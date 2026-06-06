@@ -1,4 +1,24 @@
-<!DOCTYPE html>
+<div class="pw-overlay" id="paywall">
+    <div class="pw-box">
+      <div class="pw-orb">⚡</div>
+      <div class="pw-title" id="pw-title">Passe à PRO</div>
+      <div class="pw-sub" id="pw-sub">Tu as utilisé ton essai gratuit.<br>Accès illimité à partir de <strong style="color:var(--v2)">19€/mois</strong></div>
+      <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:20px;margin-bottom:20px;text-align:left">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">✦ Terminal Analyzer PRO</div>
+        <ul style="list-style:none;font-size:12px;color:var(--text2);line-height:2.2">
+          <li>+ Analyses illimitées</li>
+          <li>+ Annotations graphique IA</li>
+          <li>+ Historique complet</li>
+          <li>+ Scénarios & contexte macro</li>
+          <li>+ Accès prioritaire aux nouvelles features</li>
+        </ul>
+      </div>
+      <button class="pay-btn" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" style="margin-bottom:10px">
+        🔓 S'abonner via Whop — 19€/mois
+      </button>
+      <div class="pay-note" id="pay-note">Paiement sécurisé · Annulation à tout moment<br>Géré par <a href="https://whop.com" target="_blank">Whop</a></div>
+    </div>
+  </div><!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -971,7 +991,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
     <div class="topbar-brand">Le <span>Terminal</span></div>
     <div class="topbar-right">
       <button class="history-btn" id="historyBtn" onclick="openHistory()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Historique</button>
-      <div class="usage-chip" id="usageChip">FREE · 3 restantes</div>
+      <div class="usage-chip" id="usageChip">1 essai gratuit</div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
         <div class="user-avatar" id="userAvatar">?</div>
         <span class="user-name" id="userName">Mon compte</span>
@@ -1153,7 +1173,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
 let usage=parseInt(localStorage.getItem('lt_u')||'0');
-const FREE=3;
+const FREE=1;
 if(localStorage.getItem('lt_pro')==='1') isPro=true;
 
 // ── LANDING ──
@@ -1196,7 +1216,7 @@ const T={
     pf4:'Analyses illimitées',pf5:'Upload graphique',pf6:'Historique complet',pf7:'Accès prioritaire',
     payTxt:'Continuer vers le paiement', payNote:'Paiement sécurisé Stripe · Annulation à tout moment',
     demoLnk:'Continuer en mode démo',
-    usageChip:'FREE · {n} restantes', proBadge:'PRO · Illimité',
+    usageChip:'{n} essai gratuit', proBadge:'PRO · Illimité',
     alertFill:'Remplis tous les champs et sélectionne une direction.',
     waitLabel:'⏸ ATTENDRE',
     sys:`Tu es un analyste ICT/Smart Money senior d'élite. Ta mission : aider le trader à affiner sa prise de position pour maximiser ses probabilités de succès.
@@ -1254,7 +1274,7 @@ Réponds en français.`
     pf4:'Unlimited analyses',pf5:'Chart upload',pf6:'Full history',pf7:'Priority access',
     payTxt:'Continue to payment', payNote:'Secure payment via Stripe · Cancel anytime',
     demoLnk:'Continue in demo mode',
-    usageChip:'FREE · {n} left', proBadge:'PRO · Unlimited',
+    usageChip:'{n} free trial', proBadge:'PRO · Unlimited',
     alertFill:'Fill in all required fields and select a direction.',
     waitLabel:'⏸ WAIT',
     sys:`Senior ICT/Smart Money analyst. Analyze MARKET STRUCTURE only.
@@ -1428,6 +1448,7 @@ async function analyze(){
   const bias=document.getElementById('bias').value;
   const sess=document.getElementById('sess').value;
   const conf=document.getElementById('conf').value.trim();
+  if(!currentUser){openAuth();return}
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){openPW();return}
 
@@ -1594,73 +1615,9 @@ function renderAnnotatedCanvas(src, anns){
   var ctx = canvas.getContext('2d');
   var img = new Image();
   img.onload = function(){
-    var W = img.naturalWidth, H = img.naturalHeight;
-    canvas.width = W; canvas.height = H;
-    ctx.drawImage(img, 0, 0, W, H);
-    if(!anns || anns.length === 0) return;
-    var COLORS = {bull:'#34D399', bear:'#F87171', info:'#A78BFA', warn:'#FBBF24'};
-    var PIN = Math.min(14, Math.max(8, Math.round(W * 0.01)));
-    var FS = Math.min(11, Math.max(8, Math.round(W * 0.008)));
-
-    // Draw only numbered pins (no inline labels)
-    anns.forEach(function(ann, i){
-      var x = (Math.min(90,Math.max(10,ann.x))/100)*W;
-      var y = (Math.min(90,Math.max(10,ann.y))/100)*H;
-      var col = COLORS[ann.type]||COLORS.info;
-      ctx.save();
-      // Subtle dashed line
-      if(ann.type==='bull'||ann.type==='bear'){
-        ctx.beginPath(); ctx.setLineDash([5,5]);
-        ctx.strokeStyle=col; ctx.lineWidth=1; ctx.globalAlpha=0.4;
-        ctx.moveTo(W*0.08,y); ctx.lineTo(W*0.82,y); ctx.stroke();
-        ctx.globalAlpha=1; ctx.setLineDash([]);
-      }
-      // Pin circle
-      ctx.beginPath(); ctx.arc(x,y,PIN,0,Math.PI*2);
-      ctx.fillStyle='rgba(6,6,14,0.9)'; ctx.fill();
-      ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.stroke();
-      // Number
-      ctx.font='bold '+FS+'px Arial,sans-serif';
-      ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(String(i+1),x,y);
-      ctx.restore();
-    });
-
-    // Legend panel - bottom left, compact
-    var LX = Math.round(W*0.015);
-    var LFS = Math.min(11, Math.max(8, Math.round(W*0.0085)));
-    var LH = LFS + 7;
-    var LW = Math.round(W*0.36);
-    var LY = H - (anns.length * LH) - 20;
-    if(LY < H*0.5) LY = Math.round(H*0.5);
-
-    // Legend bg
-    ctx.save();
-    ctx.fillStyle='rgba(6,6,14,0.85)';
-    ctx.strokeStyle='rgba(255,255,255,0.07)';
-    ctx.lineWidth=1;
-    if(ctx.roundRect) ctx.roundRect(LX-4, LY-6, LW, anns.length*LH+12, 6);
-    else ctx.rect(LX-4, LY-6, LW, anns.length*LH+12);
-    ctx.fill(); ctx.stroke();
-    ctx.restore();
-
-    anns.forEach(function(ann, i){
-      var col = COLORS[ann.type]||COLORS.info;
-      var ty = LY + i*LH + LFS/2;
-      ctx.save();
-      // Colored number badge
-      ctx.beginPath(); ctx.arc(LX+6, ty, 5, 0, Math.PI*2);
-      ctx.fillStyle=col; ctx.fill();
-      ctx.font='bold '+(LFS-2)+'px Arial,sans-serif';
-      ctx.fillStyle='#06060E'; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(String(i+1), LX+6, ty);
-      // Label
-      var lbl = (ann.label||'').slice(0,38);
-      ctx.font=LFS+'px Arial,sans-serif';
-      ctx.fillStyle='#E0DCF8'; ctx.textAlign='left'; ctx.textBaseline='middle';
-      ctx.fillText(lbl, LX+16, ty);
-      ctx.restore();
-    });
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
   };
   img.src = src;
 }
@@ -1803,7 +1760,7 @@ window.openHDetail = openHDetail;
 <!-- HISTORY PAGE -->
 <div id="historyPage">
   <header class="history-page-header">
-    <div class="history-page-title">Le Terminal <span>Analyzer</span> — Historique</div>
+    <div class="history-page-title">Le Le Terminal <span>Analyzer</span> — Historique</div>
     <button class="back-btn" onclick="closeHistoryPage()">← Retour à l'analyse</button>
   </header>
   <div class="history-page-content">
