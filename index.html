@@ -1058,16 +1058,36 @@ const T={
     usageChip:'FREE · {n} restantes', proBadge:'PRO · Illimité',
     alertFill:'Remplis tous les champs et sélectionne une direction.',
     waitLabel:'⏸ ATTENDRE',
-    sys:`Analyste ICT/Smart Money senior. Analyse la STRUCTURE DU MARCHÉ uniquement.
+    sys:`Tu es un analyste ICT/Smart Money senior d'élite. Ta mission : aider le trader à affiner sa prise de position pour maximiser ses probabilités de succès.
 
-RÈGLES : Ne critique JAMAIS le TF ni le R:R. Un grand R:R est une force. Concentre-toi sur la structure, les zones institutionnelles et le contexte.
+RÈGLES ABSOLUES :
+• Ne critique JAMAIS le TF ni le R:R — tous sont valides
+• Analyse la STRUCTURE du marché, pas les paramètres du trade
+• Sois concret : cite des niveaux de prix, des zones précises, des confirmations à attendre
+• Ton rôle = coach qui aide à corriger les erreurs et améliorer le timing
 
-Analyse : structure HTF/LTF, BOS/CHoCH, Order Blocks, FVG, liquidité BSL/SSL, zones premium/discount, timing session.
+ANALYSE STRUCTURELLE COMPLÈTE :
 
-Si graphique fourni : génère 3-5 annotations ICT précises (coordonnées % 0-100).
+1. STRUCTURE HTF → LTF
+Identifie : tendance dominante, dernier BOS/CHoCH significatif, phase du marché (expansion/correction/distribution/accumulation). Le setup est-il aligné avec le flux des ordres institutionnels ?
 
-Réponds UNIQUEMENT en JSON compact :
-{"niveau":"DÉBUTANT"|"INTERMÉDIAIRE"|"AVANCÉ","score":<1-10>,"scoreLabel":<3 mots>,"scoreSub":<1 phrase courte>,"annotations":[{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊","label":<nom ICT court>}],"scenarios":[{"type":"bull"|"bear"|"alt","name":<nom>,"probability":<ex "60%">,"description":<1 phrase>}],"macro":<2 phrases macro>,"forces":<3 points \n séparés, emoji début>,"forcesTags":["t1","t2","t3"],"faiblesses":<2-3 points \n séparés, emoji début, jamais RR/TF>,"faiblesTags":["t1","t2"],"recommandations":<3 conseils \n séparés, numéro début>,"verdict":"GO"|"ATTENDRE"|"NO-GO","verdictTitle":<3-4 mots>,"verdictSub":<1 phrase sur la structure>}
+2. QUALITÉ DE LA ZONE D'ENTRÉE
+Est-ce un Order Block valide ? Y a-t-il un FVG à combler ? La zone est-elle en discount (long) ou premium (short) ? Y a-t-il eu un liquidity sweep avant l'entrée ? L'OTE (0.62-0.79 du retracement) est-il respecté ?
+
+3. CONFIRMATION NÉCESSAIRE
+Qu'est-ce que le trader doit VOIR avant d'entrer ? BOS sur LTF ? CHoCH ? Rejection candle ? Quels éléments manquent encore pour valider le setup ?
+
+4. GESTION DU TRADE
+TP logique (prochain liquidity pool, FVG, OB opposé) ? SL sous/au-dessus de la structure ? Y a-t-il un BE trigger à placer ?
+
+5. RISQUES SPÉCIFIQUES
+Liquidity sweep possible avant le move ? Résistance/support clé entre entrée et TP ? Catalyseur macro imminent ?
+
+6. ANNOTATIONS GRAPHIQUE (si fourni)
+Génère 4-6 annotations précises sur les zones ICT visibles. Places les aux coordonnées % réelles sur le graphique.
+
+JSON UNIQUEMENT, sans markdown :
+{"niveau":"DÉBUTANT"|"INTERMÉDIAIRE"|"AVANCÉ","score":<1-10>,"scoreLabel":<3 mots>,"scoreSub":<1 phrase diagnostic>,"annotations":[{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️","label":<zone ICT précise, max 35 chars>}],"scenarios":[{"type":"bull"|"bear"|"alt","name":<nom>,"probability":<ex "65%">,"description":<ce qui doit se passer pour que ce scénario se confirme>}],"macro":<analyse macro de l'actif en 2-3 phrases : sentiment dominant, corrélations clés, catalyseurs>,"forces":<3-4 points forts de STRUCTURE séparés par \n, emoji début, sois précis>,"forcesTags":["t1","t2","t3"],"faiblesses":<3-4 points faibles ou risques séparés par \n, emoji début, jamais critiquer RR/TF>,"faiblesTags":["t1","t2"],"recommandations":<4-5 conseils concrets et actionnables séparés par \n, numéro début — cite des niveaux et des confirmations à attendre>,"verdict":"GO"|"ATTENDRE"|"NO-GO","verdictTitle":<verdict sur la structure en 3-4 mots>,"verdictSub":<explication directe : pourquoi GO/ATTENDRE/NO-GO basé sur la structure — sois précis et aide le trader>}
 Réponds en français.`
   },
   en:{
@@ -1382,16 +1402,29 @@ function render(r,rrv,tf,pair){
   function fmtBlock(s){
     if(!s) return '<span style="color:#5A5570">—</span>';
     var parts = s.split('\n').filter(function(l){return l.trim().length>0;});
-    if(parts.length<=1) return '<p style="font-size:13px;color:#9B96B8;line-height:1.8">'+s+'</p>';
+    if(parts.length<=1){
+      return '<p style="font-size:13px;font-weight:300;color:#C4B5FD;line-height:1.8;margin:0">'+s+'</p>';
+    }
     return parts.map(function(l,i){
       var cp = l.codePointAt(0);
       var isEmoji = cp > 127 && cp !== 8226;
-      var icon = isEmoji ? String.fromCodePoint(cp) : '•';
-      var rest = isEmoji ? l.slice(icon.length).trim() : l.replace(/^[0-9]+[.)\s]+/,'').trim();
-      var border = i<parts.length-1 ? 'border-bottom:1px solid rgba(255,255,255,0.06);' : '';
-      return '<div style="display:flex;gap:10px;padding:10px 0;'+border+'align-items:flex-start">'+
-        '<span style="flex-shrink:0;font-size:15px;line-height:1.5;min-width:22px">'+icon+'</span>'+
-        '<span style="font-size:13px;font-weight:300;color:#C4B5FD;line-height:1.75;flex:1">'+rest+'</span>'+
+      var isNum = /^[0-9]+[.)\s]/.test(l);
+      var icon, rest;
+      if(isEmoji){
+        icon = l.slice(0, l.indexOf(' ')>2 ? 2 : 1).trim();
+        rest = l.slice(icon.length).trim();
+      } else if(isNum){
+        var m = l.match(/^([0-9]+[.)\s]+)(.*)/);
+        icon = m ? m[1].trim() : '•';
+        rest = m ? m[2].trim() : l;
+      } else {
+        icon = '›';
+        rest = l.trim();
+      }
+      var isLast = i===parts.length-1;
+      return '<div style="display:flex;gap:10px;padding:8px 0;'+(isLast?'':'border-bottom:1px solid rgba(255,255,255,0.05)')+';align-items:flex-start">'+
+        '<span style="flex-shrink:0;font-size:13px;line-height:1.6;min-width:20px;color:#A78BFA;font-weight:600">'+icon+'</span>'+
+        '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.7;flex:1">'+rest+'</span>'+
         '</div>';
     }).join('');
   }
