@@ -1401,34 +1401,30 @@ function render(r,rrv,tf,pair){
 
   function fmtBlock(s){
     if(!s) return '<span style="color:#5A5570">—</span>';
-    var parts = s.split('\n').filter(function(l){return l.trim().length>0;});
-    if(parts.length<=1){
-      return '<p style="font-size:13px;font-weight:300;color:#C4B5FD;line-height:1.8;margin:0">'+s+'</p>';
-    }
-    return parts.map(function(l,i){
-      var cp = l.codePointAt(0);
-      var isEmoji = cp > 127 && cp !== 8226;
-      var isNum = /^[0-9]+[.)\s]/.test(l);
-      var icon, rest;
-      if(isEmoji){
-        icon = l.slice(0, l.indexOf(' ')>2 ? 2 : 1).trim();
-        rest = l.slice(icon.length).trim();
-      } else if(isNum){
-        var m = l.match(/^([0-9]+[.)\s]+)(.*)/);
-        icon = m ? m[1].trim() : '•';
-        rest = m ? m[2].trim() : l;
+    // Split on literal \n or actual newlines
+    var raw = s.replace(/\\n/g,'\n');
+    var parts = raw.split('\n').map(function(l){return l.trim();}).filter(function(l){return l.length>0;});
+    if(parts.length === 0) return '<span style="color:#5A5570">—</span>';
+    return parts.map(function(l, i){
+      // Extract leading emoji or number
+      var icon = '›';
+      var text = l;
+      var cp = l.codePointAt(0)||0;
+      if(cp > 127 && cp !== 8226){
+        icon = String.fromCodePoint(cp);
+        text = l.slice(icon.length).trim();
       } else {
-        icon = '›';
-        rest = l.trim();
+        var nm = l.match(/^([0-9]+[.)\s]+)(.*)/);
+        if(nm){ icon = nm[1].trim(); text = nm[2].trim(); }
       }
-      var isLast = i===parts.length-1;
-      return '<div style="display:flex;gap:10px;padding:8px 0;'+(isLast?'':'border-bottom:1px solid rgba(255,255,255,0.05)')+';align-items:flex-start">'+
-        '<span style="flex-shrink:0;font-size:13px;line-height:1.6;min-width:20px;color:#A78BFA;font-weight:600">'+icon+'</span>'+
-        '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.7;flex:1">'+rest+'</span>'+
+      var last = i === parts.length-1;
+      return '<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;'+(last?'':'border-bottom:1px solid rgba(255,255,255,0.05)')+'">'+
+        '<span style="flex-shrink:0;min-width:18px;font-size:13px;color:#A78BFA;font-weight:700;line-height:1.5">'+icon+'</span>'+
+        '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.6;flex:1">'+text+'</span>'+
         '</div>';
     }).join('');
   }
-  document.getElementById('forcesText').innerHTML=fmtBlock(r.forces);
+    document.getElementById('forcesText').innerHTML=fmtBlock(r.forces);
   document.getElementById('weakText').innerHTML=fmtBlock(r.faiblesses);
   document.getElementById('adviceText').innerHTML=fmtBlock(r.recommandations);
 
@@ -1458,58 +1454,74 @@ function renderAnnotatedCanvas(src, anns){
     var W = img.naturalWidth, H = img.naturalHeight;
     canvas.width = W; canvas.height = H;
     ctx.drawImage(img, 0, 0, W, H);
-    if(!anns || anns.length===0) return;
+    if(!anns || anns.length === 0) return;
     var COLORS = {bull:'#34D399', bear:'#F87171', info:'#A78BFA', warn:'#FBBF24'};
-    var PIN = Math.max(18, W*0.018);
-    var FS = Math.max(12, W*0.013);
+    var PIN = Math.min(14, Math.max(8, Math.round(W * 0.01)));
+    var FS = Math.min(11, Math.max(8, Math.round(W * 0.008)));
+
+    // Draw only numbered pins (no inline labels)
     anns.forEach(function(ann, i){
-      var x = (Math.min(95,Math.max(5,ann.x))/100)*W;
-      var y = (Math.min(95,Math.max(5,ann.y))/100)*H;
+      var x = (Math.min(90,Math.max(10,ann.x))/100)*W;
+      var y = (Math.min(90,Math.max(10,ann.y))/100)*H;
       var col = COLORS[ann.type]||COLORS.info;
       ctx.save();
-      // Dashed horizontal line for bull/bear
+      // Subtle dashed line
       if(ann.type==='bull'||ann.type==='bear'){
-        ctx.beginPath(); ctx.setLineDash([10,7]);
-        ctx.strokeStyle=col; ctx.lineWidth=Math.max(2,W/500);
-        ctx.globalAlpha=0.75;
-        ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+        ctx.beginPath(); ctx.setLineDash([5,5]);
+        ctx.strokeStyle=col; ctx.lineWidth=1; ctx.globalAlpha=0.4;
+        ctx.moveTo(W*0.08,y); ctx.lineTo(W*0.82,y); ctx.stroke();
         ctx.globalAlpha=1; ctx.setLineDash([]);
       }
-      // Circle pin
+      // Pin circle
       ctx.beginPath(); ctx.arc(x,y,PIN,0,Math.PI*2);
-      ctx.fillStyle='rgba(8,8,15,0.9)'; ctx.fill();
-      ctx.strokeStyle=col; ctx.lineWidth=Math.max(3,W/180); ctx.stroke();
-      // Icon
-      var icon = ann.icon||String(i+1);
-      ctx.font='bold '+Math.round(FS*1.1)+'px Arial,sans-serif';
+      ctx.fillStyle='rgba(6,6,14,0.9)'; ctx.fill();
+      ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.stroke();
+      // Number
+      ctx.font='bold '+FS+'px Arial,sans-serif';
       ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(icon,x,y+1);
+      ctx.fillText(String(i+1),x,y);
+      ctx.restore();
+    });
+
+    // Legend panel - bottom left, compact
+    var LX = Math.round(W*0.015);
+    var LFS = Math.min(11, Math.max(8, Math.round(W*0.0085)));
+    var LH = LFS + 7;
+    var LW = Math.round(W*0.36);
+    var LY = H - (anns.length * LH) - 20;
+    if(LY < H*0.5) LY = Math.round(H*0.5);
+
+    // Legend bg
+    ctx.save();
+    ctx.fillStyle='rgba(6,6,14,0.85)';
+    ctx.strokeStyle='rgba(255,255,255,0.07)';
+    ctx.lineWidth=1;
+    if(ctx.roundRect) ctx.roundRect(LX-4, LY-6, LW, anns.length*LH+12, 6);
+    else ctx.rect(LX-4, LY-6, LW, anns.length*LH+12);
+    ctx.fill(); ctx.stroke();
+    ctx.restore();
+
+    anns.forEach(function(ann, i){
+      var col = COLORS[ann.type]||COLORS.info;
+      var ty = LY + i*LH + LFS/2;
+      ctx.save();
+      // Colored number badge
+      ctx.beginPath(); ctx.arc(LX+6, ty, 5, 0, Math.PI*2);
+      ctx.fillStyle=col; ctx.fill();
+      ctx.font='bold '+(LFS-2)+'px Arial,sans-serif';
+      ctx.fillStyle='#06060E'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(String(i+1), LX+6, ty);
       // Label
-      if(ann.label){
-        ctx.font=Math.round(FS)+'px Arial,sans-serif';
-        var pad=FS*0.7, tw=ctx.measureText(ann.label).width;
-        var bw=tw+pad*2, bh=FS+pad*2;
-        var lx=x+PIN+8, ly=y-bh/2;
-        if(lx+bw>W-8) lx=x-PIN-8-bw;
-        if(ly<4) ly=4;
-        if(ly+bh>H-4) ly=H-bh-4;
-        ctx.shadowColor='rgba(0,0,0,0.9)'; ctx.shadowBlur=10;
-        ctx.fillStyle='rgba(8,8,15,0.93)';
-        ctx.beginPath();
-        ctx.roundRect?ctx.roundRect(lx,ly,bw,bh,5):ctx.rect(lx,ly,bw,bh);
-        ctx.fill();
-        ctx.shadowBlur=0;
-        ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.stroke();
-        ctx.fillStyle='#F0EEFF'; ctx.textAlign='left'; ctx.textBaseline='middle';
-        ctx.fillText(ann.label,lx+pad,ly+bh/2);
-      }
+      var lbl = (ann.label||'').slice(0,38);
+      ctx.font=LFS+'px Arial,sans-serif';
+      ctx.fillStyle='#E0DCF8'; ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText(lbl, LX+16, ty);
       ctx.restore();
     });
   };
   img.src = src;
 }
 
-// init
 applyLang();
 </script>
 </body>
