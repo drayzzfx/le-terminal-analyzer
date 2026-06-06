@@ -1596,6 +1596,86 @@ function renderAnnotatedCanvas(src, anns){
 }
 
 applyLang();
+
+// ── AUTH ──
+var currentUser=null,authToken=null,authMode='login';
+function openAuth(){document.getElementById('authOverlay').classList.add('show');}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('show');document.getElementById('authError').textContent='';}
+function switchAuthTab(mode){authMode=mode;document.getElementById('tabLogin').classList.toggle('on',mode==='login');document.getElementById('tabSignup').classList.toggle('on',mode==='signup');document.getElementById('authSubmitTxt').textContent=mode==='login'?'Se connecter':'Créer mon compte';}
+async function doAuth(){
+  var email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value,errEl=document.getElementById('authError');
+  errEl.textContent='';errEl.style.color='var(--red)';
+  if(!email||!password){errEl.textContent='Remplis tous les champs';return;}
+  var btn=document.getElementById('authSubmitBtn');btn.disabled=true;
+  document.getElementById('authSubmitTxt').textContent=authMode==='login'?'Connexion…':'Création…';
+  try{
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
+    var data=await res.json();
+    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);closeAuth();updateUserUI();loadHistory();}
+    else if(data.id){errEl.style.color='var(--green)';errEl.textContent='Compte créé ! Vérifie ton email.';}
+    else errEl.textContent=data.error_description||data.msg||data.message||'Erreur';
+  }catch(e){errEl.textContent='Erreur réseau';}
+  btn.disabled=false;document.getElementById('authSubmitTxt').textContent=authMode==='login'?'Se connecter':'Créer mon compte';
+}
+function updateUserUI(){
+  var lb=document.getElementById('loginBtn'),uc=document.getElementById('userChip'),hb=document.getElementById('historyBtn');
+  if(currentUser){lb.style.display='none';uc.classList.add('show');hb.classList.add('show');var em=currentUser.email||'';document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();document.getElementById('userName').textContent=em.split('@')[0];}
+  else{lb.style.display='';uc.classList.remove('show');hb.classList.remove('show');}
+}
+async function checkSession(){
+  var token=localStorage.getItem('ta_token');if(!token)return;
+  try{var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});var data=await res.json();
+  if(data.id){authToken=token;currentUser=data;updateUserUI();loadHistory();}else localStorage.removeItem('ta_token');}catch(e){}
+}
+var historyData=[];
+function openHistory(){document.getElementById('historyPanel').classList.add('open');}
+function closeHistory(){document.getElementById('historyPanel').classList.remove('open');}
+function closeHDetail(){document.getElementById('hdetailOverlay').classList.remove('show');}
+async function loadHistory(){
+  if(!authToken)return;
+  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();historyData=Array.isArray(data)?data:[];renderHistory();}catch(e){}
+}
+function renderHistory(){
+  var list=document.getElementById('historyList');
+  if(!currentUser){list.innerHTML='<div class="history-empty">Connecte-toi pour voir<br>ton historique</div>';return;}
+  if(!historyData.length){list.innerHTML='<div class="history-empty">Aucune analyse encore<br>Lance ta première analyse !</div>';return;}
+  list.innerHTML=historyData.map(function(item,i){
+    var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
+    var vL=item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
+    var sc=parseFloat(item.score)||0,col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
+    var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    return '<div class="history-item" onclick="openHDetail('+i+')">'+
+      '<div class="hi-top"><span class="hi-pair">'+(item.pair||'—')+' · '+(item.direction||'')+' · '+(item.tf||'')+'</span><span class="hi-verdict '+vC+'">'+vL+'</span></div>'+
+      '<div class="hi-meta"><span class="hi-score" style="color:'+col+'">'+sc.toFixed(1)+'/10</span> · <span>'+(item.score_label||'')+'</span></div>'+
+      (item.img_data?'<img class="hi-img" src="'+item.img_data+'" alt="">':'')+
+      '<div class="hi-date">'+ds+'</div></div>';
+  }).join('');
+}
+function openHDetail(i){
+  var item=historyData[i];if(!item)return;
+  var sc=parseFloat(item.score)||0,col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
+  var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  function sec(title,text,c){if(!text)return '';var parts=text.replace(/\\n/g,'\n').split(/\n|\/{2}/).filter(function(l){return l.trim().length>2;});
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">'+
+    '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:'+c+';margin-bottom:10px;text-transform:uppercase">'+title+'</div>'+
+    parts.map(function(p){return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:#D4D0F0;line-height:1.6">'+p.trim()+'</div>';}).join('')+'</div>';}
+  var content='<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)">'+
+    '<div style="font-family:Bricolage Grotesque,sans-serif;font-size:36px;font-weight:800;color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:12px;color:var(--text3)">/10</span></div>'+
+    '<div><div style="font-family:Bricolage Grotesque,sans-serif;font-size:18px;font-weight:700">'+(item.score_label||'')+'</div>'+
+    '<div style="font-size:12px;color:var(--text2);margin-top:3px">'+(item.pair||'')+' · '+(item.direction||'')+' · '+(item.tf||'')+' · '+ds+'</div></div></div>'+
+    (item.img_data?'<img src="'+item.img_data+'" style="width:100%;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">':'')+
+    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#60A5FA')+
+    (item.macro?'<div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
+  document.getElementById('hdetailContent').innerHTML=content;
+  document.getElementById('hdetailOverlay').classList.add('show');
+}
+async function saveAnalysis(r,pair,d,tf){
+  if(!authToken)return;
+  try{await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+  body:JSON.stringify({pair,direction:d,tf,score:r.score,verdict:r.verdict,scoreLabel:r.scoreLabel,forces:r.forces,faiblesses:r.faiblesses,recommandations:r.recommandations,macro:r.macro,scenarios:r.scenarios||[],annotations:r.annotations||[],imgData:imgData||null})});loadHistory();}catch(e){}
+}
+checkSession();
+
 </script>
 
 <!-- AUTH MODAL -->
