@@ -1366,14 +1366,25 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
   }
 
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:c().sys,messages:[{role:'user',content}]})
+    const res=await fetch('/api/analyze',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:c().sys,messages:[{role:'user',content}]})
     });
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'Erreur '+res.status);}
     clearInterval(iv);
     const data=await res.json();
+    if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
     const raw=data.content[0].text.replace(/```json[\s\S]*?```/g,m=>m.slice(7,-3)).replace(/```/g,'').trim();
-    render(JSON.parse(raw),rrv,tf,pair);
+    let parsed;
+    try{parsed=JSON.parse(raw);}catch(e){
+      let f=raw,b=0,br=0;
+      for(const c of f){if(c==='{')b++;else if(c==='}')b--;else if(c==='[')br++;else if(c===']')br--;}
+      f=f.replace(/,?\s*"[^"]*$/,'');
+      while(br>0){f+='"]';br--;}while(b>0){f+='}';b--;}
+      try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
+    }
+    render(parsed,rrv,tf,pair);
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
