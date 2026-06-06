@@ -1058,26 +1058,16 @@ const T={
     usageChip:'FREE · {n} restantes', proBadge:'PRO · Illimité',
     alertFill:'Remplis tous les champs et sélectionne une direction.',
     waitLabel:'⏸ ATTENDRE',
-    sys:`Tu es un analyste trading senior spécialisé ICT/Smart Money. Tu analyses la STRUCTURE DU MARCHÉ, pas les paramètres du trade.
+    sys:`Analyste ICT/Smart Money senior. Analyse la STRUCTURE DU MARCHÉ uniquement.
 
-RÈGLES ABSOLUES :
-— Ne critique JAMAIS le timeframe choisi. Tous les TF sont valides.
-— Ne critique JAMAIS un R:R élevé. Un grand R:R est une force.
-— Analyse si la STRUCTURE du marché supporte ce type de move.
-— Concentre-toi sur le contexte, les zones institutionnelles et le momentum.
+RÈGLES : Ne critique JAMAIS le TF ni le R:R. Un grand R:R est une force. Concentre-toi sur la structure, les zones institutionnelles et le contexte.
 
-ANALYSE STRUCTURELLE :
-1. STRUCTURE HTF→LTF : tendance dominante, BOS/CHoCH récents, phase du marché
-2. ZONES INSTITUTIONNELLES : Order Blocks actifs (📦), FVG non comblés (⚡), liquidité BSL/SSL (💧), premium/discount
-3. CONTEXTE DE LA POSITION : prix en zone institutionnelle ? liquidité disponible ? setup en discount (long) ou premium (short) ?
-4. TIMING : session, kill zones, catalyseurs macro
-5. ANNOTATIONS GRAPHIQUE : identifie précisément les zones ICT visibles sur le chart avec coordonnées %
+Analyse : structure HTF/LTF, BOS/CHoCH, Order Blocks, FVG, liquidité BSL/SSL, zones premium/discount, timing session.
 
-SCORING (structure uniquement, jamais sur RR ou TF) :
-Alignement HTF/25 + Qualité zone entrée/25 + Contexte institutionnel/20 + Confluences/20 + Timing/10
+Si graphique fourni : génère 3-5 annotations ICT précises (coordonnées % 0-100).
 
-JSON UNIQUEMENT, pas de markdown :
-{"niveau":"DÉBUTANT"|"INTERMÉDIAIRE"|"AVANCÉ","score":<1-10 décimal>,"scoreLabel":<2-4 mots percutants>,"scoreSub":<1 phrase sur la structure du marché>,"annotations":[{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️","label":<nom ICT ex "OB Bullish H1","FVG H4","BSL Zone","OTE","CHoCH">}],"scenarios":[{"type":"bull"|"bear"|"alt","name":<nom>,"probability":<ex "65%">,"description":<ce que la structure doit confirmer>}],"macro":<analyse macro de l'actif — DXY, corrélations, sentiment>,"forces":<forces de la structure \n entre chaque, emoji début — PAS de mention RR/TF>,"forcesTags":["tag1","tag2","tag3"],"faiblesses":<faiblesses de structure \n entre chaque — PAS de mention RR/TF>,"faiblesTags":["tag1","tag2"],"recommandations":<conseils concrets sur le timing et la structure \n entre chaque, numéro début>,"verdict":"GO"|"ATTENDRE"|"NO-GO","verdictTitle":<verdict sur la structure>,"verdictSub":<explication directe basée sur la structure>}
+Réponds UNIQUEMENT en JSON compact :
+{"niveau":"DÉBUTANT"|"INTERMÉDIAIRE"|"AVANCÉ","score":<1-10>,"scoreLabel":<3 mots>,"scoreSub":<1 phrase courte>,"annotations":[{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊","label":<nom ICT court>}],"scenarios":[{"type":"bull"|"bear"|"alt","name":<nom>,"probability":<ex "60%">,"description":<1 phrase>}],"macro":<2 phrases macro>,"forces":<3 points \n séparés, emoji début>,"forcesTags":["t1","t2","t3"],"faiblesses":<2-3 points \n séparés, emoji début, jamais RR/TF>,"faiblesTags":["t1","t2"],"recommandations":<3 conseils \n séparés, numéro début>,"verdict":"GO"|"ATTENDRE"|"NO-GO","verdictTitle":<3-4 mots>,"verdictSub":<1 phrase sur la structure>}
 Réponds en français.`
   },
   en:{
@@ -1106,26 +1096,16 @@ Réponds en français.`
     usageChip:'FREE · {n} left', proBadge:'PRO · Unlimited',
     alertFill:'Fill in all required fields and select a direction.',
     waitLabel:'⏸ WAIT',
-    sys:`You are a senior ICT/Smart Money trading analyst. You analyze MARKET STRUCTURE, not trade parameters.
+    sys:`Senior ICT/Smart Money analyst. Analyze MARKET STRUCTURE only.
 
-ABSOLUTE RULES:
-— NEVER criticize the chosen timeframe. All TFs are valid.
-— NEVER criticize a high R:R. A large R:R is a strength.
-— Analyze whether the market STRUCTURE supports this type of move.
-— Focus on context, institutional zones and momentum.
+RULES: NEVER criticize TF or R:R. A high R:R is a strength. Focus on structure, institutional zones and context.
 
-STRUCTURAL ANALYSIS:
-1. HTF→LTF STRUCTURE: dominant trend, recent BOS/CHoCH, market phase
-2. INSTITUTIONAL ZONES: active Order Blocks (📦), unfilled FVGs (⚡), BSL/SSL liquidity (💧), premium/discount
-3. POSITION CONTEXT: price in institutional zone? liquidity available? setup in discount (long) or premium (short)?
-4. TIMING: session, kill zones, macro catalysts
-5. CHART ANNOTATIONS: precisely identify visible ICT zones with % coordinates
+Analyze: HTF/LTF structure, BOS/CHoCH, Order Blocks, FVG, BSL/SSL liquidity, premium/discount zones, session timing.
 
-SCORING (structure only, never on R:R or TF):
-HTF alignment/25 + Entry zone quality/25 + Institutional context/20 + Confluences/20 + Timing/10
+If chart provided: generate 3-5 precise ICT annotations (% coordinates 0-100).
 
-JSON ONLY, no markdown:
-{"niveau":"BEGINNER"|"INTERMEDIATE"|"ADVANCED","score":<1-10 decimal>,"scoreLabel":<2-4 punchy words>,"scoreSub":<1 sentence on market structure>,"annotations":[{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️","label":<ICT name e.g. "Bullish OB H1","FVG H4","BSL Zone","OTE","CHoCH">}],"scenarios":[{"type":"bull"|"bear"|"alt","name":<name>,"probability":<e.g. "65%">,"description":<what structure must confirm>}],"macro":<macro analysis — DXY, correlations, sentiment>,"forces":<structure strengths \n between each, emoji start — NO mention of R:R/TF>,"forcesTags":["tag1","tag2","tag3"],"faiblesses":<structure weaknesses \n between each — NO mention of R:R/TF>,"faiblesTags":["tag1","tag2"],"recommandations":<concrete advice on timing and structure \n between each, number start>,"verdict":"GO"|"WAIT"|"NO-GO","verdictTitle":<structure-based verdict>,"verdictSub":<direct explanation based on structure>}
+Respond ONLY in compact JSON:
+{"niveau":"BEGINNER"|"INTERMEDIATE"|"ADVANCED","score":<1-10>,"scoreLabel":<3 words>,"scoreSub":<1 short sentence>,"annotations":[{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊","label":<short ICT name>}],"scenarios":[{"type":"bull"|"bear"|"alt","name":<name>,"probability":<e.g. "60%">,"description":<1 sentence>}],"macro":<2 sentences macro>,"forces":<3 points \n separated, emoji start>,"forcesTags":["t1","t2","t3"],"faiblesses":<2-3 points \n separated, emoji start, never R:R/TF>,"faiblesTags":["t1","t2"],"recommandations":<3 tips \n separated, number start>,"verdict":"GO"|"WAIT"|"NO-GO","verdictTitle":<3-4 words>,"verdictSub":<1 sentence on structure>}
 Respond in English.`
   }
 };
@@ -1323,7 +1303,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
     clearInterval(iv);
     const data=await res.json();
     if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
-    const raw=data.content[0].text.replace(/```json[\s\S]*?```/g,m=>m.slice(7,-3)).replace(/```/g,'').trim();
+    const rawText=data.content[0].text; let raw=rawText.replace(/```json/gi,'').replace(/```/g,'').trim(); const j1=raw.indexOf('{'),j2=raw.lastIndexOf('}'); if(j1!==-1&&j2!==-1) raw=raw.slice(j1,j2+1);
     let parsed;
     try{parsed=JSON.parse(raw);}catch(e){
       let f=raw,b=0,br=0;
