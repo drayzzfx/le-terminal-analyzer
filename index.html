@@ -760,49 +760,7 @@ function setLang(l){
   lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
   document.querySelector(`.lang-btn:${l==='fr'?'first':'last'}-child`).classList.add('on');
-  
-function drawAnnotatedChart(src, anns){
-  const canvas = document.getElementById('annotationCanvas');
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function(){
-    const W = img.naturalWidth;
-    const H = img.naturalHeight;
-    canvas.width = W;
-    canvas.height = H;
-
-    // Draw base image
-    ctx.drawImage(img, 0, 0, W, H);
-
-    if(!anns || anns.length === 0) return;
-
-    const COLORS = {bull:'#34D399', bear:'#F87171', info:'#A78BFA', warn:'#FBBF24'};
-    const PIN_R = Math.max(18, W * 0.018);
-    const FS = Math.max(12, W * 0.013);
-
-    anns.forEach((ann, i) => {
-      const x = (Math.min(95, Math.max(5, ann.x)) / 100) * W;
-      const y = (Math.min(95, Math.max(5, ann.y)) / 100) * H;
-      const col = COLORS[ann.type] || COLORS.info;
-
-      ctx.save();
-
-      // Horizontal dashed line for bull/bear levels
-      if(ann.type === 'bull' || ann.type === 'bear'){
-        ctx.beginPath();
-        ctx.setLineDash([10, 7]);
-        ctx.strokeStyle = col;
-        ctx.lineWidth = Math.max(2, W / 500);
-        ctx.globalAlpha = 0.7;
-        ctx.moveTo(0, y);
-        ctx.lineTo(W, y);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-        ctx.setLineDash([]);
-      }
-
-      // Circle background (solid)
+        // Circle background (solid)
       ctx.beginPath();
       ctx.arc(x, y, PIN_R, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(8,8,15,0.85)';
@@ -1115,6 +1073,7 @@ function render(r,rrv,tf,pair){
   const chartWrap=document.getElementById('chartAnnotated');
   if(imgData){
     chartWrap.classList.add('show');
+    console.log('Annotations reçues:', r.annotations);
     drawAnnotatedChart(imgData, r.annotations||[]);
   } else {
     chartWrap.classList.remove('show');
