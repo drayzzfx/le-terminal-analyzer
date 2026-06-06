@@ -760,7 +760,118 @@ function setLang(l){
   lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
   document.querySelector(`.lang-btn:${l==='fr'?'first':'last'}-child`).classList.add('on');
-  applyLang();
+  
+function drawAnnotatedChart(src, anns){
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function(){
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    // Draw base image
+    ctx.drawImage(img, 0, 0, W, H);
+
+    if(!anns || anns.length === 0) return;
+
+    const COLORS = {bull:'#34D399', bear:'#F87171', info:'#A78BFA', warn:'#FBBF24'};
+    const PIN_R = Math.max(18, W * 0.018);
+    const FS = Math.max(12, W * 0.013);
+
+    anns.forEach((ann, i) => {
+      const x = (Math.min(95, Math.max(5, ann.x)) / 100) * W;
+      const y = (Math.min(95, Math.max(5, ann.y)) / 100) * H;
+      const col = COLORS[ann.type] || COLORS.info;
+
+      ctx.save();
+
+      // Horizontal dashed line for bull/bear levels
+      if(ann.type === 'bull' || ann.type === 'bear'){
+        ctx.beginPath();
+        ctx.setLineDash([10, 7]);
+        ctx.strokeStyle = col;
+        ctx.lineWidth = Math.max(2, W / 500);
+        ctx.globalAlpha = 0.7;
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.setLineDash([]);
+      }
+
+      // Circle background (solid)
+      ctx.beginPath();
+      ctx.arc(x, y, PIN_R, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(8,8,15,0.85)';
+      ctx.fill();
+      ctx.strokeStyle = col;
+      ctx.lineWidth = Math.max(3, W / 200);
+      ctx.stroke();
+
+      // Icon or number
+      const icon = ann.icon || String(i + 1);
+      ctx.font = `bold ${FS * 1.1}px Arial, sans-serif`;
+      ctx.fillStyle = col;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(icon, x, y + 1);
+
+      // Label box
+      if(ann.label){
+        ctx.font = `${FS}px Arial, sans-serif`;
+        const pad = FS * 0.7;
+        const tw = ctx.measureText(ann.label).width;
+        const bw = tw + pad * 2;
+        const bh = FS + pad * 2;
+
+        // Position label: right of pin, or left if too close to edge
+        let lx = x + PIN_R + 8;
+        let ly = y - bh / 2;
+        if(lx + bw > W - 10) lx = x - PIN_R - 8 - bw;
+        if(ly < 4) ly = 4;
+        if(ly + bh > H - 4) ly = H - bh - 4;
+
+        // Shadow
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 8;
+
+        // Background rounded box
+        ctx.beginPath();
+        const br = 6;
+        ctx.moveTo(lx + br, ly);
+        ctx.lineTo(lx + bw - br, ly);
+        ctx.quadraticCurveTo(lx + bw, ly, lx + bw, ly + br);
+        ctx.lineTo(lx + bw, ly + bh - br);
+        ctx.quadraticCurveTo(lx + bw, ly + bh, lx + bw - br, ly + bh);
+        ctx.lineTo(lx + br, ly + bh);
+        ctx.quadraticCurveTo(lx, ly + bh, lx, ly + bh - br);
+        ctx.lineTo(lx, ly + br);
+        ctx.quadraticCurveTo(lx, ly, lx + br, ly);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(10,10,20,0.92)';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Label text
+        ctx.fillStyle = '#F0EEFF';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(ann.label, lx + pad, ly + bh / 2);
+      }
+
+      ctx.restore();
+    });
+  };
+  img.src = src;
+}
+
+applyLang();
 }
 
 function setDir(d){
@@ -1004,101 +1115,7 @@ function render(r,rrv,tf,pair){
   const chartWrap=document.getElementById('chartAnnotated');
   if(imgData){
     chartWrap.classList.add('show');
-    const canvas=document.getElementById('annotationCanvas');
-    const ctx=canvas.getContext('2d');
-    const img=new Image();
-    img.onload=()=>{
-      // Set canvas real size
-      canvas.width=img.naturalWidth;
-      canvas.height=img.naturalHeight;
-      ctx.drawImage(img,0,0);
-
-      const W=canvas.width, H=canvas.height;
-      const anns=r.annotations||[];
-
-      // Color map
-      const colors={bull:'#34D399',bear:'#F87171',info:'#A78BFA',warn:'#FBBF24'};
-
-      // Draw each annotation
-      anns.forEach((ann,i)=>{
-        const x=(ann.x/100)*W;
-        const y=(ann.y/100)*H;
-        const col=colors[ann.type]||colors.info;
-
-        ctx.save();
-
-        // Draw a subtle horizontal line across the chart at this Y
-        if(ann.type==='bull'||ann.type==='bear'){
-          ctx.beginPath();
-          ctx.setLineDash([8,6]);
-          ctx.strokeStyle=col+'88';
-          ctx.lineWidth=Math.max(1,W/400);
-          ctx.moveTo(0,y);
-          ctx.lineTo(W,y);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        }
-
-        // Draw circle pin
-        const r2=Math.max(14,W/40);
-        ctx.beginPath();
-        ctx.arc(x,y,r2,0,Math.PI*2);
-        ctx.fillStyle=col+'33';
-        ctx.fill();
-        ctx.strokeStyle=col;
-        ctx.lineWidth=Math.max(2,W/300);
-        ctx.stroke();
-
-        // Number inside circle
-        ctx.fillStyle='#ffffff';
-        ctx.font=`bold ${Math.max(11,W/80)}px Inter,sans-serif`;
-        ctx.textAlign='center';
-        ctx.textBaseline='middle';
-        ctx.fillText(ann.icon||String(i+1),x,y);
-
-        // Label box
-        if(ann.label){
-          const fs=Math.max(10,W/90);
-          ctx.font=`${fs}px Inter,sans-serif`;
-          const pad=fs*0.6;
-          const tw=ctx.measureText(ann.label).width;
-          const bw=tw+pad*2, bh=fs+pad*2;
-          let lx=x+r2+6, ly=y-bh/2;
-          if(lx+bw>W) lx=x-r2-6-bw;
-          if(ly<0) ly=0;
-          if(ly+bh>H) ly=H-bh;
-
-          // Box bg
-          ctx.beginPath();
-          ctx.roundRect?ctx.roundRect(lx,ly,bw,bh,4):ctx.rect(lx,ly,bw,bh);
-          ctx.fillStyle='rgba(8,8,15,0.88)';
-          ctx.fill();
-          ctx.strokeStyle=col+'99';
-          ctx.lineWidth=1;
-          ctx.stroke();
-
-          // Text
-          ctx.fillStyle=col;
-          ctx.textAlign='left';
-          ctx.textBaseline='middle';
-          ctx.fillText(ann.label,lx+pad,ly+bh/2);
-        }
-
-        ctx.restore();
-      });
-
-      // If no annotations, add a subtle "Analyse visuelle" watermark
-      if(anns.length===0){
-        ctx.save();
-        ctx.fillStyle='rgba(139,92,246,0.15)';
-        ctx.font=`bold ${W/30}px Inter,sans-serif`;
-        ctx.textAlign='center';
-        ctx.textBaseline='middle';
-        ctx.fillText('Analyse visuelle — Terminal Analyzer',W/2,H-W/40);
-        ctx.restore();
-      }
-    };
-    img.src=imgData;
+    drawAnnotatedChart(imgData, r.annotations||[]);
   } else {
     chartWrap.classList.remove('show');
   }
@@ -1129,16 +1146,18 @@ function render(r,rrv,tf,pair){
     macroCard.style.display='none';
   }
 
-  // Better text formatting — each line as a styled item
-  function fmtLines(s, colored){
-    if(!s) return '—';
-    return s.split('\n')
-      .filter(l=>l.trim())
-      .map(l=>`<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.04)">
-        <span style="flex-shrink:0;font-size:15px;line-height:1.4">${l.match(/^(\p{Emoji}|[0-9]+\.)/u)?.[0]||'•'}</span>
-        <span style="font-size:12px;font-weight:300;color:#9B96B8;line-height:1.7">${l.replace(/^(\p{Emoji}|[0-9]+\.\s*)/u,'').trim()}</span>
-      </div>`)
-      .join('');
+  // Text formatting — split on \n literal or real newlines
+  function fmtLines(s){
+    if(!s) return '<span style="color:#5A5570">—</span>';
+    const lines = s.split(/\\n|\n/).filter(l=>l.trim());
+    if(lines.length<=1) return `<p style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.8">${s}</p>`;
+    return lines.map((l,i)=>{
+      const isLast = i===lines.length-1;
+      return `<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;${isLast?'':'border-bottom:1px solid rgba(255,255,255,0.05)'}">
+        <span style="flex-shrink:0;font-size:14px;min-width:20px;text-align:center;line-height:1.6">${l.match(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u)?.[0]||'•'}</span>
+        <span style="font-size:12px;font-weight:300;color:#C4B5FD;line-height:1.75;flex:1">${l.replace(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}]\s*/u,'').replace(/^[0-9]+\.\s*/,'').trim()}</span>
+      </div>`;
+    }).join('');
   }
   document.getElementById('forcesText').innerHTML=fmtLines(r.forces);
   document.getElementById('weakText').innerHTML=fmtLines(r.faiblesses);
@@ -1159,6 +1178,117 @@ function render(r,rrv,tf,pair){
   document.getElementById('v-title').textContent=r.verdictTitle||'';
   document.getElementById('v-sub').textContent=r.verdictSub||'';
   showResult();
+}
+
+
+function drawAnnotatedChart(src, anns){
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function(){
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    // Draw base image
+    ctx.drawImage(img, 0, 0, W, H);
+
+    if(!anns || anns.length === 0) return;
+
+    const COLORS = {bull:'#34D399', bear:'#F87171', info:'#A78BFA', warn:'#FBBF24'};
+    const PIN_R = Math.max(18, W * 0.018);
+    const FS = Math.max(12, W * 0.013);
+
+    anns.forEach((ann, i) => {
+      const x = (Math.min(95, Math.max(5, ann.x)) / 100) * W;
+      const y = (Math.min(95, Math.max(5, ann.y)) / 100) * H;
+      const col = COLORS[ann.type] || COLORS.info;
+
+      ctx.save();
+
+      // Horizontal dashed line for bull/bear levels
+      if(ann.type === 'bull' || ann.type === 'bear'){
+        ctx.beginPath();
+        ctx.setLineDash([10, 7]);
+        ctx.strokeStyle = col;
+        ctx.lineWidth = Math.max(2, W / 500);
+        ctx.globalAlpha = 0.7;
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.setLineDash([]);
+      }
+
+      // Circle background (solid)
+      ctx.beginPath();
+      ctx.arc(x, y, PIN_R, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(8,8,15,0.85)';
+      ctx.fill();
+      ctx.strokeStyle = col;
+      ctx.lineWidth = Math.max(3, W / 200);
+      ctx.stroke();
+
+      // Icon or number
+      const icon = ann.icon || String(i + 1);
+      ctx.font = `bold ${FS * 1.1}px Arial, sans-serif`;
+      ctx.fillStyle = col;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(icon, x, y + 1);
+
+      // Label box
+      if(ann.label){
+        ctx.font = `${FS}px Arial, sans-serif`;
+        const pad = FS * 0.7;
+        const tw = ctx.measureText(ann.label).width;
+        const bw = tw + pad * 2;
+        const bh = FS + pad * 2;
+
+        // Position label: right of pin, or left if too close to edge
+        let lx = x + PIN_R + 8;
+        let ly = y - bh / 2;
+        if(lx + bw > W - 10) lx = x - PIN_R - 8 - bw;
+        if(ly < 4) ly = 4;
+        if(ly + bh > H - 4) ly = H - bh - 4;
+
+        // Shadow
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 8;
+
+        // Background rounded box
+        ctx.beginPath();
+        const br = 6;
+        ctx.moveTo(lx + br, ly);
+        ctx.lineTo(lx + bw - br, ly);
+        ctx.quadraticCurveTo(lx + bw, ly, lx + bw, ly + br);
+        ctx.lineTo(lx + bw, ly + bh - br);
+        ctx.quadraticCurveTo(lx + bw, ly + bh, lx + bw - br, ly + bh);
+        ctx.lineTo(lx + br, ly + bh);
+        ctx.quadraticCurveTo(lx, ly + bh, lx, ly + bh - br);
+        ctx.lineTo(lx, ly + br);
+        ctx.quadraticCurveTo(lx, ly, lx + br, ly);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(10,10,20,0.92)';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Label text
+        ctx.fillStyle = '#F0EEFF';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(ann.label, lx + pad, ly + bh / 2);
+      }
+
+      ctx.restore();
+    });
+  };
+  img.src = src;
 }
 
 applyLang();
