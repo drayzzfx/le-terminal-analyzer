@@ -1401,26 +1401,31 @@ function render(r,rrv,tf,pair){
 
   function fmtBlock(s){
     if(!s) return '<span style="color:#5A5570">—</span>';
-    // Split on literal \n or actual newlines
-    var raw = s.replace(/\\n/g,'\n');
-    var parts = raw.split('\n').map(function(l){return l.trim();}).filter(function(l){return l.length>0;});
-    if(parts.length === 0) return '<span style="color:#5A5570">—</span>';
+    // Split on \n, \\n, or // separators used by AI
+    var raw = s
+      .replace(/\\n/g, '||SPLIT||')
+      .replace(/\n/g, '||SPLIT||')
+      .replace(/ \/{2} /g, '||SPLIT||')
+      .replace(/\/{2}/g, '||SPLIT||')
+      .replace(/\|/g, '||SPLIT||');
+    var parts = raw.split('||SPLIT||').map(function(l){return l.trim();}).filter(function(l){return l.length>2;});
+    if(parts.length === 0) return '<p style="font-size:13px;color:#9B96B8;line-height:1.8">'+s+'</p>';
     return parts.map(function(l, i){
-      // Extract leading emoji or number
       var icon = '›';
       var text = l;
       var cp = l.codePointAt(0)||0;
-      if(cp > 127 && cp !== 8226){
+      if(cp > 8000){
         icon = String.fromCodePoint(cp);
         text = l.slice(icon.length).trim();
       } else {
-        var nm = l.match(/^([0-9]+[.)\s]+)(.*)/);
+        var nm = l.match(/^([0-9]+[.)\s]+)(.*)/s);
         if(nm){ icon = nm[1].trim(); text = nm[2].trim(); }
       }
       var last = i === parts.length-1;
-      return '<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;'+(last?'':'border-bottom:1px solid rgba(255,255,255,0.05)')+'">'+
-        '<span style="flex-shrink:0;min-width:18px;font-size:13px;color:#A78BFA;font-weight:700;line-height:1.5">'+icon+'</span>'+
-        '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.6;flex:1">'+text+'</span>'+
+      return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;'+
+        (last ? '' : 'border-bottom:1px solid rgba(255,255,255,0.06);')+'">'+
+        '<span style="flex-shrink:0;min-width:22px;font-size:14px;color:#A78BFA;font-weight:700;line-height:1.5;text-align:center">'+icon+'</span>'+
+        '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.65;flex:1">'+text+'</span>'+
         '</div>';
     }).join('');
   }
