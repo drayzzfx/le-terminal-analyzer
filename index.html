@@ -1676,6 +1676,17 @@ async function saveAnalysis(r,pair,d,tf){
 }
 checkSession();
 
+
+// Make functions globally accessible
+window.openAuth = openAuth;
+window.closeAuth = closeAuth;
+window.switchAuthTab = switchAuthTab;
+window.doAuth = doAuth;
+window.openHistory = openHistory;
+window.closeHistory = closeHistory;
+window.closeHDetail = closeHDetail;
+window.openHDetail = openHDetail;
+
 </script>
 
 <!-- AUTH MODAL -->
