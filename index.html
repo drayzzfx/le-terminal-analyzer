@@ -1432,7 +1432,21 @@ function render(r,rrv,tf,pair){
 
   if(imgData){
     document.getElementById('chartResult').classList.add('show');
-    renderAnnotatedCanvas(imgData, r.annotations||[]);
+    window._lastAnnotations = r.annotations||[];
+    window._lastScore = r.score;
+    console.log('Annotations IA:', JSON.stringify(r.annotations||[]));
+    // If IA returned no annotations, generate smart default ones based on entry/TP/SL
+    let annsToRender = r.annotations||[];
+    if(annsToRender.length === 0 && imgData){
+      // Generate basic annotations from trade data
+      const entryPct = 50; // middle of chart
+      annsToRender = [
+        {x:70, y:45, type:'info', icon:'📍', label:'Zone d\'entrée : '+document.getElementById('entry').value},
+        {x:70, y:25, type:'bull', icon:'🎯', label:'TP : '+document.getElementById('tp').value},
+        {x:70, y:65, type:'bear', icon:'🛡', label:'SL : '+document.getElementById('sl').value}
+      ];
+    }
+    renderAnnotatedCanvas(imgData, annsToRender);
   } else {
     document.getElementById('chartResult').classList.remove('show');
   }
