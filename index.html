@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LE TERMINAL — Setup Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080F;
+  --card: rgba(255,255,255,0.04);
+  --card-hover: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.08);
+  --border-active: rgba(139,92,246,0.6);
+  --v: #8B5CF6;
+  --v2: #A78BFA;
+  --v3: #C4B5FD;
+  --vglow: rgba(139,92,246,0.25);
+  --vglow2: rgba(139,92,246,0.08);
+  --text: #F0EEFF;
+  --text2: #9B96B8;
+  --text3: #5A5570;
+  --green: #34D399;
+  --red: #F87171;
+  --amber: #FBBF24;
+  --r: 16px;
+  --r2: 12px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── LANDING ── */
+#landing {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+#landing.exit {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+.landing-top {
+  text-align: center;
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.landing-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.25em;
+  color: var(--v2);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.landing-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.landing-title span {
+  background: linear-gradient(135deg, var(--v) 0%, var(--v2) 50%, #E879F9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.landing-sub {
+  font-size: 15px; font-weight: 300;
+  color: var(--text2);
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+/* CHART CARD */
+.chart-card-wrap {
+  position: relative;
+  cursor: pointer;
+}
+
+.chart-card {
+  width: min(720px, 90vw);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(.2,0,.1,1), box-shadow 0.4s ease, border-color 0.3s;
+  position: relative;
+}
+
+.chart-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px var(--vglow);
+  border-color: rgba(139,92,246,0.3);
+}
+
+.chart-card.zooming {
+  animation: zoomIn 0.55s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes zoomIn {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(3.5); opacity: 0; }
+}
+
+.chart-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+
+.chart-dots { display: flex; gap: 6px; }
+.chart-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.chart-dot:nth-child(1) { background: #FF5F57; }
+.chart-dot:nth-child(2) { background: #FFBD2E; }
+.chart-dot:nth-child(3) { background: #28C840; }
+
+.chart-pair {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+}
+
+.chart-tf {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--v2);
+  background: var(--vglow2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(139,92,246,0.2);
+}
+
+.chart-body { padding: 24px 20px 20px; }
+
+/* SVG CHART */
+.fake-chart { width: 100%; height: 180px; }
+
+.chart-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 24px;
+  background: rgba(8,8,15,0.5);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.chart-card-wrap:hover .chart-overlay { opacity: 1; }
+
+.chart-cta {
+  background: var(--v);
+  color: white;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 14px 32px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 40px var(--vglow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.chart-cta:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 60px rgba(139,92,246,0.5);
+}
+
+/* ambient glow behind chart */
+.glow-bg {
+  position: absolute;
+  width: 500px; height: 300px;
+  background: radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* ── APP ── */
+#app {
+  display: none;
+  min-height: 100vh;
+  padding: 0;
+}
+#app.show { display: block; }
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; height: 60px;
+  background: rgba(8,8,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-brand {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 17px; font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.topbar-brand span { color: var(--v2); }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.usage-chip {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 5px 12px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  background: var(--card);
+}
+.usage-chip.pro {
+  border-color: rgba(139,92,246,0.4);
+  color: var(--v2);
+  background: var(--vglow2);
+}
+
+.lang-switch { display: flex; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); }
+.lang-btn {
+  padding: 5px 13px;
+  background: transparent; border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500;
+  color: var(--text3); cursor: pointer; transition: all 0.2s;
+}
+.lang-btn.on { background: var(--v); color: white; }
+
+/* MAIN LAYOUT */
+.main {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* PAGE TITLE */
+.page-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.page-title span {
+  background: linear-gradient(135deg, var(--v), var(--v2), #E879F9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-sub {
+  font-size: 14px; font-weight: 300;
+  color: var(--text2); letter-spacing: 0.01em;
+}
+
+/* FORM GRID */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+
+/* CARD */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.card:focus-within { border-color: rgba(139,92,246,0.35); }
+
+.card-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--v2);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.card-label::before {
+  content: '';
+  display: block; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--v);
+}
+
+/* FIELD */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.lbl {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+
+input[type=text], input[type=number], select, textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  color: var(--text);
+  padding: 11px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 400;
+  outline: none; width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--border-active);
+  background: rgba(139,92,246,0.06);
+}
+input::placeholder, textarea::placeholder { color: var(--text3); }
+select { cursor: pointer; }
+select option { background: #13131f; }
+textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
+
+/* DIRECTION */
+.dir-group { display: flex; gap: 8px; }
+.dir-btn {
+  flex: 1; padding: 11px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text2); cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.dir-btn.long.on { border-color: rgba(52,211,153,0.5); color: var(--green); background: rgba(52,211,153,0.08); }
+.dir-btn.short.on { border-color: rgba(248,113,113,0.5); color: var(--red); background: rgba(248,113,113,0.08); }
+
+/* UPLOAD */
+.upload-zone {
+  border: 1.5px dashed rgba(139,92,246,0.25);
+  border-radius: var(--r2);
+  background: var(--vglow2);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag {
+  border-color: var(--v);
+  background: rgba(139,92,246,0.1);
+}
+.upload-zone input[type=file] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.upload-icon { font-size: 24px; margin-bottom: 6px; }
+.upload-text { font-size: 12px; font-weight: 400; color: var(--text2); line-height: 1.6; }
+.upload-text strong { color: var(--v2); }
+.upload-hint { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+.preview { display: none; position: relative; border-radius: var(--r2); overflow: hidden; }
+.preview img { width: 100%; max-height: 140px; object-fit: cover; display: block; }
+.preview-rm {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(8,8,15,0.8); backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  color: var(--text2); font-size: 11px;
+  padding: 4px 10px; border-radius: 50px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.preview-rm:hover { border-color: var(--red); color: var(--red); }
+
+/* ANALYZE BTN */
+.analyze-btn {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--v), #7C3AED);
+  border: none; border-radius: var(--r);
+  color: white;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 8px 32px rgba(139,92,246,0.3);
+  position: relative; overflow: hidden;
+}
+.analyze-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(139,92,246,0.45); }
+.analyze-btn:hover::before { opacity: 1; }
+.analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.form-section-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin: 20px 0 10px;
+}
+
+/* ── LOADING ── */
+.loading-view {
+  display: none;
+  min-height: 60vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+}
+.loading-view.show { display: flex; }
+
+.ld-orb {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--v), #7C3AED, #E879F9);
+  margin: 0 auto 28px;
+  animation: orbPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 40px var(--vglow);
+}
+@keyframes orbPulse {
+  0%,100% { transform: scale(1); box-shadow: 0 0 40px var(--vglow); }
+  50%      { transform: scale(1.12); box-shadow: 0 0 70px rgba(139,92,246,0.45); }
+}
+
+.ld-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 24px; font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text); margin-bottom: 8px;
+}
+.ld-step {
+  font-size: 12px; font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--v2);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ── RESULT ── */
+.result-view { display: none; }
+.result-view.show { display: block; }
+
+/* Score hero */
+.result-hero {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px; align-items: center;
+  position: relative; overflow: hidden;
+}
+.result-hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--v) 30%, var(--v2) 60%, transparent);
+}
+.result-hero::after {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.score-ring { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+.score-ring svg { transform: rotate(-90deg); }
+.score-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.score-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 32px; font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1;
+}
+.score-den { font-size: 10px; color: var(--text3); font-weight: 400; }
+
+.result-meta {}
+.result-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; color: var(--v2); margin-bottom: 6px; }
+.result-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -0.01em; color: var(--text);
+  margin-bottom: 4px; line-height: 1.2;
+}
+.result-sub { font-size: 13px; font-weight: 300; color: var(--text2); line-height: 1.6; }
+
+/* Metrics */
+.metrics-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; margin-bottom: 12px;
+}
+.metric {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 14px 16px;
+}
+.metric-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; }
+.metric-val {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 20px; font-weight: 700;
+  letter-spacing: -0.01em; line-height: 1;
+}
+
+/* Chart */
+.chart-result {
+  display: none;
+  border-radius: var(--r2); overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 12px; position: relative;
+}
+.chart-result.show { display: block; }
+.chart-result img { width: 100%; max-height: 200px; object-fit: cover; display: block; }
+.chart-result-tag {
+  position: absolute; top: 10px; left: 12px;
+  font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+  color: var(--v2); background: rgba(8,8,15,0.75);
+  backdrop-filter: blur(8px);
+  padding: 3px 10px; border-radius: 50px;
+  border: 1px solid rgba(139,92,246,0.25);
+}
+
+/* Feedback */
+.fb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.fb-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 18px;
+}
+.fb-head {
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 12px;
+}
+.fb-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.fb-title { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.fb-body { font-size: 12px; font-weight: 300; color: var(--text2); line-height: 1.8; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.tag {
+  font-size: 10px; font-weight: 500;
+  padding: 3px 10px; border-radius: 50px;
+  border: 1px solid var(--border);
+  color: var(--text3);
+}
+.tag.g { border-color: rgba(52,211,153,0.35); color: var(--green); background: rgba(52,211,153,0.06); }
+.tag.r { border-color: rgba(248,113,113,0.35); color: var(--red); background: rgba(248,113,113,0.06); }
+
+.fb-full {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 18px; margin-bottom: 10px;
+}
+
+/* Verdict */
+.verdict {
+  border-radius: var(--r2);
+  border: 1px solid;
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px;
+}
+.verdict.go  { border-color: rgba(52,211,153,0.35); background: rgba(52,211,153,0.06); }
+.verdict.wait{ border-color: rgba(251,191,36,0.35);  background: rgba(251,191,36,0.06);  }
+.verdict.no  { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+
+.v-badge {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px; font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 6px 14px; border-radius: 50px;
+  border: 1px solid; flex-shrink: 0;
+}
+.verdict.go  .v-badge { color: var(--green); border-color: rgba(52,211,153,0.5);  background: rgba(52,211,153,0.1); }
+.verdict.wait .v-badge { color: var(--amber); border-color: rgba(251,191,36,0.5);  background: rgba(251,191,36,0.1); }
+.verdict.no  .v-badge { color: var(--red);   border-color: rgba(248,113,113,0.5); background: rgba(248,113,113,0.1); }
+
+.v-text { font-size: 13px; font-weight: 300; color: var(--text2); line-height: 1.6; }
+.v-text strong { display: block; font-family: 'Bricolage Grotesque', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+
+.actions { display: flex; gap: 8px; }
+.act-btn {
+  padding: 11px 22px; border-radius: 50px;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text2); font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.04em; cursor: pointer;
+  transition: all 0.2s;
+}
+.act-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+.act-btn.accent { border-color: rgba(139,92,246,0.4); color: var(--v2); background: var(--vglow2); }
+.act-btn.accent:hover { background: rgba(139,92,246,0.15); }
+
+/* ── PAYWALL ── */
+.pw-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(8,8,15,0.92); backdrop-filter: blur(24px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.pw-overlay.show { display: flex; animation: fadeUp .35s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.pw-box {
+  max-width: 460px; width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 24px;
+  padding: 36px;
+  position: relative; text-align: center;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px var(--vglow);
+}
+.pw-box::before {
+  content: '';
+  position: absolute; top: 0; left: 40px; right: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--v), var(--v2), transparent);
+}
+
+.pw-orb {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--v), #E879F9);
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 30px var(--vglow);
+}
+.pw-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+  color: var(--text); margin-bottom: 8px;
+}
+.pw-sub { font-size: 13px; font-weight: 300; color: var(--text2); line-height: 1.7; margin-bottom: 28px; }
+
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.plan {
+  border: 1px solid var(--border); border-radius: var(--r2);
+  padding: 18px; cursor: pointer; transition: all 0.2s;
+  text-align: left; position: relative;
+}
+.plan:hover, .plan.sel { border-color: rgba(139,92,246,0.5); background: var(--vglow2); }
+.plan.sel::after { content: '✓'; position: absolute; top: 10px; right: 12px; font-size: 11px; color: var(--v2); }
+.plan-badge-top { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; color: var(--v2); margin-bottom: 6px; display: block; }
+.plan-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: 0.04em; }
+.plan-price { font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 800; color: var(--v2); line-height: 1; margin-bottom: 2px; }
+.plan-per { font-size: 9px; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 12px; }
+.plan-feats { list-style: none; font-size: 10px; color: var(--text2); line-height: 2.1; }
+.plan-feats li::before { content: '+ '; color: var(--v); font-weight: 600; }
+
+.pay-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--v), #7C3AED);
+  border: none; border-radius: 50px;
+  color: white; font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.04em;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 8px 24px rgba(139,92,246,0.4);
+  margin-bottom: 14px;
+}
+.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(139,92,246,0.55); }
+.pay-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.pay-note { font-size: 10px; color: var(--text3); line-height: 1.8; }
+.pay-note a { color: var(--v2); text-decoration: none; }
+.demo-link { display: inline-block; margin-top: 12px; font-size: 11px; color: var(--text3); cursor: pointer; text-decoration: underline; transition: color 0.2s; }
+.demo-link:hover { color: var(--text2); }
+
+@media (max-width: 680px) {
+  .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+  .metrics-row { grid-template-columns: 1fr 1fr; }
+  .fb-grid { grid-template-columns: 1fr; }
+  .plans { grid-template-columns: 1fr; }
+  .result-hero { grid-template-columns: 1fr; }
+  .landing-title { font-size: 48px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LANDING ═══ -->
+<div id="landing">
+  <div class="glow-bg"></div>
+
+  <div class="landing-top">
+    <div class="landing-eyebrow">Propulsé par l'IA · Le Terminal</div>
+    <h1 class="landing-title">
+      Analyse ton<br><span>Setup</span> en secondes.
+    </h1>
+    <p class="landing-sub">Score IA · Confluence · Risk/Reward · Feedback instantané</p>
+  </div>
+
+  <div class="chart-card-wrap" onclick="enterApp()">
+    <div class="chart-card" id="chartCard">
+      <div class="chart-topbar">
+        <div class="chart-dots">
+          <div class="chart-dot"></div>
+          <div class="chart-dot"></div>
+          <div class="chart-dot"></div>
+        </div>
+        <div class="chart-pair">XAUUSD · H4</div>
+        <div class="chart-tf">LIVE</div>
+      </div>
+      <div class="chart-body">
+        <svg class="fake-chart" viewBox="0 0 680 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#7C3AED"/>
+              <stop offset="60%" stop-color="#A78BFA"/>
+              <stop offset="100%" stop-color="#E879F9"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid lines -->
+          <line x1="0" y1="36" x2="680" y2="36" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="72" x2="680" y2="72" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="108" x2="680" y2="108" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="144" x2="680" y2="144" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <!-- Area fill -->
+          <path d="M0,140 C40,130 70,120 110,115 C150,110 170,125 210,118 C250,111 260,95 300,88 C340,81 360,90 400,85 C440,80 460,68 500,55 C540,42 560,50 600,40 C640,30 660,32 680,28 L680,180 L0,180 Z" fill="url(#areaGrad)"/>
+          <!-- Main line -->
+          <path d="M0,140 C40,130 70,120 110,115 C150,110 170,125 210,118 C250,111 260,95 300,88 C340,81 360,90 400,85 C440,80 460,68 500,55 C540,42 560,50 600,40 C640,30 660,32 680,28" fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Candles suggestion -->
+          <rect x="80" y="108" width="5" height="18" rx="1" fill="rgba(52,211,153,0.6)"/>
+          <rect x="120" y="112" width="5" height="14" rx="1" fill="rgba(52,211,153,0.6)"/>
+          <rect x="200" y="115" width="5" height="16" rx="1" fill="rgba(248,113,113,0.6)"/>
+          <rect x="280" y="84" width="5" height="18" rx="1" fill="rgba(52,211,153,0.6)"/>
+          <rect x="380" y="80" width="5" height="14" rx="1" fill="rgba(52,211,153,0.6)"/>
+          <rect x="480" y="52" width="5" height="12" rx="1" fill="rgba(248,113,113,0.6)"/>
+          <rect x="580" y="36" width="5" height="16" rx="1" fill="rgba(52,211,153,0.6)"/>
+          <!-- TP line -->
+          <line x1="380" y1="30" x2="680" y2="30" stroke="rgba(52,211,153,0.45)" stroke-width="1" stroke-dasharray="5,4"/>
+          <text x="388" y="25" font-family="Inter" font-size="9" fill="rgba(52,211,153,0.8)" letter-spacing="0.06em">TP</text>
+          <!-- SL line -->
+          <line x1="380" y1="100" x2="680" y2="100" stroke="rgba(248,113,113,0.45)" stroke-width="1" stroke-dasharray="5,4"/>
+          <text x="388" y="112" font-family="Inter" font-size="9" fill="rgba(248,113,113,0.8)" letter-spacing="0.06em">SL</text>
+          <!-- Entry -->
+          <circle cx="380" cy="85" r="5" fill="#8B5CF6" opacity="0.9"/>
+          <circle cx="380" cy="85" r="9" fill="none" stroke="#8B5CF6" stroke-width="1" opacity="0.4"/>
+          <!-- Glow dot end -->
+          <circle cx="680" cy="28" r="4" fill="#E879F9" opacity="0.9"/>
+          <circle cx="680" cy="28" r="8" fill="none" stroke="#E879F9" stroke-width="1" opacity="0.3"/>
+          <!-- Price labels -->
+          <text x="8" y="33" font-family="Inter" font-size="8" fill="rgba(255,255,255,0.2)" letter-spacing="0.04em">2360</text>
+          <text x="8" y="145" font-family="Inter" font-size="8" fill="rgba(255,255,255,0.2)" letter-spacing="0.04em">2290</text>
+        </svg>
+      </div>
+    </div>
+    <div class="chart-overlay">
+      <button class="chart-cta">⚡ Analyser ce setup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+
+  <!-- Paywall -->
+  <div class="pw-overlay" id="paywall">
+    <div class="pw-box">
+      <div class="pw-orb">🔒</div>
+      <div class="pw-title" id="pw-title">Limite atteinte</div>
+      <div class="pw-sub" id="pw-sub">Tu as utilisé tes 3 analyses gratuites.<br>Passe à PRO pour des analyses illimitées.</div>
+      <div class="plans">
+        <div class="plan" id="plan-m" onclick="pickPlan('m')">
+          <span class="plan-name" id="pm-name">Mensuel</span>
+          <div class="plan-price">19€</div>
+          <div class="plan-per" id="pm-per">/ mois</div>
+          <ul class="plan-feats"><li id="pf1">Analyses illimitées</li><li id="pf2">Upload graphique</li><li id="pf3">Historique 30j</li></ul>
+        </div>
+        <div class="plan sel" id="plan-y" onclick="pickPlan('y')">
+          <span class="plan-badge-top" id="py-top">★ MEILLEURE OFFRE</span>
+          <span class="plan-name" id="py-name">Annuel</span>
+          <div class="plan-price">9€</div>
+          <div class="plan-per" id="py-per">/ mois · 99€/an</div>
+          <ul class="plan-feats"><li id="pf4">Analyses illimitées</li><li id="pf5">Upload graphique</li><li id="pf6">Historique complet</li><li id="pf7">Accès prioritaire</li></ul>
+        </div>
+      </div>
+      <button class="pay-btn" id="payBtn" onclick="doPayment()"><span id="pay-txt">Continuer vers le paiement</span></button>
+      <div class="pay-note" id="pay-note">Paiement sécurisé Stripe · Annulation à tout moment</div>
+      <span class="demo-link" onclick="closePW()" id="demo-lnk">Continuer en mode démo</span>
+    </div>
+  </div>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-brand">Le <span>Terminal</span></div>
+    <div class="topbar-right">
+      <div class="usage-chip" id="usageChip">FREE · 3 restantes</div>
+      <div class="lang-switch">
+        <button class="lang-btn on" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- Page title -->
+    <div class="page-hero">
+      <h2 class="page-title" id="page-title">Analyse ton <span>Setup</span></h2>
+      <p class="page-sub" id="page-sub">Configure ton trade, ajoute ton graphique. Score IA + feedback instantané.</p>
+    </div>
+
+    <!-- FORM -->
+    <div id="formView">
+
+      <div class="form-section-title" id="fst1">Trade</div>
+      <div class="form-grid three" style="margin-bottom:12px">
+        <div class="field">
+          <label class="lbl" id="lbl-pair">Paire / Actif</label>
+          <input type="text" id="pair" placeholder="XAUUSD, BTC, NAS100…" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="lbl" id="lbl-dir">Direction</label>
+          <div class="dir-group">
+            <button class="dir-btn long" id="btnL" onclick="setDir('LONG')">LONG</button>
+            <button class="dir-btn short" id="btnS" onclick="setDir('SHORT')">SHORT</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="lbl" id="lbl-tf">Timeframe</label>
+          <select id="tf"><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
+        </div>
+      </div>
+
+      <div class="form-section-title" id="fst2">Niveaux</div>
+      <div class="form-grid three" style="margin-bottom:12px">
+        <div class="field">
+          <label class="lbl" id="lbl-entry">Entrée</label>
+          <input type="number" id="entry" placeholder="2320.50" step="any">
+        </div>
+        <div class="field">
+          <label class="lbl" id="lbl-tp">Take Profit</label>
+          <input type="number" id="tp" placeholder="2345.00" step="any">
+        </div>
+        <div class="field">
+          <label class="lbl" id="lbl-sl">Stop Loss</label>
+          <input type="number" id="sl" placeholder="2308.00" step="any">
+        </div>
+      </div>
+
+      <div class="form-section-title" id="fst3">Contexte</div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field">
+          <label class="lbl" id="lbl-bias">Biais marché</label>
+          <select id="bias"><option value="bullish" id="ob">Haussier</option><option value="bearish" id="obr">Baissier</option><option value="neutral" id="on">Neutre</option></select>
+        </div>
+        <div class="field">
+          <label class="lbl" id="lbl-sess">Session</label>
+          <select id="sess"><option>London</option><option selected>New York</option><option>Asian</option><option>Overlap</option></select>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:20px">
+        <label class="lbl" id="lbl-conf">Confluences & Notes</label>
+        <textarea id="conf" placeholder="Rejet résistance H4, DXY haussier, divergence RSI…"></textarea>
+      </div>
+
+      <div class="form-section-title" id="fst4">Graphique</div>
+      <div class="upload-zone" id="uploadZone" style="margin-bottom:20px" onclick="trigUpl()">
+        <input type="file" id="fileIn" accept="image/*" onchange="onFile(this)">
+        <div class="upload-icon" id="uico">📊</div>
+        <div class="upload-text"><strong id="ucta">Ajoute ton graphique</strong></div>
+        <div class="upload-hint" id="uhint">PNG, JPG · Glisse ou clique</div>
+      </div>
+      <div class="preview" id="prevWrap" style="margin-bottom:20px">
+        <img id="prevImg" src="" alt="">
+        <button class="preview-rm" onclick="rmImg(event)" id="rm-img">✕ Retirer</button>
+      </div>
+
+      <button class="analyze-btn" id="submitBtn" onclick="analyze()">
+        <span id="btn-txt">⚡ Analyser mon setup</span>
+      </button>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading-view" id="loadView">
+      <div class="ld-orb"></div>
+      <div class="ld-title" id="ld-title">Analyse en cours…</div>
+      <div class="ld-step" id="ld-step">ÉVALUATION DES CONFLUENCES</div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-view" id="resView">
+
+      <div class="result-hero">
+        <div class="score-ring">
+          <svg width="88" height="88" viewBox="0 0 88 88">
+            <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(139,92,246,0.1)" stroke-width="5"/>
+            <circle cx="44" cy="44" r="36" fill="none" stroke="var(--v2)" stroke-width="5"
+              stroke-dasharray="226" id="scoreArc" stroke-dashoffset="226" stroke-linecap="round"
+              style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .4s"/>
+          </svg>
+          <div class="score-center">
+            <div class="score-num" id="scoreNum">—</div>
+            <div class="score-den">/10</div>
+          </div>
+        </div>
+        <div class="result-meta">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div class="result-tag" id="res-tag">RÉSULTAT D'ANALYSE</div>
+            <div id="niveau-badge" style="font-size:9px;font-weight:600;letter-spacing:0.14em;padding:3px 10px;border-radius:50px;border:1px solid;display:none"></div>
+          </div>
+          <div class="result-title" id="res-title">—</div>
+          <div class="result-sub" id="res-sub">—</div>
+        </div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric"><div class="metric-lbl">R:R</div><div class="metric-val" id="m-rr">—</div></div>
+        <div class="metric"><div class="metric-lbl" id="m-dir-lbl">Direction</div><div class="metric-val" id="m-dir">—</div></div>
+        <div class="metric"><div class="metric-lbl">TF</div><div class="metric-val" id="m-tf">—</div></div>
+        <div class="metric"><div class="metric-lbl" id="m-pair-lbl">Actif</div><div class="metric-val" id="m-pair" style="font-size:15px">—</div></div>
+      </div>
+
+      <div class="chart-result" id="chartResult">
+        <img id="chartResImg" src="" alt="">
+        <div class="chart-result-tag" id="crt-lbl">Graphique soumis</div>
+      </div>
+
+      <div class="fb-grid">
+        <div class="fb-card">
+          <div class="fb-head">
+            <div class="fb-dot" style="background:var(--green)"></div>
+            <span class="fb-title" id="fc-forces" style="color:var(--green)">Points Forts</span>
+          </div>
+          <div class="fb-body" id="forcesText">—</div>
+          <div class="tag-row" id="forcesTags"></div>
+        </div>
+        <div class="fb-card">
+          <div class="fb-head">
+            <div class="fb-dot" style="background:var(--red)"></div>
+            <span class="fb-title" id="fc-weak" style="color:var(--red)">Points Faibles</span>
+          </div>
+          <div class="fb-body" id="weakText">—</div>
+          <div class="tag-row" id="weakTags"></div>
+        </div>
+      </div>
+
+      <div class="fb-full">
+        <div class="fb-head" style="margin-bottom:10px">
+          <div class="fb-dot" style="background:#60A5FA"></div>
+          <span class="fb-title" id="fc-advice" style="color:#60A5FA">Recommandations</span>
+        </div>
+        <div class="fb-body" id="adviceText">—</div>
+      </div>
+
+      <div class="verdict" id="verdictBox">
+        <div class="v-badge" id="v-badge">—</div>
+        <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
+      </div>
+
+      <div class="actions">
+        <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
+        <button class="act-btn accent" onclick="openPW()" id="act-pro">★ Passer PRO</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
+let usage=parseInt(localStorage.getItem('lt_u')||'0');
+const FREE=3;
+if(localStorage.getItem('lt_pro')==='1') isPro=true;
+
+// ── LANDING ──
+function enterApp(){
+  const card=document.getElementById('chartCard');
+  card.classList.add('zooming');
+  setTimeout(()=>{
+    document.getElementById('landing').classList.add('exit');
+    setTimeout(()=>{
+      document.getElementById('landing').style.display='none';
+      const app=document.getElementById('app');
+      app.classList.add('show');
+      app.style.animation='fadeUp .5s ease';
+    },400);
+  },300);
+}
+
+// ── LANG ──
+const T={
+  fr:{
+    pageTitle:'Analyse ton <span>Setup</span>',
+    pageSub:'Configure ton trade, ajoute ton graphique. Score IA + feedback instantané.',
+    fst1:'Trade', fst2:'Niveaux', fst3:'Contexte', fst4:'Graphique',
+    lblPair:'Paire / Actif', lblDir:'Direction', lblTf:'Timeframe',
+    lblEntry:'Entrée', lblTp:'Take Profit', lblSl:'Stop Loss',
+    lblBias:'Biais marché', lblSess:'Session', lblConf:'Confluences & Notes',
+    ob:'Haussier', obr:'Baissier', on:'Neutre',
+    ucta:'Ajoute ton graphique', uhint:'PNG, JPG · Glisse ou clique', rmImg:'✕ Retirer',
+    btnTxt:'⚡ Analyser mon setup',
+    ldTitle:'Analyse en cours…',
+    steps:['ÉVALUATION DES CONFLUENCES','CALCUL DU RISQUE','ANALYSE DE LA STRUCTURE','GÉNÉRATION DU FEEDBACK'],
+    resTag:'RÉSULTAT D\'ANALYSE', mDirLbl:'Direction', mPairLbl:'Actif',
+    crtLbl:'Graphique soumis',
+    fcForces:'Points Forts', fcWeak:'Points Faibles', fcAdvice:'Recommandations',
+    actNew:'↩ Nouvelle analyse', actPro:'★ Passer PRO',
+    pwTitle:'Limite atteinte', pwSub:'Tu as utilisé tes 3 analyses gratuites.<br>Passe à PRO pour des analyses illimitées.',
+    pmName:'Mensuel', pyName:'Annuel', pyTop:'★ MEILLEURE OFFRE',
+    pmPer:'/ mois', pyPer:'/ mois · 99€/an',
+    pf1:'Analyses illimitées',pf2:'Upload graphique',pf3:'Historique 30j',
+    pf4:'Analyses illimitées',pf5:'Upload graphique',pf6:'Historique complet',pf7:'Accès prioritaire',
+    payTxt:'Continuer vers le paiement', payNote:'Paiement sécurisé Stripe · Annulation à tout moment',
+    demoLnk:'Continuer en mode démo',
+    usageChip:'FREE · {n} restantes', proBadge:'PRO · Illimité',
+    alertFill:'Remplis tous les champs et sélectionne une direction.',
+    waitLabel:'⏸ ATTENDRE',
+    sys:`Tu es un analyste trading senior avec 15 ans d'expérience sur tous les marchés (Forex, Or, Indices, Crypto). Tu maîtrises parfaitement l'ICT/Smart Money (BOS, CHoCH, Order Blocks, FVG, liquidity sweeps), la Price Action classique (support/résistance, tendances, patterns chartistes) et les indicateurs techniques (EMA, RSI, MACD, volume).
+
+ÉTAPE 1 — DÉTECTION DU NIVEAU DU TRADER
+Analyse les indices fournis pour détecter le niveau :
+- DÉBUTANT : setup simple, peu de confluences, R:R basique, pas de vocabulaire technique, niveaux ronds
+- INTERMÉDIAIRE : quelques confluences, R:R correct (1.5-2.5), timeframe cohérent, un peu de contexte
+- AVANCÉ : confluences multiples, R:R optimisé, structure de marché mentionnée, session précisée, contexte macro
+
+ÉTAPE 2 — ANALYSE MULTI-COUCHES (évalue chaque point)
+1. STRUCTURE DE MARCHÉ : tendance HTF cohérente avec le setup ? BOS/CHoCH identifié ?
+2. ZONE D'ENTRÉE : OB / FVG / niveau S&R / confluence de prix ? Précision de l'entrée ?
+3. RISK MANAGEMENT : R:R (idéal ≥2:1), SL logique (sous structure, pas au hasard), position sizing mentionné ?
+4. CONFLUENCES : combien et lesquelles ? Session, liquidité, volume, indicateurs, multi-TF ?
+5. CONTEXTE MACRO : biais DXY, corrélations, news à venir, sentiment ?
+6. TIMING : bonne session pour l'actif ? Kill zone ? Overlap London/NY ?
+7. LECTURE DU GRAPHIQUE (si fourni) : structure visible, zones clés, qualité du setup visuel
+
+ÉTAPE 3 — SCORING PONDÉRÉ
+- Structure marché : /20
+- Zone d'entrée : /20
+- Risk management : /25
+- Confluences : /20
+- Timing/contexte : /15
+→ Total /100 → ramené sur /10 (arrondi au dixième)
+
+ÉTAPE 4 — FEEDBACK ADAPTÉ AU NIVEAU
+- DÉBUTANT : langage simple, explique le "pourquoi", encourage mais sois honnête, donne des pistes d'apprentissage concrètes
+- INTERMÉDIAIRE : langage technique modéré, pointe les lacunes précises, suggère des optimisations
+- AVANCÉ : langage expert, va dans le détail, sois brutal si nécessaire, suggère des confluences manquantes pointues
+
+Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks, sans texte avant ou après.
+Structure exacte :
+{
+  "niveau": "DÉBUTANT"|"INTERMÉDIAIRE"|"AVANCÉ",
+  "score": <nombre décimal ex: 7.4>,
+  "scoreLabel": <titre percutant en 2-4 mots, ex: "SETUP SOLIDE", "RISQUE ÉLEVÉ", "CONFLUENCE FAIBLE">,
+  "scoreSub": <1 phrase résumant la qualité globale du setup>,
+  "forces": <points forts détaillés, 1 point par ligne séparé par \\n, commence chaque ligne par un emoji pertinent>,
+  "forcesTags": [<3 tags courts max 3 mots>],
+  "faiblesses": <points faibles détaillés, 1 point par ligne séparé par \\n, commence chaque ligne par un emoji pertinent>,
+  "faiblesTags": [<2-3 tags courts>],
+  "recommandations": <conseils concrets et actionnables, 1 conseil par ligne séparé par \\n, adapté au niveau détecté, commence chaque ligne par un numéro>,
+  "verdict": "GO"|"ATTENDRE"|"NO-GO",
+  "verdictTitle": <titre du verdict en 3-5 mots>,
+  "verdictSub": <explication directe du verdict en 1-2 phrases, dis exactement pourquoi>
+}
+Réponds en français.`
+  },
+  en:{
+    pageTitle:'Analyze your <span>Setup</span>',
+    pageSub:'Configure your trade, add your chart. AI score + instant feedback.',
+    fst1:'Trade', fst2:'Levels', fst3:'Context', fst4:'Chart',
+    lblPair:'Pair / Asset', lblDir:'Direction', lblTf:'Timeframe',
+    lblEntry:'Entry', lblTp:'Take Profit', lblSl:'Stop Loss',
+    lblBias:'Market Bias', lblSess:'Session', lblConf:'Confluences & Notes',
+    ob:'Bullish', obr:'Bearish', on:'Neutral',
+    ucta:'Add your chart', uhint:'PNG, JPG · Drag or click', rmImg:'✕ Remove',
+    btnTxt:'⚡ Analyze my setup',
+    ldTitle:'Analyzing…',
+    steps:['EVALUATING CONFLUENCES','CALCULATING RISK','ANALYZING STRUCTURE','GENERATING FEEDBACK'],
+    resTag:'ANALYSIS RESULT', mDirLbl:'Direction', mPairLbl:'Asset',
+    crtLbl:'Submitted chart',
+    fcForces:'Strengths', fcWeak:'Weaknesses', fcAdvice:'Recommendations',
+    actNew:'↩ New analysis', actPro:'★ Go PRO',
+    pwTitle:'Limit reached', pwSub:'You\'ve used your 3 free analyses.<br>Go PRO for unlimited analyses.',
+    pmName:'Monthly', pyName:'Annual', pyTop:'★ BEST VALUE',
+    pmPer:'/ month', pyPer:'/ month · €99/year',
+    pf1:'Unlimited analyses',pf2:'Chart upload',pf3:'30-day history',
+    pf4:'Unlimited analyses',pf5:'Chart upload',pf6:'Full history',pf7:'Priority access',
+    payTxt:'Continue to payment', payNote:'Secure payment via Stripe · Cancel anytime',
+    demoLnk:'Continue in demo mode',
+    usageChip:'FREE · {n} left', proBadge:'PRO · Unlimited',
+    alertFill:'Fill in all required fields and select a direction.',
+    waitLabel:'⏸ WAIT',
+    sys:`You are a senior trading analyst with 15 years of experience across all markets (Forex, Gold, Indices, Crypto). You have deep expertise in ICT/Smart Money concepts (BOS, CHoCH, Order Blocks, FVG, liquidity sweeps), classic Price Action (support/resistance, trends, chart patterns) and technical indicators (EMA, RSI, MACD, volume).
+
+STEP 1 — DETECT TRADER LEVEL
+Analyze provided signals to detect level:
+- BEGINNER: simple setup, few confluences, basic R:R, no technical vocabulary, round numbers
+- INTERMEDIATE: some confluences, decent R:R (1.5-2.5), coherent timeframe, some context
+- ADVANCED: multiple confluences, optimized R:R, market structure mentioned, session specified, macro context
+
+STEP 2 — MULTI-LAYER ANALYSIS (evaluate each point)
+1. MARKET STRUCTURE: HTF trend aligned with setup? BOS/CHoCH identified?
+2. ENTRY ZONE: OB / FVG / S&R level / price confluence? Entry precision?
+3. RISK MANAGEMENT: R:R (ideal ≥2:1), logical SL (below structure), position sizing mentioned?
+4. CONFLUENCES: how many and which? Session, liquidity, volume, indicators, multi-TF?
+5. MACRO CONTEXT: DXY bias, correlations, upcoming news, sentiment?
+6. TIMING: right session for the asset? Kill zone? London/NY overlap?
+7. CHART READING (if provided): visible structure, key zones, visual setup quality
+
+STEP 3 — WEIGHTED SCORING
+- Market structure: /20
+- Entry zone: /20
+- Risk management: /25
+- Confluences: /20
+- Timing/context: /15
+→ Total /100 → converted to /10 (rounded to one decimal)
+
+STEP 4 — LEVEL-ADAPTED FEEDBACK
+- BEGINNER: simple language, explain the "why", encourage but be honest, give concrete learning tips
+- INTERMEDIATE: moderate technical language, point out specific gaps, suggest optimizations
+- ADVANCED: expert language, go into detail, be brutal if necessary, suggest missing sharp confluences
+
+Respond ONLY with valid JSON, no markdown, no backticks, no text before or after.
+Exact structure:
+{
+  "niveau": "BEGINNER"|"INTERMEDIATE"|"ADVANCED",
+  "score": <decimal number e.g. 7.4>,
+  "scoreLabel": <punchy title 2-4 words, e.g. "SOLID SETUP", "HIGH RISK", "WEAK CONFLUENCE">,
+  "scoreSub": <1 sentence summarizing overall setup quality>,
+  "forces": <detailed strengths, 1 point per line separated by \\n, start each line with a relevant emoji>,
+  "forcesTags": [<3 short tags max 3 words>],
+  "faiblesses": <detailed weaknesses, 1 point per line separated by \\n, start each line with a relevant emoji>,
+  "faiblesTags": [<2-3 short tags>],
+  "recommandations": <concrete actionable advice, 1 per line separated by \\n, adapted to detected level, start each line with a number>,
+  "verdict": "GO"|"WAIT"|"NO-GO",
+  "verdictTitle": <verdict title in 3-5 words>,
+  "verdictSub": <direct explanation of verdict in 1-2 sentences, say exactly why>
+}
+Respond in English.`
+  }
+};
+
+function c(){return T[lang]}
+
+function applyLang(){
+  const t=c();
+  document.getElementById('page-title').innerHTML=t.pageTitle;
+  document.getElementById('page-sub').textContent=t.pageSub;
+  ['fst1','fst2','fst3','fst4'].forEach((id,i)=>document.getElementById(id).textContent=[t.fst1,t.fst2,t.fst3,t.fst4][i]);
+  ['lbl-pair','lbl-dir','lbl-tf','lbl-entry','lbl-tp','lbl-sl','lbl-bias','lbl-sess','lbl-conf'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(el)el.textContent=[t.lblPair,t.lblDir,t.lblTf,t.lblEntry,t.lblTp,t.lblSl,t.lblBias,t.lblSess,t.lblConf][i];
+  });
+  document.getElementById('ob').textContent=t.ob;
+  document.getElementById('obr').textContent=t.obr;
+  document.getElementById('on').textContent=t.on;
+  document.getElementById('ucta').textContent=t.ucta;
+  document.getElementById('uhint').textContent=t.uhint;
+  document.getElementById('rm-img').textContent=t.rmImg;
+  document.getElementById('btn-txt').textContent=t.btnTxt;
+  document.getElementById('ld-title').textContent=t.ldTitle;
+  document.getElementById('res-tag').textContent=t.resTag;
+  document.getElementById('m-dir-lbl').textContent=t.mDirLbl;
+  document.getElementById('m-pair-lbl').textContent=t.mPairLbl;
+  document.getElementById('crt-lbl').textContent=t.crtLbl;
+  document.getElementById('fc-forces').textContent=t.fcForces;
+  document.getElementById('fc-weak').textContent=t.fcWeak;
+  document.getElementById('fc-advice').textContent=t.fcAdvice;
+  document.getElementById('act-new').textContent=t.actNew;
+  document.getElementById('act-pro').textContent=t.actPro;
+  document.getElementById('pw-title').textContent=t.pwTitle;
+  document.getElementById('pw-sub').innerHTML=t.pwSub;
+  document.getElementById('pm-name').textContent=t.pmName;
+  document.getElementById('py-name').textContent=t.pyName;
+  document.getElementById('py-top').textContent=t.pyTop;
+  document.getElementById('pm-per').textContent=t.pmPer;
+  document.getElementById('py-per').textContent=t.pyPer;
+  for(let i=1;i<=7;i++) document.getElementById('pf'+i).textContent=t['pf'+i];
+  document.getElementById('pay-txt').textContent=t.payTxt;
+  document.getElementById('pay-note').textContent=t.payNote;
+  document.getElementById('demo-lnk').textContent=t.demoLnk;
+  updUsage();
+}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`.lang-btn:${l==='fr'?'first':'last'}-child`).classList.add('on');
+  applyLang();
+}
+
+function setDir(d){
+  dir=d;
+  document.getElementById('btnL').classList.toggle('on',d==='LONG');
+  document.getElementById('btnS').classList.toggle('on',d==='SHORT');
+}
+
+// ── USAGE ──
+function updUsage(){
+  const t=c(), left=Math.max(0,FREE-usage), chip=document.getElementById('usageChip');
+  if(isPro){chip.className='usage-chip pro';chip.textContent=t.proBadge;}
+  else{chip.className='usage-chip';chip.textContent=t.usageChip.replace('{n}',left);}
+  document.getElementById('act-pro').style.display=isPro?'none':'';
+}
+function canGo(){return isPro||usage<FREE}
+
+// ── UPLOAD ──
+function trigUpl(){}
+function onFile(inp){
+  const f=inp.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    imgData=e.target.result;
+    document.getElementById('prevImg').src=imgData;
+    document.getElementById('prevWrap').style.display='block';
+    document.getElementById('uico').style.display='none';
+    document.getElementById('uploadZone').querySelector('.upload-text').style.display='none';
+    document.getElementById('uploadZone').querySelector('.upload-hint').style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+function rmImg(e){
+  e.stopPropagation(); imgData=null;
+  document.getElementById('fileIn').value='';
+  document.getElementById('prevWrap').style.display='none';
+  document.getElementById('uico').style.display='block';
+  document.getElementById('uploadZone').querySelector('.upload-text').style.display='block';
+  document.getElementById('uploadZone').querySelector('.upload-hint').style.display='block';
+}
+const uz=document.getElementById('uploadZone');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag')});
+uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
+uz.addEventListener('drop',e=>{
+  e.preventDefault();uz.classList.remove('drag');
+  const f=e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('image/')){
+    const dt=new DataTransfer();dt.items.add(f);
+    document.getElementById('fileIn').files=dt.files;
+    onFile(document.getElementById('fileIn'));
+  }
+});
+
+// ── PAYWALL ──
+function openPW(){document.getElementById('paywall').classList.add('show')}
+function closePW(){document.getElementById('paywall').classList.remove('show')}
+function pickPlan(p){
+  selPlan=p;
+  document.getElementById('plan-m').classList.toggle('sel',p==='m');
+  document.getElementById('plan-y').classList.toggle('sel',p==='y');
+}
+function doPayment(){
+  // → Replace with Stripe checkout redirect
+  const btn=document.getElementById('payBtn');
+  btn.disabled=true;
+  document.getElementById('pay-txt').textContent=lang==='fr'?'Redirection…':'Redirecting…';
+  setTimeout(()=>{
+    isPro=true; localStorage.setItem('lt_pro','1');
+    closePW(); updUsage();
+    btn.disabled=false;
+    document.getElementById('pay-txt').textContent=c().payTxt;
+  },1600);
+}
+
+// ── VIEWS ──
+function showForm(){
+  document.getElementById('formView').style.display='block';
+  document.getElementById('loadView').classList.remove('show');
+  document.getElementById('resView').classList.remove('show');
+  document.getElementById('scoreArc').style.strokeDashoffset='226';
+}
+function showLoad(){
+  document.getElementById('formView').style.display='none';
+  document.getElementById('loadView').classList.add('show');
+  document.getElementById('resView').classList.remove('show');
+}
+function showResult(){
+  document.getElementById('formView').style.display='none';
+  document.getElementById('loadView').classList.remove('show');
+  document.getElementById('resView').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── ANALYZE ──
+function calcRR(){
+  const e=parseFloat(document.getElementById('entry').value),
+        t=parseFloat(document.getElementById('tp').value),
+        s=parseFloat(document.getElementById('sl').value);
+  if(!e||!t||!s||Math.abs(e-s)===0)return null;
+  return (Math.abs(t-e)/Math.abs(e-s)).toFixed(2);
+}
+
+async function analyze(){
+  const pair=document.getElementById('pair').value.trim();
+  const entry=document.getElementById('entry').value;
+  const tp=document.getElementById('tp').value;
+  const sl=document.getElementById('sl').value;
+  const tf=document.getElementById('tf').value;
+  const bias=document.getElementById('bias').value;
+  const sess=document.getElementById('sess').value;
+  const conf=document.getElementById('conf').value.trim();
+  if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
+  if(!canGo()){openPW();return}
+
+  usage++; localStorage.setItem('lt_u',usage);
+  const rrv=calcRR();
+  const steps=c().steps; let si=0;
+  showLoad();
+  const iv=setInterval(()=>{si=(si+1)%steps.length; document.getElementById('ld-step').textContent=steps[si];},900);
+
+  const txt=`Setup à analyser :
+- Actif : ${pair} | Direction : ${dir} | Timeframe : ${tf}
+- Entrée : ${entry} | Take Profit : ${tp} | Stop Loss : ${sl}
+- R:R calculé : ${rrv ? rrv+':1' : 'non calculable'}
+- Biais marché : ${bias} | Session : ${sess}
+- Confluences & notes : ${conf || 'Aucune précisée'}
+- Graphique fourni : ${imgData ? 'Oui — analyse la structure visible' : 'Non'}
+
+Détecte le niveau du trader à partir de la richesse des informations fournies, du vocabulaire utilisé dans les notes, de la logique du setup et de la qualité du R:R. Adapte ton feedback en conséquence.`;
+
+  let content=txt;
+  if(imgData){
+    const b64=imgData.split(',')[1];
+    const mime=(imgData.match(/^data:(image\/\w+);/)||['','image/jpeg'])[1];
+    content=[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:txt}];
+  }
+
+  try{
+    const res=await fetch('/api/analyze',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:c().sys,
+        messages:[{role:'user',content}]
+      })
+    });
+
+    if(!res.ok){
+      const errData=await res.json().catch(()=>({}));
+      throw new Error(errData.error||'Erreur '+res.status);
+    }
+
+    clearInterval(iv);
+    const data=await res.json();
+
+    if(!data.content||!data.content[0]){
+      throw new Error('Réponse IA invalide');
+    }
+
+    const raw=data.content[0].text
+      .replace(/```json[\s\S]*?```/g,m=>m.slice(7,-3))
+      .replace(/```/g,'')
+      .trim();
+
+    let parsed;
+    try{ parsed=JSON.parse(raw); }
+    catch(e){ throw new Error('Parsing JSON échoué : '+raw.slice(0,120)); }
+
+    render(parsed,rrv,tf,pair);
+
+  }catch(err){
+    clearInterval(iv);
+    console.error('Analyze error:',err);
+    showForm();
+    const msg=lang==='fr'
+      ? 'Erreur lors de l\'analyse :\n'+err.message+'\n\nVérifie que ta clé API est bien configurée dans Netlify.'
+      : 'Analysis error:\n'+err.message+'\n\nCheck your API key in Netlify environment variables.';
+    alert(msg);
+    usage=Math.max(0,usage-1);
+    localStorage.setItem('lt_u',usage);
+  }
+  updUsage();
+}
+
+function render(r,rrv,tf,pair){
+  const score=Math.min(10,Math.max(1,parseFloat(r.score)||0));
+  const color=score>=7?'var(--green)':score>=5?'var(--v2)':'var(--red)';
+  document.getElementById('scoreNum').textContent=Number.isInteger(score)?score:score.toFixed(1);
+  document.getElementById('scoreNum').style.color=color;
+  const arc=document.getElementById('scoreArc');
+  arc.style.stroke=color;
+  setTimeout(()=>{arc.style.strokeDashoffset=226-(226*score/10)},80);
+
+  // Niveau badge
+  const nb=document.getElementById('niveau-badge');
+  const niveauMap={
+    'DÉBUTANT':   {label:'DÉBUTANT',   color:'#FBBF24', bg:'rgba(251,191,36,0.1)',  border:'rgba(251,191,36,0.4)'},
+    'INTERMÉDIAIRE':{label:'INTERMÉDIAIRE',color:'var(--v2)',bg:'rgba(139,92,246,0.1)',border:'rgba(139,92,246,0.4)'},
+    'AVANCÉ':     {label:'AVANCÉ',     color:'var(--green)',bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.4)'},
+    'BEGINNER':   {label:'BEGINNER',   color:'#FBBF24', bg:'rgba(251,191,36,0.1)',  border:'rgba(251,191,36,0.4)'},
+    'INTERMEDIATE':{label:'INTERMEDIATE',color:'var(--v2)',bg:'rgba(139,92,246,0.1)',border:'rgba(139,92,246,0.4)'},
+    'ADVANCED':   {label:'ADVANCED',   color:'var(--green)',bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.4)'},
+  };
+  const nv=niveauMap[r.niveau];
+  if(nv){
+    nb.textContent=nv.label; nb.style.display='block';
+    nb.style.color=nv.color; nb.style.background=nv.bg; nb.style.borderColor=nv.border;
+  } else { nb.style.display='none'; }
+
+  document.getElementById('res-title').textContent=r.scoreLabel||'';
+  document.getElementById('res-sub').textContent=r.scoreSub||'';
+
+  const rr=document.getElementById('m-rr');
+  rr.textContent=rrv?rrv+':1':'—';
+  rr.style.color=parseFloat(rrv)>=2?'var(--green)':parseFloat(rrv)>=1.5?'var(--amber)':'var(--red)';
+  const md=document.getElementById('m-dir');
+  md.textContent=dir; md.style.color=dir==='LONG'?'var(--green)':'var(--red)';
+  document.getElementById('m-tf').textContent=tf;
+  document.getElementById('m-tf').style.color='var(--v2)';
+  document.getElementById('m-pair').textContent=pair.toUpperCase();
+
+  if(imgData){document.getElementById('chartResImg').src=imgData;document.getElementById('chartResult').classList.add('show');}
+  else document.getElementById('chartResult').classList.remove('show');
+
+  const fmt=s=>(s||'').replace(/\n/g,'<br>');
+  document.getElementById('forcesText').innerHTML=fmt(r.forces);
+  document.getElementById('weakText').innerHTML=fmt(r.faiblesses);
+  document.getElementById('adviceText').innerHTML=fmt(r.recommandations);
+
+  const mkT=(id,tags,cls)=>{
+    const el=document.getElementById(id);el.innerHTML='';
+    (tags||[]).forEach(tag=>{const s=document.createElement('span');s.className='tag '+cls;s.textContent=tag;el.appendChild(s);});
+  };
+  mkT('forcesTags',r.forcesTags,'g');
+  mkT('weakTags',r.faiblesTags,'r');
+
+  const vb=document.getElementById('verdictBox'),vi=document.getElementById('v-badge'),verdict=r.verdict;
+  vb.className='verdict';
+  if(verdict==='GO'){vb.classList.add('go');vi.textContent='✓ GO';}
+  else if(verdict==='NO-GO'){vb.classList.add('no');vi.textContent='✕ NO-GO';}
+  else{vb.classList.add('wait');vi.textContent=c().waitLabel;}
+  document.getElementById('v-title').textContent=r.verdictTitle||'';
+  document.getElementById('v-sub').textContent=r.verdictSub||'';
+  showResult();
+}
+
+
+// ── API KEY SETUP ──
+function showApiSetup(){
+  document.getElementById('api-setup').classList.add('show');
+}
+function saveApiKey(){
+  const key = document.getElementById('api-key-input').value.trim();
+  if(!key.startsWith('sk-ant-')){
+    alert('Clé invalide. Elle doit commencer par sk-ant-');
+    return;
+  }
+  localStorage.setItem('lt_apikey', key);
+  document.getElementById('api-setup').classList.remove('show');
+  alert('✅ Clé API sauvegardée !');
+}
+// Auto-check on load
+window.addEventListener('load', ()=>{
+  if(!localStorage.getItem('lt_apikey')){
+    // Show subtle indicator but don't block
+    const chip = document.getElementById('usageChip');
+    if(chip){ chip.style.borderColor='rgba(251,191,36,0.5)'; chip.style.color='#FBBF24'; chip.textContent='⚙ Config API'; chip.onclick=showApiSetup; chip.style.cursor='pointer'; }
+  }
+});
+
+// init
+applyLang();
+</script>
+
+<!-- API SETUP MODAL -->
+<div class="pw-overlay" id="api-setup">
+  <div class="pw-box" style="max-width:420px">
+    <div class="pw-orb">⚙️</div>
+    <div class="pw-title">Configuration API</div>
+    <div class="pw-sub" style="margin-bottom:20px">
+      Entre ta clé API Anthropic pour activer l'analyse IA.<br>
+      Elle sera sauvegardée localement sur cet appareil.
+    </div>
+    <div class="field" style="margin-bottom:16px;text-align:left">
+      <label class="lbl" style="margin-bottom:6px;display:block">CLÉ API ANTHROPIC</label>
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." 
+        style="border-radius:12px;padding:12px 16px;font-size:13px"
+        onkeydown="if(event.key==='Enter')saveApiKey()">
+    </div>
+    <button class="pay-btn" onclick="saveApiKey()">✅ Sauvegarder la clé</button>
+    <div class="pay-note">
+      Ta clé n'est jamais envoyée ailleurs que vers api.anthropic.com<br>
+      Trouve ta clé sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys
+    </div>
+    <span class="demo-link" onclick="document.getElementById('api-setup').classList.remove('show')">Fermer</span>
+  </div>
+</div>
+
+</body>
+</html>
