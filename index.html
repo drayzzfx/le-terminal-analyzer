@@ -1407,8 +1407,8 @@ function render(r,rrv,tf,pair){
       .replace(/\n/g, '||SPLIT||')
       .replace(/ \/{2} /g, '||SPLIT||')
       .replace(/\/{2}/g, '||SPLIT||')
-      .replace(/\|/g, '||SPLIT||');
-    var parts = raw.split('||SPLIT||').map(function(l){return l.trim();}).filter(function(l){return l.length>2;});
+      .replace(/ \| /g, '||SPLIT||');
+    var parts = raw.split('||SPLIT||').map(function(l){return l.trim();}).filter(function(l){return l.length>2 && l.toUpperCase()!=='SPLIT' && l!=='|' && l!=='||';});
     if(parts.length === 0) return '<p style="font-size:13px;color:#9B96B8;line-height:1.8">'+s+'</p>';
     return parts.map(function(l, i){
       var icon = '›';
