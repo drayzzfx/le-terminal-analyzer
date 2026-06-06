@@ -918,8 +918,43 @@ INSTRUCTIONS SPÉCIALES :
     if(!data.content||!data.content[0]) throw new Error('Réponse IA invalide');
     const raw=data.content[0].text.replace(/```json[\s\S]*?```/g,m=>m.slice(7,-3)).replace(/```/g,'').trim();
     let parsed;
-    try{parsed=JSON.parse(raw);}
-    catch(e){throw new Error('JSON invalide : '+raw.slice(0,200));}
+    try{
+      parsed=JSON.parse(raw);
+    } catch(e){
+      // Try to fix truncated JSON by closing it
+      let fixed=raw;
+      // Count open/close braces and brackets to fix truncation
+      let braces=0, brackets=0;
+      for(const ch of fixed){ if(ch==='{')braces++; else if(ch==='}')braces--; else if(ch==='[')brackets++; else if(ch===']')brackets--; }
+      // Close any open strings first - remove last incomplete line
+      fixed=fixed.replace(/,?\s*"[^"]*$/, '');
+      // Close open arrays
+      while(brackets>0){fixed+='"]'; brackets--;}
+      // Close open objects
+      while(braces>0){fixed+='}'; braces--;}
+      try{
+        parsed=JSON.parse(fixed);
+      } catch(e2){
+        // Last resort: extract key fields with regex
+        const extract=(key,def)=>{const m=raw.match(new RegExp('"'+key+'"\\s*:\\s*"([^"]*)"'));return m?m[1]:def;};
+        const extractNum=(key,def)=>{const m=raw.match(new RegExp('"'+key+'"\\s*:\\s*([0-9.]+)'));return m?parseFloat(m[1]):def;};
+        parsed={
+          niveau:extract('niveau','INTERMÉDIAIRE'),
+          score:extractNum('score',6),
+          scoreLabel:extract('scoreLabel','ANALYSE PARTIELLE'),
+          scoreSub:extract('scoreSub','Analyse générée - résultat partiel'),
+          annotations:[],scenarios:[],macro:'',
+          forces:extract('forces','Analyse en cours'),
+          forcesTags:[],
+          faiblesses:extract('faiblesses',''),
+          faiblesTags:[],
+          recommandations:extract('recommandations',''),
+          verdict:extract('verdict','ATTENDRE'),
+          verdictTitle:extract('verdictTitle','Résultat partiel'),
+          verdictSub:extract('verdictSub','La réponse a été tronquée, voici les éléments disponibles.')
+        };
+      }
+    }
     render(parsed,rrv,tf,pair);
   }catch(err){
     clearInterval(iv);
