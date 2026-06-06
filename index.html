@@ -782,6 +782,79 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .hdetail-overlay.show{display:flex}
 .hdetail-box{max-width:760px;width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;margin:auto;position:relative}
 .hdetail-close{position:absolute;top:16px;right:18px;background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer}
+
+/* HISTORY PAGE */
+#historyPage {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg);
+}
+#historyPage.show { display: block; }
+
+.history-page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; height: 60px;
+  background: rgba(8,8,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+}
+
+.history-page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 20px; font-weight: 800;
+  letter-spacing: -0.02em; color: var(--text);
+}
+
+.history-page-title span { color: var(--v2); }
+
+.back-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 50px; padding: 7px 16px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: var(--text2); cursor: pointer; transition: all .2s;
+}
+.back-btn:hover { border-color: rgba(139,92,246,.4); color: var(--v2); }
+
+.history-page-content {
+  max-width: 900px; margin: 0 auto; padding: 32px 24px 80px;
+}
+
+.history-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.history-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 18px; cursor: pointer;
+  transition: all .2s;
+}
+.history-card:hover {
+  border-color: rgba(139,92,246,.35);
+  background: rgba(139,92,246,.04);
+  transform: translateY(-2px);
+}
+
+.hc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.hc-pair { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.hc-verdict { font-size: 9px; font-weight: 700; letter-spacing: .1em; padding: 3px 10px; border-radius: 50px; }
+.hc-verdict.go  { background: rgba(52,211,153,.15); color: var(--green); border: 1px solid rgba(52,211,153,.3); }
+.hc-verdict.wait{ background: rgba(251,191,36,.1);  color: var(--amber); border: 1px solid rgba(251,191,36,.25); }
+.hc-verdict.no  { background: rgba(248,113,113,.12); color: var(--red);  border: 1px solid rgba(248,113,113,.3); }
+
+.hc-score { font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; }
+.hc-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.hc-meta  { font-size: 10px; color: var(--text3); margin-top: 8px; }
+.hc-img   { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-top: 10px; opacity: .85; }
+
+.history-empty-page {
+  text-align: center; padding: 80px 20px;
+  color: var(--text3); font-size: 14px; line-height: 2;
+}
+.history-empty-page .big { font-size: 48px; margin-bottom: 16px; }
 </style>
 </head>
 <body>
@@ -897,7 +970,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   <header class="topbar">
     <div class="topbar-brand">Le <span>Terminal</span></div>
     <div class="topbar-right">
-      <button class="history-btn" id="historyBtn" onclick="openHistory()">📋 <span id="historyBtnTxt">Historique</span></button>
+      <button class="history-btn" id="historyBtn" onclick="openHistory()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Historique</button>
       <div class="usage-chip" id="usageChip">FREE · 3 restantes</div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
         <div class="user-avatar" id="userAvatar">?</div>
@@ -1469,33 +1542,30 @@ function render(r,rrv,tf,pair){
 
   function fmtBlock(s){
     if(!s) return '<span style="color:#5A5570">—</span>';
-    // Split on \n, \\n, or // separators used by AI
     var raw = s
-      .replace(/\\n/g, '||SPLIT||')
-      .replace(/\n/g, '||SPLIT||')
-      .replace(/ \/{2} /g, '||SPLIT||')
-      .replace(/\/{2}/g, '||SPLIT||')
-      .replace(/ \| /g, '||SPLIT||');
-    var parts = raw.split('||SPLIT||').map(function(l){return l.trim();}).filter(function(l){return l.length>2 && l.toUpperCase()!=='SPLIT' && l!=='|' && l!=='||';});
-    if(parts.length === 0) return '<p style="font-size:13px;color:#9B96B8;line-height:1.8">'+s+'</p>';
-    return parts.map(function(l, i){
-      var icon = '›';
-      var text = l;
-      var cp = l.codePointAt(0)||0;
-      if(cp > 8000){
-        icon = String.fromCodePoint(cp);
-        text = l.slice(icon.length).trim();
-      } else {
-        var nm = l.match(/^([0-9]+[.)\s]+)(.*)/s);
-        if(nm){ icon = nm[1].trim(); text = nm[2].trim(); }
-      }
-      var last = i === parts.length-1;
-      return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;'+
-        (last ? '' : 'border-bottom:1px solid rgba(255,255,255,0.06);')+'">'+
-        '<span style="flex-shrink:0;min-width:22px;font-size:14px;color:#A78BFA;font-weight:700;line-height:1.5;text-align:center">'+icon+'</span>'+
-        '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.65;flex:1">'+text+'</span>'+
-        '</div>';
-    }).join('');
+      .replace(/\\n/g, '__NL__')
+      .replace(/\n/g, '__NL__')
+      .replace(/ \/{2} /g, '__NL__')
+      .replace(/\/{2}/g, '__NL__')
+      .replace(/ \| /g, '__NL__');
+    var parts = raw.split('__NL__')
+      .map(function(l){ return l.trim(); })
+      .filter(function(l){ return l.length > 2 && l.toUpperCase() !== 'SPLIT'; });
+    if(!parts.length) return '<span style="color:#5A5570">—</span>';
+    return '<div style="display:flex;flex-direction:column;gap:0">' +
+      parts.map(function(l, i){
+        var cp = l.codePointAt(0)||0;
+        var icon, text;
+        if(cp > 8000){ icon = String.fromCodePoint(cp); text = l.slice(icon.length).trim(); }
+        else { var nm = l.match(/^([0-9]+[.)\s]+)(.*)/s); if(nm){icon=nm[1].trim();text=nm[2].trim();}else{icon='›';text=l;} }
+        var last = i === parts.length-1;
+        return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;' +
+          (last?'':'border-bottom:1px solid rgba(255,255,255,0.06);') + '">' +
+          '<span style="flex-shrink:0;min-width:20px;font-size:14px;color:var(--v2);font-weight:700;line-height:1.5;text-align:center">' + icon + '</span>' +
+          '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.65;flex:1">' + text + '</span>' +
+          '</div>';
+      }).join('') +
+    '</div>';
   }
     document.getElementById('forcesText').innerHTML=fmtBlock(r.forces);
   document.getElementById('weakText').innerHTML=fmtBlock(r.faiblesses);
@@ -1628,12 +1698,19 @@ async function checkSession(){
   if(data.id){authToken=token;currentUser=data;updateUserUI();loadHistory();}else localStorage.removeItem('ta_token');}catch(e){}
 }
 var historyData=[];
-function openHistory(){document.getElementById('historyPanel').classList.add('open');}
-function closeHistory(){document.getElementById('historyPanel').classList.remove('open');}
+function openHistory(){
+    document.getElementById('app').style.display='none';
+    document.getElementById('historyPage').classList.add('show');
+    renderHistoryGrid();
+  }
+function closeHistory(){
+    document.getElementById('historyPage').classList.remove('show');
+    document.getElementById('app').style.display='block';
+  }
 function closeHDetail(){document.getElementById('hdetailOverlay').classList.remove('show');}
 async function loadHistory(){
   if(!authToken)return;
-  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();historyData=Array.isArray(data)?data:[];renderHistory();}catch(e){}
+  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();historyData=Array.isArray(data)?data:[];renderHistory();renderHistoryGrid();}catch(e){}
 }
 function renderHistory(){
   var list=document.getElementById('historyList');
@@ -1678,16 +1755,66 @@ checkSession();
 
 
 // Make functions globally accessible
+
+function renderHistoryGrid(){
+  var grid = document.getElementById('historyGrid');
+  if(!grid) return;
+  if(!currentUser){
+    grid.innerHTML='<div class="history-empty-page"><div class="big">🔐</div>Connecte-toi pour voir<br>ton historique</div>';
+    return;
+  }
+  if(!historyData.length){
+    grid.innerHTML='<div class="history-empty-page"><div class="big">📊</div>Aucune analyse encore<br>Lance ta première analyse !</div>';
+    return;
+  }
+  grid.innerHTML = historyData.map(function(item, i){
+    var vC = item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
+    var vL = item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
+    var sc = parseFloat(item.score)||0;
+    var col = sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
+    var ds = new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+    return '<div class="history-card" onclick="openHDetail('+i+')">' +
+      '<div class="hc-top">' +
+        '<span class="hc-pair">'+(item.pair||'—')+' · '+(item.direction||'')+'</span>' +
+        '<span class="hc-verdict '+vC+'">'+vL+'</span>' +
+      '</div>' +
+      '<div class="hc-score" style="color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:14px;color:var(--text3)">/10</span></div>' +
+      '<div class="hc-label">'+(item.score_label||'')+'</div>' +
+      '<div class="hc-meta">'+( item.tf||'')+(item.tf&&item.direction?' · ':'')+ds+'</div>'+
+      (item.img_data?'<img class="hc-img" src="'+item.img_data+'" alt="">':'')+
+    '</div>';
+  }).join('');
+}
+window.renderHistoryGrid = renderHistoryGrid;
+
 window.openAuth = openAuth;
 window.closeAuth = closeAuth;
 window.switchAuthTab = switchAuthTab;
 window.doAuth = doAuth;
 window.openHistory = openHistory;
 window.closeHistory = closeHistory;
+window.closeHistoryPage = closeHistory;
 window.closeHDetail = closeHDetail;
 window.openHDetail = openHDetail;
 
 </script>
+
+
+<!-- HISTORY PAGE -->
+<div id="historyPage">
+  <header class="history-page-header">
+    <div class="history-page-title">Le Terminal <span>Analyzer</span> — Historique</div>
+    <button class="back-btn" onclick="closeHistoryPage()">← Retour à l'analyse</button>
+  </header>
+  <div class="history-page-content">
+    <div class="history-grid" id="historyGrid">
+      <div class="history-empty-page">
+        <div class="big">📋</div>
+        Connecte-toi pour accéder<br>à ton historique d'analyses
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
