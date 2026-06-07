@@ -1893,34 +1893,38 @@ async function setResult(i, result){
   }catch(e){}
 }
 
-async function saveRR(i){
+async function saveRR(i, btnEl){
   var item = historyData[i];
-  var rr = parseFloat(document.getElementById('rrInput').value);
-  if(!item||!authToken||isNaN(rr)) return;
+  var rrEl = document.getElementById('rrInput');
+  var rr = parseFloat(rrEl ? rrEl.value : '');
+  if(!item) return;
+  if(!authToken){ alert('Connecte-toi pour sauvegarder.'); return; }
+  if(isNaN(rr)){ alert('Entre un RR valide.'); return; }
   item.rr_realized = rr;
   historyData[i] = item;
+  var btn = btnEl || (typeof event !== 'undefined' && event.target);
   try{
     await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:rr,tradeNotes:item.trade_notes})});
-    var btn = event.target;
-    btn.textContent='✓'; btn.style.background='var(--green)';
-    setTimeout(function(){ btn.textContent='Sauver'; btn.style.background='var(--v)'; }, 1500);
-  }catch(e){}
-}
+    if(btn){ btn.textContent='✓'; btn.style.background='rgba(52,211,153,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
+    setTimeout(function(){ if(btn){ btn.textContent='Sauver'; btn.style.background='var(--v)'; btn.style.borderColor=''; btn.style.color='white'; } }, 1500);
+  }catch(e){ if(btn){ btn.textContent='Erreur'; btn.style.background='rgba(248,113,113,0.3)'; } }
 
-async function saveNotes(i){
+async function saveNotes(i, btnEl){
   var item = historyData[i];
-  var notes = document.getElementById('tradeNotes').value;
-  if(!item||!authToken) return;
+  var notesEl = document.getElementById('tradeNotes');
+  var notes = notesEl ? notesEl.value : '';
+  if(!item) return;
+  if(!authToken){ alert('Connecte-toi pour sauvegarder.'); return; }
   item.trade_notes = notes;
   historyData[i] = item;
+  var btn = btnEl || (typeof event !== 'undefined' && event.target);
   try{
     await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:notes})});
-    var btn = event.target;
-    btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)';
-    setTimeout(function(){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; }, 1500);
-  }catch(e){}
+    if(btn){ btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)'; }
+    setTimeout(function(){ if(btn){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; } }, 1500);
+  }catch(e){ if(btn){ btn.textContent='Erreur réseau'; btn.style.color='var(--red)'; } }
 }
 
 // ── PERFORMANCES PAGE ──
@@ -2187,10 +2191,10 @@ function openHDetail(i){
       '<div style="display:flex;gap:8px;margin-top:8px;align-items:center">' +
         '<span style="font-size:11px;color:var(--text2);flex-shrink:0">RR réalisé :</span>' +
         '<input type="number" step="0.1" id="rrInput" value="'+(item.rr_realized||'')+'" placeholder="ex: 2.5" style="width:80px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;font-size:12px;outline:none">' +
-        '<button onclick="saveRR('+i+')" style="padding:6px 14px;background:var(--v);border:none;border-radius:8px;color:white;font-size:11px;font-weight:600;cursor:pointer">Sauver</button>' +
+        '<button onclick="saveRR('+i+',this)" style="padding:6px 14px;background:var(--v);border:none;border-radius:8px;color:white;font-size:11px;font-weight:600;cursor:pointer">Sauver</button>' +
       '</div>' +
       '<textarea id="tradeNotes" placeholder="Notes post-trade…" style="width:100%;margin-top:8px;height:60px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:12px;resize:none;outline:none;font-family:Inter,sans-serif">'+(item.trade_notes||'')+'</textarea>' +
-      '<button onclick="saveNotes('+i+')" style="margin-top:6px;padding:7px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:11px;cursor:pointer">💾 Sauvegarder les notes</button>' +
+      '<button onclick="saveNotes('+i+',this)" style="margin-top:6px;padding:7px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:11px;cursor:pointer">💾 Sauvegarder les notes</button>' +
     '</div>' : '') +
   '</div>';
 
