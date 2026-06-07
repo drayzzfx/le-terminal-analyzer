@@ -906,6 +906,20 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .side-nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
 .side-nav-divider{height:1px;background:var(--border);margin:8px 0}
 .side-menu-footer{padding:16px 12px;border-top:1px solid var(--border)}
+
+/* ── CUSTOM CONFIRM MODAL ── */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px)}
+.confirm-overlay.show{opacity:1;pointer-events:all}
+.confirm-box{background:#0E0E1A;border:1px solid rgba(248,113,113,.25);border-radius:20px;padding:32px 28px;width:min(360px,90vw);text-align:center;transform:scale(.95);transition:transform .25s;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+.confirm-overlay.show .confirm-box{transform:scale(1)}
+.confirm-icon{font-size:36px;margin-bottom:14px}
+.confirm-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
+.confirm-sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.confirm-btns{display:flex;gap:10px;justify-content:center}
+.confirm-cancel{flex:1;padding:11px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
+.confirm-ok{flex:1;padding:11px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);border-radius:12px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-ok:hover{background:rgba(248,113,113,.25);border-color:rgba(248,113,113,.6)}
 </style>
 </head>
 <body>
@@ -2185,11 +2199,22 @@ function closeHistory(){
     document.getElementById('app').style.display='block';
   }
 function closeHDetail(){document.getElementById('hdetailOverlay').classList.remove('show');}
-async function deleteAnalysis(i){
+var _pendingDeleteIdx = -1;
+function deleteAnalysis(i){
+  _pendingDeleteIdx = i;
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+function closeConfirm(){
+  document.getElementById('confirmOverlay').classList.remove('show');
+  _pendingDeleteIdx = -1;
+}
+async function confirmOk(){
+  var i = _pendingDeleteIdx;
+  closeConfirm();
   var item = historyData[i];
   if(!item) return;
-  if(!confirm('Supprimer cette analyse ? Cette action est irréversible.')) return;
   historyData.splice(i, 1);
+  try{ localStorage.setItem('lt_history', JSON.stringify(historyData.slice(0,50))); }catch(e){}
   closeHDetail();
   renderHistory();
   renderHistoryGrid();
@@ -2197,6 +2222,8 @@ async function deleteAnalysis(i){
     try{ await fetch('/api/history/'+item.id,{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}}); }catch(e){}
   }
 }
+window.closeConfirm=closeConfirm;
+window.confirmOk=confirmOk;
 async function loadHistory(){
   if(!authToken)return;
   try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data;try{localStorage.setItem('lt_history',JSON.stringify(historyData.slice(0,50)));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
@@ -2676,5 +2703,18 @@ window.doLogout=doLogout;
   </div>
 </div>
 
+
+<!-- CUSTOM CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑</div>
+    <div class="confirm-title">Supprimer l'analyse ?</div>
+    <div class="confirm-sub">Cette action est irréversible.<br>L'analyse sera définitivement supprimée.</div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">Annuler</button>
+      <button class="confirm-ok" id="confirmOkBtn" onclick="confirmOk()">Supprimer</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
