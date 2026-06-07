@@ -1020,9 +1020,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
       <div class="form-section-title" id="fst1">Trade</div>
       <div class="form-grid three" style="margin-bottom:12px">
-        <div class="field">
+        <div class="field" style="position:relative">
           <label class="lbl" id="lbl-pair">Paire / Actif</label>
-          <input type="text" id="pair" placeholder="XAUUSD, BTC, NAS100…" autocomplete="off" oninput="fetchLivePrice(this.value)">
+          <input type="text" id="pair" placeholder="XAUUSD, BTC, NAS100…" autocomplete="off"
+            oninput="onPairInput(this.value)" onfocus="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,200)">
+          <div id="pairSuggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:100;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.5);margin-top:4px"></div>
           <div id="livePriceBar" style="display:none;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text2);align-items:center;gap:10px">
             <span style="font-size:9px;color:var(--text3);letter-spacing:.1em">PRIX LIVE</span>
             <span id="livePriceVal" style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:var(--text)">—</span>
@@ -1166,6 +1168,18 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="verdict" id="verdictBox">
         <div class="v-badge" id="v-badge">—</div>
         <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
+      </div>
+
+      <!-- COACH QUESTIONS -->
+      <div id="coachQuestionsPanel" style="display:none;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:20px;margin-bottom:16px">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;color:var(--v2);margin-bottom:14px">🎓 Questions du Coach IA</div>
+        <div id="coachQuestionsList"></div>
+        <div style="margin-top:14px">
+          <textarea id="coachAnswer" placeholder="Réponds aux questions ci-dessus pour approfondir l'analyse…" style="width:100%;height:80px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-family:'Inter',sans-serif;font-size:12px;resize:none;outline:none"></textarea>
+          <button onclick="sendCoachAnswer()" style="margin-top:8px;width:100%;padding:11px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">
+            📤 Envoyer mes réponses pour affiner l'analyse
+          </button>
+        </div>
       </div>
 
       <div class="actions">
@@ -1617,12 +1631,26 @@ async function analyze(){
 
 Détecte le niveau du trader à partir de la richesse des informations fournies, du vocabulaire utilisé dans les notes, de la logique du setup et de la qualité du R:R. Adapte ton feedback en conséquence.`;
 
-  let content=txt;
-  if(imgData){
-    const b64=imgData.split(',')[1];
-    const mime=(imgData.match(/^data:(image\/\w+);/)||['','image/jpeg'])[1];
-    content=[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:txt}];
+  // Build multi-image content
+  let content = txt;
+  var images = [];
+  if(imgDataHTF) images.push({data:imgDataHTF, label:'HTF'});
+  if(imgDataITF) images.push({data:imgDataITF, label:'ITF'});
+  if(imgDataLTF) images.push({data:imgDataLTF, label:'LTF'});
+  if(!images.length && imgData) images.push({data:imgData, label:'Chart'});
+
+  if(images.length > 0){
+    var msgParts = images.map(function(img){
+      var b64=img.data.split(',')[1];
+      var mime=(img.data.match(/^data:(image\/\w+);/)||['','image/jpeg'])[1];
+      return {type:'image',source:{type:'base64',media_type:mime,data:b64}};
+    });
+    msgParts.push({type:'text',text:txt});
+    content = msgParts;
   }
+
+  // Store params for coach follow-up
+  lastAnalysisParams = {txt, rrv, tf, pair, dir};
 
   try{
     const res=await fetch('/api/analyze',{
@@ -1643,7 +1671,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       while(br>0){f+='"]';br--;}while(b>0){f+='}';b--;}
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
-    render(parsed,rrv,tf,pair); saveAnalysis(parsed, pair, dir, tf);
+    render(parsed,rrv,tf,pair);
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
@@ -2036,6 +2064,134 @@ function hideLivePrice(){
   document.getElementById('livePriceBar').style.display = 'none';
 }
 window.fetchLivePrice = fetchLivePrice;
+
+
+// ── AUTOCOMPLETE PAIRS ──
+var ALL_PAIRS = [
+  'XAUUSD','XAGUSD','EURUSD','GBPUSD','USDJPY','AUDUSD','USDCAD','NZDUSD','USDCHF',
+  'EURGBP','EURJPY','GBPJPY','CADJPY','CHFJPY','EURCHF','EURAUD','GBPAUD',
+  'NAS100','US30','SP500','DAX','UK100','CAC40','AU200','JP225',
+  'BTCUSD','ETHUSD','SOLUSD','XRPUSD','BNBUSD','ADAUSD','DOTUSD','AVAXUSD',
+  'USOIL','UKOIL','NATGAS','COPPER','PLATINUM','PALLADIUM'
+];
+
+function onPairInput(val){
+  showSuggestions(val);
+  fetchLivePrice(val);
+}
+
+function showSuggestions(val){
+  var box = document.getElementById('pairSuggestions');
+  if(!val || val.length < 1){ box.style.display='none'; return; }
+  var v = val.toUpperCase();
+  var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
+  if(!matches.length){ box.style.display='none'; return; }
+  box.innerHTML = matches.map(function(p){
+    return '<div onclick="selectPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:background .15s;border-bottom:1px solid var(--border)" onmouseover="this.style.background=\'rgba(139,92,246,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+p+'</div>';
+  }).join('');
+  box.style.display='block';
+}
+
+function selectPair(p){
+  document.getElementById('pair').value = p;
+  hideSuggestions();
+  fetchLivePrice(p);
+}
+
+function hideSuggestions(){
+  document.getElementById('pairSuggestions').style.display='none';
+}
+
+// ── MULTI-TF UPLOADS ──
+var imgDataHTF = null, imgDataITF = null, imgDataLTF = null;
+
+function trigUplTF(tf){}
+
+function onFileTF(inp, tf){
+  var f = inp.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){
+    var data = e.target.result;
+    if(tf==='htf'){ imgDataHTF=data; document.getElementById('prevHTF').src=data; document.getElementById('previewHTF').style.display='block'; document.getElementById('uicoHTF').style.display='none'; document.getElementById('lblHTF').textContent='HTF chargé ✓'; document.getElementById('lblHTF').style.color='var(--green)'; }
+    if(tf==='itf'){ imgDataITF=data; document.getElementById('prevITF').src=data; document.getElementById('previewITF').style.display='block'; document.getElementById('uicoITF').style.display='none'; document.getElementById('lblITF').textContent='ITF chargé ✓'; document.getElementById('lblITF').style.color='var(--green)'; }
+    if(tf==='ltf'){ imgDataLTF=data; document.getElementById('prevLTF').src=data; document.getElementById('previewLTF').style.display='block'; document.getElementById('uicoLTF').style.display='none'; document.getElementById('lblLTF').textContent='LTF chargé ✓'; document.getElementById('lblLTF').style.color='var(--green)'; }
+    // Set main imgData to LTF if available, else ITF, else HTF
+    imgData = imgDataLTF || imgDataITF || imgDataHTF;
+  };
+  r.readAsDataURL(f);
+}
+
+function rmTF(e, tf){
+  e.stopPropagation();
+  if(tf==='htf'){ imgDataHTF=null; document.getElementById('fileHTF').value=''; document.getElementById('previewHTF').style.display='none'; document.getElementById('uicoHTF').style.display='block'; document.getElementById('lblHTF').textContent='Ajouter'; document.getElementById('lblHTF').style.color=''; }
+  if(tf==='itf'){ imgDataITF=null; document.getElementById('fileITF').value=''; document.getElementById('previewITF').style.display='none'; document.getElementById('uicoITF').style.display='block'; document.getElementById('lblITF').textContent='Ajouter'; document.getElementById('lblITF').style.color=''; }
+  if(tf==='ltf'){ imgDataLTF=null; document.getElementById('fileLTF').value=''; document.getElementById('previewLTF').style.display='none'; document.getElementById('uicoLTF').style.display='block'; document.getElementById('lblLTF').textContent='Ajouter'; document.getElementById('lblLTF').style.color=''; }
+  imgData = imgDataLTF || imgDataITF || imgDataHTF;
+}
+
+// ── COACH MODE ──
+var coachMode = false;
+var lastAnalysisResult = null;
+var lastAnalysisParams = null;
+
+function toggleCoach(){
+  coachMode = !coachMode;
+  var btn = document.getElementById('coachToggle');
+  var dot = document.getElementById('coachDot');
+  btn.style.background = coachMode ? 'var(--v)' : 'var(--border)';
+  dot.style.left = coachMode ? '23px' : '3px';
+}
+
+function showCoachQuestions(questions){
+  var panel = document.getElementById('coachQuestionsPanel');
+  var list = document.getElementById('coachQuestionsList');
+  if(!questions || !questions.length){ panel.style.display='none'; return; }
+  list.innerHTML = questions.map(function(q,i){
+    return '<div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start">'+
+      '<span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--v);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">'+(i+1)+'</span>'+
+      '<span style="font-size:13px;color:var(--text2);line-height:1.5">'+q+'</span>'+
+    '</div>';
+  }).join('');
+  panel.style.display='block';
+}
+
+async function sendCoachAnswer(){
+  var answer = document.getElementById('coachAnswer').value.trim();
+  if(!answer || !lastAnalysisResult || !lastAnalysisParams) return;
+  document.getElementById('coachQuestionsPanel').style.display='none';
+  showLoad();
+  var p = lastAnalysisParams;
+  var enrichedTxt = p.txt + '\n\nRÉPONSES AUX QUESTIONS DU COACH :\n' + answer;
+  var content = enrichedTxt;
+  if(imgData){
+    var b64=imgData.split(',')[1];
+    var mime=(imgData.match(/^data:(image\/\w+);/)||['','image/jpeg'])[1];
+    content=[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:enrichedTxt}];
+  }
+  try{
+    var res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:c().sys,messages:[{role:'user',content}]})});
+    var data=await res.json();
+    if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
+    var rawText=data.content[0].text;
+    var raw=rawText.replace(/^s*```jsons*/im,'').replace(/s*```s*$/m,'').trim();
+    var js2=raw.indexOf('{'),je2=raw.lastIndexOf('}');
+    if(js2!==-1&&je2!==-1) raw=raw.slice(js2,je2+1);
+    var parsed=JSON.parse(raw);
+    render(parsed,p.rrv,p.tf,p.pair);
+    saveAnalysis(parsed,p.pair,p.dir,p.tf);
+  }catch(err){
+    showResult();
+    console.error(err);
+  }
+}
+window.toggleCoach=toggleCoach;
+window.selectPair=selectPair;
+window.showSuggestions=showSuggestions;
+window.hideSuggestions=hideSuggestions;
+window.onPairInput=onPairInput;
+window.onFileTF=onFileTF;
+window.rmTF=rmTF;
+window.sendCoachAnswer=sendCoachAnswer;
 
 window.openAuth = openAuth;
 window.checkProStatus = checkProStatus;
