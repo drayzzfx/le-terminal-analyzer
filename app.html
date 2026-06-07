@@ -2197,7 +2197,9 @@ async function checkProStatus(){
   }catch(e){ console.log('Pro check error:', e); }
 }
 var historyData=[];
-try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ historyData=JSON.parse(_lh)||[]; } }catch(e){}
+var _deletedIds = new Set();
+try{ var _di=localStorage.getItem('lt_deleted'); if(_di){ JSON.parse(_di).forEach(function(id){ _deletedIds.add(String(id)); }); } }catch(e){}
+try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ historyData=(JSON.parse(_lh)||[]).filter(function(h){ return !_deletedIds.has(String(h.id)); }); } }catch(e){}
 function openHistory(){
     document.getElementById('app').style.display='none';
     document.getElementById('historyPage').classList.add('show');
@@ -2226,8 +2228,13 @@ async function confirmOk(){
   closeConfirm();
   var item = historyData[i];
   if(!item) return;
+  var deletedId = item.id;
   historyData.splice(i, 1);
+  // Track deleted ID so it doesn't come back on API reload
+  _deletedIds.add(String(deletedId));
   try{
+    var deletedArr = Array.from(_deletedIds);
+    localStorage.setItem('lt_deleted', JSON.stringify(deletedArr));
     var toStore = historyData.slice(0,50).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
     localStorage.setItem('lt_history', JSON.stringify(toStore));
   }catch(e){}
@@ -2249,7 +2256,7 @@ window.closeConfirm=closeConfirm;
 window.confirmOk=confirmOk;
 async function loadHistory(){
   if(!authToken)return;
-  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data;try{localStorage.setItem('lt_history',JSON.stringify(historyData.slice(0,50)));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
+  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data.filter(function(h){return !_deletedIds.has(String(h.id));});try{var ts=historyData.slice(0,50).map(function(h){var c=Object.assign({},h);c.img_data=null;return c;});localStorage.setItem('lt_history',JSON.stringify(ts));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
 }
 function renderHistory(){
   var list=document.getElementById('historyList');
