@@ -1712,6 +1712,29 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
     render(parsed,rrv,tf,pair);
+    // Store in local historyData so Performances page has data
+    var newEntry = {
+      id: Date.now(),
+      pair: pair,
+      direction: dir,
+      tf: tf,
+      score: parsed.score||0,
+      score_label: parsed.scoreLabel||'',
+      verdict: parsed.verdict||'',
+      forces: parsed.forces||'',
+      faiblesses: parsed.faiblesses||'',
+      recommandations: parsed.recommandations||'',
+      macro: parsed.macro||'',
+      img_data: imgData||null,
+      created_at: new Date().toISOString(),
+      trade_taken: null,
+      trade_result: null,
+      rr_realized: null,
+      trade_notes: ''
+    };
+    historyData.unshift(newEntry);
+    // Persist to localStorage for session
+    try{ localStorage.setItem('lt_history', JSON.stringify(historyData.slice(0,50))); }catch(e){}
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
@@ -2151,6 +2174,7 @@ async function checkProStatus(){
   }catch(e){ console.log('Pro check error:', e); }
 }
 var historyData=[];
+try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ historyData=JSON.parse(_lh)||[]; } }catch(e){}
 function openHistory(){
     document.getElementById('app').style.display='none';
     document.getElementById('historyPage').classList.add('show');
@@ -2175,7 +2199,7 @@ async function deleteAnalysis(i){
 }
 async function loadHistory(){
   if(!authToken)return;
-  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();historyData=Array.isArray(data)?data:[];renderHistory();renderHistoryGrid();}catch(e){}
+  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data;try{localStorage.setItem('lt_history',JSON.stringify(historyData.slice(0,50)));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
 }
 function renderHistory(){
   var list=document.getElementById('historyList');
