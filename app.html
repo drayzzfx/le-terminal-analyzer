@@ -1702,6 +1702,12 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
     render(parsed,rrv,tf,pair);
+  // Coach mode - show questions
+  if(coachMode && parsed.coachQuestions && parsed.coachQuestions.length){
+    lastAnalysisResult=parsed;
+    lastAnalysisParams={txt,rrv,tf,pair,dir};
+    showCoachQuestions(parsed.coachQuestions);
+  }
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
