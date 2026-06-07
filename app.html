@@ -1808,7 +1808,14 @@ applyLang();
 
 // ── AUTH ──
 var currentUser=null,authToken=null,authMode='login';
-function openAuth(){document.getElementById('authOverlay').classList.add('show');}
+function openAuth(){
+    authMode='login';
+    document.getElementById('tabLogin').classList.add('on');
+    document.getElementById('tabSignup').classList.remove('on');
+    document.getElementById('authSubmitTxt').textContent='Se connecter';
+    document.getElementById('authError').textContent='';
+    document.getElementById('authOverlay').classList.add('show');
+  }
 function closeAuth(){document.getElementById('authOverlay').classList.remove('show');document.getElementById('authError').textContent='';}
 function switchAuthTab(mode){authMode=mode;document.getElementById('tabLogin').classList.toggle('on',mode==='login');document.getElementById('tabSignup').classList.toggle('on',mode==='signup');document.getElementById('authSubmitTxt').textContent=mode==='login'?'Se connecter':'Créer mon compte';}
 async function doAuth(){
