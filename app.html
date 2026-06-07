@@ -2258,16 +2258,20 @@ async function confirmOk(){
     var toStore = historyData.slice(0,50).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
     localStorage.setItem('lt_history', JSON.stringify(toStore));
   }catch(e){}
-  // 3. Fermer le détail
-  closeHDetail();
-  // 4. Toujours aller sur la page historique et la rafraîchir
-  var app = document.getElementById('app');
+  // 3. Tout fermer proprement
+  document.getElementById('hdetailOverlay').classList.remove('show');
+  document.getElementById('confirmOverlay').classList.remove('show');
+  // 4. Cacher toutes les pages sauf historique
+  document.getElementById('app').style.display='none';
+  var perfPage=document.getElementById('perfPage'); if(perfPage) perfPage.classList.remove('show');
+  // 5. Forcer l'affichage historique et rafraîchir avec un petit délai pour le rendu
   var histPage = document.getElementById('historyPage');
-  app.style.display='none';
   histPage.classList.add('show');
-  renderHistory();
-  renderHistoryGrid();
-  // 5. API delete en arrière-plan
+  setTimeout(function(){
+    renderHistory();
+    renderHistoryGrid();
+  }, 50);
+  // 6. API delete en arrière-plan
   if(authToken && item.id){
     try{ await fetch('/api/history/'+item.id,{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}}); }catch(e){}
   }
