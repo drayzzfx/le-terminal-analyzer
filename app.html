@@ -750,7 +750,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
 .auth-tab.on{background:var(--v);color:white}
 .auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;text-align:left}
-.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
+.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
 .auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
 .auth-field input:focus{border-color:var(--border-active)}
 .auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
@@ -1021,7 +1021,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst1">Trade</div>
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field" style="position:relative">
-          <label class="lbl" id="lbl-pair">Paire / Actif</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-pair">Paire / Actif</label>
           <input type="text" id="pair" placeholder="XAUUSD, BTC, NAS100…" autocomplete="off"
             oninput="onPairInput(this.value)" onfocus="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,200)">
           <div id="pairSuggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:100;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.5);margin-top:4px"></div>
@@ -1032,14 +1032,14 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           </div>
         </div>
         <div class="field">
-          <label class="lbl" id="lbl-dir">Direction</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-dir">Direction</label>
           <div class="dir-group">
             <button class="dir-btn long" id="btnL" onclick="setDir('LONG')">LONG</button>
             <button class="dir-btn short" id="btnS" onclick="setDir('SHORT')">SHORT</button>
           </div>
         </div>
         <div class="field">
-          <label class="lbl" id="lbl-tf">Timeframe</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-tf">Timeframe</label>
           <select id="tf"><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
         </div>
       </div>
@@ -1047,15 +1047,15 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst2">Niveaux</div>
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field">
-          <label class="lbl" id="lbl-entry">Entrée</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-entry">Entrée</label>
           <input type="number" id="entry" placeholder="2320.50" step="any">
         </div>
         <div class="field">
-          <label class="lbl" id="lbl-tp">Take Profit</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-tp">Take Profit</label>
           <input type="number" id="tp" placeholder="2345.00" step="any">
         </div>
         <div class="field">
-          <label class="lbl" id="lbl-sl">Stop Loss</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-sl">Stop Loss</label>
           <input type="number" id="sl" placeholder="2308.00" step="any">
         </div>
       </div>
@@ -1063,29 +1063,59 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst3">Contexte</div>
       <div class="form-grid" style="margin-bottom:12px">
         <div class="field">
-          <label class="lbl" id="lbl-bias">Biais marché</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-bias">Biais marché</label>
           <select id="bias"><option value="bullish" id="ob">Haussier</option><option value="bearish" id="obr">Baissier</option><option value="neutral" id="on">Neutre</option></select>
         </div>
         <div class="field">
-          <label class="lbl" id="lbl-sess">Session</label>
+          <label class="lbl" style="color:#C4B5FD" id="lbl-sess">Session</label>
           <select id="sess"><option>London</option><option selected>New York</option><option>Asian</option><option>Overlap</option></select>
         </div>
       </div>
       <div class="field" style="margin-bottom:20px">
-        <label class="lbl" id="lbl-conf">Confluences & Notes</label>
+        <label class="lbl" style="color:#C4B5FD" id="lbl-conf">Confluences & Notes</label>
         <textarea id="conf" placeholder="Rejet résistance H4, DXY haussier, divergence RSI…"></textarea>
       </div>
 
-      <div class="form-section-title" id="fst4">Graphique</div>
-      <div class="upload-zone" id="uploadZone" style="margin-bottom:20px" onclick="trigUpl()">
-        <input type="file" id="fileIn" accept="image/*" onchange="onFile(this)">
-        <div class="upload-icon" id="uico">📊</div>
-        <div class="upload-text"><strong id="ucta">Ajoute ton graphique</strong></div>
-        <div class="upload-hint" id="uhint">PNG, JPG · Glisse ou clique</div>
+      <!-- COACH MODE -->
+      <div style="display:flex;align-items:center;gap:12px;margin:16px 0;padding:14px 16px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:12px">
+        <div style="flex:1">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text)">🎓 Mode Coach</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">L'IA analyse ET te pose 3 questions pour affiner ton setup</div>
+        </div>
+        <button id="coachToggle" onclick="toggleCoach()" style="width:44px;height:24px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;background:rgba(255,255,255,0.1);position:relative;flex-shrink:0">
+          <div id="coachDot" style="width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
+        </button>
       </div>
-      <div class="preview" id="prevWrap" style="margin-bottom:20px">
-        <img id="prevImg" src="" alt="">
-        <button class="preview-rm" onclick="rmImg(event)" id="rm-img">✕ Retirer</button>
+
+      <div class="form-section-title" id="fst4">Graphiques HTF → LTF</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:var(--text3);margin-bottom:6px;text-transform:uppercase">HTF · D1/H4</div>
+          <div class="upload-zone" style="padding:14px;text-align:center;position:relative;min-height:80px" onclick="trigUplTF('htf')">
+            <input type="file" id="fileHTF" accept="image/*" onchange="onFileTF(this,'htf')" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+            <div id="uicoHTF" style="font-size:20px;margin-bottom:4px">📈</div>
+            <div id="previewHTF" style="display:none;position:relative"><img id="prevHTF" style="width:100%;height:55px;object-fit:cover;border-radius:6px;display:block"><button onclick="rmTF(event,'htf')" style="position:absolute;top:3px;right:3px;background:rgba(8,8,15,.85);border:1px solid var(--border);color:var(--text2);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer">✕</button></div>
+            <div style="font-size:10px;color:var(--text3)" id="lblHTF">Ajouter</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:var(--text3);margin-bottom:6px;text-transform:uppercase">ITF · H1/M30</div>
+          <div class="upload-zone" style="padding:14px;text-align:center;position:relative;min-height:80px" onclick="trigUplTF('itf')">
+            <input type="file" id="fileITF" accept="image/*" onchange="onFileTF(this,'itf')" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+            <div id="uicoITF" style="font-size:20px;margin-bottom:4px">📊</div>
+            <div id="previewITF" style="display:none;position:relative"><img id="prevITF" style="width:100%;height:55px;object-fit:cover;border-radius:6px;display:block"><button onclick="rmTF(event,'itf')" style="position:absolute;top:3px;right:3px;background:rgba(8,8,15,.85);border:1px solid var(--border);color:var(--text2);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer">✕</button></div>
+            <div style="font-size:10px;color:var(--text3)" id="lblITF">Ajouter</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:var(--text3);margin-bottom:6px;text-transform:uppercase">LTF · M15/M5</div>
+          <div class="upload-zone" style="padding:14px;text-align:center;position:relative;min-height:80px" onclick="trigUplTF('ltf')">
+            <input type="file" id="fileLTF" accept="image/*" onchange="onFileTF(this,'ltf')" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+            <div id="uicoLTF" style="font-size:20px;margin-bottom:4px">🔍</div>
+            <div id="previewLTF" style="display:none;position:relative"><img id="prevLTF" style="width:100%;height:55px;object-fit:cover;border-radius:6px;display:block"><button onclick="rmTF(event,'ltf')" style="position:absolute;top:3px;right:3px;background:rgba(8,8,15,.85);border:1px solid var(--border);color:var(--text2);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer">✕</button></div>
+            <div style="font-size:10px;color:var(--text3)" id="lblLTF">Ajouter</div>
+          </div>
+        </div>
       </div>
 
       <button class="analyze-btn" id="submitBtn" onclick="analyze()">
@@ -1760,7 +1790,7 @@ function render(r,rrv,tf,pair){
         return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;' +
           (last?'':'border-bottom:1px solid rgba(255,255,255,0.06);') + '">' +
           '<span style="flex-shrink:0;min-width:20px;font-size:14px;color:var(--v2);font-weight:700;line-height:1.5;text-align:center">' + icon + '</span>' +
-          '<span style="font-size:13px;font-weight:300;color:#D4D0F0;line-height:1.65;flex:1">' + text + '</span>' +
+          '<span style="font-size:13px;font-weight:300;color:#F0EEFF;line-height:1.65;flex:1">' + text + '</span>' +
           '</div>';
       }).join('') +
     '</div>';
