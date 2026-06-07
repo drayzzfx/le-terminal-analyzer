@@ -1910,7 +1910,7 @@ async function doAuth(){
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
     var data=await res.json();
-    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);closeAuth();await checkProStatus();updateUserUI();loadHistory();}
+    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');closeAuth();await checkProStatus();updateUserUI();loadHistory();}
     else if(data.id){errEl.style.color='var(--green)';errEl.textContent='Compte créé ! Vérifie ton email.';}
     else errEl.textContent=data.error_description||data.msg||data.message||'Erreur';
   }catch(e){errEl.textContent='Erreur réseau';}
@@ -2169,18 +2169,33 @@ window.requestIAFeedback=requestIAFeedback;
 
 async function checkSession(){
   var token=localStorage.getItem('ta_token');if(!token)return;
+  // Restore session optimistically from token immediately
+  authToken=token;
+  var savedEmail=localStorage.getItem('ta_email')||'';
+  currentUser={email:savedEmail};
+  updateUserUI();
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
     var data=await res.json();
     if(data.id){
-      authToken=token;currentUser=data;
-      // Check PRO status from Whop
+      currentUser=data;
+      localStorage.setItem('ta_email', data.email||'');
       await checkProStatus();
       updateUserUI();loadHistory();
     } else {
-      localStorage.removeItem('ta_token');
+      // API says invalid - but keep session alive if network error might be the cause
+      // Only clear if explicit invalid response
+      if(data.error){
+        authToken=null;currentUser=null;
+        localStorage.removeItem('ta_token');
+        localStorage.removeItem('ta_email');
+        updateUserUI();
+      }
     }
-  }catch(e){}
+  }catch(e){
+    // Network error - keep session from localStorage, user stays logged in
+    updateUserUI();
+  }
 }
 
 async function checkProStatus(){
@@ -2245,9 +2260,12 @@ async function confirmOk(){
   closeHDetail();
   renderHistory();
   renderHistoryGrid();
-  // If history page is not open, we deleted from result view → go back to form
+  // If on history page - stay there, grid already updated above
+  // If deleted from result view → go back to form
   var histPage = document.getElementById('historyPage');
-  if(!histPage.classList.contains('show')){
+  if(histPage.classList.contains('show')){
+    // Already on history page - just let renderHistoryGrid() do its job (already called above)
+  } else {
     var delBtn = document.getElementById('act-del');
     if(delBtn) delBtn.style.display='none';
     showForm();
