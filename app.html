@@ -2260,7 +2260,6 @@ async function loadHistory(){
 }
 function renderHistory(){
   var list=document.getElementById('historyList');
-  if(!currentUser){list.innerHTML='<div class="history-empty">Connecte-toi pour voir<br>ton historique</div>';return;}
   if(!historyData.length){list.innerHTML='<div class="history-empty">Aucune analyse encore<br>Lance ta première analyse !</div>';return;}
   list.innerHTML=historyData.map(function(item,i){
     var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
@@ -2334,10 +2333,6 @@ checkSession();
 function renderHistoryGrid(){
   var grid = document.getElementById('historyGrid');
   if(!grid) return;
-  if(!currentUser){
-    grid.innerHTML='<div class="history-empty-page"><div class="big">🔐</div>Connecte-toi pour voir<br>ton historique</div>';
-    return;
-  }
   if(!historyData.length){
     grid.innerHTML='<div class="history-empty-page"><div class="big">📊</div>Aucune analyse encore<br>Lance ta première analyse !</div>';
     return;
