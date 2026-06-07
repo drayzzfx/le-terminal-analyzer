@@ -889,6 +889,23 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .score-bar-fill{height:100%;border-radius:50px;transition:width .6s ease}
 .pair-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
 .pair-row:last-child{border:none}
+
+/* ── SIDE MENU ── */
+.side-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.side-menu-overlay.open{opacity:1;pointer-events:all}
+.side-menu{position:fixed;top:0;left:0;bottom:0;width:280px;background:#0E0E1A;border-right:1px solid var(--border);z-index:201;transform:translateX(-100%);transition:transform .35s cubic-bezier(.2,0,.1,1);display:flex;flex-direction:column}
+.side-menu.open{transform:translateX(0)}
+.side-menu-header{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.side-menu-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:var(--text)}
+.side-menu-brand span{color:var(--v2)}
+.side-menu-close{background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1;padding:4px;border-radius:6px;transition:all .2s}
+.side-menu-close:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.side-menu-nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
+.side-nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:600}
+.side-nav-item:hover{background:rgba(139,92,246,.1);color:var(--v2)}
+.side-nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
+.side-nav-divider{height:1px;background:var(--border);margin:8px 0}
+.side-menu-footer{padding:16px 12px;border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -1007,8 +1024,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="topbar-brand">Le Terminal <span>Analyzer</span></div>
     </div>
     <div class="topbar-right">
-      <button class="history-btn" id="perfBtn" onclick="openPerf()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Performances</button>
-      <button class="history-btn" id="historyBtn" onclick="openHistory()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Historique</button>
+      <button id="menuToggle" onclick="toggleSideMenu()" style="display:flex;flex-direction:column;gap:4px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
+        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px;transition:all .2s"></span>
+        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px;transition:all .2s"></span>
+        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px;transition:all .2s"></span>
+      </button>
       <div class="usage-chip" id="usageChip">1 essai gratuit</div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
         <div class="user-avatar" id="userAvatar">?</div>
@@ -1909,14 +1929,43 @@ function closePerf(){
 }
 
 async function loadPerf(){
-  if(!authToken) return;
   document.getElementById('perfLoading').style.display='block';
   document.getElementById('perfContent').style.display='none';
-  try{
-    var res = await fetch('/api/outcomes',{headers:{'Authorization':'Bearer '+authToken}});
-    var data = await res.json();
-    renderPerf(data);
-  }catch(e){ document.getElementById('perfLoading').textContent='Erreur de chargement'; }
+  // Try to refresh from API if connected
+  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d))historyData=d;}catch(e){}}
+  // Build stats from local historyData
+  var all = historyData;
+  if(!all.length){ document.getElementById('perfLoading').textContent='Aucune analyse encore. Lance ta première analyse !'; return; }
+  var taken = all.filter(function(a){ return a.trade_taken===true; });
+  var wins = taken.filter(function(a){ return a.trade_result==='win'; }).length;
+  var losses = taken.filter(function(a){ return a.trade_result==='loss'; }).length;
+  var be = taken.filter(function(a){ return a.trade_result==='be'; }).length;
+  var winRate = (wins+losses)>0 ? Math.round(wins/(wins+losses)*100) : null;
+  var scores = all.map(function(a){ return parseFloat(a.score)||0; }).filter(function(s){ return s>0; });
+  var avgScore = scores.length ? (scores.reduce(function(a,b){return a+b;},0)/scores.length).toFixed(1) : null;
+  var rrVals = taken.filter(function(a){ return a.rr_realized; }).map(function(a){ return parseFloat(a.rr_realized)||0; });
+  var avgRR = rrVals.length ? (rrVals.reduce(function(a,b){return a+b;},0)/rrVals.length).toFixed(2) : null;
+  // Weekly RR
+  var weekAgo = Date.now() - 7*24*60*60*1000;
+  var weekRR = taken.filter(function(a){ return new Date(a.created_at).getTime()>weekAgo && a.rr_realized; }).reduce(function(s,a){ return s+(parseFloat(a.rr_realized)||0); },0);
+  // Pair stats
+  var pairStats = {};
+  taken.forEach(function(a){
+    var p = a.pair||'?';
+    if(!pairStats[p]) pairStats[p]={total:0,wins:0,losses:0,be:0};
+    pairStats[p].total++;
+    if(a.trade_result==='win') pairStats[p].wins++;
+    else if(a.trade_result==='loss') pairStats[p].losses++;
+    else if(a.trade_result==='be') pairStats[p].be++;
+  });
+  // Score progression (last 10)
+  var scoreProgression = all.slice(-10).map(function(a){ return {score:parseFloat(a.score)||0, pair:a.pair}; });
+  renderPerf({
+    totalAnalyses: all.length, totalTaken: taken.length,
+    wins: wins, losses: losses, be: be,
+    winRate: winRate, avgRR: avgRR, weeklyRR: weekRR.toFixed(2),
+    avgScore: avgScore, pairStats: pairStats, scoreProgression: scoreProgression
+  });
 }
 
 function renderPerf(d){
@@ -2045,17 +2094,21 @@ async function requestIAFeedback(){
 function updateUserUI(){
   var lb=document.getElementById('loginBtn');
   var uc=document.getElementById('userChip');
-  var hb=document.getElementById('historyBtn');
-  var pb=document.getElementById('perfBtn');
+  var sli=document.getElementById('sideLoginBtn');
+  var sui=document.getElementById('sideUserInfo');
   if(currentUser){
-    lb.style.display='none'; uc.classList.add('show'); hb.classList.add('show');
-    if(pb) pb.style.display='block';
+    if(lb) lb.style.display='none';
+    if(uc) uc.classList.add('show');
     var em=currentUser.email||'';
     document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();
     document.getElementById('userName').textContent=em.split('@')[0];
+    if(sli) sli.style.display='none';
+    if(sui){ sui.style.display='block'; document.getElementById('sideUserEmail').textContent=em; }
   } else {
-    lb.style.display=''; uc.classList.remove('show'); hb.classList.remove('show');
-    if(pb) pb.style.display='none';
+    if(lb) lb.style.display='';
+    if(uc) uc.classList.remove('show');
+    if(sli) sli.style.display='flex';
+    if(sui) sui.style.display='none';
   }
 }
 window.openPerf=openPerf;
@@ -2108,6 +2161,18 @@ function closeHistory(){
     document.getElementById('app').style.display='block';
   }
 function closeHDetail(){document.getElementById('hdetailOverlay').classList.remove('show');}
+async function deleteAnalysis(i){
+  var item = historyData[i];
+  if(!item) return;
+  if(!confirm('Supprimer cette analyse ? Cette action est irréversible.')) return;
+  historyData.splice(i, 1);
+  closeHDetail();
+  renderHistory();
+  renderHistoryGrid();
+  if(authToken && item.id){
+    try{ await fetch('/api/history/'+item.id,{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}}); }catch(e){}
+  }
+}
 async function loadHistory(){
   if(!authToken)return;
   try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();historyData=Array.isArray(data)?data:[];renderHistory();renderHistoryGrid();}catch(e){}
@@ -2168,6 +2233,10 @@ function openHDetail(i){
     '</div>' : '') +
   '</div>';
 
+  // Add delete button at bottom
+  content += '<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);text-align:center">' +
+    '<button onclick="deleteAnalysis('+i+')" style="padding:8px 20px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:8px;color:#F87171;font-size:12px;font-family:Inter,sans-serif;cursor:pointer">🗑 Supprimer cette analyse</button>' +
+  '</div>';
   document.getElementById('hdetailContent').innerHTML=content;
   document.getElementById('hdetailOverlay').classList.add('show');
 }
@@ -2406,6 +2475,25 @@ function closeHistoryPage(){ closeHistory(); }
 window.closeHDetail = closeHDetail;
 window.openHDetail = openHDetail;
 
+
+function toggleSideMenu(){
+  document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('sideMenuOverlay').classList.toggle('open');
+}
+function closeSideMenu(){
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('sideMenuOverlay').classList.remove('open');
+}
+function doLogout(){
+  authToken=null; currentUser=null; isPro=false; historyData=[];
+  localStorage.removeItem('ta_token'); localStorage.removeItem('lt_pro');
+  updateUserUI(); closeSideMenu();
+  document.getElementById('historyList').innerHTML='<div class="history-empty">Connecte-toi pour voir<br>ton historique</div>';
+}
+window.deleteAnalysis=deleteAnalysis;
+window.toggleSideMenu=toggleSideMenu;
+window.closeSideMenu=closeSideMenu;
+window.doLogout=doLogout;
 </script>
 
 
@@ -2532,5 +2620,37 @@ window.openHDetail = openHDetail;
       Rejoindre le Telegram
     </a>
   </div>
+
+<!-- SIDE MENU -->
+<div class="side-menu-overlay" id="sideMenuOverlay" onclick="closeSideMenu()"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="side-menu-header">
+    <div class="side-menu-brand">Le Terminal <span>Analyzer</span></div>
+    <button class="side-menu-close" onclick="closeSideMenu()">✕</button>
+  </div>
+  <nav class="side-menu-nav">
+    <button class="side-nav-item" onclick="closeSideMenu();showForm()">
+      <span class="nav-icon">⚡</span> Nouvelle analyse
+    </button>
+    <div class="side-nav-divider"></div>
+    <button class="side-nav-item" onclick="closeSideMenu();openHistory()">
+      <span class="nav-icon">📋</span> Historique
+    </button>
+    <button class="side-nav-item" onclick="closeSideMenu();openPerf()">
+      <span class="nav-icon">📈</span> Performances
+    </button>
+  </nav>
+  <div class="side-menu-footer">
+    <button class="side-nav-item" id="sideLoginBtn" onclick="closeSideMenu();openAuth()" style="color:var(--v2)">
+      <span class="nav-icon">👤</span> Connexion / Créer un compte
+    </button>
+    <div id="sideUserInfo" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2)">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px">CONNECTÉ</div>
+      <div id="sideUserEmail" style="font-size:13px;font-weight:600;color:var(--text2)"></div>
+      <button onclick="doLogout()" style="margin-top:8px;font-size:11px;color:#F87171;background:transparent;border:none;cursor:pointer;padding:0;font-family:Inter,sans-serif">Se déconnecter</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
