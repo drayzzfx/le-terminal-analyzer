@@ -2248,28 +2248,26 @@ async function confirmOk(){
   var item = historyData[i];
   if(!item) return;
   var deletedId = item.id;
+  // 1. Supprimer de historyData
   historyData.splice(i, 1);
-  // Track deleted ID so it doesn't come back on API reload
+  if(!Array.isArray(historyData)) historyData=[];
+  // 2. Persister
   _deletedIds.add(String(deletedId));
   try{
-    var deletedArr = Array.from(_deletedIds);
-    localStorage.setItem('lt_deleted', JSON.stringify(deletedArr));
+    localStorage.setItem('lt_deleted', JSON.stringify(Array.from(_deletedIds)));
     var toStore = historyData.slice(0,50).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
     localStorage.setItem('lt_history', JSON.stringify(toStore));
   }catch(e){}
+  // 3. Fermer le détail
   closeHDetail();
+  // 4. Toujours aller sur la page historique et la rafraîchir
+  var app = document.getElementById('app');
+  var histPage = document.getElementById('historyPage');
+  app.style.display='none';
+  histPage.classList.add('show');
   renderHistory();
   renderHistoryGrid();
-  // If on history page - stay there, grid already updated above
-  // If deleted from result view → go back to form
-  var histPage = document.getElementById('historyPage');
-  if(histPage.classList.contains('show')){
-    // Already on history page - just let renderHistoryGrid() do its job (already called above)
-  } else {
-    var delBtn = document.getElementById('act-del');
-    if(delBtn) delBtn.style.display='none';
-    showForm();
-  }
+  // 5. API delete en arrière-plan
   if(authToken && item.id){
     try{ await fetch('/api/history/'+item.id,{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}}); }catch(e){}
   }
