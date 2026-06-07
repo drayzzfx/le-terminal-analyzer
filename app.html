@@ -2264,19 +2264,39 @@ async function confirmOk(){
     localStorage.setItem('lt_history', JSON.stringify(toStore));
   }catch(e){}
 
-  // 4. Naviguer vers historique et re-render
+  // 4. Naviguer vers historique - reconstruire toute la page
   document.getElementById('app').style.display='none';
   var perfPage=document.getElementById('perfPage'); if(perfPage) perfPage.classList.remove('show');
-  document.getElementById('historyPage').classList.add('show');
-  // Vider le grid immédiatement puis re-remplir après le rendu du navigateur
+  // Reset historyPage complètement
+  var histPage = document.getElementById('historyPage');
+  histPage.classList.remove('show');
+  // Force reflow
+  void histPage.offsetHeight;
+  histPage.classList.add('show');
+  // Reconstruire le grid depuis zéro
   var grid = document.getElementById('historyGrid');
-  if(grid) grid.innerHTML = '';
-  renderHistory();
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      renderHistoryGrid();
-    });
-  });
+  if(grid){
+    grid.innerHTML = '';
+    void grid.offsetHeight; // force reflow
+    if(!historyData.length){
+      grid.innerHTML = '<div class="history-empty-page"><div class="big">📊</div>Aucune analyse encore<br>Lance ta première analyse !</div>';
+    } else {
+      var html = historyData.map(function(item, idx){
+        var vC = item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
+        var vL = item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
+        var sc = parseFloat(item.score)||0;
+        var col = sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
+        var ds = new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+        return '<div class="history-card" onclick="openHDetail('+idx+')">' +
+          '<div class="hc-top"><span class="hc-pair">'+(item.pair||'—')+' · '+(item.direction||'')+'</span><span class="hc-verdict '+vC+'">'+vL+'</span></div>' +
+          '<div class="hc-score" style="color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:14px;color:var(--text3)">/10</span></div>' +
+          '<div class="hc-label">'+(item.score_label||'')+'</div>' +
+          '<div class="hc-meta">'+(item.tf||'')+(item.tf&&item.direction?' · ':'')+ds+'</div>' +
+        '</div>';
+      }).join('');
+      grid.innerHTML = html;
+    }
+  }
 
   // 5. API DELETE (ne pas attendre, ne pas appeler loadHistory après)
   if(authToken && item.id){
