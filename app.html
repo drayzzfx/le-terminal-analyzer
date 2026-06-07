@@ -864,9 +864,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .outcome-btn.skipped{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:#F87171}
 .result-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .result-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
-.result-btn.win{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:var(--green)}
-.result-btn.loss{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);color:#F87171}
-.result-btn.be{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--amber)}
+.result-btn.win:hover{border-color:rgba(52,211,153,.4);color:var(--green)}
+.result-btn.active-win{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:var(--green)}
+.result-btn.loss:hover{border-color:rgba(248,113,113,.35);color:#F87171}
+.result-btn.active-loss{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);color:#F87171}
+.result-btn.be:hover{border-color:rgba(251,191,36,.3);color:var(--amber)}
+.result-btn.active-be{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--amber)}
 
 /* PERFORMANCES PAGE */
 #perfPage{display:none;min-height:100vh;background:var(--bg)}
@@ -1004,7 +1007,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="topbar-brand">Le Terminal <span>Analyzer</span></div>
     </div>
     <div class="topbar-right">
-      <button class="history-btn" id="perfBtn" onclick="openPerf()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s;display:none" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Performances</button>
+      <button class="history-btn" id="perfBtn" onclick="openPerf()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Performances</button>
       <button class="history-btn" id="historyBtn" onclick="openHistory()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Historique</button>
       <div class="usage-chip" id="usageChip">1 essai gratuit</div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
@@ -1851,26 +1854,20 @@ var currentDetailIdx = -1;
 
 async function setOutcome(i, taken){
   var item = historyData[i];
-  if(!item||!authToken) return;
+  if(!item) return;
   item.trade_taken = taken;
   historyData[i] = item;
-  try{
-    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({analysisId:item.id,tradeTaken:taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});
-    openHDetail(i);
-  }catch(e){}
+  openHDetail(i);
+  if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});}catch(e){}}
 }
 
 async function setResult(i, result){
   var item = historyData[i];
-  if(!item||!authToken) return;
+  if(!item) return;
   item.trade_result = result;
   historyData[i] = item;
-  try{
-    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({analysisId:item.id,tradeTaken:true,tradeResult:result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});
-    openHDetail(i);
-  }catch(e){}
+  openHDetail(i);
+  if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:true,tradeResult:result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});}catch(e){}}
 }
 
 async function saveRR(i, btnEl){
@@ -1878,17 +1875,13 @@ async function saveRR(i, btnEl){
   var rrEl = document.getElementById('rrInput');
   var rr = parseFloat(rrEl ? rrEl.value : '');
   if(!item) return;
-  if(!authToken){ alert('Connecte-toi pour sauvegarder.'); return; }
-  if(isNaN(rr)){ alert('Entre un RR valide.'); return; }
+  if(isNaN(rr)){ if(btn){ btn.textContent='RR invalide'; setTimeout(function(){ btn.textContent='Sauver'; }, 1200); } return; }
   item.rr_realized = rr;
   historyData[i] = item;
   var btn = btnEl || (typeof event !== 'undefined' && event.target);
-  try{
-    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:rr,tradeNotes:item.trade_notes})});
-    if(btn){ btn.textContent='✓'; btn.style.background='rgba(52,211,153,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
-    setTimeout(function(){ if(btn){ btn.textContent='Sauver'; btn.style.background='var(--v)'; btn.style.borderColor=''; btn.style.color='white'; } }, 1500);
-  }catch(e){ if(btn){ btn.textContent='Erreur'; btn.style.background='rgba(248,113,113,0.3)'; } }
+  if(btn){ btn.textContent='✓'; btn.style.background='rgba(52,211,153,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
+  setTimeout(function(){ if(btn){ btn.textContent='Sauver'; btn.style.background='var(--v)'; btn.style.borderColor=''; btn.style.color='white'; } }, 1500);
+  if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:rr,tradeNotes:item.trade_notes})});}catch(e){}}
 }
 
 async function saveNotes(i, btnEl){
@@ -1896,16 +1889,12 @@ async function saveNotes(i, btnEl){
   var notesEl = document.getElementById('tradeNotes');
   var notes = notesEl ? notesEl.value : '';
   if(!item) return;
-  if(!authToken){ alert('Connecte-toi pour sauvegarder.'); return; }
   item.trade_notes = notes;
   historyData[i] = item;
   var btn = btnEl || (typeof event !== 'undefined' && event.target);
-  try{
-    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:notes})});
-    if(btn){ btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)'; }
-    setTimeout(function(){ if(btn){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; } }, 1500);
-  }catch(e){ if(btn){ btn.textContent='Erreur réseau'; btn.style.color='var(--red)'; } }
+  if(btn){ btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)'; }
+  setTimeout(function(){ if(btn){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; } }, 1500);
+  if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:notes})});}catch(e){}}
 }
 
 // ── PERFORMANCES PAGE ──
@@ -2165,9 +2154,9 @@ function openHDetail(i){
     '</div>' +
     (item.trade_taken===true ? '<div style="margin-top:10px"><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Résultat :</div>' +
       '<div class="result-btns">' +
-        '<button class="result-btn win '+(item.trade_result==='win'?'win':'')+'" onclick="setResult('+i+',\'win\')">✓ Win</button>' +
-        '<button class="result-btn loss '+(item.trade_result==='loss'?'loss':'')+'" onclick="setResult('+i+',\'loss\')">✗ Loss</button>' +
-        '<button class="result-btn be '+(item.trade_result==='be'?'be':'')+'" onclick="setResult('+i+',\'be\')">= BE</button>' +
+        '<button class="result-btn win '+(item.trade_result==='win'?'active-win':'')+'" onclick="setResult('+i+',\'win\')">✓ Win</button>' +
+        '<button class="result-btn loss '+(item.trade_result==='loss'?'active-loss':'')+'" onclick="setResult('+i+',\'loss\')">✗ Loss</button>' +
+        '<button class="result-btn be '+(item.trade_result==='be'?'active-be':'')+'" onclick="setResult('+i+',\'be\')">= BE</button>' +
       '</div>' +
       '<div style="display:flex;gap:8px;margin-top:8px;align-items:center">' +
         '<span style="font-size:11px;color:var(--text2);flex-shrink:0">RR réalisé :</span>' +
