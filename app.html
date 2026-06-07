@@ -1596,6 +1596,7 @@ function rmImg(e){
   document.getElementById('uploadZone').querySelector('.upload-hint').style.display='block';
 }
 const uz=document.getElementById('uploadZone');
+if(uz){
 uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag')});
 uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
 uz.addEventListener('drop',e=>{
@@ -1607,6 +1608,7 @@ uz.addEventListener('drop',e=>{
     onFile(document.getElementById('fileIn'));
   }
 });
+} // end if(uz)
 
 // ── PAYWALL ──
 function openPW(){document.getElementById('paywall').classList.add('show')}
@@ -1750,7 +1752,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       rr_realized: null,
       trade_notes: ''
     };
-    historyData.unshift(newEntry);
+    if(!Array.isArray(historyData)) historyData=[]; historyData.unshift(newEntry);
     // Persist to localStorage without img_data (too large)
     try{
       var toStore = historyData.slice(0,50).map(function(h){
@@ -2199,7 +2201,8 @@ async function checkProStatus(){
 var historyData=[];
 var _deletedIds = new Set();
 try{ var _di=localStorage.getItem('lt_deleted'); if(_di){ JSON.parse(_di).forEach(function(id){ _deletedIds.add(String(id)); }); } }catch(e){}
-try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ historyData=(JSON.parse(_lh)||[]).filter(function(h){ return !_deletedIds.has(String(h.id)); }); } }catch(e){}
+try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ var _parsed=JSON.parse(_lh); if(Array.isArray(_parsed)){ historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); }); } } }catch(e){ historyData=[]; }
+if(!Array.isArray(historyData)) historyData=[];
 function openHistory(){
     document.getElementById('app').style.display='none';
     document.getElementById('historyPage').classList.add('show');
@@ -2260,6 +2263,7 @@ async function loadHistory(){
   try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data.filter(function(h){return !_deletedIds.has(String(h.id));});try{var ts=historyData.slice(0,50).map(function(h){var c=Object.assign({},h);c.img_data=null;return c;});localStorage.setItem('lt_history',JSON.stringify(ts));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
 }
 function renderHistory(){
+  if(!Array.isArray(historyData)) historyData=[];
   var list=document.getElementById('historyList');
   if(!historyData.length){list.innerHTML='<div class="history-empty">Aucune analyse encore<br>Lance ta première analyse !</div>';return;}
   list.innerHTML=historyData.map(function(item,i){
@@ -2334,6 +2338,7 @@ checkSession();
 function renderHistoryGrid(){
   var grid = document.getElementById('historyGrid');
   if(!grid) return;
+  if(!Array.isArray(historyData)) historyData=[];
   if(!historyData.length){
     grid.innerHTML='<div class="history-empty-page"><div class="big">📊</div>Aucune analyse encore<br>Lance ta première analyse !</div>';
     return;
