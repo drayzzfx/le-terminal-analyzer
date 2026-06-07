@@ -1075,18 +1075,6 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <label class="lbl" style="color:#C4B5FD" id="lbl-conf">Confluences & Notes</label>
         <textarea id="conf" placeholder="Rejet résistance H4, DXY haussier, divergence RSI…"></textarea>
       </div>
-
-      <!-- COACH MODE -->
-      <div style="display:flex;align-items:center;gap:12px;margin:16px 0;padding:14px 16px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:12px">
-        <div style="flex:1">
-          <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text)">🎓 Mode Coach</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px">L'IA analyse ET te pose 3 questions pour affiner ton setup</div>
-        </div>
-        <button id="coachToggle" onclick="toggleCoach()" style="width:44px;height:24px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;background:rgba(255,255,255,0.1);position:relative;flex-shrink:0">
-          <div id="coachDot" style="width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
-        </button>
-      </div>
-
       <div class="form-section-title" id="fst4">Graphiques HTF → LTF</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
         <div>
@@ -1199,19 +1187,6 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <div class="v-badge" id="v-badge">—</div>
         <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
       </div>
-
-      <!-- COACH QUESTIONS -->
-      <div id="coachQuestionsPanel" style="display:none;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:20px;margin-bottom:16px">
-        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;color:var(--v2);margin-bottom:14px">🎓 Questions du Coach IA</div>
-        <div id="coachQuestionsList"></div>
-        <div style="margin-top:14px">
-          <textarea id="coachAnswer" placeholder="Réponds aux questions ci-dessus pour approfondir l'analyse…" style="width:100%;height:80px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-family:'Inter',sans-serif;font-size:12px;resize:none;outline:none"></textarea>
-          <button onclick="sendCoachAnswer()" style="margin-top:8px;width:100%;padding:11px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">
-            📤 Envoyer mes réponses pour affiner l'analyse
-          </button>
-        </div>
-      </div>
-
       <div class="actions">
         <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
         <button class="act-btn accent" onclick="openPW()" id="act-pro">★ Passer PRO</button>
@@ -1702,12 +1677,6 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
     render(parsed,rrv,tf,pair);
-  // Coach mode - show questions
-  if(coachMode && parsed.coachQuestions && parsed.coachQuestions.length){
-    lastAnalysisResult=parsed;
-    lastAnalysisParams={txt,rrv,tf,pair,dir};
-    showCoachQuestions(parsed.coachQuestions);
-  }
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
@@ -2164,70 +2133,6 @@ function rmTF(e, tf){
   if(tf==='ltf'){ imgDataLTF=null; document.getElementById('fileLTF').value=''; document.getElementById('previewLTF').style.display='none'; document.getElementById('uicoLTF').style.display='block'; document.getElementById('lblLTF').textContent='Ajouter'; document.getElementById('lblLTF').style.color=''; }
   imgData = imgDataLTF || imgDataITF || imgDataHTF;
 }
-
-// ── COACH MODE ──
-var coachMode = false;
-var lastAnalysisResult = null;
-var lastAnalysisParams = null;
-
-function toggleCoach(){
-  coachMode = !coachMode;
-  var btn = document.getElementById('coachToggle');
-  var dot = document.getElementById('coachDot');
-  btn.style.background = coachMode ? 'var(--v)' : 'var(--border)';
-  dot.style.left = coachMode ? '23px' : '3px';
-}
-
-function showCoachQuestions(questions){
-  var panel = document.getElementById('coachQuestionsPanel');
-  var list = document.getElementById('coachQuestionsList');
-  if(!questions || !questions.length){ panel.style.display='none'; return; }
-  list.innerHTML = questions.map(function(q,i){
-    return '<div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start">'+
-      '<span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--v);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">'+(i+1)+'</span>'+
-      '<span style="font-size:13px;color:var(--text2);line-height:1.5">'+q+'</span>'+
-    '</div>';
-  }).join('');
-  panel.style.display='block';
-}
-
-async function sendCoachAnswer(){
-  var answer = document.getElementById('coachAnswer').value.trim();
-  if(!answer || !lastAnalysisResult || !lastAnalysisParams) return;
-  document.getElementById('coachQuestionsPanel').style.display='none';
-  showLoad();
-  var p = lastAnalysisParams;
-  var enrichedTxt = p.txt + '\n\nRÉPONSES AUX QUESTIONS DU COACH :\n' + answer;
-  var content = enrichedTxt;
-  if(imgData){
-    var b64=imgData.split(',')[1];
-    var mime=(imgData.match(/^data:(image\/\w+);/)||['','image/jpeg'])[1];
-    content=[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:enrichedTxt}];
-  }
-  try{
-    var res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:c().sys,messages:[{role:'user',content}]})});
-    var data=await res.json();
-    if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
-    var rawText=data.content[0].text;
-    var raw=rawText.replace(/^s*```jsons*/im,'').replace(/s*```s*$/m,'').trim();
-    var js2=raw.indexOf('{'),je2=raw.lastIndexOf('}');
-    if(js2!==-1&&je2!==-1) raw=raw.slice(js2,je2+1);
-    var parsed=JSON.parse(raw);
-    render(parsed,p.rrv,p.tf,p.pair);
-    saveAnalysis(parsed,p.pair,p.dir,p.tf);
-  }catch(err){
-    showResult();
-    console.error(err);
-  }
-}
-window.toggleCoach=toggleCoach;
-window.selectPair=selectPair;
-window.showSuggestions=showSuggestions;
-window.hideSuggestions=hideSuggestions;
-window.onPairInput=onPairInput;
-window.onFileTF=onFileTF;
-window.rmTF=rmTF;
-window.sendCoachAnswer=sendCoachAnswer;
 
 window.openAuth = openAuth;
 window.checkProStatus = checkProStatus;
