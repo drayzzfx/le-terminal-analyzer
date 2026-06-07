@@ -1907,12 +1907,22 @@ async function doAuth(){
 // ── OUTCOMES ──
 var currentDetailIdx = -1;
 
+function persistHistoryData(){
+  try{
+    var toStore = historyData.slice(0,50).map(function(h){
+      var c = Object.assign({},h); c.img_data = null; return c;
+    });
+    localStorage.setItem('lt_history', JSON.stringify(toStore));
+  }catch(e){}
+}
+
 async function setOutcome(i, taken){
   var item = historyData[i];
   if(!item) return;
   item.trade_taken = taken;
   historyData[i] = item;
   openHDetail(i);
+  persistHistoryData();
   if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});}catch(e){}}
 }
 
@@ -1922,6 +1932,7 @@ async function setResult(i, result){
   item.trade_result = result;
   historyData[i] = item;
   openHDetail(i);
+  persistHistoryData();
   if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:true,tradeResult:result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});}catch(e){}}
 }
 
@@ -1936,6 +1947,7 @@ async function saveRR(i, btnEl){
   var btn = btnEl || (typeof event !== 'undefined' && event.target);
   if(btn){ btn.textContent='✓'; btn.style.background='rgba(52,211,153,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
   setTimeout(function(){ if(btn){ btn.textContent='Sauver'; btn.style.background='var(--v)'; btn.style.borderColor=''; btn.style.color='white'; } }, 1500);
+  persistHistoryData();
   if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:rr,tradeNotes:item.trade_notes})});}catch(e){}}
 }
 
@@ -1949,6 +1961,7 @@ async function saveNotes(i, btnEl){
   var btn = btnEl || (typeof event !== 'undefined' && event.target);
   if(btn){ btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)'; }
   setTimeout(function(){ if(btn){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; } }, 1500);
+  persistHistoryData();
   if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:notes})});}catch(e){}}
 }
 
