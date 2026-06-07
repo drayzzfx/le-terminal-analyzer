@@ -15,7 +15,7 @@ module.exports = async function handler(req, res) {
     const { system, messages } = req.body;
 
     const payload = JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'claude-opus-4-5',
       max_tokens: 4096,
       system,
       messages
@@ -33,14 +33,16 @@ module.exports = async function handler(req, res) {
           'anthropic-version': '2023-06-01'
         }
       };
+
       const req2 = https.request(options, (r) => {
         let data = '';
         r.on('data', c => data += c);
         r.on('end', () => {
           try { resolve({ status: r.statusCode, body: JSON.parse(data) }); }
-          catch(e) { resolve({ status: r.statusCode, body: { error: data.slice(0,300) } }); }
+          catch(e) { resolve({ status: r.statusCode, body: { error: data.slice(0, 300) } }); }
         });
       });
+
       req2.on('error', reject);
       req2.write(payload);
       req2.end();
