@@ -1787,7 +1787,7 @@ async function doAuth(){
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
     var data=await res.json();
-    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);closeAuth();updateUserUI();loadHistory();}
+    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);closeAuth();await checkProStatus();updateUserUI();loadHistory();}
     else if(data.id){errEl.style.color='var(--green)';errEl.textContent='Compte créé ! Vérifie ton email.';}
     else errEl.textContent=data.error_description||data.msg||data.message||'Erreur';
   }catch(e){errEl.textContent='Erreur réseau';}
@@ -1800,8 +1800,34 @@ function updateUserUI(){
 }
 async function checkSession(){
   var token=localStorage.getItem('ta_token');if(!token)return;
-  try{var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});var data=await res.json();
-  if(data.id){authToken=token;currentUser=data;updateUserUI();loadHistory();}else localStorage.removeItem('ta_token');}catch(e){}
+  try{
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
+    var data=await res.json();
+    if(data.id){
+      authToken=token;currentUser=data;
+      // Check PRO status from Whop
+      await checkProStatus();
+      updateUserUI();loadHistory();
+    } else {
+      localStorage.removeItem('ta_token');
+    }
+  }catch(e){}
+}
+
+async function checkProStatus(){
+  if(!authToken) return;
+  try{
+    var res=await fetch('/api/check-pro',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}
+    });
+    var data=await res.json();
+    if(data.is_pro){
+      isPro=true;
+      localStorage.setItem('lt_pro','1');
+      console.log('PRO status confirmed via:', data.source);
+    }
+  }catch(e){ console.log('Pro check error:', e); }
 }
 var historyData=[];
 function openHistory(){
@@ -2012,6 +2038,7 @@ function hideLivePrice(){
 window.fetchLivePrice = fetchLivePrice;
 
 window.openAuth = openAuth;
+window.checkProStatus = checkProStatus;
 window.closeAuth = closeAuth;
 window.switchAuthTab = switchAuthTab;
 window.doAuth = doAuth;
