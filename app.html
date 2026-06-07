@@ -1889,6 +1889,7 @@ async function saveRR(i, btnEl){
     if(btn){ btn.textContent='✓'; btn.style.background='rgba(52,211,153,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
     setTimeout(function(){ if(btn){ btn.textContent='Sauver'; btn.style.background='var(--v)'; btn.style.borderColor=''; btn.style.color='white'; } }, 1500);
   }catch(e){ if(btn){ btn.textContent='Erreur'; btn.style.background='rgba(248,113,113,0.3)'; } }
+}
 
 async function saveNotes(i, btnEl){
   var item = historyData[i];
