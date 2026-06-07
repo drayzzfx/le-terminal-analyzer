@@ -875,6 +875,37 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   color: var(--text3); font-size: 14px; line-height: 2;
 }
 .history-empty-page .big { font-size: 48px; margin-bottom: 16px; }
+
+/* OUTCOMES */
+.outcome-bar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.outcome-btn{flex:1;min-width:80px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
+.outcome-btn:hover{border-color:rgba(139,92,246,.4);color:var(--v2)}
+.outcome-btn.taken{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:var(--green)}
+.outcome-btn.skipped{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:#F87171}
+.result-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.result-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
+.result-btn.win{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:var(--green)}
+.result-btn.loss{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);color:#F87171}
+.result-btn.be{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--amber)}
+
+/* PERFORMANCES PAGE */
+#perfPage{display:none;min-height:100vh;background:var(--bg)}
+#perfPage.show{display:block}
+.perf-header{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.perf-content{max-width:960px;margin:0 auto;padding:32px 24px 80px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.stat-lbl{font-size:10px;font-weight:500;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-top:6px}
+.perf-section{margin-bottom:28px}
+.perf-section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.score-bar-wrap{display:flex;flex-direction:column;gap:8px}
+.score-bar-item{display:flex;align-items:center;gap:10px}
+.score-bar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0}
+.score-bar-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:50px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:50px;transition:width .6s ease}
+.pair-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pair-row:last-child{border:none}
 </style>
 </head>
 <body>
@@ -993,6 +1024,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="topbar-brand">Le Terminal <span>Analyzer</span></div>
     </div>
     <div class="topbar-right">
+      <button class="history-btn" id="perfBtn" onclick="openPerf()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s;display:none" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Performances</button>
       <button class="history-btn" id="historyBtn" onclick="openHistory()" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.01em;border:none;background:transparent;color:var(--text2);cursor:pointer;padding:4px 8px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text2)'">Historique</button>
       <div class="usage-chip" id="usageChip">1 essai gratuit</div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
@@ -1833,11 +1865,233 @@ async function doAuth(){
   }catch(e){errEl.textContent='Erreur réseau';}
   btn.disabled=false;document.getElementById('authSubmitTxt').textContent=authMode==='login'?'Se connecter':'Créer mon compte';
 }
-function updateUserUI(){
-  var lb=document.getElementById('loginBtn'),uc=document.getElementById('userChip'),hb=document.getElementById('historyBtn');
-  if(currentUser){lb.style.display='none';uc.classList.add('show');hb.classList.add('show');var em=currentUser.email||'';document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();document.getElementById('userName').textContent=em.split('@')[0];}
-  else{lb.style.display='';uc.classList.remove('show');hb.classList.remove('show');}
+
+// ── OUTCOMES ──
+var currentDetailIdx = -1;
+
+async function setOutcome(i, taken){
+  var item = historyData[i];
+  if(!item||!authToken) return;
+  item.trade_taken = taken;
+  historyData[i] = item;
+  try{
+    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({analysisId:item.id,tradeTaken:taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});
+    openHDetail(i);
+  }catch(e){}
 }
+
+async function setResult(i, result){
+  var item = historyData[i];
+  if(!item||!authToken) return;
+  item.trade_result = result;
+  historyData[i] = item;
+  try{
+    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({analysisId:item.id,tradeTaken:true,tradeResult:result,rrRealized:item.rr_realized,tradeNotes:item.trade_notes})});
+    openHDetail(i);
+  }catch(e){}
+}
+
+async function saveRR(i){
+  var item = historyData[i];
+  var rr = parseFloat(document.getElementById('rrInput').value);
+  if(!item||!authToken||isNaN(rr)) return;
+  item.rr_realized = rr;
+  historyData[i] = item;
+  try{
+    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:rr,tradeNotes:item.trade_notes})});
+    var btn = event.target;
+    btn.textContent='✓'; btn.style.background='var(--green)';
+    setTimeout(function(){ btn.textContent='Sauver'; btn.style.background='var(--v)'; }, 1500);
+  }catch(e){}
+}
+
+async function saveNotes(i){
+  var item = historyData[i];
+  var notes = document.getElementById('tradeNotes').value;
+  if(!item||!authToken) return;
+  item.trade_notes = notes;
+  historyData[i] = item;
+  try{
+    await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:notes})});
+    var btn = event.target;
+    btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)';
+    setTimeout(function(){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; }, 1500);
+  }catch(e){}
+}
+
+// ── PERFORMANCES PAGE ──
+function openPerf(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('perfPage').classList.add('show');
+  loadPerf();
+}
+function closePerf(){
+  document.getElementById('perfPage').classList.remove('show');
+  document.getElementById('app').style.display='block';
+}
+
+async function loadPerf(){
+  if(!authToken) return;
+  document.getElementById('perfLoading').style.display='block';
+  document.getElementById('perfContent').style.display='none';
+  try{
+    var res = await fetch('/api/outcomes',{headers:{'Authorization':'Bearer '+authToken}});
+    var data = await res.json();
+    renderPerf(data);
+  }catch(e){ document.getElementById('perfLoading').textContent='Erreur de chargement'; }
+}
+
+function renderPerf(d){
+  document.getElementById('perfLoading').style.display='none';
+  document.getElementById('perfContent').style.display='block';
+
+  // Stat cards
+  var stats = [
+    {val: d.totalAnalyses||0, lbl:'Analyses', col:'var(--v2)'},
+    {val: d.totalTaken||0, lbl:'Trades pris', col:'var(--green)'},
+    {val: (d.winRate!==null?d.winRate+'%':'—'), lbl:'Win Rate', col:d.winRate>=50?'var(--green)':'#F87171'},
+    {val: (d.avgRR!==null?d.avgRR+'R':'—'), lbl:'RR Moyen', col:'var(--v2)'},
+    {val: (d.weeklyRR>0?'+':'')+d.weeklyRR+'R', lbl:'RR Semaine', col:parseFloat(d.weeklyRR)>=0?'var(--green)':'#F87171'},
+    {val: d.avgScore||'—', lbl:'Score Moyen', col:'var(--v2)'},
+  ];
+  document.getElementById('statGrid').innerHTML = stats.map(function(s){
+    return '<div class="stat-card"><div class="stat-val" style="color:'+s.col+'">'+s.val+'</div><div class="stat-lbl">'+s.lbl+'</div></div>';
+  }).join('');
+
+  // Win rate bar
+  var total = (d.wins||0)+(d.losses||0)+(d.be||0);
+  if(total > 0){
+    var wPct = Math.round((d.wins/total)*100);
+    var lPct = Math.round((d.losses/total)*100);
+    var bPct = 100-wPct-lPct;
+    document.getElementById('winRateBar').innerHTML =
+      '<div style="width:'+wPct+'%;background:var(--green)"></div>'+
+      '<div style="width:'+bPct+'%;background:var(--amber)"></div>'+
+      '<div style="width:'+lPct+'%;background:#F87171"></div>';
+    document.getElementById('winRateLegend').innerHTML =
+      '<span style="color:var(--green)">✓ Win: '+(d.wins||0)+'</span>'+
+      '<span style="color:var(--amber)">= BE: '+(d.be||0)+'</span>'+
+      '<span style="color:#F87171">✗ Loss: '+(d.losses||0)+'</span>'+
+      '<span style="margin-left:auto">Total fermés: '+total+'</span>';
+  } else {
+    document.getElementById('winRateBar').innerHTML='<div style="width:100%;background:rgba(255,255,255,.06)"></div>';
+    document.getElementById('winRateLegend').innerHTML='<span>Aucun trade fermé pour l\'instant</span>';
+  }
+
+  // Score progression chart (simple canvas)
+  if(d.scoreProgression && d.scoreProgression.length > 1){
+    var canvas = document.getElementById('scoreChart');
+    var ctx = canvas.getContext('2d');
+    canvas.width = canvas.parentElement.offsetWidth - 40;
+    canvas.height = 80;
+    var W = canvas.width, H = canvas.height;
+    var pts = d.scoreProgression;
+    var minS = Math.min.apply(null, pts.map(function(p){return p.score;}));
+    var maxS = Math.max.apply(null, pts.map(function(p){return p.score;}));
+    var range = maxS - minS || 1;
+    ctx.clearRect(0,0,W,H);
+    // Draw line
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(139,92,246,0.8)';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    pts.forEach(function(p,i){
+      var x = (i/(pts.length-1))*W;
+      var y = H - ((p.score-minS)/range)*(H-20) - 10;
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+    // Draw fill
+    ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+    ctx.fillStyle = 'rgba(139,92,246,0.08)';
+    ctx.fill();
+    // Draw dots
+    pts.forEach(function(p,i){
+      var x = (i/(pts.length-1))*W;
+      var y = H - ((p.score-minS)/range)*(H-20) - 10;
+      ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2);
+      ctx.fillStyle = p.score>=7?'var(--green)':p.score>=5?'var(--v2)':'#F87171';
+      ctx.fill();
+    });
+  }
+
+  // Pair stats
+  var pairs = Object.keys(d.pairStats||{});
+  if(pairs.length){
+    document.getElementById('pairStatsContent').innerHTML = pairs.sort(function(a,b){
+      return d.pairStats[b].total - d.pairStats[a].total;
+    }).map(function(pair){
+      var ps = d.pairStats[pair];
+      var wr = ps.wins+ps.losses > 0 ? Math.round(ps.wins/(ps.wins+ps.losses)*100) : null;
+      return '<div class="pair-row">'+
+        '<span style="font-weight:600;color:var(--text)">'+pair+'</span>'+
+        '<span style="color:var(--text3)">'+ps.total+' trades</span>'+
+        '<span style="color:var(--green)">'+ps.wins+' W</span>'+
+        '<span style="color:#F87171">'+ps.losses+' L</span>'+
+        (wr!==null?'<span style="color:'+(wr>=50?'var(--green)':'#F87171')+'">'+wr+'%</span>':'<span style="color:var(--text3)">—</span>')+
+      '</div>';
+    }).join('');
+  } else {
+    document.getElementById('pairStatsContent').innerHTML = '<div style="text-align:center;color:var(--text3);padding:20px;font-size:13px">Aucun trade pris pour l\'instant</div>';
+  }
+}
+
+async function requestIAFeedback(){
+  if(!authToken) return;
+  var btn = event.target;
+  btn.textContent = '🤖 Analyse en cours…';
+  btn.disabled = true;
+  try{
+    var res = await fetch('/api/outcomes',{headers:{'Authorization':'Bearer '+authToken}});
+    var data = await res.json();
+    var trades = (data.recentAnalyses||[]).filter(function(a){ return a.trade_taken !== null; }).slice(0,15);
+    if(trades.length < 3){
+      document.getElementById('iaFeedback').innerHTML = '<p style="color:var(--text3);font-size:13px">Il te faut au moins 3 trades suivis pour obtenir une analyse de patterns. Continue à renseigner tes résultats dans l\'historique !</p>';
+      return;
+    }
+    // Build prompt for pattern analysis
+    var tradesSummary = trades.map(function(t){
+      return '- '+t.pair+' '+t.direction+' '+t.tf+' | Score: '+t.score+' | Verdict IA: '+t.verdict+' | Pris: '+(t.trade_taken?'OUI':'NON')+' | Résultat: '+(t.trade_result||'?')+' | RR réalisé: '+(t.rr_realized||'?');
+    }).join('\n');
+    var prompt = 'Voici les '+ trades.length +' dernières analyses de ce trader :\n'+ tradesSummary +'\n\nAnalyse ses patterns de trading en 4-5 points clés : ses forces, ses erreurs récurrentes, les paires où il performe le mieux, et 3 recommandations concrètes pour améliorer son win rate. Sois direct et précis. Réponds en français en 200-300 mots.';
+    var r = await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:'Tu es un coach de trading expert ICT/SMC. Analyse les performances passées et identifie les patterns.',messages:[{role:'user',content:prompt}]})});
+    var rd = await r.json();
+    var txt = rd.content&&rd.content[0]?rd.content[0].text:'Analyse indisponible';
+    document.getElementById('iaFeedback').innerHTML = '<div style="font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-line">'+txt+'</div>';
+  }catch(e){
+    document.getElementById('iaFeedback').innerHTML = '<p style="color:#F87171">Erreur lors de l\'analyse</p>';
+  }
+}
+
+function updateUserUI(){
+  var lb=document.getElementById('loginBtn');
+  var uc=document.getElementById('userChip');
+  var hb=document.getElementById('historyBtn');
+  var pb=document.getElementById('perfBtn');
+  if(currentUser){
+    lb.style.display='none'; uc.classList.add('show'); hb.classList.add('show');
+    if(pb) pb.style.display='block';
+    var em=currentUser.email||'';
+    document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();
+    document.getElementById('userName').textContent=em.split('@')[0];
+  } else {
+    lb.style.display=''; uc.classList.remove('show'); hb.classList.remove('show');
+    if(pb) pb.style.display='none';
+  }
+}
+window.openPerf=openPerf;
+window.closePerf=closePerf;
+window.setOutcome=setOutcome;
+window.setResult=setResult;
+window.saveRR=saveRR;
+window.saveNotes=saveNotes;
+window.requestIAFeedback=requestIAFeedback;
+
 async function checkSession(){
   var token=localStorage.getItem('ta_token');if(!token)return;
   try{
@@ -1902,6 +2156,7 @@ function renderHistory(){
 }
 function openHDetail(i){
   var item=historyData[i];if(!item)return;
+  currentDetailIdx=i;
   var sc=parseFloat(item.score)||0,col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
   var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
   function sec(title,text,c){if(!text)return '';var parts=text.replace(/\\n/g,'\n').split(/\n|\/{2}/).filter(function(l){return l.trim().length>2;});
@@ -1915,6 +2170,30 @@ function openHDetail(i){
     (item.img_data?'<img src="'+item.img_data+'" style="width:100%;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">':'')+
     sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#60A5FA')+
     (item.macro?'<div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
+  // Add outcome section
+  content += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">' +
+    '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--text3);margin-bottom:10px">SUIVI DU TRADE</div>' +
+    '<div style="font-size:12px;color:var(--text2);margin-bottom:8px">As-tu pris ce trade ?</div>' +
+    '<div class="outcome-bar">' +
+      '<button class="outcome-btn '+(item.trade_taken===true?'taken':'')+'" onclick="setOutcome('+i+',true)">✓ J\'ai pris</button>' +
+      '<button class="outcome-btn '+(item.trade_taken===false?'skipped':'')+'" onclick="setOutcome('+i+',false)">✗ Pas pris</button>' +
+    '</div>' +
+    (item.trade_taken===true ? '<div style="margin-top:10px"><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Résultat :</div>' +
+      '<div class="result-btns">' +
+        '<button class="result-btn win '+(item.trade_result==='win'?'win':'')+'" onclick="setResult('+i+',\'win\')">✓ Win</button>' +
+        '<button class="result-btn loss '+(item.trade_result==='loss'?'loss':'')+'" onclick="setResult('+i+',\'loss\')">✗ Loss</button>' +
+        '<button class="result-btn be '+(item.trade_result==='be'?'be':'')+'" onclick="setResult('+i+',\'be\')">= BE</button>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:8px;align-items:center">' +
+        '<span style="font-size:11px;color:var(--text2);flex-shrink:0">RR réalisé :</span>' +
+        '<input type="number" step="0.1" id="rrInput" value="'+(item.rr_realized||'')+'" placeholder="ex: 2.5" style="width:80px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;font-size:12px;outline:none">' +
+        '<button onclick="saveRR('+i+')" style="padding:6px 14px;background:var(--v);border:none;border-radius:8px;color:white;font-size:11px;font-weight:600;cursor:pointer">Sauver</button>' +
+      '</div>' +
+      '<textarea id="tradeNotes" placeholder="Notes post-trade…" style="width:100%;margin-top:8px;height:60px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:12px;resize:none;outline:none;font-family:Inter,sans-serif">'+(item.trade_notes||'')+'</textarea>' +
+      '<button onclick="saveNotes('+i+')" style="margin-top:6px;padding:7px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:11px;cursor:pointer">💾 Sauvegarder les notes</button>' +
+    '</div>' : '') +
+  '</div>';
+
   document.getElementById('hdetailContent').innerHTML=content;
   document.getElementById('hdetailOverlay').classList.add('show');
 }
@@ -2168,6 +2447,61 @@ window.openHDetail = openHDetail;
         <div class="big">📋</div>
         Connecte-toi pour accéder<br>à ton historique d'analyses
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- PERFORMANCES PAGE -->
+<div id="perfPage">
+  <header class="perf-header">
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800">Le Terminal <span style="color:var(--v2)">Analyzer</span> — Performances</div>
+    <button class="back-btn" onclick="closePerf()">← Retour à l'analyse</button>
+  </header>
+  <div class="perf-content">
+    <div id="perfLoading" style="text-align:center;padding:60px;color:var(--text3)">Chargement des stats…</div>
+    <div id="perfContent" style="display:none">
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid" id="statGrid"></div>
+
+      <!-- SCORE PROGRESSION -->
+      <div class="perf-section">
+        <div class="perf-section-title">📈 Progression du score (10 dernières analyses)</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+          <canvas id="scoreChart" height="80"></canvas>
+        </div>
+      </div>
+
+      <!-- WIN RATE BAR -->
+      <div class="perf-section">
+        <div class="perf-section-title">🎯 Résultats des trades pris</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+          <div id="winRateBar" style="display:flex;height:20px;border-radius:50px;overflow:hidden;margin-bottom:12px"></div>
+          <div id="winRateLegend" style="display:flex;gap:16px;font-size:11px;color:var(--text2)"></div>
+        </div>
+      </div>
+
+      <!-- PAIR STATS -->
+      <div class="perf-section">
+        <div class="perf-section-title">💱 Stats par paire</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px">
+          <div id="pairStatsContent"></div>
+        </div>
+      </div>
+
+      <!-- IA FEEDBACK -->
+      <div class="perf-section">
+        <div class="perf-section-title">🧠 Analyse IA de tes patterns</div>
+        <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:20px">
+          <div id="iaFeedback" style="font-size:13px;color:var(--text2);line-height:1.7">
+            <button onclick="requestIAFeedback()" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">
+              🤖 Demander à l'IA d'analyser mes patterns
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
