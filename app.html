@@ -2268,8 +2268,15 @@ async function confirmOk(){
   document.getElementById('app').style.display='none';
   var perfPage=document.getElementById('perfPage'); if(perfPage) perfPage.classList.remove('show');
   document.getElementById('historyPage').classList.add('show');
+  // Vider le grid immédiatement puis re-remplir après le rendu du navigateur
+  var grid = document.getElementById('historyGrid');
+  if(grid) grid.innerHTML = '';
   renderHistory();
-  renderHistoryGrid();
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      renderHistoryGrid();
+    });
+  });
 
   // 5. API DELETE (ne pas attendre, ne pas appeler loadHistory après)
   if(authToken && item.id){
