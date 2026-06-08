@@ -44,9 +44,9 @@
   var style = document.createElement('style');
   style.textContent = `
     .lt-menu-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      position: fixed; inset: 0; background: rgba(0,0,0,.35);
       z-index: 998; opacity: 0; pointer-events: none;
-      transition: opacity .3s; backdrop-filter: blur(4px);
+      transition: opacity .3s;
     }
     .lt-menu-overlay.open { opacity: 1; pointer-events: all; }
 
@@ -270,8 +270,14 @@
 
   // ── FUNCTIONS ──
   window.ltOpenMenu = function() {
-    document.getElementById('ltSideMenu').classList.add('open');
-    document.getElementById('ltMenuOverlay').classList.add('open');
+    // Toggle : si déjà ouvert → ferme, sinon → ouvre
+    var menu = document.getElementById('ltSideMenu');
+    if(menu.classList.contains('open')) {
+      ltCloseMenu();
+    } else {
+      menu.classList.add('open');
+      document.getElementById('ltMenuOverlay').classList.add('open');
+    }
   };
   window.ltCloseMenu = function() {
     document.getElementById('ltSideMenu').classList.remove('open');
