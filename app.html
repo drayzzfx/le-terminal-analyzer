@@ -231,20 +231,6 @@ body {
 
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 
-.usage-chip {
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.05em;
-  padding: 5px 12px;
-  border-radius: 50px;
-  border: 1px solid var(--border);
-  color: var(--text2);
-  background: var(--card);
-}
-.usage-chip.pro {
-  border-color: rgba(139,92,246,0.4);
-  color: var(--v2);
-  background: var(--vglow2);
-}
 
 .lang-switch { display: flex; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); }
 .lang-btn {
@@ -946,7 +932,6 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="topbar-brand">Le Terminal <span>Analyzer</span></div>
     </div>
     <div class="topbar-right">
-      <div class="usage-chip" id="usageChip">1 essai gratuit</div>
       <!-- Analyzer quick nav -->
       <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px">
         <button onclick="openHistory()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📋 Historique</button>
@@ -1157,8 +1142,6 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 <script>
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
-let usage=parseInt(localStorage.getItem('lt_u')||'0');
-const FREE=1;
 if(localStorage.getItem('lt_pro')==='1') isPro=true;
 
 // ── LANDING ──
@@ -1458,12 +1441,9 @@ function setDir(d){
 
 // ── USAGE ──
 function updUsage(){
-  const t=c(), left=Math.max(0,FREE-usage), chip=document.getElementById('usageChip');
-  if(isPro){chip.className='usage-chip pro';chip.textContent=t.proBadge;}
-  else{chip.className='usage-chip';chip.textContent=t.usageChip.replace('{n}',left);}
   document.getElementById('act-pro').style.display=isPro?'none':'';
 }
-function canGo(){return isPro||usage<FREE}
+function canGo(){return true}
 
 // ── UPLOAD ──
 function trigUpl(){}
@@ -1550,7 +1530,6 @@ async function analyze(){
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){window.location.href="./index.html";return}
 
-  usage++; localStorage.setItem('lt_u',usage);
   const rrv=calcRR();
   const steps=c().steps; let si=0;
   showLoad();
@@ -1638,7 +1617,6 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
-    usage=Math.max(0,usage-1);localStorage.setItem('lt_u',usage);
   }
   updUsage();
 }
