@@ -18,19 +18,19 @@
   var PAGES = [
     { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
     { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
-    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './calendrier.html', children: [
-      { icon: '📰', label: 'Édition du jour', href: './calendrier.html#edition', children: [
-        { icon: '⭐', label: 'La sélection',  href: './calendrier.html#selection' },
-        { icon: '🇪🇺', label: 'Europe',        href: './calendrier.html#r-europe' },
-        { icon: '🌎', label: 'Amériques',     href: './calendrier.html#r-ameriques' },
-        { icon: '🌏', label: 'Asie',          href: './calendrier.html#r-asie' },
-        { icon: '📈', label: 'Marchés',       href: './calendrier.html#r-marches' },
-        { icon: '🏛️', label: 'Institutions',  href: './calendrier.html#r-institutions' },
-        { icon: '🌐', label: 'International',  href: './calendrier.html#r-international' },
+    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './eco-edition.html', children: [
+      { icon: '📰', label: 'Édition du jour', href: './eco-edition.html', children: [
+        { icon: '⭐', label: 'La sélection',  href: './eco-selection.html' },
+        { icon: '🇪🇺', label: 'Europe',        href: './eco-europe.html' },
+        { icon: '🌎', label: 'Amériques',     href: './eco-ameriques.html' },
+        { icon: '🌏', label: 'Asie',          href: './eco-asie.html' },
+        { icon: '📈', label: 'Marchés',       href: './eco-marches.html' },
+        { icon: '🏛️', label: 'Institutions',  href: './eco-institutions.html' },
+        { icon: '🌐', label: 'International',  href: './eco-international.html' },
       ] },
-      { icon: '⚡', label: 'Flash Info',      href: './calendrier.html#flash' },
-      { icon: '📅', label: 'Calendrier éco',  href: './calendrier.html#calendrier' },
-      { icon: '🪙', label: 'Crypto',          href: './calendrier.html#crypto' },
+      { icon: '⚡', label: 'Flash Info',      href: './eco-flash.html' },
+      { icon: '📅', label: 'Calendrier éco',  href: './eco-calendrier.html' },
+      { icon: '🪙', label: 'Crypto',          href: './eco-crypto.html' },
     ] },
     { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html' },
     { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
@@ -134,6 +134,7 @@
       transition: all .2s;
     }
     .lt-subnav-item:hover { background: rgba(0,149,255,.1); color: #38B6FF; }
+    .lt-subnav-item.active { background: rgba(0,149,255,.12); color: #38B6FF; }
     .lt-subnav-item .lt-subnav-ic { font-size: 14px; line-height: 1; flex-shrink: 0; width: 18px; text-align: center; }
 
     /* ── 3e niveau (catégories d'Édition du jour) ── */
@@ -185,23 +186,32 @@
   // ── HTML ──
   var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
+  // Détection de l'item courant à partir du nom de fichier du href
+  function fileOf(h) { return (h || '').split('/').pop().split('#')[0]; }
+  function selfActive(node) { return fileOf(node.href) === page && page !== ''; }
+  function treeActive(node) {
+    if(selfActive(node)) return true;
+    return !!(node.children && node.children.some(treeActive));
+  }
+
   // Rendu récursif d'une sous-entrée (peut elle-même avoir des enfants → 3e niveau)
   function renderSub(c, depth) {
+    var act = selfActive(c) ? ' active' : '';
     if(c.children && c.children.length) {
       var inner = c.children.map(function(cc) { return renderSub(cc, depth + 1); }).join('');
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
-                 '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
+                 '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
                  '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav lt-subnav--deep open"><div>' + inner + '</div></div>' +
              '</div>';
     }
-    return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+    return '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
   }
 
   var navItems = PAGES.map(function(p) {
-    var isActive = page === p.id || (page === '' && p.id === 'index.html');
+    var isActive = page === p.id || (page === '' && p.id === 'index.html') || treeActive(p);
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
     if(p.children && p.children.length) {

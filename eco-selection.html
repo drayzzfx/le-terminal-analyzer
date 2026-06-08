@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — La sélection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./eco.css">
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<header class="lt-topbar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="lt-hamburger" onclick="ltOpenMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="./index.html" class="lt-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Éco</span></a>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="lt-status"><div class="lt-dot"></div>LIVE</div>
+    <span class="liveclock" id="liveClock" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums"></span>
+    <button class="langbtn" id="langToggle" type="button" aria-label="Switch language" title="English / Français">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>
+      <span class="lang__label">EN</span>
+    </button>
+  </div>
+</header>
+<!-- PRICETAPE (TradingView ticker) -->
+<div class="pricetape">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName": "FOREXCOM:FRA40", "title": "CAC 40"},
+        {"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
+        {"proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100"},
+        {"proName": "FX_IDC:EURUSD", "title": "EUR/USD"},
+        {"proName": "FX_IDC:USDJPY", "title": "USD/JPY"},
+        {"proName": "TVC:GOLD", "title": "Or"},
+        {"proName": "TVC:UKOIL", "title": "Brent"},
+        {"proName": "TVC:USOIL", "title": "WTI"},
+        {"proName": "BITSTAMP:BTCUSD", "title": "Bitcoin"},
+        {"proName": "BITSTAMP:ETHUSD", "title": "Ethereum"}
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "fr"
+    }
+    </script>
+  </div>
+</div>
+<main class="wrap">
+<section class="pagehead" aria-label="La sélection">
+  <p class="pagehead__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg> <span data-en="Editor's picks">Le choix de la rédaction</span></p>
+  <h1 class="pagehead__title" data-en="The selection">La sélection</h1>
+  <p class="pagehead__lead" data-en="Analyses hand-picked for the day — what truly deserves your attention.">Les analyses choisies à la main pour la journée — ce qui mérite vraiment votre attention.</p>
+</section>
+
+<section id="selection" class="block" aria-label="La sélection">
+  <div class="grid">
+    <article class="card card--pick" style="--i: 0">
+  <a class="card__hit" href="annonces/3af88624c50a45c7.html" aria-label="Lire le résumé : Pourquoi la désinflation française résiste mieux que prévu">
+    <p class="card__kicker">
+      <span class="card__cat js-term">La sélection</span>
+      <span class="card__sep">·</span>
+      <span class="card__source">Analyse maison</span>
+<span class="bias bias--up card__bias" data-en="Leaning dovish">Plutôt dovish</span>    </p>
+    <h3 class="card__title" data-en="Why French disinflation is holding up better than expected">Pourquoi la désinflation française résiste mieux que prévu</h3>
+    <p class="card__summary" data-en="Despite the euro-area slowdown, consumer prices are easing faster in France than in…">Malgré le ralentissement de la zone euro, les prix à la consommation ralentissent plus…</p>
+  </a>
+  <a class="btn" href="annonces/3af88624c50a45c7.html">
+    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
+  </a>
+</article>
+
+    <article class="card card--pick" style="--i: 1">
+  <a class="card__hit" href="annonces/31e289e5c10bb16b.html" aria-label="Lire le résumé : Budget 2027 : les trois arbitrages qui vont compter">
+    <p class="card__kicker">
+      <span class="card__cat js-term">La sélection</span>
+      <span class="card__sep">·</span>
+      <span class="card__source">Note de veille</span>
+<span class="bias bias--down card__bias" data-en="Risk-off (France)">Risk-off (France)</span>    </p>
+    <h3 class="card__title" data-en="2027 Budget: the three trade-offs that will matter">Budget 2027 : les trois arbitrages qui vont compter</h3>
+    <p class="card__summary" data-en="Preparing the 2027 budget is shaping up to be one of the most sensitive files of the…">La préparation du budget 2027 s&#39;annonce comme l&#39;un des dossiers les plus sensibles de la…</p>
+  </a>
+  <a class="btn" href="annonces/31e289e5c10bb16b.html">
+    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
+  </a>
+</article>
+
+  </div>
+</section>
+
+<section class="prose" aria-label="Pourquoi cette page">
+  <span class="prose__kicker" data-en="About this page">À propos de cette page</span>
+  <h2 class="prose__h" data-en="Why this page">Pourquoi cette page</h2>
+  <p data-en="Amid the flood of news, “The selection” highlights a small number of analyses and background notes chosen by the editors. The goal: focus on what matters rather than reading everything.">Au milieu du flot d'actualités, « La sélection » met en avant un petit nombre d'analyses et de notes de fond choisies par la rédaction. L'idée : aller à l'essentiel plutôt que tout lire.</p>
+</section>
+
+<section class="block eco-archives" aria-label="Annonces précédentes">
+  <header class="block__head">
+    <h2 class="block__title" data-en='<span class="block__dot">●</span> Earlier announcements'><span class="block__dot">●</span> Annonces précédentes</h2>
+    <span class="block__sub" data-en="Coming soon">Bientôt disponibles</span>
+  </header>
+  <div class="eco-empty" data-en="Older announcements will be archived here as new editions are published. Come back soon.">
+    Les annonces plus anciennes seront archivées ici au fil des prochaines éditions. Revenez bientôt.
+  </div>
+</section>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./menu.js"></script>
+</body>
+</html>
