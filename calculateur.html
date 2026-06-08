@@ -233,7 +233,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       </div>
     </div>
 
-    <button class="calc-btn" onclick="calculate()">🧮 Calculer ma position</button>
+
   </div>
 
   <!-- RESULT -->
@@ -258,6 +258,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       <div class="detail-item">
         <div class="detail-label">Valeur pip</div>
         <div class="detail-val" id="resPipVal">—</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:3px" id="resPipNote"></div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Paire</div>
@@ -304,38 +305,40 @@ var currency = 'EUR';
 // Pip value per lot (in USD) for common pairs
 // Format: [pipValue per standard lot in USD, pipDecimals]
 var PIP_DATA = {
-  // Forex majors (pip = 0.0001, except JPY = 0.01)
-  'EURUSD': { pipVal: 10, dec: 4 },
-  'GBPUSD': { pipVal: 10, dec: 4 },
-  'AUDUSD': { pipVal: 10, dec: 4 },
-  'NZDUSD': { pipVal: 10, dec: 4 },
-  'USDCAD': { pipVal: 7.7, dec: 4 },
-  'USDCHF': { pipVal: 10.5, dec: 4 },
-  'USDJPY': { pipVal: 6.8, dec: 2 },
-  'EURJPY': { pipVal: 6.8, dec: 2 },
-  'GBPJPY': { pipVal: 6.8, dec: 2 },
-  'CADJPY': { pipVal: 6.8, dec: 2 },
-  'CHFJPY': { pipVal: 6.8, dec: 2 },
-  'AUDJPY': { pipVal: 6.8, dec: 2 },
-  'EURGBP': { pipVal: 12.5, dec: 4 },
-  'EURAUD': { pipVal: 6.5, dec: 4 },
-  'GBPAUD': { pipVal: 6.5, dec: 4 },
-  'EURCHF': { pipVal: 10.5, dec: 4 },
-  // Metals
-  'XAUUSD': { pipVal: 10, dec: 2, note: '1 pip = 0.01$' },
-  'XAGUSD': { pipVal: 50, dec: 3, note: '1 pip = 0.001$' },
-  // Indices (pip = 1 point)
-  'NAS100': { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
-  'US30':   { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
-  'SP500':  { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
-  'DAX':    { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
-  'UK100':  { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
-  // Crypto (pip = 1$)
-  'BTCUSD': { pipVal: 1, dec: 0, note: '1 pip = 1$' },
-  'ETHUSD': { pipVal: 1, dec: 0, note: '1 pip = 1$' },
-  // Oil
-  'USOIL':  { pipVal: 10, dec: 2 },
-  'UKOIL':  { pipVal: 10, dec: 2 },
+  // Forex majors — pip = 0.0001, 1 standard lot = 100,000 units → $10/pip
+  'EURUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'GBPUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'AUDUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'NZDUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'USDCAD': { pipVal: 7.7,  unit: 'lot', note: '1 pip = 0.0001' },
+  'USDCHF': { pipVal: 9.2,  unit: 'lot', note: '1 pip = 0.0001' },
+  'USDJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'EURJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'GBPJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'CADJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'CHFJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'AUDJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'EURGBP': { pipVal: 12.5, unit: 'lot', note: '1 pip = 0.0001' },
+  'EURAUD': { pipVal: 6.5,  unit: 'lot', note: '1 pip = 0.0001' },
+  'GBPAUD': { pipVal: 6.5,  unit: 'lot', note: '1 pip = 0.0001' },
+  'EURCHF': { pipVal: 9.2,  unit: 'lot', note: '1 pip = 0.0001' },
+  // Métaux — XAUUSD: 1 lot = 100 oz, 1 pip ($0.01) = $1/lot
+  'XAUUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $0.01 · 100oz/lot' },
+  'XAGUSD': { pipVal: 5,    unit: 'lot', note: '1 pip = $0.001 · 5000oz/lot' },
+  // Indices — 1 contrat, 1 point = valeur du contrat
+  'NAS100': { pipVal: 20,   unit: 'contrat', note: '1 point = $20/contrat' },
+  'US30':   { pipVal: 5,    unit: 'contrat', note: '1 point = $5/contrat' },
+  'SP500':  { pipVal: 50,   unit: 'contrat', note: '1 point = $50/contrat' },
+  'DAX':    { pipVal: 25,   unit: 'contrat', note: '1 point = €25/contrat' },
+  'UK100':  { pipVal: 10,   unit: 'contrat', note: '1 point = £10/contrat' },
+  // Crypto — 1 lot standard = 1 BTC/ETH, pip = $1
+  'BTCUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $1 · 1BTC/lot' },
+  'ETHUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $1 · 1ETH/lot' },
+  'SOLUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $0.01' },
+  'XRPUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = $0.0001' },
+  // Pétrole — 1 lot = 1000 barils, 1 pip ($0.01) = $10/lot
+  'USOIL':  { pipVal: 10,   unit: 'lot', note: '1 pip = $0.01 · 1000bbl/lot' },
+  'UKOIL':  { pipVal: 10,   unit: 'lot', note: '1 pip = $0.01 · 1000bbl/lot' },
 };
 
 var ALL_PAIRS = Object.keys(PIP_DATA).concat([
@@ -426,20 +429,7 @@ function calculate() {
   var size = parseFloat(document.getElementById('accountSize').value);
   var sl   = parseFloat(document.getElementById('slPips').value);
   if(!size || !sl || sl <= 0) {
-    // Shake the empty fields
-    var btn = document.querySelector('.calc-btn');
-    btn.style.background = 'linear-gradient(135deg,#F87171,#dc2626)';
-    btn.textContent = '⚠️ Remplis le capital et le SL en pips';
-    setTimeout(function(){
-      btn.style.background = 'linear-gradient(135deg,var(--v),#7C3AED)';
-      btn.innerHTML = '🧮 Calculer ma position';
-    }, 2000);
-    if(!size) document.getElementById('accountSize').style.borderColor='rgba(248,113,113,.6)';
-    if(!sl || sl<=0) document.getElementById('slPips').style.borderColor='rgba(248,113,113,.6)';
-    setTimeout(function(){
-      document.getElementById('accountSize').style.borderColor='';
-      document.getElementById('slPips').style.borderColor='';
-    }, 2000);
+    document.getElementById('resultCard').classList.remove('show');
     return;
   }
 
@@ -455,17 +445,20 @@ function calculate() {
   var lotSize = riskAmountUSD / (sl * pipValUSD);
 
   // Smart rounding based on lot size
+  var unit = pip ? (pip.unit || 'lot') : 'lot';
   var displayLot, lotType;
   if(lotSize >= 1) {
     displayLot = lotSize.toFixed(2);
-    lotType = 'lots standard';
+    lotType = unit === 'contrat' ? 'contrats' : 'lots standard';
   } else if(lotSize >= 0.1) {
     displayLot = (Math.round(lotSize * 10) / 10).toFixed(1);
-    lotType = 'mini-lots (0.1)';
+    lotType = unit === 'contrat' ? 'contrats' : 'mini-lots (0.1)';
   } else {
     displayLot = (Math.round(lotSize * 100) / 100).toFixed(2);
-    lotType = 'micro-lots (0.01)';
+    lotType = unit === 'contrat' ? 'contrats' : 'micro-lots (0.01)';
   }
+  // Show pip note
+  var pipNote = pip ? pip.note : '1 pip = $0.0001';
 
   // Pip value for this lot
   var pipValForLot = fromUSD(lotSize * pipValUSD);
@@ -483,6 +476,9 @@ function calculate() {
   document.getElementById('resMontant').textContent = riskAmount.toFixed(2) + curSym();
   document.getElementById('resMontantSub').textContent = riskPct + '% du capital';
   document.getElementById('resPipVal').textContent = pipValForLot.toFixed(2) + curSym() + '/pip';
+  // Show pip note
+  var noteEl = document.getElementById('resPipNote');
+  if(noteEl && pipNote) noteEl.textContent = pipNote;
   document.getElementById('resPair').textContent = selectedPair;
   document.getElementById('resSL').textContent = sl + ' pips';
   document.getElementById('resRiskPct').textContent = riskPct + '%';
