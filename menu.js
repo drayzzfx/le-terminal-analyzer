@@ -110,7 +110,7 @@
       display: flex; align-items: center; justify-content: center;
       transition: all .2s; flex-shrink: 0;
     }
-    .lt-nav-caret:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
+    .lt-nav-caret:hover { background: rgba(0,149,255,.1); color: #38B6FF; }
     .lt-nav-caret svg { transition: transform .25s cubic-bezier(.2,0,.1,1); }
     .lt-nav-caret:hover svg { transform: rotate(-180deg); }
     .lt-nav-caret.open svg { transform: rotate(180deg); }
@@ -142,8 +142,23 @@
       font-size: 13px; font-weight: 600;
       transition: all .2s;
     }
-    .lt-subnav-item:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
-    .lt-subnav-item .lt-subnav-ic { font-size: 14px; line-height: 1; flex-shrink: 0; }
+    .lt-subnav-item:hover { background: rgba(0,149,255,.1); color: #38B6FF; }
+    .lt-subnav-item .lt-subnav-ic { font-size: 14px; line-height: 1; flex-shrink: 0; width: 18px; text-align: center; }
+
+    /* ── 3e niveau (catégories d'Édition du jour) ── */
+    .lt-subnav-group { display: flex; flex-direction: column; }
+    .lt-subnav-row { display: flex; align-items: center; gap: 2px; }
+    .lt-subnav-row .lt-subnav-item { flex: 1; }
+    .lt-nav-caret.lt-caret-sm { padding: 6px; }
+    .lt-nav-caret.lt-caret-sm svg { width: 12px; height: 12px; }
+    .lt-subnav--deep {
+      margin-left: 9px; padding-left: 10px;
+      border-left: 1px solid rgba(0,149,255,.12);
+    }
+    .lt-subnav--deep .lt-subnav-item {
+      font-size: 12.5px; font-weight: 500; padding: 7px 10px; color: #847FA0;
+    }
+    .lt-subnav--deep .lt-subnav-item:hover { color: #38B6FF; }
 
     .lt-menu-footer {
       padding: 12px; border-top: 1px solid rgba(255,255,255,.06); flex-shrink: 0;
@@ -178,6 +193,21 @@
 
   // ── HTML ──
   var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+  // Rendu récursif d'une sous-entrée (peut elle-même avoir des enfants → 3e niveau)
+  function renderSub(c, depth) {
+    if(c.children && c.children.length) {
+      var inner = c.children.map(function(cc) { return renderSub(cc, depth + 1); }).join('');
+      return '<div class="lt-subnav-group">' +
+               '<div class="lt-subnav-row">' +
+                 '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
+                 '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+               '</div>' +
+               '<div class="lt-subnav lt-subnav--deep open"><div>' + inner + '</div></div>' +
+             '</div>';
+    }
+    return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+  }
 
   var navItems = PAGES.map(function(p) {
     var isActive = page === p.id || (page === '' && p.id === 'index.html');
@@ -302,25 +332,38 @@
     ltCloseMenu();
   };
 
-  // Replier / déplier un sous-menu
+  // Replier / déplier un sous-menu (gère le 2e et le 3e niveau)
   window.ltToggleSub = function(e, btn) {
     if(e) { e.preventDefault(); e.stopPropagation(); }
-    var group = btn.closest('.lt-nav-group');
+    var group = btn.closest('.lt-subnav-group') || btn.closest('.lt-nav-group');
     var sub = group ? group.querySelector('.lt-subnav') : null;
     if(sub) sub.classList.toggle('open');
     btn.classList.toggle('open');
   };
 
+  // Les 4 onglets de calendrier.html
+  var ECO_TABS = { edition: 1, flash: 1, calendrier: 1, crypto: 1 };
+
   // Ouvre le bon onglet de calendrier.html à partir du hash (#edition, #flash, ...)
+  // et, pour une catégorie de l'édition (#r-europe, #selection...), scrolle jusqu'à la section.
   window.ltOpenEcoTabFromHash = function() {
     if(page !== 'calendrier.html') return;
     var id = (window.location.hash || '').replace('#', '');
     if(!id) return;
-    var needle = "showTab('" + id + "')";
+    // Une ancre de catégorie appartient à l'onglet "edition" ; sinon c'est un id d'onglet.
+    var tabId = ECO_TABS[id] ? id : 'edition';
+    var needle = "showTab('" + tabId + "')";
     var tabs = document.querySelectorAll('.eco-tab');
     for(var i = 0; i < tabs.length; i++) {
       var oc = tabs[i].getAttribute('onclick') || '';
       if(oc.indexOf(needle) !== -1) { tabs[i].click(); break; }
+    }
+    // Catégorie : on défile jusqu'à la section une fois l'onglet affiché.
+    if(!ECO_TABS[id]) {
+      var target = document.getElementById(id);
+      if(target) {
+        setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 140);
+      }
     }
   };
   window.addEventListener('hashchange', window.ltOpenEcoTabFromHash);
