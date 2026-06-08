@@ -53,13 +53,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
     <button class="cb" onclick="setMkt('stocks',this)">📈 Actions US</button>
     <button class="cb" onclick="setMkt('etf',this)">📦 ETF</button>
   </div>
-  <div class="sep" id="tfSep"></div>
-  <div class="cg" id="tfG">
-    <button class="cb" onclick="setTf('60',this)">1H</button>
-    <button class="cb on" onclick="setTf('D',this)">24H</button>
-    <button class="cb" onclick="setTf('W',this)">7J</button>
-    <button class="cb" onclick="setTf('M',this)">1M</button>
-  </div>
+
   <div class="sep" id="szSep"></div>
   <div class="cg" id="szG">
     <button class="cb on" onclick="setSz('market_cap_calc',this)">Cap.</button>
@@ -80,25 +74,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 </div>
 
 <script>
-var mkt = 'crypto', tf = 'D', sz = 'market_cap_calc';
+var mkt = 'crypto', sz = 'market_cap_calc';
 
 function setMkt(v, btn) {
   mkt = v;
   document.querySelectorAll('#mktG .cb').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
   // Hide tf + sz for forex
-  var show = v !== 'forex';
-  document.getElementById('tfSep').style.display = show ? '' : 'none';
-  document.getElementById('tfG').style.display = show ? '' : 'none';
   document.getElementById('szSep').style.display = (v === 'crypto') ? '' : 'none';
   document.getElementById('szG').style.display = (v === 'crypto') ? '' : 'none';
-  render();
-}
-
-function setTf(v, btn) {
-  tf = v;
-  document.querySelectorAll('#tfG .cb').forEach(function(b){b.classList.remove('on')});
-  btn.classList.add('on');
   render();
 }
 
