@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -12,10 +12,10 @@
   --bg2: #0E0E1A;
   --card: rgba(255,255,255,0.04);
   --border: rgba(255,255,255,0.08);
-  --v: #8B5CF6;
-  --v2: #A78BFA;
-  --vglow: rgba(139,92,246,0.25);
-  --vglow2: rgba(139,92,246,0.08);
+  --v: #0095FF;
+  --v2: #38B6FF;
+  --vglow: rgba(0,149,255,0.25);
+  --vglow2: rgba(0,149,255,0.08);
   --text: #F0EEFF;
   --text2: #9B96B8;
   --text3: #5A5570;
@@ -30,7 +30,7 @@ html{-webkit-font-smoothing:antialiased}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
 /* BG */
-.bg-orb{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(139,92,246,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+.bg-orb{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(0,149,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
 
 /* TOPBAR */
 .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
@@ -43,28 +43,28 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* HERO */
 .hero{text-align:center;margin-bottom:48px}
 .hero h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:10px}
-.hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#00C6FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:14px;color:var(--text2);font-weight:300}
 
 /* CALCULATOR CARD */
 .calc-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;margin-bottom:20px;position:relative;overflow:hidden}
-.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.4),transparent)}
+.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,149,255,.4),transparent)}
 
 .section-label{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--v2);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.section-label::after{content:'';flex:1;height:1px;background:rgba(139,92,246,.15)}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(0,149,255,.15)}
 
 /* PAIR SELECTOR */
 .pair-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:24px}
 .pair-btn{padding:8px 6px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .2s;text-align:center}
-.pair-btn:hover{border-color:rgba(139,92,246,.3);color:var(--text2);background:rgba(139,92,246,.06)}
-.pair-btn.active{border-color:rgba(139,92,246,.5);color:var(--v2);background:rgba(139,92,246,.12)}
+.pair-btn:hover{border-color:rgba(0,149,255,.3);color:var(--text2);background:rgba(0,149,255,.06)}
+.pair-btn.active{border-color:rgba(0,149,255,.5);color:var(--v2);background:rgba(0,149,255,.12)}
 
 /* CUSTOM PAIR INPUT */
 .custom-pair-wrap{position:relative;margin-bottom:24px}
 .custom-pair-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all .2s}
-.custom-pair-input:focus{border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.06)}
+.custom-pair-input:focus{border-color:rgba(0,149,255,.5);background:rgba(0,149,255,.06)}
 .custom-pair-input::placeholder{color:var(--text3)}
-#pairDropdown{display:none;position:fixed;background:#13131f;border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px}
+#pairDropdown{display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px}
 
 /* FIELDS */
 .fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
@@ -72,7 +72,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .field-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
 .field-input-wrap{position:relative}
 .field-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:14px 50px 14px 16px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;outline:none;transition:all .2s;-webkit-appearance:none}
-.field-input:focus{border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.06)}
+.field-input:focus{border-color:rgba(0,149,255,.5);background:rgba(0,149,255,.06)}
 .field-input::placeholder{color:var(--text3);font-size:16px;font-weight:400}
 .field-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--text3)}
 
@@ -87,17 +87,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .risk-val{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:var(--v2)}
 .risk-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:50px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--v) var(--pct,50%),rgba(255,255,255,.08) var(--pct,50%))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 0 0 3px var(--v),0 4px 12px rgba(139,92,246,.4);cursor:pointer;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 0 0 3px var(--v),0 4px 12px rgba(0,149,255,.4);cursor:pointer;transition:transform .15s}
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .risk-presets{display:flex;gap:6px;margin-top:10px}
 .risk-preset{padding:4px 12px;background:transparent;border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
-.risk-preset:hover{border-color:rgba(139,92,246,.3);color:var(--v2)}
-.risk-preset.on{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.4);color:var(--v2)}
+.risk-preset:hover{border-color:rgba(0,149,255,.3);color:var(--v2)}
+.risk-preset.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
 
 /* CALCULATE BTN */
-.calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(139,92,246,.3);position:relative;overflow:hidden}
+.calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.3);position:relative;overflow:hidden}
 .calc-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);opacity:0;transition:opacity .2s}
-.calc-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(139,92,246,.45)}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,149,255,.45)}
 .calc-btn:hover::before{opacity:1}
 
 /* RESULT */
@@ -107,7 +107,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
 .result-main{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
 .result-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;transition:all .3s}
-.result-box.highlight{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.3)}
+.result-box.highlight{background:rgba(0,149,255,.08);border-color:rgba(0,149,255,.3)}
 .result-box-label{font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
 .result-box-val{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;line-height:1}
 .result-box-sub{font-size:11px;color:var(--text3);margin-top:4px}
@@ -123,7 +123,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .risk-bar-fill{height:100%;border-radius:50px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 
 /* TIPS */
-.tips-card{background:rgba(139,92,246,.04);border:1px solid rgba(139,92,246,.12);border-radius:16px;padding:20px}
+.tips-card{background:rgba(0,149,255,.04);border:1px solid rgba(0,149,255,.12);border-radius:16px;padding:20px}
 .tips-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--v2);text-transform:uppercase;margin-bottom:12px}
 .tip-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--text2);line-height:1.6}
 .tip-item:last-child{border:none}
@@ -149,7 +149,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
       <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
     </button>
-    <div class="topbar-brand"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(167,139,250,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Calculateur</span></div>
+    <div class="topbar-brand"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Calculateur</span></div>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <div class="cur-toggle">
@@ -294,7 +294,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 </div>
 
 <!-- PAIR DROPDOWN (body level) -->
-<div id="pairDropdown" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:220px"></div>
+<div id="pairDropdown" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:220px"></div>
 
 <script>
 // ── STATE ──
@@ -503,7 +503,7 @@ function onCustomPairInput(val) {
   if(!matches.length) { box.style.display='none'; return; }
   box.innerHTML = matches.map(function(p){
     var hasPip = PIP_DATA[p];
-    return '<div onclick="chooseCustomPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between" onmouseover="this.style.background=\'rgba(139,92,246,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">' +
+    return '<div onclick="chooseCustomPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between" onmouseover="this.style.background=\'rgba(0,149,255,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">' +
       '<span>'+(p===v?'<strong style=\'color:var(--v2)\'>'+p+'</strong>':p)+'</span>' +
       (hasPip?'<span style=\'font-size:10px;color:var(--text3)\'>'+hasPip.pipVal+'$/lot</span>':'') +
     '</div>';

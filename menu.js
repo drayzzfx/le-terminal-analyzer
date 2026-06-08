@@ -1,4 +1,4 @@
-// ── LE TERMINAL · MENU LATERAL GLOBAL ──
+﻿// ── LE TERMINAL · MENU LATERAL GLOBAL ──
 // Inclure ce fichier dans toutes les pages du site
 
 (function() {
@@ -52,7 +52,7 @@
       font-family: 'Bricolage Grotesque', sans-serif;
       font-size: 16px; font-weight: 800; color: #F0EEFF;
     }
-    .lt-menu-brand span { color: #A78BFA; }
+    .lt-menu-brand span { color: #38B6FF; }
     .lt-menu-close {
       background: transparent; border: none; color: #5A5570;
       font-size: 20px; cursor: pointer; line-height: 1;
@@ -71,10 +71,10 @@
       font-size: 14px; font-weight: 600;
       border: none; background: transparent; width: 100%; text-align: left;
     }
-    .lt-nav-item:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
+    .lt-nav-item:hover { background: rgba(0,149,255,.1); color: #38B6FF; }
     .lt-nav-item.active {
-      background: rgba(139,92,246,.15); color: #A78BFA;
-      border: 1px solid rgba(139,92,246,.25);
+      background: rgba(0,149,255,.15); color: #38B6FF;
+      border: 1px solid rgba(0,149,255,.25);
     }
     .lt-nav-item.soon { opacity: .45; cursor: not-allowed; pointer-events: none; }
     .lt-nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: .7; }
@@ -92,7 +92,7 @@
     }
     .lt-user-info {
       display: none; padding: 10px 14px; border-radius: 10px;
-      background: rgba(139,92,246,.06); border: 1px solid rgba(139,92,246,.15);
+      background: rgba(0,149,255,.06); border: 1px solid rgba(0,149,255,.15);
       margin-bottom: 8px;
     }
     .lt-user-info.show { display: block; }
@@ -110,7 +110,7 @@
       background: transparent; border: none; cursor: pointer;
       padding: 6px; border-radius: 8px; transition: background .2s;
     }
-    .lt-hamburger:hover { background: rgba(139,92,246,.1); }
+    .lt-hamburger:hover { background: rgba(0,149,255,.1); }
     .lt-hamburger span {
       display: block; width: 20px; height: 2px;
       background: #9B96B8; border-radius: 2px;
@@ -133,7 +133,7 @@
     <div class="lt-menu-overlay" id="ltMenuOverlay" onclick="ltCloseMenu()"></div>
     <div class="lt-side-menu" id="ltSideMenu">
       <div class="lt-menu-header">
-        <div class="lt-menu-brand"><img src="./logo.jpg.webp" alt="Le Terminal" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(167,139,250,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Hub</span></div>
+        <div class="lt-menu-brand"><img src="./logo.jpg.webp" alt="Le Terminal" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Hub</span></div>
         <button class="lt-menu-close" onclick="ltCloseMenu()">✕</button>
       </div>
       <nav class="lt-menu-nav">

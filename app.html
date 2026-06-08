@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -12,12 +12,12 @@
   --card: rgba(255,255,255,0.04);
   --card-hover: rgba(255,255,255,0.07);
   --border: rgba(255,255,255,0.08);
-  --border-active: rgba(139,92,246,0.6);
-  --v: #8B5CF6;
-  --v2: #A78BFA;
-  --v3: #C4B5FD;
-  --vglow: rgba(139,92,246,0.25);
-  --vglow2: rgba(139,92,246,0.08);
+  --border-active: rgba(0,149,255,0.6);
+  --v: #0095FF;
+  --v2: #38B6FF;
+  --v3: #93D0FF;
+  --vglow: rgba(0,149,255,0.25);
+  --vglow2: rgba(0,149,255,0.08);
   --text: #F0EEFF;
   --text2: #9B96B8;
   --text3: #5A5570;
@@ -76,7 +76,7 @@ body {
 }
 
 .landing-title span {
-  background: linear-gradient(135deg, var(--v) 0%, var(--v2) 50%, #E879F9 100%);
+  background: linear-gradient(135deg, var(--v) 0%, var(--v2) 50%, #00C6FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -108,7 +108,7 @@ body {
 .chart-card:hover {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px var(--vglow);
-  border-color: rgba(139,92,246,0.3);
+  border-color: rgba(0,149,255,0.3);
 }
 
 .chart-card.zooming {
@@ -149,7 +149,7 @@ body {
   background: var(--vglow2);
   padding: 3px 10px;
   border-radius: 20px;
-  border: 1px solid rgba(139,92,246,0.2);
+  border: 1px solid rgba(0,149,255,0.2);
 }
 
 .chart-body { padding: 24px 20px 20px; }
@@ -186,14 +186,14 @@ body {
 
 .chart-cta:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 60px rgba(139,92,246,0.5);
+  box-shadow: 0 0 60px rgba(0,149,255,0.5);
 }
 
 /* ambient glow behind chart */
 .glow-bg {
   position: absolute;
   width: 500px; height: 300px;
-  background: radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(0,149,255,0.12) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   top: 50%; left: 50%;
@@ -265,7 +265,7 @@ body {
 }
 
 .page-title span {
-  background: linear-gradient(135deg, var(--v), var(--v2), #E879F9);
+  background: linear-gradient(135deg, var(--v), var(--v2), #00C6FF);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -293,7 +293,7 @@ body {
   padding: 20px;
   transition: border-color 0.2s;
 }
-.card:focus-within { border-color: rgba(139,92,246,0.35); }
+.card:focus-within { border-color: rgba(0,149,255,0.35); }
 
 .card-label {
   font-size: 10px; font-weight: 600;
@@ -333,7 +333,7 @@ input[type=text], input[type=number], select, textarea {
 }
 input:focus, select:focus, textarea:focus {
   border-color: var(--border-active);
-  background: rgba(139,92,246,0.06);
+  background: rgba(0,149,255,0.06);
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -365,7 +365,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
 /* UPLOAD */
 .upload-zone {
-  border: 1.5px dashed rgba(139,92,246,0.25);
+  border: 1.5px dashed rgba(0,149,255,0.25);
   border-radius: var(--r2);
   background: var(--vglow2);
   padding: 20px;
@@ -376,7 +376,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 }
 .upload-zone:hover, .upload-zone.drag {
   border-color: var(--v);
-  background: rgba(139,92,246,0.1);
+  background: rgba(0,149,255,0.1);
 }
 .upload-zone input[type=file] {
   position: absolute; inset: 0;
@@ -403,7 +403,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* ANALYZE BTN */
 .analyze-btn {
   width: 100%; padding: 16px;
-  background: linear-gradient(135deg, var(--v), #7C3AED);
+  background: linear-gradient(135deg, var(--v), #0070CC);
   border: none; border-radius: var(--r);
   color: white;
   font-family: 'Bricolage Grotesque', sans-serif;
@@ -411,7 +411,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: all 0.25s;
-  box-shadow: 0 8px 32px rgba(139,92,246,0.3);
+  box-shadow: 0 8px 32px rgba(0,149,255,0.3);
   position: relative; overflow: hidden;
 }
 .analyze-btn::before {
@@ -420,7 +420,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
   opacity: 0; transition: opacity 0.2s;
 }
-.analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(139,92,246,0.45); }
+.analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,149,255,0.45); }
 .analyze-btn:hover::before { opacity: 1; }
 .analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
@@ -448,14 +448,14 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .ld-orb {
   width: 64px; height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--v), #7C3AED, #E879F9);
+  background: linear-gradient(135deg, var(--v), #0070CC, #00C6FF);
   margin: 0 auto 28px;
   animation: orbPulse 2s ease-in-out infinite;
   box-shadow: 0 0 40px var(--vglow);
 }
 @keyframes orbPulse {
   0%,100% { transform: scale(1); box-shadow: 0 0 40px var(--vglow); }
-  50%      { transform: scale(1.12); box-shadow: 0 0 70px rgba(139,92,246,0.45); }
+  50%      { transform: scale(1.12); box-shadow: 0 0 70px rgba(0,149,255,0.45); }
 }
 
 .ld-title {
@@ -497,7 +497,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   content: '';
   position: absolute; top: -40px; right: -40px;
   width: 220px; height: 220px;
-  background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,149,255,0.08) 0%, transparent 70%);
   border-radius: 50%;
 }
 
@@ -558,7 +558,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   color: var(--v2); background: rgba(8,8,15,0.75);
   backdrop-filter: blur(8px);
   padding: 3px 10px; border-radius: 50px;
-  border: 1px solid rgba(139,92,246,0.25);
+  border: 1px solid rgba(0,149,255,0.25);
 }
 
 /* Feedback */
@@ -629,8 +629,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   transition: all 0.2s;
 }
 .act-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
-.act-btn.accent { border-color: rgba(139,92,246,0.4); color: var(--v2); background: var(--vglow2); }
-.act-btn.accent:hover { background: rgba(139,92,246,0.15); }
+.act-btn.accent { border-color: rgba(0,149,255,0.4); color: var(--v2); background: var(--vglow2); }
+.act-btn.accent:hover { background: rgba(0,149,255,0.15); }
 
 /* ── PAYWALL ── */
 .pw-overlay {
@@ -644,7 +644,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .pw-box {
   max-width: 460px; width: 100%;
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(139,92,246,0.3);
+  border: 1px solid rgba(0,149,255,0.3);
   border-radius: 24px;
   padding: 36px;
   position: relative; text-align: center;
@@ -658,7 +658,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
 .pw-orb {
   width: 48px; height: 48px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--v), #E879F9);
+  background: linear-gradient(135deg, var(--v), #00C6FF);
   margin: 0 auto 18px;
   display: flex; align-items: center; justify-content: center;
   font-size: 20px;
@@ -677,7 +677,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   padding: 18px; cursor: pointer; transition: all 0.2s;
   text-align: left; position: relative;
 }
-.plan:hover, .plan.sel { border-color: rgba(139,92,246,0.5); background: var(--vglow2); }
+.plan:hover, .plan.sel { border-color: rgba(0,149,255,0.5); background: var(--vglow2); }
 .plan.sel::after { content: '✓'; position: absolute; top: 10px; right: 12px; font-size: 11px; color: var(--v2); }
 .plan-badge-top { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; color: var(--v2); margin-bottom: 6px; display: block; }
 .plan-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: 0.04em; }
@@ -688,15 +688,15 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
 .pay-btn {
   width: 100%; padding: 14px;
-  background: linear-gradient(135deg, var(--v), #7C3AED);
+  background: linear-gradient(135deg, var(--v), #0070CC);
   border: none; border-radius: 50px;
   color: white; font-family: 'Bricolage Grotesque', sans-serif;
   font-size: 15px; font-weight: 700; letter-spacing: 0.04em;
   cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 8px 24px rgba(139,92,246,0.4);
+  box-shadow: 0 8px 24px rgba(0,149,255,0.4);
   margin-bottom: 14px;
 }
-.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(139,92,246,0.55); }
+.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(0,149,255,0.55); }
 .pay-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 .pay-note { font-size: 10px; color: var(--text3); line-height: 1.8; }
@@ -716,7 +716,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* AUTH MODAL */
 .auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
-.auth-box{max-width:400px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:32px;position:relative;text-align:center}
+.auth-box{max-width:400px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:20px;padding:32px;position:relative;text-align:center}
 .auth-box::before{content:'';position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
 .auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:50px;overflow:hidden}
 .auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
@@ -725,21 +725,21 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
 .auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
 .auth-field input:focus{border-color:var(--border-active)}
-.auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
-.auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(139,92,246,.4)}
+.auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,149,255,.4)}
 .auth-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .auth-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
 .auth-close{position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;padding:4px}
 .auth-close:hover{color:var(--text)}
 .auth-sep{font-size:10px;color:var(--text3);margin:12px 0;letter-spacing:.1em}
-.whop-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(139,92,246,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.whop-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
 .whop-btn:hover{background:var(--vglow2);border-color:var(--v)}
 
 /* USER CHIP */
 .user-chip{display:none;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:50px;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s}
-.user-chip:hover{border-color:rgba(139,92,246,.3)}
+.user-chip:hover{border-color:rgba(0,149,255,.3)}
 .user-chip.show{display:flex}
-.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#E879F9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#00C6FF);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
 .user-name{font-size:11px;font-weight:500;color:var(--text2)}
 
 /* HISTORY PANEL */
@@ -754,7 +754,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .history-list::-webkit-scrollbar-thumb{background:var(--v)}
 .history-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px;line-height:1.8}
 .history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .2s}
-.history-item:hover{border-color:rgba(139,92,246,.3);background:var(--vglow2)}
+.history-item:hover{border-color:rgba(0,149,255,.3);background:var(--vglow2)}
 .hi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .hi-pair{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
 .hi-verdict{font-size:9px;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:50px}
@@ -766,7 +766,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .hi-date{font-size:10px;color:var(--text3);margin-top:4px}
 .hi-img{width:100%;height:60px;object-fit:cover;border-radius:8px;margin-top:8px;opacity:.8}
 .history-btn{display:none;align-items:center;gap:6px;padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
-.history-btn:hover{border-color:rgba(139,92,246,.3);color:var(--v2)}
+.history-btn:hover{border-color:rgba(0,149,255,.3);color:var(--v2)}
 .history-btn.show{display:flex}
 
 /* HISTORY DETAIL MODAL */
@@ -808,7 +808,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   font-size: 13px; font-weight: 600;
   color: var(--text2); cursor: pointer; transition: all .2s;
 }
-.back-btn:hover { border-color: rgba(139,92,246,.4); color: var(--v2); }
+.back-btn:hover { border-color: rgba(0,149,255,.4); color: var(--v2); }
 
 .history-page-content {
   max-width: 900px; margin: 0 auto; padding: 32px 24px 80px;
@@ -825,8 +825,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   transition: all .2s;
 }
 .history-card:hover {
-  border-color: rgba(139,92,246,.35);
-  background: rgba(139,92,246,.04);
+  border-color: rgba(0,149,255,.35);
+  background: rgba(0,149,255,.04);
   transform: translateY(-2px);
 }
 
@@ -851,7 +851,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* OUTCOMES */
 .outcome-bar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .outcome-btn{flex:1;min-width:80px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
-.outcome-btn:hover{border-color:rgba(139,92,246,.4);color:var(--v2)}
+.outcome-btn:hover{border-color:rgba(0,149,255,.4);color:var(--v2)}
 .outcome-btn.taken{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:var(--green)}
 .outcome-btn.skipped{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:#F87171}
 .result-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
@@ -894,7 +894,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .side-menu-close:hover{color:var(--text);background:rgba(255,255,255,.06)}
 .side-menu-nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
 .side-nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:600}
-.side-nav-item:hover{background:rgba(139,92,246,.1);color:var(--v2)}
+.side-nav-item:hover{background:rgba(0,149,255,.1);color:var(--v2)}
 .side-nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
 .side-nav-divider{height:1px;background:var(--border);margin:8px 0}
 .side-menu-footer{padding:16px 12px;border-top:1px solid var(--border)}
@@ -924,18 +924,18 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   <!-- Topbar -->
   <header class="topbar">
     <div style="display:flex;align-items:center;gap:10px">
-      <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
+      <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(0,149,255,.1)'" onmouseout="this.style.background='transparent'">
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
       </button>
-      <div class="topbar-brand"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(167,139,250,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Analyzer</span></div>
+      <div class="topbar-brand"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Analyzer</span></div>
     </div>
     <div class="topbar-right">
       <!-- Analyzer quick nav -->
       <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px">
-        <button onclick="openHistory()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📋 Historique</button>
-        <button onclick="openPerf()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📈 Perfs</button>
+        <button onclick="openHistory()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📋 Historique</button>
+        <button onclick="openPerf()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📈 Perfs</button>
       </div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
         <div class="user-avatar" id="userAvatar">?</div>
@@ -963,7 +963,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst1">Trade</div>
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field" style="position:relative">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-pair">Paire / Actif</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-pair">Paire / Actif</label>
           <input type="text" id="pair" placeholder="XAUUSD, BTC, NAS100…" autocomplete="off"
             oninput="onPairInput(this.value)" onfocus="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,200)">
           
@@ -974,14 +974,14 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           </div>
         </div>
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-dir">Direction</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-dir">Direction</label>
           <div class="dir-group">
             <button class="dir-btn long" id="btnL" onclick="setDir('LONG')">LONG</button>
             <button class="dir-btn short" id="btnS" onclick="setDir('SHORT')">SHORT</button>
           </div>
         </div>
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-tf">Timeframe</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-tf">Timeframe</label>
           <select id="tf"><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
         </div>
       </div>
@@ -989,15 +989,15 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst2">Niveaux</div>
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-entry">Entrée</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-entry">Entrée</label>
           <input type="number" id="entry" placeholder="2320.50" step="any">
         </div>
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-tp">Take Profit</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-tp">Take Profit</label>
           <input type="number" id="tp" placeholder="2345.00" step="any">
         </div>
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-sl">Stop Loss</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-sl">Stop Loss</label>
           <input type="number" id="sl" placeholder="2308.00" step="any" autocomplete="off">
         </div>
       </div>
@@ -1005,16 +1005,16 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst3">Contexte</div>
       <div class="form-grid" style="margin-bottom:12px">
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-bias">Biais marché</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-bias">Biais marché</label>
           <select id="bias"><option value="bullish" id="ob">Haussier</option><option value="bearish" id="obr">Baissier</option><option value="neutral" id="on">Neutre</option></select>
         </div>
         <div class="field">
-          <label class="lbl" style="color:#C4B5FD" id="lbl-sess">Session</label>
+          <label class="lbl" style="color:#93D0FF" id="lbl-sess">Session</label>
           <select id="sess"><option>London</option><option selected>New York</option><option>Asian</option><option>Overlap</option></select>
         </div>
       </div>
       <div class="field" style="margin-bottom:20px">
-        <label class="lbl" style="color:#C4B5FD" id="lbl-conf">Confluences & Notes</label>
+        <label class="lbl" style="color:#93D0FF" id="lbl-conf">Confluences & Notes</label>
         <textarea id="conf" placeholder="Rejet résistance H4, DXY haussier, divergence RSI…"></textarea>
       </div>
       <div class="form-section-title" id="fst4">Graphiques HTF → LTF</div>
@@ -1066,7 +1066,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="result-hero">
         <div class="score-ring">
           <svg width="88" height="88" viewBox="0 0 88 88">
-            <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(139,92,246,0.1)" stroke-width="5"/>
+            <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(0,149,255,0.1)" stroke-width="5"/>
             <circle cx="44" cy="44" r="36" fill="none" stroke="var(--v2)" stroke-width="5"
               stroke-dasharray="226" id="scoreArc" stroke-dashoffset="226" stroke-linecap="round"
               style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .4s"/>
@@ -1634,10 +1634,10 @@ function render(r,rrv,tf,pair){
   const nb=document.getElementById('niveau-badge');
   const niveauMap={
     'DÉBUTANT':   {label:'DÉBUTANT',   color:'#FBBF24', bg:'rgba(251,191,36,0.1)',  border:'rgba(251,191,36,0.4)'},
-    'INTERMÉDIAIRE':{label:'INTERMÉDIAIRE',color:'var(--v2)',bg:'rgba(139,92,246,0.1)',border:'rgba(139,92,246,0.4)'},
+    'INTERMÉDIAIRE':{label:'INTERMÉDIAIRE',color:'var(--v2)',bg:'rgba(0,149,255,0.1)',border:'rgba(0,149,255,0.4)'},
     'AVANCÉ':     {label:'AVANCÉ',     color:'var(--green)',bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.4)'},
     'BEGINNER':   {label:'BEGINNER',   color:'#FBBF24', bg:'rgba(251,191,36,0.1)',  border:'rgba(251,191,36,0.4)'},
-    'INTERMEDIATE':{label:'INTERMEDIATE',color:'var(--v2)',bg:'rgba(139,92,246,0.1)',border:'rgba(139,92,246,0.4)'},
+    'INTERMEDIATE':{label:'INTERMEDIATE',color:'var(--v2)',bg:'rgba(0,149,255,0.1)',border:'rgba(0,149,255,0.4)'},
     'ADVANCED':   {label:'ADVANCED',   color:'var(--green)',bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.4)'},
   };
   const nv=niveauMap[r.niveau];
@@ -1920,7 +1920,7 @@ function renderPerf(d){
     ctx.clearRect(0,0,W,H);
     // Draw line
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(139,92,246,0.8)';
+    ctx.strokeStyle = 'rgba(0,149,255,0.8)';
     ctx.lineWidth = 2;
     ctx.lineJoin = 'round';
     pts.forEach(function(p,i){
@@ -1931,7 +1931,7 @@ function renderPerf(d){
     ctx.stroke();
     // Draw fill
     ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
-    ctx.fillStyle = 'rgba(139,92,246,0.08)';
+    ctx.fillStyle = 'rgba(0,149,255,0.08)';
     ctx.fill();
     // Draw dots
     pts.forEach(function(p,i){
@@ -2196,7 +2196,7 @@ function openHDetail(i){
     '<div style="font-size:12px;color:var(--text2);margin-top:3px">'+(item.pair||'')+' · '+(item.direction||'')+' · '+(item.tf||'')+' · '+ds+'</div></div></div>'+
     (item.img_data?'<img src="'+item.img_data+'" style="width:100%;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">':'')+
     sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#60A5FA')+
-    (item.macro?'<div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
+    (item.macro?'<div style="background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
   // Add outcome section
   content += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">' +
     '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--text3);margin-bottom:10px">SUIVI DU TRADE</div>' +
@@ -2412,7 +2412,7 @@ function showSuggestions(val){
   var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
   if(!matches.length){ box.style.display='none'; return; }
   box.innerHTML = matches.map(function(p){
-    return '<div onclick="selectPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(139,92,246,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+p+'</div>';
+    return '<div onclick="selectPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(0,149,255,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+p+'</div>';
   }).join('');
   var rect = inp.getBoundingClientRect();
   box.style.top = (rect.bottom + 4) + 'px';
@@ -2550,7 +2550,7 @@ window.doLogout=doLogout;
       <!-- IA FEEDBACK -->
       <div class="perf-section">
         <div class="perf-section-title">🧠 Analyse IA de tes patterns</div>
-        <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:20px">
+        <div style="background:rgba(0,149,255,0.06);border:1px solid rgba(0,149,255,0.2);border-radius:14px;padding:20px">
           <div id="iaFeedback" style="font-size:13px;color:var(--text2);line-height:1.7">
             <button onclick="requestIAFeedback()" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">
               🤖 Demander à l'IA d'analyser mes patterns
@@ -2610,7 +2610,7 @@ window.doLogout=doLogout;
 </div>
 
 <div style="position:fixed;bottom:20px;right:20px;z-index:300">
-    <a href="https://t.me/leterminalfx" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(8,8,15,0.9);border:1px solid rgba(139,92,246,0.3);border-radius:50px;padding:10px 20px;text-decoration:none;color:var(--text2);font-size:14px;font-weight:600;backdrop-filter:blur(12px);transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.4)" onmouseover="this.style.borderColor='rgba(139,92,246,0.6)';this.style.color='var(--v2)'" onmouseout="this.style.borderColor='rgba(139,92,246,0.3)';this.style.color='var(--text2)'">
+    <a href="https://t.me/leterminalfx" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(8,8,15,0.9);border:1px solid rgba(0,149,255,0.3);border-radius:50px;padding:10px 20px;text-decoration:none;color:var(--text2);font-size:14px;font-weight:600;backdrop-filter:blur(12px);transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.4)" onmouseover="this.style.borderColor='rgba(0,149,255,0.6)';this.style.color='var(--v2)'" onmouseout="this.style.borderColor='rgba(0,149,255,0.3)';this.style.color='var(--text2)'">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z" fill="currentColor"/></svg>
       Rejoindre le Telegram
     </a>
@@ -2634,7 +2634,7 @@ window.doLogout=doLogout;
     <a class="side-nav-item" href="./calendrier.html" style="text-decoration:none;opacity:.5">
       <span class="nav-icon">📅</span> Calendrier Éco <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
     </a>
-    <a class="side-nav-item" href="./app.html" style="text-decoration:none;background:rgba(139,92,246,.1);color:var(--v2)">
+    <a class="side-nav-item" href="./app.html" style="text-decoration:none;background:rgba(0,149,255,.1);color:var(--v2)">
       <span class="nav-icon">⚡</span> Setup Analyzer
     </a>
     <a class="side-nav-item" href="./bubble.html" style="text-decoration:none;opacity:.5">
@@ -2648,7 +2648,7 @@ window.doLogout=doLogout;
     <button class="side-nav-item" id="sideLoginBtn" onclick="closeSideMenu();openAuth()" style="color:var(--v2)">
       <span class="nav-icon">👤</span> Connexion / Créer un compte
     </button>
-    <div id="sideUserInfo" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2)">
+    <div id="sideUserInfo" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2)">
       <div style="font-size:11px;color:var(--text3);margin-bottom:4px">CONNECTÉ</div>
       <div id="sideUserEmail" style="font-size:13px;font-weight:600;color:var(--text2)"></div>
       <button onclick="doLogout()" style="margin-top:8px;font-size:11px;color:#F87171;background:transparent;border:none;cursor:pointer;padding:0;font-family:Inter,sans-serif">Se déconnecter</button>
@@ -2669,7 +2669,7 @@ window.doLogout=doLogout;
     </div>
   </div>
 </div>
-<div id="pairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
+<div id="pairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
 <script src="./menu.js"></script>
 </body>
 </html>
