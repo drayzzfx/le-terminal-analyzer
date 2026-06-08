@@ -288,16 +288,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
   </div>
 
-  <!-- GLOBAL IA -->
-  <div class="global-ia" id="globalIaSection">
-    <div class="global-ia-header">
-      <div class="global-ia-title">🧠 Analyse IA de tes performances</div>
-      <button class="ia-btn" id="globalIaBtn" onclick="requestGlobalIA()">Analyser mes patterns</button>
-    </div>
-    <div class="global-ia-content" id="globalIaContent" style="color:var(--text3);font-size:13px">
-      Lance une analyse IA pour obtenir un feedback détaillé sur tes patterns de trading, tes forces et tes axes d'amélioration.
-    </div>
-  </div>
+
 
   <!-- ADD TRADE -->
   <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
@@ -313,6 +304,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
     </div>
     <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <!-- GLOBAL IA - condensed, below calendar -->
+  <div style="background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.15);border-radius:16px;padding:18px;margin-top:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0" id="globalIaHeader">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:14px">🧠</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text)">Analyse IA de mes performances</span>
+      </div>
+      <button class="ia-btn" id="globalIaBtn" onclick="toggleGlobalIA()" style="font-size:11px;padding:5px 14px">Analyser</button>
+    </div>
+    <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="color:var(--text3);font-size:13px">Lance une analyse pour voir tes patterns.</span>
+    </div>
   </div>
 
 </div>
@@ -1008,6 +1013,20 @@ function renderIAText(txt) {
   return '<div style="display:flex;flex-direction:column;gap:2px">' + html + '</div>';
 }
 
+function toggleGlobalIA() {
+  var panel = document.getElementById('globalIaContent');
+  var btn = document.getElementById('globalIaBtn');
+  if(panel.style.display === 'none') {
+    panel.style.display = 'block';
+    if(panel.innerHTML.includes('Lance une analyse')) {
+      requestGlobalIA();
+    }
+  } else {
+    panel.style.display = 'none';
+    btn.textContent = 'Analyser';
+  }
+}
+
 async function requestGlobalIA() {
   if(trades.length < 3) {
     document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il te faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
@@ -1016,7 +1035,7 @@ async function requestGlobalIA() {
   var btn = document.getElementById('globalIaBtn');
   var content = document.getElementById('globalIaContent');
   btn.disabled = true;
-  btn.textContent = '⏳ Analyse…';
+  btn.textContent = '⏳…';
   content.innerHTML = '<div class="ia-loading"><div class="ia-orb"></div><span>Analyse de tes patterns en cours…</span></div>';
 
   var wins = trades.filter(function(t){ return t.result==='win'; }).length;
@@ -1054,7 +1073,7 @@ async function requestGlobalIA() {
     content.innerHTML = '<span style="color:var(--red)">Erreur lors de l\'analyse.</span>';
   }
   btn.disabled = false;
-  btn.textContent = '🔄 Relancer l\'analyse';
+  btn.textContent = '🔄 Relancer';
 }
 
 // ── SUPABASE SYNC ──
