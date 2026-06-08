@@ -26,9 +26,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green);margin-left:auto;flex-shrink:0}
 .ld{width:6px;height:6px;border-radius:50%;background:var(--green);animation:p 2s ease-in-out infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
-.map{flex:1;position:relative;min-height:0;background:#131722}
-.map .tradingview-widget-container{position:absolute;inset:0;width:100%;height:100%}
+
+/* MAP takes ALL remaining space */
+.map{flex:1;min-height:0;position:relative;background:#131722}
+.map .tradingview-widget-container{position:absolute;top:0;left:0;right:0;bottom:0}
 .map .tradingview-widget-container__widget{width:100%;height:100%}
+
 .foot{display:flex;align-items:center;gap:10px;padding:5px 16px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)}
 .ldc{width:8px;height:8px;border-radius:50%}
@@ -53,7 +56,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
     <button class="cb" onclick="setMkt('stocks',this)">📈 Actions US</button>
     <button class="cb" onclick="setMkt('etf',this)">📦 ETF</button>
   </div>
-
   <div class="sep" id="szSep"></div>
   <div class="cg" id="szG">
     <button class="cb on" onclick="setSz('market_cap_calc',this)">Cap.</button>
@@ -80,9 +82,9 @@ function setMkt(v, btn) {
   mkt = v;
   document.querySelectorAll('#mktG .cb').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
-  // Hide tf + sz for forex
-  document.getElementById('szSep').style.display = (v === 'crypto') ? '' : 'none';
-  document.getElementById('szG').style.display = (v === 'crypto') ? '' : 'none';
+  var isCrypto = v === 'crypto';
+  document.getElementById('szSep').style.display = isCrypto ? '' : 'none';
+  document.getElementById('szG').style.display = isCrypto ? '' : 'none';
   render();
 }
 
@@ -95,8 +97,19 @@ function setSz(v, btn) {
 
 function render() {
   var wrap = document.getElementById('mapWrap');
+  wrap.innerHTML = '';
 
-  // Build config
+  var container = document.createElement('div');
+  container.className = 'tradingview-widget-container';
+
+  var inner = document.createElement('div');
+  inner.className = 'tradingview-widget-container__widget';
+  container.appendChild(inner);
+
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.async = true;
+
   var cfg = {
     colorTheme: 'dark',
     locale: 'fr',
@@ -108,61 +121,33 @@ function render() {
     height: '100%'
   };
 
-  var widgetName;
-
   if (mkt === 'crypto') {
-    widgetName = 'crypto-coins-heatmap';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js';
     cfg.dataSource = 'Crypto';
     cfg.blockSize = sz;
     cfg.blockColor = 'change';
     cfg.isMonoSize = false;
   } else if (mkt === 'forex') {
-    widgetName = 'forex-heat-map';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js';
     cfg.currencies = ['EUR','USD','JPY','GBP','CHF','AUD','CAD','NZD'];
   } else if (mkt === 'stocks') {
-    widgetName = 'stock-heatmap';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js';
     cfg.exchanges = [];
     cfg.dataSource = 'SPX500';
     cfg.grouping = 'sector';
     cfg.blockSize = 'market_cap_basic';
     cfg.blockColor = 'change';
   } else if (mkt === 'etf') {
-    widgetName = 'etf-heatmap';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-etf-heatmap.js';
     cfg.dataSource = 'AllUSEtf';
     cfg.grouping = 'asset_class';
     cfg.blockSize = 'aum';
     cfg.blockColor = 'change';
   }
 
-  // Use iframe with encoded config — bypasses script caching issue
-  // TradingView embed page supports config via postMessage or URL
-  var cfgStr = encodeURIComponent(JSON.stringify(cfg));
-  var iframeSrc = 'https://www.tradingview-widget.com/embed-widget/' + widgetName +
-    '/?locale=fr&colorTheme=dark#' + cfgStr;
-
-  // Actually use the proper TV script approach but force reload by recreating DOM
-  wrap.innerHTML = '';
-
-  var html = '<div class="tradingview-widget-container" style="width:100%;height:100%">' +
-    '<div class="tradingview-widget-container__widget" style="width:100%;height:100%"></div>' +
-    '<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-' +
-    widgetName + '.js" async>' +
-    JSON.stringify(cfg) +
-    '<\/script>' +
-    '</div>';
-
-  // Use iframe trick to force fresh script execution
-  var blob = new Blob([
-    '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#131722}</style></head><body>' +
-    html + '</body></html>'
-  ], {type: 'text/html'});
-
-  var iframe = document.createElement('iframe');
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  iframe.src = URL.createObjectURL(blob);
-  wrap.appendChild(iframe);
+  script.textContent = JSON.stringify(cfg);
+  container.appendChild(script);
+  wrap.appendChild(container);
 }
 
 render();
