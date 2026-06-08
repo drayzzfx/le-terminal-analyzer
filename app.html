@@ -1007,26 +1007,46 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   <!-- Paywall -->
   <div class="pw-overlay" id="paywall">
     <div class="pw-box">
-      <div class="pw-orb">🔒</div>
-      <div class="pw-title" id="pw-title">Limite atteinte</div>
-      <div class="pw-sub" id="pw-sub">Tu as utilisé tes 3 analyses gratuites.<br>Passe à PRO pour des analyses illimitées.</div>
-      <div class="plans">
-        <div class="plan" id="plan-m" onclick="pickPlan('m')">
-          <span class="plan-name" id="pm-name">Mensuel</span>
-          <div class="plan-price">19€</div>
-          <div class="plan-per" id="pm-per">/ mois</div>
-          <ul class="plan-feats"><li id="pf1">Analyses illimitées</li><li id="pf2">Upload graphique</li><li id="pf3">Historique 30j</li></ul>
+      <div class="pw-orb">⚡</div>
+      <div class="pw-title" id="pw-title">Passe à PRO</div>
+      <div class="pw-sub" id="pw-sub">Tu as utilisé ton essai gratuit.<br>Débloque les analyses illimitées avec Le Terminal PRO.</div>
+
+      <!-- Whop offer -->
+      <div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:16px;padding:20px;margin-bottom:20px;text-align:left">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--v2);margin-bottom:4px">LE TERMINAL PRO</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1">9€<span style="font-size:13px;color:var(--text3);font-weight:400"> / mois</span></div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px">ou 99€/an · économise 2 mois</div>
+          </div>
+          <div style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);border-radius:50px;padding:5px 12px;font-size:10px;font-weight:700;color:var(--green);letter-spacing:.08em">★ MEILLEURE OFFRE</div>
         </div>
-        <div class="plan sel" id="plan-y" onclick="pickPlan('y')">
-          <span class="plan-badge-top" id="py-top">★ MEILLEURE OFFRE</span>
-          <span class="plan-name" id="py-name">Annuel</span>
-          <div class="plan-price">9€</div>
-          <div class="plan-per" id="py-per">/ mois · 99€/an</div>
-          <ul class="plan-feats"><li id="pf4">Analyses illimitées</li><li id="pf5">Upload graphique</li><li id="pf6">Historique complet</li><li id="pf7">Accès prioritaire</li></ul>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Analyses illimitées</div>
+          <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Upload de graphiques HTF/ITF/LTF</div>
+          <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Historique complet + Journal de trading</div>
+          <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Accès prioritaire aux nouvelles features</div>
         </div>
       </div>
-      <button class="pay-btn" id="payBtn" onclick="doPayment()"><span id="pay-txt">Continuer vers le paiement</span></button>
-      <div class="pay-note" id="pay-note">Paiement sécurisé Stripe · Annulation à tout moment</div>
+
+      <button class="pay-btn" id="payBtn" onclick="doPayment()">
+        <span id="pay-txt">⚡ Obtenir l'accès PRO sur Whop</span>
+      </button>
+
+      <div style="margin-top:10px;font-size:11px;color:var(--text3);line-height:1.7" id="pay-note">
+        Paiement sécurisé via Whop · Annulation à tout moment<br>
+        <span style="color:var(--v2);font-weight:500">Utilise le même email que ton compte Le Terminal</span>
+      </div>
+
+      <!-- Already bought -->
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
+        <button onclick="checkAndActivatePro()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(139,92,246,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.background='transparent'">
+          🔄 Vérifier mon accès PRO
+        </button>
+        <div id="proCheckMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+      </div>
+
       <span class="demo-link" onclick="closePW()" id="demo-lnk">Continuer en mode démo</span>
     </div>
   </div>
@@ -1609,16 +1629,48 @@ function pickPlan(p){
   document.getElementById('plan-y').classList.toggle('sel',p==='y');
 }
 function doPayment(){
-  // → Replace with Stripe checkout redirect
-  const btn=document.getElementById('payBtn');
+  // Redirect to Whop product page
+  var btn=document.getElementById('payBtn');
   btn.disabled=true;
-  document.getElementById('pay-txt').textContent=lang==='fr'?'Redirection…':'Redirecting…';
-  setTimeout(()=>{
-    isPro=true; localStorage.setItem('lt_pro','1');
-    closePW(); updUsage();
+  document.getElementById('pay-txt').textContent='Redirection vers Whop…';
+  // Open Whop in same tab so user can come back authenticated
+  setTimeout(function(){
+    window.location.href='https://whop.com/terminal-analyzer/';
     btn.disabled=false;
-    document.getElementById('pay-txt').textContent=c().payTxt;
-  },1600);
+    document.getElementById('pay-txt').textContent='⚡ Obtenir l'accès PRO sur Whop';
+  }, 600);
+}
+
+async function checkAndActivatePro(){
+  var msg = document.getElementById('proCheckMsg');
+  msg.style.color='var(--text3)';
+  msg.textContent='Vérification en cours…';
+  if(!authToken){
+    msg.style.color='var(--amber)';
+    msg.textContent='Connecte-toi d'abord avec ton email Whop.';
+    setTimeout(function(){ closePW(); openAuth(); }, 1200);
+    return;
+  }
+  try{
+    var res=await fetch('/api/check-pro',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}
+    });
+    var data=await res.json();
+    if(data.is_pro){
+      isPro=true;
+      localStorage.setItem('lt_pro','1');
+      msg.style.color='var(--green)';
+      msg.textContent='✓ Accès PRO activé !';
+      setTimeout(function(){ closePW(); updUsage(); }, 1000);
+    } else {
+      msg.style.color='var(--red)';
+      msg.textContent='Aucun accès PRO trouvé pour cet email sur Whop.';
+    }
+  }catch(e){
+    msg.style.color='var(--red)';
+    msg.textContent='Erreur de vérification. Réessaie.';
+  }
 }
 
 // ── VIEWS ──
