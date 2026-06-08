@@ -240,7 +240,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <!-- TOPBAR -->
 <header class="topbar">
   <div style="display:flex;align-items:center;gap:12px">
-    <a href="./index.html" class="back-link" title="Retour au dashboard">←</a>
+    <button class="lt-hamburger" onclick="ltOpenMenu()" id="ltHamburger"><span></span><span></span><span></span></button>
     <div class="topbar-brand">Le Terminal <span>Journal</span></div>
   </div>
   <div class="topbar-right">
@@ -1108,5 +1108,6 @@ renderCalendar();
 checkSession();
 </script>
 
+<script src="./menu.js"></script>
 </body>
 </html>
