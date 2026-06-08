@@ -1034,7 +1034,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   <!-- Topbar -->
   <header class="topbar">
     <div style="display:flex;align-items:center;gap:10px">
-      <button onclick="toggleSideMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
+      <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
@@ -2829,5 +2829,6 @@ window.doLogout=doLogout;
     </div>
   </div>
 </div>
+<script src="./menu.js"></script>
 </body>
 </html>
