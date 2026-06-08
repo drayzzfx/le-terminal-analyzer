@@ -874,13 +874,14 @@ function closeConfirm() {
 }
 function confirmDelete() {
   if(!pendingDeleteId) return;
-  trades = trades.filter(function(t){ return t.id !== pendingDeleteId; });
+  var idToDelete = pendingDeleteId;
+  trades = trades.filter(function(t){ return t.id !== idToDelete; });
   persist();
   closeConfirm();
   closeDayModal();
   renderStats();
   renderCalendar();
-  if(authToken) deleteTrade(pendingDeleteId);
+  if(authToken) deleteTrade(idToDelete);
 }
 
 // ── LIGHTBOX ──
@@ -1080,7 +1081,7 @@ async function requestGlobalIA() {
 async function syncTrade(trade) {
   if(!authToken) return;
   try {
-    await fetch('/api/journal', {
+    await fetch('/api/history', {
       method: 'POST',
       headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body: JSON.stringify(trade)
@@ -1091,7 +1092,7 @@ async function syncTrade(trade) {
 async function deleteTrade(id) {
   if(!authToken) return;
   try {
-    await fetch('/api/journal/'+id, {
+    await fetch('/api/history?id=' + encodeURIComponent(id), {
       method: 'DELETE',
       headers: {'Authorization':'Bearer '+authToken}
     });
@@ -1101,7 +1102,7 @@ async function deleteTrade(id) {
 async function loadFromServer() {
   if(!authToken) return;
   try {
-    var res = await fetch('/api/journal', {headers:{'Authorization':'Bearer '+authToken}});
+    var res = await fetch('/api/history', {headers:{'Authorization':'Bearer '+authToken}});
     var data = await res.json();
     if(Array.isArray(data) && data.length) {
       // Merge: server wins, keep local img_data
