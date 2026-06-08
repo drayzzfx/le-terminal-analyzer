@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LE TERMINAL — Calculateur de Pips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080F;
+  --bg2: #0E0E1A;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --v: #8B5CF6;
+  --v2: #A78BFA;
+  --vglow: rgba(139,92,246,0.25);
+  --vglow2: rgba(139,92,246,0.08);
+  --text: #F0EEFF;
+  --text2: #9B96B8;
+  --text3: #5A5570;
+  --green: #34D399;
+  --red: #F87171;
+  --amber: #FBBF24;
+  --r: 16px;
+  --r2: 12px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* BG */
+.bg-orb{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(139,92,246,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em}
+.topbar-brand span{color:var(--v2)}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:40px 24px 100px}
+
+/* HERO */
+.hero{text-align:center;margin-bottom:48px}
+.hero h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:10px}
+.hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:14px;color:var(--text2);font-weight:300}
+
+/* CALCULATOR CARD */
+.calc-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;margin-bottom:20px;position:relative;overflow:hidden}
+.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.4),transparent)}
+
+.section-label{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--v2);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(139,92,246,.15)}
+
+/* PAIR SELECTOR */
+.pair-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:24px}
+.pair-btn{padding:8px 6px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .2s;text-align:center}
+.pair-btn:hover{border-color:rgba(139,92,246,.3);color:var(--text2);background:rgba(139,92,246,.06)}
+.pair-btn.active{border-color:rgba(139,92,246,.5);color:var(--v2);background:rgba(139,92,246,.12)}
+
+/* CUSTOM PAIR INPUT */
+.custom-pair-wrap{position:relative;margin-bottom:24px}
+.custom-pair-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all .2s}
+.custom-pair-input:focus{border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.06)}
+.custom-pair-input::placeholder{color:var(--text3)}
+#pairDropdown{display:none;position:fixed;background:#13131f;border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px}
+
+/* FIELDS */
+.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
+.field-input-wrap{position:relative}
+.field-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:14px 50px 14px 16px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;outline:none;transition:all .2s;-webkit-appearance:none}
+.field-input:focus{border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.06)}
+.field-input::placeholder{color:var(--text3);font-size:16px;font-weight:400}
+.field-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--text3)}
+
+/* CURRENCY TOGGLE */
+.cur-toggle{display:flex;border-radius:50px;overflow:hidden;border:1px solid var(--border);width:fit-content;margin-bottom:24px}
+.cur-btn{padding:6px 16px;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
+.cur-btn.on{background:var(--v);color:white}
+
+/* RISK SLIDER */
+.risk-wrap{margin-bottom:24px}
+.risk-display{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.risk-val{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:var(--v2)}
+.risk-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:50px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--v) var(--pct,50%),rgba(255,255,255,.08) var(--pct,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 0 0 3px var(--v),0 4px 12px rgba(139,92,246,.4);cursor:pointer;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.risk-presets{display:flex;gap:6px;margin-top:10px}
+.risk-preset{padding:4px 12px;background:transparent;border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
+.risk-preset:hover{border-color:rgba(139,92,246,.3);color:var(--v2)}
+.risk-preset.on{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.4);color:var(--v2)}
+
+/* CALCULATE BTN */
+.calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(139,92,246,.3);position:relative;overflow:hidden}
+.calc-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);opacity:0;transition:opacity .2s}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(139,92,246,.45)}
+.calc-btn:hover::before{opacity:1}
+
+/* RESULT */
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;display:none;animation:fadeUp .4s ease}
+.result-card.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.result-main{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.result-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;transition:all .3s}
+.result-box.highlight{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.3)}
+.result-box-label{font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
+.result-box-val{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.result-box-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+.result-details{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.detail-item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:14px;text-align:center}
+.detail-label{font-size:9px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.detail-val{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:var(--text2)}
+
+.risk-bar-wrap{margin-top:16px}
+.risk-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:8px}
+.risk-bar-track{height:6px;background:rgba(255,255,255,.06);border-radius:50px;overflow:hidden}
+.risk-bar-fill{height:100%;border-radius:50px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* TIPS */
+.tips-card{background:rgba(139,92,246,.04);border:1px solid rgba(139,92,246,.12);border-radius:16px;padding:20px}
+.tips-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--v2);text-transform:uppercase;margin-bottom:12px}
+.tip-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--text2);line-height:1.6}
+.tip-item:last-child{border:none}
+.tip-icon{flex-shrink:0;font-size:14px}
+
+@media(max-width:640px){
+  .fields-grid{grid-template-columns:1fr}
+  .result-main{grid-template-columns:1fr}
+  .result-details{grid-template-columns:1fr 1fr}
+  .pair-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="lt-hamburger" onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px">
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+    </button>
+    <div class="topbar-brand">Le Terminal <span>Calculateur</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="cur-toggle">
+      <button class="cur-btn on" onclick="setCurrency('EUR')">€</button>
+      <button class="cur-btn" onclick="setCurrency('USD')">$</button>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Calculateur de <span>Position</span></h1>
+    <p>Entre ta paire, ton capital, ton risque et ton SL — obtiens ton lot exact en 1 seconde.</p>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="calc-card">
+
+    <!-- PAIR -->
+    <div class="section-label">Paire / Actif</div>
+    <div class="pair-grid" id="pairGrid">
+      <button class="pair-btn active" onclick="selectPair('XAUUSD')">XAUUSD</button>
+      <button class="pair-btn" onclick="selectPair('EURUSD')">EURUSD</button>
+      <button class="pair-btn" onclick="selectPair('GBPUSD')">GBPUSD</button>
+      <button class="pair-btn" onclick="selectPair('NAS100')">NAS100</button>
+      <button class="pair-btn" onclick="selectPair('US30')">US30</button>
+      <button class="pair-btn" onclick="selectPair('BTCUSD')">BTCUSD</button>
+      <button class="pair-btn" onclick="selectPair('USDJPY')">USDJPY</button>
+      <button class="pair-btn" onclick="selectPair('GBPJPY')">GBPJPY</button>
+      <button class="pair-btn" onclick="selectPair('ETHUSD')">ETHUSD</button>
+    </div>
+
+    <!-- CUSTOM PAIR -->
+    <div class="custom-pair-wrap">
+      <input class="custom-pair-input" id="customPair" type="text" placeholder="Ou tape une paire personnalisée..." autocomplete="off"
+        oninput="onCustomPairInput(this.value)" onfocus="onCustomPairInput(this.value)" onblur="setTimeout(hidePairDropdown,200)">
+      <div id="pairDropdown"></div>
+    </div>
+
+    <!-- CAPITAL + CURRENCY -->
+    <div class="section-label">Capital du compte</div>
+    <div class="fields-grid" style="margin-bottom:24px">
+      <div class="field">
+        <div class="field-label">Taille du compte</div>
+        <div class="field-input-wrap">
+          <input class="field-input" id="accountSize" type="number" placeholder="10 000" min="1" oninput="calculate()">
+          <span class="field-unit" id="curUnit">€</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">SL en pips</div>
+        <div class="field-input-wrap">
+          <input class="field-input" id="slPips" type="number" placeholder="20" min="1" oninput="calculate()">
+          <span class="field-unit">pips</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK % SLIDER -->
+    <div class="section-label">Risque par trade</div>
+    <div class="risk-wrap">
+      <div class="risk-display">
+        <div>
+          <div class="risk-val" id="riskDisplay">1%</div>
+          <div class="risk-label">du capital</div>
+        </div>
+        <div id="riskAmountDisplay" style="text-align:right">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;color:var(--text2)" id="riskAmount">—</div>
+          <div class="risk-label">risqué</div>
+        </div>
+      </div>
+      <input type="range" id="riskSlider" min="0.1" max="5" step="0.1" value="1" oninput="onRiskSlide(this.value)">
+      <div class="risk-presets">
+        <button class="risk-preset on" onclick="setRisk(0.5)">0.5%</button>
+        <button class="risk-preset" onclick="setRisk(1)">1%</button>
+        <button class="risk-preset" onclick="setRisk(1.5)">1.5%</button>
+        <button class="risk-preset" onclick="setRisk(2)">2%</button>
+        <button class="risk-preset" onclick="setRisk(3)">3%</button>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">🧮 Calculer ma position</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+
+    <div class="section-label">Résultat</div>
+
+    <div class="result-main">
+      <div class="result-box highlight">
+        <div class="result-box-label">Taille de lot</div>
+        <div class="result-box-val" id="resLot" style="color:var(--v2)">—</div>
+        <div class="result-box-sub" id="resLotType">lots standard</div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Montant risqué</div>
+        <div class="result-box-val" id="resMontant" style="color:var(--red)">—</div>
+        <div class="result-box-sub" id="resMontantSub">sur ce trade</div>
+      </div>
+    </div>
+
+    <div class="result-details">
+      <div class="detail-item">
+        <div class="detail-label">Valeur pip</div>
+        <div class="detail-val" id="resPipVal">—</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Paire</div>
+        <div class="detail-val" id="resPair">—</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">SL</div>
+        <div class="detail-val" id="resSL">—</div>
+      </div>
+    </div>
+
+    <div class="risk-bar-wrap">
+      <div class="risk-bar-label">
+        <span>Risque capital</span>
+        <span id="resRiskPct">—</span>
+      </div>
+      <div class="risk-bar-track">
+        <div class="risk-bar-fill" id="riskBarFill" style="width:0%"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips-card" style="margin-top:20px">
+    <div class="tips-title">💡 Règles de gestion du risque ICT</div>
+    <div class="tip-item"><span class="tip-icon">🎯</span><span>Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les traders professionnels restent souvent sous 1%.</span></div>
+    <div class="tip-item"><span class="tip-icon">📐</span><span>Ton SL doit être placé sous/sur un niveau de structure logique (OB, FVG, swing high/low) — jamais un montant fixe en pips.</span></div>
+    <div class="tip-item"><span class="tip-icon">⚡</span><span>Pour un RR de 2:1 minimum, ton TP doit être au moins 2× la distance de ton SL. C'est la base d'une espérance positive.</span></div>
+    <div class="tip-item"><span class="tip-icon">🔄</span><span>Ajuste toujours ta taille de position en fonction du SL — pas l'inverse. Le lot découle du risque, jamais l'inverse.</span></div>
+  </div>
+
+</div>
+
+<!-- PAIR DROPDOWN (body level) -->
+<div id="pairDropdown" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:220px"></div>
+
+<script>
+// ── STATE ──
+var selectedPair = 'XAUUSD';
+var riskPct = 1;
+var currency = 'EUR';
+
+// Pip value per lot (in USD) for common pairs
+// Format: [pipValue per standard lot in USD, pipDecimals]
+var PIP_DATA = {
+  // Forex majors (pip = 0.0001, except JPY = 0.01)
+  'EURUSD': { pipVal: 10, dec: 4 },
+  'GBPUSD': { pipVal: 10, dec: 4 },
+  'AUDUSD': { pipVal: 10, dec: 4 },
+  'NZDUSD': { pipVal: 10, dec: 4 },
+  'USDCAD': { pipVal: 7.7, dec: 4 },
+  'USDCHF': { pipVal: 10.5, dec: 4 },
+  'USDJPY': { pipVal: 6.8, dec: 2 },
+  'EURJPY': { pipVal: 6.8, dec: 2 },
+  'GBPJPY': { pipVal: 6.8, dec: 2 },
+  'CADJPY': { pipVal: 6.8, dec: 2 },
+  'CHFJPY': { pipVal: 6.8, dec: 2 },
+  'AUDJPY': { pipVal: 6.8, dec: 2 },
+  'EURGBP': { pipVal: 12.5, dec: 4 },
+  'EURAUD': { pipVal: 6.5, dec: 4 },
+  'GBPAUD': { pipVal: 6.5, dec: 4 },
+  'EURCHF': { pipVal: 10.5, dec: 4 },
+  // Metals
+  'XAUUSD': { pipVal: 10, dec: 2, note: '1 pip = 0.01$' },
+  'XAGUSD': { pipVal: 50, dec: 3, note: '1 pip = 0.001$' },
+  // Indices (pip = 1 point)
+  'NAS100': { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
+  'US30':   { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
+  'SP500':  { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
+  'DAX':    { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
+  'UK100':  { pipVal: 1, dec: 0, note: '1 pip = 1 point' },
+  // Crypto (pip = 1$)
+  'BTCUSD': { pipVal: 1, dec: 0, note: '1 pip = 1$' },
+  'ETHUSD': { pipVal: 1, dec: 0, note: '1 pip = 1$' },
+  // Oil
+  'USOIL':  { pipVal: 10, dec: 2 },
+  'UKOIL':  { pipVal: 10, dec: 2 },
+};
+
+var ALL_PAIRS = Object.keys(PIP_DATA).concat([
+  'GBPCAD','GBPCHF','EURCAD','AUDCAD','AUDCHF','AUDNZD',
+  'CADCHF','NZDCAD','NZDCHF','NZDJPY',
+  'US500','JP225','AU200','CAC40',
+  'SOLUSD','XRPUSD','BNBUSD'
+]);
+
+// EUR/USD rate for conversion
+var EUR_USD = 1.08;
+
+// ── CURRENCY ──
+function setCurrency(c) {
+  currency = c;
+  document.querySelectorAll('.cur-btn').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelector('.cur-btn:' + (c==='EUR'?'first':'last') + '-child').classList.add('on');
+  document.getElementById('curUnit').textContent = c==='EUR'?'€':'$';
+  calculate();
+}
+
+function curSym() { return currency === 'EUR' ? '€' : '$'; }
+
+function toUSD(amount) {
+  return currency === 'EUR' ? amount * EUR_USD : amount;
+}
+
+function fromUSD(amount) {
+  return currency === 'EUR' ? amount / EUR_USD : amount;
+}
+
+// ── PAIR SELECTION ──
+function selectPair(p) {
+  selectedPair = p.toUpperCase();
+  // Update grid buttons
+  document.querySelectorAll('.pair-btn').forEach(function(b){
+    b.classList.toggle('active', b.textContent === selectedPair);
+  });
+  // Clear custom input if it was a quick select
+  var customEl = document.getElementById('customPair');
+  if(customEl.value.toUpperCase() !== selectedPair) customEl.value = '';
+  calculate();
+}
+
+// ── RISK SLIDER ──
+function onRiskSlide(val) {
+  riskPct = parseFloat(val);
+  updateSliderStyle();
+  updatePresetBtns();
+  updateRiskAmount();
+  calculate();
+}
+
+function setRisk(val) {
+  riskPct = val;
+  document.getElementById('riskSlider').value = val;
+  updateSliderStyle();
+  updatePresetBtns();
+  calculate();
+}
+
+function updateSliderStyle() {
+  var slider = document.getElementById('riskSlider');
+  var pct = ((riskPct - 0.1) / (5 - 0.1)) * 100;
+  slider.style.setProperty('--pct', pct + '%');
+  document.getElementById('riskDisplay').textContent = riskPct + '%';
+}
+
+function updatePresetBtns() {
+  document.querySelectorAll('.risk-preset').forEach(function(b){
+    b.classList.toggle('on', parseFloat(b.textContent) === riskPct);
+  });
+}
+
+function updateRiskAmount() {
+  var size = parseFloat(document.getElementById('accountSize').value) || 0;
+  if(size > 0) {
+    var amount = (size * riskPct / 100).toFixed(2);
+    document.getElementById('riskAmount').textContent = amount + curSym();
+  } else {
+    document.getElementById('riskAmount').textContent = '—';
+  }
+}
+
+// ── CALCULATE ──
+function calculate() {
+  updateRiskAmount();
+  var size = parseFloat(document.getElementById('accountSize').value);
+  var sl   = parseFloat(document.getElementById('slPips').value);
+  if(!size || !sl || sl <= 0) return;
+
+  var pip = PIP_DATA[selectedPair];
+  var pipValUSD = pip ? pip.pipVal : 10; // default 10$/lot
+
+  // Risk amount in account currency
+  var riskAmount = size * riskPct / 100;
+  // Convert to USD for lot calculation
+  var riskAmountUSD = toUSD(riskAmount);
+
+  // Lot size = riskAmount / (sl * pipValuePerLot)
+  var lotSize = riskAmountUSD / (sl * pipValUSD);
+
+  // Smart rounding based on lot size
+  var displayLot, lotType;
+  if(lotSize >= 1) {
+    displayLot = lotSize.toFixed(2);
+    lotType = 'lots standard';
+  } else if(lotSize >= 0.1) {
+    displayLot = (Math.round(lotSize * 10) / 10).toFixed(1);
+    lotType = 'mini-lots (0.1)';
+  } else {
+    displayLot = (Math.round(lotSize * 100) / 100).toFixed(2);
+    lotType = 'micro-lots (0.01)';
+  }
+
+  // Pip value for this lot
+  var pipValForLot = fromUSD(lotSize * pipValUSD);
+
+  // Risk bar color
+  var barColor = riskPct <= 1 ? 'var(--green)' : riskPct <= 2 ? 'var(--amber)' : 'var(--red)';
+  var barWidth = Math.min(riskPct / 5 * 100, 100);
+
+  // Show result
+  var card = document.getElementById('resultCard');
+  card.classList.add('show');
+
+  document.getElementById('resLot').textContent = displayLot;
+  document.getElementById('resLotType').textContent = lotType;
+  document.getElementById('resMontant').textContent = riskAmount.toFixed(2) + curSym();
+  document.getElementById('resMontantSub').textContent = riskPct + '% du capital';
+  document.getElementById('resPipVal').textContent = pipValForLot.toFixed(2) + curSym() + '/pip';
+  document.getElementById('resPair').textContent = selectedPair;
+  document.getElementById('resSL').textContent = sl + ' pips';
+  document.getElementById('resRiskPct').textContent = riskPct + '%';
+  document.getElementById('riskBarFill').style.width = barWidth + '%';
+  document.getElementById('riskBarFill').style.background = barColor;
+
+  // Lot color
+  var lotColor = parseFloat(displayLot) >= 1 ? 'var(--text)' :
+                 parseFloat(displayLot) >= 0.1 ? 'var(--v2)' : 'var(--green)';
+  document.getElementById('resLot').style.color = lotColor;
+}
+
+// ── AUTOCOMPLETE ──
+function onCustomPairInput(val) {
+  var box = document.getElementById('pairDropdown');
+  var inp = document.getElementById('customPair');
+  if(!val || val.length < 1) { box.style.display='none'; return; }
+  var v = val.toUpperCase();
+  var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,7);
+  if(!matches.length) { box.style.display='none'; return; }
+  box.innerHTML = matches.map(function(p){
+    var hasPip = PIP_DATA[p];
+    return '<div onclick="chooseCustomPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between" onmouseover="this.style.background=\'rgba(139,92,246,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">' +
+      '<span>'+(p===v?'<strong style=\'color:var(--v2)\'>'+p+'</strong>':p)+'</span>' +
+      (hasPip?'<span style=\'font-size:10px;color:var(--text3)\'>'+hasPip.pipVal+'$/lot</span>':'') +
+    '</div>';
+  }).join('');
+  var rect = inp.getBoundingClientRect();
+  box.style.top = (rect.bottom + 4) + 'px';
+  box.style.left = rect.left + 'px';
+  box.style.width = rect.width + 'px';
+  box.style.display = 'block';
+  // Update selectedPair live
+  if(PIP_DATA[v]) { selectedPair = v; calculate(); }
+}
+
+function chooseCustomPair(p) {
+  document.getElementById('customPair').value = p;
+  hidePairDropdown();
+  // Deselect grid buttons
+  document.querySelectorAll('.pair-btn').forEach(function(b){ b.classList.remove('active'); });
+  selectedPair = p;
+  calculate();
+}
+
+function hidePairDropdown() {
+  document.getElementById('pairDropdown').style.display = 'none';
+}
+
+window.onCustomPairInput = onCustomPairInput;
+window.chooseCustomPair = chooseCustomPair;
+window.hidePairDropdown = hidePairDropdown;
+window.selectPair = selectPair;
+
+// ── INIT ──
+updateSliderStyle();
+calculate();
+</script>
+
+<script src="./menu.js"></script>
+</body>
+</html>
