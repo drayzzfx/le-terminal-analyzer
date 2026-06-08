@@ -1655,6 +1655,8 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       });
       localStorage.setItem('lt_history', JSON.stringify(toStore));
     }catch(e){ console.warn('localStorage save failed:', e); }
+    // Persist to Supabase if logged in
+    saveAnalysis(parsed, pair, dir, tf);
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
