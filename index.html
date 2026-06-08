@@ -3,394 +3,349 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Le Terminal Analyzer — Analyse ton Setup en secondes</title>
+<title>LE TERMINAL — Hub Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #08080F;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
   --v: #8B5CF6;
   --v2: #A78BFA;
-  --v3: #C4B5FD;
-  --vglow: rgba(139,92,246,0.3);
+  --vglow: rgba(139,92,246,0.25);
+  --vglow2: rgba(139,92,246,0.08);
   --text: #F0EEFF;
   --text2: #9B96B8;
   --text3: #5A5570;
   --green: #34D399;
-  --border: rgba(255,255,255,0.07);
-  --card: rgba(255,255,255,0.04);
+  --red: #F87171;
+  --amber: #FBBF24;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-/* NOISE */
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+/* BG GLOW */
+.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-glow::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(139,92,246,0.07) 0%,transparent 70%);border-radius:50%}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,15,0);backdrop-filter:blur(0px);transition:all .4s;border-bottom:1px solid transparent}
-nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color:var(--border)}
-.nav-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.02em;color:var(--text);text-decoration:none}
-.nav-brand span{color:var(--v2)}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-link{font-size:13px;font-weight:400;color:var(--text2);text-decoration:none;transition:color .2s}
-.nav-link:hover{color:var(--text)}
-.nav-cta{padding:8px 20px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
-.nav-cta:hover{background:var(--v2);box-shadow:0 0 24px var(--vglow)}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:rgba(8,8,15,0.8);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
+.brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--v),#7C3AED);display:flex;align-items:center;justify-content:center;font-size:14px}
+.brand span{color:var(--v2)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.user-chip{display:none;align-items:center;gap:8px;padding:4px 14px 4px 4px;border-radius:50px;border:1px solid var(--border);background:var(--card);cursor:pointer}
+.user-chip.show{display:flex}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--v),#E879F9);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white}
+.user-name{font-size:12px;font-weight:500;color:var(--text2)}
+.login-btn{padding:7px 18px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(139,92,246,.3)}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(139,92,246,.45)}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 24px 100px}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero{text-align:center;margin-bottom:72px}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.25em;color:var(--v2);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.4))}
+.hero-eyebrow::after{background:linear-gradient(90deg,rgba(139,92,246,.4),transparent)}
+.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(48px,7vw,88px);font-weight:800;letter-spacing:-0.04em;line-height:.92;margin-bottom:24px}
+.hero-title span{background:linear-gradient(135deg,var(--v) 0%,var(--v2) 50%,#E879F9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:16px;font-weight:300;color:var(--text2);line-height:1.7;max-width:500px;margin:0 auto 40px}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(139,92,246,.4)}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(139,92,246,.55)}
 
-.hero-glow{position:absolute;width:800px;height:800px;background:radial-gradient(circle,rgba(139,92,246,0.15) 0%,transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none;animation:glowPulse 4s ease-in-out infinite}
-@keyframes glowPulse{0%,100%{opacity:.6;transform:translate(-50%,-60%) scale(1)}50%{opacity:1;transform:translate(-50%,-60%) scale(1.1)}}
+/* TOOLS GRID */
+.tools-label{font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:20px;text-align:center}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.tools-grid.bottom{grid-template-columns:repeat(2,1fr)}
 
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(139,92,246,0.3);border-radius:50px;font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--v2);background:rgba(139,92,246,0.08);margin-bottom:28px;animation:fadeUp .8s ease both}
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.tool-card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;cursor:pointer;text-decoration:none;color:inherit;transition:all .3s;overflow:hidden;display:block}
+.tool-card::before{content:'';position:absolute;inset:0;border-radius:20px;opacity:0;transition:opacity .3s;background:linear-gradient(135deg,rgba(139,92,246,.08),transparent)}
+.tool-card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(139,92,246,.08)}
+.tool-card:hover::before{opacity:1}
 
-.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(48px,7vw,88px);font-weight:800;letter-spacing:-0.04em;line-height:.95;margin-bottom:24px;animation:fadeUp .8s .1s ease both}
-.hero-title span{background:linear-gradient(135deg,var(--v) 0%,var(--v2) 40%,#E879F9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tool-card.coming-soon{opacity:.5;cursor:not-allowed;pointer-events:none}
+.tool-card.coming-soon:hover{transform:none;box-shadow:none;border-color:var(--border)}
 
-.hero-sub{font-size:clamp(16px,2vw,20px);font-weight:300;color:var(--text2);max-width:560px;line-height:1.7;margin-bottom:40px;animation:fadeUp .8s .2s ease both}
+.tool-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;position:relative;z-index:1}
+.tool-badge{position:absolute;top:16px;right:16px;font-size:9px;font-weight:700;letter-spacing:.12em;padding:3px 10px;border-radius:50px;text-transform:uppercase}
+.tool-badge.new{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.tool-badge.soon{background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border)}
+.tool-badge.live{background:rgba(139,92,246,.15);color:var(--v2);border:1px solid rgba(139,92,246,.3)}
 
-.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .3s ease both}
-.btn-primary{padding:16px 36px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(139,92,246,.35)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(139,92,246,.5)}
-.btn-secondary{padding:16px 36px;background:transparent;border:1px solid var(--border);border-radius:50px;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
-.btn-secondary:hover{border-color:rgba(139,92,246,.4);color:var(--v2)}
+.tool-name{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;position:relative;z-index:1}
+.tool-desc{font-size:12px;font-weight:300;color:var(--text2);line-height:1.7;position:relative;z-index:1}
+.tool-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;position:relative;z-index:1}
+.tool-tag{font-size:9px;font-weight:600;letter-spacing:.1em;padding:3px 9px;border-radius:50px;border:1px solid var(--border);color:var(--text3)}
 
-.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:60px;animation:fadeUp .8s .4s ease both;flex-wrap:wrap}
-.hero-stat{text-align:center}
-.hero-stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.hero-stat-lbl{font-size:11px;font-weight:400;color:var(--text3);letter-spacing:.1em;margin-top:4px;text-transform:uppercase}
+.tool-arrow{position:absolute;bottom:20px;right:20px;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);transition:all .3s;z-index:1}
+.tool-card:hover .tool-arrow{border-color:rgba(139,92,246,.4);color:var(--v2);background:rgba(139,92,246,.08)}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+/* STATS BAND */
+.stats-band{display:flex;align-items:center;justify-content:center;gap:48px;padding:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:60px 0}
+.stat-item{text-align:center}
+.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.03em;color:var(--v2)}
+.stat-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--text3);margin-top:4px;text-transform:uppercase}
 
-/* TICKER */
-.ticker{background:rgba(139,92,246,0.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden;position:relative}
-.ticker-track{display:flex;gap:48px;animation:ticker 30s linear infinite;white-space:nowrap}
-.ticker-item{display:flex;align-items:center;gap:10px;font-size:13px;flex-shrink:0}
-.ticker-pair{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;color:var(--text);letter-spacing:.04em}
-.ticker-price{font-weight:400;color:var(--text2)}
-.ticker-change{font-size:11px;font-weight:600;padding:2px 8px;border-radius:50px}
-.ticker-change.up{background:rgba(52,211,153,.15);color:var(--green)}
-.ticker-change.down{background:rgba(248,113,113,.12);color:#F87171}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* TELEGRAM */
+.tg-banner{display:flex;align-items:center;gap:16px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:20px 24px;text-decoration:none;color:inherit;transition:all .2s;margin-top:40px}
+.tg-banner:hover{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.35)}
+.tg-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.tg-text strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px}
+.tg-text span{font-size:12px;color:var(--text2)}
+.tg-arrow{margin-left:auto;color:var(--text3);font-size:18px}
 
-/* FEATURES */
-.section{padding:100px 24px;max-width:1100px;margin:0 auto}
-.section-eyebrow{font-size:11px;font-weight:600;letter-spacing:.25em;color:var(--v2);text-transform:uppercase;margin-bottom:14px;text-align:center}
-.section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1.05;text-align:center;margin-bottom:16px}
-.section-title span{background:linear-gradient(135deg,var(--v),var(--v2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.section-sub{font-size:16px;font-weight:300;color:var(--text2);text-align:center;max-width:480px;margin:0 auto 64px;line-height:1.7}
+/* AUTH MODAL */
+.auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
+.auth-overlay.show{display:flex;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.auth-box{max-width:380px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:28px;position:relative;text-align:center}
+.auth-box::before{content:'';position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
+.auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;text-align:left}
+.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
+.auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
+.auth-field input:focus{border-color:rgba(139,92,246,.5)}
+.auth-tabs{display:flex;margin-bottom:20px;border:1px solid var(--border);border-radius:50px;overflow:hidden}
+.auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
+.auth-tab.on{background:var(--v);color:white}
+.auth-submit{width:100%;padding:12px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+.auth-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
+.auth-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer}
 
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.feature-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
-.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--v),transparent);opacity:0;transition:opacity .3s}
-.feature-card:hover{border-color:rgba(139,92,246,.25);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
-.feature-card:hover::before{opacity:1}
-.feature-icon{font-size:28px;margin-bottom:16px}
-.feature-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px}
-.feature-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.7}
-
-/* HOW IT WORKS */
-.how-section{padding:100px 24px;background:rgba(139,92,246,0.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.how-inner{max-width:900px;margin:0 auto}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:60px}
-.step{text-align:center;position:relative}
-.step::after{content:'→';position:absolute;right:-16px;top:28px;font-size:20px;color:var(--text3)}
-.step:last-child::after{display:none}
-.step-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--v),#7C3AED);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:white;margin:0 auto 16px;box-shadow:0 0 24px var(--vglow)}
-.step-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
-.step-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.7}
-
-/* PRICING */
-.pricing-section{padding:100px 24px;max-width:700px;margin:0 auto;text-align:center}
-.pricing-card{background:var(--card);border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:40px;position:relative;overflow:hidden;margin-top:48px}
-.pricing-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
-.pricing-glow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.12),transparent 70%);border-radius:50%}
-.pricing-badge{display:inline-block;padding:4px 14px;background:linear-gradient(135deg,var(--v),#E879F9);border-radius:50px;font-size:11px;font-weight:700;letter-spacing:.1em;color:white;margin-bottom:20px}
-.pricing-name{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px}
-.pricing-price{font-family:'Bricolage Grotesque',sans-serif;font-size:64px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px}
-.pricing-price span{font-size:20px;font-weight:400;color:var(--text2)}
-.pricing-period{font-size:13px;color:var(--text3);margin-bottom:32px}
-.pricing-feats{list-style:none;text-align:left;margin-bottom:32px}
-.pricing-feats li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;font-weight:300;color:var(--text2)}
-.pricing-feats li:last-child{border:none}
-.pricing-feats li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
-.pricing-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(139,92,246,.35)}
-.pricing-cta:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(139,92,246,.5)}
-.pricing-note{font-size:11px;color:var(--text3);margin-top:14px}
-
-/* CTA SECTION */
-.cta-section{padding:120px 24px;text-align:center;position:relative;overflow:hidden}
-.cta-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.12),transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-.cta-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:20px;position:relative;z-index:1}
-.cta-sub{font-size:16px;font-weight:300;color:var(--text2);margin-bottom:36px;position:relative;z-index:1}
-
-/* FOOTER */
-footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.footer-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;color:var(--text2)}
-.footer-brand span{color:var(--v2)}
-.footer-note{font-size:12px;color:var(--text3)}
-
-/* SCROLL ANIMATIONS */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-/* MOBILE */
 @media(max-width:768px){
-  nav{padding:0 20px}
-  .features-grid{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr;gap:24px}
-  .step::after{display:none}
-  .hero-stats{gap:24px}
-  footer{flex-direction:column;text-align:center}
+  .tools-grid,.tools-grid.bottom{grid-template-columns:1fr}
+  .stats-band{gap:24px;flex-wrap:wrap}
+  .hero-title{font-size:42px}
 }
 </style>
 </head>
 <body>
 
-<nav id="navbar">
-  <a href="#" class="nav-brand">Le Terminal <span>Analyzer</span></a>
-  <div class="nav-right">
-    <a href="#features" class="nav-link">Fonctionnalités</a>
-    <a href="#pricing" class="nav-link">Tarifs</a>
-    <a href="./app.html" class="nav-cta">Essayer gratuitement</a>
-  </div>
-</nav>
+<div class="bg-glow"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-badge"><div class="hero-badge-dot"></div>Propulsé par Claude AI · ICT & Smart Money</div>
-  <h1 class="hero-title">Analyse ton<br><span>Setup.</span></h1>
-  <p class="hero-sub">L'IA analyse ta structure de marché, identifie les zones ICT, évalue ta confluence et te donne un verdict précis — en moins de 5 secondes.</p>
-  <div class="hero-actions">
-    <a href="./app.html" class="btn-primary">⚡ Commencer gratuitement</a>
-    <a href="#how" class="btn-secondary">Comment ça marche →</a>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">⚡</div>
+    Le <span>Terminal</span>
   </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">10</div>
-      <div class="hero-stat-lbl">Critères analysés</div>
+  <div class="topbar-right">
+    <div class="user-chip" id="userChip">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span class="user-name" id="userName">—</span>
     </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">&lt;5s</div>
-      <div class="hero-stat-lbl">Temps de réponse</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">ICT</div>
-      <div class="hero-stat-lbl">Smart Money</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">∞</div>
-      <div class="hero-stat-lbl">Actifs supportés</div>
-    </div>
+    <button class="login-btn" id="loginBtn" onclick="openAuth()">Connexion</button>
   </div>
-</section>
+</header>
 
-<!-- TICKER -->
-<div class="tradingview-widget-container" style="height:46px;overflow:hidden">
-  <div class="tradingview-widget-container__widget"></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-  {
-    "symbols": [
-      {"proName":"OANDA:XAUUSD","title":"Or"},
-      {"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},
-      {"proName":"NASDAQ:QQQ","title":"Nasdaq"},
-      {"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},
-      {"proName":"BITSTAMP:ETHUSD","title":"Ethereum"},
-      {"proName":"OANDA:EURUSD","title":"EUR/USD"},
-      {"proName":"OANDA:GBPUSD","title":"GBP/USD"},
-      {"proName":"OANDA:USDJPY","title":"USD/JPY"},
-      {"proName":"FOREXCOM:DJI","title":"Dow Jones"}
-    ],
-    "showSymbolLogo": false,
-    "isTransparent": true,
-    "displayMode": "adaptive",
-    "colorTheme": "dark",
-    "locale": "fr"
-  }
-  </script>
-</div>
+<div class="main">
 
-<!-- FEATURES --><!-- FEATURES -->
-<section class="section" id="features">
-  <div class="reveal">
-    <div class="section-eyebrow">Fonctionnalités</div>
-    <h2 class="section-title">Tout ce qu'il te faut<br>pour <span>trader mieux</span></h2>
-    <p class="section-sub">Un outil conçu par des traders, pour des traders. ICT, Smart Money, Price Action — l'IA maîtrise ta méthodologie.</p>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Propulsé par l'IA · ICT / SMC</div>
+    <h1 class="hero-title">Ton arsenal<br><span>trading complet.</span></h1>
+    <p class="hero-sub">Analyse tes setups, suis ton journal, consulte le calendrier économique et maîtrise ta gestion du risque — tout en un seul endroit.</p>
+    <a href="./app.html" class="hero-cta">⚡ Analyser un setup maintenant</a>
   </div>
-  <div class="features-grid reveal">
-    <div class="feature-card">
-      <div class="feature-icon">🧠</div>
-      <div class="feature-title">Analyse ICT & SMC</div>
-      <div class="feature-desc">Order Blocks, FVG, BOS/CHoCH, Liquidity Sweeps, OTE — l'IA identifie les zones institutionnelles sur ton graphique et évalue la qualité de ta confluence.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <div class="feature-title">Score sur 10</div>
-      <div class="feature-desc">Scoring pondéré sur 5 dimensions : structure HTF, zone d'entrée, risk management, confluences et timing. Un verdict clair : GO, ATTENDRE ou NO-GO.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <div class="feature-title">Feedback personnalisé</div>
-      <div class="feature-desc">L'IA détecte ton niveau (Débutant / Intermédiaire / Avancé) et adapte son feedback. Des conseils concrets avec des niveaux de prix précis.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📈</div>
-      <div class="feature-title">Scénarios probables</div>
-      <div class="feature-desc">2 à 3 scénarios avec probabilités estimées basées sur la structure actuelle. Anticipe les moves possibles avant d'entrer en position.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌍</div>
-      <div class="feature-title">Contexte macro</div>
-      <div class="feature-desc">Analyse de l'actif dans son contexte macro — corrélations DXY, sentiment dominant, catalyseurs à venir (NFP, FOMC, CPI).</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📋</div>
-      <div class="feature-title">Historique complet</div>
-      <div class="feature-desc">Toutes tes analyses sauvegardées avec le graphique, le score et le feedback détaillé. Revois tes setups passés et suis ta progression.</div>
-    </div>
-  </div>
-</section>
 
-<!-- HOW IT WORKS -->
-<div class="how-section" id="how">
-  <div class="how-inner">
-    <div class="reveal" style="text-align:center">
-      <div class="section-eyebrow">Comment ça marche</div>
-      <h2 class="section-title">Simple comme<br><span>3 étapes</span></h2>
-    </div>
-    <div class="steps reveal">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-title">Configure ton trade</div>
-        <div class="step-desc">Entre ta paire, direction, TF, entrée/TP/SL et tes confluences. Ajoute ton graphique pour une analyse visuelle.</div>
+  <!-- TOOLS -->
+  <div class="tools-label">Les outils</div>
+
+  <div class="tools-grid">
+
+    <!-- Setup Analyzer -->
+    <a href="./app.html" class="tool-card">
+      <div class="tool-badge live">En ligne</div>
+      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.06));border:1px solid rgba(139,92,246,.2)">⚡</div>
+      <div class="tool-name">Setup Analyzer</div>
+      <div class="tool-desc">Score IA de ton setup, confluence ICT/SMC, feedback instantané et annotations sur ton graphique.</div>
+      <div class="tool-tags">
+        <span class="tool-tag">Score IA</span>
+        <span class="tool-tag">ICT / SMC</span>
+        <span class="tool-tag">R:R</span>
+        <span class="tool-tag">Annotations</span>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-title">L'IA analyse</div>
-        <div class="step-desc">En moins de 5 secondes, l'IA évalue la structure du marché, les zones ICT et le contexte macro de ton actif.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-title">Trade avec confiance</div>
-        <div class="step-desc">Score, verdict, points forts/faibles, scénarios et recommandations précises. Tu sais exactement quoi faire.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PRICING -->
-<section class="pricing-section" id="pricing">
-  <div class="reveal">
-    <div class="section-eyebrow">Tarifs</div>
-    <h2 class="section-title">Un seul plan.<br><span>Illimité.</span></h2>
-    <p class="section-sub" style="margin-bottom:0">Commence avec 1 analyse gratuite. Passe PRO pour un accès illimité.</p>
-  </div>
-  <div class="pricing-card reveal">
-    <div class="pricing-glow"></div>
-    <div class="pricing-badge">★ LE TERMINAL PRO</div>
-    <div class="pricing-name">Accès Illimité</div>
-    <div class="pricing-price">19<span>€</span></div>
-    <div class="pricing-period">par mois · sans engagement</div>
-    <ul class="pricing-feats">
-      <li>Analyses illimitées</li>
-      <li>Upload graphique + analyse visuelle</li>
-      <li>Scénarios IA & contexte macro</li>
-      <li>Historique complet de tes analyses</li>
-      <li>Feedback adapté à ton niveau</li>
-      <li>Accès prioritaire aux nouvelles features</li>
-    </ul>
-    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" class="pricing-cta">🔓 S'abonner maintenant</a>
-    <div class="pricing-note">Paiement sécurisé via Whop · Annulation à tout moment</div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-glow"></div>
-  <h2 class="cta-title reveal">Prêt à analyser<br><span style="background:linear-gradient(135deg,var(--v),var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">ton prochain setup ?</span></h2>
-  <p class="cta-sub reveal">1 analyse gratuite. Aucune carte bancaire requise.</p>
-  <a href="./app.html" class="btn-primary reveal">⚡ Commencer maintenant</a>
-</section>
-
-<footer>
-  <div class="footer-brand">Le Terminal <span>Analyzer</span></div>
-  <a href="https://t.me/leterminalfx" target="_blank" style="display:flex;align-items:center;gap:6px;color:var(--text3);text-decoration:none;font-size:12px;transition:color .2s" onmouseover="this.style.color='var(--v2)'" onmouseout="this.style.color='var(--text3)'">
-      <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z" fill="currentColor"/></svg>
-      @leterminalfx
+      <div class="tool-arrow">→</div>
     </a>
-    <div class="footer-note">© 2025 Le Terminal Analyzer · Propulsé par Claude AI</div>
-</footer>
+
+    <!-- Journal -->
+    <a href="./journal.html" class="tool-card">
+      <div class="tool-badge new">Nouveau</div>
+      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(52,211,153,.04));border:1px solid rgba(52,211,153,.2)">📒</div>
+      <div class="tool-name">Journal de Trading</div>
+      <div class="tool-desc">Calendrier de tes trades, suivi P&L, screenshots, notes et analyse IA de tes patterns de performance.</div>
+      <div class="tool-tags">
+        <span class="tool-tag">Calendrier</span>
+        <span class="tool-tag">P&L</span>
+        <span class="tool-tag">Win Rate</span>
+        <span class="tool-tag">IA Coach</span>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+    <!-- Calendrier éco -->
+    <a href="./calendrier.html" class="tool-card coming-soon">
+      <div class="tool-badge soon">Bientôt</div>
+      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.03));border:1px solid rgba(251,191,36,.15)">📅</div>
+      <div class="tool-name">Calendrier Éco</div>
+      <div class="tool-desc">Tous les événements macroéconomiques clés — NFP, CPI, FOMC — avec impact attendu et alertes.</div>
+      <div class="tool-tags">
+        <span class="tool-tag">NFP</span>
+        <span class="tool-tag">CPI</span>
+        <span class="tool-tag">FOMC</span>
+        <span class="tool-tag">Alertes</span>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+  </div>
+
+  <div class="tools-grid bottom">
+
+    <!-- Bubble Map -->
+    <a href="./bubble.html" class="tool-card coming-soon">
+      <div class="tool-badge soon">Bientôt</div>
+      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(232,121,249,.12),rgba(232,121,249,.03));border:1px solid rgba(232,121,249,.15)">🫧</div>
+      <div class="tool-name">Bubble Map</div>
+      <div class="tool-desc">Visualise en temps réel les flux de capitaux entre actifs — crypto, forex, indices et matières premières.</div>
+      <div class="tool-tags">
+        <span class="tool-tag">Flux capitaux</span>
+        <span class="tool-tag">Crypto</span>
+        <span class="tool-tag">Corrélations</span>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+    <!-- Calculateur de pips -->
+    <a href="./calculateur.html" class="tool-card coming-soon">
+      <div class="tool-badge soon">Bientôt</div>
+      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(96,165,250,.12),rgba(96,165,250,.03));border:1px solid rgba(96,165,250,.15)">🧮</div>
+      <div class="tool-name">Calculateur de Pips</div>
+      <div class="tool-desc">Calcule instantanément ta taille de position, valeur du pip, risque en devise et R:R optimal selon ton compte.</div>
+      <div class="tool-tags">
+        <span class="tool-tag">Position size</span>
+        <span class="tool-tag">Risque %</span>
+        <span class="tool-tag">Valeur pip</span>
+        <span class="tool-tag">R:R</span>
+      </div>
+      <div class="tool-arrow">→</div>
+    </a>
+
+  </div>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stat-item">
+      <div class="stat-val">5</div>
+      <div class="stat-lbl">Outils</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val" style="color:var(--green)">IA</div>
+      <div class="stat-lbl">Powered</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">ICT</div>
+      <div class="stat-lbl">Méthodologie</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val" style="color:var(--amber)">100%</div>
+      <div class="stat-lbl">Gratuit</div>
+    </div>
+  </div>
+
+  <!-- TELEGRAM -->
+  <a href="https://t.me/leterminalfx" target="_blank" class="tg-banner">
+    <div class="tg-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z"/></svg>
+    </div>
+    <div class="tg-text">
+      <strong>Rejoindre la communauté Telegram</strong>
+      <span>Analyses quotidiennes · Setups en live · Entraide entre traders</span>
+    </div>
+    <div class="tg-arrow">→</div>
+  </a>
+
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:20px">Connexion</div>
+    <div class="auth-tabs">
+      <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Connexion</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
+    </div>
+    <div class="auth-field">
+      <label>EMAIL</label>
+      <input type="email" id="authEmail" placeholder="ton@email.com">
+    </div>
+    <div class="auth-field">
+      <label>MOT DE PASSE</label>
+      <input type="password" id="authPassword" placeholder="••••••••">
+    </div>
+    <button class="auth-submit" onclick="doAuth()"><span id="authTxt">Se connecter</span></button>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
 
 <script>
-// Navbar scroll
-window.addEventListener('scroll', function(){
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
-});
+var authToken = null, currentUser = null, authMode = 'login';
 
-// Scroll reveal
-const observer = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting) e.target.classList.add('visible');
-  });
-}, {threshold:0.1});
-document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
-
-// Live prices via Binance + Coinbase APIs
-async function fetchPrices(){
-  try {
-    // Crypto via Binance
-    const [btc, eth] = await Promise.all([
-      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT').then(r=>r.json()),
-      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=ETHUSDT').then(r=>r.json())
-    ]);
-
-    function fmt(n, dec){ return parseFloat(n).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
-    function setPrice(id, price, change){
-      var el = document.getElementById('t-'+id);
-      var el2 = document.getElementById('t-'+id+'2');
-      var cel = document.getElementById('tc-'+id);
-      if(el) el.textContent = price;
-      if(el2) el2.textContent = price;
-      if(cel){
-        var c = parseFloat(change);
-        cel.textContent = (c>=0?'+':'')+c.toFixed(2)+'%';
-        cel.className = 'ticker-change ' + (c>=0?'up':'down');
-      }
-    }
-
-    setPrice('btcusd', '$'+fmt(btc.lastPrice,0), btc.priceChangePercent);
-    setPrice('ethusd', '$'+fmt(eth.lastPrice,0), eth.priceChangePercent);
-
-    // Forex & Gold via a free API
-    const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR,GBP').then(r=>r.json()).catch(()=>null);
-    if(fxRes && fxRes.rates){
-      var eur = (1/fxRes.rates.EUR).toFixed(4);
-      var gbp = (1/fxRes.rates.GBP).toFixed(4);
-      ['eurusd','eurusd2'].forEach(function(id){ var el=document.getElementById('t-'+id); if(el) el.textContent=eur; });
-      ['gbpusd','gbpusd2'].forEach(function(id){ var el=document.getElementById('t-'+id); if(el) el.textContent=gbp; });
-      var ec=document.getElementById('tc-eurusd'), gc=document.getElementById('tc-gbpusd');
-      if(ec){ec.textContent='+0.12%';ec.className='ticker-change up';}
-      if(gc){gc.textContent='-0.08%';gc.className='ticker-change down';}
-    }
-
-    // Indices - static approximations (no free real-time API)
-    ['nas100','nas1002'].forEach(function(id){ var el=document.getElementById('t-'+id); if(el) el.textContent='19,847'; });
-    ['us30','us302'].forEach(function(id){ var el=document.getElementById('t-'+id); if(el) el.textContent='39,124'; });
-    ['xauusd','xauusd2'].forEach(function(id){ var el=document.getElementById('t-'+id); if(el) el.textContent='2,329'; });
-    var xc=document.getElementById('tc-xauusd'); if(xc){xc.textContent='+0.34%';xc.className='ticker-change up';}
-    var nc=document.getElementById('tc-nas100'); if(nc){nc.textContent='+0.21%';nc.className='ticker-change up';}
-    var uc=document.getElementById('tc-us30'); if(uc){uc.textContent='+0.15%';uc.className='ticker-change up';}
-
-  } catch(e){ console.log('Price fetch error:', e); }
+function openAuth(){ document.getElementById('authOverlay').classList.add('show'); }
+function closeAuth(){ document.getElementById('authOverlay').classList.remove('show'); }
+function switchTab(m){
+  authMode=m;
+  document.getElementById('tabLogin').classList.toggle('on',m==='login');
+  document.getElementById('tabSignup').classList.toggle('on',m==='signup');
+  document.getElementById('authTxt').textContent=m==='login'?'Se connecter':'Créer mon compte';
 }
-
-fetchPrices();
-setInterval(fetchPrices, 30000);
+async function doAuth(){
+  var email=document.getElementById('authEmail').value.trim();
+  var password=document.getElementById('authPassword').value;
+  var errEl=document.getElementById('authError');
+  errEl.textContent='';
+  if(!email||!password){errEl.textContent='Remplis tous les champs';return;}
+  try{
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
+    var data=await res.json();
+    if(data.access_token){
+      authToken=data.access_token; currentUser=data.user||{email};
+      localStorage.setItem('ta_token',authToken);
+      localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');
+      closeAuth(); updateUserUI();
+    } else { errEl.textContent=data.error_description||data.msg||'Erreur'; }
+  }catch(e){errEl.textContent='Erreur réseau';}
+}
+function updateUserUI(){
+  var lb=document.getElementById('loginBtn');
+  var uc=document.getElementById('userChip');
+  if(currentUser){
+    lb.style.display='none'; uc.classList.add('show');
+    var em=currentUser.email||'';
+    document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();
+    document.getElementById('userName').textContent=em.split('@')[0];
+  } else {
+    lb.style.display=''; uc.classList.remove('show');
+  }
+}
+async function checkSession(){
+  var token=localStorage.getItem('ta_token'); if(!token)return;
+  authToken=token;
+  currentUser={email:localStorage.getItem('ta_email')||''};
+  updateUserUI();
+  try{
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
+    var data=await res.json();
+    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();}
+    else if(data.error){authToken=null;currentUser=null;localStorage.removeItem('ta_token');updateUserUI();}
+  }catch(e){}
+}
+checkSession();
 </script>
+
 </body>
 </html>
