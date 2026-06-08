@@ -336,7 +336,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
       <div class="field" style="grid-column:span 2">
         <label class="lbl">Paire / Actif</label>
-        <input type="text" id="tradePair" placeholder="XAUUSD, NAS100, BTC…">
+        <input type="text" id="tradePair" placeholder="XAUUSD, NAS100, BTC…" autocomplete="off" oninput="showJournalSuggestions(this.value)" onfocus="showJournalSuggestions(this.value)" onblur="setTimeout(hideJournalSuggestions,200)">
       </div>
     </div>
 
@@ -1117,6 +1117,37 @@ async function loadFromServer() {
       renderCalendar();
     }
   } catch(e) {}
+}
+
+// ── PAIR AUTOCOMPLETE ──
+var JOURNAL_PAIRS = [
+  'XAUUSD','XAGUSD','EURUSD','GBPUSD','USDJPY','AUDUSD','USDCAD','NZDUSD','USDCHF',
+  'EURGBP','EURJPY','GBPJPY','CADJPY','CHFJPY','EURCHF','EURAUD','GBPAUD',
+  'NAS100','US30','SP500','DAX','UK100','CAC40','AU200','JP225',
+  'BTCUSD','ETHUSD','SOLUSD','XRPUSD','BNBUSD','ADAUSD','DOTUSD','AVAXUSD',
+  'USOIL','UKOIL','NATGAS','COPPER','PLATINUM','PALLADIUM'
+];
+
+function showJournalSuggestions(val){
+  var box = document.getElementById('journalPairSuggestions');
+  if(!val || val.length < 1){ box.style.display='none'; return; }
+  var v = val.toUpperCase();
+  var matches = JOURNAL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
+  if(!matches.length){ box.style.display='none'; return; }
+  box.innerHTML = matches.map(function(p){
+    return '<div onclick="selectJournalPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(139,92,246,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+(p===v?'<strong>'+p+'</strong>':p)+'</div>';
+  }).join('');
+  box.style.display='block';
+}
+
+function selectJournalPair(p){
+  document.getElementById('tradePair').value = p;
+  hideJournalSuggestions();
+}
+
+function hideJournalSuggestions(){
+  var box = document.getElementById('journalPairSuggestions');
+  if(box) box.style.display='none';
 }
 
 // ── AUTH ──
