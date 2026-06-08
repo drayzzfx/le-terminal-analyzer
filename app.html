@@ -1615,7 +1615,7 @@ function doPayment(){
   document.getElementById('pay-txt').textContent='Redirection vers Whop…';
   // Open Whop in same tab so user can come back authenticated
   setTimeout(function(){
-    window.location.href='https://whop.com/terminal-analyzer/';
+    window.location.href='https://whop.com/terminal-analyzer/terminal-analyzer-pro/';
     btn.disabled=false;
     document.getElementById('pay-txt').textContent='⚡ Obtenir l\'accès PRO sur Whop';
   }, 600);
@@ -2744,7 +2744,7 @@ window.doLogout=doLogout;
     </button>
     <div class="auth-error" id="authError"></div>
     <div class="auth-sep">— ou —</div>
-    <button class="whop-btn" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')">
+    <button class="whop-btn" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro/)">
       ⚡ Obtenir l'accès PRO via Whop
     </button>
   </div>
