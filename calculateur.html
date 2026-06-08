@@ -377,9 +377,11 @@ function selectPair(p) {
   document.querySelectorAll('.pair-btn').forEach(function(b){
     b.classList.toggle('active', b.textContent === selectedPair);
   });
-  // Clear custom input if it was a quick select
-  var customEl = document.getElementById('customPair');
-  if(customEl.value.toUpperCase() !== selectedPair) customEl.value = '';
+  // Clear custom input
+  document.getElementById('customPair').value = '';
+  hidePairDropdown();
+  // Force result card to recalculate with NEW pair
+  document.getElementById('resultCard').classList.remove('show');
   calculate();
 }
 
@@ -516,11 +518,11 @@ function onCustomPairInput(val) {
 }
 
 function chooseCustomPair(p) {
+  selectedPair = p.toUpperCase();
   document.getElementById('customPair').value = p;
   hidePairDropdown();
-  // Deselect grid buttons
   document.querySelectorAll('.pair-btn').forEach(function(b){ b.classList.remove('active'); });
-  selectedPair = p;
+  document.getElementById('resultCard').classList.remove('show');
   calculate();
 }
 
