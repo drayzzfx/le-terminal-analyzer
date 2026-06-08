@@ -18,7 +18,12 @@
   var PAGES = [
     { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
     { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
-    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './calendrier.html' },
+    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './calendrier.html', children: [
+      { icon: '📰', label: 'Édition du jour', href: './calendrier.html#edition' },
+      { icon: '⚡', label: 'Flash Info',      href: './calendrier.html#flash' },
+      { icon: '📅', label: 'Calendrier éco',  href: './calendrier.html#calendrier' },
+      { icon: '🪙', label: 'Crypto',          href: './calendrier.html#crypto' },
+    ] },
     { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html' },
     { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
     { id: 'calculateur.html', icon: ICONS.calc,       label: 'Calculateur de Pips', href: './calculateur.html' },
@@ -87,6 +92,42 @@
     }
     .lt-menu-divider { height: 1px; background: rgba(255,255,255,.06); margin: 6px 0; }
 
+    /* ── Menu déroulant (Calendrier Éco) ── */
+    .lt-nav-group { display: flex; flex-direction: column; }
+    .lt-nav-row { display: flex; align-items: center; gap: 4px; }
+    .lt-nav-row .lt-nav-item { flex: 1; }
+    .lt-nav-caret {
+      background: transparent; border: none; cursor: pointer;
+      color: #9B96B8; padding: 8px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s; flex-shrink: 0;
+    }
+    .lt-nav-caret:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
+    .lt-nav-caret svg { transition: transform .25s cubic-bezier(.2,0,.1,1); }
+    .lt-nav-caret:hover svg { transform: rotate(-180deg); }
+    .lt-nav-caret.open svg { transform: rotate(180deg); }
+    .lt-nav-caret.open:hover svg { transform: rotate(180deg); }
+
+    .lt-subnav {
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows .3s cubic-bezier(.2,0,.1,1);
+      margin-left: 14px; padding-left: 12px;
+      border-left: 1px solid rgba(139,92,246,.18);
+    }
+    .lt-subnav > div { overflow: hidden; }
+    .lt-subnav.open { grid-template-rows: 1fr; }
+
+    .lt-subnav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      text-decoration: none; color: #9B96B8;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 13px; font-weight: 600;
+      transition: all .2s;
+    }
+    .lt-subnav-item:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
+    .lt-subnav-item .lt-subnav-ic { font-size: 14px; line-height: 1; flex-shrink: 0; }
+
     .lt-menu-footer {
       padding: 12px; border-top: 1px solid rgba(255,255,255,.06); flex-shrink: 0;
     }
@@ -119,10 +160,24 @@
   document.head.appendChild(style);
 
   // ── HTML ──
+  var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
   var navItems = PAGES.map(function(p) {
     var isActive = page === p.id || (page === '' && p.id === 'index.html');
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
+    if(p.children && p.children.length) {
+      var subItems = p.children.map(function(c) {
+        return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+      }).join('');
+      return '<div class="lt-nav-group">' +
+               '<div class="lt-nav-row">' +
+                 '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
+                 '<button class="lt-nav-caret open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+               '</div>' +
+               '<div class="lt-subnav open"><div>' + subItems + '</div></div>' +
+             '</div>';
+    }
     if(p.soon) {
       return '<div class="' + cls + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + '</div>';
     }
@@ -217,6 +272,35 @@
     if(typeof updateUserUI === 'function') updateUserUI();
     ltCloseMenu();
   };
+
+  // Replier / déplier un sous-menu
+  window.ltToggleSub = function(e, btn) {
+    if(e) { e.preventDefault(); e.stopPropagation(); }
+    var group = btn.closest('.lt-nav-group');
+    var sub = group ? group.querySelector('.lt-subnav') : null;
+    if(sub) sub.classList.toggle('open');
+    btn.classList.toggle('open');
+  };
+
+  // Ouvre le bon onglet de calendrier.html à partir du hash (#edition, #flash, ...)
+  window.ltOpenEcoTabFromHash = function() {
+    if(page !== 'calendrier.html') return;
+    var id = (window.location.hash || '').replace('#', '');
+    if(!id) return;
+    var needle = "showTab('" + id + "')";
+    var tabs = document.querySelectorAll('.eco-tab');
+    for(var i = 0; i < tabs.length; i++) {
+      var oc = tabs[i].getAttribute('onclick') || '';
+      if(oc.indexOf(needle) !== -1) { tabs[i].click(); break; }
+    }
+  };
+  window.addEventListener('hashchange', window.ltOpenEcoTabFromHash);
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.ltOpenEcoTabFromHash);
+  } else {
+    window.ltOpenEcoTabFromHash();
+  }
+  setTimeout(window.ltOpenEcoTabFromHash, 300);
 
   window.ltOpenLogin = function() {
     ltCloseMenu();
