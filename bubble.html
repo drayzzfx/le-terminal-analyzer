@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LE TERMINAL — Bubble Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080F;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --v: #8B5CF6;
+  --v2: #A78BFA;
+  --vglow2: rgba(139,92,246,0.08);
+  --text: #F0EEFF;
+  --text2: #9B96B8;
+  --text3: #5A5570;
+  --green: #34D399;
+  --red: #F87171;
+  --amber: #FBBF24;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;background:rgba(8,8,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
+.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em}
+.topbar-brand span{color:var(--v2)}
+
+/* CONTROLS BAR */
+.controls{display:flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(8,8,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.controls::-webkit-scrollbar{display:none}
+
+.ctrl-group{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px}
+.ctrl-btn{padding:5px 14px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ctrl-btn:hover{color:var(--text2)}
+.ctrl-btn.on{background:var(--v);color:white}
+
+.ctrl-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+
+.status-live{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--green);margin-left:auto}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* HEATMAP CONTAINER - full remaining height */
+.heatmap-wrap{flex:1;position:relative;min-height:0}
+.heatmap-wrap iframe{width:100%;height:100%;border:none;display:block}
+
+/* LEGEND BAR */
+.legend-bar{display:flex;align-items:center;gap:16px;padding:8px 20px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+.legend-note{font-size:10px;color:var(--text3);margin-left:auto}
+.legend-note a{color:var(--v2);text-decoration:none}
+.legend-note a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+    </button>
+    <div class="topbar-brand">Le Terminal <span>Bubble Map</span></div>
+  </div>
+  <div class="status-live">
+    <div class="status-dot"></div>
+    LIVE
+  </div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <!-- Période -->
+  <div class="ctrl-group" id="periodGroup">
+    <button class="ctrl-btn on" onclick="setPeriod('hour', this)">1H</button>
+    <button class="ctrl-btn" onclick="setPeriod('day', this)">24H</button>
+    <button class="ctrl-btn" onclick="setPeriod('week', this)">7J</button>
+    <button class="ctrl-btn" onclick="setPeriod('month', this)">1M</button>
+  </div>
+
+  <div class="ctrl-sep"></div>
+
+  <!-- Marché -->
+  <div class="ctrl-group" id="marketGroup">
+    <button class="ctrl-btn on" onclick="setMarket('crypto', this)">Crypto</button>
+    <button class="ctrl-btn" onclick="setMarket('forex', this)">Forex</button>
+    <button class="ctrl-btn" onclick="setMarket('us_stocks', this)">Actions US</button>
+    <button class="ctrl-btn" onclick="setMarket('etf', this)">ETF</button>
+  </div>
+
+  <div class="ctrl-sep"></div>
+
+  <!-- Métrique -->
+  <div class="ctrl-group" id="metricGroup">
+    <button class="ctrl-btn on" onclick="setMetric('market_cap_calc', this)">Cap. marché</button>
+    <button class="ctrl-btn" onclick="setMetric('volume', this)">Volume</button>
+  </div>
+
+  <div class="status-live">
+    <div class="status-dot"></div>
+    LIVE · TradingView
+  </div>
+</div>
+
+<!-- HEATMAP -->
+<div class="heatmap-wrap" id="heatmapWrap">
+  <!-- iframe injected by JS -->
+</div>
+
+<!-- LEGEND -->
+<div class="legend-bar">
+  <div class="legend-item"><div class="legend-dot" style="background:#1a9e6e"></div>Forte hausse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#26a69a"></div>Hausse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4caf80"></div>Légère hausse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#888"></div>Neutre</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ef5350"></div>Légère baisse</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c62828"></div>Forte baisse</div>
+  <div class="legend-note">Données via <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a></div>
+</div>
+
+<script>
+var currentPeriod = 'hour';
+var currentMarket = 'crypto';
+var currentMetric = 'market_cap_calc';
+
+function buildIframeSrc() {
+  // TradingView crypto heatmap widget
+  var params = {
+    dataSource: currentMarket === 'crypto' ? 'Crypto' :
+                currentMarket === 'forex' ? 'FX' :
+                currentMarket === 'us_stocks' ? 'SPX500' : 'ETF',
+    blockSize: currentMetric,
+    blockColor: 'change',
+    locale: 'fr',
+    colorTheme: 'dark',
+    hasTopBar: false,
+    isDataSetEnabled: false,
+    isZoomEnabled: true,
+    hasSymbolTooltip: true,
+    isMonoSize: false,
+    width: '100%',
+    height: '100%'
+  };
+
+  // Map period to TradingView timeframe
+  var tfMap = { hour: '60', day: 'D', week: 'W', month: 'M' };
+  params.timeframe = tfMap[currentPeriod] || 'D';
+
+  var encoded = encodeURIComponent(JSON.stringify(params));
+  return 'https://www.tradingview.com/widgetembed/?hideideas=1&utm_source=www&utm_medium=widget&utm_campaign=chart&utm_term=BTCUSD&widgetType=crypto-coins-heatmap&widgetConfig=' + encoded;
+}
+
+function buildWidget() {
+  var wrap = document.getElementById('heatmapWrap');
+
+  // Use TradingView script-based widget
+  wrap.innerHTML = '';
+
+  var container = document.createElement('div');
+  container.className = 'tradingview-widget-container';
+  container.style.width = '100%';
+  container.style.height = '100%';
+
+  var widget = document.createElement('div');
+  widget.className = 'tradingview-widget-container__widget';
+  widget.style.width = '100%';
+  widget.style.height = '100%';
+  container.appendChild(widget);
+
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js';
+  script.async = true;
+
+  var tfMap = { hour: '60', day: 'D', week: 'W', month: 'M' };
+
+  var config = {
+    dataSource: currentMarket === 'crypto' ? 'Crypto' :
+                currentMarket === 'forex' ? 'FX' :
+                currentMarket === 'us_stocks' ? 'SPX500' : 'ETF',
+    blockSize: currentMetric,
+    blockColor: 'change',
+    locale: 'fr',
+    colorTheme: 'dark',
+    hasTopBar: false,
+    isDataSetEnabled: false,
+    isZoomEnabled: true,
+    hasSymbolTooltip: true,
+    isMonoSize: false,
+    width: '100%',
+    height: '100%'
+  };
+
+  // Inject timeframe via URL param instead
+  script.innerHTML = JSON.stringify(config);
+  container.appendChild(script);
+  wrap.appendChild(container);
+}
+
+function setPeriod(p, btn) {
+  currentPeriod = p;
+  document.querySelectorAll('#periodGroup .ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  buildWidget();
+}
+
+function setMarket(m, btn) {
+  currentMarket = m;
+  document.querySelectorAll('#marketGroup .ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+
+  // Adapt metric buttons based on market
+  var metricGroup = document.getElementById('metricGroup');
+  if(m === 'crypto') {
+    metricGroup.innerHTML = '<button class="ctrl-btn on" onclick="setMetric(\'market_cap_calc\', this)">Cap. marché</button>' +
+      '<button class="ctrl-btn" onclick="setMetric(\'volume\', this)">Volume</button>';
+  } else if(m === 'forex') {
+    metricGroup.innerHTML = '<button class="ctrl-btn on" onclick="setMetric(\'change\', this)">Variation</button>';
+    currentMetric = 'change';
+  } else {
+    metricGroup.innerHTML = '<button class="ctrl-btn on" onclick="setMetric(\'market_cap_calc\', this)">Cap. marché</button>' +
+      '<button class="ctrl-btn" onclick="setMetric(\'volume\', this)">Volume</button>';
+  }
+  buildWidget();
+}
+
+function setMetric(m, btn) {
+  currentMetric = m;
+  document.querySelectorAll('#metricGroup .ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  buildWidget();
+}
+
+// Initial render
+buildWidget();
+</script>
+
+<script src="./menu.js"></script>
+</body>
+</html>
