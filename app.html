@@ -1043,6 +1043,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
     </div>
     <div class="topbar-right">
       <div class="usage-chip" id="usageChip">1 essai gratuit</div>
+      <!-- Analyzer quick nav -->
+      <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px">
+        <button onclick="showForm()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">⚡ Analyse</button>
+        <button onclick="openHistory()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📋 Historique</button>
+        <button onclick="openPerf()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📈 Perfs</button>
+      </div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
         <div class="user-avatar" id="userAvatar">?</div>
         <span class="user-name" id="userName">Mon compte</span>
@@ -2746,21 +2752,24 @@ window.doLogout=doLogout;
     <button class="side-menu-close" onclick="closeSideMenu()">✕</button>
   </div>
   <nav class="side-menu-nav">
-    <button class="side-nav-item" onclick="closeSideMenu();showForm()">
-      <span class="nav-icon">⚡</span> Nouvelle analyse
-    </button>
-    <button class="side-nav-item" onclick="closeSideMenu();openHistory()">
-      <span class="nav-icon">📋</span> Historique
-    </button>
-    <button class="side-nav-item" onclick="closeSideMenu();openPerf()">
-      <span class="nav-icon">📈</span> Performances
-    </button>
+    <a class="side-nav-item" href="./index.html" style="text-decoration:none">
+      <span class="nav-icon">🏠</span> Dashboard
+    </a>
     <div class="side-nav-divider"></div>
     <a class="side-nav-item" href="./journal.html" style="text-decoration:none">
       <span class="nav-icon">📒</span> Journal de Trading
     </a>
-    <a class="side-nav-item" href="./index.html" style="text-decoration:none">
-      <span class="nav-icon">🏠</span> Dashboard
+    <a class="side-nav-item" href="./calendrier.html" style="text-decoration:none;opacity:.5">
+      <span class="nav-icon">📅</span> Calendrier Éco <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
+    </a>
+    <a class="side-nav-item" href="./app.html" style="text-decoration:none;background:rgba(139,92,246,.1);color:var(--v2)">
+      <span class="nav-icon">⚡</span> Setup Analyzer
+    </a>
+    <a class="side-nav-item" href="./bubble.html" style="text-decoration:none;opacity:.5">
+      <span class="nav-icon">🫧</span> Bubble Map <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
+    </a>
+    <a class="side-nav-item" href="./calculateur.html" style="text-decoration:none;opacity:.5">
+      <span class="nav-icon">🧮</span> Calculateur de Pips <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
     </a>
   </nav>
   <div class="side-menu-footer">
