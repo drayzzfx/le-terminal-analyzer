@@ -93,18 +93,18 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 
 <script>
 var mkt = 'crypto', sz = 'market_cap_calc';
-var rendered = {}; // cache: cle → container DOM node
+var loaderTimer = null;
 
 function showLoader() {
   var l = document.getElementById('mapLoader');
-  if (l) { l.style.opacity = '1'; l.style.pointerEvents = 'none'; }
+  if (l) { l.classList.remove('hidden'); }
+  // Masquer automatiquement après 4s max (TradingView ne notifie pas la fin)
+  if (loaderTimer) clearTimeout(loaderTimer);
+  loaderTimer = setTimeout(function() {
+    var l = document.getElementById('mapLoader');
+    if (l) l.classList.add('hidden');
+  }, 4000);
 }
-function hideLoader() {
-  var l = document.getElementById('mapLoader');
-  if (l) l.classList.add('hidden');
-}
-
-function cacheKey() { return mkt + '|' + sz; }
 
 function setMkt(v, btn) {
   mkt = v;
@@ -126,32 +126,18 @@ function setSz(v, btn) {
 function render() {
   var wrap = document.getElementById('mapWrap');
   var loader = document.getElementById('mapLoader');
-  var key = cacheKey();
 
-  // Cacher tous les containers existants
-  Object.keys(rendered).forEach(function(k) {
-    rendered[k].style.display = 'none';
-  });
+  // Retirer l'ancien widget mais garder le loader
+  var old = wrap.querySelector('.tradingview-widget-container');
+  if (old) wrap.removeChild(old);
 
-  // Si déjà rendu → réafficher directement sans recharger
-  if (rendered[key]) {
-    rendered[key].style.display = '';
-    hideLoader();
-    return;
-  }
-
-  // Nouveau widget → afficher loader
   showLoader();
 
   var container = document.createElement('div');
   container.className = 'tradingview-widget-container';
-  container.style.position = 'absolute';
-  container.style.inset = '0';
 
   var inner = document.createElement('div');
   inner.className = 'tradingview-widget-container__widget';
-  inner.style.width = '100%';
-  inner.style.height = '100%';
   container.appendChild(inner);
 
   var script = document.createElement('script');
@@ -194,26 +180,8 @@ function render() {
   }
 
   script.textContent = JSON.stringify(cfg);
-
-  // Détecter quand l'iframe TradingView est prête
-  script.onload = function() {
-    // L'iframe met ~500ms à s'injecter après le script
-    var tries = 0;
-    var check = setInterval(function() {
-      var iframe = container.querySelector('iframe');
-      if (iframe) {
-        clearInterval(check);
-        hideLoader();
-      } else if (++tries > 30) {
-        clearInterval(check);
-        hideLoader(); // fallback après 3s
-      }
-    }, 100);
-  };
-
   container.appendChild(script);
   wrap.appendChild(container);
-  rendered[key] = container;
 }
 
 render();
