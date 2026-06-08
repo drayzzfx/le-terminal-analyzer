@@ -136,6 +136,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   </div>
   </div>
   <div class="topbar-right">
+    <span id="trialBadge" style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:50px;border:1px solid var(--border);color:var(--text3);letter-spacing:.05em"></span>
     <div class="user-chip" id="userChip">
       <div class="user-avatar" id="userAvatar">?</div>
       <span class="user-name" id="userName">—</span>
@@ -160,7 +161,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div class="tools-grid">
 
     <!-- Setup Analyzer -->
-    <a href="./app.html" class="tool-card">
+    <a href="./app.html" class="tool-card" onclick="return checkFeatureAccess(event)">
       <div class="tool-badge live">En ligne</div>
       <div class="tool-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.06));border:1px solid rgba(139,92,246,.2)">⚡</div>
       <div class="tool-name">Setup Analyzer</div>
@@ -175,7 +176,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </a>
 
     <!-- Journal -->
-    <a href="./journal.html" class="tool-card">
+    <a href="./journal.html" class="tool-card" onclick="return checkFeatureAccess(event)">
       <div class="tool-badge new">Nouveau</div>
       <div class="tool-icon" style="background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(52,211,153,.04));border:1px solid rgba(52,211,153,.2)">📒</div>
       <div class="tool-name">Journal de Trading</div>
@@ -190,7 +191,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </a>
 
     <!-- Calendrier éco -->
-    <a href="./calendrier.html" class="tool-card">
+    <a href="./calendrier.html" class="tool-card" onclick="return checkFeatureAccess(event)">
       <div class="tool-badge live">En ligne</div>
       <div class="tool-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.03));border:1px solid rgba(251,191,36,.15)">📅</div>
       <div class="tool-name">Calendrier Éco</div>
@@ -209,7 +210,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div class="tools-grid bottom">
 
     <!-- Bubble Map -->
-    <a href="./bubble.html" class="tool-card">
+    <a href="./bubble.html" class="tool-card" onclick="return checkFeatureAccess(event)">
       <div class="tool-badge live">En ligne</div>
       <div class="tool-icon" style="background:linear-gradient(135deg,rgba(232,121,249,.12),rgba(232,121,249,.03));border:1px solid rgba(232,121,249,.15)">🫧</div>
       <div class="tool-name">Bubble Map</div>
@@ -223,7 +224,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </a>
 
     <!-- Calculateur de pips -->
-    <a href="./calculateur.html" class="tool-card">
+    <a href="./calculateur.html" class="tool-card" onclick="return checkFeatureAccess(event)">
       <div class="tool-badge live">En ligne</div>
       <div class="tool-icon" style="background:linear-gradient(135deg,rgba(96,165,250,.12),rgba(96,165,250,.03));border:1px solid rgba(96,165,250,.15)">🧮</div>
       <div class="tool-name">Calculateur de Pips</div>
@@ -325,7 +326,11 @@ async function doAuth(){
       authToken=data.access_token; currentUser=data.user||{email};
       localStorage.setItem('ta_token',authToken);
       localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');
-      closeAuth(); updateUserUI();
+      startTrial(); // start 24h free trial
+      closeAuth(); updateUserUI(); updateTrialBadge();
+      // Show welcome message
+      document.getElementById('welcomeMsg').style.display='block';
+      setTimeout(function(){ document.getElementById('welcomeMsg').style.display='none'; }, 4000);
     } else if(data.id){
       errEl.style.color='var(--green)';
       errEl.textContent='Compte créé ! Vérifie ton email pour confirmer.';
@@ -365,13 +370,59 @@ function updateUserUI(){
   }
 }
 
+// ── TRIAL LOGIC ──
+var TRIAL_DURATION = 24 * 60 * 60 * 1000; // 24h in ms
+
+function getTrialStatus() {
+  var created = localStorage.getItem('ta_trial_start');
+  var isPro = localStorage.getItem('lt_pro') === '1';
+  if(isPro) return 'pro';
+  if(!created) return 'none'; // not started
+  var elapsed = Date.now() - parseInt(created);
+  if(elapsed < TRIAL_DURATION) return 'trial';
+  return 'expired';
+}
+
+function startTrial() {
+  if(!localStorage.getItem('ta_trial_start')) {
+    localStorage.setItem('ta_trial_start', Date.now().toString());
+  }
+}
+
+function checkFeatureAccess(e) {
+  // Called when user clicks on a tool card
+  var status = getTrialStatus();
+  if(!authToken) {
+    // Not logged in — force signup
+    e.preventDefault();
+    e.stopPropagation();
+    openAuth();
+    return false;
+  }
+  if(status === 'expired') {
+    // Trial expired — show Whop paywall
+    e.preventDefault();
+    e.stopPropagation();
+    showPaywall();
+    return false;
+  }
+  // trial or pro — allow access
+  return true;
+}
+
+function showPaywall() {
+  document.getElementById('paywallOverlay').classList.add('show');
+}
+function closePaywall() {
+  document.getElementById('paywallOverlay').classList.remove('show');
+}
+
 async function checkSession(){
   var token=localStorage.getItem('ta_token'); if(!token)return;
-  // Restore immediately from localStorage
   authToken=token;
   currentUser={email:localStorage.getItem('ta_email')||''};
   updateUserUI();
-  // Verify with API
+  updateTrialBadge();
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
     var data=await res.json();
@@ -385,12 +436,104 @@ async function checkSession(){
       localStorage.removeItem('ta_email');
       updateUserUI();
     }
-  }catch(e){
-    // Network error - keep session
-    updateUserUI();
+  }catch(e){ updateUserUI(); }
+}
+
+function updateTrialBadge() {
+  var status = getTrialStatus();
+  var badge = document.getElementById('trialBadge');
+  if(!badge) return;
+  if(status === 'pro') {
+    badge.textContent = '⭐ PRO';
+    badge.style.color = 'var(--v2)';
+    badge.style.borderColor = 'rgba(139,92,246,.4)';
+  } else if(status === 'trial') {
+    var created = parseInt(localStorage.getItem('ta_trial_start'));
+    var remaining = TRIAL_DURATION - (Date.now() - created);
+    var hours = Math.ceil(remaining / (1000 * 60 * 60));
+    badge.textContent = '⏳ ' + hours + 'h restantes';
+    badge.style.color = 'var(--amber)';
+    badge.style.borderColor = 'rgba(251,191,36,.4)';
+  } else if(status === 'expired') {
+    badge.textContent = '🔒 Essai expiré';
+    badge.style.color = 'var(--red)';
+    badge.style.borderColor = 'rgba(248,113,113,.4)';
+  } else {
+    badge.style.display = 'none';
   }
 }
+
 checkSession();
+</script>
+
+<!-- WELCOME MESSAGE -->
+<div id="welcomeMsg" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);border-radius:50px;padding:12px 24px;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:#34D399;z-index:1000;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.4);white-space:nowrap">
+  ✓ Bienvenue ! 24h d'accès gratuit activé.
+</div>
+
+<!-- PAYWALL MODAL -->
+<div id="paywallOverlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
+  <div style="max-width:440px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:36px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6)">
+    <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,#8B5CF6,#A78BFA,transparent)"></div>
+    <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:#5A5570;font-size:20px;cursor:pointer;line-height:1">✕</button>
+    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#E879F9);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(139,92,246,.4)">⚡</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Essai terminé</div>
+    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:28px">
+      Ton accès gratuit de 24h est expiré.<br>
+      Passe à <strong style="color:#F0EEFF">Le Terminal PRO</strong> pour continuer à accéder à tous les outils.
+    </div>
+    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#8B5CF6,#7C3AED);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(139,92,246,.4);transition:all .2s" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+      ⚡ Obtenir l'accès PRO sur Whop
+    </a>
+    <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">
+      Paiement sécurisé via Whop · Annulation à tout moment<br>
+      <span style="color:#A78BFA;font-weight:500">Utilise le même email que ton compte Le Terminal</span>
+    </div>
+    <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
+      <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(139,92,246,.3);border-radius:50px;color:#A78BFA;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.background='transparent'">
+        🔄 Vérifier mon accès PRO
+      </button>
+      <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+#paywallOverlay.show { display: flex; animation: fadeUp .3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+</style>
+
+<script>
+async function verifyProAccess() {
+  var msg = document.getElementById('proVerifyMsg');
+  msg.style.color = '#9B96B8';
+  msg.textContent = 'Vérification…';
+  if(!authToken) {
+    msg.style.color = '#FBBF24';
+    msg.textContent = 'Connecte-toi d\'abord avec ton email Whop.';
+    return;
+  }
+  try {
+    var res = await fetch('/api/check-pro', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken}
+    });
+    var data = await res.json();
+    if(data.is_pro) {
+      localStorage.setItem('lt_pro','1');
+      msg.style.color = '#34D399';
+      msg.textContent = '✓ Accès PRO activé !';
+      setTimeout(function(){ closePaywall(); updateTrialBadge(); }, 1000);
+    } else {
+      msg.style.color = '#F87171';
+      msg.textContent = 'Aucun accès PRO trouvé pour cet email.';
+    }
+  } catch(e) {
+    msg.style.color = '#F87171';
+    msg.textContent = 'Erreur de vérification. Réessaie.';
+  }
+}
 </script>
 
 <script src="./menu.js"></script>
