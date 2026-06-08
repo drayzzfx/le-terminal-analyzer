@@ -1032,31 +1032,26 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   </div>
 
   <!-- Topbar -->
-  <header class="topbar" style="height:auto;padding:0 28px;flex-direction:column;align-items:stretch;gap:0">
-    <div style="display:flex;align-items:center;justify-content:space-between;height:60px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <a href="./index.html" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text2);text-decoration:none;font-size:16px;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='rgba(139,92,246,.4)';this.style.color='var(--v2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">←</a>
-        <div class="topbar-brand">Le Terminal <span>Analyzer</span></div>
-      </div>
-      <div class="topbar-right">
-        <div class="usage-chip" id="usageChip">1 essai gratuit</div>
-        <div class="user-chip" id="userChip" onclick="openHistory()">
-          <div class="user-avatar" id="userAvatar">?</div>
-          <span class="user-name" id="userName">Mon compte</span>
-        </div>
-        <button class="pay-btn" id="loginBtn" onclick="openAuth()" style="width:auto;padding:6px 16px;font-size:12px;margin:0;border-radius:50px">Connexion</button>
-        <div class="lang-switch">
-          <button class="lang-btn on" onclick="setLang('fr')">FR</button>
-          <button class="lang-btn" onclick="setLang('en')">EN</button>
-        </div>
-      </div>
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button onclick="toggleSideMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
+        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      </button>
+      <div class="topbar-brand">Le Terminal <span>Analyzer</span></div>
     </div>
-    <div style="display:flex;gap:4px;padding-bottom:10px">
-      <button onclick="showForm()" style="padding:6px 16px;background:transparent;border:none;border-radius:8px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">⚡ Nouvelle analyse</button>
-      <button onclick="openHistory()" style="padding:6px 16px;background:transparent;border:none;border-radius:8px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📋 Historique</button>
-      <button onclick="openPerf()" style="padding:6px 16px;background:transparent;border:none;border-radius:8px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📈 Performances</button>
-      <a href="./journal.html" style="padding:6px 16px;background:transparent;border:none;border-radius:8px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📒 Journal</a>
-      <a href="./index.html" style="padding:6px 16px;background:transparent;border:none;border-radius:8px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">🏠 Dashboard</a>
+    <div class="topbar-right">
+      <div class="usage-chip" id="usageChip">1 essai gratuit</div>
+      <div class="user-chip" id="userChip" onclick="openHistory()">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <span class="user-name" id="userName">Mon compte</span>
+      </div>
+      <button class="pay-btn" id="loginBtn" onclick="openAuth()" style="width:auto;padding:6px 16px;font-size:12px;margin:0;border-radius:50px">Connexion</button>
+      <div class="lang-switch">
+        <button class="lang-btn on" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
     </div>
   </header>
 
@@ -2754,13 +2749,19 @@ window.doLogout=doLogout;
     <button class="side-nav-item" onclick="closeSideMenu();showForm()">
       <span class="nav-icon">⚡</span> Nouvelle analyse
     </button>
-    <div class="side-nav-divider"></div>
     <button class="side-nav-item" onclick="closeSideMenu();openHistory()">
       <span class="nav-icon">📋</span> Historique
     </button>
     <button class="side-nav-item" onclick="closeSideMenu();openPerf()">
       <span class="nav-icon">📈</span> Performances
     </button>
+    <div class="side-nav-divider"></div>
+    <a class="side-nav-item" href="./journal.html" style="text-decoration:none">
+      <span class="nav-icon">📒</span> Journal de Trading
+    </a>
+    <a class="side-nav-item" href="./index.html" style="text-decoration:none">
+      <span class="nav-icon">🏠</span> Dashboard
+    </a>
   </nav>
   <div class="side-menu-footer">
     <button class="side-nav-item" id="sideLoginBtn" onclick="closeSideMenu();openAuth()" style="color:var(--v2)">
