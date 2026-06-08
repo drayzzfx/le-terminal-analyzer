@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Bubble Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
+<link rel="dns-prefetch" href="https://s3.tradingview.com">
+<link rel="preconnect" href="https://www.tradingview-widget.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.tradingview-widget.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#08080F;--border:rgba(255,255,255,0.08);--v:#0095FF;--v2:#38B6FF;--text:#F0EEFF;--text2:#9B96B8;--text3:#5A5570;--green:#34D399}
@@ -31,6 +35,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .map{flex:1;min-height:0;position:relative;background:#131722}
 .map .tradingview-widget-container{position:absolute;top:0;left:0;right:0;bottom:0}
 .map .tradingview-widget-container__widget{width:100%;height:100%}
+
+/* SKELETON LOADER */
+.map-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#131722;z-index:10;transition:opacity .4s}
+.map-loader.hidden{opacity:0;pointer-events:none}
+.map-loader-bar{width:120px;height:3px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.map-loader-bar::after{content:'';display:block;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,149,255,.6),transparent);animation:shimmer 1.2s infinite}
+@keyframes shimmer{from{transform:translateX(-200%)}to{transform:translateX(400%)}}
 
 .foot{display:flex;align-items:center;gap:10px;padding:5px 16px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)}
@@ -64,7 +75,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
   <div class="live"><div class="ld"></div>TradingView</div>
 </div>
 
-<div class="map" id="mapWrap"></div>
+<div class="map" id="mapWrap">
+  <div class="map-loader" id="mapLoader">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(0,149,255,.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
+    <div class="map-loader-bar"></div>
+  </div>
+</div>
 
 <div class="foot">
   <div class="leg"><div class="ldc" style="background:#1a9e6e"></div>Forte hausse</div>
@@ -77,6 +93,18 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 
 <script>
 var mkt = 'crypto', sz = 'market_cap_calc';
+var rendered = {}; // cache: cle → container DOM node
+
+function showLoader() {
+  var l = document.getElementById('mapLoader');
+  if (l) { l.style.opacity = '1'; l.style.pointerEvents = 'none'; }
+}
+function hideLoader() {
+  var l = document.getElementById('mapLoader');
+  if (l) l.classList.add('hidden');
+}
+
+function cacheKey() { return mkt + '|' + sz; }
 
 function setMkt(v, btn) {
   mkt = v;
@@ -97,13 +125,33 @@ function setSz(v, btn) {
 
 function render() {
   var wrap = document.getElementById('mapWrap');
-  wrap.innerHTML = '';
+  var loader = document.getElementById('mapLoader');
+  var key = cacheKey();
+
+  // Cacher tous les containers existants
+  Object.keys(rendered).forEach(function(k) {
+    rendered[k].style.display = 'none';
+  });
+
+  // Si déjà rendu → réafficher directement sans recharger
+  if (rendered[key]) {
+    rendered[key].style.display = '';
+    hideLoader();
+    return;
+  }
+
+  // Nouveau widget → afficher loader
+  showLoader();
 
   var container = document.createElement('div');
   container.className = 'tradingview-widget-container';
+  container.style.position = 'absolute';
+  container.style.inset = '0';
 
   var inner = document.createElement('div');
   inner.className = 'tradingview-widget-container__widget';
+  inner.style.width = '100%';
+  inner.style.height = '100%';
   container.appendChild(inner);
 
   var script = document.createElement('script');
@@ -146,8 +194,26 @@ function render() {
   }
 
   script.textContent = JSON.stringify(cfg);
+
+  // Détecter quand l'iframe TradingView est prête
+  script.onload = function() {
+    // L'iframe met ~500ms à s'injecter après le script
+    var tries = 0;
+    var check = setInterval(function() {
+      var iframe = container.querySelector('iframe');
+      if (iframe) {
+        clearInterval(check);
+        hideLoader();
+      } else if (++tries > 30) {
+        clearInterval(check);
+        hideLoader(); // fallback après 3s
+      }
+    }, 100);
+  };
+
   container.appendChild(script);
   wrap.appendChild(container);
+  rendered[key] = container;
 }
 
 render();
