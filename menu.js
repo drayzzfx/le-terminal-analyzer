@@ -213,7 +213,8 @@
 
   // Détection de l'item courant à partir du nom de fichier du href
   function fileOf(h) { return (h || '').split('/').pop().split('#')[0]; }
-  function selfActive(node) { return fileOf(node.href) === page && page !== ''; }
+  // Un sous-item avec un # (ancre) n'est jamais marqué actif — on ne peut pas détecter la section courante côté statique
+  function selfActive(node) { return fileOf(node.href) === page && page !== '' && !(node.href || '').includes('#'); }
   function treeActive(node) {
     if(selfActive(node)) return true;
     return !!(node.children && node.children.some(treeActive));
