@@ -137,6 +137,15 @@
     .lt-nav-caret--sub { padding: 4px; min-width: 24px; }
     .lt-subnav-item--deep { padding: 7px 10px; font-size: 12px; opacity: .85; }
 
+    /* ── USER BAR ── */
+    #ltUserBar { display: flex; align-items: center; gap: 8px; }
+    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 50px; color: #FACC15; font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+    .lt-ub-chip { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 50px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+    .lt-ub-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#0095FF,#38B6FF); display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
+    .lt-ub-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; color: #F0EEFF; }
+    .lt-ub-logout { padding: 5px 13px; background: transparent; border: 1px solid rgba(248,113,113,.3); border-radius: 50px; color: #F87171; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
+    .lt-ub-logout:hover { background: rgba(248,113,113,.1); }
+
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
       padding: 9px 12px; border-radius: 8px;
@@ -303,12 +312,36 @@
     }
   }
 
+  // ── USER BAR (injecté dans #ltUserBar sur toutes les pages) ──
+  function ltRenderUserBar() {
+    var bar = document.getElementById('ltUserBar');
+    if(!bar) return;
+    var email = localStorage.getItem('ta_email') || '';
+    var token = localStorage.getItem('ta_token') || '';
+    var isPro = localStorage.getItem('lt_pro') === '1';
+    if(!token || !email) { bar.innerHTML = ''; return; }
+    var initial = email.charAt(0).toUpperCase();
+    var username = email.split('@')[0];
+    bar.innerHTML =
+      (isPro ? '<div class="lt-ub-pro"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> PRO</div>' : '') +
+      '<div class="lt-ub-chip"><div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>' +
+      '<button class="lt-ub-logout" onclick="ltGlobalLogout()">Déconnexion</button>';
+  }
+
+  window.ltGlobalLogout = function() {
+    localStorage.removeItem('ta_token');
+    localStorage.removeItem('ta_email');
+    localStorage.removeItem('lt_pro');
+    if(typeof doLogout === 'function') { doLogout(); } else { window.location.href = './index.html'; }
+  };
+
   // Run sync after DOM is ready and after any checkSession finishes
   // Override updateUserUI on each page to also call ltSyncUser
   var _origUpdateUI = window.updateUserUI;
   window.updateUserUI = function() {
     if(typeof _origUpdateUI === 'function') _origUpdateUI();
     ltSyncUser();
+    ltRenderUserBar();
   };
 
   window.ltLogout = function() {
@@ -375,6 +408,10 @@
 
   // Init - run immediately and after checkSession completes
   ltSyncUser();
+  ltRenderUserBar();
+  // Re-render after page auth logic runs (e.g. checkSession async)
+  setTimeout(ltRenderUserBar, 800);
+  setTimeout(ltRenderUserBar, 2000);
   // Run again after 1s to catch async checkSession result
   setTimeout(ltSyncUser, 800);
   setTimeout(ltSyncUser, 2000);
