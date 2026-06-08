@@ -138,6 +138,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       <span class="user-name" id="userName">—</span>
     </div>
     <button class="login-btn" id="loginBtn" onclick="openAuth()">Connexion</button>
+    <button id="logoutBtn" onclick="doLogout()" style="display:none;padding:6px 14px;background:transparent;border:1px solid rgba(248,113,113,.3);border-radius:50px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(248,113,113,.1)'" onmouseout="this.style.background='transparent'">Déconnexion</button>
   </div>
 </header>
 
@@ -273,7 +274,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuth()">✕</button>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:20px">Connexion</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">Bienvenue</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Connecte-toi pour synchroniser ton compte sur tous les outils</div>
     <div class="auth-tabs">
       <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Connexion</button>
       <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
@@ -288,6 +290,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
     <button class="auth-submit" onclick="doAuth()"><span id="authTxt">Se connecter</span></button>
     <div class="auth-error" id="authError"></div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);text-align:center">
+      🔒 Connexion sécurisée · Données synchronisées sur tous les outils
+    </div>
   </div>
 </div>
 
@@ -295,7 +300,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 var authToken = null, currentUser = null, authMode = 'login';
 
 function openAuth(){ document.getElementById('authOverlay').classList.add('show'); }
-function closeAuth(){ document.getElementById('authOverlay').classList.remove('show'); }
+function closeAuth(){ document.getElementById('authOverlay').classList.remove('show'); document.getElementById('authError').textContent=''; }
 function switchTab(m){
   authMode=m;
   document.getElementById('tabLogin').classList.toggle('on',m==='login');
@@ -306,8 +311,10 @@ async function doAuth(){
   var email=document.getElementById('authEmail').value.trim();
   var password=document.getElementById('authPassword').value;
   var errEl=document.getElementById('authError');
-  errEl.textContent='';
+  errEl.textContent=''; errEl.style.color='var(--red)';
   if(!email||!password){errEl.textContent='Remplis tous les champs';return;}
+  var btn=document.querySelector('.auth-submit'); btn.disabled=true;
+  document.getElementById('authTxt').textContent=authMode==='login'?'Connexion…':'Création…';
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
     var data=await res.json();
@@ -316,32 +323,69 @@ async function doAuth(){
       localStorage.setItem('ta_token',authToken);
       localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');
       closeAuth(); updateUserUI();
-    } else { errEl.textContent=data.error_description||data.msg||'Erreur'; }
+    } else if(data.id){
+      errEl.style.color='var(--green)';
+      errEl.textContent='Compte créé ! Vérifie ton email pour confirmer.';
+    } else {
+      errEl.textContent=data.error_description||data.msg||data.message||'Erreur';
+    }
   }catch(e){errEl.textContent='Erreur réseau';}
+  btn.disabled=false;
+  document.getElementById('authTxt').textContent=authMode==='login'?'Se connecter':'Créer mon compte';
 }
+
+function doLogout(){
+  authToken=null; currentUser=null;
+  localStorage.removeItem('ta_token');
+  localStorage.removeItem('ta_email');
+  localStorage.removeItem('lt_pro');
+  updateUserUI();
+}
+
 function updateUserUI(){
   var lb=document.getElementById('loginBtn');
+  var lo=document.getElementById('logoutBtn');
   var uc=document.getElementById('userChip');
-  if(currentUser){
-    lb.style.display='none'; uc.classList.add('show');
+  if(currentUser && currentUser.email){
+    if(lb) lb.style.display='none';
+    if(lo) lo.style.display='';
+    if(uc) uc.classList.add('show');
     var em=currentUser.email||'';
-    document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();
-    document.getElementById('userName').textContent=em.split('@')[0];
+    var av=document.getElementById('userAvatar');
+    var un=document.getElementById('userName');
+    if(av) av.textContent=em.charAt(0).toUpperCase();
+    if(un) un.textContent=em.split('@')[0];
   } else {
-    lb.style.display=''; uc.classList.remove('show');
+    if(lb) lb.style.display='';
+    if(lo) lo.style.display='none';
+    if(uc) uc.classList.remove('show');
   }
 }
+
 async function checkSession(){
   var token=localStorage.getItem('ta_token'); if(!token)return;
+  // Restore immediately from localStorage
   authToken=token;
   currentUser={email:localStorage.getItem('ta_email')||''};
   updateUserUI();
+  // Verify with API
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
     var data=await res.json();
-    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();}
-    else if(data.error){authToken=null;currentUser=null;localStorage.removeItem('ta_token');updateUserUI();}
-  }catch(e){}
+    if(data.id){
+      currentUser=data;
+      localStorage.setItem('ta_email',data.email||'');
+      updateUserUI();
+    } else if(data.error){
+      authToken=null; currentUser=null;
+      localStorage.removeItem('ta_token');
+      localStorage.removeItem('ta_email');
+      updateUserUI();
+    }
+  }catch(e){
+    // Network error - keep session
+    updateUserUI();
+  }
 }
 checkSession();
 </script>
