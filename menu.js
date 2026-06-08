@@ -43,12 +43,8 @@
   // ── CSS ──
   var style = document.createElement('style');
   style.textContent = `
-    .lt-menu-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.35);
-      z-index: 998; opacity: 0; pointer-events: none;
-      transition: opacity .3s;
-    }
-    .lt-menu-overlay.open { opacity: 1; pointer-events: all; }
+    /* overlay supprimé — mode push */
+    .lt-menu-overlay { display: none; }
 
     .lt-side-menu {
       position: fixed; top: 0; left: 0; bottom: 0; width: 280px;
@@ -57,7 +53,15 @@
       transition: transform .35s cubic-bezier(.2,0,.1,1);
       display: flex; flex-direction: column; overflow: hidden;
     }
-    .lt-side-menu.open { transform: translateX(0); box-shadow: 20px 0 60px rgba(0,0,0,.6); }
+    .lt-side-menu.open { transform: translateX(0); }
+
+    /* Push : tout le contenu se décale, les topbars sticky suivent automatiquement */
+    body {
+      transition: margin-left .35s cubic-bezier(.2,0,.1,1);
+    }
+    body.lt-menu-open {
+      margin-left: 280px;
+    }
 
     .lt-menu-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -270,18 +274,17 @@
 
   // ── FUNCTIONS ──
   window.ltOpenMenu = function() {
-    // Toggle : si déjà ouvert → ferme, sinon → ouvre
     var menu = document.getElementById('ltSideMenu');
     if(menu.classList.contains('open')) {
       ltCloseMenu();
     } else {
       menu.classList.add('open');
-      document.getElementById('ltMenuOverlay').classList.add('open');
+      document.body.classList.add('lt-menu-open');
     }
   };
   window.ltCloseMenu = function() {
     document.getElementById('ltSideMenu').classList.remove('open');
-    document.getElementById('ltMenuOverlay').classList.remove('open');
+    document.body.classList.remove('lt-menu-open');
   };
 
   // Sync user state from localStorage
