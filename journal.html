@@ -101,7 +101,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .modal-overlay.show{display:flex;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.modal-box{max-width:580px;width:100%;background:var(--bg2);border:1px solid rgba(139,92,246,.25);border-radius:24px;padding:32px;position:relative;margin:auto}
+.modal-box{max-width:580px;width:100%;background:var(--bg2);border:1px solid rgba(139,92,246,.25);border-radius:24px;padding:32px;position:relative;margin:auto;overflow:visible}
 .modal-box::before{content:'';position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
 .modal-title{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px}
 .modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
@@ -1130,13 +1130,19 @@ var JOURNAL_PAIRS = [
 
 function showJournalSuggestions(val){
   var box = document.getElementById('journalPairSuggestions');
+  var inp = document.getElementById('tradePair');
   if(!val || val.length < 1){ box.style.display='none'; return; }
   var v = val.toUpperCase();
   var matches = JOURNAL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
   if(!matches.length){ box.style.display='none'; return; }
   box.innerHTML = matches.map(function(p){
-    return '<div onclick="selectJournalPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(139,92,246,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+(p===v?'<strong>'+p+'</strong>':p)+'</div>';
+    return '<div onclick="selectJournalPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(139,92,246,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+(p===v?'<strong style=\"color:var(--v2)\">'+p+'</strong>':p)+'</div>';
   }).join('');
+  // Position relative to input
+  var rect = inp.getBoundingClientRect();
+  box.style.top = (rect.bottom + 4) + 'px';
+  box.style.left = rect.left + 'px';
+  box.style.width = rect.width + 'px';
   box.style.display='block';
 }
 
@@ -1244,6 +1250,7 @@ renderCalendar();
 checkSession();
 </script>
 
+<div id="journalPairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(139,92,246,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
 <script src="./menu.js"></script>
 </body>
 </html>
