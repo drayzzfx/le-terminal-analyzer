@@ -158,19 +158,45 @@
 
   // Sync user state from localStorage
   function ltSyncUser() {
-    var email = localStorage.getItem('ta_email');
-    var token = localStorage.getItem('ta_token');
+    var email = localStorage.getItem('ta_email') || '';
+    var token = localStorage.getItem('ta_token') || '';
     var info = document.getElementById('ltUserInfo');
     var loginItem = document.getElementById('ltLoginItem');
     var emailEl = document.getElementById('ltUserEmail');
     if(token && email) {
       if(info) { info.classList.add('show'); if(emailEl) emailEl.textContent = email; }
       if(loginItem) loginItem.style.display = 'none';
+      // Sync page-level UI elements (loginBtn, userChip etc.)
+      var lb = document.getElementById('loginBtn');
+      var uc = document.getElementById('userChip');
+      var av = document.getElementById('userAvatar');
+      var un = document.getElementById('userName');
+      if(lb) lb.style.display = 'none';
+      if(uc) { uc.classList.add('show'); uc.style.display = 'flex'; }
+      if(av) av.textContent = email.charAt(0).toUpperCase();
+      if(un) un.textContent = email.split('@')[0];
+      // logoutBtn on index
+      var lo = document.getElementById('logoutBtn');
+      if(lo) lo.style.display = '';
     } else {
       if(info) info.classList.remove('show');
       if(loginItem) loginItem.style.display = 'flex';
+      var lb = document.getElementById('loginBtn');
+      var uc = document.getElementById('userChip');
+      if(lb) lb.style.display = '';
+      if(uc) { uc.classList.remove('show'); uc.style.display = ''; }
+      var lo = document.getElementById('logoutBtn');
+      if(lo) lo.style.display = 'none';
     }
   }
+
+  // Run sync after DOM is ready and after any checkSession finishes
+  // Override updateUserUI on each page to also call ltSyncUser
+  var _origUpdateUI = window.updateUserUI;
+  window.updateUserUI = function() {
+    if(typeof _origUpdateUI === 'function') _origUpdateUI();
+    ltSyncUser();
+  };
 
   window.ltLogout = function() {
     localStorage.removeItem('ta_token');
@@ -192,8 +218,11 @@
     }
   };
 
-  // Init
+  // Init - run immediately and after checkSession completes
   ltSyncUser();
+  // Run again after 1s to catch async checkSession result
+  setTimeout(ltSyncUser, 800);
+  setTimeout(ltSyncUser, 2000);
 
   // Re-sync when localStorage changes (cross-tab)
   window.addEventListener('storage', ltSyncUser);
