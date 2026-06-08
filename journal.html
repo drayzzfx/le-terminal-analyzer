@@ -917,7 +917,7 @@ async function requestDayIA(dateStr) {
     });
     var data = await res.json();
     var txt = data.content && data.content[0] ? data.content[0].text : 'Analyse indisponible.';
-    content.innerHTML = '<div style="font-size:13px;color:var(--text2);line-height:1.8">'+txt+'</div>';
+    content.innerHTML = renderIAText(txt);
   } catch(e) {
     content.innerHTML = '<span style="color:var(--red)">Erreur lors de l\'analyse.</span>';
   }
@@ -925,6 +925,90 @@ async function requestDayIA(dateStr) {
 }
 
 // ── GLOBAL IA ──
+function renderIAText(txt) {
+  // Parse markdown-like text into clean structured HTML
+  var lines = txt.split('
+');
+  var html = '';
+  var inList = false;
+
+  lines.forEach(function(line) {
+    line = line.trim();
+    if(!line) {
+      if(inList) { html += '</div>'; inList = false; }
+      return;
+    }
+
+    // Clean bold markers for display
+    line = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    line = line.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    // Clean broken chars
+    line = line.replace(/\?\?/g, 'é');
+
+    // H2 headings: ## or ###
+    if(line.match(/^#{1,3}\s/)) {
+      if(inList) { html += '</div>'; inList = false; }
+      var heading = line.replace(/^#{1,3}\s/, '');
+      html += '<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06)">' + heading + '</div>';
+      return;
+    }
+
+    // Separator ---
+    if(line === '---' || line === '***') {
+      if(inList) { html += '</div>'; inList = false; }
+      html += '<div style="height:1px;background:rgba(255,255,255,.06);margin:14px 0"></div>';
+      return;
+    }
+
+    // Table row |...|
+    if(line.startsWith('|') && line.endsWith('|')) {
+      if(line.includes('---')) return; // skip separator rows
+      if(inList) { html += '</div>'; inList = false; }
+      var cells = line.split('|').filter(function(c){ return c.trim(); });
+      var isHeader = cells.some(function(c){ return c.includes('<strong>') || c.trim() === c.trim().toUpperCase(); });
+      html += '<div style="display:flex;gap:0;margin:2px 0">';
+      cells.forEach(function(cell, i) {
+        var bg = i===0 ? 'rgba(139,92,246,.06)' : 'transparent';
+        var fw = i===0 ? '600' : '400';
+        html += '<div style="flex:1;padding:7px 12px;border:1px solid rgba(255,255,255,.06);font-size:12px;color:var(--text2);font-weight:'+fw+';background:'+bg+'">' + cell.trim() + '</div>';
+      });
+      html += '</div>';
+      return;
+    }
+
+    // Bullet / list item: - or •
+    if(line.match(/^[-•·]\s/)) {
+      if(!inList) {
+        html += '<div style="display:flex;flex-direction:column;gap:5px;margin:8px 0">';
+        inList = true;
+      }
+      var item = line.replace(/^[-•·]\s/, '');
+      html += '<div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);line-height:1.6">' +
+        '<span style="color:var(--v2);margin-top:2px;flex-shrink:0">›</span>' +
+        '<span>' + item + '</span></div>';
+      return;
+    }
+
+    // Numbered item: 1. 2. etc
+    if(line.match(/^\d+[.)]\s/)) {
+      if(inList) { html += '</div>'; inList = false; }
+      var num = line.match(/^(\d+)[.)]/)[1];
+      var item = line.replace(/^\d+[.)]\s/, '');
+      html += '<div style="display:flex;align-items:flex-start;gap:10px;margin:10px 0 4px">' +
+        '<span style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:800;color:var(--v2);min-width:20px;flex-shrink:0">' + num + '</span>' +
+        '<div style="font-size:13px;color:var(--text2);line-height:1.6">' + item + '</div></div>';
+      return;
+    }
+
+    // Regular paragraph
+    if(inList) { html += '</div>'; inList = false; }
+    html += '<div style="font-size:13px;color:var(--text2);line-height:1.7;margin:6px 0">' + line + '</div>';
+  });
+
+  if(inList) html += '</div>';
+  return '<div style="display:flex;flex-direction:column;gap:2px">' + html + '</div>';
+}
+
 async function requestGlobalIA() {
   if(trades.length < 3) {
     document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il te faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
@@ -966,7 +1050,7 @@ async function requestGlobalIA() {
     });
     var data = await res.json();
     var txt = data.content && data.content[0] ? data.content[0].text : 'Analyse indisponible.';
-    content.innerHTML = '<div style="font-size:13px;color:var(--text2);line-height:1.9;white-space:pre-line">'+txt+'</div>';
+    content.innerHTML = renderIAText(txt);
   } catch(e) {
     content.innerHTML = '<span style="color:var(--red)">Erreur lors de l\'analyse.</span>';
   }
