@@ -128,9 +128,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <!-- TOPBAR -->
 <header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px">
+  <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
   <div class="brand">
     <div class="brand-icon">⚡</div>
     Le <span>Terminal</span>
+  </div>
   </div>
   <div class="topbar-right">
     <div class="user-chip" id="userChip">
@@ -390,5 +393,6 @@ async function checkSession(){
 checkSession();
 </script>
 
+<script src="./menu.js"></script>
 </body>
 </html>
