@@ -6,13 +6,22 @@
   // Détecte la page active
   var page = window.location.pathname.split('/').pop() || 'index.html';
 
+  var ICONS = {
+    dashboard: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+    journal:   `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`,
+    calendrier:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>`,
+    analyzer:  `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    bubble:    `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>`,
+    calc:      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/><line x1="16" y1="18" x2="16" y2="18"/></svg>`,
+  };
+
   var PAGES = [
-    { id: 'index.html',       icon: '🏠', label: 'Dashboard',           href: './index.html' },
-    { id: 'journal.html',     icon: '📒', label: 'Journal de Trading',  href: './journal.html' },
-    { id: 'calendrier.html',  icon: '📅', label: 'Calendrier Éco',      href: './calendrier.html' },
-    { id: 'app.html',         icon: '⚡', label: 'Setup Analyzer',      href: './app.html' },
-    { id: 'bubble.html',      icon: '🫧', label: 'Bubble Map',          href: './bubble.html' },
-    { id: 'calculateur.html', icon: '🧮', label: 'Calculateur de Pips', href: './calculateur.html' },
+    { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
+    { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
+    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './calendrier.html' },
+    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html' },
+    { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
+    { id: 'calculateur.html', icon: ICONS.calc,       label: 'Calculateur de Pips', href: './calculateur.html' },
   ];
 
   // ── CSS ──
@@ -68,7 +77,8 @@
       border: 1px solid rgba(139,92,246,.25);
     }
     .lt-nav-item.soon { opacity: .45; cursor: not-allowed; pointer-events: none; }
-    .lt-nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+    .lt-nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: .7; }
+    .lt-nav-item:hover .lt-nav-icon, .lt-nav-item.active .lt-nav-icon { opacity: 1; }
     .lt-nav-soon {
       margin-left: auto; font-size: 9px; font-weight: 700;
       letter-spacing: .1em; color: #5A5570;
