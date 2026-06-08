@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LE TERMINAL — Calendrier Économique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080F;
+  --bg2: #0E0E1A;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --v: #8B5CF6;
+  --v2: #A78BFA;
+  --vglow: rgba(139,92,246,0.25);
+  --vglow2: rgba(139,92,246,0.08);
+  --text: #F0EEFF;
+  --text2: #9B96B8;
+  --text3: #5A5570;
+  --green: #34D399;
+  --red: #F87171;
+  --amber: #FBBF24;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* BG */
+.bg-orb{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(139,92,246,.05) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em}
+.topbar-brand span{color:var(--v2)}
+.status-live{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--green)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
+.liveclock{font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums;letter-spacing:.05em}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:36px 24px 80px}
+
+/* HERO */
+.hero{margin-bottom:32px}
+.hero h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:8px}
+.hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:13px;color:var(--text2);font-weight:300;line-height:1.7;max-width:600px}
+
+/* INFO BAND */
+.info-band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.info-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:50px;border:1px solid var(--border);background:var(--card);font-size:11px;font-weight:600;color:var(--text2)}
+.info-badge.impact{border-color:rgba(248,113,113,.3);color:var(--red);background:rgba(248,113,113,.06)}
+.info-badge .dot{width:6px;height:6px;border-radius:50%}
+
+/* CALENDAR CARD */
+.cal-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative}
+.cal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.4),transparent);z-index:1}
+
+.cal-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.cal-topbar-left{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--amber);display:flex;align-items:center;gap:6px}
+.cal-link{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text3);text-decoration:none;transition:color .2s;padding:5px 12px;border:1px solid var(--border);border-radius:50px;background:transparent}
+.cal-link:hover{color:var(--v2);border-color:rgba(139,92,246,.3)}
+
+/* IFRAME WRAPPER - dark mode */
+.iframe-wrap{position:relative;background:#070A12;min-height:600px}
+.iframe-wrap iframe{
+  width:100%;
+  min-height:600px;
+  border:none;
+  display:block;
+  filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.95);
+}
+
+/* Toggle to disable filter */
+.iframe-wrap.no-filter iframe{filter:none}
+
+/* FILTER TOGGLE */
+.filter-toggle{display:flex;align-items:center;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01)}
+.filter-toggle span{font-size:11px;color:var(--text3)}
+.toggle-btn{position:relative;width:34px;height:18px;border-radius:50px;background:var(--v);border:none;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle-btn::after{content:'';position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:white;transition:left .2s}
+.toggle-btn.off{background:rgba(255,255,255,.1)}
+.toggle-btn.off::after{left:19px}
+
+/* CREDIT */
+.cal-credit{padding:12px 20px;font-size:11px;color:var(--text3);text-align:center;border-top:1px solid var(--border)}
+.cal-credit a{color:var(--v2);text-decoration:none}
+.cal-credit a:hover{text-decoration:underline}
+
+/* GUIDE */
+.guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.guide-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.guide-icon{font-size:20px;margin-bottom:10px}
+.guide-title{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px}
+.guide-text{font-size:12px;color:var(--text2);line-height:1.7}
+
+/* EVENTS LEGEND */
+.legend{display:flex;gap:16px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01)}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+@media(max-width:640px){
+  .guide{grid-template-columns:1fr}
+  .info-band{gap:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+    </button>
+    <div class="topbar-brand">Le Terminal <span>Éco</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="status-live">
+      <div class="status-dot"></div>
+      LIVE
+    </div>
+    <div class="liveclock" id="liveClock"></div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Calendrier <span>Économique</span></h1>
+    <p>Décisions de banques centrales, inflation, emploi, PIB… Uniquement les annonces à <strong style="color:var(--text)">fort impact ★★★</strong> — celles qui font vraiment bouger les marchés. Données en temps réel via Investing.com.</p>
+  </div>
+
+  <!-- INFO BAND -->
+  <div class="info-band">
+    <div class="info-badge impact">
+      <span class="dot" style="background:var(--red)"></span>
+      ★★★ Fort impact uniquement
+    </div>
+    <div class="info-badge">
+      <span class="dot" style="background:var(--green)"></span>
+      Temps réel
+    </div>
+    <div class="info-badge">📅 Semaine en cours</div>
+    <div class="info-badge">🌍 Multi-pays</div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="cal-card">
+    <div class="cal-topbar">
+      <div class="cal-topbar-left">
+        📅 Calendrier économique ★★★
+      </div>
+      <a class="cal-link" href="https://fr.investing.com/economic-calendar/" target="_blank" rel="noopener nofollow">
+        Calendrier complet ↗
+      </a>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#e53e3e"></div>Fort impact</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#dd6b20"></div>Impact modéré</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#38a169"></div>Faible impact</div>
+      <div class="legend-item" style="margin-left:auto"><span style="color:var(--text3)">🕐 Heure de Paris (CET/CEST)</span></div>
+    </div>
+
+    <div class="filter-toggle">
+      <span>Mode sombre adapté</span>
+      <button class="toggle-btn" id="filterToggle" onclick="toggleFilter()"></button>
+      <span id="filterLabel" style="font-size:11px;color:var(--v2)">Activé</span>
+    </div>
+
+    <div class="iframe-wrap" id="iframeWrap">
+      <iframe
+        title="Calendrier économique 3 étoiles — Investing.com"
+        src="https://sslecal2.investing.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&importance=3&features=datepicker,timezone&countries=25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&calType=week&timeZone=58&lang=5"
+        loading="lazy"
+        frameborder="0"
+        allowtransparency="true"
+        scrolling="no"
+        id="calIframe">
+      </iframe>
+    </div>
+
+    <div class="cal-credit">
+      Calendrier économique en temps réel fourni par
+      <a href="https://fr.investing.com/" target="_blank" rel="noopener nofollow">Investing.com France</a>.
+    </div>
+  </div>
+
+  <!-- GUIDE -->
+  <div class="guide">
+    <div class="guide-item">
+      <div class="guide-icon">🏦</div>
+      <div class="guide-title">Banques centrales</div>
+      <div class="guide-text">Fed, BCE, BoE, BoJ… Les décisions de taux sont les événements les plus volatils du calendrier. Évite d'être en position pendant l'annonce.</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-icon">📊</div>
+      <div class="guide-title">NFP & Emploi</div>
+      <div class="guide-text">Le rapport NFP (1er vendredi du mois, 14h30 CET) est l'événement macro le plus suivi. Il impacte fortement le Dollar, l'Or et les indices US.</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-icon">💡</div>
+      <div class="guide-title">Stratégie ICT</div>
+      <div class="guide-text">En ICT, les events macro créent des <strong>Judas Swings</strong> et des manipulations. Note les horaires et place tes SL loin des niveaux de liquidité évidents.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Live clock
+function updateClock() {
+  var now = new Date();
+  var h = String(now.getHours()).padStart(2,'0');
+  var m = String(now.getMinutes()).padStart(2,'0');
+  var s = String(now.getSeconds()).padStart(2,'0');
+  var el = document.getElementById('liveClock');
+  if(el) el.textContent = h + ':' + m + ':' + s;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Dark mode filter toggle
+var filterOn = true;
+function toggleFilter() {
+  filterOn = !filterOn;
+  var wrap = document.getElementById('iframeWrap');
+  var btn = document.getElementById('filterToggle');
+  var lbl = document.getElementById('filterLabel');
+  if(filterOn) {
+    wrap.classList.remove('no-filter');
+    btn.classList.remove('off');
+    lbl.textContent = 'Activé';
+    lbl.style.color = 'var(--v2)';
+  } else {
+    wrap.classList.add('no-filter');
+    btn.classList.add('off');
+    lbl.textContent = 'Désactivé';
+    lbl.style.color = 'var(--text3)';
+  }
+}
+
+// Auto-resize iframe
+function resizeIframe() {
+  var iframe = document.getElementById('calIframe');
+  var wrap = document.getElementById('iframeWrap');
+  if(iframe && wrap) {
+    var h = Math.max(600, window.innerHeight - 300);
+    iframe.style.minHeight = h + 'px';
+    wrap.style.minHeight = h + 'px';
+  }
+}
+resizeIframe();
+window.addEventListener('resize', resizeIframe);
+</script>
+
+<script src="./menu.js"></script>
+</body>
+</html>
