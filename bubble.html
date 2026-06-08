@@ -7,45 +7,31 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #08080F;
-  --card: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.08);
-  --v: #8B5CF6;
-  --v2: #A78BFA;
-  --text: #F0EEFF;
-  --text2: #9B96B8;
-  --text3: #5A5570;
-  --green: #34D399;
-  --red: #F87171;
-}
+:root{--bg:#08080F;--border:rgba(255,255,255,0.08);--v:#8B5CF6;--v2:#A78BFA;--text:#F0EEFF;--text2:#9B96B8;--text3:#5A5570;--green:#34D399}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh;overflow:hidden}
-
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;background:rgba(8,8,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
-.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800}
-.topbar-brand span{color:var(--v2)}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800}
+.brand span{color:var(--v2)}
 .hbtn{display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px}
 .hbtn span{display:block;width:20px;height:2px;background:var(--text2);border-radius:2px}
-
 .controls{display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(8,8,15,.9);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
 .controls::-webkit-scrollbar{display:none}
-.ctrl-group{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px;flex-shrink:0}
-.ctrl-btn{padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
-.ctrl-btn:hover{color:var(--text2)}
-.ctrl-btn.on{background:var(--v);color:white}
-.sep{width:1px;height:18px;background:var(--border);flex-shrink:0;margin:0 2px}
-.live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--green);margin-left:auto;flex-shrink:0}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:p 2s ease-in-out infinite}
+.cg{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px;flex-shrink:0}
+.cb{padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
+.cb:hover{color:var(--text2)}
+.cb.on{background:var(--v);color:white}
+.sep{width:1px;height:18px;background:var(--border);flex-shrink:0;margin:0 4px}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green);margin-left:auto;flex-shrink:0}
+.ld{width:6px;height:6px;border-radius:50%;background:var(--green);animation:p 2s ease-in-out infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
-
-.map-wrap{flex:1;position:relative;min-height:0;background:#131722}
-.map-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-
-.foot{display:flex;align-items:center;gap:12px;padding:6px 16px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+.map{flex:1;position:relative;min-height:0;background:#131722}
+.map .tradingview-widget-container{position:absolute;inset:0;width:100%;height:100%}
+.map .tradingview-widget-container__widget{width:100%;height:100%}
+.foot{display:flex;align-items:center;gap:10px;padding:5px 16px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)}
-.ld{width:8px;height:8px;border-radius:50%}
+.ldc{width:8px;height:8px;border-radius:50%}
 .src{font-size:10px;color:var(--text3);margin-left:auto}
 .src a{color:var(--v2);text-decoration:none}
 </style>
@@ -55,72 +41,89 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 <header class="topbar">
   <div style="display:flex;align-items:center;gap:10px">
     <button class="hbtn" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-    <div class="topbar-brand">Le Terminal <span>Bubble Map</span></div>
+    <div class="brand">Le Terminal <span>Bubble Map</span></div>
   </div>
-  <div class="live"><div class="live-dot"></div>LIVE</div>
+  <div class="live"><div class="ld"></div>LIVE</div>
 </header>
 
 <div class="controls">
-  <!-- Marché -->
-  <div class="ctrl-group" id="mktGroup">
-    <button class="ctrl-btn on" onclick="pick('mkt','crypto',this)">🪙 Crypto</button>
-    <button class="ctrl-btn" onclick="pick('mkt','forex',this)">💱 Forex</button>
-    <button class="ctrl-btn" onclick="pick('mkt','stocks',this)">📈 Indices US</button>
-    <button class="ctrl-btn" onclick="pick('mkt','etf',this)">📦 ETF</button>
+  <div class="cg" id="mktG">
+    <button class="cb on" onclick="setMkt('crypto',this)">🪙 Crypto</button>
+    <button class="cb" onclick="setMkt('forex',this)">💱 Forex</button>
+    <button class="cb" onclick="setMkt('stocks',this)">📈 Actions US</button>
+    <button class="cb" onclick="setMkt('etf',this)">📦 ETF</button>
   </div>
-
-  <div class="sep"></div>
-
-  <!-- Période -->
-  <div class="ctrl-group" id="tfGroup">
-    <button class="ctrl-btn" onclick="pick('tf','60',this)">1H</button>
-    <button class="ctrl-btn on" onclick="pick('tf','D',this)">24H</button>
-    <button class="ctrl-btn" onclick="pick('tf','W',this)">7J</button>
-    <button class="ctrl-btn" onclick="pick('tf','M',this)">1M</button>
+  <div class="sep" id="tfSep"></div>
+  <div class="cg" id="tfG">
+    <button class="cb" onclick="setTf('60',this)">1H</button>
+    <button class="cb on" onclick="setTf('D',this)">24H</button>
+    <button class="cb" onclick="setTf('W',this)">7J</button>
+    <button class="cb" onclick="setTf('M',this)">1M</button>
   </div>
-
-  <div class="sep"></div>
-
-  <!-- Taille bulle -->
-  <div class="ctrl-group" id="sizeGroup">
-    <button class="ctrl-btn on" onclick="pick('size','market_cap_calc',this)">Cap.</button>
-    <button class="ctrl-btn" onclick="pick('size','volume',this)">Volume</button>
+  <div class="sep" id="szSep"></div>
+  <div class="cg" id="szG">
+    <button class="cb on" onclick="setSz('market_cap_calc',this)">Cap.</button>
+    <button class="cb" onclick="setSz('volume',this)">Volume</button>
   </div>
-
-  <div class="live"><div class="live-dot"></div>TradingView</div>
+  <div class="live"><div class="ld"></div>TradingView</div>
 </div>
 
-<div class="map-wrap" id="mapWrap"></div>
+<div class="map" id="mapWrap"></div>
 
 <div class="foot">
-  <div class="leg"><div class="ld" style="background:#1a9e6e"></div>Forte hausse</div>
-  <div class="leg"><div class="ld" style="background:#4caf80"></div>Hausse</div>
-  <div class="leg"><div class="ld" style="background:#888"></div>Neutre</div>
-  <div class="leg"><div class="ld" style="background:#ef5350"></div>Baisse</div>
-  <div class="leg"><div class="ld" style="background:#c62828"></div>Forte baisse</div>
+  <div class="leg"><div class="ldc" style="background:#1a9e6e"></div>Forte hausse</div>
+  <div class="leg"><div class="ldc" style="background:#4caf80"></div>Hausse</div>
+  <div class="leg"><div class="ldc" style="background:#888"></div>Neutre</div>
+  <div class="leg"><div class="ldc" style="background:#ef5350"></div>Baisse</div>
+  <div class="leg"><div class="ldc" style="background:#c62828"></div>Forte baisse</div>
   <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
 </div>
 
 <script>
-var state = { mkt: 'crypto', tf: 'D', size: 'market_cap_calc' };
+var mkt = 'crypto', tf = 'D', sz = 'market_cap_calc';
 
-function pick(key, val, btn) {
-  state[key] = val;
-  var group = btn.parentElement;
-  group.querySelectorAll('.ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
+function setMkt(v, btn) {
+  mkt = v;
+  document.querySelectorAll('#mktG .cb').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
+  // Hide tf + sz for forex
+  var show = v !== 'forex';
+  document.getElementById('tfSep').style.display = show ? '' : 'none';
+  document.getElementById('tfG').style.display = show ? '' : 'none';
+  document.getElementById('szSep').style.display = (v === 'crypto') ? '' : 'none';
+  document.getElementById('szG').style.display = (v === 'crypto') ? '' : 'none';
+  render();
+}
 
-  // Hide size group for forex (not applicable)
-  document.getElementById('sizeGroup').style.display =
-    (state.mkt === 'forex') ? 'none' : 'flex';
+function setTf(v, btn) {
+  tf = v;
+  document.querySelectorAll('#tfG .cb').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  render();
+}
 
+function setSz(v, btn) {
+  sz = v;
+  document.querySelectorAll('#szG .cb').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
   render();
 }
 
 function render() {
   var wrap = document.getElementById('mapWrap');
+  wrap.innerHTML = '';
 
-  // Build config based on market
+  var container = document.createElement('div');
+  container.className = 'tradingview-widget-container';
+
+  var inner = document.createElement('div');
+  inner.className = 'tradingview-widget-container__widget';
+  container.appendChild(inner);
+
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.async = true;
+
   var cfg = {
     colorTheme: 'dark',
     locale: 'fr',
@@ -128,42 +131,38 @@ function render() {
     isDataSetEnabled: false,
     isZoomEnabled: true,
     hasSymbolTooltip: true,
-    isMonoSize: false,
     width: '100%',
-    height: '100%',
-    blockColor: 'change',
-    blockSize: state.size
+    height: '100%'
   };
 
-  var widgetType, src;
-
-  if (state.mkt === 'crypto') {
-    widgetType = 'crypto-coins-heatmap';
+  if (mkt === 'crypto') {
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js';
     cfg.dataSource = 'Crypto';
-  } else if (state.mkt === 'forex') {
-    // Use forex heatmap — different widget
-    widgetType = 'forex-heat-map';
+    cfg.blockSize = sz;
+    cfg.blockColor = 'change';
+    cfg.isMonoSize = false;
+  } else if (mkt === 'forex') {
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js';
     cfg.currencies = ['EUR','USD','JPY','GBP','CHF','AUD','CAD','NZD'];
-  } else if (state.mkt === 'stocks') {
-    widgetType = 'stock-heatmap';
+  } else if (mkt === 'stocks') {
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js';
     cfg.exchanges = [];
     cfg.dataSource = 'SPX500';
     cfg.grouping = 'sector';
-  } else if (state.mkt === 'etf') {
-    widgetType = 'etf-heatmap';
+    cfg.blockSize = 'market_cap_basic';
+    cfg.blockColor = 'change';
+    cfg.symbolUrl = '';
+  } else if (mkt === 'etf') {
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-etf-heatmap.js';
     cfg.dataSource = 'AllUSEtf';
     cfg.grouping = 'asset_class';
+    cfg.blockSize = 'aum';
+    cfg.blockColor = 'change';
   }
 
-  // Inject timeframe into config
-  cfg.timeframe = state.tf;
-
-  // Build iframe URL
-  src = 'https://www.tradingview.com/widgetembed/?widgetType=' + widgetType +
-    '&widgetConfig=' + encodeURIComponent(JSON.stringify(cfg)) +
-    '&utm_source=terminal&utm_medium=widget';
-
-  wrap.innerHTML = '<iframe src="' + src + '" allowtransparency="true" scrolling="no" frameborder="0"></iframe>';
+  script.textContent = JSON.stringify(cfg);
+  container.appendChild(script);
+  wrap.appendChild(container);
 }
 
 render();
