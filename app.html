@@ -2445,8 +2445,24 @@ async function confirmOk(){
 window.closeConfirm=closeConfirm;
 window.confirmOk=confirmOk;
 async function loadHistory(){
-  if(!authToken)return;
-  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data.filter(function(h){return !_deletedIds.has(String(h.id));});try{var ts=historyData.slice(0,50).map(function(h){var c=Object.assign({},h);c.img_data=null;return c;});localStorage.setItem('lt_history',JSON.stringify(ts));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
+  if(!authToken){
+    // Pas connecté : on rend depuis localStorage (déjà chargé au démarrage)
+    renderHistory();renderHistoryGrid();return;
+  }
+  try{
+    var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});
+    var data=await res.json();
+    if(Array.isArray(data)&&data.length){
+      // Fusionner les données Supabase avec celles en mémoire (garder les entrées locales non encore sync)
+      var apiIds=new Set(data.map(function(h){return String(h.id);}));
+      var localOnly=historyData.filter(function(h){return !apiIds.has(String(h.id));});
+      var merged=localOnly.concat(data).filter(function(h){return !_deletedIds.has(String(h.id));});
+      merged.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
+      historyData=merged;
+      try{var ts=historyData.slice(0,50).map(function(h){var c=Object.assign({},h);c.img_data=null;return c;});localStorage.setItem('lt_history',JSON.stringify(ts));}catch(e){}
+    }
+    renderHistory();renderHistoryGrid();
+  }catch(e){renderHistory();renderHistoryGrid();}
 }
 function renderHistory(){
   if(!Array.isArray(historyData)) historyData=[];
@@ -2513,8 +2529,13 @@ function openHDetail(i){
 }
 async function saveAnalysis(r,pair,d,tf){
   if(!authToken)return;
-  try{await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-  body:JSON.stringify({pair,direction:d,tf,score:r.score,verdict:r.verdict,scoreLabel:r.scoreLabel,forces:r.forces,faiblesses:r.faiblesses,recommandations:r.recommandations,macro:r.macro,scenarios:r.scenarios||[],annotations:r.annotations||[],imgData:imgData||null})});loadHistory();}catch(e){}
+  try{
+    // Ne pas envoyer imgData dans le POST — trop volumineuse (plusieurs MB), dépasse la limite Vercel
+    var res=await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({pair,direction:d,tf,score:r.score,verdict:r.verdict,scoreLabel:r.scoreLabel,forces:r.forces,faiblesses:r.faiblesses,recommandations:r.recommandations,macro:r.macro,scenarios:r.scenarios||[],annotations:r.annotations||[]})});
+    // Appeler loadHistory SEULEMENT si le POST a réussi — sinon ça écraserait le localStorage avec des données incomplètes
+    if(res.ok) loadHistory();
+  }catch(e){}
 }
 checkSession();
 
