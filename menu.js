@@ -11,7 +11,7 @@
     { id: 'journal.html',     icon: '📒', label: 'Journal de Trading',  href: './journal.html' },
     { id: 'calendrier.html',  icon: '📅', label: 'Calendrier Éco',      href: './calendrier.html' },
     { id: 'app.html',         icon: '⚡', label: 'Setup Analyzer',      href: './app.html' },
-    { id: 'bubble.html',      icon: '🫧', label: 'Bubble Map',          href: './bubble.html', soon: true },
+    { id: 'bubble.html',      icon: '🫧', label: 'Bubble Map',          href: './bubble.html' },
     { id: 'calculateur.html', icon: '🧮', label: 'Calculateur de Pips', href: './calculateur.html' },
   ];
 
