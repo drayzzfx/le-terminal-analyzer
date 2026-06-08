@@ -1633,7 +1633,7 @@ function doPayment(){
   setTimeout(function(){
     window.location.href='https://whop.com/terminal-analyzer/';
     btn.disabled=false;
-    document.getElementById('pay-txt').textContent='⚡ Obtenir l'accès PRO sur Whop';
+    document.getElementById('pay-txt').textContent='⚡ Obtenir l\'accès PRO sur Whop';
   }, 600);
 }
 
@@ -1643,7 +1643,7 @@ async function checkAndActivatePro(){
   msg.textContent='Vérification en cours…';
   if(!authToken){
     msg.style.color='var(--amber)';
-    msg.textContent='Connecte-toi d'abord avec ton email Whop.';
+    msg.textContent='Connecte-toi d\'abord avec ton email Whop.';
     setTimeout(function(){ closePW(); openAuth(); }, 1200);
     return;
   }
@@ -1661,7 +1661,7 @@ async function checkAndActivatePro(){
       setTimeout(function(){ closePW(); updUsage(); }, 1000);
     } else {
       msg.style.color='var(--red)';
-      msg.textContent='Aucun accès PRO trouvé pour cet email sur Whop.';
+      msg.textContent='Aucun acc\u00e8s PRO trouv\u00e9 pour cet email sur Whop.';
     }
   }catch(e){
     msg.style.color='var(--red)';
@@ -1709,7 +1709,7 @@ async function analyze(){
   const bias=document.getElementById('bias').value;
   const sess=document.getElementById('sess').value;
   const conf=document.getElementById('conf').value.trim();
-  if(!currentUser){openAuth();return}
+  // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){openPW();return}
 
