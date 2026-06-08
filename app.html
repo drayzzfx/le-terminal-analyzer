@@ -843,10 +843,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .hc-img   { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-top: 10px; opacity: .85; }
 
 .history-empty-page {
-  text-align: center; padding: 80px 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 60vh; text-align: center; padding: 80px 20px;
   color: var(--text3); font-size: 14px; line-height: 2;
 }
-.history-empty-page .big { font-size: 48px; margin-bottom: 16px; }
+.history-empty-page .big { margin-bottom: 20px; color: rgba(0,149,255,.35); }
 
 /* OUTCOMES */
 .outcome-bar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
@@ -929,13 +930,13 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
         <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
       </button>
-      <div class="topbar-brand"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Analyzer</span></div>
+      <a href="./index.html" class="topbar-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Analyzer</span></a>
     </div>
     <div class="topbar-right">
       <!-- Analyzer quick nav -->
       <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px">
-        <button onclick="openHistory()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📋 Historique</button>
-        <button onclick="openPerf()" style="padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'">📈 Perfs</button>
+        <button onclick="openHistory()" style="display:flex;align-items:center;gap:5px;padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Historique</button>
+        <button onclick="openPerf()" style="display:flex;align-items:center;gap:5px;padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Perfs</button>
       </div>
       <div class="user-chip" id="userChip" onclick="openHistory()">
         <div class="user-avatar" id="userAvatar">?</div>
@@ -1187,9 +1188,9 @@ const T={
     usageChip:'{n} essai gratuit', proBadge:'PRO · Illimité',
     alertFill:'Remplis tous les champs et sélectionne une direction.',
     waitLabel:'⏸ ATTENDRE',
-    sys:`Tu es un analyste de marché d'élite absolue, spécialisé ICT (Inner Circle Trader) et Smart Money Concepts. Tu as une connaissance encyclopédique de TOUS les concepts de Michael J. Huddleston et de leurs applications pratiques.
+    sys:`Tu es un analyste de marché d'élite absolue, expert en TOUTES les méthodologies de trading : ICT/SMC (Inner Circle Trader, Smart Money Concepts), Price Action, Wyckoff, Elliott Wave, Supply & Demand, Harmoniques, VSA, et toutes les approches de structure de marché. Tu t'adaptes au setup présenté quelle que soit la stratégie utilisée.
 
-CONNAISSANCE ICT/SMC COMPLÈTE QUE TU MAÎTRISES :
+CONNAISSANCE UNIVERSELLE QUE TU MAÎTRISES :
 
 STRUCTURE DE MARCHÉ :
 - Market Structure Shift (MSS) vs Break of Structure (BOS) vs Change of Character (CHoCH)
@@ -1277,18 +1278,18 @@ FORMAT DE RÉPONSE — JSON UNIQUEMENT, sans markdown :
   "niveau": "DÉBUTANT"|"INTERMÉDIAIRE"|"AVANCÉ",
   "score": <1.0-10.0>,
   "scoreLabel": <3-4 mots percutants ex "OTE VALIDE - STRUCTURE ALIGNÉE">,
-  "scoreSub": <diagnostic précis en 1 phrase avec terminologie ICT>,
-  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️"|"🔄"|"🏹","label":<zone ICT précise max 35 chars>}],
-  "scenarios": [{"type":"bull"|"bear"|"alt","name":<nom du scénario ICT>,"probability":<ex "70%">,"description":<ce que la structure doit confirmer avec niveaux précis>}],
+  "scoreSub": <diagnostic précis en 1 phrase avec la terminologie de la stratégie identifiée>,
+  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️"|"🔄"|"🏹","label":<zone/concept précis max 35 chars>}],
+  "scenarios": [{"type":"bull"|"bear"|"alt","name":<nom du scénario>,"probability":<ex "70%">,"description":<ce que la structure doit confirmer avec niveaux précis>}],
   "macro": <analyse macro 2-3 phrases : DXY, corrélations, catalyseurs, session actuelle>,
-  "forces": <3-4 forces de STRUCTURE avec terminologie ICT précise, séparées par \n, emoji ICT pertinent au début de chaque ligne>,
+  "forces": <3-4 forces de STRUCTURE avec la terminologie adaptée à la stratégie, séparées par \n, emoji pertinent au début de chaque ligne>,
   "forcesTags": ["tag1","tag2","tag3"],
-  "faiblesses": <3-4 faiblesses ou risques structurels avec terminologie ICT, séparées par \n, emoji au début — JAMAIS critiquer RR ou TF>,
+  "faiblesses": <3-4 faiblesses ou risques structurels, séparées par \n, emoji au début — JAMAIS critiquer RR ou TF>,
   "faiblesTags": ["tag1","tag2"],
   "recommandations": <4-5 conseils ultra-précis et actionnables avec niveaux de prix, séparés par \n, numéro au début — dis exactement QUOI surveiller, QUAND entrer, COMMENT gérer>,
   "verdict": "GO"|"ATTENDRE"|"NO-GO",
-  "verdictTitle": <verdict ICT précis ex "ATTENDRE CONFIRMATION LTF BOS">,
-  "verdictSub": <explication directe et honnête en 2 phrases max — cite les éléments ICT précis qui justifient le verdict>
+  "verdictTitle": <verdict précis ex "ATTENDRE CONFIRMATION LTF BOS">,
+  "verdictSub": <explication directe et honnête en 2 phrases max — cite les éléments précis qui justifient le verdict>
 }
 Réponds en français.`
   },
@@ -1318,9 +1319,9 @@ Réponds en français.`
     usageChip:'{n} free trial', proBadge:'PRO · Unlimited',
     alertFill:'Fill in all required fields and select a direction.',
     waitLabel:'⏸ WAIT',
-    sys:`You are an absolute elite market analyst, specialized in ICT (Inner Circle Trader) and Smart Money Concepts. You have encyclopedic knowledge of ALL Michael J. Huddleston's concepts and their practical applications.
+    sys:`You are an absolute elite market analyst, expert in ALL trading methodologies: ICT/SMC (Inner Circle Trader, Smart Money Concepts), Price Action, Wyckoff, Elliott Wave, Supply & Demand, Harmonics, VSA, and all market structure approaches. You adapt to the presented setup regardless of the strategy used.
 
-ICT/SMC COMPLETE KNOWLEDGE:
+UNIVERSAL KNOWLEDGE YOU MASTER:
 
 MARKET STRUCTURE:
 - Market Structure Shift (MSS) vs Break of Structure (BOS) vs Change of Character (CHoCH)
@@ -1383,18 +1384,18 @@ JSON ONLY, no markdown:
   "niveau": "BEGINNER"|"INTERMEDIATE"|"ADVANCED",
   "score": <1.0-10.0>,
   "scoreLabel": <3-4 punchy words e.g. "VALID OTE - ALIGNED STRUCTURE">,
-  "scoreSub": <precise ICT diagnosis in 1 sentence>,
-  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️"|"🔄"|"🏹","label":<precise ICT zone max 35 chars>}],
-  "scenarios": [{"type":"bull"|"bear"|"alt","name":<ICT scenario name>,"probability":<e.g. "70%">,"description":<what structure must confirm with precise levels>}],
+  "scoreSub": <precise diagnosis in 1 sentence using the identified strategy's terminology>,
+  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️"|"🔄"|"🏹","label":<precise zone/concept max 35 chars>}],
+  "scenarios": [{"type":"bull"|"bear"|"alt","name":<scenario name>,"probability":<e.g. "70%">,"description":<what structure must confirm with precise levels>}],
   "macro": <macro analysis 2-3 sentences: DXY, correlations, catalysts, current session>,
-  "forces": <3-4 STRUCTURE strengths with precise ICT terminology, separated by \n, relevant ICT emoji at start>,
+  "forces": <3-4 STRUCTURE strengths using terminology adapted to the strategy, separated by \n, relevant emoji at start>,
   "forcesTags": ["tag1","tag2","tag3"],
-  "faiblesses": <3-4 structural weaknesses with ICT terminology, separated by \n — NEVER criticize R:R or TF>,
+  "faiblesses": <3-4 structural weaknesses, separated by \n — NEVER criticize R:R or TF>,
   "faiblesTags": ["tag1","tag2"],
   "recommandations": <4-5 ultra-precise actionable tips with price levels, separated by \n, number at start — say exactly WHAT to watch, WHEN to enter, HOW to manage>,
   "verdict": "GO"|"WAIT"|"NO-GO",
-  "verdictTitle": <precise ICT verdict e.g. "WAIT FOR LTF BOS CONFIRMATION">,
-  "verdictSub": <direct honest explanation in max 2 sentences — cite precise ICT elements justifying verdict>
+  "verdictTitle": <precise verdict e.g. "WAIT FOR LTF BOS CONFIRMATION">,
+  "verdictSub": <direct honest explanation in max 2 sentences — cite precise elements justifying verdict>
 }
 Respond in English.`
   }
@@ -1824,9 +1825,9 @@ function openPerf(){
   document.getElementById('perfPage').classList.add('show');
   loadPerf();
 }
-function closePerf(){
+function closePerf(goTo){
   document.getElementById('perfPage').classList.remove('show');
-  document.getElementById('app').style.display='block';
+  if(!goTo) document.getElementById('app').style.display='block';
 }
 
 async function loadPerf(){
@@ -2099,7 +2100,7 @@ function buildHistoryGrid(){
   var grid = document.getElementById('historyGrid');
   if(!grid) return;
   if(!historyData.length){
-    grid.innerHTML='<div class="history-empty-page"><div class="big">📊</div>Aucune analyse encore<br>Lance ta première analyse !</div>';
+    grid.innerHTML='<div class="history-empty-page"><div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Aucune analyse encore<br>Lance ta première analyse !</div>';
     return;
   }
   var rows = historyData.map(function(item,idx){
@@ -2244,7 +2245,7 @@ function _renderHistoryGridOld(){
   if(!grid) return;
   if(!Array.isArray(historyData)) historyData=[];
   if(!historyData.length){
-    grid.innerHTML='<div class="history-empty-page"><div class="big">📊</div>Aucune analyse encore<br>Lance ta première analyse !</div>';
+    grid.innerHTML='<div class="history-empty-page"><div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Aucune analyse encore<br>Lance ta première analyse !</div>';
     return;
   }
   grid.innerHTML = historyData.map(function(item, i){
@@ -2465,8 +2466,11 @@ window.switchAuthTab = switchAuthTab;
 window.doAuth = doAuth;
 window.openHistory = openHistory;
 window.closeHistory = closeHistory;
-window.closeHistoryPage = closeHistory;
-function closeHistoryPage(){ closeHistory(); }
+function closeHistoryPage(goTo){
+  document.getElementById('historyPage').classList.remove('show');
+  if(!goTo) document.getElementById('app').style.display='block';
+}
+window.closeHistoryPage = closeHistoryPage;
 window.closeHDetail = closeHDetail;
 window.openHDetail = openHDetail;
 
@@ -2495,13 +2499,17 @@ window.doLogout=doLogout;
 <!-- HISTORY PAGE -->
 <div id="historyPage">
   <header class="history-page-header">
-    <div class="history-page-title">Le Le Terminal <span>Analyzer</span> — Historique</div>
-    <button class="back-btn" onclick="closeHistoryPage()">← Retour à l'analyse</button>
+    <div class="history-page-title">Le Terminal <span>Analyzer</span></div>
+    <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px">
+      <button style="display:flex;align-items:center;gap:5px;padding:5px 14px;background:rgba(0,149,255,.15);border:1px solid rgba(0,149,255,.25);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Historique</button>
+      <button onclick="closeHistoryPage('perfs');openPerf()" style="display:flex;align-items:center;gap:5px;padding:5px 14px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Perfs</button>
+    </div>
+    <button class="back-btn" onclick="closeHistoryPage()">← Retour</button>
   </header>
   <div class="history-page-content">
     <div class="history-grid" id="historyGrid">
       <div class="history-empty-page">
-        <div class="big">📊</div>
+        <div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
         Aucune analyse encore<br>Lance ta première analyse !
       </div>
     </div>
@@ -2512,8 +2520,12 @@ window.doLogout=doLogout;
 <!-- PERFORMANCES PAGE -->
 <div id="perfPage">
   <header class="perf-header">
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800">Le Terminal <span style="color:var(--v2)">Analyzer</span> — Performances</div>
-    <button class="back-btn" onclick="closePerf()">← Retour à l'analyse</button>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800">Le Terminal <span style="color:var(--v2)">Analyzer</span></div>
+    <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px">
+      <button onclick="closePerf('hist');openHistory()" style="display:flex;align-items:center;gap:5px;padding:5px 14px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--v2)';this.style.background='rgba(0,149,255,.12)'" onmouseout="this.style.color='var(--text3)';this.style.background='transparent'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Historique</button>
+      <button style="display:flex;align-items:center;gap:5px;padding:5px 14px;background:rgba(0,149,255,.15);border:1px solid rgba(0,149,255,.25);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Perfs</button>
+    </div>
+    <button class="back-btn" onclick="closePerf()">← Retour</button>
   </header>
   <div class="perf-content">
     <div id="perfLoading" style="text-align:center;padding:60px;color:var(--text3)">Chargement des stats…</div>

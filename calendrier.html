@@ -1050,7 +1050,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <button class="lt-hamburger" onclick="ltOpenMenu()">
       <span></span><span></span><span></span>
     </button>
-    <div class="lt-brand"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Éco</span></div>
+    <a href="./index.html" class="lt-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Éco</span></a>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
     <div class="lt-status"><div class="lt-dot"></div>LIVE</div>
@@ -1065,17 +1065,21 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 <!-- TABS -->
 <nav class="eco-tabs">
   <button class="eco-tab on" onclick="showTab('edition')">
-    🏠 <span data-en="Today's edition">Édition du jour</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    <span data-en="Today's edition">Édition du jour</span>
   </button>
   <button class="eco-tab" onclick="showTab('flash')">
-    ⚡ <span data-en="Live newswire">Flash Info</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    <span data-en="Live newswire">Flash Info</span>
     <span class="sb-live" style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:ltPulse 2s infinite;display:inline-block"></span>
   </button>
   <button class="eco-tab" onclick="showTab('calendrier')">
-    📅 <span data-en="Economic calendar">Calendrier éco</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>
+    <span data-en="Economic calendar">Calendrier éco</span>
   </button>
   <button class="eco-tab" onclick="showTab('crypto')">
-    ₿ Crypto
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>
+    Crypto
   </button>
 </nav>
 
@@ -1104,58 +1108,6 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       "locale": "fr"
     }
     </script>
-  </div>
-</div>
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__track">
-    <span class="ticker__item"><span class="ticker__tag">Analyse maison</span>Pourquoi la désinflation française résiste mieux que prévu</span>
-    <span class="ticker__item"><span class="ticker__tag">Note de veille</span>Budget 2027 : les trois arbitrages qui vont compter</span>
-    <span class="ticker__item"><span class="ticker__tag">ForexLive</span>FLASH : l&#39;inflation américaine ressort à 3,1 %, sous les attentes</span>
-    <span class="ticker__item"><span class="ticker__tag">CoinDesk</span>Bitcoin repasse au-dessus d&#39;un seuil clé porté par les entrées en ETF</span>
-    <span class="ticker__item"><span class="ticker__tag">ZeroHedge</span>La Fed pourrait ralentir la réduction de son bilan, selon une source</span>
-    <span class="ticker__item"><span class="ticker__tag">Banque centrale européenne</span>La BCE maintient ses taux et confirme une approche réunion par réunion</span>
-    <span class="ticker__item"><span class="ticker__tag">Natixis – Recherche &amp; marchés</span>Natixis : pourquoi les taux longs resteront durablement plus élevés</span>
-    <span class="ticker__item"><span class="ticker__tag">Les Échos – Économie</span>Zone euro : la croissance accélère légèrement au deuxième trimestre</span>
-    <span class="ticker__item"><span class="ticker__tag">CNBC – Economy</span>États-Unis : les créations d&#39;emplois ralentissent mais restent solides</span>
-    <span class="ticker__item"><span class="ticker__tag">Trump · marchés (live)</span>Trump menace de nouveaux droits de douane, les marchés se tendent</span>
-    <span class="ticker__item"><span class="ticker__tag">Reuters – Business</span>Les marchés mondiaux stables, entre croissance et banques centrales</span>
-    <span class="ticker__item"><span class="ticker__tag">Cointelegraph</span>Ethereum : la mise à jour réseau relance le débat sur les frais</span>
-    <span class="ticker__item"><span class="ticker__tag">Financial Times – Markets</span>Les rendements obligataires européens reculent sur fond de pari de baisse des taux</span>
-    <span class="ticker__item"><span class="ticker__tag">FXStreet – News</span>EUR/USD : cassure au-dessus de 1,09 après les chiffres américains</span>
-    <span class="ticker__item"><span class="ticker__tag">Réserve fédérale (Fed)</span>La Fed appelle à la patience avant tout mouvement sur les taux</span>
-    <span class="ticker__item"><span class="ticker__tag">MarketWatch – Top Stories</span>Wall Street finit en hausse, le Nasdaq porté par la tech à un record</span>
-    <span class="ticker__item"><span class="ticker__tag">Ostrum AM (Natixis) – Stratégie marchés</span>Ostrum (Natixis) : surpondérer le crédit de qualité, prudence sur la duration</span>
-    <span class="ticker__item"><span class="ticker__tag">La Tribune – Économie</span>Énergie : les prix de gros du gaz repartent à la baisse en Europe</span>
-    <span class="ticker__item"><span class="ticker__tag">Decrypt</span>Régulation : un nouveau cadre crypto se précise en Europe</span>
-    <span class="ticker__item"><span class="ticker__tag">Nikkei Asia – Economy</span>Japon : les exportations rebondissent grâce à un yen plus faible</span>
-    <span class="ticker__item"><span class="ticker__tag">Fonds monétaire international (FMI)</span>Le FMI relève légèrement sa prévision de croissance mondiale pour 2026</span>
-    <span class="ticker__item"><span class="ticker__tag">OCDE – Salle de presse</span>L&#39;OCDE invite les pays à investir davantage dans les compétences</span>
-    <span class="ticker__item"><span class="ticker__tag">Banque de France</span>La Banque de France confirme une inflation sous les 2 % à l&#39;horizon 2027</span>
-    <span class="ticker__item"><span class="ticker__tag">INSEE – À la une</span>Le climat des affaires se stabilise en France en juin</span>
-    <span class="ticker__item"><span class="ticker__tag">Analyse maison</span>Pourquoi la désinflation française résiste mieux que prévu</span>
-    <span class="ticker__item"><span class="ticker__tag">Note de veille</span>Budget 2027 : les trois arbitrages qui vont compter</span>
-    <span class="ticker__item"><span class="ticker__tag">ForexLive</span>FLASH : l&#39;inflation américaine ressort à 3,1 %, sous les attentes</span>
-    <span class="ticker__item"><span class="ticker__tag">CoinDesk</span>Bitcoin repasse au-dessus d&#39;un seuil clé porté par les entrées en ETF</span>
-    <span class="ticker__item"><span class="ticker__tag">ZeroHedge</span>La Fed pourrait ralentir la réduction de son bilan, selon une source</span>
-    <span class="ticker__item"><span class="ticker__tag">Banque centrale européenne</span>La BCE maintient ses taux et confirme une approche réunion par réunion</span>
-    <span class="ticker__item"><span class="ticker__tag">Natixis – Recherche &amp; marchés</span>Natixis : pourquoi les taux longs resteront durablement plus élevés</span>
-    <span class="ticker__item"><span class="ticker__tag">Les Échos – Économie</span>Zone euro : la croissance accélère légèrement au deuxième trimestre</span>
-    <span class="ticker__item"><span class="ticker__tag">CNBC – Economy</span>États-Unis : les créations d&#39;emplois ralentissent mais restent solides</span>
-    <span class="ticker__item"><span class="ticker__tag">Trump · marchés (live)</span>Trump menace de nouveaux droits de douane, les marchés se tendent</span>
-    <span class="ticker__item"><span class="ticker__tag">Reuters – Business</span>Les marchés mondiaux stables, entre croissance et banques centrales</span>
-    <span class="ticker__item"><span class="ticker__tag">Cointelegraph</span>Ethereum : la mise à jour réseau relance le débat sur les frais</span>
-    <span class="ticker__item"><span class="ticker__tag">Financial Times – Markets</span>Les rendements obligataires européens reculent sur fond de pari de baisse des taux</span>
-    <span class="ticker__item"><span class="ticker__tag">FXStreet – News</span>EUR/USD : cassure au-dessus de 1,09 après les chiffres américains</span>
-    <span class="ticker__item"><span class="ticker__tag">Réserve fédérale (Fed)</span>La Fed appelle à la patience avant tout mouvement sur les taux</span>
-    <span class="ticker__item"><span class="ticker__tag">MarketWatch – Top Stories</span>Wall Street finit en hausse, le Nasdaq porté par la tech à un record</span>
-    <span class="ticker__item"><span class="ticker__tag">Ostrum AM (Natixis) – Stratégie marchés</span>Ostrum (Natixis) : surpondérer le crédit de qualité, prudence sur la duration</span>
-    <span class="ticker__item"><span class="ticker__tag">La Tribune – Économie</span>Énergie : les prix de gros du gaz repartent à la baisse en Europe</span>
-    <span class="ticker__item"><span class="ticker__tag">Decrypt</span>Régulation : un nouveau cadre crypto se précise en Europe</span>
-    <span class="ticker__item"><span class="ticker__tag">Nikkei Asia – Economy</span>Japon : les exportations rebondissent grâce à un yen plus faible</span>
-    <span class="ticker__item"><span class="ticker__tag">Fonds monétaire international (FMI)</span>Le FMI relève légèrement sa prévision de croissance mondiale pour 2026</span>
-    <span class="ticker__item"><span class="ticker__tag">OCDE – Salle de presse</span>L&#39;OCDE invite les pays à investir davantage dans les compétences</span>
-    <span class="ticker__item"><span class="ticker__tag">Banque de France</span>La Banque de France confirme une inflation sous les 2 % à l&#39;horizon 2027</span>
-    <span class="ticker__item"><span class="ticker__tag">INSEE – À la une</span>Le climat des affaires se stabilise en France en juin</span>
   </div>
 </div>
 
