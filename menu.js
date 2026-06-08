@@ -32,7 +32,6 @@
       { icon: '📅', label: 'Calendrier éco',  href: './eco-calendrier.html' },
       { icon: '🪙', label: 'Crypto',          href: './eco-crypto.html' },
     ] },
-    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html' },
     { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
     { id: 'calculateur.html', icon: ICONS.calc,       label: 'Calculateur de Pips', href: './calculateur.html' },
   ];
@@ -40,12 +39,8 @@
   // ── CSS ──
   var style = document.createElement('style');
   style.textContent = `
-    .lt-menu-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.5);
-      z-index: 998; opacity: 0; pointer-events: none;
-      transition: opacity .3s; backdrop-filter: blur(4px);
-    }
-    .lt-menu-overlay.open { opacity: 1; pointer-events: all; }
+    /* overlay supprimé — mode push */
+    .lt-menu-overlay { display: none; }
 
     .lt-side-menu {
       position: fixed; top: 0; left: 0; bottom: 0; width: 280px;
@@ -54,7 +49,15 @@
       transition: transform .35s cubic-bezier(.2,0,.1,1);
       display: flex; flex-direction: column; overflow: hidden;
     }
-    .lt-side-menu.open { transform: translateX(0); box-shadow: 20px 0 60px rgba(0,0,0,.6); }
+    .lt-side-menu.open { transform: translateX(0); }
+
+    /* Push : tout le contenu se décale, les topbars sticky suivent automatiquement */
+    body {
+      transition: margin-left .35s cubic-bezier(.2,0,.1,1);
+    }
+    body.lt-menu-open {
+      margin-left: 280px;
+    }
 
     .lt-menu-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -124,6 +127,24 @@
     }
     .lt-subnav > div { overflow: hidden; }
     .lt-subnav.open { grid-template-rows: 1fr; }
+    .lt-subnav--deep {
+      margin-left: 10px; padding-left: 10px;
+      border-left: 1px solid rgba(0,149,255,.1);
+    }
+    .lt-subnav-group { display: flex; flex-direction: column; }
+    .lt-subnav-row { display: flex; align-items: center; }
+    .lt-subnav-row .lt-subnav-item { flex: 1; }
+    .lt-nav-caret--sub { padding: 4px; min-width: 24px; }
+    .lt-subnav-item--deep { padding: 7px 10px; font-size: 12px; opacity: .85; }
+
+    /* ── USER BAR ── */
+    #ltUserBar { display: flex; align-items: center; gap: 8px; }
+    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 50px; color: #FACC15; font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+    .lt-ub-chip { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 50px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+    .lt-ub-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#0095FF,#38B6FF); display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
+    .lt-ub-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; color: #F0EEFF; }
+    .lt-ub-logout { padding: 5px 13px; background: transparent; border: 1px solid rgba(248,113,113,.3); border-radius: 50px; color: #F87171; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
+    .lt-ub-logout:hover { background: rgba(248,113,113,.1); }
 
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
@@ -198,13 +219,13 @@
   function renderSub(c, depth) {
     var act = selfActive(c) ? ' active' : '';
     if(c.children && c.children.length) {
-      var inner = c.children.map(function(cc) { return renderSub(cc, depth + 1); }).join('');
+      var inner = c.children.map(function(cc) { return renderSub(cc); }).join('');
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
                  '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
                  '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
-               '<div class="lt-subnav lt-subnav--deep open"><div>' + inner + '</div></div>' +
+               '<div class="lt-subnav lt-subnav--deep"><div>' + inner + '</div></div>' +
              '</div>';
     }
     return '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
@@ -215,13 +236,13 @@
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
     if(p.children && p.children.length) {
-      var subItems = p.children.map(function(c) { return renderSub(c, 1); }).join('');
+      var subItems = p.children.map(function(c) { return renderSub(c); }).join('');
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
                  '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
-                 '<button class="lt-nav-caret open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+                 '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
                '</div>' +
-               '<div class="lt-subnav open"><div>' + subItems + '</div></div>' +
+               '<div class="lt-subnav"><div>' + subItems + '</div></div>' +
              '</div>';
     }
     if(p.soon) {
@@ -259,12 +280,17 @@
 
   // ── FUNCTIONS ──
   window.ltOpenMenu = function() {
-    document.getElementById('ltSideMenu').classList.add('open');
-    document.getElementById('ltMenuOverlay').classList.add('open');
+    var menu = document.getElementById('ltSideMenu');
+    if(menu.classList.contains('open')) {
+      ltCloseMenu();
+    } else {
+      menu.classList.add('open');
+      document.body.classList.add('lt-menu-open');
+    }
   };
   window.ltCloseMenu = function() {
     document.getElementById('ltSideMenu').classList.remove('open');
-    document.getElementById('ltMenuOverlay').classList.remove('open');
+    document.body.classList.remove('lt-menu-open');
   };
 
   // Sync user state from localStorage
@@ -301,12 +327,36 @@
     }
   }
 
+  // ── USER BAR (injecté dans #ltUserBar sur toutes les pages) ──
+  function ltRenderUserBar() {
+    var bar = document.getElementById('ltUserBar');
+    if(!bar) return;
+    var email = localStorage.getItem('ta_email') || '';
+    var token = localStorage.getItem('ta_token') || '';
+    var isPro = localStorage.getItem('lt_pro') === '1';
+    if(!token || !email) { bar.innerHTML = ''; return; }
+    var initial = email.charAt(0).toUpperCase();
+    var username = email.split('@')[0];
+    bar.innerHTML =
+      (isPro ? '<div class="lt-ub-pro"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> PRO</div>' : '') +
+      '<div class="lt-ub-chip"><div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>' +
+      '<button class="lt-ub-logout" onclick="ltGlobalLogout()">Déconnexion</button>';
+  }
+
+  window.ltGlobalLogout = function() {
+    localStorage.removeItem('ta_token');
+    localStorage.removeItem('ta_email');
+    localStorage.removeItem('lt_pro');
+    if(typeof doLogout === 'function') { doLogout(); } else { window.location.href = './index.html'; }
+  };
+
   // Run sync after DOM is ready and after any checkSession finishes
   // Override updateUserUI on each page to also call ltSyncUser
   var _origUpdateUI = window.updateUserUI;
   window.updateUserUI = function() {
     if(typeof _origUpdateUI === 'function') _origUpdateUI();
     ltSyncUser();
+    ltRenderUserBar();
   };
 
   window.ltLogout = function() {
@@ -373,6 +423,10 @@
 
   // Init - run immediately and after checkSession completes
   ltSyncUser();
+  ltRenderUserBar();
+  // Re-render after page auth logic runs (e.g. checkSession async)
+  setTimeout(ltRenderUserBar, 800);
+  setTimeout(ltRenderUserBar, 2000);
   // Run again after 1s to catch async checkSession result
   setTimeout(ltSyncUser, 800);
   setTimeout(ltSyncUser, 2000);

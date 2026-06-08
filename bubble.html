@@ -20,14 +20,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .brand span{color:var(--v2)}
 .hbtn{display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px}
 .hbtn span{display:block;width:20px;height:2px;background:var(--text2);border-radius:2px}
-.controls{display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(8,8,15,.9);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.controls::-webkit-scrollbar{display:none}
-.cg{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px;flex-shrink:0}
-.cb{padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
-.cb:hover{color:var(--text2)}
-.cb.on{background:var(--v);color:white}
-.sep{width:1px;height:18px;background:var(--border);flex-shrink:0;margin:0 4px}
-.live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green);margin-left:auto;flex-shrink:0}
+.eco-tabs{display:flex;align-items:center;gap:2px;padding:0 18px;background:rgba(8,8,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.eco-tabs::-webkit-scrollbar{display:none}
+.eco-tab{padding:10px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.eco-tab:hover{color:var(--text2)}
+.eco-tab.on{color:var(--v2);border-bottom-color:var(--v2)}
+.sz-group{display:flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0}
+.sz-btn{padding:4px 10px;background:transparent;border:1px solid transparent;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
+.sz-btn:hover{color:var(--text2)}
+.sz-btn.on{background:rgba(0,149,255,.15);border-color:rgba(0,149,255,.3);color:var(--v2)}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green);flex-shrink:0;padding:0 4px}
 .ld{width:6px;height:6px;border-radius:50%;background:var(--green);animation:p 2s ease-in-out infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 
@@ -57,23 +59,35 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
     <button class="hbtn" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
     <a href="./index.html" class="brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Bubble Map</span></a>
   </div>
-  <div class="live"><div class="ld"></div>LIVE</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="live"><div class="ld"></div>LIVE</div>
+    <div id="ltUserBar"></div>
+  </div>
 </header>
 
-<div class="controls">
-  <div class="cg" id="mktG">
-    <button class="cb on" onclick="setMkt('crypto',this)">🪙 Crypto</button>
-    <button class="cb" onclick="setMkt('forex',this)">💱 Forex</button>
-    <button class="cb" onclick="setMkt('stocks',this)">📈 Actions US</button>
-    <button class="cb" onclick="setMkt('etf',this)">📦 ETF</button>
-  </div>
-  <div class="sep" id="szSep"></div>
-  <div class="cg" id="szG">
-    <button class="cb on" onclick="setSz('market_cap_calc',this)">Cap.</button>
-    <button class="cb" onclick="setSz('volume',this)">Volume</button>
+<nav class="eco-tabs">
+  <button class="eco-tab on" onclick="setMkt('crypto',this)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>
+    Crypto
+  </button>
+  <button class="eco-tab" onclick="setMkt('forex',this)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2c2.5 2.5 2.5 15 0 18M12 2c-2.5 2.5-2.5 15 0 18"/></svg>
+    Forex
+  </button>
+  <button class="eco-tab" onclick="setMkt('stocks',this)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Actions US
+  </button>
+  <button class="eco-tab" onclick="setMkt('etf',this)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+    ETF
+  </button>
+  <div class="sz-group" id="szG">
+    <button class="sz-btn on" onclick="setSz('market_cap_calc',this)">Cap.</button>
+    <button class="sz-btn" onclick="setSz('volume',this)">Volume</button>
   </div>
   <div class="live"><div class="ld"></div>TradingView</div>
-</div>
+</nav>
 
 <div class="map" id="mapWrap">
   <div class="map-loader" id="mapLoader">
@@ -108,17 +122,16 @@ function showLoader() {
 
 function setMkt(v, btn) {
   mkt = v;
-  document.querySelectorAll('#mktG .cb').forEach(function(b){b.classList.remove('on')});
+  document.querySelectorAll('.eco-tab').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
   var isCrypto = v === 'crypto';
-  document.getElementById('szSep').style.display = isCrypto ? '' : 'none';
-  document.getElementById('szG').style.display = isCrypto ? '' : 'none';
+  document.getElementById('szG').style.visibility = isCrypto ? 'visible' : 'hidden';
   render();
 }
 
 function setSz(v, btn) {
   sz = v;
-  document.querySelectorAll('#szG .cb').forEach(function(b){b.classList.remove('on')});
+  document.querySelectorAll('#szG .sz-btn').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
   render();
 }
