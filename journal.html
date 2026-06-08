@@ -1149,6 +1149,9 @@ function hideJournalSuggestions(){
   var box = document.getElementById('journalPairSuggestions');
   if(box) box.style.display='none';
 }
+window.showJournalSuggestions = showJournalSuggestions;
+window.hideJournalSuggestions = hideJournalSuggestions;
+window.selectJournalPair = selectJournalPair;
 
 // ── AUTH ──
 function openAuth() {
