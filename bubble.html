@@ -111,19 +111,8 @@ function setSz(v, btn) {
 
 function render() {
   var wrap = document.getElementById('mapWrap');
-  wrap.innerHTML = '';
 
-  var container = document.createElement('div');
-  container.className = 'tradingview-widget-container';
-
-  var inner = document.createElement('div');
-  inner.className = 'tradingview-widget-container__widget';
-  container.appendChild(inner);
-
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.async = true;
-
+  // Build config
   var cfg = {
     colorTheme: 'dark',
     locale: 'fr',
@@ -135,34 +124,61 @@ function render() {
     height: '100%'
   };
 
+  var widgetName;
+
   if (mkt === 'crypto') {
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js';
+    widgetName = 'crypto-coins-heatmap';
     cfg.dataSource = 'Crypto';
     cfg.blockSize = sz;
     cfg.blockColor = 'change';
     cfg.isMonoSize = false;
   } else if (mkt === 'forex') {
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js';
+    widgetName = 'forex-heat-map';
     cfg.currencies = ['EUR','USD','JPY','GBP','CHF','AUD','CAD','NZD'];
   } else if (mkt === 'stocks') {
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js';
+    widgetName = 'stock-heatmap';
     cfg.exchanges = [];
     cfg.dataSource = 'SPX500';
     cfg.grouping = 'sector';
     cfg.blockSize = 'market_cap_basic';
     cfg.blockColor = 'change';
-    cfg.symbolUrl = '';
   } else if (mkt === 'etf') {
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-etf-heatmap.js';
+    widgetName = 'etf-heatmap';
     cfg.dataSource = 'AllUSEtf';
     cfg.grouping = 'asset_class';
     cfg.blockSize = 'aum';
     cfg.blockColor = 'change';
   }
 
-  script.textContent = JSON.stringify(cfg);
-  container.appendChild(script);
-  wrap.appendChild(container);
+  // Use iframe with encoded config — bypasses script caching issue
+  // TradingView embed page supports config via postMessage or URL
+  var cfgStr = encodeURIComponent(JSON.stringify(cfg));
+  var iframeSrc = 'https://www.tradingview-widget.com/embed-widget/' + widgetName +
+    '/?locale=fr&colorTheme=dark#' + cfgStr;
+
+  // Actually use the proper TV script approach but force reload by recreating DOM
+  wrap.innerHTML = '';
+
+  var html = '<div class="tradingview-widget-container" style="width:100%;height:100%">' +
+    '<div class="tradingview-widget-container__widget" style="width:100%;height:100%"></div>' +
+    '<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-' +
+    widgetName + '.js" async>' +
+    JSON.stringify(cfg) +
+    '<\/script>' +
+    '</div>';
+
+  // Use iframe trick to force fresh script execution
+  var blob = new Blob([
+    '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#131722}</style></head><body>' +
+    html + '</body></html>'
+  ], {type: 'text/html'});
+
+  var iframe = document.createElement('iframe');
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = 'none';
+  iframe.src = URL.createObjectURL(blob);
+  wrap.appendChild(iframe);
 }
 
 render();
