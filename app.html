@@ -1007,33 +1007,6 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 <!-- ═══ APP ═══ -->
 <div id="app">
 
-  <!-- Paywall -->
-  <div class="pw-overlay" id="paywall">
-    <div class="pw-box">
-      <div class="pw-orb">⚡</div>
-      <div class="pw-title" id="pw-title">Passe à PRO</div>
-      <div class="pw-sub" id="pw-sub">Tu as utilisé ton essai gratuit.<br>Débloque les analyses illimitées avec Le Terminal PRO.</div>
-
-
-
-      <button class="pay-btn" id="payBtn" onclick="doPayment()">
-        <span id="pay-txt">⚡ Obtenir l'accès PRO sur Whop</span>
-      </button>
-
-      <div style="margin-top:10px;font-size:11px;color:var(--text3);line-height:1.7" id="pay-note">
-        Paiement sécurisé via Whop · Annulation à tout moment<br>
-        <span style="color:var(--v2);font-weight:500">Utilise le même email que ton compte Le Terminal</span>
-      </div>
-
-      <!-- Already bought -->
-      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
-        <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
-        <button onclick="checkAndActivatePro()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(139,92,246,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(139,92,246,.08)'" onmouseout="this.style.background='transparent'">
-          🔄 Vérifier mon accès PRO
-        </button>
-        <div id="proCheckMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
-      </div>
-
       <span class="demo-link" onclick="closePW()" id="demo-lnk">Continuer en mode démo</span>
     </div>
   </div>
@@ -1249,7 +1222,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       </div>
       <div class="actions">
         <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
-        <button class="act-btn accent" onclick="openPW()" id="act-pro">★ Passer PRO</button>
+        <button class="act-btn accent" onclick="window.location.href='./index.html'" id="act-pro">★ Passer PRO</button>
         <button class="act-btn" onclick="deleteLastAnalysis()" id="act-del" style="display:none;border-color:rgba(248,113,113,.3);color:#F87171">🗑</button>
       </div>
     </div>
@@ -1606,58 +1579,8 @@ uz.addEventListener('drop',e=>{
 });
 } // end if(uz)
 
-// ── PAYWALL ──
-function openPW(){document.getElementById('paywall').classList.add('show')}
-function closePW(){document.getElementById('paywall').classList.remove('show')}
-function pickPlan(p){
-  selPlan=p;
-  document.getElementById('plan-m').classList.toggle('sel',p==='m');
-  document.getElementById('plan-y').classList.toggle('sel',p==='y');
-}
-function doPayment(){
-  // Redirect to Whop product page
-  var btn=document.getElementById('payBtn');
-  btn.disabled=true;
-  document.getElementById('pay-txt').textContent='Redirection vers Whop…';
-  // Open Whop in same tab so user can come back authenticated
-  setTimeout(function(){
-    window.location.href='https://whop.com/terminal-analyzer/terminal-analyzer-pro/';
-    btn.disabled=false;
-    document.getElementById('pay-txt').textContent='⚡ Obtenir l\'accès PRO sur Whop';
-  }, 600);
-}
+// ── VIEWS ──
 
-async function checkAndActivatePro(){
-  var msg = document.getElementById('proCheckMsg');
-  msg.style.color='var(--text3)';
-  msg.textContent='Vérification en cours…';
-  if(!authToken){
-    msg.style.color='var(--amber)';
-    msg.textContent='Connecte-toi d\'abord avec ton email Whop.';
-    setTimeout(function(){ closePW(); openAuth(); }, 1200);
-    return;
-  }
-  try{
-    var res=await fetch('/api/check-pro',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}
-    });
-    var data=await res.json();
-    if(data.is_pro){
-      isPro=true;
-      localStorage.setItem('lt_pro','1');
-      msg.style.color='var(--green)';
-      msg.textContent='✓ Accès PRO activé !';
-      setTimeout(function(){ closePW(); updUsage(); }, 1000);
-    } else {
-      msg.style.color='var(--red)';
-      msg.textContent='Aucun acc\u00e8s PRO trouv\u00e9 pour cet email sur Whop.';
-    }
-  }catch(e){
-    msg.style.color='var(--red)';
-    msg.textContent='Erreur de vérification. Réessaie.';
-  }
-}
 
 // ── VIEWS ──
 function showForm(){
@@ -1701,7 +1624,7 @@ async function analyze(){
   const conf=document.getElementById('conf').value.trim();
   // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
-  if(!canGo()){openPW();return}
+  if(!canGo()){window.location.href="./index.html";return}
 
   usage++; localStorage.setItem('lt_u',usage);
   const rrv=calcRR();
