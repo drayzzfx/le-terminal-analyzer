@@ -13,234 +13,160 @@
   --border: rgba(255,255,255,0.08);
   --v: #8B5CF6;
   --v2: #A78BFA;
-  --vglow2: rgba(139,92,246,0.08);
   --text: #F0EEFF;
   --text2: #9B96B8;
   --text3: #5A5570;
   --green: #34D399;
   --red: #F87171;
-  --amber: #FBBF24;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-/* TOPBAR */
-.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;background:rgba(8,8,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
-.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;background:rgba(8,8,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
+.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800}
 .topbar-brand span{color:var(--v2)}
+.hbtn{display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px}
+.hbtn span{display:block;width:20px;height:2px;background:var(--text2);border-radius:2px}
 
-/* CONTROLS BAR */
-.controls{display:flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(8,8,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.controls{display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(8,8,15,.9);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
 .controls::-webkit-scrollbar{display:none}
-
-.ctrl-group{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px}
-.ctrl-btn{padding:5px 14px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ctrl-group{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:3px;flex-shrink:0}
+.ctrl-btn{padding:4px 12px;background:transparent;border:none;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
 .ctrl-btn:hover{color:var(--text2)}
 .ctrl-btn.on{background:var(--v);color:white}
+.sep{width:1px;height:18px;background:var(--border);flex-shrink:0;margin:0 2px}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--green);margin-left:auto;flex-shrink:0}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:p 2s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 
-.ctrl-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.map-wrap{flex:1;position:relative;min-height:0;background:#131722}
+.map-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
 
-.status-live{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--green);margin-left:auto}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* HEATMAP CONTAINER - full remaining height */
-.heatmap-wrap{flex:1;position:relative;min-height:0}
-.heatmap-wrap iframe{width:100%;height:100%;border:none;display:block}
-
-/* LEGEND BAR */
-.legend-bar{display:flex;align-items:center;gap:16px;padding:8px 20px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)}
-.legend-dot{width:8px;height:8px;border-radius:50%}
-.legend-note{font-size:10px;color:var(--text3);margin-left:auto}
-.legend-note a{color:var(--v2);text-decoration:none}
-.legend-note a:hover{text-decoration:underline}
+.foot{display:flex;align-items:center;gap:12px;padding:6px 16px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)}
+.ld{width:8px;height:8px;border-radius:50%}
+.src{font-size:10px;color:var(--text3);margin-left:auto}
+.src a{color:var(--v2);text-decoration:none}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <header class="topbar">
   <div style="display:flex;align-items:center;gap:10px">
-    <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(139,92,246,.1)'" onmouseout="this.style.background='transparent'">
-      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-    </button>
+    <button class="hbtn" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
     <div class="topbar-brand">Le Terminal <span>Bubble Map</span></div>
   </div>
-  <div class="status-live">
-    <div class="status-dot"></div>
-    LIVE
-  </div>
+  <div class="live"><div class="live-dot"></div>LIVE</div>
 </header>
 
-<!-- CONTROLS -->
 <div class="controls">
-  <!-- Période -->
-  <div class="ctrl-group" id="periodGroup">
-    <button class="ctrl-btn on" onclick="setPeriod('hour', this)">1H</button>
-    <button class="ctrl-btn" onclick="setPeriod('day', this)">24H</button>
-    <button class="ctrl-btn" onclick="setPeriod('week', this)">7J</button>
-    <button class="ctrl-btn" onclick="setPeriod('month', this)">1M</button>
-  </div>
-
-  <div class="ctrl-sep"></div>
-
   <!-- Marché -->
-  <div class="ctrl-group" id="marketGroup">
-    <button class="ctrl-btn on" onclick="setMarket('crypto', this)">Crypto</button>
-    <button class="ctrl-btn" onclick="setMarket('forex', this)">Forex</button>
-    <button class="ctrl-btn" onclick="setMarket('us_stocks', this)">Actions US</button>
-    <button class="ctrl-btn" onclick="setMarket('etf', this)">ETF</button>
+  <div class="ctrl-group" id="mktGroup">
+    <button class="ctrl-btn on" onclick="pick('mkt','crypto',this)">🪙 Crypto</button>
+    <button class="ctrl-btn" onclick="pick('mkt','forex',this)">💱 Forex</button>
+    <button class="ctrl-btn" onclick="pick('mkt','stocks',this)">📈 Indices US</button>
+    <button class="ctrl-btn" onclick="pick('mkt','etf',this)">📦 ETF</button>
   </div>
 
-  <div class="ctrl-sep"></div>
+  <div class="sep"></div>
 
-  <!-- Métrique -->
-  <div class="ctrl-group" id="metricGroup">
-    <button class="ctrl-btn on" onclick="setMetric('market_cap_calc', this)">Cap. marché</button>
-    <button class="ctrl-btn" onclick="setMetric('volume', this)">Volume</button>
+  <!-- Période -->
+  <div class="ctrl-group" id="tfGroup">
+    <button class="ctrl-btn" onclick="pick('tf','60',this)">1H</button>
+    <button class="ctrl-btn on" onclick="pick('tf','D',this)">24H</button>
+    <button class="ctrl-btn" onclick="pick('tf','W',this)">7J</button>
+    <button class="ctrl-btn" onclick="pick('tf','M',this)">1M</button>
   </div>
 
-  <div class="status-live">
-    <div class="status-dot"></div>
-    LIVE · TradingView
+  <div class="sep"></div>
+
+  <!-- Taille bulle -->
+  <div class="ctrl-group" id="sizeGroup">
+    <button class="ctrl-btn on" onclick="pick('size','market_cap_calc',this)">Cap.</button>
+    <button class="ctrl-btn" onclick="pick('size','volume',this)">Volume</button>
   </div>
+
+  <div class="live"><div class="live-dot"></div>TradingView</div>
 </div>
 
-<!-- HEATMAP -->
-<div class="heatmap-wrap" id="heatmapWrap">
-  <!-- iframe injected by JS -->
-</div>
+<div class="map-wrap" id="mapWrap"></div>
 
-<!-- LEGEND -->
-<div class="legend-bar">
-  <div class="legend-item"><div class="legend-dot" style="background:#1a9e6e"></div>Forte hausse</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#26a69a"></div>Hausse</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#4caf80"></div>Légère hausse</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#888"></div>Neutre</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#ef5350"></div>Légère baisse</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#c62828"></div>Forte baisse</div>
-  <div class="legend-note">Données via <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a></div>
+<div class="foot">
+  <div class="leg"><div class="ld" style="background:#1a9e6e"></div>Forte hausse</div>
+  <div class="leg"><div class="ld" style="background:#4caf80"></div>Hausse</div>
+  <div class="leg"><div class="ld" style="background:#888"></div>Neutre</div>
+  <div class="leg"><div class="ld" style="background:#ef5350"></div>Baisse</div>
+  <div class="leg"><div class="ld" style="background:#c62828"></div>Forte baisse</div>
+  <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
 </div>
 
 <script>
-var currentPeriod = 'hour';
-var currentMarket = 'crypto';
-var currentMetric = 'market_cap_calc';
+var state = { mkt: 'crypto', tf: 'D', size: 'market_cap_calc' };
 
-function buildIframeSrc() {
-  // TradingView crypto heatmap widget
-  var params = {
-    dataSource: currentMarket === 'crypto' ? 'Crypto' :
-                currentMarket === 'forex' ? 'FX' :
-                currentMarket === 'us_stocks' ? 'SPX500' : 'ETF',
-    blockSize: currentMetric,
-    blockColor: 'change',
-    locale: 'fr',
+function pick(key, val, btn) {
+  state[key] = val;
+  var group = btn.parentElement;
+  group.querySelectorAll('.ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+
+  // Hide size group for forex (not applicable)
+  document.getElementById('sizeGroup').style.display =
+    (state.mkt === 'forex') ? 'none' : 'flex';
+
+  render();
+}
+
+function render() {
+  var wrap = document.getElementById('mapWrap');
+
+  // Build config based on market
+  var cfg = {
     colorTheme: 'dark',
+    locale: 'fr',
     hasTopBar: false,
     isDataSetEnabled: false,
     isZoomEnabled: true,
     hasSymbolTooltip: true,
     isMonoSize: false,
     width: '100%',
-    height: '100%'
-  };
-
-  // Map period to TradingView timeframe
-  var tfMap = { hour: '60', day: 'D', week: 'W', month: 'M' };
-  params.timeframe = tfMap[currentPeriod] || 'D';
-
-  var encoded = encodeURIComponent(JSON.stringify(params));
-  return 'https://www.tradingview.com/widgetembed/?hideideas=1&utm_source=www&utm_medium=widget&utm_campaign=chart&utm_term=BTCUSD&widgetType=crypto-coins-heatmap&widgetConfig=' + encoded;
-}
-
-function buildWidget() {
-  var wrap = document.getElementById('heatmapWrap');
-
-  // Use TradingView script-based widget
-  wrap.innerHTML = '';
-
-  var container = document.createElement('div');
-  container.className = 'tradingview-widget-container';
-  container.style.width = '100%';
-  container.style.height = '100%';
-
-  var widget = document.createElement('div');
-  widget.className = 'tradingview-widget-container__widget';
-  widget.style.width = '100%';
-  widget.style.height = '100%';
-  container.appendChild(widget);
-
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js';
-  script.async = true;
-
-  var tfMap = { hour: '60', day: 'D', week: 'W', month: 'M' };
-
-  var config = {
-    dataSource: currentMarket === 'crypto' ? 'Crypto' :
-                currentMarket === 'forex' ? 'FX' :
-                currentMarket === 'us_stocks' ? 'SPX500' : 'ETF',
-    blockSize: currentMetric,
+    height: '100%',
     blockColor: 'change',
-    locale: 'fr',
-    colorTheme: 'dark',
-    hasTopBar: false,
-    isDataSetEnabled: false,
-    isZoomEnabled: true,
-    hasSymbolTooltip: true,
-    isMonoSize: false,
-    width: '100%',
-    height: '100%'
+    blockSize: state.size
   };
 
-  // Inject timeframe via URL param instead
-  script.innerHTML = JSON.stringify(config);
-  container.appendChild(script);
-  wrap.appendChild(container);
-}
+  var widgetType, src;
 
-function setPeriod(p, btn) {
-  currentPeriod = p;
-  document.querySelectorAll('#periodGroup .ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
-  btn.classList.add('on');
-  buildWidget();
-}
-
-function setMarket(m, btn) {
-  currentMarket = m;
-  document.querySelectorAll('#marketGroup .ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
-  btn.classList.add('on');
-
-  // Adapt metric buttons based on market
-  var metricGroup = document.getElementById('metricGroup');
-  if(m === 'crypto') {
-    metricGroup.innerHTML = '<button class="ctrl-btn on" onclick="setMetric(\'market_cap_calc\', this)">Cap. marché</button>' +
-      '<button class="ctrl-btn" onclick="setMetric(\'volume\', this)">Volume</button>';
-  } else if(m === 'forex') {
-    metricGroup.innerHTML = '<button class="ctrl-btn on" onclick="setMetric(\'change\', this)">Variation</button>';
-    currentMetric = 'change';
-  } else {
-    metricGroup.innerHTML = '<button class="ctrl-btn on" onclick="setMetric(\'market_cap_calc\', this)">Cap. marché</button>' +
-      '<button class="ctrl-btn" onclick="setMetric(\'volume\', this)">Volume</button>';
+  if (state.mkt === 'crypto') {
+    widgetType = 'crypto-coins-heatmap';
+    cfg.dataSource = 'Crypto';
+  } else if (state.mkt === 'forex') {
+    // Use forex heatmap — different widget
+    widgetType = 'forex-heat-map';
+    cfg.currencies = ['EUR','USD','JPY','GBP','CHF','AUD','CAD','NZD'];
+  } else if (state.mkt === 'stocks') {
+    widgetType = 'stock-heatmap';
+    cfg.exchanges = [];
+    cfg.dataSource = 'SPX500';
+    cfg.grouping = 'sector';
+  } else if (state.mkt === 'etf') {
+    widgetType = 'etf-heatmap';
+    cfg.dataSource = 'AllUSEtf';
+    cfg.grouping = 'asset_class';
   }
-  buildWidget();
+
+  // Inject timeframe into config
+  cfg.timeframe = state.tf;
+
+  // Build iframe URL
+  src = 'https://www.tradingview.com/widgetembed/?widgetType=' + widgetType +
+    '&widgetConfig=' + encodeURIComponent(JSON.stringify(cfg)) +
+    '&utm_source=terminal&utm_medium=widget';
+
+  wrap.innerHTML = '<iframe src="' + src + '" allowtransparency="true" scrolling="no" frameborder="0"></iframe>';
 }
 
-function setMetric(m, btn) {
-  currentMetric = m;
-  document.querySelectorAll('#metricGroup .ctrl-btn').forEach(function(b){ b.classList.remove('on'); });
-  btn.classList.add('on');
-  buildWidget();
-}
-
-// Initial render
-buildWidget();
+render();
 </script>
 
 <script src="./menu.js"></script>
