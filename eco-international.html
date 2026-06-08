@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — International</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./eco.css">
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<header class="lt-topbar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="lt-hamburger" onclick="ltOpenMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="./index.html" class="lt-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Éco</span></a>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="lt-status"><div class="lt-dot"></div>LIVE</div>
+    <span class="liveclock" id="liveClock" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums"></span>
+    <button class="langbtn" id="langToggle" type="button" aria-label="Switch language" title="English / Français">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>
+      <span class="lang__label">EN</span>
+    </button>
+  </div>
+</header>
+<!-- PRICETAPE (TradingView ticker) -->
+<div class="pricetape">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName": "FOREXCOM:FRA40", "title": "CAC 40"},
+        {"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
+        {"proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100"},
+        {"proName": "FX_IDC:EURUSD", "title": "EUR/USD"},
+        {"proName": "FX_IDC:USDJPY", "title": "USD/JPY"},
+        {"proName": "TVC:GOLD", "title": "Or"},
+        {"proName": "TVC:UKOIL", "title": "Brent"},
+        {"proName": "TVC:USOIL", "title": "WTI"},
+        {"proName": "BITSTAMP:BTCUSD", "title": "Bitcoin"},
+        {"proName": "BITSTAMP:ETHUSD", "title": "Ethereum"}
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "fr"
+    }
+    </script>
+  </div>
+</div>
+<main class="wrap">
+<section class="pagehead" aria-label="International">
+  <p class="pagehead__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg> <span data-en="View · International">Vue · International</span></p>
+  <h1 class="pagehead__title" data-en="International">International</h1>
+  <p class="pagehead__lead" data-en="When the news goes beyond a single region: a global, multi-zone view.">Quand l'actualité dépasse une seule région : une vue globale et multi-zones.</p>
+</section>
+
+<section id="r-international" class="block" aria-label="International">
+  <div class="grid">
+    <article class="card " style="--i: 0">
+  <a class="card__hit" href="annonces/352fa986356c82d3.html" aria-label="Lire le résumé : Les marchés mondiaux stables, entre croissance et banques centrales">
+    <p class="card__kicker">
+      <span class="card__cat js-term">International</span>
+      <span class="card__sep">·</span>
+      <span class="card__source">Reuters – Business</span>
+<span class="card__time">08:32</span><span class="bias bias--flat card__bias" data-en="Neutral / wait-and-see">Neutre / attentiste</span>    </p>
+    <h3 class="card__title" data-en="Global markets steady between growth and central banks">Les marchés mondiaux stables, entre croissance et banques centrales</h3>
+    <p class="card__summary" data-en="Equities hold and the dollar eases.">Les actions tiennent et le dollar s&#39;assouplit.</p>
+  </a>
+  <a class="btn" href="annonces/352fa986356c82d3.html">
+    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
+  </a>
+</article>
+
+  </div>
+</section>
+
+<section class="prose" aria-label="Pourquoi cette page">
+  <span class="prose__kicker" data-en="About this page">À propos de cette page</span>
+  <h2 class="prose__h" data-en="Why this page">Pourquoi cette page</h2>
+  <p data-en="This page gathers announcements with a global reach, spanning several zones at once: global market trends, international trade and the big macroeconomic balances.">Cette page rassemble les annonces à portée mondiale, qui concernent plusieurs zones à la fois : tendances globales des marchés, commerce international et grands équilibres macroéconomiques.</p>
+</section>
+
+<section class="block eco-archives" aria-label="Annonces précédentes">
+  <header class="block__head">
+    <h2 class="block__title" data-en='<span class="block__dot">●</span> Earlier announcements'><span class="block__dot">●</span> Annonces précédentes</h2>
+    <span class="block__sub" data-en="Coming soon">Bientôt disponibles</span>
+  </header>
+  <div class="eco-empty" data-en="Older announcements will be archived here as new editions are published. Come back soon.">
+    Les annonces plus anciennes seront archivées ici au fil des prochaines éditions. Revenez bientôt.
+  </div>
+</section>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./menu.js"></script>
+</body>
+</html>
