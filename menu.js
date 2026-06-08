@@ -197,14 +197,14 @@
   // ── HTML ──
   var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
-  // Rendu récursif d'une sous-entrée (peut elle-même avoir des enfants → 3e niveau)
-  function renderSub(c, depth) {
+  // Rendu récursif d'un sous-item (gère N niveaux)
+  function renderSub(c) {
     if(c.children && c.children.length) {
-      var inner = c.children.map(function(cc) { return renderSub(cc, depth + 1); }).join('');
+      var inner = c.children.map(function(cc) { return renderSub(cc); }).join('');
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
                  '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
-                 '<button class="lt-nav-caret lt-caret-sm" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+                 '<button class="lt-nav-caret lt-nav-caret--sub" type="button" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav lt-subnav--deep"><div>' + inner + '</div></div>' +
              '</div>';
@@ -217,25 +217,11 @@
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
     if(p.children && p.children.length) {
-      var subItems = p.children.map(function(c) {
-        if(c.children && c.children.length) {
-          var subSub = c.children.map(function(sc) {
-            return '<a class="lt-subnav-item lt-subnav-item--deep" href="' + sc.href + '"><span class="lt-subnav-ic">' + sc.icon + '</span>' + sc.label + '</a>';
-          }).join('');
-          return '<div class="lt-subnav-group">' +
-            '<div class="lt-subnav-row">' +
-              '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
-              '<button class="lt-nav-caret lt-nav-caret--sub" type="button" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
-            '</div>' +
-            '<div class="lt-subnav lt-subnav--deep"><div>' + subSub + '</div></div>' +
-          '</div>';
-        }
-        return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
-      }).join('');
+      var subItems = p.children.map(function(c) { return renderSub(c); }).join('');
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
                  '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
-                 '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+                 '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav"><div>' + subItems + '</div></div>' +
              '</div>';
