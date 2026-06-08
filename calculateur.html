@@ -94,6 +94,17 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .risk-preset:hover{border-color:rgba(0,149,255,.3);color:var(--v2)}
 .risk-preset.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
 
+/* RR DISPLAY */
+.rr-display{align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid var(--border)}
+.rr-badge{font-size:1em;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
+.rr-green{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.33)}
+.rr-orange{background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.33)}
+.rr-red{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.33)}
+
+/* OPTIONAL PRICE SECTION */
+.price-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.price-section-title{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+
 /* CALCULATE BTN */
 .calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.3);position:relative;overflow:hidden}
 .calc-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);opacity:0;transition:opacity .2s}
@@ -234,6 +245,31 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       </div>
     </div>
 
+    <!-- OPTIONAL PRICE SECTION -->
+    <div class="price-section">
+      <div class="price-section-title">Calcul par prix (optionnel)</div>
+      <div class="fields-grid" style="margin-bottom:12px">
+        <div class="field">
+          <div class="field-label">Prix d'entrée</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="entryPrice" type="number" placeholder="ex: 1.08500" step="any" oninput="calcPriceToSL()">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Stop Loss prix</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="slPrice" type="number" placeholder="ex: 1.08200" step="any" oninput="calcPriceToSL()">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Take Profit prix</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="tpPrice" type="number" placeholder="ex: 1.09100" step="any" oninput="calcRR()">
+          </div>
+        </div>
+      </div>
+      <div id="rrDisplay" class="rr-display" style="display:none"></div>
+    </div>
 
   </div>
 
@@ -401,6 +437,61 @@ function setRisk(val) {
   updateSliderStyle();
   updatePresetBtns();
   calculate();
+}
+
+// ── PRICE / RR FUNCTIONS ──
+function getPipMult(pair) {
+  if (!pair) return 10000;
+  var p = pair.toUpperCase();
+  if (['EURUSD','GBPUSD','AUDUSD','NZDUSD','EURGBP','EURAUD','GBPAUD'].indexOf(p) > -1) return 10000;
+  if (['USDJPY','EURJPY','GBPJPY','CADJPY','AUDJPY'].indexOf(p) > -1) return 100;
+  if (p === 'XAUUSD') return 100;
+  if (['NAS100','US30','SP500','DAX'].indexOf(p) > -1) return 1;
+  if (['BTCUSD','ETHUSD'].indexOf(p) > -1) return 1;
+  if (['USOIL','UKOIL'].indexOf(p) > -1) return 100;
+  return 10000;
+}
+
+function calcPriceToSL() {
+  var entry = parseFloat(document.getElementById('entryPrice').value);
+  var sl = parseFloat(document.getElementById('slPrice').value);
+  if (isNaN(entry) || isNaN(sl)) { calcRR(); return; }
+  var mult = getPipMult(selectedPair);
+  var pips = Math.abs(entry - sl) * mult;
+  var slPipsField = document.getElementById('slPips');
+  if (slPipsField) {
+    slPipsField.value = Math.round(pips * 10) / 10;
+    calculate();
+  }
+  calcRR();
+}
+
+function calcRR() {
+  var entry = parseFloat(document.getElementById('entryPrice').value);
+  var sl = parseFloat(document.getElementById('slPrice').value);
+  var tp = parseFloat(document.getElementById('tpPrice').value);
+  var rrDisplay = document.getElementById('rrDisplay');
+  if (isNaN(entry) || isNaN(sl) || isNaN(tp)) { rrDisplay.style.display = 'none'; return; }
+  var mult = getPipMult(selectedPair);
+  var slPips = Math.abs(entry - sl) * mult;
+  var tpPips = Math.abs(tp - entry) * mult;
+  if (slPips === 0) { rrDisplay.style.display = 'none'; return; }
+  var ratio = tpPips / slPips;
+  // Read risk amount from div textContent
+  var riskEur = null;
+  var riskField = document.getElementById('riskAmount');
+  if (riskField) {
+    var v = parseFloat(riskField.textContent);
+    if (!isNaN(v)) riskEur = v;
+  }
+  var colorClass = ratio >= 2 ? 'rr-green' : ratio >= 1 ? 'rr-orange' : 'rr-red';
+  var profitHtml = '';
+  if (riskEur !== null) {
+    var profitVal = (riskEur * ratio).toFixed(2);
+    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--text2)">Profit attendu : <strong>' + profitVal + curSym() + '</strong> (' + ratio.toFixed(2) + 'R)</span>';
+  }
+  rrDisplay.style.display = 'flex';
+  rrDisplay.innerHTML = '<span class="rr-badge ' + colorClass + '">RR 1:' + ratio.toFixed(2) + '</span>' + profitHtml;
 }
 
 function updateSliderStyle() {
