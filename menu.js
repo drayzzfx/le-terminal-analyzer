@@ -19,10 +19,18 @@
     { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
     { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
     { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './calendrier.html', children: [
-      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`, label: 'Édition du jour', href: './calendrier.html#edition' },
-      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, label: 'Flash Info', href: './calendrier.html#flash' },
-      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>`, label: 'Calendrier éco', href: './calendrier.html#calendrier' },
-      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>`, label: 'Crypto', href: './calendrier.html#crypto' },
+      { icon: '📰', label: 'Édition du jour', href: './calendrier.html#edition', children: [
+        { icon: '⭐', label: 'La sélection',  href: './calendrier.html#selection' },
+        { icon: '🇪🇺', label: 'Europe',        href: './calendrier.html#r-europe' },
+        { icon: '🌎', label: 'Amériques',     href: './calendrier.html#r-ameriques' },
+        { icon: '🌏', label: 'Asie',          href: './calendrier.html#r-asie' },
+        { icon: '📈', label: 'Marchés',       href: './calendrier.html#r-marches' },
+        { icon: '🏛️', label: 'Institutions',  href: './calendrier.html#r-institutions' },
+        { icon: '🌐', label: 'International',  href: './calendrier.html#r-international' },
+      ] },
+      { icon: '⚡', label: 'Flash Info',      href: './calendrier.html#flash' },
+      { icon: '📅', label: 'Calendrier éco',  href: './calendrier.html#calendrier' },
+      { icon: '🪙', label: 'Crypto',          href: './calendrier.html#crypto' },
     ] },
     { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html' },
     { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
@@ -102,7 +110,7 @@
       display: flex; align-items: center; justify-content: center;
       transition: all .2s; flex-shrink: 0;
     }
-    .lt-nav-caret:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
+    .lt-nav-caret:hover { background: rgba(0,149,255,.1); color: #38B6FF; }
     .lt-nav-caret svg { transition: transform .25s cubic-bezier(.2,0,.1,1); }
     .lt-nav-caret:hover svg { transform: rotate(-180deg); }
     .lt-nav-caret.open svg { transform: rotate(180deg); }
@@ -112,7 +120,7 @@
       display: grid; grid-template-rows: 0fr;
       transition: grid-template-rows .3s cubic-bezier(.2,0,.1,1);
       margin-left: 14px; padding-left: 12px;
-      border-left: 1px solid rgba(139,92,246,.18);
+      border-left: 1px solid rgba(0,149,255,.18);
     }
     .lt-subnav > div { overflow: hidden; }
     .lt-subnav.open { grid-template-rows: 1fr; }
@@ -125,8 +133,23 @@
       font-size: 13px; font-weight: 600;
       transition: all .2s;
     }
-    .lt-subnav-item:hover { background: rgba(139,92,246,.1); color: #A78BFA; }
-    .lt-subnav-item .lt-subnav-ic { font-size: 14px; line-height: 1; flex-shrink: 0; }
+    .lt-subnav-item:hover { background: rgba(0,149,255,.1); color: #38B6FF; }
+    .lt-subnav-item .lt-subnav-ic { font-size: 14px; line-height: 1; flex-shrink: 0; width: 18px; text-align: center; }
+
+    /* ── 3e niveau (catégories d'Édition du jour) ── */
+    .lt-subnav-group { display: flex; flex-direction: column; }
+    .lt-subnav-row { display: flex; align-items: center; gap: 2px; }
+    .lt-subnav-row .lt-subnav-item { flex: 1; }
+    .lt-nav-caret.lt-caret-sm { padding: 6px; }
+    .lt-nav-caret.lt-caret-sm svg { width: 12px; height: 12px; }
+    .lt-subnav--deep {
+      margin-left: 9px; padding-left: 10px;
+      border-left: 1px solid rgba(0,149,255,.12);
+    }
+    .lt-subnav--deep .lt-subnav-item {
+      font-size: 12.5px; font-weight: 500; padding: 7px 10px; color: #847FA0;
+    }
+    .lt-subnav--deep .lt-subnav-item:hover { color: #38B6FF; }
 
     .lt-menu-footer {
       padding: 12px; border-top: 1px solid rgba(255,255,255,.06); flex-shrink: 0;
@@ -162,14 +185,27 @@
   // ── HTML ──
   var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
+  // Rendu récursif d'une sous-entrée (peut elle-même avoir des enfants → 3e niveau)
+  function renderSub(c, depth) {
+    if(c.children && c.children.length) {
+      var inner = c.children.map(function(cc) { return renderSub(cc, depth + 1); }).join('');
+      return '<div class="lt-subnav-group">' +
+               '<div class="lt-subnav-row">' +
+                 '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
+                 '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+               '</div>' +
+               '<div class="lt-subnav lt-subnav--deep open"><div>' + inner + '</div></div>' +
+             '</div>';
+    }
+    return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+  }
+
   var navItems = PAGES.map(function(p) {
     var isActive = page === p.id || (page === '' && p.id === 'index.html');
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
     if(p.children && p.children.length) {
-      var subItems = p.children.map(function(c) {
-        return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
-      }).join('');
+      var subItems = p.children.map(function(c) { return renderSub(c, 1); }).join('');
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
                  '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
@@ -273,25 +309,38 @@
     ltCloseMenu();
   };
 
-  // Replier / déplier un sous-menu
+  // Replier / déplier un sous-menu (gère le 2e et le 3e niveau)
   window.ltToggleSub = function(e, btn) {
     if(e) { e.preventDefault(); e.stopPropagation(); }
-    var group = btn.closest('.lt-nav-group');
+    var group = btn.closest('.lt-subnav-group') || btn.closest('.lt-nav-group');
     var sub = group ? group.querySelector('.lt-subnav') : null;
     if(sub) sub.classList.toggle('open');
     btn.classList.toggle('open');
   };
 
+  // Les 4 onglets de calendrier.html
+  var ECO_TABS = { edition: 1, flash: 1, calendrier: 1, crypto: 1 };
+
   // Ouvre le bon onglet de calendrier.html à partir du hash (#edition, #flash, ...)
+  // et, pour une catégorie de l'édition (#r-europe, #selection...), scrolle jusqu'à la section.
   window.ltOpenEcoTabFromHash = function() {
     if(page !== 'calendrier.html') return;
     var id = (window.location.hash || '').replace('#', '');
     if(!id) return;
-    var needle = "showTab('" + id + "')";
+    // Une ancre de catégorie appartient à l'onglet "edition" ; sinon c'est un id d'onglet.
+    var tabId = ECO_TABS[id] ? id : 'edition';
+    var needle = "showTab('" + tabId + "')";
     var tabs = document.querySelectorAll('.eco-tab');
     for(var i = 0; i < tabs.length; i++) {
       var oc = tabs[i].getAttribute('onclick') || '';
       if(oc.indexOf(needle) !== -1) { tabs[i].click(); break; }
+    }
+    // Catégorie : on défile jusqu'à la section une fois l'onglet affiché.
+    if(!ECO_TABS[id]) {
+      var target = document.getElementById(id);
+      if(target) {
+        setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 140);
+      }
     }
   };
   window.addEventListener('hashchange', window.ltOpenEcoTabFromHash);
