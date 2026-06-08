@@ -204,9 +204,9 @@
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
                  '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
-                 '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+                 '<button class="lt-nav-caret lt-caret-sm" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
-               '<div class="lt-subnav lt-subnav--deep open"><div>' + inner + '</div></div>' +
+               '<div class="lt-subnav lt-subnav--deep"><div>' + inner + '</div></div>' +
              '</div>';
     }
     return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
@@ -225,9 +225,9 @@
           return '<div class="lt-subnav-group">' +
             '<div class="lt-subnav-row">' +
               '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
-              '<button class="lt-nav-caret lt-nav-caret--sub open" type="button" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
+              '<button class="lt-nav-caret lt-nav-caret--sub" type="button" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
             '</div>' +
-            '<div class="lt-subnav lt-subnav--deep open"><div>' + subSub + '</div></div>' +
+            '<div class="lt-subnav lt-subnav--deep"><div>' + subSub + '</div></div>' +
           '</div>';
         }
         return '<a class="lt-subnav-item" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
@@ -235,9 +235,9 @@
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
                  '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
-                 '<button class="lt-nav-caret open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
+                 '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
-               '<div class="lt-subnav open"><div>' + subItems + '</div></div>' +
+               '<div class="lt-subnav"><div>' + subItems + '</div></div>' +
              '</div>';
     }
     if(p.soon) {
