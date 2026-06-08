@@ -425,7 +425,23 @@ function calculate() {
   updateRiskAmount();
   var size = parseFloat(document.getElementById('accountSize').value);
   var sl   = parseFloat(document.getElementById('slPips').value);
-  if(!size || !sl || sl <= 0) return;
+  if(!size || !sl || sl <= 0) {
+    // Shake the empty fields
+    var btn = document.querySelector('.calc-btn');
+    btn.style.background = 'linear-gradient(135deg,#F87171,#dc2626)';
+    btn.textContent = '⚠️ Remplis le capital et le SL en pips';
+    setTimeout(function(){
+      btn.style.background = 'linear-gradient(135deg,var(--v),#7C3AED)';
+      btn.innerHTML = '🧮 Calculer ma position';
+    }, 2000);
+    if(!size) document.getElementById('accountSize').style.borderColor='rgba(248,113,113,.6)';
+    if(!sl || sl<=0) document.getElementById('slPips').style.borderColor='rgba(248,113,113,.6)';
+    setTimeout(function(){
+      document.getElementById('accountSize').style.borderColor='';
+      document.getElementById('slPips').style.borderColor='';
+    }, 2000);
+    return;
+  }
 
   var pip = PIP_DATA[selectedPair];
   var pipValUSD = pip ? pip.pipVal : 10; // default 10$/lot
