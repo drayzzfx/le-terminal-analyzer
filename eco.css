@@ -852,9 +852,10 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 }
 .card__hit { display: block; flex: 1 1 auto; }
 .card__kicker {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  display: flex; align-items: center; align-content: flex-start; flex-wrap: wrap; gap: 8px;
   font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
   color: var(--text3); text-transform: uppercase; margin-bottom: 11px;
+  min-height: 38px;
 }
 .card__cat { color: var(--v2); font-weight: 600; }
 .card__sep { color: var(--border); }
@@ -863,9 +864,15 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 .card__title {
   font-family: var(--display); font-weight: 700; font-size: 18px; line-height: 1.2;
   letter-spacing: -0.01em; margin-bottom: 9px; transition: color 0.2s;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  min-height: 2.4em;
 }
 .card__hit:hover .card__title { color: var(--v3); }
-.card__summary { font-size: 13.5px; font-weight: 300; color: var(--text2); line-height: 1.65; }
+.card__summary {
+  font-size: 13.5px; font-weight: 300; color: var(--text2); line-height: 1.65;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  min-height: 3.3em;
+}
 
 /* Variante sélection : accent ambre */
 .card--pick { border-color: rgba(251,191,36,0.3); }
