@@ -1051,3 +1051,40 @@ body.eco-page .wrap { padding-top: 30px; }
   line-height: 1.6;
   text-align: center;
 }
+
+/* =========================================================================
+   Sentiment labels — hawkish / dovish / dynamic cards
+   ========================================================================= */
+.bias--hawk { color: #FB923C; background: rgba(251,146,60,0.10); }
+.bias--dove { color: #A78BFA; background: rgba(167,139,250,0.10); }
+
+/* Skeleton cards (chargement dynamique) */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.card--skeleton {
+  pointer-events: none;
+  animation: rise 0.3s ease both, none !important;
+}
+.card__skel-line {
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--border) 25%, rgba(255,255,255,0.07) 50%, var(--border) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+.card__skel-line--short { width: 55%; }
+.card__skel-line--med   { width: 75%; margin-top: 8px; }
+.card--skeleton::after {
+  content: '';
+  display: block;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--border);
+  margin-top: 8px;
+}
+
+/* Zone vide / erreur */
+.eco-empty svg { display: block; margin: 0 auto 12px; }
+

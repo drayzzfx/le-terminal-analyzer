@@ -64,7 +64,7 @@
   </p>
 </section>
 
-<ol class="wire" aria-label="Fil en direct">
+<ol class="wire" id="flash-wire" aria-label="Fil en direct">
   <li class="wire__item" style="--i: 0">
     <div class="wire__rail">
       <span class="wire__time">08:57</span>
@@ -148,5 +148,76 @@
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
 <script src="./menu.js"></script>
+<script>
+// ── Flash Info — polling /api/flash-detect toutes les 30 secondes ──────────
+(function(){
+  var wire = document.getElementById('flash-wire');
+  if (!wire) return;
+
+  function fmt(iso) {
+    try { return new Date(iso).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+    catch(e){ return ''; }
+  }
+  function relTime(iso) {
+    try {
+      var d = Date.now() - new Date(iso).getTime(), m = Math.floor(d/60000);
+      if (m < 1) return 'À l\'instant';
+      if (m < 60) return 'Il y a '+m+' min';
+      return 'Il y a '+Math.floor(m/60)+'h';
+    } catch(e){ return ''; }
+  }
+
+  function renderAlerts(alerts) {
+    var lang = localStorage.getItem('lt_lang') || 'fr';
+    if (!alerts || !alerts.length) return; // garde le contenu statique si vide
+    wire.innerHTML = alerts.map(function(a, i){
+      var dirCls = a.direction === 'up' ? 'bias--up' : 'bias--down';
+      var dirLabel = a.direction === 'up' ? (lang==='en' ? 'Risk-on' : 'Risk-on') : (lang==='en' ? 'Risk-off' : 'Risk-off');
+      var pct = (a.move_pct || 0).toFixed(2);
+      var arrow = a.direction === 'up' ? '↑' : '↓';
+      var causeHtml = a.cause_found
+        ? '<p class="wire__sum">'+arrow+' '+pct+'% &mdash; '+(a.source_title||'').slice(0,100)+'</p>'
+        : '<p class="wire__sum">'+arrow+' '+pct+'% &mdash; Mouvement non expliqué — surveillance active</p>';
+      var href = a.source_url || '#';
+      var target = a.source_url ? ' target="_blank" rel="noopener nofollow"' : '';
+      return '<li class="wire__item" style="--i:'+i+'">'
+        +'<div class="wire__rail">'
+        +'<span class="wire__time" title="'+relTime(a.detected_at)+'">'+fmt(a.detected_at)+'</span>'
+        +'<span class="wire__dot"></span>'
+        +'</div>'
+        +'<a class="wire__card" href="'+href+'"'+target+'>'
+        +'<p class="wire__kicker">'
+        +'<span class="wire__live">FLASH</span>'
+        +'<span class="wire__src">'+a.asset+'</span>'
+        +'<span class="bias '+dirCls+' wire__bias">'+dirLabel+'</span>'
+        +'</p>'
+        +'<h3 class="wire__title">'+arrow+' '+a.asset+' : +'+pct+'% en quelques minutes</h3>'
+        +causeHtml
+        +(a.source_url ? '<span class="wire__more">Lire la source <span aria-hidden="true">→</span></span>' : '')
+        +'</a>'
+        +'</li>';
+    }).join('');
+  }
+
+  function poll() {
+    fetch('/api/flash-detect')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){ if (data && data.alerts) renderAlerts(data.alerts); })
+      .catch(function(){});
+  }
+
+  // Premier appel au chargement
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', poll);
+  } else { poll(); }
+
+  // Déclenche aussi la détection (avec clé API dispo côté serveur)
+  // Appel séparé au endpoint de détection pour les environnements qui ont TWELVE_DATA_API_KEY
+  setInterval(function(){
+    fetch('/api/flash-detect?detect=1').catch(function(){});
+    setTimeout(poll, 3000); // récupère les nouvelles alertes 3s après la détection
+  }, 30000);
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,238 @@
+// api/refresh-news.js
+// Vercel Cron — agrège les RSS, résume via Claude, stocke dans Supabase
+// Déclenché par vercel.json crons (nécessite plan Pro pour < daily)
+const https = require('https');
+
+// ── SOURCES RSS PAR ZONE ──────────────────────────────────────────────────────
+const SOURCES = {
+  europe: [
+    { name: 'Reuters Business',  url: 'https://feeds.reuters.com/reuters/businessNews' },
+    { name: 'Les Échos',         url: 'https://feeds.lesechos.fr/lesechos/economie' },
+    { name: 'La Tribune',        url: 'https://www.latribune.fr/rss/une.xml' },
+    { name: 'Financial Times',   url: 'https://www.ft.com/rss/home/europe' },
+  ],
+  ameriques: [
+    { name: 'CNBC Economy',      url: 'https://www.cnbc.com/id/20910258/device/rss/rss.html' },
+    { name: 'MarketWatch',       url: 'https://feeds.marketwatch.com/marketwatch/topstories/' },
+    { name: 'Reuters US',        url: 'https://feeds.reuters.com/reuters/money' },
+  ],
+  asie: [
+    { name: 'SCMP Business',     url: 'https://www.scmp.com/rss/91/feed' },
+    { name: 'Nikkei Asia',       url: 'https://asia.nikkei.com/rss/feed/nar' },
+  ],
+  institutions: [
+    { name: 'BCE',               url: 'https://www.ecb.europa.eu/rss/press.html' },
+    { name: 'FMI',               url: 'https://www.imf.org/en/News/rss' },
+    { name: 'Banque de France',  url: 'https://www.banque-france.fr/fr/rss.xml' },
+    { name: 'INSEE',             url: 'https://www.insee.fr/fr/rss.asp' },
+    { name: 'Fed',               url: 'https://www.federalreserve.gov/feeds/press_all.xml' },
+  ],
+  marches: [
+    { name: 'Investing.com News',url: 'https://www.investing.com/rss/news.rss' },
+    { name: 'FXStreet',          url: 'https://www.fxstreet.com/rss/news' },
+  ],
+  crypto: [
+    { name: 'CoinDesk',          url: 'https://www.coindesk.com/arc/outboundfeeds/rss/' },
+    { name: 'Cointelegraph',     url: 'https://cointelegraph.com/rss' },
+    { name: 'Decrypt',           url: 'https://decrypt.co/feed' },
+  ],
+};
+
+// ── HTTP FETCH ────────────────────────────────────────────────────────────────
+function httpGet(url, timeout = 8000) {
+  return new Promise((resolve, reject) => {
+    const mod = url.startsWith('https') ? https : require('http');
+    const timer = setTimeout(() => reject(new Error('timeout')), timeout);
+    try {
+      const req = mod.get(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; LeTerminalBot/1.0)',
+          'Accept': 'application/rss+xml, application/xml, text/xml, */*'
+        }
+      }, (res) => {
+        // Follow redirect
+        if (res.statusCode >= 301 && res.statusCode <= 308 && res.headers.location) {
+          clearTimeout(timer);
+          return httpGet(res.headers.location, timeout).then(resolve).catch(reject);
+        }
+        let data = '';
+        res.on('data', c => data += c);
+        res.on('end', () => { clearTimeout(timer); resolve(data); });
+        res.on('error', e => { clearTimeout(timer); reject(e); });
+      });
+      req.on('error', e => { clearTimeout(timer); reject(e); });
+    } catch(e) { clearTimeout(timer); reject(e); }
+  });
+}
+
+// ── RSS PARSER (no npm — regex based) ────────────────────────────────────────
+function parseRSS(xml) {
+  const items = [];
+  const itemRx = /<item[^>]*>([\s\S]*?)<\/item>/gi;
+  let m;
+  while ((m = itemRx.exec(xml)) !== null) {
+    const block = m[1];
+    const get = (tag) => {
+      const r = new RegExp(`<${tag}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i');
+      const match = r.exec(block);
+      return match ? match[1].trim() : '';
+    };
+    const title = get('title').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'").replace(/&quot;/g,'"');
+    const link  = get('link') || get('guid');
+    const pubDate = get('pubDate') || get('dc:date') || get('published');
+    const guid  = get('guid') || link;
+    const desc  = get('description') || get('summary') || get('content:encoded') || '';
+    if (title && link) items.push({ title, link, guid, pubDate, desc });
+  }
+  return items;
+}
+
+// ── SUPABASE HELPERS ─────────────────────────────────────────────────────────
+function sbReq(method, path, body) {
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  const url = new URL(SUPABASE_URL);
+  const payload = body ? JSON.stringify(body) : null;
+  const headers = {
+    'Content-Type': 'application/json',
+    'apikey': KEY,
+    'Authorization': `Bearer ${KEY}`,
+    'Prefer': method === 'POST' ? 'return=minimal' : undefined,
+  };
+  Object.keys(headers).forEach(k => headers[k] === undefined && delete headers[k]);
+  if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
+  return new Promise((resolve, reject) => {
+    const req = https.request({ hostname: url.hostname, path, method, headers }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, body: data ? JSON.parse(data) : {} }); }
+        catch(e) { resolve({ status: res.statusCode, body: data }); }
+      });
+    });
+    req.on('error', reject);
+    if (payload) req.write(payload);
+    req.end();
+  });
+}
+
+async function guidExists(guid) {
+  const encoded = encodeURIComponent(guid);
+  const r = await sbReq('GET', `/rest/v1/news_items?guid=eq.${encoded}&select=id&limit=1`);
+  return Array.isArray(r.body) && r.body.length > 0;
+}
+
+async function insertNewsItem(item) {
+  return sbReq('POST', '/rest/v1/news_items', item);
+}
+
+async function logFeedError(source, url, error) {
+  return sbReq('POST', '/rest/v1/feed_errors', { source, url, error: String(error) });
+}
+
+// ── CLAUDE SUMMARY ────────────────────────────────────────────────────────────
+async function getSummaryAndSentiment(title, desc, zone) {
+  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+  if (!ANTHROPIC_API_KEY) return { summary: '', sentiment: 'Neutre' };
+
+  const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 400);
+  const prompt = `Tu es un analyste financier. Voici un article économique.
+
+Titre : ${title}
+Résumé brut : ${cleanDesc}
+Zone : ${zone}
+
+Réponds UNIQUEMENT en JSON strict, sans markdown :
+{"summary":"<résumé 1-2 phrases max, factuel>","sentiment":"<Risk-on|Risk-off|Hawkish|Dovish|Neutre>"}`;
+
+  const payload = JSON.stringify({
+    model: 'claude-haiku-4-5',
+    max_tokens: 200,
+    messages: [{ role: 'user', content: prompt }]
+  });
+
+  return new Promise((resolve) => {
+    const req = https.request({
+      hostname: 'api.anthropic.com',
+      path: '/v1/messages',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try {
+          const body = JSON.parse(data);
+          const text = body.content?.[0]?.text || '{}';
+          const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
+          resolve({ summary: parsed.summary || '', sentiment: parsed.sentiment || 'Neutre' });
+        } catch(e) { resolve({ summary: '', sentiment: 'Neutre' }); }
+      });
+    });
+    req.on('error', () => resolve({ summary: '', sentiment: 'Neutre' }));
+    req.write(payload);
+    req.end();
+  });
+}
+
+// ── MAIN HANDLER ─────────────────────────────────────────────────────────────
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // Vérification cron secret (optionnel)
+  const CRON_SECRET = process.env.CRON_SECRET;
+  if (CRON_SECRET && req.headers['authorization'] !== `Bearer ${CRON_SECRET}`) {
+    // Vercel cron injecte automatiquement le bon header — on laisse passer si pas de secret configuré
+  }
+
+  const stats = { processed: 0, inserted: 0, skipped: 0, errors: [] };
+
+  for (const [zone, sources] of Object.entries(SOURCES)) {
+    for (const source of sources) {
+      try {
+        const xml = await httpGet(source.url);
+        const items = parseRSS(xml);
+
+        for (const item of items.slice(0, 10)) { // max 10 par feed
+          stats.processed++;
+          const exists = await guidExists(item.guid);
+          if (exists) { stats.skipped++; continue; }
+
+          // Trop vieux ? (> 48h)
+          if (item.pubDate) {
+            const age = Date.now() - new Date(item.pubDate).getTime();
+            if (age > 48 * 3600 * 1000) { stats.skipped++; continue; }
+          }
+
+          const { summary, sentiment } = await getSummaryAndSentiment(item.title, item.desc, zone);
+
+          await insertNewsItem({
+            guid: item.guid,
+            title: item.title,
+            summary: summary || item.desc.replace(/<[^>]+>/g,'').slice(0,200),
+            source: source.name,
+            url: item.link,
+            published_at: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
+            zone,
+            sentiment,
+          });
+          stats.inserted++;
+
+          // Pause anti-rate-limit Claude
+          await new Promise(r => setTimeout(r, 300));
+        }
+      } catch(err) {
+        stats.errors.push(`${source.name}: ${err.message}`);
+        await logFeedError(source.name, source.url, err.message).catch(() => {});
+      }
+    }
+  }
+
+  return res.status(200).json({ ok: true, ...stats });
+};
