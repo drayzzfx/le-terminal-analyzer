@@ -11,32 +11,32 @@
 * { cursor: none !important; }
 #cur-dot {
   position: fixed; top: 0; left: 0; z-index: 99999; pointer-events: none;
-  width: 6px; height: 6px; border-radius: 50%;
+  width: 4px; height: 4px; border-radius: 50%;
   background: #38B6FF;
-  box-shadow: 0 0 6px 2px #38B6FF, 0 0 14px 4px rgba(56,182,255,.5);
+  box-shadow: 0 0 4px 1px #38B6FF, 0 0 9px 2px rgba(56,182,255,.45);
   transform: translate(-50%,-50%);
   transition: transform .08s ease, width .2s, height .2s, background .2s;
   will-change: left, top;
 }
 #cur-ring {
   position: fixed; top: 0; left: 0; z-index: 99998; pointer-events: none;
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 1.5px solid rgba(56,182,255,.55);
-  box-shadow: 0 0 8px 1px rgba(56,182,255,.2), inset 0 0 6px rgba(56,182,255,.07);
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 1px solid rgba(56,182,255,.5);
+  box-shadow: 0 0 5px 1px rgba(56,182,255,.15);
   transform: translate(-50%,-50%);
   transition: width .25s, height .25s, border-color .25s;
   will-change: left, top;
 }
 /* Effets au hover sur éléments cliquables */
 body.cur-hover #cur-dot {
-  width: 10px; height: 10px;
+  width: 6px; height: 6px;
   background: #A78BFA;
-  box-shadow: 0 0 10px 4px #A78BFA, 0 0 22px 6px rgba(167,139,250,.45);
+  box-shadow: 0 0 7px 2px #A78BFA, 0 0 14px 4px rgba(167,139,250,.4);
 }
 body.cur-hover #cur-ring {
-  width: 44px; height: 44px;
-  border-color: rgba(167,139,250,.6);
-  box-shadow: 0 0 12px 2px rgba(167,139,250,.25), inset 0 0 8px rgba(167,139,250,.08);
+  width: 28px; height: 28px;
+  border-color: rgba(167,139,250,.55);
+  box-shadow: 0 0 8px 1px rgba(167,139,250,.2);
 }
 /* Cacher sur mobile */
 @media (pointer: coarse) { #cur-dot, #cur-ring { display: none !important; } * { cursor: auto !important; } }
