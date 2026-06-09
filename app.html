@@ -1032,11 +1032,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-entry">Entrée</label>
-          <input type="number" id="entry" placeholder="2320.50" step="any">
+          <input type="number" id="entry" placeholder="2320.50" step="any" autocomplete="off">
         </div>
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-tp">Take Profit</label>
-          <input type="number" id="tp" placeholder="2345.00" step="any">
+          <input type="number" id="tp" placeholder="2345.00" step="any" autocomplete="off">
         </div>
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-sl">Stop Loss</label>
@@ -3097,11 +3097,11 @@ window.doLogout=doLogout;
     </div>
     <div class="auth-field">
       <label>EMAIL</label>
-      <input type="email" id="authEmail" placeholder="ton@email.com">
+      <input type="email" id="authEmail" placeholder="ton@email.com" autocomplete="email">
     </div>
     <div class="auth-field">
       <label>MOT DE PASSE</label>
-      <input type="password" id="authPassword" placeholder="••••••••">
+      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="auth-submit" id="authSubmitBtn" onclick="doAuth()">
       <span id="authSubmitTxt">Se connecter</span>
