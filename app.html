@@ -2196,22 +2196,98 @@ async function requestIAFeedback(){
     weekTrades.forEach(function(t){ var h=new Date(t.created_at).getHours(); hourCounts[h]=(hourCounts[h]||0)+1; });
     var peakHour=Object.keys(hourCounts).sort(function(a,b){return hourCounts[b]-hourCounts[a];})[0];
     var peakHourStr=peakHour!==undefined?peakHour+'h-'+(parseInt(peakHour)+1)+'h':'N/A';
+    // === STATS AVANCÉES POUR LE RAPPORT IA ===
+    // Discipline : combien de GO/NO-GO/WAIT ont été respectés
+    var goTrades = weekTrades.filter(function(t){ return t.verdict==='GO'; });
+    var nogoTrades = weekTrades.filter(function(t){ return t.verdict==='NO-GO'; });
+    var waitTrades = weekTrades.filter(function(t){ return t.verdict==='WAIT'; });
+    var goPris = goTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; }).length;
+    var nogoPris = nogoTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; }).length;
+    var waitPris = waitTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; }).length;
+    // Distribution des scores
+    var scoresAll = weekTrades.map(function(t){ return parseFloat(t.score)||0; });
+    var scoreHigh = weekTrades.filter(function(t){ return parseFloat(t.score)>=7; }).length;
+    var scoreMid = weekTrades.filter(function(t){ return parseFloat(t.score)>=5 && parseFloat(t.score)<7; }).length;
+    var scoreLow = weekTrades.filter(function(t){ return parseFloat(t.score)<5; }).length;
+    var avgScoreWeek = scoresAll.length ? (scoresAll.reduce(function(a,b){return a+b;},0)/scoresAll.length).toFixed(1) : 'N/A';
+    // Score moyen des trades pris vs refusés
+    var scoresPris = tradesTaken.map(function(t){ return parseFloat(t.score)||0; });
+    var scoresRefus = weekTrades.filter(function(t){ return !t.trade_taken; }).map(function(t){ return parseFloat(t.score)||0; });
+    var avgScorePris = scoresPris.length ? (scoresPris.reduce(function(a,b){return a+b;},0)/scoresPris.length).toFixed(1) : 'N/A';
+    var avgScoreRefus = scoresRefus.length ? (scoresRefus.reduce(function(a,b){return a+b;},0)/scoresRefus.length).toFixed(1) : 'N/A';
+    // TF distribution
+    var tfCounts = {};
+    weekTrades.forEach(function(t){ if(t.tf) tfCounts[t.tf]=(tfCounts[t.tf]||0)+1; });
+    var tfSummary = Object.keys(tfCounts).map(function(k){ return k+'('+tfCounts[k]+')'; }).join(', ');
+    // Session stats (si disponible)
+    var sessionCounts = {asia:0,london:0,ny:0};
+    weekTrades.forEach(function(t){
+      var h = new Date(t.created_at).getUTCHours();
+      if(h>=23||h<8) sessionCounts.asia++;
+      else if(h>=7&&h<16) sessionCounts.london++;
+      else if(h>=13&&h<22) sessionCounts.ny++;
+    });
+    // Résumé détaillé avec forces/faiblesses
     var tradesSummary=weekTrades.map(function(t){
-      var date=new Date(t.created_at).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-      return '- ['+date+'] '+t.pair+' '+t.direction+' '+t.tf+' | Score: '+t.score+' | Verdict IA: '+t.verdict+' | Pris: '+(t.trade_taken?'OUI':'NON')+' | Résultat: '+(t.trade_result||'N/A')+' | RR réalisé: '+(t.rr_realized||'N/A');
+      var date=new Date(t.created_at).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      var forces = t.forces ? t.forces.replace(/\n/g,' | ').substring(0,120) : '';
+      var faiblesses = t.faiblesses ? t.faiblesses.replace(/\n/g,' | ').substring(0,120) : '';
+      var notes = t.trade_notes ? ' | Notes trader: '+t.trade_notes.substring(0,80) : '';
+      return '- ['+date+'] '+t.pair+' '+t.direction+' '+t.tf+
+        ' | Score: '+t.score+'/10 | Verdict IA: '+t.verdict+
+        ' | Pris: '+(t.trade_taken?'OUI':'NON')+
+        ' | Résultat: '+(t.trade_result||'—')+
+        ' | RR réalisé: '+(t.rr_realized||'—')+
+        (forces ? '\n  Forces: '+forces : '')+
+        (faiblesses ? '\n  Faiblesses: '+faiblesses : '')+
+        notes;
     }).join('\n');
-    var statsBlock=['STATISTIQUES SEMAINE:',
-      '- Analyses totales: '+weekTrades.length,
-      '- Trades pris: '+tradesTaken.length+' | Refusés: '+(weekTrades.length-tradesTaken.length),
-      '- Wins: '+wins2.length+' | Losses: '+losses2.length,
+    var statsBlock=[
+      '=== RAPPORT HEBDOMADAIRE — STATISTIQUES ===',
+      '',
+      'VOLUME & ACTIVITÉ:',
+      '- Analyses totales: '+weekTrades.length+' | Score moyen: '+avgScoreWeek+'/10',
+      '- Distribution scores: Haute (≥7): '+scoreHigh+' | Moyenne (5-7): '+scoreMid+' | Faible (<5): '+scoreLow,
+      '- Timeframes utilisés: '+(tfSummary||'N/A'),
+      '- Heure la plus active: '+peakHourStr,
+      '- Activité sessions: Asia: '+sessionCounts.asia+' | London: '+sessionCounts.london+' | NY: '+sessionCounts.ny,
+      '',
+      'DISCIPLINE (respect des verdicts IA):',
+      '- Setups GO: '+goTrades.length+' analysés → '+goPris+' pris (discipline: '+(goTrades.length?Math.round(goPris/goTrades.length*100)+'%':'N/A')+')',
+      '- Setups WAIT: '+waitTrades.length+' analysés → '+waitPris+' pris quand même ('+waitPris+' trades pris contre avis IA)',
+      '- Setups NO-GO: '+nogoTrades.length+' analysés → '+nogoPris+' pris quand même ('+nogoPris+' trades pris contre avis IA)',
+      '- Score moyen trades PRIS: '+avgScorePris+'/10 | Score moyen trades REFUSÉS: '+avgScoreRefus+'/10',
+      '',
+      'PERFORMANCE:',
+      '- Trades pris: '+tradesTaken.length+' | Wins: '+wins2.length+' | Losses: '+losses2.length,
       '- Win rate: '+winRate2+'%',
       '- RR moyen réalisé: '+avgRR2,
       '- Meilleure paire: '+bestPair+(bestPair!=='N/A'?' ('+Math.round(bestRate)+'% win)':''),
       '- Paire difficile: '+worstPair+(worstPair!=='N/A'&&worstPair!==bestPair?' ('+Math.round(worstRate)+'% win)':''),
-      '- Heure la plus active: '+peakHourStr].join('\n');
-    var prompt=statsBlock+'\n\nDÉTAIL DES ANALYSES:\n'+tradesSummary+'\n\nGénère un rapport hebdomadaire structuré avec EXACTEMENT ces 4 sections:\n\n## Résumé de la semaine\n[2-3 phrases bilan global]\n\n## Points forts\n[3-4 bullets sur ce qui a bien fonctionné]\n\n## Axes d\'amélioration\n[3-4 bullets sur les erreurs ou patterns négatifs]\n\n## 3 actions concrètes pour la semaine prochaine\n[Exactement 3 bullets avec des actions précises]\n\nSois direct, factuel et bienveillant. Réponds en français.';
+    ].join('\n');
+    var prompt=statsBlock+'\n\nDÉTAIL COMPLET DES ANALYSES (avec forces/faiblesses ICT identifiées):\n'+tradesSummary+'\n\n'+
+      '=== INSTRUCTIONS RAPPORT ===\n'+
+      'Génère un rapport hebdomadaire structuré avec EXACTEMENT ces 4 sections.\n'+
+      'Utilise la terminologie ICT/SMC précise (OB, FVG, BOS, OTE, liquidity sweep, killzone, PD Array, etc.).\n'+
+      'Analyse la DISCIPLINE (respect des verdicts), la QUALITÉ des setups (scores), et les PATTERNS récurrents.\n'+
+      'Mentionne les sessions (Asia/London/NY) si les données le permettent.\n'+
+      'Sois direct, factuel, bienveillant. Réponds en français.\n\n'+
+      '## Résumé de la semaine\n[2-3 phrases bilan global avec chiffres clés]\n\n'+
+      '## Points forts\n[3-4 bullets sur ce qui a bien fonctionné — patterns ICT, discipline, sessions]\n\n'+
+      '## Axes d\'amélioration\n[3-4 bullets sur les erreurs ou patterns négatifs — mauvaises entrées, non-respect verdicts, mauvaise session]\n\n'+
+      '## 3 actions concrètes pour la semaine prochaine\n[Exactement 3 bullets ultra-précis avec des actions mesurables liées à la stratégie ICT/SMC]';
     var r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({system:'Tu es un coach de trading expert ICT/SMC. Tu analyses les performances hebdomadaires et génères des rapports structurés.',messages:[{role:'user',content:prompt}]})});
+      body:JSON.stringify({
+        system:'Tu es un coach de trading expert ICT/SMC (Inner Circle Trader / Smart Money Concepts). '+
+          'Tu maîtrises parfaitement : Order Blocks (OB), Fair Value Gaps (FVG), Break of Structure (BOS), Change of Character (ChoCH), '+
+          'Optimal Trade Entry (OTE 0.62-0.79 fib), liquidity sweeps, Power of 3 (AMD), Judas Swing, SMT Divergence, '+
+          'killzones (London Open 7h-16h UTC, NY AM 13h-17h UTC, Asia 23h-8h UTC), PD Arrays (premium/discount), '+
+          'Silver Bullet, ICT Unicorn Model, CISD, et toutes les corrélations DXY/Gold/Indices. '+
+          'Tu analyses les performances hebdomadaires d\'un trader pour l\'aider à progresser. '+
+          'Tu génères des rapports structurés qui identifient les patterns récurrents gagnants et perdants, '+
+          'évalues la discipline (respect des verdicts IA), et proposes des actions concrètes ICT-specific.',
+        messages:[{role:'user',content:prompt}]
+      })});
     var rd=await r.json();
     var txt=rd.content&&rd.content[0]?rd.content[0].text:'Rapport indisponible';
     var container=document.getElementById('iaFeedbackContent');
