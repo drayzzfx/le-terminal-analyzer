@@ -7,6 +7,40 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+/* ── CURSEUR PERSONNALISÉ ── */
+* { cursor: none !important; }
+#cur-dot {
+  position: fixed; top: 0; left: 0; z-index: 99999; pointer-events: none;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #38B6FF;
+  box-shadow: 0 0 6px 2px #38B6FF, 0 0 14px 4px rgba(56,182,255,.5);
+  transform: translate(-50%,-50%);
+  transition: transform .08s ease, width .2s, height .2s, background .2s;
+  will-change: left, top;
+}
+#cur-ring {
+  position: fixed; top: 0; left: 0; z-index: 99998; pointer-events: none;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1.5px solid rgba(56,182,255,.55);
+  box-shadow: 0 0 8px 1px rgba(56,182,255,.2), inset 0 0 6px rgba(56,182,255,.07);
+  transform: translate(-50%,-50%);
+  transition: width .25s, height .25s, border-color .25s;
+  will-change: left, top;
+}
+/* Effets au hover sur éléments cliquables */
+body.cur-hover #cur-dot {
+  width: 10px; height: 10px;
+  background: #A78BFA;
+  box-shadow: 0 0 10px 4px #A78BFA, 0 0 22px 6px rgba(167,139,250,.45);
+}
+body.cur-hover #cur-ring {
+  width: 44px; height: 44px;
+  border-color: rgba(167,139,250,.6);
+  box-shadow: 0 0 12px 2px rgba(167,139,250,.25), inset 0 0 8px rgba(167,139,250,.08);
+}
+/* Cacher sur mobile */
+@media (pointer: coarse) { #cur-dot, #cur-ring { display: none !important; } * { cursor: auto !important; } }
+
 :root {
   --bg: #08080F;
   --card: rgba(255,255,255,0.04);
@@ -3207,6 +3241,55 @@ window.doLogout=doLogout;
   var h = window.location.hash;
   if (h === '#historique') { window.addEventListener('load', function(){ openHistory(); }); }
   else if (h === '#perfs')  { window.addEventListener('load', function(){ openPerf();    }); }
+})();
+</script>
+
+<!-- CURSEUR PERSONNALISÉ -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+<script>
+(function(){
+  if(window.matchMedia('(pointer: coarse)').matches) return; // mobile : skip
+  var dot = document.getElementById('cur-dot');
+  var ring = document.getElementById('cur-ring');
+  var mx = window.innerWidth/2, my = window.innerHeight/2;
+  var rx = mx, ry = my;
+  var lag = 0.13; // 0 = colle au curseur, 1 = ne bouge pas
+
+  document.addEventListener('mousemove', function(e){
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  });
+
+  // Hover sur éléments interactifs
+  var hoverEls = 'a,button,input,select,textarea,[onclick],[role="button"],.analyzer-tab,.history-card,.history-item,.hc-top,label';
+  document.addEventListener('mouseover', function(e){
+    if(e.target.closest(hoverEls)) document.body.classList.add('cur-hover');
+  });
+  document.addEventListener('mouseout', function(e){
+    if(e.target.closest(hoverEls)) document.body.classList.remove('cur-hover');
+  });
+
+  // Click pulse
+  document.addEventListener('mousedown', function(){
+    dot.style.transform = 'translate(-50%,-50%) scale(0.6)';
+    ring.style.transform = 'translate(-50%,-50%) scale(0.85)';
+  });
+  document.addEventListener('mouseup', function(){
+    dot.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+
+  // Boucle RAF pour le ring avec décalage fluide
+  function loop(){
+    rx += (mx - rx) * lag;
+    ry += (my - ry) * lag;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(loop);
+  }
+  loop();
 })();
 </script>
 </body>
