@@ -92,6 +92,11 @@
     return item.summary || item.summary_en || '';
   }
 
+  // ── URL interne vers la page d'analyse dédiée ───────────────────────────
+  function articleUrl(item) {
+    return item.id ? '/eco-article.html?id=' + encodeURIComponent(item.id) : (item.url || '#');
+  }
+
   // ── Card normale (section actuel) ────────────────────────────────────────
   function buildCard(item, idx) {
     var zone = (window.ECO_ZONE || 'eco');
@@ -99,11 +104,10 @@
     var title   = (item.title || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var source  = (item.source || '').replace(/</g,'&lt;');
-    var url     = item.url || '#';
-    var target  = item.url ? ' target="_blank" rel="noopener nofollow"' : '';
+    var url     = articleUrl(item);
 
     return '<article class="card" style="--i:' + idx + '" data-eco-dynamic>'
-      + '<a class="card__hit" href="' + url + '"' + target + '>'
+      + '<a class="card__hit" href="' + url + '">'
       + '<p class="card__kicker">'
       + '<span class="card__cat js-term">' + zoneLabel + '</span>'
       + '<span class="card__sep">·</span>'
@@ -114,7 +118,7 @@
       + '<h3 class="card__title">' + title + '</h3>'
       + '<p class="card__summary">' + summary + '</p>'
       + '</a>'
-      + '<a class="btn" href="' + url + '"' + target + '>'
+      + '<a class="btn" href="' + url + '">'
       + '<span>' + t('readBtn') + '</span>'
       + '<span class="btn__arrow" aria-hidden="true">→</span>'
       + '</a>'
@@ -128,11 +132,10 @@
     var title   = (item.title || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var source  = (item.source || '').replace(/</g,'&lt;');
-    var url     = item.url || '#';
-    var target  = item.url ? ' target="_blank" rel="noopener nofollow"' : '';
+    var url     = articleUrl(item);
 
     return '<article class="card card--featured" style="--i:' + idx + '" data-eco-dynamic>'
-      + '<a class="card__hit" href="' + url + '"' + target + '>'
+      + '<a class="card__hit" href="' + url + '">'
       + '<p class="card__kicker">'
       + '<span class="card__cat js-term">' + zoneLabel + '</span>'
       + '<span class="card__sep">·</span>'
@@ -143,7 +146,7 @@
       + '<h3 class="card__title">' + title + '</h3>'
       + '<p class="card__summary">' + summary + '</p>'
       + '</a>'
-      + '<a class="btn" href="' + url + '"' + target + '>'
+      + '<a class="btn" href="' + url + '">'
       + '<span>' + t('readBtn') + '</span>'
       + '<span class="btn__arrow" aria-hidden="true">→</span>'
       + '</a>'
@@ -159,10 +162,9 @@
       : '';
     var title  = (item.title  || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var source = (item.source || '').replace(/</g,'&lt;');
-    var url    = item.url || '#';
-    var target = item.url ? ' target="_blank" rel="noopener nofollow"' : '';
+    var url    = articleUrl(item);
 
-    return '<a class="eco-arch-item" href="' + url + '"' + target + ' style="--i:' + idx + '">'
+    return '<a class="eco-arch-item" href="' + url + '" style="--i:' + idx + '">'
       + '<div class="eco-arch-item__meta">'
       + '<span class="eco-arch-item__time">' + dateLabel(item.published_at) + '</span>'
       + '<span class="eco-arch-item__src">' + source + '</span>'
