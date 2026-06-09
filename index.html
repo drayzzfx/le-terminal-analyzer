@@ -1,7 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0095FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le Terminal">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Hub Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -9,12 +15,12 @@
 <style>
 :root {
   --bg: #08080F;
+  --bg2: #0D0D1A;
   --card: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.07);
   --v: #0095FF;
   --v2: #38B6FF;
   --vglow: rgba(0,149,255,0.25);
-  --vglow2: rgba(0,149,255,0.08);
   --text: #F0EEFF;
   --text2: #9B96B8;
   --text3: #5A5570;
@@ -23,254 +29,468 @@
   --amber: #FBBF24;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-font-smoothing:antialiased}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-/* BG GLOW */
-.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0}
-.bg-glow::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,149,255,0.07) 0%,transparent 70%);border-radius:50%}
+/* ── BACKGROUND ── */
+.bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 20%,transparent 100%)}
+.bg-glow-1{position:absolute;top:-15%;left:50%;transform:translateX(-50%);width:900px;height:700px;background:radial-gradient(ellipse,rgba(0,149,255,.09) 0%,transparent 65%);border-radius:50%}
+.bg-glow-2{position:absolute;top:30%;left:-10%;width:500px;height:500px;background:radial-gradient(ellipse,rgba(56,182,255,.04) 0%,transparent 70%);border-radius:50%}
+.bg-glow-3{position:absolute;top:50%;right:-10%;width:500px;height:500px;background:radial-gradient(ellipse,rgba(0,149,255,.04) 0%,transparent 70%);border-radius:50%}
 
-/* TOPBAR */
-.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:rgba(8,8,15,0.8);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.brand{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
-.brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--v),#0070CC);display:flex;align-items:center;justify-content:center;font-size:14px}
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
 .brand span{color:var(--v2)}
-.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.trial-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;border:1px solid var(--border);color:var(--text3);letter-spacing:.05em;display:none}
+.trial-badge.show{display:block}
 .user-chip{display:none;align-items:center;gap:8px;padding:4px 14px 4px 4px;border-radius:50px;border:1px solid var(--border);background:var(--card);cursor:pointer}
 .user-chip.show{display:flex}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--v),#00C6FF);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#00C6FF);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
 .user-name{font-size:12px;font-weight:500;color:var(--text2)}
-.login-btn{padding:7px 18px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,149,255,.3)}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,149,255,.45)}
+.login-btn{padding:7px 20px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,149,255,.3)}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,149,255,.45)}
+.logout-btn{padding:6px 14px;background:transparent;border:1px solid rgba(248,113,113,.3);border-radius:50px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;display:none}
+.logout-btn:hover{background:rgba(248,113,113,.1)}
 
-/* MAIN */
-.main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 24px 100px}
+/* ── MAIN ── */
+.main{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px 120px}
 
-/* HERO */
-.hero{text-align:center;margin-bottom:72px}
-.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.25em;color:var(--v2);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
-.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,149,255,.4))}
-.hero-eyebrow::after{background:linear-gradient(90deg,rgba(0,149,255,.4),transparent)}
-.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(48px,7vw,88px);font-weight:800;letter-spacing:-0.04em;line-height:.92;margin-bottom:24px}
-.hero-title span{background:linear-gradient(135deg,var(--v) 0%,var(--v2) 50%,#00C6FF 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:16px;font-weight:300;color:var(--text2);line-height:1.7;max-width:500px;margin:0 auto 40px}
-.hero-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.4)}
-.hero-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,149,255,.55)}
+/* ── HERO ── */
+.hero{text-align:center;padding:90px 0 80px;position:relative}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:50px;border:1px solid rgba(0,149,255,.25);background:rgba(0,149,255,.08);margin-bottom:28px}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.hero-pill span{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--v2);text-transform:uppercase}
+.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(44px,6.5vw,84px);font-weight:800;letter-spacing:-0.04em;line-height:.94;margin-bottom:26px}
+.hero-title .line2{background:linear-gradient(130deg,var(--v) 0%,var(--v2) 45%,#8DB8FF 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:15.5px;font-weight:300;color:var(--text2);line-height:1.75;max-width:520px;margin:0 auto 44px}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.cta-primary{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.02em;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.4)}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,149,255,.55)}
+.cta-secondary{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:50px;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .25s}
+.cta-secondary:hover{border-color:rgba(0,149,255,.3);color:var(--v2);background:rgba(0,149,255,.06)}
 
-/* TOOLS GRID */
-.tools-label{font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:20px;text-align:center}
-.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
-.tools-grid.bottom{grid-template-columns:repeat(2,1fr)}
+/* Floating stat chips */
+.hero-chips{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:48px;flex-wrap:wrap}
+.hero-chip{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:50px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.hero-chip-icon{font-size:14px}
+.hero-chip-text{font-size:12px;font-weight:500;color:var(--text2)}
+.hero-chip-text strong{color:var(--text);font-weight:700}
 
-.tool-card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;cursor:pointer;text-decoration:none;color:inherit;transition:all .3s;overflow:hidden;display:block}
-.tool-card::before{content:'';position:absolute;inset:0;border-radius:20px;opacity:0;transition:opacity .3s;background:linear-gradient(135deg,rgba(0,149,255,.08),transparent)}
-.tool-card:hover{border-color:rgba(0,149,255,.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(0,149,255,.08)}
-.tool-card:hover::before{opacity:1}
+/* ── SECTION HEADERS ── */
+.section-header{text-align:center;margin-bottom:48px}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:.22em;color:var(--v2);text-transform:uppercase;margin-bottom:12px}
+.section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.03em;color:var(--text)}
+.section-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-top:10px;max-width:480px;margin-left:auto;margin-right:auto}
 
-.tool-card.coming-soon{opacity:.5;cursor:not-allowed;pointer-events:none}
-.tool-card.coming-soon:hover{transform:none;box-shadow:none;border-color:var(--border)}
+/* ── TOOLS ── */
+.tools-section{padding:80px 0 40px}
+.tools-grid-main{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.tools-grid-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 
-.tool-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;z-index:1}
-.tool-badge{position:absolute;top:16px;right:16px;font-size:9px;font-weight:700;letter-spacing:.12em;padding:3px 10px;border-radius:50px;text-transform:uppercase}
-.tool-badge.new{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
-.tool-badge.soon{background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border)}
-.tool-badge.live{background:rgba(0,149,255,.15);color:var(--v2);border:1px solid rgba(0,149,255,.3)}
+.tool-card{position:relative;background:linear-gradient(145deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.02) 100%);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:28px 26px 52px;cursor:pointer;text-decoration:none;color:inherit;transition:all .3s cubic-bezier(.2,0,.1,1);overflow:hidden;display:block}
+.tool-card::after{content:'';position:absolute;inset:0;border-radius:20px;opacity:0;transition:opacity .3s;background:linear-gradient(135deg,rgba(0,149,255,.07) 0%,transparent 60%)}
+.tool-card:hover{border-color:rgba(0,149,255,.28);transform:translateY(-5px);box-shadow:0 24px 64px rgba(0,0,0,.45),0 0 0 1px rgba(0,149,255,.08)}
+.tool-card:hover::after{opacity:1}
+.tool-card.featured{border-color:rgba(0,149,255,.2);background:linear-gradient(145deg,rgba(0,149,255,.07) 0%,rgba(0,149,255,.02) 100%)}
 
-.tool-name{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;position:relative;z-index:1}
-.tool-desc{font-size:12px;font-weight:300;color:var(--text2);line-height:1.7;position:relative;z-index:1}
+.tool-badge{position:absolute;top:16px;right:16px;font-size:9px;font-weight:700;letter-spacing:.12em;padding:3px 10px;border-radius:50px;text-transform:uppercase;z-index:2}
+.badge-live{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.28)}
+.badge-new{background:rgba(0,149,255,.15);color:var(--v2);border:1px solid rgba(0,149,255,.3)}
+.badge-soon{background:rgba(255,255,255,.04);color:var(--text3);border:1px solid var(--border)}
+
+.tool-icon-wrap{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;z-index:1;border:1px solid rgba(0,149,255,.2);background:linear-gradient(135deg,rgba(0,149,255,.14),rgba(0,149,255,.04));color:var(--v2)}
+.tool-name{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;position:relative;z-index:1}
+.tool-desc{font-size:12.5px;font-weight:300;color:var(--text2);line-height:1.65;position:relative;z-index:1}
 .tool-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;position:relative;z-index:1}
-.tool-tag{font-size:9px;font-weight:600;letter-spacing:.1em;padding:3px 9px;border-radius:50px;border:1px solid var(--border);color:var(--text3)}
+.tool-tag{font-size:9px;font-weight:600;letter-spacing:.09em;padding:3px 9px;border-radius:50px;border:1px solid rgba(255,255,255,.07);color:var(--text3);background:rgba(255,255,255,.02)}
+.tool-arrow{position:absolute;bottom:20px;right:20px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .3s;z-index:2;font-size:13px}
+.tool-card:hover .tool-arrow{border-color:rgba(0,149,255,.4);color:var(--v2);background:rgba(0,149,255,.1);transform:translate(2px,-2px)}
 
-.tool-arrow{position:absolute;bottom:20px;right:20px;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);transition:all .3s;z-index:1}
-.tool-card:hover .tool-arrow{border-color:rgba(0,149,255,.4);color:var(--v2);background:rgba(0,149,255,.08)}
+/* ── STATS BAND ── */
+.stats-section{padding:24px 0 80px}
+.stats-band{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.stat-item{background:var(--bg);padding:28px 24px;text-align:center;transition:background .2s}
+.stat-item:hover{background:rgba(0,149,255,.04)}
+.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:34px;font-weight:800;letter-spacing:-0.04em;color:var(--v2);line-height:1}
+.stat-lbl{font-size:10px;font-weight:500;letter-spacing:.12em;color:var(--text3);margin-top:8px;text-transform:uppercase}
 
-/* STATS BAND */
-.stats-band{display:flex;align-items:center;justify-content:center;gap:48px;padding:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:60px 0}
-.stat-item{text-align:center}
-.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.03em;color:var(--v2)}
-.stat-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--text3);margin-top:4px;text-transform:uppercase}
+/* ── STRATEGY SECTION ── */
+.strategy-section{padding:60px 0}
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.strategy-left{padding-right:20px}
+.strategy-left .section-header{text-align:left;margin-bottom:28px}
+.strategy-desc{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:32px}
+.strat-tags{display:flex;flex-wrap:wrap;gap:8px}
+.strat-tag{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:12px;font-weight:600;color:var(--text2);transition:all .2s}
+.strat-tag:hover{border-color:rgba(0,149,255,.25);color:var(--v2);background:rgba(0,149,255,.06)}
+.strat-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--v2);flex-shrink:0}
 
-/* TELEGRAM */
-.tg-banner{display:flex;align-items:center;gap:16px;background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:16px;padding:20px 24px;text-decoration:none;color:inherit;transition:all .2s;margin-top:40px}
-.tg-banner:hover{background:rgba(0,149,255,.1);border-color:rgba(0,149,255,.35)}
-.tg-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.tg-text strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px}
-.tg-text span{font-size:12px;color:var(--text2)}
-.tg-arrow{margin-left:auto;color:var(--text3);font-size:18px}
+.strategy-right{display:flex;flex-direction:column;gap:12px}
+.feat-card{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);transition:all .2s}
+.feat-card:hover{border-color:rgba(0,149,255,.2);background:rgba(0,149,255,.04)}
+.feat-icon{width:40px;height:40px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.feat-body strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.feat-body span{font-size:12px;color:var(--text2);line-height:1.6}
 
-/* AUTH MODAL */
-.auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
+/* ── PROCESS SECTION ── */
+.process-section{padding:80px 0}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;position:relative}
+.process-step{padding:32px 24px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;text-align:center;position:relative}
+.step-num{font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--v);margin-bottom:16px;text-transform:uppercase}
+.step-icon{font-size:28px;margin-bottom:14px}
+.step-title{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ── TELEGRAM ── */
+.tg-section{padding:40px 0 60px}
+.tg-banner{display:flex;align-items:center;gap:20px;background:linear-gradient(135deg,rgba(42,171,238,.08),rgba(34,158,217,.04));border:1px solid rgba(42,171,238,.2);border-radius:20px;padding:28px 32px;text-decoration:none;color:inherit;transition:all .25s;position:relative;overflow:hidden}
+.tg-banner::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(42,171,238,.06),transparent);opacity:0;transition:opacity .25s}
+.tg-banner:hover{border-color:rgba(42,171,238,.35);transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,0,0,.3)}
+.tg-banner:hover::before{opacity:1}
+.tg-icon{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 24px rgba(42,171,238,.3)}
+.tg-body strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:700;margin-bottom:4px}
+.tg-body span{font-size:13px;color:var(--text2)}
+.tg-chips{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tg-chip{font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 10px;border-radius:50px;background:rgba(42,171,238,.1);border:1px solid rgba(42,171,238,.2);color:#2AABEE}
+.tg-cta{margin-left:auto;flex-shrink:0;padding:10px 22px;background:linear-gradient(135deg,#2AABEE,#229ED9);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap}
+.tg-cta:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(42,171,238,.4)}
+
+/* ── AUTH MODAL ── */
+.auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.auth-box{max-width:380px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:20px;padding:28px;position:relative;text-align:center}
-.auth-box::before{content:'';position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
+.auth-box{max-width:380px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.25);border-radius:22px;padding:32px;position:relative;text-align:center}
+.auth-box::before{content:'';position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
 .auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;text-align:left}
-.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
-.auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
+.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text2);text-transform:uppercase}
+.auth-field input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
 .auth-field input:focus{border-color:rgba(0,149,255,.5)}
 .auth-tabs{display:flex;margin-bottom:20px;border:1px solid var(--border);border-radius:50px;overflow:hidden}
 .auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
 .auth-tab.on{background:var(--v);color:white}
-.auth-submit{width:100%;padding:12px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+.auth-submit{width:100%;padding:12px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;transition:opacity .2s}
+.auth-submit:hover{opacity:.9}
 .auth-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
-.auth-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer}
+.auth-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;padding:4px}
 
-@media(max-width:768px){
-  .tools-grid,.tools-grid.bottom{grid-template-columns:1fr}
-  .stats-band{gap:24px;flex-wrap:wrap}
-  .hero-title{font-size:42px}
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .tools-grid-main{grid-template-columns:1fr 1fr}
+  .tools-grid-sub{grid-template-columns:1fr 1fr}
+  .strategy-grid{grid-template-columns:1fr}
+  .strategy-left{padding-right:0}
+  .stats-band{grid-template-columns:repeat(2,1fr)}
+  .process-steps{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .tools-grid-main,.tools-grid-sub{grid-template-columns:1fr}
+  .hero-title{font-size:40px}
+  .tg-banner{flex-wrap:wrap}
+  .tg-cta{width:100%;text-align:center}
+  .process-steps{grid-template-columns:1fr}
+  .stats-band{grid-template-columns:1fr 1fr}
+  .hero-chips{gap:8px}
 }
 </style>
 </head>
 <body>
 
-<div class="bg-glow"></div>
+<div class="bg-layer">
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+  <div class="bg-glow-3"></div>
+</div>
 
 <!-- TOPBAR -->
 <header class="topbar">
   <div style="display:flex;align-items:center;gap:10px">
-  <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-  <a href="./index.html" class="brand" style="text-decoration:none;color:inherit">
-    <img src="./logo.jpg.webp" alt="Le Terminal" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">
-    Le <span>Terminal</span>
-  </a>
+    <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
+    <a href="./index.html" class="brand">
+      <img src="./logo.jpg.webp" alt="Le Terminal" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">
+      Le <span>Terminal</span>
+    </a>
   </div>
   <div class="topbar-right">
-    <span id="trialBadge" style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:50px;border:1px solid var(--border);color:var(--text3);letter-spacing:.05em"></span>
+    <span id="trialBadge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;border:1px solid var(--border);color:var(--text3);letter-spacing:.05em"></span>
     <div class="user-chip" id="userChip">
       <div class="user-avatar" id="userAvatar">?</div>
       <span class="user-name" id="userName">—</span>
     </div>
     <button class="login-btn" id="loginBtn" onclick="openAuth()">Connexion</button>
-    <button id="logoutBtn" onclick="doLogout()" style="display:none;padding:6px 14px;background:transparent;border:1px solid rgba(248,113,113,.3);border-radius:50px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(248,113,113,.1)'" onmouseout="this.style.background='transparent'">Déconnexion</button>
+    <button id="logoutBtn" class="logout-btn" onclick="doLogout()">Déconnexion</button>
   </div>
 </header>
 
 <div class="main">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-eyebrow">Propulsé par l'IA · Toutes stratégies</div>
-    <h1 class="hero-title">Ton arsenal<br><span>trading complet.</span></h1>
-    <p class="hero-sub">Analyse tes setups, suis ton journal, consulte le calendrier économique et maîtrise ta gestion du risque — tout en un seul endroit.</p>
-  </div>
-
-  <!-- TOOLS -->
-  <div class="tools-label">Les outils</div>
-
-  <div class="tools-grid">
-
-    <!-- Setup Analyzer -->
-    <a href="./app.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-      <div class="tool-badge live">En ligne</div>
-      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(0,149,255,.18),rgba(0,149,255,.06));border:1px solid rgba(0,149,255,.25);color:#38B6FF"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      <div class="tool-name">Setup Analyzer</div>
-      <div class="tool-desc">Score IA de ton setup, compatible avec toutes les stratégies (ICT, SMC, Price Action, Wyckoff…), feedback instantané et annotations sur ton graphique.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Score IA</span>
-        <span class="tool-tag">Toutes stratégies</span>
-        <span class="tool-tag">R:R</span>
-        <span class="tool-tag">Annotations</span>
-      </div>
-      <div class="tool-arrow">→</div>
-    </a>
-
-    <!-- Journal -->
-    <a href="./journal.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-      <div class="tool-badge new">Nouveau</div>
-      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(0,149,255,.18),rgba(0,149,255,.06));border:1px solid rgba(0,149,255,.25);color:#38B6FF"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></div>
-      <div class="tool-name">Journal de Trading</div>
-      <div class="tool-desc">Calendrier de tes trades, suivi P&L, screenshots, notes et analyse IA de tes patterns de performance.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Calendrier</span>
-        <span class="tool-tag">P&L</span>
-        <span class="tool-tag">Win Rate</span>
-        <span class="tool-tag">IA Coach</span>
-      </div>
-      <div class="tool-arrow">→</div>
-    </a>
-
-    <!-- Calendrier éco -->
-    <a href="./calendrier.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-      <div class="tool-badge live">En ligne</div>
-      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(0,149,255,.18),rgba(0,149,255,.06));border:1px solid rgba(0,149,255,.25);color:#38B6FF"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg></div>
-      <div class="tool-name">Calendrier Éco</div>
-      <div class="tool-desc">Tous les événements macroéconomiques clés — NFP, CPI, FOMC — avec impact attendu et alertes.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">NFP</span>
-        <span class="tool-tag">CPI</span>
-        <span class="tool-tag">FOMC</span>
-        <span class="tool-tag">Alertes</span>
-      </div>
-      <div class="tool-arrow">→</div>
-    </a>
-
-  </div>
-
-  <div class="tools-grid bottom">
-
-    <!-- Bubble Map -->
-    <a href="./bubble.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-      <div class="tool-badge live">En ligne</div>
-      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(0,149,255,.18),rgba(0,149,255,.06));border:1px solid rgba(0,149,255,.25);color:#38B6FF"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg></div>
-      <div class="tool-name">Bubble Map</div>
-      <div class="tool-desc">Visualise en temps réel les flux de capitaux entre actifs — crypto, forex, indices et matières premières.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Flux capitaux</span>
-        <span class="tool-tag">Crypto</span>
-        <span class="tool-tag">Corrélations</span>
-      </div>
-      <div class="tool-arrow">→</div>
-    </a>
-
-    <!-- Calculateur de pips -->
-    <a href="./calculateur.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-      <div class="tool-badge live">En ligne</div>
-      <div class="tool-icon" style="background:linear-gradient(135deg,rgba(0,149,255,.18),rgba(0,149,255,.06));border:1px solid rgba(0,149,255,.25);color:#38B6FF"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/><line x1="16" y1="18" x2="16" y2="18"/></svg></div>
-      <div class="tool-name">Calculateur de Pips</div>
-      <div class="tool-desc">Calcule instantanément ta taille de position, valeur du pip, risque en devise et R:R optimal selon ton compte.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Position size</span>
-        <span class="tool-tag">Risque %</span>
-        <span class="tool-tag">Valeur pip</span>
-        <span class="tool-tag">R:R</span>
-      </div>
-      <div class="tool-arrow">→</div>
-    </a>
-
-  </div>
-
-  <!-- STATS BAND -->
-  <div class="stats-band">
-    <div class="stat-item">
-      <div class="stat-val">5</div>
-      <div class="stat-lbl">Outils</div>
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-pill">
+      <div class="hero-pill-dot"></div>
+      <span>Plateforme active · Mis à jour quotidiennement</span>
     </div>
-    <div class="stat-item">
-      <div class="stat-val" style="color:var(--green)">IA</div>
-      <div class="stat-lbl">Powered</div>
+    <h1 class="hero-title">
+      Ton hub trading<br>
+      <span class="line2">propulsé par l'IA.</span>
+    </h1>
+    <p class="hero-sub">Analyse tes setups en quelques secondes, tiens ton journal, consulte le calendrier économique et maîtrise ta gestion du risque. Tout en un seul endroit.</p>
+    <div class="hero-actions">
+      <a href="#tools" class="cta-primary">
+        Voir les outils
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
     </div>
-    <div class="stat-item">
-      <div class="stat-val">∞</div>
-      <div class="stat-lbl">Stratégies</div>
+    <div class="hero-chips">
+      <div class="hero-chip">
+        <span class="hero-chip-icon">⚡</span>
+        <span class="hero-chip-text"><strong>IA Claude</strong> · Feedback instantané</span>
+      </div>
+      <div class="hero-chip">
+        <span class="hero-chip-icon">🎯</span>
+        <span class="hero-chip-text"><strong>ICT · SMC · PA</strong> · Toutes stratégies</span>
+      </div>
+      <div class="hero-chip">
+        <span class="hero-chip-icon">📊</span>
+        <span class="hero-chip-text"><strong>Score /100</strong> · Objectif & précis</span>
+      </div>
+      <div class="hero-chip">
+        <span class="hero-chip-icon">🔒</span>
+        <span class="hero-chip-text"><strong>100% sécurisé</strong> · Données privées</span>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- TELEGRAM -->
-  <a href="https://t.me/leterminalfx" target="_blank" class="tg-banner">
-    <div class="tg-icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z"/></svg>
+  <!-- ── TOOLS ── -->
+  <section class="tools-section" id="tools">
+    <div class="section-header">
+      <div class="section-eyebrow">Arsenal complet</div>
+      <div class="section-title">Tous les outils dont tu as besoin</div>
+      <div class="section-sub">Chaque outil est conçu pour un aspect précis de ton trading. Ensemble, ils forment un écosystème complet.</div>
     </div>
-    <div class="tg-text">
-      <strong>Rejoindre la communauté Telegram</strong>
-      <span>Analyses quotidiennes · Setups en live · Entraide entre traders</span>
+
+    <div class="tools-grid-main">
+
+      <a href="./app.html" class="tool-card featured" onclick="return checkFeatureAccess(event)">
+        <div class="tool-badge badge-live">En ligne</div>
+        <div class="tool-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="tool-name">Setup Analyzer</div>
+        <div class="tool-desc">Score IA de ton setup, compatible avec toutes les stratégies (ICT, SMC, Price Action…). Feedback instantané et annotations sur ton graphique.</div>
+        <div class="tool-tags">
+          <span class="tool-tag">Score /100</span>
+          <span class="tool-tag">Toutes stratégies</span>
+          <span class="tool-tag">Annotations IA</span>
+          <span class="tool-tag">Rapport PDF</span>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+
+      <a href="./journal.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+        <div class="tool-badge badge-new">Nouveau</div>
+        <div class="tool-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        </div>
+        <div class="tool-name">Journal de Trading</div>
+        <div class="tool-desc">Calendrier de tes trades, suivi P&L, screenshots, notes et analyse IA de tes patterns de performance.</div>
+        <div class="tool-tags">
+          <span class="tool-tag">Calendrier</span>
+          <span class="tool-tag">P&L</span>
+          <span class="tool-tag">Win Rate</span>
+          <span class="tool-tag">IA Coach</span>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+
+      <a href="./calendrier.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+        <div class="tool-badge badge-live">En ligne</div>
+        <div class="tool-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>
+        </div>
+        <div class="tool-name">Calendrier Éco</div>
+        <div class="tool-desc">Tous les événements macroéconomiques clés — NFP, CPI, FOMC — organisés par région et impact attendu.</div>
+        <div class="tool-tags">
+          <span class="tool-tag">NFP · CPI · FOMC</span>
+          <span class="tool-tag">Multi-régions</span>
+          <span class="tool-tag">Flash Info</span>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+
     </div>
-    <div class="tg-arrow">→</div>
-  </a>
+
+    <div class="tools-grid-sub" style="margin-top:14px">
+
+      <a href="./bubble.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+        <div class="tool-badge badge-live">En ligne</div>
+        <div class="tool-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
+        </div>
+        <div class="tool-name">Bubble Map</div>
+        <div class="tool-desc">Visualise les flux de capitaux entre actifs en temps réel — crypto, forex, indices et matières premières.</div>
+        <div class="tool-tags">
+          <span class="tool-tag">Flux capitaux</span>
+          <span class="tool-tag">Corrélations</span>
+          <span class="tool-tag">Live</span>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+
+      <a href="./calculateur.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+        <div class="tool-badge badge-live">En ligne</div>
+        <div class="tool-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/><line x1="16" y1="18" x2="16" y2="18"/></svg>
+        </div>
+        <div class="tool-name">Calculateur de Pips</div>
+        <div class="tool-desc">Taille de position, valeur du pip, risque en devise et R:R optimal. Long/Short avec validation automatique.</div>
+        <div class="tool-tags">
+          <span class="tool-tag">Position size</span>
+          <span class="tool-tag">Risque %</span>
+          <span class="tool-tag">Long / Short</span>
+        </div>
+        <div class="tool-arrow">→</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <section class="stats-section">
+    <div class="stats-band">
+      <div class="stat-item">
+        <div class="stat-val">5</div>
+        <div class="stat-lbl">Outils actifs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" style="color:var(--green)">IA</div>
+        <div class="stat-lbl">Claude Opus</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">∞</div>
+        <div class="stat-lbl">Stratégies</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" style="color:var(--amber)">24/7</div>
+        <div class="stat-lbl">Disponible</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STRATEGY COMPAT ── -->
+  <section class="strategy-section">
+    <div class="strategy-grid">
+      <div class="strategy-left">
+        <div class="section-header">
+          <div class="section-eyebrow">Compatibilité universelle</div>
+          <div class="section-title">Toutes les stratégies,<br>un seul outil.</div>
+        </div>
+        <p class="strategy-desc">Le Terminal Analyzer adapte son analyse à ta stratégie. Que tu trades l'ICT, le SMC, le Price Action pur ou la structure de Wyckoff, l'IA détecte les confluences qui correspondent à ta méthode.</p>
+        <div class="strat-tags">
+          <div class="strat-tag"><div class="strat-tag-dot"></div>ICT / Inner Circle Trader</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Smart Money Concepts</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Price Action classique</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Wyckoff</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Supply & Demand</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Fibonacci / OTE</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Structure de marché</div>
+          <div class="strat-tag"><div class="strat-tag-dot"></div>Orderflow & Footprint</div>
+        </div>
+      </div>
+      <div class="strategy-right">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(0,149,255,.1);border:1px solid rgba(0,149,255,.2)">📍</div>
+          <div class="feat-body">
+            <strong>Order Blocks & FVG</strong>
+            <span>Détection automatique des zones clés, Fair Value Gaps et liquidity pools sur ton graphique.</span>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)">📈</div>
+          <div class="feat-body">
+            <strong>BOS / CHoCH / Structure</strong>
+            <span>Analyse de la structure de marché HTF vers LTF, confirmation des changements de caractère.</span>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2)">⏰</div>
+          <div class="feat-body">
+            <strong>Killzones & Sessions</strong>
+            <span>Prise en compte automatique des sessions London, NY, Asia et des killzones à haute probabilité.</span>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2)">🎯</div>
+          <div class="feat-body">
+            <strong>Verdict GO / ATTENDRE / NO-GO</strong>
+            <span>Verdict net et sans ambiguïté avec niveau de confiance, cibles et conseils actionnables.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ── -->
+  <section class="process-section">
+    <div class="section-header">
+      <div class="section-eyebrow">Comment ça marche</div>
+      <div class="section-title">Une analyse complète en 4 étapes</div>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">Étape 01</div>
+        <div class="step-icon">📸</div>
+        <div class="step-title">Upload ton chart</div>
+        <div class="step-desc">Capture d'écran de ton setup depuis TradingView ou ta plateforme. Glisse-dépose ou colle directement.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">Étape 02</div>
+        <div class="step-icon">🧠</div>
+        <div class="step-title">L'IA analyse</div>
+        <div class="step-desc">Claude Opus scanne la structure, les zones clés, le contexte macro et les confluences de ta stratégie.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">Étape 03</div>
+        <div class="step-icon">📊</div>
+        <div class="step-title">Score & feedback</div>
+        <div class="step-desc">Score /100, forces, faiblesses, niveaux de prix précis et verdict GO / ATTENDRE / NO-GO.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">Étape 04</div>
+        <div class="step-icon">📁</div>
+        <div class="step-title">Sauvegarde & suivi</div>
+        <div class="step-desc">Chaque analyse est archivée. Enregistre le résultat du trade et analyse tes stats dans le journal.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TELEGRAM ── -->
+  <section class="tg-section">
+    <a href="https://t.me/leterminalfx" target="_blank" class="tg-banner">
+      <div class="tg-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z"/></svg>
+      </div>
+      <div class="tg-body">
+        <strong>Rejoindre la communauté Telegram</strong>
+        <span>Analyses quotidiennes, setups en live et entraide entre traders</span>
+        <div class="tg-chips">
+          <span class="tg-chip">Analyses live</span>
+          <span class="tg-chip">Setups du jour</span>
+          <span class="tg-chip">Entraide</span>
+          <span class="tg-chip">Alertes macro</span>
+        </div>
+      </div>
+      <a href="https://t.me/leterminalfx" target="_blank" class="tg-cta" onclick="event.stopPropagation()">Rejoindre →</a>
+    </a>
+  </section>
 
 </div>
 
-<!-- AUTH MODAL -->
+<!-- ── AUTH MODAL ── -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuth()">✕</button>
@@ -282,25 +502,54 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
     <div class="auth-field">
       <label>EMAIL</label>
-      <input type="email" id="authEmail" placeholder="ton@email.com">
+      <input type="email" id="authEmail" placeholder="ton@email.com" autocomplete="username">
     </div>
     <div class="auth-field">
       <label>MOT DE PASSE</label>
-      <input type="password" id="authPassword" placeholder="••••••••">
+      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="new-password">
     </div>
     <button class="auth-submit" onclick="doAuth()"><span id="authTxt">Se connecter</span></button>
     <div class="auth-error" id="authError"></div>
-    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);text-align:center">
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)">
       🔒 Connexion sécurisée · Données synchronisées sur tous les outils
     </div>
   </div>
 </div>
 
-<script>
-var authToken = null, currentUser = null, authMode = 'login';
+<!-- WELCOME TOAST -->
+<div id="welcomeMsg" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);border-radius:50px;padding:12px 24px;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:#34D399;z-index:1000;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.4);white-space:nowrap">
+  ✓ Bienvenue ! 24h d'accès gratuit activé.
+</div>
 
-function openAuth(){ document.getElementById('authOverlay').classList.add('show'); }
-function closeAuth(){ document.getElementById('authOverlay').classList.remove('show'); document.getElementById('authError').textContent=''; }
+<!-- PAYWALL MODAL -->
+<div id="paywallOverlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(8,8,15,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
+  <div style="max-width:440px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6)">
+    <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,#0095FF,#38B6FF,transparent)"></div>
+    <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:#5A5570;font-size:20px;cursor:pointer;line-height:1">✕</button>
+    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Essai terminé</div>
+    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:28px">Ton accès gratuit de 24h est expiré.<br>Passe à <strong style="color:#F0EEFF">Le Terminal PRO</strong> pour continuer.</div>
+    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,149,255,.4)">
+      ⚡ Obtenir l'accès PRO sur Whop
+    </a>
+    <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">Paiement sécurisé via Whop · Annulation à tout moment<br><span style="color:#38B6FF;font-weight:500">Utilise le même email que ton compte Le Terminal</span></div>
+    <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
+      <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:#38B6FF;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">🔄 Vérifier mon accès PRO</button>
+      <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+#paywallOverlay.show{display:flex;animation:fadeUp .3s ease}
+</style>
+
+<script>
+var authToken=null,currentUser=null,authMode='login';
+
+function openAuth(){document.getElementById('authOverlay').classList.add('show');}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('show');document.getElementById('authError').textContent='';}
 function switchTab(m){
   authMode=m;
   document.getElementById('tabLogin').classList.toggle('on',m==='login');
@@ -311,227 +560,92 @@ async function doAuth(){
   var email=document.getElementById('authEmail').value.trim();
   var password=document.getElementById('authPassword').value;
   var errEl=document.getElementById('authError');
-  errEl.textContent=''; errEl.style.color='var(--red)';
+  errEl.textContent='';errEl.style.color='var(--red)';
   if(!email||!password){errEl.textContent='Remplis tous les champs';return;}
-  var btn=document.querySelector('.auth-submit'); btn.disabled=true;
+  var btn=document.querySelector('.auth-submit');btn.disabled=true;
   document.getElementById('authTxt').textContent=authMode==='login'?'Connexion…':'Création…';
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
     var data=await res.json();
     if(data.access_token){
-      authToken=data.access_token; currentUser=data.user||{email};
+      authToken=data.access_token;currentUser=data.user||{email};
       localStorage.setItem('ta_token',authToken);
       localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');
-      startTrial(); // start 24h free trial
-      closeAuth(); updateUserUI(); updateTrialBadge();
-      // Show welcome message
+      startTrial();closeAuth();updateUserUI();updateTrialBadge();
       document.getElementById('welcomeMsg').style.display='block';
-      setTimeout(function(){ document.getElementById('welcomeMsg').style.display='none'; }, 4000);
-    } else if(data.id){
-      errEl.style.color='var(--green)';
-      errEl.textContent='Compte créé ! Vérifie ton email pour confirmer.';
-    } else {
-      errEl.textContent=data.error_description||data.msg||data.message||'Erreur';
-    }
+      setTimeout(function(){document.getElementById('welcomeMsg').style.display='none';},4000);
+    }else if(data.id){
+      errEl.style.color='var(--green)';errEl.textContent='Compte créé ! Vérifie ton email pour confirmer.';
+    }else{errEl.textContent=data.error_description||data.msg||data.message||'Erreur';}
   }catch(e){errEl.textContent='Erreur réseau';}
   btn.disabled=false;
   document.getElementById('authTxt').textContent=authMode==='login'?'Se connecter':'Créer mon compte';
 }
-
 function doLogout(){
-  authToken=null; currentUser=null;
-  localStorage.removeItem('ta_token');
-  localStorage.removeItem('ta_email');
-  localStorage.removeItem('lt_pro');
+  authToken=null;currentUser=null;
+  localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');localStorage.removeItem('lt_pro');
   updateUserUI();
 }
-
 function updateUserUI(){
   var lb=document.getElementById('loginBtn');
   var lo=document.getElementById('logoutBtn');
   var uc=document.getElementById('userChip');
-  if(currentUser && currentUser.email){
-    if(lb) lb.style.display='none';
-    if(lo) lo.style.display='';
-    if(uc) uc.classList.add('show');
+  if(currentUser&&currentUser.email){
+    if(lb)lb.style.display='none';if(lo)lo.style.display='';if(uc)uc.classList.add('show');
     var em=currentUser.email||'';
-    var av=document.getElementById('userAvatar');
-    var un=document.getElementById('userName');
-    if(av) av.textContent=em.charAt(0).toUpperCase();
-    if(un) un.textContent=em.split('@')[0];
-  } else {
-    if(lb) lb.style.display='';
-    if(lo) lo.style.display='none';
-    if(uc) uc.classList.remove('show');
+    var av=document.getElementById('userAvatar');var un=document.getElementById('userName');
+    if(av)av.textContent=em.charAt(0).toUpperCase();if(un)un.textContent=em.split('@')[0];
+  }else{
+    if(lb)lb.style.display='';if(lo)lo.style.display='none';if(uc)uc.classList.remove('show');
   }
 }
-
-// ── TRIAL LOGIC ──
-var TRIAL_DURATION = 24 * 60 * 60 * 1000; // 24h in ms
-
-function getTrialStatus() {
-  var created = localStorage.getItem('ta_trial_start');
-  var isPro = localStorage.getItem('lt_pro') === '1';
-  if(isPro) return 'pro';
-  if(!created) return 'none'; // not started
-  var elapsed = Date.now() - parseInt(created);
-  if(elapsed < TRIAL_DURATION) return 'trial';
-  return 'expired';
+var TRIAL_DURATION=24*60*60*1000;
+function getTrialStatus(){
+  var created=localStorage.getItem('ta_trial_start');var isPro=localStorage.getItem('lt_pro')==='1';
+  if(isPro)return'pro';if(!created)return'none';
+  var elapsed=Date.now()-parseInt(created);
+  return elapsed<TRIAL_DURATION?'trial':'expired';
 }
-
-function startTrial() {
-  if(!localStorage.getItem('ta_trial_start')) {
-    localStorage.setItem('ta_trial_start', Date.now().toString());
-  }
-}
-
-function checkFeatureAccess(e) {
-  // Called when user clicks on a tool card
-  var status = getTrialStatus();
-  if(!authToken) {
-    // Not logged in — force signup
-    e.preventDefault();
-    e.stopPropagation();
-    openAuth();
-    return false;
-  }
-  if(status === 'expired') {
-    // Trial expired — show Whop paywall
-    e.preventDefault();
-    e.stopPropagation();
-    showPaywall();
-    return false;
-  }
-  // trial or pro — allow access
+function startTrial(){if(!localStorage.getItem('ta_trial_start'))localStorage.setItem('ta_trial_start',Date.now().toString());}
+function checkFeatureAccess(e){
+  var status=getTrialStatus();
+  if(!authToken){e.preventDefault();e.stopPropagation();openAuth();return false;}
+  if(status==='expired'){e.preventDefault();e.stopPropagation();showPaywall();return false;}
   return true;
 }
-
-function showPaywall() {
-  document.getElementById('paywallOverlay').classList.add('show');
-}
-function closePaywall() {
-  document.getElementById('paywallOverlay').classList.remove('show');
-}
-
+function showPaywall(){document.getElementById('paywallOverlay').classList.add('show');}
+function closePaywall(){document.getElementById('paywallOverlay').classList.remove('show');}
 async function checkSession(){
-  var token=localStorage.getItem('ta_token'); if(!token)return;
-  authToken=token;
-  currentUser={email:localStorage.getItem('ta_email')||''};
-  updateUserUI();
-  updateTrialBadge();
+  var token=localStorage.getItem('ta_token');if(!token)return;
+  authToken=token;currentUser={email:localStorage.getItem('ta_email')||''};updateUserUI();updateTrialBadge();
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
     var data=await res.json();
-    if(data.id){
-      currentUser=data;
-      localStorage.setItem('ta_email',data.email||'');
-      updateUserUI();
-    } else if(data.error){
-      authToken=null; currentUser=null;
-      localStorage.removeItem('ta_token');
-      localStorage.removeItem('ta_email');
-      updateUserUI();
-    }
-  }catch(e){ updateUserUI(); }
+    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();}
+    else if(data.error){authToken=null;currentUser=null;localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');updateUserUI();}
+  }catch(e){updateUserUI();}
 }
-
-function updateTrialBadge() {
-  var status = getTrialStatus();
-  var badge = document.getElementById('trialBadge');
-  if(!badge) return;
-  if(status === 'pro') {
-    badge.textContent = '⭐ PRO';
-    badge.style.color = 'var(--v2)';
-    badge.style.borderColor = 'rgba(0,149,255,.4)';
-  } else if(status === 'trial') {
-    var created = parseInt(localStorage.getItem('ta_trial_start'));
-    var remaining = TRIAL_DURATION - (Date.now() - created);
-    var hours = Math.ceil(remaining / (1000 * 60 * 60));
-    badge.textContent = '⏳ ' + hours + 'h restantes';
-    badge.style.color = 'var(--amber)';
-    badge.style.borderColor = 'rgba(251,191,36,.4)';
-  } else if(status === 'expired') {
-    badge.textContent = '🔒 Essai expiré';
-    badge.style.color = 'var(--red)';
-    badge.style.borderColor = 'rgba(248,113,113,.4)';
-  } else {
-    badge.style.display = 'none';
-  }
+function updateTrialBadge(){
+  var status=getTrialStatus();var badge=document.getElementById('trialBadge');if(!badge)return;
+  if(status==='pro'){badge.textContent='⭐ PRO';badge.style.color='var(--v2)';badge.style.borderColor='rgba(0,149,255,.4)';badge.style.display='block';}
+  else if(status==='trial'){var created=parseInt(localStorage.getItem('ta_trial_start'));var remaining=TRIAL_DURATION-(Date.now()-created);var hours=Math.ceil(remaining/(1000*60*60));badge.textContent='⏳ '+hours+'h restantes';badge.style.color='var(--amber)';badge.style.borderColor='rgba(251,191,36,.4)';badge.style.display='block';}
+  else if(status==='expired'){badge.textContent='🔒 Essai expiré';badge.style.color='var(--red)';badge.style.borderColor='rgba(248,113,113,.4)';badge.style.display='block';}
+  else{badge.style.display='none';}
 }
-
+async function verifyProAccess(){
+  var msg=document.getElementById('proVerifyMsg');msg.style.color='#9B96B8';msg.textContent='Vérification…';
+  if(!authToken){msg.style.color='#FBBF24';msg.textContent="Connecte-toi d'abord avec ton email Whop.";return;}
+  try{
+    var res=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
+    var data=await res.json();
+    if(data.is_pro){localStorage.setItem('lt_pro','1');msg.style.color='#34D399';msg.textContent='✓ Accès PRO activé !';setTimeout(function(){closePaywall();updateTrialBadge();},1000);}
+    else{msg.style.color='#F87171';msg.textContent='Aucun accès PRO trouvé pour cet email.';}
+  }catch(e){msg.style.color='#F87171';msg.textContent='Erreur de vérification. Réessaie.';}
+}
 checkSession();
 </script>
 
-<!-- WELCOME MESSAGE -->
-<div id="welcomeMsg" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);border-radius:50px;padding:12px 24px;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:#34D399;z-index:1000;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.4);white-space:nowrap">
-  ✓ Bienvenue ! 24h d'accès gratuit activé.
-</div>
-
-<!-- PAYWALL MODAL -->
-<div id="paywallOverlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
-  <div style="max-width:440px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6)">
-    <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,#0095FF,#38B6FF,transparent)"></div>
-    <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:#5A5570;font-size:20px;cursor:pointer;line-height:1">✕</button>
-    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Essai terminé</div>
-    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:28px">
-      Ton accès gratuit de 24h est expiré.<br>
-      Passe à <strong style="color:#F0EEFF">Le Terminal PRO</strong> pour continuer à accéder à tous les outils.
-    </div>
-    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,149,255,.4);transition:all .2s" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
-      ⚡ Obtenir l'accès PRO sur Whop
-    </a>
-    <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">
-      Paiement sécurisé via Whop · Annulation à tout moment<br>
-      <span style="color:#38B6FF;font-weight:500">Utilise le même email que ton compte Le Terminal</span>
-    </div>
-    <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-      <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
-      <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:#38B6FF;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(0,149,255,.08)'" onmouseout="this.style.background='transparent'">
-        🔄 Vérifier mon accès PRO
-      </button>
-      <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
-    </div>
-  </div>
-</div>
-
-<style>
-#paywallOverlay.show { display: flex; animation: fadeUp .3s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-</style>
-
-<script>
-async function verifyProAccess() {
-  var msg = document.getElementById('proVerifyMsg');
-  msg.style.color = '#9B96B8';
-  msg.textContent = 'Vérification…';
-  if(!authToken) {
-    msg.style.color = '#FBBF24';
-    msg.textContent = 'Connecte-toi d\'abord avec ton email Whop.';
-    return;
-  }
-  try {
-    var res = await fetch('/api/check-pro', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken}
-    });
-    var data = await res.json();
-    if(data.is_pro) {
-      localStorage.setItem('lt_pro','1');
-      msg.style.color = '#34D399';
-      msg.textContent = '✓ Accès PRO activé !';
-      setTimeout(function(){ closePaywall(); updateTrialBadge(); }, 1000);
-    } else {
-      msg.style.color = '#F87171';
-      msg.textContent = 'Aucun accès PRO trouvé pour cet email.';
-    }
-  } catch(e) {
-    msg.style.color = '#F87171';
-    msg.textContent = 'Erreur de vérification. Réessaie.';
-  }
-}
-</script>
-
 <script src="./menu.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(function(){});}</script>
 </body>
 </html>

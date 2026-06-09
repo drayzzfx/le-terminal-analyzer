@@ -28,9 +28,13 @@
         { icon: '🏛️', label: 'Institutions',  href: './eco-institutions.html' },
         { icon: '🌐', label: 'International',  href: './eco-international.html' },
       ] },
-      { icon: '⚡', label: 'Flash Info',      href: './eco-flash.html' },
-      { icon: '📅', label: 'Calendrier éco',  href: './eco-calendrier.html' },
-      { icon: '🪙', label: 'Crypto',          href: './eco-crypto.html' },
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, label: 'Flash Info',      href: './eco-flash.html' },
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>`, label: 'Calendrier éco',  href: './eco-calendrier.html' },
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>`, label: 'Crypto',          href: './eco-crypto.html' },
+    ] },
+    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html', children: [
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`, label: 'Historique', href: './app.html#historique' },
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, label: 'Perfs', href: './app.html#perfs' },
     ] },
     { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
     { id: 'calculateur.html', icon: ICONS.calc,       label: 'Calculateur de Pips', href: './calculateur.html' },
@@ -201,6 +205,23 @@
       display: block; width: 20px; height: 2px;
       background: #9B96B8; border-radius: 2px;
     }
+
+    /* ── LANGUE TOGGLE ── */
+    .lt-lang-toggle {
+      display: flex; align-items: center; gap: 0;
+      border: 1px solid rgba(255,255,255,.1); border-radius: 50px;
+      overflow: hidden; margin-top: 8px;
+    }
+    .lt-lang-btn {
+      flex: 1; background: transparent; border: none; cursor: pointer;
+      padding: 6px 0; font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      color: #5A5570; transition: all .2s;
+    }
+    .lt-lang-btn:hover { color: #9B96B8; }
+    .lt-lang-btn.active {
+      background: rgba(0,149,255,.2); color: #38B6FF;
+    }
   `;
   document.head.appendChild(style);
 
@@ -209,7 +230,8 @@
 
   // Détection de l'item courant à partir du nom de fichier du href
   function fileOf(h) { return (h || '').split('/').pop().split('#')[0]; }
-  function selfActive(node) { return fileOf(node.href) === page && page !== ''; }
+  // Un sous-item avec un # (ancre) n'est jamais marqué actif — on ne peut pas détecter la section courante côté statique
+  function selfActive(node) { return fileOf(node.href) === page && page !== '' && !(node.href || '').includes('#'); }
   function treeActive(node) {
     if(selfActive(node)) return true;
     return !!(node.children && node.children.some(treeActive));
@@ -270,6 +292,10 @@
         <a class="lt-nav-item" id="ltLoginItem" href="#" onclick="ltOpenLogin();return false;">
           <span class="lt-nav-icon">👤</span> Connexion / Inscription
         </a>
+        <div class="lt-lang-toggle">
+          <button class="lt-lang-btn" id="ltLangFR" onclick="ltSetLang('fr')">FR</button>
+          <button class="lt-lang-btn" id="ltLangEN" onclick="ltSetLang('en')">EN</button>
+        </div>
       </div>
     </div>
   `;
@@ -421,6 +447,22 @@
     }
   };
 
+  // ── LANGUE ──
+  function ltUpdateLangBtns(l) {
+    var fr = document.getElementById('ltLangFR');
+    var en = document.getElementById('ltLangEN');
+    if(!fr || !en) return;
+    if(l === 'en') { fr.classList.remove('active'); en.classList.add('active'); }
+    else           { fr.classList.add('active');    en.classList.remove('active'); }
+  }
+  window.ltSetLang = function(l) {
+    localStorage.setItem('lt_lang', l);
+    ltUpdateLangBtns(l);
+    // Appelle setLang de la page si elle existe
+    if(typeof window.setLang === 'function') window.setLang(l);
+  };
+  ltUpdateLangBtns(localStorage.getItem('lt_lang') || 'fr');
+
   // Init - run immediately and after checkSession completes
   ltSyncUser();
   ltRenderUserBar();
@@ -433,5 +475,102 @@
 
   // Re-sync when localStorage changes (cross-tab)
   window.addEventListener('storage', ltSyncUser);
+
+  // ── CURSEUR PERSONNALISÉ (toutes les pages) ──
+  (function(){
+    if(window.matchMedia('(pointer: coarse)').matches) return; // mobile : skip
+
+    // CSS
+    var cs = document.createElement('style');
+    cs.textContent = [
+      '* { cursor: none !important; }',
+      '#lt-cur-dot {',
+        'position:fixed;top:0;left:0;z-index:99999;pointer-events:none;',
+        'width:4px;height:4px;border-radius:50%;',
+        'background:#38B6FF;',
+        'box-shadow:0 0 4px 1px #38B6FF,0 0 9px 2px rgba(56,182,255,.45);',
+        'transform:translate(-50%,-50%);',
+        'transition:transform .08s ease,width .2s,height .2s,background .2s;',
+        'will-change:left,top;',
+      '}',
+      '#lt-cur-ring {',
+        'position:fixed;top:0;left:0;z-index:99998;pointer-events:none;',
+        'width:20px;height:20px;border-radius:50%;',
+        'border:1px solid rgba(56,182,255,.5);',
+        'box-shadow:0 0 5px 1px rgba(56,182,255,.15);',
+        'transform:translate(-50%,-50%);',
+        'transition:width .25s,height .25s,border-color .25s;',
+        'will-change:left,top;',
+      '}',
+      'body.lt-cur-hover #lt-cur-dot {',
+        'width:6px;height:6px;',
+        'background:#A78BFA;',
+        'box-shadow:0 0 7px 2px #A78BFA,0 0 14px 4px rgba(167,139,250,.4);',
+      '}',
+      'body.lt-cur-hover #lt-cur-ring {',
+        'width:28px;height:28px;',
+        'border-color:rgba(167,139,250,.55);',
+        'box-shadow:0 0 8px 1px rgba(167,139,250,.2);',
+      '}',
+      '@media (pointer:coarse){#lt-cur-dot,#lt-cur-ring{display:none!important}*{cursor:auto!important}}'
+    ].join('');
+    document.head.appendChild(cs);
+
+    // Éléments DOM
+    var dot = document.createElement('div'); dot.id = 'lt-cur-dot';
+    var ring = document.createElement('div'); ring.id = 'lt-cur-ring';
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    var mx = window.innerWidth/2, my = window.innerHeight/2;
+    var rx = mx, ry = my;
+
+    document.addEventListener('mousemove', function(e){
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top  = my + 'px';
+    });
+
+    var hoverSel = 'a,button,input,select,textarea,[onclick],[role="button"]';
+    document.addEventListener('mouseover', function(e){
+      if(e.target.closest(hoverSel)) document.body.classList.add('lt-cur-hover');
+    });
+    document.addEventListener('mouseout', function(e){
+      if(e.target.closest(hoverSel)) document.body.classList.remove('lt-cur-hover');
+    });
+
+    document.addEventListener('mousedown', function(){
+      dot.style.transform = 'translate(-50%,-50%) scale(0.6)';
+      ring.style.transform = 'translate(-50%,-50%) scale(0.85)';
+    });
+    document.addEventListener('mouseup', function(){
+      dot.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+
+    // Quand la souris entre dans un iframe (ex: TradingView bubble map),
+    // les mousemove s'arrêtent → on masque le curseur custom et on restaure le natif
+    var iframeStyle = document.createElement('style');
+    iframeStyle.textContent = 'body.lt-in-iframe * { cursor: auto !important; } body.lt-in-iframe #lt-cur-dot, body.lt-in-iframe #lt-cur-ring { opacity: 0 !important; }';
+    document.head.appendChild(iframeStyle);
+
+    function enterIframe(){ document.body.classList.add('lt-in-iframe'); }
+    function leaveIframe(){ document.body.classList.remove('lt-in-iframe'); }
+
+    document.addEventListener('mouseleave', enterIframe);
+    document.addEventListener('mouseenter', leaveIframe);
+    // Fallback polling : si pas de mousemove pendant 200ms → dans un iframe
+    var lastMove = Date.now();
+    document.addEventListener('mousemove', function(){ lastMove = Date.now(); leaveIframe(); });
+    setInterval(function(){ if(Date.now() - lastMove > 200) enterIframe(); }, 100);
+
+    (function loop(){
+      rx += (mx - rx) * 0.13;
+      ry += (my - ry) * 0.13;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+  })();
 
 })();

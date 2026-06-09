@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Veille Économique</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
+<link rel="dns-prefetch" href="https://s3.tradingview.com">
+<link rel="preconnect" href="https://www.tradingview-widget.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.tradingview-widget.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* =========================================================================
@@ -1085,32 +1089,39 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 </nav>
 
 <!-- PRICETAPE (TradingView ticker) -->
-<div class="pricetape">
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-    {
-      "symbols": [
-        {"proName": "FOREXCOM:FRA40", "title": "CAC 40"},
-        {"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
-        {"proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100"},
-        {"proName": "FX_IDC:EURUSD", "title": "EUR/USD"},
-        {"proName": "FX_IDC:USDJPY", "title": "USD/JPY"},
-        {"proName": "TVC:GOLD", "title": "Or"},
-        {"proName": "TVC:UKOIL", "title": "Brent"},
-        {"proName": "TVC:USOIL", "title": "WTI"},
-        {"proName": "BITSTAMP:BTCUSD", "title": "Bitcoin"},
-        {"proName": "BITSTAMP:ETHUSD", "title": "Ethereum"}
-      ],
-      "showSymbolLogo": true,
-      "isTransparent": true,
-      "displayMode": "adaptive",
-      "colorTheme": "dark",
-      "locale": "fr"
-    }
-    </script>
+<div class="pricetape" id="pricetapeWrap">
+  <div class="tradingview-widget-container" id="pricetapeContainer">
+    <div class="tradingview-widget-container__widget" id="pricetapeWidget"></div>
   </div>
 </div>
+<script>
+(function() {
+  var cfg = {
+    symbols: [
+      {proName:"FOREXCOM:FRA40",title:"CAC 40"},
+      {proName:"FOREXCOM:SPXUSD",title:"S&P 500"},
+      {proName:"FOREXCOM:NSXUSD",title:"Nasdaq 100"},
+      {proName:"FX_IDC:EURUSD",title:"EUR/USD"},
+      {proName:"FX_IDC:USDJPY",title:"USD/JPY"},
+      {proName:"TVC:GOLD",title:"Or"},
+      {proName:"TVC:UKOIL",title:"Brent"},
+      {proName:"TVC:USOIL",title:"WTI"},
+      {proName:"BITSTAMP:BTCUSD",title:"Bitcoin"},
+      {proName:"BITSTAMP:ETHUSD",title:"Ethereum"}
+    ],
+    showSymbolLogo: true,
+    isTransparent: true,
+    displayMode: "adaptive",
+    colorTheme: "dark",
+    locale: "fr"
+  };
+  var s = document.createElement('script');
+  s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+  s.async = true;
+  s.textContent = JSON.stringify(cfg);
+  document.getElementById('pricetapeContainer').appendChild(s);
+})();
+</script>
 
 
 

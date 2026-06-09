@@ -2,11 +2,18 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0095FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le Terminal">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Setup Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --bg: #08080F;
   --card: rgba(255,255,255,0.04);
@@ -26,6 +33,15 @@
   --amber: #FBBF24;
   --r: 16px;
   --r2: 12px;
+}
+body.lt-light {
+  --bg: #F4F6FA;
+  --bg2: #ECEEF5;
+  --card: rgba(0,0,0,0.03);
+  --border: rgba(0,0,0,0.08);
+  --text: #12111A;
+  --text2: #4A4660;
+  --text3: #9B96B8;
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
@@ -251,6 +267,7 @@ body {
   display: flex; align-items: center; gap: 6px;
 }
 .analyzer-tab:hover { color: var(--text2); border-bottom-color: rgba(0,149,255,.3); }
+.analyzer-tab[data-count]:not([data-count=''])::after { content: ' (' attr(data-count) ')'; font-size: 11px; opacity: .7; }
 
 
 .lang-switch { display: flex; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); }
@@ -896,6 +913,17 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .stat-lbl{font-size:10px;font-weight:500;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-top:6px}
 .perf-section{margin-bottom:28px}
 .perf-section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* Session grid */
+.session-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.session-grid{grid-template-columns:1fr}}
+.session-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.sess-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
+.sess-label{font-size:11px;color:var(--text3);margin-bottom:10px}
+.sess-sub{font-size:12px;color:var(--text3);margin-bottom:10px}
+.sess-metrics{display:flex;flex-direction:column;gap:6px}
+.sess-metrics>div{display:flex;justify-content:space-between;align-items:center}
+.sess-metric-lbl{font-size:12px;color:var(--text3)}
+.sess-metric-val{font-size:13px;font-weight:700;color:var(--text)}
 .score-bar-wrap{display:flex;flex-direction:column;gap:8px}
 .score-bar-item{display:flex;align-items:center;gap:10px}
 .score-bar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0}
@@ -934,6 +962,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .confirm-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
 .confirm-ok{flex:1;padding:11px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);border-radius:12px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .confirm-ok:hover{background:rgba(248,113,113,.25);border-color:rgba(248,113,113,.6)}
+@media print {
+  .topbar,.back-btn,.analyzer-tabs,#iaFeedbackBtn,.history-page-header { display: none !important; }
+  #perfPage { display: block !important; }
+  body { background: white !important; color: black !important; }
+  .stat-card, .perf-section { break-inside: avoid; }
+}
 </style>
 </head>
 <body>
@@ -963,6 +997,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="lang-switch">
         <button class="lang-btn on" onclick="setLang('fr')">FR</button>
         <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button id="themeToggle" onclick="toggleTheme()" style="background:transparent;border:1px solid var(--border);border-radius:50px;padding:6px 12px;color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s" title="Thème clair/sombre">🌙</button>
       </div>
     </div>
   </header>
@@ -1020,11 +1055,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-entry">Entrée</label>
-          <input type="number" id="entry" placeholder="2320.50" step="any">
+          <input type="number" id="entry" placeholder="2320.50" step="any" autocomplete="off">
         </div>
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-tp">Take Profit</label>
-          <input type="number" id="tp" placeholder="2345.00" step="any">
+          <input type="number" id="tp" placeholder="2345.00" step="any" autocomplete="off">
         </div>
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-sl">Stop Loss</label>
@@ -1159,6 +1194,21 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <div class="v-badge" id="v-badge">—</div>
         <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
       </div>
+      <div id="quickOutcome" style="margin-top:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>
+        <div style="display:flex;gap:8px">
+          <button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l'ai pris</button>
+          <button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l'ai passé</button>
+        </div>
+        <div id="quickResultBtns" style="display:none;margin-top:8px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Résultat :</div>
+          <div style="display:flex;gap:8px">
+            <button onclick="quickSetResult('win')" style="flex:1;padding:8px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🏆 Win</button>
+            <button onclick="quickSetResult('loss')" style="flex:1;padding:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">❌ Loss</button>
+            <button onclick="quickSetResult('be')" style="flex:1;padding:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;color:#FBBF24;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➖ BE</button>
+          </div>
+        </div>
+      </div>
       <div class="actions">
         <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
         <button class="act-btn accent" onclick="window.location.href='./index.html'" id="act-pro">★ Passer PRO</button>
@@ -1172,6 +1222,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 <script>
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
+var lastAnalysisParams = null;
 if(localStorage.getItem('lt_pro')==='1') isPro=true;
 
 // ── LANDING ──
@@ -1449,10 +1500,10 @@ function applyLang(){
   s('pw-title',t.pwTitle);s('pw-sub',t.pwSub,true);
   s('pm-name',t.pmName);s('py-name',t.pyName);s('py-top',t.pyTop);
   s('pm-per',t.pmPer);s('py-per',t.pyPer);
-  for(let i=1;i<=7;i++) document.getElementById('pf'+i).textContent=t['pf'+i];
-  document.getElementById('pay-txt').textContent=t.payTxt;
-  document.getElementById('pay-note').textContent=t.payNote;
-  document.getElementById('demo-lnk').textContent=t.demoLnk;
+  for(let i=1;i<=7;i++) s('pf'+i,t['pf'+i]);
+  s('pay-txt',t.payTxt);
+  s('pay-note',t.payNote);
+  s('demo-lnk',t.demoLnk);
   updUsage();
 }
 
@@ -1615,8 +1666,8 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       while(br>0){f+='"]';br--;}while(b>0){f+='}';b--;}
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
-    render(parsed,rrv,tf,pair);
-    // Store in local historyData so Performances page has data
+    // ── SAUVEGARDER EN PREMIER (avant render pour garantir la persistance) ──
+    console.log('[LT] Analyse terminée — sauvegarde en cours...');
     var newEntry = {
       id: Date.now(),
       pair: pair,
@@ -1636,14 +1687,16 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       rr_realized: null,
       trade_notes: ''
     };
-    if(!Array.isArray(historyData)) historyData=[]; historyData.unshift(newEntry);
-    // Persist to localStorage without img_data (too large)
-    try{
-      var toStore = historyData.slice(0,50).map(function(h){
-        var c = Object.assign({}, h); c.img_data = null; return c;
-      });
-      localStorage.setItem('lt_history', JSON.stringify(toStore));
-    }catch(e){ console.warn('localStorage save failed:', e); }
+    if(!Array.isArray(historyData)) historyData=[];
+    historyData.unshift(newEntry);
+    _saveLocalHistory();
+    _updateHistoryBadge();
+    // Persist to Supabase if logged in (async, ne bloque pas le rendu)
+    saveAnalysis(parsed, pair, dir, tf);
+
+    render(parsed,rrv,tf,pair);
+    // Ouvrir automatiquement l'historique après l'analyse pour que l'utilisateur voie que c'est bien sauvegardé
+    setTimeout(function(){ openHistory(); openHDetail(0); }, 2200);
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
@@ -1741,7 +1794,7 @@ function render(r,rrv,tf,pair){
   document.getElementById('adviceText').innerHTML=fmtBlock(r.recommandations);
 
   const mkT=(id,tags,cls)=>{
-    const el=document.getElementById(id);el.innerHTML='';
+    const el=document.getElementById(id);if(!el)return;el.innerHTML='';
     (tags||[]).forEach(tag=>{const s=document.createElement('span');s.className='tag '+cls;s.textContent=tag;el.appendChild(s);});
   };
   mkT('forcesTags',r.forcesTags,'g');
@@ -1754,12 +1807,29 @@ function render(r,rrv,tf,pair){
   else{vb.classList.add('wait');vi.textContent=c().waitLabel;}
   document.getElementById('v-title').textContent=r.verdictTitle||'';
   document.getElementById('v-sub').textContent=r.verdictSub||'';
+  // Reset quick outcome widget
+  var qo = document.getElementById('quickOutcome');
+  if(qo){
+    qo.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l\'ai pris</button>' +
+      '<button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l\'ai passé</button>' +
+      '</div>' +
+      '<div id="quickResultBtns" style="display:none;margin-top:8px">' +
+      '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Résultat :</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button onclick="quickSetResult(\'win\')" style="flex:1;padding:8px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🏆 Win</button>' +
+      '<button onclick="quickSetResult(\'loss\')" style="flex:1;padding:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">❌ Loss</button>' +
+      '<button onclick="quickSetResult(\'be\')" style="flex:1;padding:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;color:#FBBF24;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➖ BE</button>' +
+      '</div></div>';
+  }
   showResult();
 }
 
 
 function renderAnnotatedCanvas(src, anns){
   var canvas = document.getElementById('annotationCanvas');
+  if(!canvas) return;
   var ctx = canvas.getContext('2d');
   var img = new Image();
   img.onload = function(){
@@ -1863,7 +1933,7 @@ async function loadPerf(){
   document.getElementById('perfLoading').style.display='block';
   document.getElementById('perfContent').style.display='none';
   // Try to refresh from API if connected
-  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d))historyData=d;}catch(e){}}
+  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d)&&d.length){var _aIds=new Set(d.map(function(h){return String(h.id);}));var _loc=historyData.filter(function(h){return !_aIds.has(String(h.id));});historyData=_loc.concat(d);historyData.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});}}catch(e){}}
   // Build stats from local historyData
   var all = historyData;
   if(!all.length){ document.getElementById('perfLoading').textContent='Aucune analyse encore. Lance ta première analyse !'; return; }
@@ -1891,11 +1961,111 @@ async function loadPerf(){
   });
   // Score progression (last 10)
   var scoreProgression = all.slice(-10).map(function(a){ return {score:parseFloat(a.score)||0, pair:a.pair}; });
+  // === NOUVELLES STATS AVANCÉES ===
+  var takenSorted = taken.filter(function(a){ return a.rr_realized != null; }).sort(function(a,b){
+    return new Date(a.created_at) - new Date(b.created_at);
+  });
+  // Equity curve (cumulative RR)
+  var equityCurve = [];
+  var cumRR = 0;
+  takenSorted.forEach(function(a){
+    cumRR += parseFloat(a.rr_realized)||0;
+    equityCurve.push({ date: a.created_at, value: parseFloat(cumRR.toFixed(2)) });
+  });
+  // Max drawdown
+  var maxDrawdown = 0, peak = -Infinity;
+  equityCurve.forEach(function(pt){
+    if(pt.value > peak) peak = pt.value;
+    var dd = peak - pt.value;
+    if(dd > maxDrawdown) maxDrawdown = dd;
+  });
+  // Stats par session
+  var sessions = {
+    asia:   { name:'Asia',   label:'23h–8h UTC',  trades:[], wins:0, losses:0, rrSum:0 },
+    london: { name:'London', label:'7h–16h UTC',  trades:[], wins:0, losses:0, rrSum:0 },
+    ny:     { name:'NY',     label:'13h–22h UTC', trades:[], wins:0, losses:0, rrSum:0 }
+  };
+  takenSorted.forEach(function(a){
+    var h = new Date(a.created_at).getUTCHours();
+    var rr = parseFloat(a.rr_realized)||0;
+    var result = a.trade_result;
+    var keys = [];
+    if(h >= 23 || h < 8)  keys.push('asia');
+    if(h >= 7  && h < 16) keys.push('london');
+    if(h >= 13 && h < 22) keys.push('ny');
+    if(keys.length === 0) keys.push('asia');
+    keys.forEach(function(k){
+      sessions[k].trades.push(a);
+      sessions[k].rrSum += rr;
+      if(result === 'win')  sessions[k].wins++;
+      if(result === 'loss') sessions[k].losses++;
+    });
+  });
+  Object.keys(sessions).forEach(function(k){
+    var s = sessions[k];
+    var t = s.trades.length;
+    s.total = t;
+    s.winRate = (s.wins + s.losses) > 0 ? Math.round(s.wins / (s.wins + s.losses) * 100) : null;
+    s.avgRR   = t > 0 ? parseFloat((s.rrSum / t).toFixed(2)) : null;
+  });
+  // Breakdown mensuel
+  var monthlyMap = {};
+  takenSorted.forEach(function(a){
+    var d2 = new Date(a.created_at);
+    var key = d2.getUTCFullYear() + '-' + String(d2.getUTCMonth()+1).padStart(2,'0');
+    if(!monthlyMap[key]) monthlyMap[key] = 0;
+    monthlyMap[key] += parseFloat(a.rr_realized)||0;
+  });
+  var monthlyData = Object.keys(monthlyMap).sort().map(function(k){
+    return { month: k, rr: parseFloat(monthlyMap[k].toFixed(2)) };
+  });
+
+  // Expectancy = (WR * avgWin_R) - ((1-WR) * avgLoss_R)
+  var winRRVals = takenSorted.filter(function(a){ return a.trade_result==='win' && a.rr_realized; }).map(function(a){ return parseFloat(a.rr_realized)||0; });
+  var lossRRVals = takenSorted.filter(function(a){ return a.trade_result==='loss' && a.rr_realized; }).map(function(a){ return Math.abs(parseFloat(a.rr_realized)||0); });
+  var avgWinR = winRRVals.length ? winRRVals.reduce(function(a,b){return a+b;},0)/winRRVals.length : 0;
+  var avgLossR = lossRRVals.length ? lossRRVals.reduce(function(a,b){return a+b;},0)/lossRRVals.length : 1;
+  var wr_dec = (wins+losses)>0 ? wins/(wins+losses) : 0;
+  var expectancy = ((wr_dec * avgWinR) - ((1-wr_dec) * avgLossR)).toFixed(3);
+
+  // Sharpe ratio (simplified: mean_R / std_R of all closed trades)
+  var allRR = takenSorted.filter(function(a){ return a.rr_realized; }).map(function(a){ return parseFloat(a.rr_realized)||0; });
+  var sharpe = 'N/A';
+  if(allRR.length >= 3){
+    var mean = allRR.reduce(function(a,b){return a+b;},0)/allRR.length;
+    var variance = allRR.reduce(function(a,b){return a+Math.pow(b-mean,2);},0)/allRR.length;
+    var std = Math.sqrt(variance);
+    sharpe = std > 0 ? (mean/std).toFixed(2) : 'N/A';
+  }
+
+  // Streak (current + best)
+  var currentStreak = 0, bestStreak = 0, streakType = '';
+  var tempStreak = 0, tempType = '';
+  takenSorted.forEach(function(a){
+    if(!a.trade_result || a.trade_result==='be') { tempStreak=0; tempType=''; return; }
+    if(a.trade_result === tempType){ tempStreak++; } else { tempType=a.trade_result; tempStreak=1; }
+    if(tempStreak > bestStreak) bestStreak = tempStreak;
+  });
+  currentStreak = tempStreak; streakType = tempType;
+
+  // Win rate by day of week
+  var dayWins = [0,0,0,0,0,0,0], dayTotal = [0,0,0,0,0,0,0];
+  takenSorted.forEach(function(a){
+    var day = new Date(a.created_at).getDay();
+    dayTotal[day]++;
+    if(a.trade_result==='win') dayWins[day]++;
+  });
+  var dayStats = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'].map(function(n,i){
+    return { name:n, wr: dayTotal[i]>0 ? Math.round(dayWins[i]/dayTotal[i]*100) : null, total: dayTotal[i] };
+  });
+
   renderPerf({
     totalAnalyses: all.length, totalTaken: taken.length,
     wins: wins, losses: losses, be: be,
     winRate: winRate, avgRR: avgRR, weeklyRR: weekRR.toFixed(2),
-    avgScore: avgScore, pairStats: pairStats, scoreProgression: scoreProgression
+    avgScore: avgScore, pairStats: pairStats, scoreProgression: scoreProgression,
+    equityCurve: equityCurve, maxDrawdown: maxDrawdown, sessions: sessions, monthlyData: monthlyData,
+    expectancy: expectancy, sharpe: sharpe, currentStreak: currentStreak, bestStreak: bestStreak, streakType: streakType, dayStats: dayStats
   });
 }
 
@@ -1911,6 +2081,9 @@ function renderPerf(d){
     {val: (d.avgRR!==null?d.avgRR+'R':'—'), lbl:'RR Moyen', col:'var(--v2)'},
     {val: (d.weeklyRR>0?'+':'')+d.weeklyRR+'R', lbl:'RR Semaine', col:parseFloat(d.weeklyRR)>=0?'var(--green)':'#F87171'},
     {val: d.avgScore||'—', lbl:'Score Moyen', col:'var(--v2)'},
+    {val: d.expectancy !== undefined ? (parseFloat(d.expectancy)>=0?'+':'')+d.expectancy+'R' : '—', lbl:'Expectancy', col: d.expectancy && parseFloat(d.expectancy)>=0 ? 'var(--green)' : '#F87171'},
+    {val: d.sharpe !== 'N/A' && d.sharpe !== undefined ? d.sharpe : '—', lbl:'Sharpe Ratio', col:'var(--v2)'},
+    {val: d.currentStreak ? (d.streakType==='win'?'🟢':'🔴')+' '+d.currentStreak : '—', lbl:'Série actuelle', col: d.streakType==='win'?'var(--green)':'#F87171'},
   ];
   document.getElementById('statGrid').innerHTML = stats.map(function(s){
     return '<div class="stat-card"><div class="stat-val" style="color:'+s.col+'">'+s.val+'</div><div class="stat-lbl">'+s.lbl+'</div></div>';
@@ -1992,34 +2165,311 @@ function renderPerf(d){
   } else {
     document.getElementById('pairStatsContent').innerHTML = '<div style="text-align:center;color:var(--text3);padding:20px;font-size:13px">Aucun trade pris pour l\'instant</div>';
   }
+
+  // === COURBE D'EQUITY ===
+  if(d.equityCurve && d.equityCurve.length > 1){
+    var ec = d.equityCurve;
+    var ecCanvas = document.getElementById('equityChart');
+    if(ecCanvas){
+      var ecCtx = ecCanvas.getContext('2d');
+      ecCanvas.width = ecCanvas.parentElement.offsetWidth - 40;
+      ecCanvas.height = 120;
+      var EW = ecCanvas.width, EH = ecCanvas.height;
+      var vals = ec.map(function(p){ return p.value; });
+      var minV = Math.min(0, Math.min.apply(null, vals));
+      var maxV = Math.max(0, Math.max.apply(null, vals));
+      var range = maxV - minV || 1;
+      var pad = 14;
+      ecCtx.clearRect(0,0,EW,EH);
+      var zeroY = EH - pad - ((0 - minV) / range) * (EH - pad*2);
+      ecCtx.beginPath(); ecCtx.strokeStyle = 'rgba(255,255,255,0.15)'; ecCtx.lineWidth = 1;
+      ecCtx.setLineDash([4,4]); ecCtx.moveTo(0, zeroY); ecCtx.lineTo(EW, zeroY); ecCtx.stroke();
+      ecCtx.setLineDash([]);
+      var grad = ecCtx.createLinearGradient(0, 0, 0, EH);
+      grad.addColorStop(0, 'rgba(52,211,153,0.25)'); grad.addColorStop(1, 'rgba(52,211,153,0)');
+      ecCtx.beginPath(); ecCtx.strokeStyle = '#34D399'; ecCtx.lineWidth = 2; ecCtx.lineJoin = 'round';
+      ec.forEach(function(p, i){
+        var x = (i/(ec.length-1))*EW;
+        var y = EH - pad - ((p.value - minV)/range)*(EH - pad*2);
+        i===0 ? ecCtx.moveTo(x,y) : ecCtx.lineTo(x,y);
+      });
+      ecCtx.stroke();
+      ecCtx.lineTo(EW, zeroY); ecCtx.lineTo(0, zeroY); ecCtx.closePath();
+      ecCtx.fillStyle = grad; ecCtx.fill();
+      var lastVal = ec[ec.length-1].value;
+      var lx = EW, ly = EH - pad - ((lastVal - minV)/range)*(EH - pad*2);
+      ecCtx.fillStyle = lastVal >= 0 ? '#34D399' : '#F87171';
+      ecCtx.font = 'bold 12px sans-serif'; ecCtx.textAlign = 'right';
+      ecCtx.fillText((lastVal >= 0 ? '+' : '') + lastVal + 'R', lx - 4, ly - 6);
+    }
+    var ddEl = document.getElementById('maxDrawdownVal');
+    if(ddEl) ddEl.textContent = '-' + (d.maxDrawdown||0).toFixed(2) + 'R';
+  }
+
+  // === STATS PAR SESSION ===
+  ['asia','london','ny'].forEach(function(k){
+    var s = d.sessions ? d.sessions[k] : null;
+    if(!s) return;
+    var el = document.getElementById('session-'+k);
+    if(!el) return;
+    el.querySelector('.sess-total').textContent = s.total + ' trades';
+    var wrEl = el.querySelector('.sess-wr');
+    wrEl.textContent = s.winRate !== null ? s.winRate + '%' : '—';
+    wrEl.style.color = s.winRate !== null ? (s.winRate >= 50 ? 'var(--green)' : '#F87171') : 'var(--text3)';
+    var rrEl = el.querySelector('.sess-rr');
+    rrEl.textContent = s.avgRR !== null ? (s.avgRR >= 0 ? '+' : '') + s.avgRR + 'R' : '—';
+    rrEl.style.color = s.avgRR !== null ? (s.avgRR >= 0 ? 'var(--green)' : '#F87171') : 'var(--text3)';
+  });
+
+  // === BREAKDOWN MENSUEL ===
+  var mbEl = document.getElementById('monthlyBarsContent');
+  if(mbEl){
+    if(d.monthlyData && d.monthlyData.length){
+      var md = d.monthlyData;
+      var maxAbs = Math.max.apply(null, md.map(function(m){ return Math.abs(m.rr); })) || 1;
+      var barH = 22, gap = 10, labelW = 72, barMaxW = 160;
+      var svgH = md.length * (barH + gap);
+      var months_fr = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+      var rows = md.map(function(m, i){
+        var y = i * (barH + gap);
+        var barW = Math.round((Math.abs(m.rr) / maxAbs) * barMaxW);
+        var color = m.rr >= 0 ? '#34D399' : '#F87171';
+        var valStr = (m.rr >= 0 ? '+' : '') + m.rr + 'R';
+        var parts = m.month.split('-');
+        var lbl = months_fr[parseInt(parts[1],10)-1] + ' ' + parts[0].slice(2);
+        return '<g transform="translate(0,'+y+')">' +
+          '<text x="'+(labelW-8)+'" y="'+(barH/2+5)+'" text-anchor="end" fill="var(--text2)" font-size="12" font-family="sans-serif">'+lbl+'</text>' +
+          '<rect x="'+labelW+'" y="0" width="'+barW+'" height="'+barH+'" rx="4" fill="'+color+'" opacity="0.85"/>' +
+          '<text x="'+(labelW+barW+6)+'" y="'+(barH/2+5)+'" fill="'+color+'" font-size="12" font-weight="700" font-family="sans-serif">'+valStr+'</text>' +
+          '</g>';
+      }).join('');
+      var svgW = labelW + barMaxW + 80;
+      mbEl.innerHTML = '<svg width="100%" viewBox="0 0 '+svgW+' '+svgH+'" style="display:block">'+rows+'</svg>';
+    } else {
+      mbEl.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:20px">Pas encore assez de données mensuelles</div>';
+    }
+  }
+
+  // Day of week chart
+  var dowEl = document.getElementById('dayOfWeekChart');
+  if(dowEl && d.dayStats){
+    var activeDays = d.dayStats.filter(function(d){ return d.total > 0; });
+    if(activeDays.length > 0){
+      dowEl.innerHTML = '<div style="display:flex;gap:8px;align-items:flex-end;height:80px">' +
+        d.dayStats.map(function(day){
+          var h = day.wr !== null ? Math.max(8, day.wr * 0.7) : 0;
+          var col = day.wr === null ? 'rgba(255,255,255,.08)' : day.wr >= 50 ? 'rgba(52,211,153,.7)' : 'rgba(248,113,113,.7)';
+          return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">' +
+            '<div style="font-size:10px;color:var(--text3);font-weight:600">'+(day.wr!==null?day.wr+'%':'')+'</div>' +
+            '<div style="width:100%;height:'+h+'px;background:'+col+';border-radius:4px 4px 0 0"></div>' +
+            '<div style="font-size:11px;color:var(--text2);font-weight:600">'+day.name+'</div>' +
+            '<div style="font-size:9px;color:var(--text3)">'+day.total+'</div>' +
+            '</div>';
+        }).join('') + '</div>';
+    } else {
+      dowEl.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:20px">Pas encore assez de données</div>';
+    }
+  }
 }
 
 async function requestIAFeedback(){
   if(!authToken) return;
-  var btn = event.target;
-  btn.textContent = '🤖 Analyse en cours…';
-  btn.disabled = true;
+  var btn = document.getElementById('iaFeedbackBtn');
+  if(btn){ btn.textContent = '⏳ Génération en cours…'; btn.disabled = true; }
   try{
-    var res = await fetch('/api/outcomes',{headers:{'Authorization':'Bearer '+authToken}});
-    var data = await res.json();
-    var trades = (data.recentAnalyses||[]).filter(function(a){ return a.trade_taken !== null; }).slice(0,15);
-    if(trades.length < 3){
-      document.getElementById('iaFeedback').innerHTML = '<p style="color:var(--text3);font-size:13px">Il te faut au moins 3 trades suivis pour obtenir une analyse de patterns. Continue à renseigner tes résultats dans l\'historique !</p>';
+    var now = new Date();
+    var sevenDaysAgo = new Date(now.getTime() - 7*24*60*60*1000);
+    var allTrades = Array.isArray(historyData) ? historyData : [];
+    try{
+      var res = await fetch('/api/outcomes',{headers:{'Authorization':'Bearer '+authToken}});
+      var data = await res.json();
+      if(data.recentAnalyses && data.recentAnalyses.length > allTrades.length) allTrades = data.recentAnalyses;
+    }catch(e){}
+    var weekTrades = allTrades.filter(function(a){ return new Date(a.created_at) >= sevenDaysAgo; });
+    if(weekTrades.length < 3){
+      document.getElementById('iaFeedbackContent').innerHTML = '<p style="color:var(--text3);font-size:13px;text-align:center;padding:10px 0">Il te faut au moins 3 analyses cette semaine pour générer le rapport.</p>';
+      if(btn){ btn.textContent = '📊 Générer le rapport de la semaine'; btn.disabled = false; }
       return;
     }
-    // Build prompt for pattern analysis
-    var tradesSummary = trades.map(function(t){
-      return '- '+t.pair+' '+t.direction+' '+t.tf+' | Score: '+t.score+' | Verdict IA: '+t.verdict+' | Pris: '+(t.trade_taken?'OUI':'NON')+' | Résultat: '+(t.trade_result||'?')+' | RR réalisé: '+(t.rr_realized||'?');
+    var tradesTaken = weekTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; });
+    var wins2 = tradesTaken.filter(function(t){ return t.trade_result==='win'; });
+    var losses2 = tradesTaken.filter(function(t){ return t.trade_result==='loss'; });
+    var winRate2 = tradesTaken.length > 0 ? Math.round((wins2.length/tradesTaken.length)*100) : 0;
+    var rrVals2 = tradesTaken.filter(function(t){ return t.rr_realized && !isNaN(parseFloat(t.rr_realized)); }).map(function(t){ return parseFloat(t.rr_realized); });
+    var avgRR2 = rrVals2.length > 0 ? (rrVals2.reduce(function(a,b){return a+b;},0)/rrVals2.length).toFixed(2) : 'N/A';
+    var pairStats2 = {};
+    tradesTaken.forEach(function(t){
+      if(!t.pair) return;
+      if(!pairStats2[t.pair]) pairStats2[t.pair]={wins:0,total:0};
+      pairStats2[t.pair].total++;
+      if(t.trade_result==='win') pairStats2[t.pair].wins++;
+    });
+    var bestPair='N/A', worstPair='N/A', bestRate=-1, worstRate=101;
+    Object.keys(pairStats2).forEach(function(p){
+      var rate = pairStats2[p].total>0 ? (pairStats2[p].wins/pairStats2[p].total)*100 : 0;
+      if(rate>bestRate){ bestRate=rate; bestPair=p; }
+      if(rate<worstRate){ worstRate=rate; worstPair=p; }
+    });
+    var hourCounts={};
+    weekTrades.forEach(function(t){ var h=new Date(t.created_at).getHours(); hourCounts[h]=(hourCounts[h]||0)+1; });
+    var peakHour=Object.keys(hourCounts).sort(function(a,b){return hourCounts[b]-hourCounts[a];})[0];
+    var peakHourStr=peakHour!==undefined?peakHour+'h-'+(parseInt(peakHour)+1)+'h':'N/A';
+    // === STATS AVANCÉES POUR LE RAPPORT IA ===
+    // Discipline : combien de GO/NO-GO/WAIT ont été respectés
+    var goTrades = weekTrades.filter(function(t){ return t.verdict==='GO'; });
+    var nogoTrades = weekTrades.filter(function(t){ return t.verdict==='NO-GO'; });
+    var waitTrades = weekTrades.filter(function(t){ return t.verdict==='WAIT'; });
+    var goPris = goTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; }).length;
+    var nogoPris = nogoTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; }).length;
+    var waitPris = waitTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; }).length;
+    // Distribution des scores
+    var scoresAll = weekTrades.map(function(t){ return parseFloat(t.score)||0; });
+    var scoreHigh = weekTrades.filter(function(t){ return parseFloat(t.score)>=7; }).length;
+    var scoreMid = weekTrades.filter(function(t){ return parseFloat(t.score)>=5 && parseFloat(t.score)<7; }).length;
+    var scoreLow = weekTrades.filter(function(t){ return parseFloat(t.score)<5; }).length;
+    var avgScoreWeek = scoresAll.length ? (scoresAll.reduce(function(a,b){return a+b;},0)/scoresAll.length).toFixed(1) : 'N/A';
+    // Score moyen des trades pris vs refusés
+    var scoresPris = tradesTaken.map(function(t){ return parseFloat(t.score)||0; });
+    var scoresRefus = weekTrades.filter(function(t){ return !t.trade_taken; }).map(function(t){ return parseFloat(t.score)||0; });
+    var avgScorePris = scoresPris.length ? (scoresPris.reduce(function(a,b){return a+b;},0)/scoresPris.length).toFixed(1) : 'N/A';
+    var avgScoreRefus = scoresRefus.length ? (scoresRefus.reduce(function(a,b){return a+b;},0)/scoresRefus.length).toFixed(1) : 'N/A';
+    // TF distribution
+    var tfCounts = {};
+    weekTrades.forEach(function(t){ if(t.tf) tfCounts[t.tf]=(tfCounts[t.tf]||0)+1; });
+    var tfSummary = Object.keys(tfCounts).map(function(k){ return k+'('+tfCounts[k]+')'; }).join(', ');
+    // Session stats (si disponible)
+    var sessionCounts = {asia:0,london:0,ny:0};
+    weekTrades.forEach(function(t){
+      var h = new Date(t.created_at).getUTCHours();
+      if(h>=23||h<8) sessionCounts.asia++;
+      else if(h>=7&&h<16) sessionCounts.london++;
+      else if(h>=13&&h<22) sessionCounts.ny++;
+    });
+    // Résumé détaillé avec forces/faiblesses
+    var tradesSummary=weekTrades.map(function(t){
+      var date=new Date(t.created_at).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      var forces = t.forces ? t.forces.replace(/\n/g,' | ').substring(0,120) : '';
+      var faiblesses = t.faiblesses ? t.faiblesses.replace(/\n/g,' | ').substring(0,120) : '';
+      var notes = t.trade_notes ? ' | Notes trader: '+t.trade_notes.substring(0,80) : '';
+      return '- ['+date+'] '+t.pair+' '+t.direction+' '+t.tf+
+        ' | Score: '+t.score+'/10 | Verdict IA: '+t.verdict+
+        ' | Pris: '+(t.trade_taken?'OUI':'NON')+
+        ' | Résultat: '+(t.trade_result||'—')+
+        ' | RR réalisé: '+(t.rr_realized||'—')+
+        (forces ? '\n  Forces: '+forces : '')+
+        (faiblesses ? '\n  Faiblesses: '+faiblesses : '')+
+        notes;
     }).join('\n');
-    var prompt = 'Voici les '+ trades.length +' dernières analyses de ce trader :\n'+ tradesSummary +'\n\nAnalyse ses patterns de trading en 4-5 points clés : ses forces, ses erreurs récurrentes, les paires où il performe le mieux, et 3 recommandations concrètes pour améliorer son win rate. Sois direct et précis. Réponds en français en 200-300 mots.';
-    var r = await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:'Tu es un coach de trading expert ICT/SMC. Analyse les performances passées et identifie les patterns.',messages:[{role:'user',content:prompt}]})});
-    var rd = await r.json();
-    var txt = rd.content&&rd.content[0]?rd.content[0].text:'Analyse indisponible';
-    document.getElementById('iaFeedback').innerHTML = '<div style="font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-line">'+txt+'</div>';
+    var statsBlock=[
+      '=== RAPPORT HEBDOMADAIRE — STATISTIQUES ===',
+      '',
+      'VOLUME & ACTIVITÉ:',
+      '- Analyses totales: '+weekTrades.length+' | Score moyen: '+avgScoreWeek+'/10',
+      '- Distribution scores: Haute (≥7): '+scoreHigh+' | Moyenne (5-7): '+scoreMid+' | Faible (<5): '+scoreLow,
+      '- Timeframes utilisés: '+(tfSummary||'N/A'),
+      '- Heure la plus active: '+peakHourStr,
+      '- Activité sessions: Asia: '+sessionCounts.asia+' | London: '+sessionCounts.london+' | NY: '+sessionCounts.ny,
+      '',
+      'DISCIPLINE (respect des verdicts IA):',
+      '- Setups GO: '+goTrades.length+' analysés → '+goPris+' pris (discipline: '+(goTrades.length?Math.round(goPris/goTrades.length*100)+'%':'N/A')+')',
+      '- Setups WAIT: '+waitTrades.length+' analysés → '+waitPris+' pris quand même ('+waitPris+' trades pris contre avis IA)',
+      '- Setups NO-GO: '+nogoTrades.length+' analysés → '+nogoPris+' pris quand même ('+nogoPris+' trades pris contre avis IA)',
+      '- Score moyen trades PRIS: '+avgScorePris+'/10 | Score moyen trades REFUSÉS: '+avgScoreRefus+'/10',
+      '',
+      'PERFORMANCE:',
+      '- Trades pris: '+tradesTaken.length+' | Wins: '+wins2.length+' | Losses: '+losses2.length,
+      '- Win rate: '+winRate2+'%',
+      '- RR moyen réalisé: '+avgRR2,
+      '- Meilleure paire: '+bestPair+(bestPair!=='N/A'?' ('+Math.round(bestRate)+'% win)':''),
+      '- Paire difficile: '+worstPair+(worstPair!=='N/A'&&worstPair!==bestPair?' ('+Math.round(worstRate)+'% win)':''),
+    ].join('\n');
+    var prompt=statsBlock+'\n\nDÉTAIL COMPLET DES ANALYSES (avec forces/faiblesses ICT identifiées):\n'+tradesSummary+'\n\n'+
+      '=== INSTRUCTIONS RAPPORT ===\n'+
+      'Génère un rapport hebdomadaire structuré avec EXACTEMENT ces 4 sections.\n'+
+      'Utilise la terminologie ICT/SMC précise (OB, FVG, BOS, OTE, liquidity sweep, killzone, PD Array, etc.).\n'+
+      'Analyse la DISCIPLINE (respect des verdicts), la QUALITÉ des setups (scores), et les PATTERNS récurrents.\n'+
+      'Mentionne les sessions (Asia/London/NY) si les données le permettent.\n'+
+      'Sois direct, factuel, bienveillant. Réponds en français.\n\n'+
+      '## Résumé de la semaine\n[2-3 phrases bilan global avec chiffres clés]\n\n'+
+      '## Points forts\n[3-4 bullets sur ce qui a bien fonctionné — patterns ICT, discipline, sessions]\n\n'+
+      '## Axes d\'amélioration\n[3-4 bullets sur les erreurs ou patterns négatifs — mauvaises entrées, non-respect verdicts, mauvaise session]\n\n'+
+      '## 3 actions concrètes pour la semaine prochaine\n[Exactement 3 bullets ultra-précis avec des actions mesurables liées à la stratégie ICT/SMC]';
+    var r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({
+        system:'Tu es un coach de trading expert ICT/SMC (Inner Circle Trader / Smart Money Concepts). '+
+          'Tu maîtrises parfaitement : Order Blocks (OB), Fair Value Gaps (FVG), Break of Structure (BOS), Change of Character (ChoCH), '+
+          'Optimal Trade Entry (OTE 0.62-0.79 fib), liquidity sweeps, Power of 3 (AMD), Judas Swing, SMT Divergence, '+
+          'killzones (London Open 7h-16h UTC, NY AM 13h-17h UTC, Asia 23h-8h UTC), PD Arrays (premium/discount), '+
+          'Silver Bullet, ICT Unicorn Model, CISD, et toutes les corrélations DXY/Gold/Indices. '+
+          'Tu analyses les performances hebdomadaires d\'un trader pour l\'aider à progresser. '+
+          'Tu génères des rapports structurés qui identifient les patterns récurrents gagnants et perdants, '+
+          'évalues la discipline (respect des verdicts IA), et proposes des actions concrètes ICT-specific.',
+        messages:[{role:'user',content:prompt}]
+      })});
+    var rd=await r.json();
+    var txt=rd.content&&rd.content[0]?rd.content[0].text:'Rapport indisponible';
+    var container=document.getElementById('iaFeedbackContent');
+    container.innerHTML=renderReport(txt,weekTrades.length,tradesTaken.length,winRate2,avgRR2);
+    var regenDiv=document.createElement('div');
+    regenDiv.style.cssText='text-align:center;margin-top:18px';
+    regenDiv.innerHTML='<button id="iaFeedbackBtn" onclick="requestIAFeedback()" style="padding:9px 22px;background:transparent;border:1px solid rgba(0,149,255,.4);border-radius:50px;color:var(--v);font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🔄 Régénérer le rapport</button>';
+    container.appendChild(regenDiv);
   }catch(e){
-    document.getElementById('iaFeedback').innerHTML = '<p style="color:#F87171">Erreur lors de l\'analyse</p>';
+    console.error('IA Feedback error:',e);
+    document.getElementById('iaFeedbackContent').innerHTML='<p style="color:#F87171;text-align:center">Erreur lors de la génération. Réessaie dans quelques instants.</p>';
+    if(btn){ btn.textContent='📊 Générer le rapport de la semaine'; btn.disabled=false; }
   }
+}
+
+function renderReport(text, totalTrades, tradesTaken, winRate, avgRR){
+  var html='';
+  html+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">';
+  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--v)">'+totalTrades+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Analyses</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--v)">'+tradesTaken+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Trades pris</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:'+(winRate>=50?'#4ADE80':'#F87171')+'">'+winRate+'%</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Win rate</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:'+(avgRR!=='N/A'&&parseFloat(avgRR)>=1?'#4ADE80':'#F87171')+'">'+avgRR+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">RR moyen</div></div>';
+  html+='</div>';
+  var sectionMeta={
+    'résumé de la semaine':{icon:'📋',bg:'rgba(0,149,255,.1)',border:'rgba(0,149,255,.25)',col:'#60B4FF'},
+    'points forts':{icon:'✅',bg:'rgba(74,222,128,.08)',border:'rgba(74,222,128,.3)',col:'#4ADE80'},
+    "axes d'amélioration":{icon:'⚠️',bg:'rgba(251,191,36,.08)',border:'rgba(251,191,36,.3)',col:'#FBbf24'},
+    '3 actions concrètes pour la semaine prochaine':{icon:'🎯',bg:'rgba(167,139,250,.1)',border:'rgba(167,139,250,.3)',col:'#A78BFA'},
+    'actions concrètes':{icon:'🎯',bg:'rgba(167,139,250,.1)',border:'rgba(167,139,250,.3)',col:'#A78BFA'}
+  };
+  var parts=text.split(/^##\s+/m);
+  if(parts[0].trim()) html+='<div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">'+escapeHtml(parts[0].trim())+'</div>';
+  for(var i=1;i<parts.length;i++){
+    var part=parts[i];
+    var nl=part.indexOf('\n');
+    var title=nl>-1?part.substring(0,nl).trim():part.trim();
+    var body=nl>-1?part.substring(nl+1).trim():'';
+    var titleKey=title.toLowerCase().replace(/[^a-zàâäéèêëîïôùûü' ]/gi,'').trim();
+    var meta=null;
+    Object.keys(sectionMeta).forEach(function(k){ if(titleKey.indexOf(k)>-1||k.indexOf(titleKey)>-1) meta=sectionMeta[k]; });
+    if(!meta) meta={icon:'📌',bg:'rgba(255,255,255,.04)',border:'rgba(255,255,255,.1)',col:'var(--v)'};
+    var bodyLines=body.split('\n'), bodyHtml='', inList=false;
+    bodyLines.forEach(function(line){
+      var t=line.trim();
+      if(!t){ if(inList){bodyHtml+='</ul>';inList=false;} return; }
+      if(/^[-*•]\s+/.test(t)||/^\d+\.\s+/.test(t)){
+        if(!inList){bodyHtml+='<ul style="margin:6px 0 6px 4px;padding-left:18px;list-style:none">';inList=true;}
+        var content=t.replace(/^[-*•]\s+/,'').replace(/^\d+\.\s+/,'');
+        bodyHtml+='<li style="margin-bottom:6px;font-size:13px;color:var(--text2);line-height:1.6;display:flex;gap:6px"><span style="color:'+meta.col+';margin-top:2px;flex-shrink:0">▸</span><span>'+escapeHtml(content)+'</span></li>';
+      }else{
+        if(inList){bodyHtml+='</ul>';inList=false;}
+        bodyHtml+='<p style="margin:4px 0;font-size:13px;color:var(--text2);line-height:1.7">'+escapeHtml(t)+'</p>';
+      }
+    });
+    if(inList) bodyHtml+='</ul>';
+    html+='<div style="background:'+meta.bg+';border:1px solid '+meta.border+';border-radius:12px;padding:16px;margin-bottom:12px">';
+    html+='<div style="font-size:13px;font-weight:700;color:'+meta.col+';margin-bottom:10px">'+meta.icon+' '+escapeHtml(title)+'</div>';
+    html+=bodyHtml+'</div>';
+  }
+  return html;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function updateUserUI(){
@@ -2098,9 +2548,66 @@ async function checkProStatus(){
 }
 var historyData=[];
 var _deletedIds = new Set();
+
+// ── BADGE COMPTEUR HISTORIQUE ──
+function _updateHistoryBadge(){
+  var count = Array.isArray(historyData) ? historyData.length : 0;
+  document.querySelectorAll('.analyzer-tab').forEach(function(btn){
+    if(btn.textContent.indexOf('Historique') > -1){
+      btn.setAttribute('data-count', count > 0 ? count : '');
+    }
+  });
+}
+
+// ── PERSISTANCE LOCALE (appelée à chaque modification de historyData) ──
+function _saveLocalHistory(){
+  try{
+    if(!Array.isArray(historyData)) { console.warn('[LT] _saveLocalHistory: historyData not array'); return; }
+    var toStore = historyData.slice(0,50).map(function(h){
+      var c = Object.assign({}, h);
+      c.img_data = null;
+      return c;
+    });
+    var json = JSON.stringify(toStore);
+    localStorage.setItem('lt_history', json);
+    // Vérification immédiate
+    var verify = localStorage.getItem('lt_history');
+    if(verify){
+      console.log('[LT] ✅ localStorage OK — ' + toStore.length + ' analyses sauvegardées');
+    } else {
+      console.error('[LT] ❌ localStorage setItem a réussi mais getItem retourne null !');
+    }
+    try{ sessionStorage.setItem('lt_history_bak', json); }catch(e2){}
+  }catch(e){
+    console.error('[LT] ❌ localStorage ERREUR:', e.message, '— fallback sessionStorage');
+    try{
+      var ts2 = historyData.slice(0,10).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
+      sessionStorage.setItem('lt_history_bak', JSON.stringify(ts2));
+    }catch(e2){ console.error('[LT] ❌ sessionStorage AUSSI échoue:', e2.message); }
+  }
+}
 try{ var _di=localStorage.getItem('lt_deleted'); if(_di){ JSON.parse(_di).forEach(function(id){ _deletedIds.add(String(id)); }); } }catch(e){}
-try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ var _parsed=JSON.parse(_lh); if(Array.isArray(_parsed)){ historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); }); } } }catch(e){ historyData=[]; }
+try{
+  var _lhRaw = localStorage.getItem('lt_history');
+  console.log('[LT STARTUP] localStorage lt_history:', _lhRaw ? 'PRÉSENT (' + _lhRaw.length + ' chars)' : 'VIDE/ABSENT');
+  if(!_lhRaw){ try{ _lhRaw = sessionStorage.getItem('lt_history_bak'); console.log('[LT STARTUP] sessionStorage fallback:', _lhRaw ? 'PRÉSENT' : 'VIDE'); }catch(e2){} }
+  if(_lhRaw){
+    var _parsed=JSON.parse(_lhRaw);
+    if(Array.isArray(_parsed)){
+      historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); });
+      console.log('[LT STARTUP] ' + historyData.length + ' analyses chargées depuis localStorage');
+    }
+  } else {
+    console.log('[LT STARTUP] Aucune analyse en localStorage — historyData = []');
+  }
+}catch(e){ console.error('[LT STARTUP] Erreur lecture localStorage:', e.message); historyData=[]; }
 if(!Array.isArray(historyData)) historyData=[];
+
+// Mettre à jour le badge historique au chargement
+document.addEventListener('DOMContentLoaded', function(){
+  _updateHistoryBadge();
+});
+
 function openHistory(){
     document.getElementById('app').style.display='none';
     document.getElementById('historyPage').classList.add('show');
@@ -2170,11 +2677,8 @@ async function confirmOk(){
   // 3. Persister dans localStorage
   if(!(_deletedIds instanceof Set)) _deletedIds = new Set();
   _deletedIds.add(String(deletedId));
-  try{
-    localStorage.setItem('lt_deleted', JSON.stringify(Array.from(_deletedIds)));
-    var toStore = historyData.slice(0,50).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
-    localStorage.setItem('lt_history', JSON.stringify(toStore));
-  }catch(e){}
+  try{ localStorage.setItem('lt_deleted', JSON.stringify(Array.from(_deletedIds))); }catch(e){}
+  _saveLocalHistory();
 
   // 4. Naviguer vers historique
   document.getElementById('app').style.display='none';
@@ -2192,8 +2696,24 @@ async function confirmOk(){
 window.closeConfirm=closeConfirm;
 window.confirmOk=confirmOk;
 async function loadHistory(){
-  if(!authToken)return;
-  try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var data=await res.json();if(Array.isArray(data)&&data.length){historyData=data.filter(function(h){return !_deletedIds.has(String(h.id));});try{var ts=historyData.slice(0,50).map(function(h){var c=Object.assign({},h);c.img_data=null;return c;});localStorage.setItem('lt_history',JSON.stringify(ts));}catch(e){}}renderHistory();renderHistoryGrid();}catch(e){renderHistory();renderHistoryGrid();}
+  if(!authToken){
+    // Pas connecté : on rend depuis localStorage (déjà chargé au démarrage)
+    renderHistory();renderHistoryGrid();return;
+  }
+  try{
+    var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});
+    var data=await res.json();
+    if(Array.isArray(data)&&data.length){
+      // Fusionner les données Supabase avec celles en mémoire (garder les entrées locales non encore sync)
+      var apiIds=new Set(data.map(function(h){return String(h.id);}));
+      var localOnly=historyData.filter(function(h){return !apiIds.has(String(h.id));});
+      var merged=localOnly.concat(data).filter(function(h){return !_deletedIds.has(String(h.id));});
+      merged.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
+      historyData=merged;
+      _saveLocalHistory();
+    }
+    renderHistory();renderHistoryGrid();
+  }catch(e){renderHistory();renderHistoryGrid();}
 }
 function renderHistory(){
   if(!Array.isArray(historyData)) historyData=[];
@@ -2260,9 +2780,67 @@ function openHDetail(i){
 }
 async function saveAnalysis(r,pair,d,tf){
   if(!authToken)return;
-  try{await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-  body:JSON.stringify({pair,direction:d,tf,score:r.score,verdict:r.verdict,scoreLabel:r.scoreLabel,forces:r.forces,faiblesses:r.faiblesses,recommandations:r.recommandations,macro:r.macro,scenarios:r.scenarios||[],annotations:r.annotations||[],imgData:imgData||null})});loadHistory();}catch(e){}
+  try{
+    // Ne pas envoyer imgData dans le POST — trop volumineuse (plusieurs MB), dépasse la limite Vercel
+    var res=await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({pair,direction:d,tf,score:r.score,verdict:r.verdict,scoreLabel:r.scoreLabel,forces:r.forces,faiblesses:r.faiblesses,recommandations:r.recommandations,macro:r.macro,scenarios:r.scenarios||[],annotations:r.annotations||[]})});
+    // Appeler loadHistory SEULEMENT si le POST a réussi — sinon ça écraserait le localStorage avec des données incomplètes
+    if(res.ok) loadHistory();
+  }catch(e){}
 }
+function toggleTheme(){
+  var isLight = document.body.classList.toggle('lt-light');
+  localStorage.setItem('lt_theme', isLight ? 'light' : 'dark');
+  var btn = document.getElementById('themeToggle');
+  if(btn) btn.textContent = isLight ? '☀️' : '🌙';
+}
+// Restore theme on load
+(function(){
+  if(localStorage.getItem('lt_theme')==='light'){
+    document.body.classList.add('lt-light');
+    var btn = document.getElementById('themeToggle');
+    if(btn) btn.textContent = '☀️';
+  }
+})();
+
+var onboardStep = 0;
+var onboardSteps = [
+  { icon: '📊', title: 'Analyse ton setup', desc: 'Remplis les infos de ton trade (paire, direction, TF, entrée/TP/SL), ajoute ton graphique et lance l\'analyse IA.' },
+  { icon: '📋', title: 'Consulte l\'historique', desc: 'Toutes tes analyses sont sauvegardées. Accède à l\'onglet "Historique" pour les revoir.' },
+  { icon: '🎯', title: 'Suis tes résultats', desc: 'Après chaque trade, note si tu l\'as pris et le résultat. L\'IA analyse tes stats chaque semaine.' },
+  { icon: '📈', title: 'Améliore-toi', desc: 'Dans "Perfs", consulte ton win rate, RR moyen, expectancy, Sharpe et les patterns de tes trades.' },
+];
+function renderOnboardStep(){
+  var s = onboardSteps[onboardStep];
+  var stepsEl = document.getElementById('onboardSteps');
+  var dotsEl = document.getElementById('onboardDots');
+  var nextBtn = document.getElementById('onboardNextBtn');
+  if(!stepsEl||!dotsEl||!nextBtn) return;
+  stepsEl.innerHTML = '<div style="font-size:36px;margin-bottom:12px">'+s.icon+'</div>'+
+    '<div style="font-family:\'Bricolage Grotesque\',sans-serif;font-size:17px;font-weight:700;color:#F0EEFF;margin-bottom:8px">'+s.title+'</div>'+
+    '<div style="color:#9B96B8;font-size:13px;line-height:1.7">'+s.desc+'</div>';
+  dotsEl.innerHTML = onboardSteps.map(function(_,i){
+    return '<div style="width:'+(i===onboardStep?16:6)+'px;height:6px;border-radius:3px;background:'+(i===onboardStep?'#38B6FF':'rgba(255,255,255,.15)')+';transition:all .3s"></div>';
+  }).join('');
+  nextBtn.textContent = onboardStep === onboardSteps.length-1 ? 'C\'est parti ! 🚀' : 'Suivant →';
+}
+function nextOnboardStep(){
+  if(onboardStep < onboardSteps.length-1){ onboardStep++; renderOnboardStep(); }
+  else { skipOnboarding(); }
+}
+function skipOnboarding(){
+  var el = document.getElementById('onboardingOverlay');
+  if(el){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.style.display='none'; },300); }
+  localStorage.setItem('lt_onboarded','1');
+}
+// Show onboarding on first visit
+if(!localStorage.getItem('lt_onboarded')){
+  document.addEventListener('DOMContentLoaded', function(){
+    var el = document.getElementById('onboardingOverlay');
+    if(el){ el.style.display='flex'; renderOnboardStep(); }
+  });
+}
+
 checkSession();
 
 
@@ -2334,6 +2912,7 @@ async function doFetchPrice(pair){
   var bar = document.getElementById('livePriceBar');
   var valEl = document.getElementById('livePriceVal');
   var chEl = document.getElementById('livePriceChange');
+  if(!bar || !valEl || !chEl) return;
 
   // Try Binance first for crypto
   var binanceMap = {'BTC':'BTCUSDT','BTCUSD':'BTCUSDT','ETH':'ETHUSDT','ETHUSD':'ETHUSDT',
@@ -2396,6 +2975,7 @@ function showLivePrice(price, change){
   var bar = document.getElementById('livePriceBar');
   var valEl = document.getElementById('livePriceVal');
   var chEl = document.getElementById('livePriceChange');
+  if(!bar || !valEl || !chEl) return;
   bar.style.display = 'flex';
   valEl.textContent = price;
   if(change !== null && change !== undefined){
@@ -2411,7 +2991,8 @@ function showLivePrice(price, change){
 }
 
 function hideLivePrice(){
-  document.getElementById('livePriceBar').style.display = 'none';
+  var bar=document.getElementById('livePriceBar');
+  if(bar) bar.style.display = 'none';
 }
 window.fetchLivePrice = fetchLivePrice;
 window.showSuggestions = showSuggestions;
@@ -2437,6 +3018,7 @@ function onPairInput(val){
 function showSuggestions(val){
   var box = document.getElementById('pairSuggestions');
   var inp = document.getElementById('pair');
+  if(!box || !inp) return;
   if(!val || val.length < 1){ box.style.display='none'; return; }
   var v = val.toUpperCase();
   var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
@@ -2458,7 +3040,8 @@ function selectPair(p){
 }
 
 function hideSuggestions(){
-  document.getElementById('pairSuggestions').style.display='none';
+  var box=document.getElementById('pairSuggestions');
+  if(box) box.style.display='none';
 }
 
 // ── MULTI-TF UPLOADS ──
@@ -2522,6 +3105,30 @@ window.deleteAnalysis=deleteAnalysis;
 window.toggleSideMenu=toggleSideMenu;
 window.closeSideMenu=closeSideMenu;
 window.doLogout=doLogout;
+
+function quickSetOutcome(taken){
+  if(!Array.isArray(historyData)||!historyData.length) return;
+  historyData[0].trade_taken = taken;
+  _saveLocalHistory();
+  var qo = document.getElementById('quickOutcome');
+  if(!qo) return;
+  if(taken){
+    var btnRow = qo.querySelector('div:nth-child(2)');
+    if(btnRow) btnRow.style.display='none';
+    var rb = document.getElementById('quickResultBtns');
+    if(rb){ rb.style.display='block'; }
+  } else {
+    qo.innerHTML='<div style="text-align:center;color:var(--text3);font-size:13px;padding:4px">Trade passé — enregistré ✓</div>';
+  }
+}
+function quickSetResult(result){
+  if(!Array.isArray(historyData)||!historyData.length) return;
+  historyData[0].trade_result = result;
+  _saveLocalHistory();
+  var qo = document.getElementById('quickOutcome');
+  var emoji = result==='win'?'🏆':result==='loss'?'❌':'➖';
+  if(qo) qo.innerHTML='<div style="text-align:center;font-size:13px;padding:4px">'+emoji+' Résultat enregistré — <span style="color:var(--text3)">visible dans l\'historique</span></div>';
+}
 </script>
 
 
@@ -2557,6 +3164,7 @@ window.doLogout=doLogout;
   <header class="perf-header">
     <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
     <button class="back-btn" onclick="closePerf()">← Retour</button>
+    <button onclick="window.print()" style="padding:7px 16px;background:rgba(0,149,255,.12);border:1px solid rgba(0,149,255,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">📄 Exporter PDF</button>
   </header>
   <nav class="analyzer-tabs">
     <button class="analyzer-tab" onclick="closePerf('hist');openHistory()">
@@ -2600,14 +3208,79 @@ window.doLogout=doLogout;
         </div>
       </div>
 
-      <!-- IA FEEDBACK -->
+      <!-- EQUITY CURVE -->
       <div class="perf-section">
-        <div class="perf-section-title">🧠 Analyse IA de tes patterns</div>
-        <div style="background:rgba(0,149,255,0.06);border:1px solid rgba(0,149,255,0.2);border-radius:14px;padding:20px">
-          <div id="iaFeedback" style="font-size:13px;color:var(--text2);line-height:1.7">
-            <button onclick="requestIAFeedback()" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">
-              🤖 Demander à l'IA d'analyser mes patterns
-            </button>
+        <div class="perf-section-title">📉 Courbe d'equity (RR cumulé)</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+          <canvas id="equityChart" height="120"></canvas>
+          <div style="display:flex;align-items:center;gap:24px;margin-top:12px;font-size:12px;color:var(--text3)">
+            <span>Drawdown max : <strong id="maxDrawdownVal" style="color:#F87171">—</strong></span>
+            <span style="margin-left:auto;opacity:.5">Chaque point = 1 trade fermé</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION STATS -->
+      <div class="perf-section">
+        <div class="perf-section-title">🕐 Stats par session</div>
+        <div class="session-grid">
+          <div class="session-card" id="session-asia">
+            <div class="sess-name">Asia</div>
+            <div class="sess-label">23h–8h UTC</div>
+            <div class="sess-total sess-sub">— trades</div>
+            <div class="sess-metrics">
+              <div><span class="sess-metric-lbl">Win Rate</span><span class="sess-wr sess-metric-val">—</span></div>
+              <div><span class="sess-metric-lbl">RR moyen</span><span class="sess-rr sess-metric-val">—</span></div>
+            </div>
+          </div>
+          <div class="session-card" id="session-london">
+            <div class="sess-name">London</div>
+            <div class="sess-label">7h–16h UTC</div>
+            <div class="sess-total sess-sub">— trades</div>
+            <div class="sess-metrics">
+              <div><span class="sess-metric-lbl">Win Rate</span><span class="sess-wr sess-metric-val">—</span></div>
+              <div><span class="sess-metric-lbl">RR moyen</span><span class="sess-rr sess-metric-val">—</span></div>
+            </div>
+          </div>
+          <div class="session-card" id="session-ny">
+            <div class="sess-name">New York</div>
+            <div class="sess-label">13h–22h UTC</div>
+            <div class="sess-total sess-sub">— trades</div>
+            <div class="sess-metrics">
+              <div><span class="sess-metric-lbl">Win Rate</span><span class="sess-wr sess-metric-val">—</span></div>
+              <div><span class="sess-metric-lbl">RR moyen</span><span class="sess-rr sess-metric-val">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONTHLY BREAKDOWN -->
+      <div class="perf-section">
+        <div class="perf-section-title">📅 Breakdown mensuel (RR cumulé)</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+          <div id="monthlyBarsContent"></div>
+        </div>
+      </div>
+
+      <!-- DAY OF WEEK -->
+      <div class="perf-section" id="dayOfWeekSection">
+        <div class="perf-section-title">📅 Win rate par jour de la semaine</div>
+        <div id="dayOfWeekChart" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px"></div>
+      </div>
+
+      <!-- IA RAPPORT HEBDOMADAIRE -->
+      <div class="perf-section">
+        <div class="perf-section-title">🧠 Rapport IA hebdomadaire</div>
+        <div style="background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:14px;padding:20px">
+          <div id="iaFeedback">
+            <div id="iaFeedbackContent" style="font-size:13px;color:var(--text2);line-height:1.7">
+              <div style="text-align:center;padding:10px 0">
+                <div style="font-size:13px;color:var(--text3);margin-bottom:16px">Génère ton bilan de la semaine : trades pris/refusés, win rate, RR, points forts et axes d'amélioration.</div>
+                <button id="iaFeedbackBtn" onclick="requestIAFeedback()" style="padding:11px 26px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(0,149,255,.3)">
+                  📊 Générer le rapport de la semaine
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2615,6 +3288,12 @@ window.doLogout=doLogout;
     </div>
   </div>
 </div>
+
+<!-- Honeypot invisible pour bloquer l'autofill Chrome sur les autres champs -->
+<form style="display:none" aria-hidden="true" tabindex="-1">
+  <input type="text" name="fakeusername" autocomplete="username" tabindex="-1">
+  <input type="password" name="fakepassword" autocomplete="new-password" tabindex="-1">
+</form>
 
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
@@ -2626,11 +3305,11 @@ window.doLogout=doLogout;
     </div>
     <div class="auth-field">
       <label>EMAIL</label>
-      <input type="email" id="authEmail" placeholder="ton@email.com">
+      <input type="email" id="authEmail" placeholder="ton@email.com" autocomplete="email">
     </div>
     <div class="auth-field">
       <label>MOT DE PASSE</label>
-      <input type="password" id="authPassword" placeholder="••••••••">
+      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="new-password">
     </div>
     <button class="auth-submit" id="authSubmitBtn" onclick="doAuth()">
       <span id="authSubmitTxt">Se connecter</span>
@@ -2732,5 +3411,21 @@ window.doLogout=doLogout;
   else if (h === '#perfs')  { window.addEventListener('load', function(){ openPerf();    }); }
 })();
 </script>
+
+<div id="onboardingOverlay" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(8,8,15,.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:#13131F;border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 60px rgba(0,149,255,.15)">
+    <div style="font-size:40px;margin-bottom:16px">👋</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#F0EEFF;margin-bottom:8px">Bienvenue sur Le Terminal</div>
+    <div style="color:#9B96B8;font-size:14px;line-height:1.7;margin-bottom:24px">Ton hub de trading ICT/SMC. Voici comment démarrer :</div>
+    <div id="onboardSteps"></div>
+    <div style="display:flex;justify-content:center;gap:6px;margin:20px 0" id="onboardDots"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#5A5570;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;cursor:pointer">Passer</button>
+      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#0095FF,#38B6FF);border:none;border-radius:10px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(function(){}); }</script>
 </body>
 </html>

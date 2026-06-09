@@ -1,7 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="fr">
+<!-- v2 -->
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0095FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le Terminal">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Calculateur de Pips</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,11 +83,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .field-input::placeholder{color:var(--text3);font-size:16px;font-weight:400}
 .field-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--text3)}
 
-/* CURRENCY TOGGLE */
-.cur-toggle{display:flex;border-radius:50px;overflow:hidden;border:1px solid var(--border);width:fit-content;margin-bottom:24px}
-.cur-btn{padding:6px 16px;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
-.cur-btn.on{background:var(--v);color:white}
-
 /* RISK SLIDER */
 .risk-wrap{margin-bottom:24px}
 .risk-display{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -93,6 +95,23 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .risk-preset{padding:4px 12px;background:transparent;border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
 .risk-preset:hover{border-color:rgba(0,149,255,.3);color:var(--v2)}
 .risk-preset.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
+
+/* RR DISPLAY */
+.rr-display{align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid var(--border)}
+.rr-badge{font-size:1em;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
+.rr-green{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.33)}
+.rr-orange{background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.33)}
+.rr-red{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.33)}
+
+/* OPTIONAL PRICE SECTION */
+.price-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.price-section-title{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.dir-toggle{display:flex;gap:8px;margin-bottom:16px}
+.dir-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .2s;letter-spacing:.03em}
+.dir-btn.long.active{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:#34D399}
+.dir-btn.short.active{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.4);color:#F87171}
+.dir-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text2)}
+.rr-warn{font-size:11px;color:#FBBF24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:6px 12px;margin-top:8px}
 
 /* CALCULATE BTN */
 .calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.3);position:relative;overflow:hidden}
@@ -152,10 +171,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <a href="./index.html" class="topbar-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Calculateur</span></a>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
-    <div class="cur-toggle">
-      <button class="cur-btn on" onclick="setCurrency('EUR')">€</button>
-      <button class="cur-btn" onclick="setCurrency('USD')">$</button>
-    </div>
     <div id="ltUserBar"></div>
   </div>
 </header>
@@ -234,6 +249,61 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       </div>
     </div>
 
+    <!-- OPTIONAL PRICE SECTION -->
+    <div class="price-section">
+      <div class="price-section-title">Calcul par prix (optionnel)</div>
+      <div class="dir-toggle">
+        <button class="dir-btn long active" id="dirLong" onclick="setDir('long')">▲ LONG</button>
+        <button class="dir-btn short" id="dirShort" onclick="setDir('short')">▼ SHORT</button>
+      </div>
+      <div class="fields-grid" style="margin-bottom:12px">
+        <div class="field">
+          <div class="field-label">Prix d'entrée</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="entryPrice" type="number" placeholder="ex: 1.08500" step="any" autocomplete="off" oninput="calcPriceToSL()">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Stop Loss prix</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="slPrice" type="number" placeholder="ex: 1.08200" step="any" autocomplete="off" oninput="calcPriceToSL()">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Take Profit prix</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="tpPrice" type="number" placeholder="ex: 1.09100" step="any" autocomplete="off" oninput="calcRR()">
+          </div>
+        </div>
+      </div>
+      <div id="rrDisplay" class="rr-display" style="display:none"></div>
+      <div id="rrWarn" class="rr-warn" style="display:none"></div>
+    </div>
+
+    <div class="price-section" id="breakevenSection">
+      <div class="price-section-title">Breakeven & Simulateur</div>
+      <div class="fields-grid" style="margin-bottom:12px">
+        <div class="field">
+          <div class="field-label">Nb de trades / semaine</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="simTrades" type="number" placeholder="5" min="1" autocomplete="off" oninput="runSimulator()">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Objectif (€ ou R)</div>
+          <div class="field-input-wrap">
+            <input class="field-input" id="simTarget" type="number" placeholder="500" min="1" autocomplete="off" oninput="runSimulator()">
+            <span class="field-unit" id="simUnit">€</span>
+          </div>
+        </div>
+      </div>
+      <div id="simResult" style="display:none;background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;color:var(--text2)"></div>
+
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div class="price-section-title" style="margin-bottom:10px">Breakeven (seuil de rentabilité)</div>
+        <div id="breakevenResult" style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px;font-size:13px;color:var(--text2);line-height:1.7"></div>
+      </div>
+    </div>
 
   </div>
 
@@ -403,6 +473,106 @@ function setRisk(val) {
   calculate();
 }
 
+// ── DIRECTION LONG/SHORT ──
+var calcDir = 'long';
+function setDir(d){
+  calcDir = d;
+  document.getElementById('dirLong').classList.toggle('active', d==='long');
+  document.getElementById('dirShort').classList.toggle('active', d==='short');
+  calcPriceToSL();
+}
+
+// ── PRICE / RR FUNCTIONS ──
+function getPipMult(pair) {
+  if (!pair) return 10000;
+  var p = pair.toUpperCase();
+  if (['EURUSD','GBPUSD','AUDUSD','NZDUSD','EURGBP','EURAUD','GBPAUD'].indexOf(p) > -1) return 10000;
+  if (['USDJPY','EURJPY','GBPJPY','CADJPY','AUDJPY'].indexOf(p) > -1) return 100;
+  if (p === 'XAUUSD') return 100;
+  if (['NAS100','US30','SP500','DAX'].indexOf(p) > -1) return 1;
+  if (['BTCUSD','ETHUSD'].indexOf(p) > -1) return 1;
+  if (['USOIL','UKOIL'].indexOf(p) > -1) return 100;
+  return 10000;
+}
+
+function calcPriceToSL() {
+  var entry = parseFloat(document.getElementById('entryPrice').value);
+  var sl    = parseFloat(document.getElementById('slPrice').value);
+  var warn  = document.getElementById('rrWarn');
+  if (isNaN(entry) || isNaN(sl)) { calcRR(); return; }
+
+  // Cohérence SL / direction
+  if (warn) {
+    if (calcDir === 'long' && sl >= entry) {
+      warn.textContent = '⚠️ En LONG, le Stop Loss doit être SOUS le prix d\'entrée.';
+      warn.style.display = 'block';
+    } else if (calcDir === 'short' && sl <= entry) {
+      warn.textContent = '⚠️ En SHORT, le Stop Loss doit être AU-DESSUS du prix d\'entrée.';
+      warn.style.display = 'block';
+    } else {
+      warn.style.display = 'none';
+    }
+  }
+
+  var mult = getPipMult(selectedPair);
+  var pips = Math.abs(entry - sl) * mult;
+  var slPipsField = document.getElementById('slPips');
+  if (slPipsField) {
+    slPipsField.value = Math.round(pips * 10) / 10;
+    calculate();
+  }
+  calcRR();
+}
+
+function calcRR() {
+  var entry     = parseFloat(document.getElementById('entryPrice').value);
+  var sl        = parseFloat(document.getElementById('slPrice').value);
+  var tp        = parseFloat(document.getElementById('tpPrice').value);
+  var rrDisplay = document.getElementById('rrDisplay');
+  var warn      = document.getElementById('rrWarn');
+  if (isNaN(entry) || isNaN(sl) || isNaN(tp)) { rrDisplay.style.display = 'none'; return; }
+
+  // Cohérence TP / direction
+  var tpWrong = (calcDir === 'long' && tp <= entry) || (calcDir === 'short' && tp >= entry);
+  if (tpWrong) {
+    if (warn) {
+      warn.textContent = calcDir === 'long'
+        ? '⚠️ En LONG, le Take Profit doit être AU-DESSUS du prix d\'entrée.'
+        : '⚠️ En SHORT, le Take Profit doit être SOUS le prix d\'entrée.';
+      warn.style.display = 'block';
+    }
+    rrDisplay.style.display = 'none'; return;
+  }
+
+  var mult   = getPipMult(selectedPair);
+  var slPips = Math.abs(entry - sl) * mult;
+  var tpPips = Math.abs(tp - entry) * mult;
+  if (slPips === 0) { rrDisplay.style.display = 'none'; return; }
+
+  // Vérification cohérence SL (on n'affiche pas le RR si SL incohérent)
+  var slWrong = (calcDir === 'long' && sl >= entry) || (calcDir === 'short' && sl <= entry);
+  if (slWrong) { rrDisplay.style.display = 'none'; return; }
+
+  if (warn) warn.style.display = 'none';
+
+  var ratio = tpPips / slPips;
+  var riskEur = null;
+  var riskField = document.getElementById('riskAmount');
+  if (riskField) { var v = parseFloat(riskField.textContent); if (!isNaN(v)) riskEur = v; }
+  var colorClass = ratio >= 2 ? 'rr-green' : ratio >= 1 ? 'rr-orange' : 'rr-red';
+  var dirLabel = calcDir === 'long' ? '▲ LONG' : '▼ SHORT';
+  var profitHtml = '';
+  if (riskEur !== null) {
+    var profitVal = (riskEur * ratio).toFixed(2);
+    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--text2)">Profit attendu : <strong style="color:'+(ratio>=1?'#34D399':'#F87171')+'">' + profitVal + curSym() + '</strong></span>';
+  }
+  rrDisplay.style.display = 'flex';
+  rrDisplay.innerHTML =
+    '<span style="font-size:.8em;color:var(--text3);margin-right:4px">' + dirLabel + '</span>' +
+    '<span class="rr-badge ' + colorClass + '">RR 1:' + ratio.toFixed(2) + '</span>' +
+    profitHtml;
+}
+
 function updateSliderStyle() {
   var slider = document.getElementById('riskSlider');
   var pct = ((riskPct - 0.1) / (5 - 0.1)) * 100;
@@ -492,6 +662,8 @@ function calculate() {
   var lotColor = parseFloat(displayLot) >= 1 ? 'var(--text)' :
                  parseFloat(displayLot) >= 0.1 ? 'var(--v2)' : 'var(--green)';
   document.getElementById('resLot').style.color = lotColor;
+
+  runSimulator();
 }
 
 // ── AUTOCOMPLETE ──
@@ -536,11 +708,52 @@ window.chooseCustomPair = chooseCustomPair;
 window.hidePairDropdown = hidePairDropdown;
 window.selectPair = selectPair;
 
+function runSimulator(){
+  var tradesPerWeek = parseFloat(document.getElementById('simTrades').value);
+  var target = parseFloat(document.getElementById('simTarget').value);
+  var simRes = document.getElementById('simResult');
+  var bkRes = document.getElementById('breakevenResult');
+
+  // Breakeven (always computed from current risk settings)
+  var account = parseFloat(document.getElementById('accountSize').value)||0;
+  var risk = riskPct/100;
+  var riskAmt = account * risk;
+  if(account > 0 && riskAmt > 0){
+    // Breakeven win rate for RR 1:1, 1:2, 1:3
+    var beLines = [1,1.5,2,2.5,3].map(function(rr){
+      var beWR = Math.round((1/(1+rr))*100);
+      return 'RR 1:'+rr+' → win rate minimum : <strong>'+beWR+'%</strong>';
+    });
+    bkRes.innerHTML = beLines.join('<br>') + '<br><span style="color:var(--text3);font-size:11px">En dessous de ce seuil tu perds de l\'argent sur le long terme</span>';
+  } else {
+    bkRes.innerHTML = '<span style="color:var(--text3)">Entre ta taille de compte pour calculer le breakeven.</span>';
+  }
+
+  if(isNaN(tradesPerWeek)||isNaN(target)||tradesPerWeek<=0||target<=0||riskAmt<=0){
+    if(simRes) simRes.style.display='none'; return;
+  }
+
+  // Weeks needed to reach target (assuming 60% win rate, RR 1:1.5 = expectancy +0.20R/trade)
+  var defaultExpectancy = 0.20; // conservative
+  var rrPerTrade = riskAmt * defaultExpectancy;
+  var tradesNeeded = Math.ceil(target / (riskAmt * defaultExpectancy));
+  var weeksNeeded = Math.ceil(tradesNeeded / tradesPerWeek);
+  var monthsNeeded = (weeksNeeded/4.33).toFixed(1);
+
+  simRes.style.display='block';
+  simRes.innerHTML =
+    'Pour atteindre <strong>'+target+curSym()+'</strong> à <strong>'+tradesPerWeek+' trades/semaine</strong> :<br>' +
+    '→ <strong style="color:var(--v2)">'+(weeksNeeded<=52?weeksNeeded+' semaines':monthsNeeded+' mois')+'</strong> (hypothèse : 60% WR, RR 1.5)<br>' +
+    '→ Gain moyen par trade : <strong>'+(riskAmt*defaultExpectancy).toFixed(2)+curSym()+'</strong><br>' +
+    '<span style="font-size:11px;color:var(--text3)">Simulation conservative — vos résultats réels varieront selon votre edge</span>';
+}
+
 // ── INIT ──
 updateSliderStyle();
 calculate();
 </script>
 
 <script src="./menu.js"></script>
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(function(){}); }</script>
 </body>
 </html>
