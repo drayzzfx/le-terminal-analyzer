@@ -571,11 +571,27 @@
   }
 
   window.ltSetLang = function(l) {
-    localStorage.setItem('lt_lang', l);
+    var en = (l === 'en');
+    // ── Synchro des deux clés localStorage (lt_lang + lte_lang) ──
+    localStorage.setItem('lt_lang',  l);
+    localStorage.setItem('lte_lang', l);
+    // ── Boutons sidebar ──
     ltUpdateLangBtns(l);
+    // ── Système data-i18n (index, calculateur…) ──
     ltApplyI18n(l);
-    // Appelle setLang de la page si elle a son propre système (app.html)
-    if(typeof window.setLang === 'function') window.setLang(l);
+    // ── Système data-en (pages éco — eco.js) ──
+    if (typeof window.ecoApplyLang === 'function') window.ecoApplyLang(en);
+    // ── Système setLang (app.html) ──
+    if (typeof window.setLang === 'function') window.setLang(l);
+    // ── Met à jour le bouton topbar #langToggle si présent ──
+    var topBtn = document.getElementById('langToggle');
+    if (topBtn) {
+      var lbl = topBtn.querySelector('.lang__label');
+      if (lbl) lbl.textContent = en ? 'FR' : 'EN';
+      document.documentElement.lang = en ? 'en' : 'fr';
+    }
+    // ── Recharge les cartes dynamiques éco si présentes ──
+    if (typeof window.ecoReloadNews === 'function') window.ecoReloadNews();
   };
 
   var _currentLang = localStorage.getItem('lt_lang') || 'fr';
