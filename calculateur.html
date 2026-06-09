@@ -82,11 +82,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .field-input::placeholder{color:var(--text3);font-size:16px;font-weight:400}
 .field-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--text3)}
 
-/* CURRENCY TOGGLE */
-.cur-toggle{display:flex;border-radius:50px;overflow:hidden;border:1px solid var(--border);width:fit-content;margin-bottom:24px}
-.cur-btn{padding:6px 16px;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
-.cur-btn.on{background:var(--v);color:white}
-
 /* RISK SLIDER */
 .risk-wrap{margin-bottom:24px}
 .risk-display{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -175,10 +170,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <a href="./index.html" class="topbar-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Calculateur</span></a>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
-    <div class="cur-toggle">
-      <button class="cur-btn on" onclick="setCurrency('EUR')">€</button>
-      <button class="cur-btn" onclick="setCurrency('USD')">$</button>
-    </div>
     <div id="ltUserBar"></div>
   </div>
 </header>
