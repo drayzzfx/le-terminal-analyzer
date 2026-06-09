@@ -19,7 +19,7 @@
     { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
     { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
     { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './eco-edition.html', children: [
-      { icon: '📰', label: 'Édition du jour', href: './eco-edition.html', children: [
+      { icon: '📰', label: 'Présentation', href: './eco-edition.html', children: [
         { icon: '⭐', label: 'La sélection',  href: './eco-selection.html' },
         { icon: '🇪🇺', label: 'Europe',        href: './eco-europe.html' },
         { icon: '🌎', label: 'Amériques',     href: './eco-ameriques.html' },
