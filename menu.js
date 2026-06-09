@@ -205,6 +205,23 @@
       display: block; width: 20px; height: 2px;
       background: #9B96B8; border-radius: 2px;
     }
+
+    /* ── LANGUE TOGGLE ── */
+    .lt-lang-toggle {
+      display: flex; align-items: center; gap: 0;
+      border: 1px solid rgba(255,255,255,.1); border-radius: 50px;
+      overflow: hidden; margin-top: 8px;
+    }
+    .lt-lang-btn {
+      flex: 1; background: transparent; border: none; cursor: pointer;
+      padding: 6px 0; font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      color: #5A5570; transition: all .2s;
+    }
+    .lt-lang-btn:hover { color: #9B96B8; }
+    .lt-lang-btn.active {
+      background: rgba(0,149,255,.2); color: #38B6FF;
+    }
   `;
   document.head.appendChild(style);
 
@@ -275,6 +292,10 @@
         <a class="lt-nav-item" id="ltLoginItem" href="#" onclick="ltOpenLogin();return false;">
           <span class="lt-nav-icon">👤</span> Connexion / Inscription
         </a>
+        <div class="lt-lang-toggle">
+          <button class="lt-lang-btn" id="ltLangFR" onclick="ltSetLang('fr')">FR</button>
+          <button class="lt-lang-btn" id="ltLangEN" onclick="ltSetLang('en')">EN</button>
+        </div>
       </div>
     </div>
   `;
@@ -425,6 +446,22 @@
       window.location.href = './index.html';
     }
   };
+
+  // ── LANGUE ──
+  function ltUpdateLangBtns(l) {
+    var fr = document.getElementById('ltLangFR');
+    var en = document.getElementById('ltLangEN');
+    if(!fr || !en) return;
+    if(l === 'en') { fr.classList.remove('active'); en.classList.add('active'); }
+    else           { fr.classList.add('active');    en.classList.remove('active'); }
+  }
+  window.ltSetLang = function(l) {
+    localStorage.setItem('lt_lang', l);
+    ltUpdateLangBtns(l);
+    // Appelle setLang de la page si elle existe
+    if(typeof window.setLang === 'function') window.setLang(l);
+  };
+  ltUpdateLangBtns(localStorage.getItem('lt_lang') || 'fr');
 
   // Init - run immediately and after checkSession completes
   ltSyncUser();
