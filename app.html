@@ -1461,10 +1461,10 @@ function applyLang(){
   s('pw-title',t.pwTitle);s('pw-sub',t.pwSub,true);
   s('pm-name',t.pmName);s('py-name',t.pyName);s('py-top',t.pyTop);
   s('pm-per',t.pmPer);s('py-per',t.pyPer);
-  for(let i=1;i<=7;i++) document.getElementById('pf'+i).textContent=t['pf'+i];
-  document.getElementById('pay-txt').textContent=t.payTxt;
-  document.getElementById('pay-note').textContent=t.payNote;
-  document.getElementById('demo-lnk').textContent=t.demoLnk;
+  for(let i=1;i<=7;i++) s('pf'+i,t['pf'+i]);
+  s('pay-txt',t.payTxt);
+  s('pay-note',t.payNote);
+  s('demo-lnk',t.demoLnk);
   updUsage();
 }
 
