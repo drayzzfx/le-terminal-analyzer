@@ -491,8 +491,8 @@
     html += '<div class="art-body">';
 
     if (a) {
-      var db = a.pour_les_debutants;
-      var dp = a.pour_les_professionnels;
+      var db = a.pour_les_debutants || {};
+      var dp = a.pour_les_professionnels || {};
 
       // Section débutants
       html += '<section class="art-section art-section--beg" style="animation-delay:0.1s">'
@@ -504,17 +504,17 @@
 
         + '<div class="art-block">'
         + '<div class="art-block__label">'+(l==='en'?'What happened':'Ce qui se passe')+'</div>'
-        + '<p class="art-block__text">'+esc(db.ce_qui_se_passe)+'</p>'
+        + '<p class="art-block__text">'+esc(db.ce_qui_se_passe||'')+'</p>'
         + '</div>'
 
         + '<div class="art-block">'
         + '<div class="art-block__label">'+(l==='en'?'Why it matters':'Pourquoi c\'est important')+'</div>'
-        + '<p class="art-block__text">'+esc(db.pourquoi_cest_important)+'</p>'
+        + '<p class="art-block__text">'+esc(db.pourquoi_cest_important||'')+'</p>'
         + '</div>'
 
         + '<div class="art-block art-block--full">'
         + '<div class="art-block__label">'+(l==='en'?'Key term to know':'Le mot clé à retenir')+'</div>'
-        + '<span class="art-keyword">'+esc(db.le_mot_cle)+'</span>'
+        + '<span class="art-keyword">'+esc(db.le_mot_cle||'')+'</span>'
         + '</div>'
 
         + '</div></section>';
@@ -529,12 +529,12 @@
 
         + '<div class="art-block">'
         + '<div class="art-block__label">'+(l==='en'?'Macro analysis':'Analyse macro')+'</div>'
-        + '<p class="art-block__text">'+esc(dp.analyse_macro)+'</p>'
+        + '<p class="art-block__text">'+esc(dp.analyse_macro||'')+'</p>'
         + '</div>'
 
         + '<div class="art-block">'
         + '<div class="art-block__label">'+(l==='en'?'Market impact':'Impact marchés')+'</div>'
-        + '<p class="art-block__text">'+esc(dp.impact_marches)+'</p>'
+        + '<p class="art-block__text">'+esc(dp.impact_marches||'')+'</p>'
         + '</div>'
 
         + (dp.niveaux_cles && dp.niveaux_cles !== 'N/A' ?
@@ -612,9 +612,11 @@
       render(data.article, data.analysis, data.image_url || null);
     } catch(e) {
       var l = getLang();
-      showError(l==='en'
+      console.error('[eco-article] error:', e);
+      showError((l==='en'
         ? 'Unable to load this article. Please <a href="javascript:history.back()">go back</a> and try again.'
-        : 'Impossible de charger cet article. <a href="javascript:history.back()">Retour</a> et réessayez.');
+        : 'Impossible de charger cet article. <a href="javascript:history.back()">Retour</a> et réessayez.')
+        + '<br><small style="opacity:0.5;font-size:11px">' + (e && e.message ? e.message : '') + '</small>');
     }
   }
 
