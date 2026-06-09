@@ -6,13 +6,50 @@
 
   var FOUR_HOURS = 4 * 60 * 60 * 1000;
 
+  // 3 sentiments uniquement
   var SENTIMENT_MAP = {
-    'Risk-on':  { cls: 'bias--up',   labelFr: 'Risk-on'  },
-    'Risk-off': { cls: 'bias--down', labelFr: 'Risk-off' },
-    'Hawkish':  { cls: 'bias--hawk', labelFr: 'Hawkish'  },
-    'Dovish':   { cls: 'bias--dove', labelFr: 'Dovish'   },
-    'Neutre':   { cls: '',           labelFr: 'Neutre'   },
+    'Positif': { cls: 'bias--up',   labelFr: 'Positif',  labelEn: 'Positive' },
+    'Négatif': { cls: 'bias--down', labelFr: 'Négatif',  labelEn: 'Negative' },
+    'Neutre':  { cls: 'bias--flat', labelFr: 'Neutre',   labelEn: 'Neutral'  },
+    // Rétrocompatibilité avec anciens sentiments stockés en DB
+    'Risk-on':  { cls: 'bias--up',   labelFr: 'Positif',  labelEn: 'Positive' },
+    'Risk-off': { cls: 'bias--down', labelFr: 'Négatif',  labelEn: 'Negative' },
+    'Hawkish':  { cls: 'bias--up',   labelFr: 'Positif',  labelEn: 'Positive' },
+    'Dovish':   { cls: 'bias--down', labelFr: 'Négatif',  labelEn: 'Negative' },
   };
+
+  function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
+
+  var I18N = {
+    fr: {
+      topTitle:    'À lire en priorité',
+      topSub:      'Sélection automatique — articles à fort impact marché',
+      topEmpty:    'Aucun article à fort impact détecté pour l\'instant.',
+      currentEmpty:'Les dernières annonces sont dans « Annonces précédentes » ci-dessous.',
+      noNews:      'Aucune news pour l\'instant — le bot collecte les articles toutes les 30 min.',
+      loadError:   'Impossible de charger les news. Nouvelle tentative dans 30s…',
+      readBtn:     'Lire l\'article',
+      toRead:      '⚡ À lire',
+      archNone:    'Les annonces publiées il y a plus de 4 heures apparaîtront ici automatiquement.',
+      archCount:   function(n) { return n + ' annonce' + (n > 1 ? 's' : '') + ' · dernières 48h'; },
+      archNoneCount:'Aucune archive pour l\'instant',
+    },
+    en: {
+      topTitle:    'Must-read',
+      topSub:      'Auto-selected — high market-impact articles',
+      topEmpty:    'No high-impact article detected yet.',
+      currentEmpty:'Latest announcements are in "Earlier announcements" below.',
+      noNews:      'No news yet — the bot collects articles every 30 min.',
+      loadError:   'Unable to load news. Retrying in 30s…',
+      readBtn:     'Read article',
+      toRead:      '⚡ Must read',
+      archNone:    'Announcements older than 4 hours will appear here automatically.',
+      archCount:   function(n) { return n + ' announcement' + (n > 1 ? 's' : '') + ' · last 48h'; },
+      archNoneCount:'No archives yet',
+    },
+  };
+
+  function t(key) { var l = getLang(); return (I18N[l] || I18N['fr'])[key] || I18N['fr'][key]; }
 
   function timeLabel(iso) {
     try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
@@ -40,17 +77,28 @@
     } catch(e) { return ''; }
   }
 
-  // ── Card normale (section actuel / précédentes) ──────────────────────────
+  function getSentiment(item) { return SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre']; }
+
+  function biasTag(item) {
+    var s = getSentiment(item);
+    if (!s.cls) return '';
+    var label = getLang() === 'en' ? s.labelEn : s.labelFr;
+    return '<span class="bias ' + s.cls + ' card__bias">' + label + '</span>';
+  }
+
+  function getSummary(item) {
+    var lang = getLang();
+    if (lang === 'en' && item.summary_en) return item.summary_en;
+    return item.summary || item.summary_en || '';
+  }
+
+  // ── Card normale (section actuel) ────────────────────────────────────────
   function buildCard(item, idx) {
-    var s = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
-    var biasHtml = s.cls
-      ? '<span class="bias ' + s.cls + ' card__bias">' + s.labelFr + '</span>'
-      : '';
     var zone = (window.ECO_ZONE || 'eco');
     var zoneLabel = zone.charAt(0).toUpperCase() + zone.slice(1);
-    var title   = (item.title   || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var summary = (item.summary || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var source  = (item.source  || '').replace(/</g,'&lt;');
+    var title   = (item.title || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var source  = (item.source || '').replace(/</g,'&lt;');
     var url     = item.url || '#';
     var target  = item.url ? ' target="_blank" rel="noopener nofollow"' : '';
 
@@ -61,13 +109,13 @@
       + '<span class="card__sep">·</span>'
       + '<span class="card__source">' + source + '</span>'
       + '<span class="card__time" title="' + relTime(item.published_at) + '">' + timeLabel(item.published_at) + '</span>'
-      + biasHtml
+      + biasTag(item)
       + '</p>'
       + '<h3 class="card__title">' + title + '</h3>'
       + '<p class="card__summary">' + summary + '</p>'
       + '</a>'
       + '<a class="btn" href="' + url + '"' + target + '>'
-      + '<span>Lire l\'article</span>'
+      + '<span>' + t('readBtn') + '</span>'
       + '<span class="btn__arrow" aria-hidden="true">→</span>'
       + '</a>'
       + '</article>';
@@ -75,30 +123,26 @@
 
   // ── Card Top (section À lire en priorité) ────────────────────────────────
   function buildTopCard(item, idx) {
-    var s = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
-    var biasHtml = s.cls
-      ? '<span class="bias ' + s.cls + ' card__bias">' + s.labelFr + '</span>'
-      : '';
-    var title   = (item.title   || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var summary = (item.summary || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var source  = (item.source  || '').replace(/</g,'&lt;');
+    var title   = (item.title || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var source  = (item.source || '').replace(/</g,'&lt;');
     var url     = item.url || '#';
     var target  = item.url ? ' target="_blank" rel="noopener nofollow"' : '';
 
     return '<article class="card card--pick card--top" style="--i:' + idx + '" data-eco-dynamic>'
       + '<a class="card__hit" href="' + url + '"' + target + '>'
       + '<p class="card__kicker">'
-      + '<span class="card__cat js-term">⚡ À lire</span>'
+      + '<span class="card__cat js-term">' + t('toRead') + '</span>'
       + '<span class="card__sep">·</span>'
       + '<span class="card__source">' + source + '</span>'
       + '<span class="card__time" title="' + relTime(item.published_at) + '">' + dateLabel(item.published_at) + '</span>'
-      + biasHtml
+      + biasTag(item)
       + '</p>'
       + '<h3 class="card__title">' + title + '</h3>'
       + '<p class="card__summary">' + summary + '</p>'
       + '</a>'
       + '<a class="btn" href="' + url + '"' + target + '>'
-      + '<span>Lire l\'article</span>'
+      + '<span>' + t('readBtn') + '</span>'
       + '<span class="btn__arrow" aria-hidden="true">→</span>'
       + '</a>'
       + '</article>';
@@ -106,9 +150,10 @@
 
   // ── Archive item (liste compacte) ────────────────────────────────────────
   function buildArchiveItem(item, idx) {
-    var s = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+    var s = getSentiment(item);
+    var biasLabel = getLang() === 'en' ? s.labelEn : s.labelFr;
     var biasHtml = s.cls
-      ? '<span class="bias ' + s.cls + '" style="font-size:10px;padding:2px 8px">' + s.labelFr + '</span>'
+      ? '<span class="bias ' + s.cls + '" style="font-size:10px;padding:2px 8px">' + biasLabel + '</span>'
       : '';
     var title  = (item.title  || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var source = (item.source || '').replace(/</g,'&lt;');
@@ -145,20 +190,22 @@
   // ── Sélection automatique des articles clés ──────────────────────────────
   // Critère : sentiment non-Neutre = article market-moving → à lire en priorité
   // On prend les 3 meilleurs des dernières 24h, classés par ordre chronologique inverse
+  // Sélection automatique : Positif ou Négatif des dernières 24h
+  // Les articles "Neutre" ne font pas bouger les marchés → exclus du Top
   function selectTop(items) {
-    var PRIORITY = { 'Hawkish': 4, 'Dovish': 4, 'Risk-off': 3, 'Risk-on': 3, 'Neutre': 0 };
+    var PRIORITY = {
+      'Positif': 3, 'Négatif': 3,
+      'Risk-on': 3, 'Risk-off': 3, 'Hawkish': 3, 'Dovish': 3,
+      'Neutre': 0,
+    };
     var cutoff24h = Date.now() - 24 * 3600 * 1000;
     return items
       .filter(function(item) {
         var age = Date.now() - new Date(item.published_at).getTime();
-        return age < cutoff24h * -1 + cutoff24h * 2 && // dans les 24h
-               (PRIORITY[item.sentiment] || 0) >= 3;   // sentiment important
+        return age < cutoff24h * 2 &&
+               (PRIORITY[item.sentiment] || 0) >= 3;
       })
       .sort(function(a, b) {
-        // Priorité sentiment d'abord, puis date
-        var pa = PRIORITY[a.sentiment] || 0;
-        var pb = PRIORITY[b.sentiment] || 0;
-        if (pb !== pa) return pb - pa;
         return new Date(b.published_at) - new Date(a.published_at);
       })
       .slice(0, 3);
@@ -199,15 +246,14 @@
       // ── Section Top ───────────────────────────────────────────────────────
       var topSection = document.querySelector('.eco-top');
       if (!topSection && top.length > 0) {
-        // Crée la section Top dynamiquement avant le bloc principal
         var block = document.querySelector('#r-' + zone);
         if (block) {
           var ts = document.createElement('section');
           ts.className = 'block eco-top';
-          ts.setAttribute('aria-label', 'À lire en priorité');
+          ts.setAttribute('aria-label', t('topTitle'));
           ts.innerHTML = '<header class="block__head">'
-            + '<h2 class="block__title"><span class="block__ico">⚡</span> <span>À lire en priorité</span></h2>'
-            + '<span class="block__sub">Sélection automatique — articles market-moving</span>'
+            + '<h2 class="block__title"><span class="block__ico">⚡</span> <span>' + t('topTitle') + '</span></h2>'
+            + '<span class="block__sub">' + t('topSub') + '</span>'
             + '</header>'
             + '<div class="grid eco-top__grid" id="eco-top-grid"></div>';
           block.parentNode.insertBefore(ts, block);
@@ -218,11 +264,9 @@
       if (topSection) {
         var topGrid = topSection.querySelector('#eco-top-grid') || topSection.querySelector('.grid');
         if (topGrid) {
-          if (top.length > 0) {
-            topGrid.innerHTML = top.map(function(item, i) { return buildTopCard(item, i); }).join('');
-          } else {
-            topGrid.innerHTML = emptyMsg('Aucun article market-moving détecté pour l\'instant.');
-          }
+          topGrid.innerHTML = top.length > 0
+            ? top.map(function(item, i) { return buildTopCard(item, i); }).join('')
+            : emptyMsg(t('topEmpty'));
         }
       }
 
@@ -230,9 +274,9 @@
       if (current.length > 0) {
         grid.innerHTML = current.map(function(item, i) { return buildCard(item, i); }).join('');
       } else if (archive.length > 0) {
-        grid.innerHTML = emptyMsg('Les dernières annonces sont dans « Annonces précédentes » ci-dessous.');
+        grid.innerHTML = emptyMsg(t('currentEmpty'));
       } else {
-        grid.innerHTML = emptyMsg('Aucune news pour l\'instant — le bot collecte les articles toutes les 30 min.');
+        grid.innerHTML = emptyMsg(t('noNews'));
       }
 
       // Mise à jour header de la section actuel
@@ -259,9 +303,7 @@
         if (archHeader) {
           var sub = archHeader.querySelector('.block__sub');
           if (sub) {
-            sub.textContent = archive.length > 0
-              ? archive.length + ' annonce' + (archive.length > 1 ? 's' : '') + ' · dernières 48h'
-              : 'Aucune archive pour l\'instant';
+            sub.textContent = archive.length > 0 ? t('archCount')(archive.length) : t('archNoneCount');
             sub.removeAttribute('data-en');
           }
         }
@@ -269,13 +311,13 @@
         if (archive.length > 0) {
           existingList.innerHTML = archive.map(function(item, i) { return buildArchiveItem(item, i); }).join('');
         } else {
-          existingList.innerHTML = '<p style="font-size:13px;color:var(--text3);padding:20px 0">Les annonces publiées il y a plus de 4 heures apparaîtront ici automatiquement.</p>';
+          existingList.innerHTML = '<p style="font-size:13px;color:var(--text3);padding:20px 0">' + t('archNone') + '</p>';
         }
       }
 
     } catch(e) {
       console.warn('[eco-news-loader]', e.message);
-      grid.innerHTML = '<div class="eco-empty" style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text3);font-size:13px">Impossible de charger les news. Nouvelle tentative dans 30s…</div>';
+      grid.innerHTML = '<div class="eco-empty" style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text3);font-size:13px">' + t('loadError') + '</div>';
       setTimeout(loadNews, 30000);
     }
   }

@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Zone invalide', valid: VALID_ZONES });
   }
 
-  const path = `/rest/v1/news_items?zone=eq.${zone}&order=published_at.desc&limit=${limit}&select=id,title,summary,source,url,published_at,sentiment`;
+  const path = `/rest/v1/news_items?zone=eq.${zone}&order=published_at.desc&limit=${limit}&select=id,guid,title,summary,summary_en,source,url,published_at,sentiment`;
   const r = await sbReq(path);
 
   if (r.status >= 400) {

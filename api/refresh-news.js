@@ -132,24 +132,33 @@ async function logFeedError(source, url, error) {
   return sbReq('POST', '/rest/v1/feed_errors', { source, url, error: String(error) });
 }
 
-// ── CLAUDE SUMMARY ────────────────────────────────────────────────────────────
+// ── CLAUDE SUMMARY (FR + EN, 3 sentiments) ───────────────────────────────────
 async function getSummaryAndSentiment(title, desc, zone) {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) return { summary: '', sentiment: 'Neutre' };
+  if (!ANTHROPIC_API_KEY) return { summary: '', summary_en: '', sentiment: 'Neutre' };
 
   const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 400);
-  const prompt = `Tu es un analyste financier. Voici un article économique.
+  const prompt = `Tu es un analyste financier senior. Voici un article économique.
 
-Titre : ${title}
-Résumé brut : ${cleanDesc}
-Zone : ${zone}
+Titre original : ${title}
+Contenu brut : ${cleanDesc}
+Zone géographique : ${zone}
 
-Réponds UNIQUEMENT en JSON strict, sans markdown :
-{"summary":"<résumé 1-2 phrases max, factuel>","sentiment":"<Risk-on|Risk-off|Hawkish|Dovish|Neutre>"}`;
+Réponds UNIQUEMENT en JSON strict, sans markdown ni texte autour :
+{
+  "summary_fr": "<résumé factuel 1-2 phrases en FRANÇAIS>",
+  "summary_en": "<same factual summary 1-2 sentences in ENGLISH>",
+  "sentiment": "<Positif|Négatif|Neutre>"
+}
+
+Règles sentiment :
+- Positif : données meilleures qu'attendu, hausse marchés, accord commercial, croissance, emploi fort
+- Négatif : données décevantes, baisse marchés, crise, récession, conflit, faillite
+- Neutre : statu quo, simple publication de données sans surprise, déclaration sans impact clair`;
 
   const payload = JSON.stringify({
     model: 'claude-haiku-4-5',
-    max_tokens: 200,
+    max_tokens: 300,
     messages: [{ role: 'user', content: prompt }]
   });
 
@@ -172,11 +181,18 @@ Réponds UNIQUEMENT en JSON strict, sans markdown :
           const body = JSON.parse(data);
           const text = body.content?.[0]?.text || '{}';
           const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
-          resolve({ summary: parsed.summary || '', sentiment: parsed.sentiment || 'Neutre' });
-        } catch(e) { resolve({ summary: '', sentiment: 'Neutre' }); }
+          // Normalise le sentiment vers 3 valeurs uniquement
+          let sentiment = parsed.sentiment || 'Neutre';
+          if (!['Positif','Négatif','Neutre'].includes(sentiment)) sentiment = 'Neutre';
+          resolve({
+            summary:    parsed.summary_fr || parsed.summary || '',
+            summary_en: parsed.summary_en || '',
+            sentiment,
+          });
+        } catch(e) { resolve({ summary: '', summary_en: '', sentiment: 'Neutre' }); }
       });
     });
-    req.on('error', () => resolve({ summary: '', sentiment: 'Neutre' }));
+    req.on('error', () => resolve({ summary: '', summary_en: '', sentiment: 'Neutre' }));
     req.write(payload);
     req.end();
   });
@@ -212,12 +228,13 @@ module.exports = async function handler(req, res) {
             if (age > 48 * 3600 * 1000) { stats.skipped++; continue; }
           }
 
-          const { summary, sentiment } = await getSummaryAndSentiment(item.title, item.desc, zone);
+          const { summary, summary_en, sentiment } = await getSummaryAndSentiment(item.title, item.desc, zone);
 
           await insertNewsItem({
             guid: item.guid,
             title: item.title,
-            summary: summary || item.desc.replace(/<[^>]+>/g,'').slice(0,200),
+            summary:    summary    || item.desc.replace(/<[^>]+>/g,'').slice(0,200),
+            summary_en: summary_en || '',
             source: source.name,
             url: item.link,
             published_at: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
