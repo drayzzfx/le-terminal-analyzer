@@ -1089,23 +1089,26 @@ body.eco-page .wrap { padding-top: 30px; }
 .eco-empty svg { display: block; margin: 0 auto 12px; }
 
 /* =========================================================================
-   Section "À lire en priorité" (Top)
+   Section "À lire en priorité" (Top) — design homogène avec le reste
    ========================================================================= */
 .eco-top {
-  border: 1px solid rgba(251,191,36,0.25);
+  border: 1px solid var(--border);
   border-radius: var(--r);
   padding: 24px;
   margin-bottom: 32px;
-  background: rgba(251,191,36,0.03);
+  background: var(--card);
 }
 .eco-top .block__head { margin-bottom: 20px; }
-.eco-top .block__title { color: var(--amber); }
+.eco-top .block__title { color: var(--v2); }
 .eco-top .block__ico { font-size: 18px; }
-.eco-top .block__sub { color: rgba(251,191,36,0.6); font-size: 11px; letter-spacing: 0.07em; }
+.eco-top .block__sub { color: var(--text3); font-size: 11px; letter-spacing: 0.07em; }
 .eco-top__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
 
-/* Card Top = card--pick avec style amber déjà défini, on ajoute juste le badge */
-.card--top .card__cat { color: var(--amber); }
+/* card--featured = même apparence que .card, juste un liseré bleu discret */
+.card--featured {
+  border-top: 2px solid var(--v);
+}
+.card--featured .card__cat { color: var(--v2); }
 
 /* =========================================================================
    Section "Annonces précédentes" — liste compacte

@@ -121,21 +121,23 @@
       + '</article>';
   }
 
-  // ── Card Top (section À lire en priorité) ────────────────────────────────
+  // ── Card Top — même structure que la carte normale, juste un badge ⚡ ──────
   function buildTopCard(item, idx) {
+    var zone = (window.ECO_ZONE || 'eco');
+    var zoneLabel = zone.charAt(0).toUpperCase() + zone.slice(1);
     var title   = (item.title || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
     var source  = (item.source || '').replace(/</g,'&lt;');
     var url     = item.url || '#';
     var target  = item.url ? ' target="_blank" rel="noopener nofollow"' : '';
 
-    return '<article class="card card--pick card--top" style="--i:' + idx + '" data-eco-dynamic>'
+    return '<article class="card card--featured" style="--i:' + idx + '" data-eco-dynamic>'
       + '<a class="card__hit" href="' + url + '"' + target + '>'
       + '<p class="card__kicker">'
-      + '<span class="card__cat js-term">' + t('toRead') + '</span>'
+      + '<span class="card__cat js-term">' + zoneLabel + '</span>'
       + '<span class="card__sep">·</span>'
       + '<span class="card__source">' + source + '</span>'
-      + '<span class="card__time" title="' + relTime(item.published_at) + '">' + dateLabel(item.published_at) + '</span>'
+      + '<span class="card__time" title="' + relTime(item.published_at) + '">' + timeLabel(item.published_at) + '</span>'
       + biasTag(item)
       + '</p>'
       + '<h3 class="card__title">' + title + '</h3>'
