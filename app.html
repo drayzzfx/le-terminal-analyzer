@@ -3135,7 +3135,10 @@ function quickSetResult(result){
 <!-- HISTORY PAGE -->
 <div id="historyPage">
   <header class="history-page-header">
-    <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
+      <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
+    </div>
     <button class="back-btn" onclick="closeHistoryPage()">← Retour</button>
   </header>
   <nav class="analyzer-tabs">
