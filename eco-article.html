@@ -334,6 +334,7 @@
 
   var params = new URLSearchParams(window.location.search);
   var id     = params.get('id');
+  var srcUrl = params.get('src');   // URL externe de secours
   var root   = document.getElementById('artRoot');
 
   /* ── Config zones ──────────────────────────────────────────────────────── */
@@ -605,7 +606,13 @@
     }
     showSpinner();
     try {
-      var resp = await fetch('/api/article?id=' + encodeURIComponent(id));
+      // _t= force une requête fraîche (bypass CDN et cache navigateur)
+      var resp = await fetch('/api/article?id=' + encodeURIComponent(id) + '&_t=' + Date.now());
+      if (resp.status === 404 && srcUrl) {
+        // Article introuvable → redirige vers la source externe
+        window.location.replace(srcUrl);
+        return;
+      }
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       var data = await resp.json();
       if (!data.article) throw new Error('not found');
@@ -613,10 +620,16 @@
     } catch(e) {
       var l = getLang();
       console.error('[eco-article] error:', e);
+      // Si on a l'URL source, propose un lien direct
+      var fallback = srcUrl
+        ? '<br><a class="btn" href="' + srcUrl + '" target="_blank" rel="noopener" style="margin-top:12px;display:inline-flex">'
+          + (l==='en' ? 'Read source article ↗' : 'Lire l\'article source ↗') + '</a>'
+        : '<br><a href="javascript:history.back()">← ' + (l==='en' ? 'Go back' : 'Retour') + '</a>';
       showError((l==='en'
-        ? 'Unable to load this article. Please <a href="javascript:history.back()">go back</a> and try again.'
-        : 'Impossible de charger cet article. <a href="javascript:history.back()">Retour</a> et réessayez.')
-        + '<br><small style="opacity:0.5;font-size:11px">' + (e && e.message ? e.message : '') + '</small>');
+        ? 'Unable to generate the analysis.'
+        : 'Impossible de générer l\'analyse.')
+        + fallback
+        + '<br><small style="opacity:0.4;font-size:11px;margin-top:8px">' + (e && e.message ? e.message : '') + '</small>');
     }
   }
 

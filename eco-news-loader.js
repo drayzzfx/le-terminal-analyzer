@@ -94,7 +94,10 @@
 
   // ── URL interne vers la page d'analyse dédiée ───────────────────────────
   function articleUrl(item) {
-    return item.id ? '/eco-article.html?id=' + encodeURIComponent(item.id) : (item.url || '#');
+    if (!item.id) return item.url || '#';
+    var u = '/eco-article.html?id=' + encodeURIComponent(item.id);
+    if (item.url) u += '&src=' + encodeURIComponent(item.url);
+    return u;
   }
 
   // ── Card normale (section actuel) ────────────────────────────────────────
