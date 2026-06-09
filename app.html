@@ -2407,17 +2407,10 @@ try{
 }catch(e){ console.error('[LT STARTUP] Erreur lecture localStorage:', e.message); historyData=[]; }
 if(!Array.isArray(historyData)) historyData=[];
 
-// Si l'utilisateur a déjà des analyses, les afficher directement au chargement
-// (évite qu'il pense que ses données sont perdues)
-if(historyData.length > 0){
-  document.addEventListener('DOMContentLoaded', function(){
-    _updateHistoryBadge();
-    // Ne pas ouvrir automatiquement si l'URL contient #perfs
-    if(window.location.hash !== '#perfs') {
-      openHistory();
-    }
-  });
-}
+// Mettre à jour le badge historique au chargement
+document.addEventListener('DOMContentLoaded', function(){
+  _updateHistoryBadge();
+});
 
 function openHistory(){
     document.getElementById('app').style.display='none';
