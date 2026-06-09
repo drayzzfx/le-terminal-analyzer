@@ -3087,6 +3087,12 @@ window.doLogout=doLogout;
   </div>
 </div>
 
+<!-- Honeypot invisible pour bloquer l'autofill Chrome sur les autres champs -->
+<form style="display:none" aria-hidden="true" tabindex="-1">
+  <input type="text" name="fakeusername" autocomplete="username" tabindex="-1">
+  <input type="password" name="fakepassword" autocomplete="new-password" tabindex="-1">
+</form>
+
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
@@ -3101,7 +3107,7 @@ window.doLogout=doLogout;
     </div>
     <div class="auth-field">
       <label>MOT DE PASSE</label>
-      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="new-password">
     </div>
     <button class="auth-submit" id="authSubmitBtn" onclick="doAuth()">
       <span id="authSubmitTxt">Se connecter</span>
