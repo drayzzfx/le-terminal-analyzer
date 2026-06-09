@@ -8,131 +8,284 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./eco.css">
 <style>
-/* ── Article page layout ── */
-.art-wrap { max-width: 780px; margin: 0 auto; padding: 40px 24px 80px; }
+/* ═══════════════════════════════════════════════════
+   ZONE PALETTES
+═══════════════════════════════════════════════════ */
+:root {
+  --zone-europe:       #1a56db, #0e9de0;
+  --zone-ameriques:    #c0392b, #e67e22;
+  --zone-asie:         #16a085, #1abc9c;
+  --zone-institutions: #6c3483, #9b59b6;
+  --zone-marches:      #0050b3, #00b3e6;
+  --zone-crypto:       #d4a017, #f39c12;
+}
 
-/* Header article */
-.art-header { margin-bottom: 36px; }
-.art-eyebrow {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
-}
-.art-zone { color: var(--v2); }
-.art-title {
-  font-family: var(--display); font-size: clamp(22px,4vw,34px);
-  font-weight: 800; line-height: 1.15; letter-spacing: -0.02em;
-  margin-bottom: 16px; color: var(--text);
-}
-.art-meta {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  font-size: 12px; color: var(--text3);
-}
-.art-source-link {
-  color: var(--v2); text-decoration: none; font-weight: 500;
-  border: 1px solid rgba(0,149,255,0.3); padding: 4px 12px; border-radius: 20px;
-  transition: all 0.2s;
-}
-.art-source-link:hover { background: rgba(0,149,255,0.1); border-color: var(--v); }
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════ */
+.art-page { max-width: 860px; margin: 0 auto; padding-bottom: 100px; }
 
-/* Chargement */
-.art-loading {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 16px; padding: 80px 24px; color: var(--text3); text-align: center;
+/* ── Bouton retour ─────────────────────────────── */
+.art-back-bar {
+  padding: 18px 28px 0;
+  max-width: 860px; margin: 0 auto;
 }
-.art-spinner {
-  width: 36px; height: 36px; border: 2px solid var(--border);
-  border-top-color: var(--v); border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.art-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text3); text-decoration: none;
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px;
+  transition: all 0.2s; background: rgba(255,255,255,0.02);
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.art-loading-text { font-size: 14px; }
-.art-loading-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
+.art-back:hover { color: var(--text); border-color: var(--v2); background: rgba(0,149,255,0.06); }
 
-/* Sections */
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+.art-hero {
+  position: relative; overflow: hidden;
+  border-radius: 20px; margin: 16px 24px 0;
+  min-height: 280px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background: var(--card); border: 1px solid var(--border);
+}
+
+/* Gradient overlay toujours présent (au-dessus de l'image) */
+.art-hero__overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg,
+    rgba(8,12,20,0.10) 0%,
+    rgba(8,12,20,0.55) 45%,
+    rgba(8,12,20,0.92) 100%);
+}
+
+/* Image de fond (og:image) */
+.art-hero__img {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.85) brightness(0.9);
+  transition: transform 6s ease;
+}
+.art-hero:hover .art-hero__img { transform: scale(1.02); }
+
+/* SVG fallback — zone graphic (shown when no image) */
+.art-hero__svg {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+}
+
+/* Contenu hero */
+.art-hero__body {
+  position: relative; z-index: 2;
+  padding: 28px 32px 32px;
+}
+
+.art-hero__badges {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.art-hero__zone {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  padding: 4px 10px; border-radius: 20px; backdrop-filter: blur(4px);
+}
+.art-hero__source {
+  font-size: 11px; color: rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.3); padding: 4px 10px;
+  border-radius: 20px; border: 1px solid rgba(255,255,255,0.12);
+}
+.art-hero__time {
+  font-size: 11px; color: rgba(255,255,255,0.5);
+  margin-left: auto;
+}
+
+.art-hero__title {
+  font-family: var(--display);
+  font-size: clamp(20px, 3.5vw, 32px);
+  font-weight: 800; line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  margin-bottom: 14px;
+}
+
+.art-hero__lead {
+  font-size: 14px; line-height: 1.65;
+  color: rgba(255,255,255,0.75);
+  max-width: 640px;
+  font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════════════
+   MÉTRIQUES VISUELLES (bande sous le hero)
+═══════════════════════════════════════════════════ */
+.art-metrics {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; margin: 0 24px;
+  background: var(--border);
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 16px 16px; overflow: hidden;
+}
+.art-metric {
+  background: var(--card);
+  padding: 14px 18px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.art-metric__label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text3);
+}
+.art-metric__value {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+}
+.art-metric__dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.dot--pos  { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.dot--neg  { background: var(--red);   box-shadow: 0 0 6px var(--red); }
+.dot--flat { background: var(--text3); }
+
+/* ═══════════════════════════════════════════════════
+   CORPS DE L'ANALYSE
+═══════════════════════════════════════════════════ */
+.art-body { padding: 28px 24px 0; display: flex; flex-direction: column; gap: 16px; }
+
+/* ── Sections (débutants / pro) ─────────────────── */
 .art-section {
-  border: 1px solid var(--border); border-radius: var(--r);
-  overflow: hidden; margin-bottom: 20px;
+  border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden;
   animation: rise 0.5s cubic-bezier(.2,.7,.3,1) both;
 }
-.art-section--beginner { border-color: rgba(52,211,153,0.25); }
-.art-section--pro      { border-color: rgba(0,149,255,0.25); }
+@keyframes rise { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+.art-section--beg  { border-color: rgba(52,211,153,0.25); }
+.art-section--pro  { border-color: rgba(0,149,255,0.22); }
 
 .art-section__head {
   display: flex; align-items: center; gap: 10px;
-  padding: 14px 20px; border-bottom: 1px solid var(--border);
-  font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+  padding: 13px 20px; border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
 }
-.art-section--beginner .art-section__head { background: rgba(52,211,153,0.06); color: var(--green); border-color: rgba(52,211,153,0.15); }
-.art-section--pro      .art-section__head { background: rgba(0,149,255,0.06);  color: var(--v2);   border-color: rgba(0,149,255,0.12); }
+.art-section--beg .art-section__head {
+  background: linear-gradient(90deg, rgba(52,211,153,0.08), transparent);
+  color: var(--green); border-color: rgba(52,211,153,0.15);
+}
+.art-section--pro .art-section__head {
+  background: linear-gradient(90deg, rgba(0,149,255,0.08), transparent);
+  color: var(--v2); border-color: rgba(0,149,255,0.12);
+}
+.art-section__head svg { flex-shrink: 0; }
 
-.art-section__body { padding: 22px 20px; display: flex; flex-direction: column; gap: 20px; }
+.art-section__grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+@media (max-width:640px) { .art-section__grid { grid-template-columns: 1fr; } }
 
-/* Bloc dans la section */
+.art-block {
+  padding: 20px 22px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.art-block:nth-child(even) { border-right: none; }
+.art-block:nth-last-child(-n+2) { border-bottom: none; }
+@media (max-width:640px) {
+  .art-block { border-right: none; }
+  .art-block:last-child { border-bottom: none; }
+}
+.art-block--full { grid-column: 1 / -1; border-right: none; }
+
 .art-block__label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 7px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 5px;
 }
-.art-block__text {
-  font-size: 15px; line-height: 1.7; color: var(--text2); font-weight: 300;
+.art-block__label::before {
+  content: ''; width: 3px; height: 12px; border-radius: 2px;
+  background: currentColor; opacity: 0.5;
 }
-.art-block__text strong { color: var(--text); font-weight: 600; }
+.art-section--beg .art-block__label { color: var(--green); }
+.art-section--pro .art-block__label { color: var(--v2); }
 
-/* Mot clé pill */
+.art-block__text {
+  font-size: 14px; line-height: 1.72; color: var(--text2); font-weight: 300;
+}
+
+/* Mot-clé */
 .art-keyword {
-  display: inline-block; background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border); border-radius: 8px;
+  display: block; background: rgba(52,211,153,0.06);
+  border: 1px solid rgba(52,211,153,0.2); border-radius: 10px;
   padding: 12px 16px; font-size: 13px; line-height: 1.6; color: var(--text2);
 }
-.art-keyword strong { color: var(--green); }
 
-/* Biais recommandé */
+/* Biais */
 .art-biais {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  padding: 9px 16px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
 }
-.art-biais--on  { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.25); }
-.art-biais--off { background: rgba(248,113,113,0.12); color: var(--red);   border: 1px solid rgba(248,113,113,0.25); }
-.art-biais--wait{ background: rgba(148,163,184,0.10); color: var(--text2); border: 1px solid var(--border); }
+.art-biais--on   { background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.25); }
+.art-biais--off  { background: rgba(248,113,113,0.1); color: var(--red);   border: 1px solid rgba(248,113,113,0.25); }
+.art-biais--wait { background: rgba(148,163,184,0.08); color: var(--text2); border: 1px solid var(--border); }
 
-/* Conclusion */
+/* ── Conclusion ─────────────────────────────────── */
 .art-conclusion {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 20px 22px;
-  font-family: var(--display); font-size: 17px; font-weight: 600;
-  line-height: 1.4; color: var(--text); text-align: center;
-  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(0,149,255,0.06), rgba(52,211,153,0.04));
+  border: 1px solid rgba(0,149,255,0.18); border-radius: 16px;
+  padding: 22px 28px;
+  font-family: var(--display);
+  font-size: 17px; font-weight: 700; line-height: 1.4;
+  color: var(--text); text-align: center;
+  position: relative; overflow: hidden;
+}
+.art-conclusion::before {
+  content: '"'; position: absolute; top: -10px; left: 16px;
+  font-size: 80px; color: rgba(0,149,255,0.08);
+  font-family: Georgia, serif; line-height: 1;
 }
 
-/* Erreur */
+/* ── Source CTA ─────────────────────────────────── */
+.art-source-cta {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  flex-wrap: wrap; padding: 8px 0 4px;
+}
+
+/* ── Erreur ─────────────────────────────────────── */
 .art-error {
-  text-align: center; padding: 60px 24px; color: var(--text3); font-size: 14px;
+  text-align: center; padding: 80px 24px; color: var(--text3);
 }
-.art-error a { color: var(--v2); }
+.art-error-icon { font-size: 48px; margin-bottom: 16px; }
+.art-error p { font-size: 15px; margin-bottom: 12px; }
+.art-error a { color: var(--v2); text-decoration: none; }
 
-/* Bouton retour */
-.art-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; color: var(--text3); text-decoration: none;
-  padding: 8px 0; margin-bottom: 24px; transition: color 0.2s;
+/* ── Spinner ─────────────────────────────────────── */
+.art-loading {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 20px; padding: 100px 24px; color: var(--text3);
 }
-.art-back:hover { color: var(--text); }
+.art-spinner {
+  width: 42px; height: 42px;
+  border: 2px solid var(--border); border-top-color: var(--v);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.art-loading p { font-size: 14px; text-align: center; line-height: 1.6; }
+.art-loading small { font-size: 12px; color: var(--text3); }
 
-/* Skeleton */
-.art-skel { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin-bottom: 20px; }
+/* ── Skeleton ────────────────────────────────────── */
+.art-skel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
 .art-skel-line {
   height: 14px; border-radius: 8px; margin-bottom: 12px;
   background: linear-gradient(90deg, var(--border) 25%, rgba(255,255,255,0.07) 50%, var(--border) 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.5s infinite linear;
+  background-size: 800px 100%; animation: shimmer 1.5s infinite linear;
 }
-.art-skel-line--title { height: 28px; width: 80%; margin-bottom: 20px; }
+.art-skel-line--h { height: 220px; margin-bottom: 0; border-radius: 12px; }
+.art-skel-line--title { height: 28px; width: 80%; margin: 16px 0 20px; }
 .art-skel-line--short { width: 45%; }
 .art-skel-line--med   { width: 70%; }
 </style>
 </head>
 <body class="eco-page">
 <div class="glow" aria-hidden="true"></div>
+
 <header class="lt-topbar">
   <div style="display:flex;align-items:center;gap:10px">
     <button class="lt-hamburger" onclick="ltOpenMenu()">
@@ -145,7 +298,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:14px">
     <div class="lt-status"><div class="lt-dot"></div>LIVE</div>
-    <button class="langbtn" id="langToggle" type="button" aria-label="Switch language" title="English / Français">
+    <button class="langbtn" id="langToggle" type="button" aria-label="Switch language">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>
       <span class="lang__label">EN</span>
     </button>
@@ -153,182 +306,326 @@
 </header>
 
 <main>
-<div class="art-wrap" id="artContent">
-  <!-- Skeleton pendant le chargement -->
-  <div class="art-skel"><div class="art-skel-line art-skel-line--short"></div><div class="art-skel-line art-skel-line--title"></div><div class="art-skel-line art-skel-line--med"></div></div>
-  <div class="art-skel"><div class="art-skel-line art-skel-line--short"></div><div class="art-skel-line"></div><div class="art-skel-line art-skel-line--med"></div><div class="art-skel-line"></div></div>
-  <div class="art-skel"><div class="art-skel-line art-skel-line--short"></div><div class="art-skel-line"></div><div class="art-skel-line art-skel-line--med"></div></div>
-</div>
+  <!-- Bouton retour -->
+  <div class="art-back-bar">
+    <a href="javascript:history.back()" class="art-back" id="backBtn">
+      ← <span data-en="Back">Retour</span>
+    </a>
+  </div>
+
+  <!-- Contenu dynamique -->
+  <div id="artRoot">
+    <!-- Skeleton initial -->
+    <div class="art-page" style="padding:16px 24px 0">
+      <div class="art-skel"><div class="art-skel-line art-skel-line--h"></div></div>
+      <div class="art-skel-line art-skel-line--title" style="margin:20px 0 0"></div>
+      <div class="art-skel" style="margin-top:12px"><div class="art-skel-line"></div><div class="art-skel-line art-skel-line--med"></div><div class="art-skel-line art-skel-line--short"></div></div>
+      <div class="art-skel" style="margin-top:12px"><div class="art-skel-line"></div><div class="art-skel-line art-skel-line--med"></div></div>
+    </div>
+  </div>
 </main>
 
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
 <script src="./menu.js"></script>
 <script>
-(function(){
-  // ── Lit l'ID dans l'URL ──────────────────────────────────────────────────
+(function () {
+  'use strict';
+
   var params = new URLSearchParams(window.location.search);
   var id     = params.get('id');
-  var wrap   = document.getElementById('artContent');
+  var root   = document.getElementById('artRoot');
 
-  var ZONE_NAMES = {
-    fr: { europe:'Europe', ameriques:'Amériques', asie:'Asie',
-          institutions:'Institutions', marches:'Marchés', crypto:'Crypto' },
-    en: { europe:'Europe', ameriques:'Americas', asie:'Asia',
-          institutions:'Institutions', marches:'Markets', crypto:'Crypto' }
+  /* ── Config zones ──────────────────────────────────────────────────────── */
+  var ZONE_CFG = {
+    europe:       { fr:'Europe',       en:'Europe',       g1:'#1a56db', g2:'#0e9de0', icon:'🌍' },
+    ameriques:    { fr:'Amériques',    en:'Americas',     g1:'#c0392b', g2:'#e67e22', icon:'🌎' },
+    asie:         { fr:'Asie',         en:'Asia',         g1:'#16a085', g2:'#27ae60', icon:'🌏' },
+    institutions: { fr:'Institutions', en:'Institutions', g1:'#6c3483', g2:'#2980b9', icon:'🏛️' },
+    marches:      { fr:'Marchés',      en:'Markets',      g1:'#0050b3', g2:'#00a8cc', icon:'📈' },
+    crypto:       { fr:'Crypto',       en:'Crypto',       g1:'#b7791f', g2:'#d69e2e', icon:'₿'  },
   };
 
+  var SENT_CFG = {
+    'Positif': { fr:'Positif', en:'Positive', cls:'dot--pos',  badge:'bias--up'   },
+    'Négatif': { fr:'Négatif', en:'Negative', cls:'dot--neg',  badge:'bias--down' },
+    'Neutre':  { fr:'Neutre',  en:'Neutral',  cls:'dot--flat', badge:'bias--flat' },
+  };
+  // Rétrocompat
+  SENT_CFG['Risk-on']  = SENT_CFG['Positif'];
+  SENT_CFG['Risk-off'] = SENT_CFG['Négatif'];
+  SENT_CFG['Hawkish']  = SENT_CFG['Positif'];
+  SENT_CFG['Dovish']   = SENT_CFG['Négatif'];
+
   function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
-
-  function sentimentBadge(s) {
-    var map = {
-      'Positif':{ cls:'bias--up',   fr:'Positif', en:'Positive' },
-      'Négatif':{ cls:'bias--down', fr:'Négatif', en:'Negative' },
-      'Neutre': { cls:'bias--flat', fr:'Neutre',  en:'Neutral'  },
-    };
-    var m = map[s] || map['Neutre'];
-    var l = getLang();
-    return '<span class="bias ' + m.cls + '">' + (l==='en' ? m.en : m.fr) + '</span>';
-  }
-
-  function biasBadge(text) {
-    if (!text) return '';
-    var lo = text.toLowerCase();
-    var cls = lo.includes('risk-on')  ? 'art-biais--on'
-            : lo.includes('risk-off') ? 'art-biais--off'
-            : 'art-biais--wait';
-    return '<span class="art-biais ' + cls + '">' + text + '</span>';
-  }
+  function esc(s)    { return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function fmt(iso) {
     try {
       return new Date(iso).toLocaleDateString(getLang()==='en'?'en-GB':'fr-FR',
-        {day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    } catch(e){ return ''; }
+        { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    } catch(e) { return ''; }
   }
 
-  function renderError(msg) {
-    wrap.innerHTML = '<div class="art-error">'
-      + '<p style="font-size:32px;margin-bottom:16px">📰</p>'
-      + '<p>' + msg + '</p>'
-      + '<p style="margin-top:16px"><a href="javascript:history.back()" class="art-back">← Retour</a></p>'
+  function relTime(iso) {
+    try {
+      var m = Math.floor((Date.now() - new Date(iso)) / 60000);
+      if (m < 1)  return getLang()==='en' ? 'Just now'   : 'À l\'instant';
+      if (m < 60) return getLang()==='en' ? m+'m ago'    : 'Il y a '+m+' min';
+      var h = Math.floor(m/60);
+      if (h < 24) return getLang()==='en' ? h+'h ago'    : 'Il y a '+h+'h';
+      return getLang()==='en' ? Math.floor(h/24)+'d ago' : 'Il y a '+Math.floor(h/24)+'j';
+    } catch(e) { return ''; }
+  }
+
+  /* ── SVG hero fallback (zone-specific) ─────────────────────────────────── */
+  function buildHeroSvg(zone, g1, g2) {
+    var id1 = 'g'+Math.random().toString(36).slice(2,7);
+    var id2 = 'g'+Math.random().toString(36).slice(2,7);
+    // Génère des points de courbe pseudo-aléatoires mais déterministes selon zone
+    var seed = zone.split('').reduce(function(a,c){ return a+c.charCodeAt(0); },0);
+    var pts  = '';
+    var prevY = 120;
+    for (var i=0; i<=10; i++) {
+      var x = i * 86;
+      seed = (seed * 1664525 + 1013904223) & 0xffffffff;
+      var y = 60 + (((seed >>> 0) % 120));
+      pts += (i===0 ? 'M' : ' L') + x + ',' + y;
+      prevY = y;
+    }
+    return '<svg class="art-hero__svg" viewBox="0 0 860 280" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">'
+      + '<defs>'
+      + '<linearGradient id="'+id1+'" x1="0%" y1="0%" x2="100%" y2="100%">'
+      + '<stop offset="0%" style="stop-color:'+g1+';stop-opacity:1"/>'
+      + '<stop offset="100%" style="stop-color:'+g2+';stop-opacity:0.8"/>'
+      + '</linearGradient>'
+      + '<linearGradient id="'+id2+'" x1="0%" y1="0%" x2="0%" y2="100%">'
+      + '<stop offset="0%" style="stop-color:'+g1+';stop-opacity:0.3"/>'
+      + '<stop offset="100%" style="stop-color:'+g2+';stop-opacity:0"/>'
+      + '</linearGradient>'
+      + '</defs>'
+      + '<rect width="860" height="280" fill="url(#'+id1+')"/>'
+      /* Grid pattern */
+      + '<g stroke="rgba(255,255,255,0.06)" stroke-width="1">'
+      + '<line x1="0" y1="70"  x2="860" y2="70"/>'
+      + '<line x1="0" y1="140" x2="860" y2="140"/>'
+      + '<line x1="0" y1="210" x2="860" y2="210"/>'
+      + '<line x1="172" y1="0" x2="172" y2="280"/>'
+      + '<line x1="344" y1="0" x2="344" y2="280"/>'
+      + '<line x1="516" y1="0" x2="516" y2="280"/>'
+      + '<line x1="688" y1="0" x2="688" y2="280"/>'
+      + '</g>'
+      /* Courbe principale */
+      + '<path d="'+pts+'" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linejoin="round"/>'
+      /* Aire sous la courbe */
+      + '<path d="'+pts+' L860,280 L0,280 Z" fill="url(#'+id2+')" opacity="0.4"/>'
+      /* Points */
+      + '<circle cx="860" cy="'+prevY+'" r="5" fill="rgba(255,255,255,0.9)"/>'
+      + '<circle cx="860" cy="'+prevY+'" r="10" fill="rgba(255,255,255,0.2)"/>'
+      /* Dots décoratifs */
+      + '<circle cx="80" cy="230" r="40" fill="rgba(255,255,255,0.04)"/>'
+      + '<circle cx="780" cy="40" r="60" fill="rgba(255,255,255,0.04)"/>'
+      + '</svg>';
+  }
+
+  /* ── Render principal ──────────────────────────────────────────────────── */
+  function render(article, analysis, imageUrl) {
+    var l   = getLang();
+    var a   = analysis ? (analysis[l] || analysis['fr']) : null;
+    var z   = ZONE_CFG[article.zone] || ZONE_CFG['marches'];
+    var s   = SENT_CFG[article.sentiment] || SENT_CFG['Neutre'];
+    var sum = (l==='en' && article.summary_en) ? article.summary_en : (article.summary||'');
+
+    document.title = 'Le Terminal — ' + ((a && a.titre_analyse) || article.title || 'Analyse').slice(0,60);
+
+    var html = '<div class="art-page">';
+
+    /* ── HERO ─────────────────────────────────────────── */
+    html += '<div class="art-hero">';
+
+    if (imageUrl) {
+      html += '<img class="art-hero__img" src="'+esc(imageUrl)+'" alt="" loading="eager" onerror="this.style.display=\'none\'">';
+    } else {
+      html += buildHeroSvg(article.zone||'marches', z.g1, z.g2);
+    }
+
+    html += '<div class="art-hero__overlay"></div>';
+    html += '<div class="art-hero__body">';
+
+    // Badges
+    html += '<div class="art-hero__badges">'
+      + '<span class="art-hero__zone">'+z.icon+' '+(l==='en'?z.en:z.fr)+'</span>'
+      + '<span class="bias '+s.badge+'" style="font-size:10px;padding:3px 10px">'+( l==='en'?s.en:s.fr )+'</span>'
+      + (article.source ? '<span class="art-hero__source">'+esc(article.source)+'</span>' : '')
+      + '<span class="art-hero__time">'+relTime(article.published_at)+'</span>'
+      + '</div>';
+
+    // Titre
+    var displayTitle = (a && a.titre_analyse) ? esc(a.titre_analyse) : esc(article.title||'');
+    html += '<h1 class="art-hero__title">'+displayTitle+'</h1>';
+
+    // Lead (résumé)
+    if (sum) {
+      html += '<p class="art-hero__lead">'+esc(sum)+'</p>';
+    }
+
+    html += '</div></div>'; // hero__body + art-hero
+
+    /* ── MÉTRIQUES ────────────────────────────────────── */
+    html += '<div class="art-metrics">'
+      + '<div class="art-metric">'
+      + '<span class="art-metric__label">'+(l==='en'?'Zone':'Zone')+'</span>'
+      + '<span class="art-metric__value">'+z.icon+' '+(l==='en'?z.en:z.fr)+'</span>'
+      + '</div>'
+      + '<div class="art-metric">'
+      + '<span class="art-metric__label">'+(l==='en'?'Sentiment':'Sentiment')+'</span>'
+      + '<span class="art-metric__value"><span class="art-metric__dot '+s.cls+'"></span>'+(l==='en'?s.en:s.fr)+'</span>'
+      + '</div>'
+      + '<div class="art-metric">'
+      + '<span class="art-metric__label">'+(l==='en'?'Published':'Publié')+'</span>'
+      + '<span class="art-metric__value" style="font-size:12px">'+fmt(article.published_at)+'</span>'
+      + '</div>'
+      + '</div>';
+
+    /* ── ANALYSE ──────────────────────────────────────── */
+    html += '<div class="art-body">';
+
+    if (a) {
+      var db = a.pour_les_debutants;
+      var dp = a.pour_les_professionnels;
+
+      // Section débutants
+      html += '<section class="art-section art-section--beg" style="animation-delay:0.1s">'
+        + '<div class="art-section__head">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>'
+        + (l==='en' ? 'For beginners — understand the basics' : 'Pour les débutants — comprendre l\'essentiel')
+        + '</div>'
+        + '<div class="art-section__grid">'
+
+        + '<div class="art-block">'
+        + '<div class="art-block__label">'+(l==='en'?'What happened':'Ce qui se passe')+'</div>'
+        + '<p class="art-block__text">'+esc(db.ce_qui_se_passe)+'</p>'
+        + '</div>'
+
+        + '<div class="art-block">'
+        + '<div class="art-block__label">'+(l==='en'?'Why it matters':'Pourquoi c\'est important')+'</div>'
+        + '<p class="art-block__text">'+esc(db.pourquoi_cest_important)+'</p>'
+        + '</div>'
+
+        + '<div class="art-block art-block--full">'
+        + '<div class="art-block__label">'+(l==='en'?'Key term to know':'Le mot clé à retenir')+'</div>'
+        + '<span class="art-keyword">'+esc(db.le_mot_cle)+'</span>'
+        + '</div>'
+
+        + '</div></section>';
+
+      // Section pro
+      html += '<section class="art-section art-section--pro" style="animation-delay:0.2s">'
+        + '<div class="art-section__head">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>'
+        + (l==='en' ? 'For professionals — market analysis' : 'Pour les professionnels — analyse marché')
+        + '</div>'
+        + '<div class="art-section__grid">'
+
+        + '<div class="art-block">'
+        + '<div class="art-block__label">'+(l==='en'?'Macro analysis':'Analyse macro')+'</div>'
+        + '<p class="art-block__text">'+esc(dp.analyse_macro)+'</p>'
+        + '</div>'
+
+        + '<div class="art-block">'
+        + '<div class="art-block__label">'+(l==='en'?'Market impact':'Impact marchés')+'</div>'
+        + '<p class="art-block__text">'+esc(dp.impact_marches)+'</p>'
+        + '</div>'
+
+        + (dp.niveaux_cles && dp.niveaux_cles !== 'N/A' ?
+          '<div class="art-block">'
+          + '<div class="art-block__label">'+(l==='en'?'Key levels':'Niveaux clés')+'</div>'
+          + '<p class="art-block__text">'+esc(dp.niveaux_cles)+'</p>'
+          + '</div>' : '')
+
+        + '<div class="art-block">'
+        + '<div class="art-block__label">'+(l==='en'?'Recommended stance':'Biais recommandé')+'</div>'
+        + buildBiais(dp.biais_recommande)
+        + '</div>'
+
+        + '</div></section>';
+
+      // Conclusion
+      html += '<div class="art-conclusion" style="animation:rise 0.5s 0.35s both">'+esc(a.conclusion)+'</div>';
+    } else {
+      // Pas d'analyse — affiche le résumé
+      html += '<div class="art-conclusion">'+esc(sum || (l==='en'?'No analysis available.':'Analyse non disponible.'))+'</div>';
+    }
+
+    // CTA source
+    if (article.url) {
+      html += '<div class="art-source-cta">'
+        + '<a class="btn" href="'+esc(article.url)+'" target="_blank" rel="noopener nofollow">'
+        + '<span>'+(l==='en'?'Read full article on ':'Lire l\'article complet sur ')+(article.source||'la source')+'</span>'
+        + '<span class="btn__arrow" aria-hidden="true">↗</span></a>'
+        + '</div>';
+    }
+
+    html += '</div>'; // art-body
+    html += '</div>'; // art-page
+
+    root.innerHTML = html;
+  }
+
+  function buildBiais(text) {
+    if (!text) return '';
+    var lo = text.toLowerCase();
+    var cls = lo.includes('risk-on') ? 'art-biais--on'
+            : lo.includes('risk-off') ? 'art-biais--off'
+            : 'art-biais--wait';
+    return '<span class="art-biais '+cls+'">'+esc(text)+'</span>';
+  }
+
+  function showError(msg) {
+    root.innerHTML = '<div class="art-error">'
+      + '<div class="art-error-icon">📰</div>'
+      + '<p>'+msg+'</p>'
+      + '<p><a href="javascript:history.back()">← '+(getLang()==='en'?'Go back':'Retour')+'</a></p>'
       + '</div>';
   }
 
-  function renderArticle(article, analysis) {
+  function showSpinner() {
     var l = getLang();
-    var a = analysis ? (analysis[l] || analysis['fr']) : null;
-    var zone = ZONE_NAMES[l][article.zone] || article.zone;
-
-    var html = '<a href="javascript:history.back()" class="art-back">← ' + (l==='en'?'Back':'Retour') + '</a>';
-
-    // ── Header ──
-    var analysisTitle = a ? a.titre_analyse : article.title;
-    html += '<header class="art-header">'
-      + '<div class="art-eyebrow">'
-      + '<span class="art-zone">' + zone + '</span>'
-      + '<span>·</span>'
-      + '<span>' + (article.source||'') + '</span>'
-      + '<span>·</span>'
-      + '<span>' + fmt(article.published_at) + '</span>'
-      + sentimentBadge(article.sentiment)
-      + '</div>'
-      + '<h1 class="art-title">' + analysisTitle + '</h1>'
-      + '<div class="art-meta">'
-      + (article.url ? '<a class="art-source-link" href="' + article.url + '" target="_blank" rel="noopener nofollow">'
-        + (l==='en'?'Read original source ↗':'Lire la source originale ↗') + '</a>' : '')
-      + '</div>'
-      + '</header>';
-
-    if (!a) {
-      // Pas d'analyse disponible — affiche juste le résumé
-      html += '<div class="art-conclusion">' + (article.summary||'Résumé non disponible.') + '</div>';
-      wrap.innerHTML = html;
-      return;
-    }
-
-    var db = a.pour_les_debutants;
-    var dp = a.pour_les_professionnels;
-
-    // ── Section débutants ──
-    html += '<section class="art-section art-section--beginner">'
-      + '<div class="art-section__head">'
-      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>'
-      + (l==='en' ? 'For beginners — what’s happening' : 'Pour les débutants — ce qui se passe')
-      + '</div>'
-      + '<div class="art-section__body">'
-      + '<div><div class="art-block__label">' + (l==='en'?'What happened':'Ce qui se passe') + '</div>'
-      + '<p class="art-block__text">' + db.ce_qui_se_passe + '</p></div>'
-      + '<div><div class="art-block__label">' + (l==='en'?'Why it matters':'Pourquoi c\'est important') + '</div>'
-      + '<p class="art-block__text">' + db.pourquoi_cest_important + '</p></div>'
-      + '<div><div class="art-block__label">' + (l==='en'?'Key term to know':'Le mot clé à retenir') + '</div>'
-      + '<div class="art-keyword">' + db.le_mot_cle + '</div></div>'
-      + '</div></section>';
-
-    // ── Section professionnels ──
-    html += '<section class="art-section art-section--pro">'
-      + '<div class="art-section__head">'
-      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>'
-      + (l==='en' ? 'For professionals — market analysis' : 'Pour les professionnels — analyse marché')
-      + '</div>'
-      + '<div class="art-section__body">'
-      + '<div><div class="art-block__label">' + (l==='en'?'Macro analysis':'Analyse macro') + '</div>'
-      + '<p class="art-block__text">' + dp.analyse_macro + '</p></div>'
-      + '<div><div class="art-block__label">' + (l==='en'?'Market impact':'Impact marchés') + '</div>'
-      + '<p class="art-block__text">' + dp.impact_marches + '</p></div>'
-      + (dp.niveaux_cles && dp.niveaux_cles !== 'N/A' ?
-        '<div><div class="art-block__label">' + (l==='en'?'Key levels to watch':'Niveaux clés à surveiller') + '</div>'
-        + '<p class="art-block__text">' + dp.niveaux_cles + '</p></div>' : '')
-      + '<div><div class="art-block__label">' + (l==='en'?'Recommended stance':'Biais recommandé') + '</div>'
-      + biasBadge(dp.biais_recommande) + '</div>'
-      + '</div></section>';
-
-    // ── Conclusion ──
-    html += '<div class="art-conclusion">' + a.conclusion + '</div>';
-
-    // ── Lien source ──
-    if (article.url) {
-      html += '<div style="text-align:center;margin-top:8px">'
-        + '<a class="btn" href="' + article.url + '" target="_blank" rel="noopener nofollow" '
-        + 'style="display:inline-flex;gap:8px;text-decoration:none">'
-        + '<span>' + (l==='en'?'Read full article on ':'Lire l\'article complet sur ') + (article.source||'la source') + '</span>'
-        + '<span aria-hidden="true">↗</span></a></div>';
-    }
-
-    wrap.innerHTML = html;
-    document.title = 'Le Terminal — ' + (a.titre_analyse || article.title).slice(0,60);
+    root.innerHTML = '<div class="art-loading">'
+      + '<div class="art-spinner"></div>'
+      + '<p>'+(l==='en'?'Generating analysis…':'Génération de l\'analyse…')+'<br>'
+      + '<small>'+(l==='en'?'Claude is reading the article for you.':'Claude analyse l\'article pour vous.')+'</small></p>'
+      + '</div>';
   }
 
   async function load() {
-    if (!id) { renderError(getLang()==='en' ? 'No article specified.' : 'Aucun article spécifié.'); return; }
-
-    // Affiche le spinner
-    wrap.innerHTML = '<div class="art-loading">'
-      + '<div class="art-spinner"></div>'
-      + '<div>'
-      + '<p class="art-loading-text">' + (getLang()==='en'?'Generating analysis…':'Génération de l\'analyse en cours…') + '</p>'
-      + '<p class="art-loading-sub">' + (getLang()==='en'?'Claude is reading the article for you.':'Claude lit l\'article pour vous.') + '</p>'
-      + '</div></div>';
-
+    if (!id) {
+      showError(getLang()==='en' ? 'No article specified.' : 'Aucun article spécifié.');
+      return;
+    }
+    showSpinner();
     try {
       var resp = await fetch('/api/article?id=' + encodeURIComponent(id));
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       var data = await resp.json();
       if (!data.article) throw new Error('not found');
-      renderArticle(data.article, data.analysis);
+      render(data.article, data.analysis, data.image_url || null);
     } catch(e) {
-      renderError(getLang()==='en'
-        ? 'Unable to load this article. <a href="javascript:history.back()">Go back</a>.'
-        : 'Impossible de charger cet article. <a href="javascript:history.back()">Retour</a>.');
+      var l = getLang();
+      showError(l==='en'
+        ? 'Unable to load this article. Please <a href="javascript:history.back()">go back</a> and try again.'
+        : 'Impossible de charger cet article. <a href="javascript:history.back()">Retour</a> et réessayez.');
     }
   }
 
-  // Recharge si langue change (pour ré-afficher dans la bonne langue)
+  // Recharge quand la langue change
   window.ecoReloadNews = load;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', load);
-  } else { load(); }
+  } else {
+    load();
+  }
 })();
 </script>
 </body>

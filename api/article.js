@@ -29,6 +29,39 @@ function sbReq(method, path, body) {
   });
 }
 
+// Récupère l'og:image de la page source (timeout 4s, suit 1 redirect)
+function fetchOgImage(url) {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), 4000);
+    const done = (val) => { clearTimeout(timer); resolve(val); };
+
+    const tryFetch = (targetUrl, redirectsLeft) => {
+      try {
+        const parsed = new URL(targetUrl);
+        const mod = parsed.protocol === 'https:' ? require('https') : require('http');
+        const req = mod.request({ hostname: parsed.hostname, path: parsed.pathname + parsed.search, method: 'GET',
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LeTerminalBot/1.0)', 'Accept': 'text/html' } }, (res) => {
+          if ((res.statusCode === 301 || res.statusCode === 302) && res.headers.location && redirectsLeft > 0) {
+            res.destroy();
+            return tryFetch(res.headers.location.startsWith('http') ? res.headers.location : parsed.origin + res.headers.location, redirectsLeft - 1);
+          }
+          let html = '';
+          res.on('data', c => { html += c; if (html.length > 30000) res.destroy(); });
+          res.on('end', () => {
+            const m = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+                   || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+            done(m ? m[1] : null);
+          });
+          res.on('error', () => done(null));
+        });
+        req.on('error', () => done(null));
+        req.end();
+      } catch(e) { done(null); }
+    };
+    tryFetch(url, 2);
+  });
+}
+
 async function generateAnalysis(article) {
   const KEY = process.env.ANTHROPIC_API_KEY;
   if (!KEY) return null;
@@ -128,22 +161,30 @@ module.exports = async function handler(req, res) {
   }
   const article = r.body[0];
 
+  // Tente de récupérer l'og:image de la source (timeout 3s)
+  let image_url = null;
+  if (article.url) {
+    try {
+      image_url = await fetchOgImage(article.url);
+    } catch(e) { /* ignore */ }
+  }
+
   // Analyse déjà en cache ?
   if (article.analysis) {
     try {
       const cached = JSON.parse(article.analysis);
-      return res.status(200).json({ article, analysis: cached, cached: true });
+      return res.status(200).json({ article, analysis: cached, cached: true, image_url });
     } catch(e) { /* recalcule si JSON corrompu */ }
   }
 
   // Génère l'analyse via Claude
   const analysis = await generateAnalysis(article);
   if (!analysis) {
-    return res.status(200).json({ article, analysis: null, cached: false });
+    return res.status(200).json({ article, analysis: null, cached: false, image_url });
   }
 
   // Met en cache dans Supabase
   await sbReq('PATCH', `/rest/v1/news_items?id=eq.${id}`, { analysis: JSON.stringify(analysis) }).catch(() => {});
 
-  return res.status(200).json({ article, analysis, cached: false });
+  return res.status(200).json({ article, analysis, cached: false, image_url });
 };
