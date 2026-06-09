@@ -1626,8 +1626,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       while(br>0){f+='"]';br--;}while(b>0){f+='}';b--;}
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
-    render(parsed,rrv,tf,pair);
-    // Store in local historyData so Performances page has data
+    // ── SAUVEGARDER EN PREMIER (avant render pour garantir la persistance) ──
     var newEntry = {
       id: Date.now(),
       pair: pair,
@@ -1647,16 +1646,13 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       rr_realized: null,
       trade_notes: ''
     };
-    if(!Array.isArray(historyData)) historyData=[]; historyData.unshift(newEntry);
-    // Persist to localStorage without img_data (too large)
-    try{
-      var toStore = historyData.slice(0,50).map(function(h){
-        var c = Object.assign({}, h); c.img_data = null; return c;
-      });
-      localStorage.setItem('lt_history', JSON.stringify(toStore));
-    }catch(e){ console.warn('localStorage save failed:', e); }
-    // Persist to Supabase if logged in
+    if(!Array.isArray(historyData)) historyData=[];
+    historyData.unshift(newEntry);
+    _saveLocalHistory();
+    // Persist to Supabase if logged in (async, ne bloque pas le rendu)
     saveAnalysis(parsed, pair, dir, tf);
+
+    render(parsed,rrv,tf,pair);
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
@@ -2351,8 +2347,38 @@ async function checkProStatus(){
 }
 var historyData=[];
 var _deletedIds = new Set();
+
+// ── PERSISTANCE LOCALE (appelée à chaque modification de historyData) ──
+function _saveLocalHistory(){
+  try{
+    if(!Array.isArray(historyData)) return;
+    var toStore = historyData.slice(0,50).map(function(h){
+      var c = Object.assign({}, h);
+      c.img_data = null; // Ne jamais stocker l'image (trop volumineuse)
+      return c;
+    });
+    var json = JSON.stringify(toStore);
+    localStorage.setItem('lt_history', json);
+    // sessionStorage comme backup en cas de restriction localStorage
+    try{ sessionStorage.setItem('lt_history_bak', json); }catch(e2){}
+  }catch(e){
+    // Fallback sur sessionStorage si localStorage quota dépassé
+    try{
+      var ts2 = historyData.slice(0,10).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
+      sessionStorage.setItem('lt_history_bak', JSON.stringify(ts2));
+    }catch(e2){}
+  }
+}
 try{ var _di=localStorage.getItem('lt_deleted'); if(_di){ JSON.parse(_di).forEach(function(id){ _deletedIds.add(String(id)); }); } }catch(e){}
-try{ var _lh=localStorage.getItem('lt_history'); if(_lh){ var _parsed=JSON.parse(_lh); if(Array.isArray(_parsed)){ historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); }); } } }catch(e){ historyData=[]; }
+try{
+  var _lhRaw = localStorage.getItem('lt_history');
+  // Fallback sur sessionStorage si localStorage vide ou inaccessible
+  if(!_lhRaw){ try{ _lhRaw = sessionStorage.getItem('lt_history_bak'); }catch(e2){} }
+  if(_lhRaw){
+    var _parsed=JSON.parse(_lhRaw);
+    if(Array.isArray(_parsed)){ historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); }); }
+  }
+}catch(e){ historyData=[]; }
 if(!Array.isArray(historyData)) historyData=[];
 function openHistory(){
     document.getElementById('app').style.display='none';
@@ -2423,11 +2449,8 @@ async function confirmOk(){
   // 3. Persister dans localStorage
   if(!(_deletedIds instanceof Set)) _deletedIds = new Set();
   _deletedIds.add(String(deletedId));
-  try{
-    localStorage.setItem('lt_deleted', JSON.stringify(Array.from(_deletedIds)));
-    var toStore = historyData.slice(0,50).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
-    localStorage.setItem('lt_history', JSON.stringify(toStore));
-  }catch(e){}
+  try{ localStorage.setItem('lt_deleted', JSON.stringify(Array.from(_deletedIds))); }catch(e){}
+  _saveLocalHistory();
 
   // 4. Naviguer vers historique
   document.getElementById('app').style.display='none';
@@ -2459,7 +2482,7 @@ async function loadHistory(){
       var merged=localOnly.concat(data).filter(function(h){return !_deletedIds.has(String(h.id));});
       merged.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
       historyData=merged;
-      try{var ts=historyData.slice(0,50).map(function(h){var c=Object.assign({},h);c.img_data=null;return c;});localStorage.setItem('lt_history',JSON.stringify(ts));}catch(e){}
+      _saveLocalHistory();
     }
     renderHistory();renderHistoryGrid();
   }catch(e){renderHistory();renderHistoryGrid();}
