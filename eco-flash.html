@@ -169,7 +169,10 @@
 
   function renderAlerts(alerts) {
     var lang = localStorage.getItem('lt_lang') || 'fr';
-    if (!alerts || !alerts.length) return; // garde le contenu statique si vide
+    if (!alerts || !alerts.length) {
+      wire.innerHTML = '<li style="padding:48px 16px;text-align:center;color:var(--text3);font-size:13px;list-style:none">Surveillance active — aucun mouvement détecté pour le moment.</li>';
+      return;
+    }
     wire.innerHTML = alerts.map(function(a, i){
       var dirCls = a.direction === 'up' ? 'bias--up' : 'bias--down';
       var dirLabel = a.direction === 'up' ? (lang==='en' ? 'Risk-on' : 'Risk-on') : (lang==='en' ? 'Risk-off' : 'Risk-off');
