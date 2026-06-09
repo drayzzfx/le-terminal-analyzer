@@ -6,15 +6,15 @@ const https = require('https');
 // ── SOURCES RSS PAR ZONE ──────────────────────────────────────────────────────
 const SOURCES = {
   europe: [
-    { name: 'Reuters Business',  url: 'https://feeds.reuters.com/reuters/businessNews' },
-    { name: 'Les Échos',         url: 'https://feeds.lesechos.fr/lesechos/economie' },
     { name: 'La Tribune',        url: 'https://www.latribune.fr/rss/une.xml' },
     { name: 'Financial Times',   url: 'https://www.ft.com/rss/home/europe' },
+    { name: 'Les Échos',         url: 'https://www.lesechos.fr/rss/rss_une.xml' },
+    { name: 'Le Monde Économie', url: 'https://www.lemonde.fr/economie/rss_full.xml' },
   ],
   ameriques: [
     { name: 'CNBC Economy',      url: 'https://www.cnbc.com/id/20910258/device/rss/rss.html' },
     { name: 'MarketWatch',       url: 'https://feeds.marketwatch.com/marketwatch/topstories/' },
-    { name: 'Reuters US',        url: 'https://feeds.reuters.com/reuters/money' },
+    { name: 'AP Business',       url: 'https://feeds.apnews.com/rss/apf-business' },
   ],
   asie: [
     { name: 'SCMP Business',     url: 'https://www.scmp.com/rss/91/feed' },
@@ -22,19 +22,21 @@ const SOURCES = {
   ],
   institutions: [
     { name: 'BCE',               url: 'https://www.ecb.europa.eu/rss/press.html' },
-    { name: 'FMI',               url: 'https://www.imf.org/en/News/rss' },
+    { name: 'FMI',               url: 'https://www.imf.org/external/np/exr/rss/news.xml' },
     { name: 'Banque de France',  url: 'https://www.banque-france.fr/fr/rss.xml' },
-    { name: 'INSEE',             url: 'https://www.insee.fr/fr/rss.asp' },
     { name: 'Fed',               url: 'https://www.federalreserve.gov/feeds/press_all.xml' },
+    { name: 'BIS',               url: 'https://www.bis.org/rss/press.rss' },
   ],
   marches: [
     { name: 'Investing.com News',url: 'https://www.investing.com/rss/news.rss' },
     { name: 'FXStreet',          url: 'https://www.fxstreet.com/rss/news' },
+    { name: 'ForexFactory',      url: 'https://forexfactory.com/ff_calendar_thisweek.xml' },
   ],
   crypto: [
-    { name: 'CoinDesk',          url: 'https://www.coindesk.com/arc/outboundfeeds/rss/' },
     { name: 'Cointelegraph',     url: 'https://cointelegraph.com/rss' },
     { name: 'Decrypt',           url: 'https://decrypt.co/feed' },
+    { name: 'Bitcoin Magazine',  url: 'https://bitcoinmagazine.com/.rss/full/' },
+    { name: 'The Block',         url: 'https://www.theblock.co/rss.xml' },
   ],
 };
 
