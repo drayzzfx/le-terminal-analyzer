@@ -511,6 +511,22 @@
       ring.style.transform = 'translate(-50%,-50%) scale(1)';
     });
 
+    // Quand la souris entre dans un iframe (ex: TradingView bubble map),
+    // les mousemove s'arrêtent → on masque le curseur custom et on restaure le natif
+    var iframeStyle = document.createElement('style');
+    iframeStyle.textContent = 'body.lt-in-iframe * { cursor: auto !important; } body.lt-in-iframe #lt-cur-dot, body.lt-in-iframe #lt-cur-ring { opacity: 0 !important; }';
+    document.head.appendChild(iframeStyle);
+
+    function enterIframe(){ document.body.classList.add('lt-in-iframe'); }
+    function leaveIframe(){ document.body.classList.remove('lt-in-iframe'); }
+
+    document.addEventListener('mouseleave', enterIframe);
+    document.addEventListener('mouseenter', leaveIframe);
+    // Fallback polling : si pas de mousemove pendant 200ms → dans un iframe
+    var lastMove = Date.now();
+    document.addEventListener('mousemove', function(){ lastMove = Date.now(); leaveIframe(); });
+    setInterval(function(){ if(Date.now() - lastMove > 200) enterIframe(); }, 100);
+
     (function loop(){
       rx += (mx - rx) * 0.13;
       ry += (my - ry) * 0.13;
