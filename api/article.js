@@ -149,7 +149,8 @@ Génère une analyse complète en JSON strict (sans markdown). Structure exacte 
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 's-maxage=3600');
+  // Pas de cache CDN global — on le pose seulement sur les 200 pour éviter que les 404 soient mis en cache
+  res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -174,10 +175,11 @@ module.exports = async function handler(req, res) {
     } catch(e) { /* ignore */ }
   }
 
-  // Analyse déjà en cache ?
+  // Analyse déjà en cache ? — CDN cache 1h pour les réponses 200 avec analyse
   if (article.analysis) {
     try {
       const cached = JSON.parse(article.analysis);
+      res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=300');
       return res.status(200).json({ article, analysis: cached, cached: true, image_url });
     } catch(e) { /* recalcule si JSON corrompu */ }
   }
