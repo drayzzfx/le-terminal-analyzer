@@ -1628,6 +1628,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       try{parsed=JSON.parse(f);}catch(e2){parsed={niveau:'INTERMÉDIAIRE',score:6,scoreLabel:'ANALYSE',scoreSub:'Résultat partiel',annotations:[],scenarios:[],macro:'',forces:'',forcesTags:[],faiblesses:'',faiblesTags:[],recommandations:'',verdict:'ATTENDRE',verdictTitle:'À vérifier',verdictSub:'Réponse tronquée.'};}
     }
     // ── SAUVEGARDER EN PREMIER (avant render pour garantir la persistance) ──
+    console.log('[LT] Analyse terminée — sauvegarde en cours...');
     var newEntry = {
       id: Date.now(),
       pair: pair,
@@ -2365,34 +2366,45 @@ function _updateHistoryBadge(){
 // ── PERSISTANCE LOCALE (appelée à chaque modification de historyData) ──
 function _saveLocalHistory(){
   try{
-    if(!Array.isArray(historyData)) return;
+    if(!Array.isArray(historyData)) { console.warn('[LT] _saveLocalHistory: historyData not array'); return; }
     var toStore = historyData.slice(0,50).map(function(h){
       var c = Object.assign({}, h);
-      c.img_data = null; // Ne jamais stocker l'image (trop volumineuse)
+      c.img_data = null;
       return c;
     });
     var json = JSON.stringify(toStore);
     localStorage.setItem('lt_history', json);
-    // sessionStorage comme backup en cas de restriction localStorage
+    // Vérification immédiate
+    var verify = localStorage.getItem('lt_history');
+    if(verify){
+      console.log('[LT] ✅ localStorage OK — ' + toStore.length + ' analyses sauvegardées');
+    } else {
+      console.error('[LT] ❌ localStorage setItem a réussi mais getItem retourne null !');
+    }
     try{ sessionStorage.setItem('lt_history_bak', json); }catch(e2){}
   }catch(e){
-    // Fallback sur sessionStorage si localStorage quota dépassé
+    console.error('[LT] ❌ localStorage ERREUR:', e.message, '— fallback sessionStorage');
     try{
       var ts2 = historyData.slice(0,10).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
       sessionStorage.setItem('lt_history_bak', JSON.stringify(ts2));
-    }catch(e2){}
+    }catch(e2){ console.error('[LT] ❌ sessionStorage AUSSI échoue:', e2.message); }
   }
 }
 try{ var _di=localStorage.getItem('lt_deleted'); if(_di){ JSON.parse(_di).forEach(function(id){ _deletedIds.add(String(id)); }); } }catch(e){}
 try{
   var _lhRaw = localStorage.getItem('lt_history');
-  // Fallback sur sessionStorage si localStorage vide ou inaccessible
-  if(!_lhRaw){ try{ _lhRaw = sessionStorage.getItem('lt_history_bak'); }catch(e2){} }
+  console.log('[LT STARTUP] localStorage lt_history:', _lhRaw ? 'PRÉSENT (' + _lhRaw.length + ' chars)' : 'VIDE/ABSENT');
+  if(!_lhRaw){ try{ _lhRaw = sessionStorage.getItem('lt_history_bak'); console.log('[LT STARTUP] sessionStorage fallback:', _lhRaw ? 'PRÉSENT' : 'VIDE'); }catch(e2){} }
   if(_lhRaw){
     var _parsed=JSON.parse(_lhRaw);
-    if(Array.isArray(_parsed)){ historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); }); }
+    if(Array.isArray(_parsed)){
+      historyData=_parsed.filter(function(h){ return h && !_deletedIds.has(String(h.id)); });
+      console.log('[LT STARTUP] ' + historyData.length + ' analyses chargées depuis localStorage');
+    }
+  } else {
+    console.log('[LT STARTUP] Aucune analyse en localStorage — historyData = []');
   }
-}catch(e){ historyData=[]; }
+}catch(e){ console.error('[LT STARTUP] Erreur lecture localStorage:', e.message); historyData=[]; }
 if(!Array.isArray(historyData)) historyData=[];
 
 // Si l'utilisateur a déjà des analyses, les afficher directement au chargement
