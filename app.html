@@ -251,6 +251,7 @@ body {
   display: flex; align-items: center; gap: 6px;
 }
 .analyzer-tab:hover { color: var(--text2); border-bottom-color: rgba(0,149,255,.3); }
+.analyzer-tab[data-count]:not([data-count=''])::after { content: ' (' attr(data-count) ')'; font-size: 11px; opacity: .7; }
 
 
 .lang-switch { display: flex; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); }
@@ -1649,10 +1650,13 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
     if(!Array.isArray(historyData)) historyData=[];
     historyData.unshift(newEntry);
     _saveLocalHistory();
+    _updateHistoryBadge();
     // Persist to Supabase if logged in (async, ne bloque pas le rendu)
     saveAnalysis(parsed, pair, dir, tf);
 
     render(parsed,rrv,tf,pair);
+    // Ouvrir automatiquement l'historique après l'analyse pour que l'utilisateur voie que c'est bien sauvegardé
+    setTimeout(function(){ openHistory(); openHDetail(0); }, 2200);
   }catch(err){
     clearInterval(iv);console.error(err);showForm();
     alert(lang==='fr'?'Erreur lors de l\'analyse.':'Analysis error.');
@@ -2348,6 +2352,16 @@ async function checkProStatus(){
 var historyData=[];
 var _deletedIds = new Set();
 
+// ── BADGE COMPTEUR HISTORIQUE ──
+function _updateHistoryBadge(){
+  var count = Array.isArray(historyData) ? historyData.length : 0;
+  document.querySelectorAll('.analyzer-tab').forEach(function(btn){
+    if(btn.textContent.indexOf('Historique') > -1){
+      btn.setAttribute('data-count', count > 0 ? count : '');
+    }
+  });
+}
+
 // ── PERSISTANCE LOCALE (appelée à chaque modification de historyData) ──
 function _saveLocalHistory(){
   try{
@@ -2380,6 +2394,19 @@ try{
   }
 }catch(e){ historyData=[]; }
 if(!Array.isArray(historyData)) historyData=[];
+
+// Si l'utilisateur a déjà des analyses, les afficher directement au chargement
+// (évite qu'il pense que ses données sont perdues)
+if(historyData.length > 0){
+  document.addEventListener('DOMContentLoaded', function(){
+    _updateHistoryBadge();
+    // Ne pas ouvrir automatiquement si l'URL contient #perfs
+    if(window.location.hash !== '#perfs') {
+      openHistory();
+    }
+  });
+}
+
 function openHistory(){
     document.getElementById('app').style.display='none';
     document.getElementById('historyPage').classList.add('show');
