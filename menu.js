@@ -439,4 +439,85 @@
   // Re-sync when localStorage changes (cross-tab)
   window.addEventListener('storage', ltSyncUser);
 
+  // ── CURSEUR PERSONNALISÉ (toutes les pages) ──
+  (function(){
+    if(window.matchMedia('(pointer: coarse)').matches) return; // mobile : skip
+
+    // CSS
+    var cs = document.createElement('style');
+    cs.textContent = [
+      '* { cursor: none !important; }',
+      '#lt-cur-dot {',
+        'position:fixed;top:0;left:0;z-index:99999;pointer-events:none;',
+        'width:4px;height:4px;border-radius:50%;',
+        'background:#38B6FF;',
+        'box-shadow:0 0 4px 1px #38B6FF,0 0 9px 2px rgba(56,182,255,.45);',
+        'transform:translate(-50%,-50%);',
+        'transition:transform .08s ease,width .2s,height .2s,background .2s;',
+        'will-change:left,top;',
+      '}',
+      '#lt-cur-ring {',
+        'position:fixed;top:0;left:0;z-index:99998;pointer-events:none;',
+        'width:20px;height:20px;border-radius:50%;',
+        'border:1px solid rgba(56,182,255,.5);',
+        'box-shadow:0 0 5px 1px rgba(56,182,255,.15);',
+        'transform:translate(-50%,-50%);',
+        'transition:width .25s,height .25s,border-color .25s;',
+        'will-change:left,top;',
+      '}',
+      'body.lt-cur-hover #lt-cur-dot {',
+        'width:6px;height:6px;',
+        'background:#A78BFA;',
+        'box-shadow:0 0 7px 2px #A78BFA,0 0 14px 4px rgba(167,139,250,.4);',
+      '}',
+      'body.lt-cur-hover #lt-cur-ring {',
+        'width:28px;height:28px;',
+        'border-color:rgba(167,139,250,.55);',
+        'box-shadow:0 0 8px 1px rgba(167,139,250,.2);',
+      '}',
+      '@media (pointer:coarse){#lt-cur-dot,#lt-cur-ring{display:none!important}*{cursor:auto!important}}'
+    ].join('');
+    document.head.appendChild(cs);
+
+    // Éléments DOM
+    var dot = document.createElement('div'); dot.id = 'lt-cur-dot';
+    var ring = document.createElement('div'); ring.id = 'lt-cur-ring';
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    var mx = window.innerWidth/2, my = window.innerHeight/2;
+    var rx = mx, ry = my;
+
+    document.addEventListener('mousemove', function(e){
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top  = my + 'px';
+    });
+
+    var hoverSel = 'a,button,input,select,textarea,[onclick],[role="button"]';
+    document.addEventListener('mouseover', function(e){
+      if(e.target.closest(hoverSel)) document.body.classList.add('lt-cur-hover');
+    });
+    document.addEventListener('mouseout', function(e){
+      if(e.target.closest(hoverSel)) document.body.classList.remove('lt-cur-hover');
+    });
+
+    document.addEventListener('mousedown', function(){
+      dot.style.transform = 'translate(-50%,-50%) scale(0.6)';
+      ring.style.transform = 'translate(-50%,-50%) scale(0.85)';
+    });
+    document.addEventListener('mouseup', function(){
+      dot.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+
+    (function loop(){
+      rx += (mx - rx) * 0.13;
+      ry += (my - ry) * 0.13;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+  })();
+
 })();
