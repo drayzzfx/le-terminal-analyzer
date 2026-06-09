@@ -1089,26 +1089,36 @@ body.eco-page .wrap { padding-top: 30px; }
 .eco-empty svg { display: block; margin: 0 auto 12px; }
 
 /* =========================================================================
-   Section "À lire en priorité" (Top) — design homogène avec le reste
+   Section "À lire en priorité" (Top) — accent gold
    ========================================================================= */
 .eco-top {
-  border: 1px solid var(--border);
+  border: 1px solid rgba(251,191,36,0.25);
   border-radius: var(--r);
   padding: 24px;
   margin-bottom: 32px;
-  background: var(--card);
+  background: rgba(251,191,36,0.03);
 }
 .eco-top .block__head { margin-bottom: 20px; }
-.eco-top .block__title { color: var(--v2); }
+.eco-top .block__title { color: var(--amber); }
 .eco-top .block__ico { font-size: 18px; }
-.eco-top .block__sub { color: var(--text3); font-size: 11px; letter-spacing: 0.07em; }
+.eco-top .block__sub { color: rgba(251,191,36,0.6); font-size: 11px; letter-spacing: 0.07em; }
 .eco-top__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
 
-/* card--featured = même apparence que .card, juste un liseré bleu discret */
+/* card--featured = carte avec accent gold */
 .card--featured {
-  border-top: 2px solid var(--v);
+  border-color: rgba(251,191,36,0.3);
 }
-.card--featured .card__cat { color: var(--v2); }
+.card--featured:hover {
+  border-color: rgba(251,191,36,0.55);
+  box-shadow: 0 24px 50px -28px rgba(251,191,36,0.4), 0 0 50px rgba(251,191,36,0.05);
+}
+.card--featured .card__cat { color: var(--amber); }
+.card--featured .btn {
+  background: linear-gradient(135deg, var(--amber), #D97706);
+  box-shadow: 0 8px 26px rgba(251,191,36,0.3);
+  color: #1a1206;
+}
+.card--featured .btn:hover { box-shadow: 0 12px 38px rgba(251,191,36,0.5); }
 
 /* =========================================================================
    Section "Annonces précédentes" — liste compacte
