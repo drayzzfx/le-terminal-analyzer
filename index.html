@@ -646,6 +646,20 @@ checkSession();
 </script>
 
 <script src="./menu.js"></script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(function(){});}</script>
+<script>
+// Force kill old service workers + vider tous les caches
+if ('serviceWorker' in navigator) {
+  // Désenregistre tous les SW actifs
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(reg) { reg.unregister(); });
+  });
+  // Vide tous les caches du navigateur
+  if (window.caches) {
+    caches.keys().then(function(keys) {
+      keys.forEach(function(k) { caches.delete(k); });
+    });
+  }
+}
+</script>
 </body>
 </html>
