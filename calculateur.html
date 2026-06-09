@@ -104,6 +104,12 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 /* OPTIONAL PRICE SECTION */
 .price-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
 .price-section-title{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.dir-toggle{display:flex;gap:8px;margin-bottom:16px}
+.dir-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .2s;letter-spacing:.03em}
+.dir-btn.long.active{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:#34D399}
+.dir-btn.short.active{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.4);color:#F87171}
+.dir-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text2)}
+.rr-warn{font-size:11px;color:#FBBF24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:6px 12px;margin-top:8px}
 
 /* CALCULATE BTN */
 .calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.3);position:relative;overflow:hidden}
@@ -248,27 +254,32 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <!-- OPTIONAL PRICE SECTION -->
     <div class="price-section">
       <div class="price-section-title">Calcul par prix (optionnel)</div>
+      <div class="dir-toggle">
+        <button class="dir-btn long active" id="dirLong" onclick="setDir('long')">▲ LONG</button>
+        <button class="dir-btn short" id="dirShort" onclick="setDir('short')">▼ SHORT</button>
+      </div>
       <div class="fields-grid" style="margin-bottom:12px">
         <div class="field">
           <div class="field-label">Prix d'entrée</div>
           <div class="field-input-wrap">
-            <input class="field-input" id="entryPrice" type="number" placeholder="ex: 1.08500" step="any" oninput="calcPriceToSL()">
+            <input class="field-input" id="entryPrice" type="number" placeholder="ex: 1.08500" step="any" autocomplete="off" oninput="calcPriceToSL()">
           </div>
         </div>
         <div class="field">
           <div class="field-label">Stop Loss prix</div>
           <div class="field-input-wrap">
-            <input class="field-input" id="slPrice" type="number" placeholder="ex: 1.08200" step="any" oninput="calcPriceToSL()">
+            <input class="field-input" id="slPrice" type="number" placeholder="ex: 1.08200" step="any" autocomplete="off" oninput="calcPriceToSL()">
           </div>
         </div>
         <div class="field">
           <div class="field-label">Take Profit prix</div>
           <div class="field-input-wrap">
-            <input class="field-input" id="tpPrice" type="number" placeholder="ex: 1.09100" step="any" oninput="calcRR()">
+            <input class="field-input" id="tpPrice" type="number" placeholder="ex: 1.09100" step="any" autocomplete="off" oninput="calcRR()">
           </div>
         </div>
       </div>
       <div id="rrDisplay" class="rr-display" style="display:none"></div>
+      <div id="rrWarn" class="rr-warn" style="display:none"></div>
     </div>
 
   </div>
@@ -439,6 +450,15 @@ function setRisk(val) {
   calculate();
 }
 
+// ── DIRECTION LONG/SHORT ──
+var calcDir = 'long';
+function setDir(d){
+  calcDir = d;
+  document.getElementById('dirLong').classList.toggle('active', d==='long');
+  document.getElementById('dirShort').classList.toggle('active', d==='short');
+  calcPriceToSL();
+}
+
 // ── PRICE / RR FUNCTIONS ──
 function getPipMult(pair) {
   if (!pair) return 10000;
@@ -454,8 +474,23 @@ function getPipMult(pair) {
 
 function calcPriceToSL() {
   var entry = parseFloat(document.getElementById('entryPrice').value);
-  var sl = parseFloat(document.getElementById('slPrice').value);
+  var sl    = parseFloat(document.getElementById('slPrice').value);
+  var warn  = document.getElementById('rrWarn');
   if (isNaN(entry) || isNaN(sl)) { calcRR(); return; }
+
+  // Cohérence SL / direction
+  if (warn) {
+    if (calcDir === 'long' && sl >= entry) {
+      warn.textContent = '⚠️ En LONG, le Stop Loss doit être SOUS le prix d\'entrée.';
+      warn.style.display = 'block';
+    } else if (calcDir === 'short' && sl <= entry) {
+      warn.textContent = '⚠️ En SHORT, le Stop Loss doit être AU-DESSUS du prix d\'entrée.';
+      warn.style.display = 'block';
+    } else {
+      warn.style.display = 'none';
+    }
+  }
+
   var mult = getPipMult(selectedPair);
   var pips = Math.abs(entry - sl) * mult;
   var slPipsField = document.getElementById('slPips');
@@ -467,31 +502,52 @@ function calcPriceToSL() {
 }
 
 function calcRR() {
-  var entry = parseFloat(document.getElementById('entryPrice').value);
-  var sl = parseFloat(document.getElementById('slPrice').value);
-  var tp = parseFloat(document.getElementById('tpPrice').value);
+  var entry     = parseFloat(document.getElementById('entryPrice').value);
+  var sl        = parseFloat(document.getElementById('slPrice').value);
+  var tp        = parseFloat(document.getElementById('tpPrice').value);
   var rrDisplay = document.getElementById('rrDisplay');
+  var warn      = document.getElementById('rrWarn');
   if (isNaN(entry) || isNaN(sl) || isNaN(tp)) { rrDisplay.style.display = 'none'; return; }
-  var mult = getPipMult(selectedPair);
+
+  // Cohérence TP / direction
+  var tpWrong = (calcDir === 'long' && tp <= entry) || (calcDir === 'short' && tp >= entry);
+  if (tpWrong) {
+    if (warn) {
+      warn.textContent = calcDir === 'long'
+        ? '⚠️ En LONG, le Take Profit doit être AU-DESSUS du prix d\'entrée.'
+        : '⚠️ En SHORT, le Take Profit doit être SOUS le prix d\'entrée.';
+      warn.style.display = 'block';
+    }
+    rrDisplay.style.display = 'none'; return;
+  }
+
+  var mult   = getPipMult(selectedPair);
   var slPips = Math.abs(entry - sl) * mult;
   var tpPips = Math.abs(tp - entry) * mult;
   if (slPips === 0) { rrDisplay.style.display = 'none'; return; }
+
+  // Vérification cohérence SL (on n'affiche pas le RR si SL incohérent)
+  var slWrong = (calcDir === 'long' && sl >= entry) || (calcDir === 'short' && sl <= entry);
+  if (slWrong) { rrDisplay.style.display = 'none'; return; }
+
+  if (warn) warn.style.display = 'none';
+
   var ratio = tpPips / slPips;
-  // Read risk amount from div textContent
   var riskEur = null;
   var riskField = document.getElementById('riskAmount');
-  if (riskField) {
-    var v = parseFloat(riskField.textContent);
-    if (!isNaN(v)) riskEur = v;
-  }
+  if (riskField) { var v = parseFloat(riskField.textContent); if (!isNaN(v)) riskEur = v; }
   var colorClass = ratio >= 2 ? 'rr-green' : ratio >= 1 ? 'rr-orange' : 'rr-red';
+  var dirLabel = calcDir === 'long' ? '▲ LONG' : '▼ SHORT';
   var profitHtml = '';
   if (riskEur !== null) {
     var profitVal = (riskEur * ratio).toFixed(2);
-    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--text2)">Profit attendu : <strong>' + profitVal + curSym() + '</strong> (' + ratio.toFixed(2) + 'R)</span>';
+    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--text2)">Profit attendu : <strong style="color:'+(ratio>=1?'#34D399':'#F87171')+'">' + profitVal + curSym() + '</strong></span>';
   }
   rrDisplay.style.display = 'flex';
-  rrDisplay.innerHTML = '<span class="rr-badge ' + colorClass + '">RR 1:' + ratio.toFixed(2) + '</span>' + profitHtml;
+  rrDisplay.innerHTML =
+    '<span style="font-size:.8em;color:var(--text3);margin-right:4px">' + dirLabel + '</span>' +
+    '<span class="rr-badge ' + colorClass + '">RR 1:' + ratio.toFixed(2) + '</span>' +
+    profitHtml;
 }
 
 function updateSliderStyle() {
