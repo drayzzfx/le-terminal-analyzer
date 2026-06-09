@@ -2,6 +2,12 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0095FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le Terminal">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Setup Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +33,15 @@
   --amber: #FBBF24;
   --r: 16px;
   --r2: 12px;
+}
+body.lt-light {
+  --bg: #F4F6FA;
+  --bg2: #ECEEF5;
+  --card: rgba(0,0,0,0.03);
+  --border: rgba(0,0,0,0.08);
+  --text: #12111A;
+  --text2: #4A4660;
+  --text3: #9B96B8;
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
@@ -947,6 +962,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .confirm-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
 .confirm-ok{flex:1;padding:11px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);border-radius:12px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .confirm-ok:hover{background:rgba(248,113,113,.25);border-color:rgba(248,113,113,.6)}
+@media print {
+  .topbar,.back-btn,.analyzer-tabs,#iaFeedbackBtn,.history-page-header { display: none !important; }
+  #perfPage { display: block !important; }
+  body { background: white !important; color: black !important; }
+  .stat-card, .perf-section { break-inside: avoid; }
+}
 </style>
 </head>
 <body>
@@ -976,6 +997,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="lang-switch">
         <button class="lang-btn on" onclick="setLang('fr')">FR</button>
         <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button id="themeToggle" onclick="toggleTheme()" style="background:transparent;border:1px solid var(--border);border-radius:50px;padding:6px 12px;color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s" title="Thème clair/sombre">🌙</button>
       </div>
     </div>
   </header>
@@ -1171,6 +1193,21 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="verdict" id="verdictBox">
         <div class="v-badge" id="v-badge">—</div>
         <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
+      </div>
+      <div id="quickOutcome" style="margin-top:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>
+        <div style="display:flex;gap:8px">
+          <button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l'ai pris</button>
+          <button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l'ai passé</button>
+        </div>
+        <div id="quickResultBtns" style="display:none;margin-top:8px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Résultat :</div>
+          <div style="display:flex;gap:8px">
+            <button onclick="quickSetResult('win')" style="flex:1;padding:8px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🏆 Win</button>
+            <button onclick="quickSetResult('loss')" style="flex:1;padding:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">❌ Loss</button>
+            <button onclick="quickSetResult('be')" style="flex:1;padding:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;color:#FBBF24;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➖ BE</button>
+          </div>
+        </div>
       </div>
       <div class="actions">
         <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
@@ -1770,6 +1807,22 @@ function render(r,rrv,tf,pair){
   else{vb.classList.add('wait');vi.textContent=c().waitLabel;}
   document.getElementById('v-title').textContent=r.verdictTitle||'';
   document.getElementById('v-sub').textContent=r.verdictSub||'';
+  // Reset quick outcome widget
+  var qo = document.getElementById('quickOutcome');
+  if(qo){
+    qo.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l\'ai pris</button>' +
+      '<button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l\'ai passé</button>' +
+      '</div>' +
+      '<div id="quickResultBtns" style="display:none;margin-top:8px">' +
+      '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Résultat :</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button onclick="quickSetResult(\'win\')" style="flex:1;padding:8px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🏆 Win</button>' +
+      '<button onclick="quickSetResult(\'loss\')" style="flex:1;padding:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">❌ Loss</button>' +
+      '<button onclick="quickSetResult(\'be\')" style="flex:1;padding:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;color:#FBBF24;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➖ BE</button>' +
+      '</div></div>';
+  }
   showResult();
 }
 
@@ -1967,12 +2020,52 @@ async function loadPerf(){
     return { month: k, rr: parseFloat(monthlyMap[k].toFixed(2)) };
   });
 
+  // Expectancy = (WR * avgWin_R) - ((1-WR) * avgLoss_R)
+  var winRRVals = takenSorted.filter(function(a){ return a.trade_result==='win' && a.rr_realized; }).map(function(a){ return parseFloat(a.rr_realized)||0; });
+  var lossRRVals = takenSorted.filter(function(a){ return a.trade_result==='loss' && a.rr_realized; }).map(function(a){ return Math.abs(parseFloat(a.rr_realized)||0); });
+  var avgWinR = winRRVals.length ? winRRVals.reduce(function(a,b){return a+b;},0)/winRRVals.length : 0;
+  var avgLossR = lossRRVals.length ? lossRRVals.reduce(function(a,b){return a+b;},0)/lossRRVals.length : 1;
+  var wr_dec = (wins+losses)>0 ? wins/(wins+losses) : 0;
+  var expectancy = ((wr_dec * avgWinR) - ((1-wr_dec) * avgLossR)).toFixed(3);
+
+  // Sharpe ratio (simplified: mean_R / std_R of all closed trades)
+  var allRR = takenSorted.filter(function(a){ return a.rr_realized; }).map(function(a){ return parseFloat(a.rr_realized)||0; });
+  var sharpe = 'N/A';
+  if(allRR.length >= 3){
+    var mean = allRR.reduce(function(a,b){return a+b;},0)/allRR.length;
+    var variance = allRR.reduce(function(a,b){return a+Math.pow(b-mean,2);},0)/allRR.length;
+    var std = Math.sqrt(variance);
+    sharpe = std > 0 ? (mean/std).toFixed(2) : 'N/A';
+  }
+
+  // Streak (current + best)
+  var currentStreak = 0, bestStreak = 0, streakType = '';
+  var tempStreak = 0, tempType = '';
+  takenSorted.forEach(function(a){
+    if(!a.trade_result || a.trade_result==='be') { tempStreak=0; tempType=''; return; }
+    if(a.trade_result === tempType){ tempStreak++; } else { tempType=a.trade_result; tempStreak=1; }
+    if(tempStreak > bestStreak) bestStreak = tempStreak;
+  });
+  currentStreak = tempStreak; streakType = tempType;
+
+  // Win rate by day of week
+  var dayWins = [0,0,0,0,0,0,0], dayTotal = [0,0,0,0,0,0,0];
+  takenSorted.forEach(function(a){
+    var day = new Date(a.created_at).getDay();
+    dayTotal[day]++;
+    if(a.trade_result==='win') dayWins[day]++;
+  });
+  var dayStats = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'].map(function(n,i){
+    return { name:n, wr: dayTotal[i]>0 ? Math.round(dayWins[i]/dayTotal[i]*100) : null, total: dayTotal[i] };
+  });
+
   renderPerf({
     totalAnalyses: all.length, totalTaken: taken.length,
     wins: wins, losses: losses, be: be,
     winRate: winRate, avgRR: avgRR, weeklyRR: weekRR.toFixed(2),
     avgScore: avgScore, pairStats: pairStats, scoreProgression: scoreProgression,
-    equityCurve: equityCurve, maxDrawdown: maxDrawdown, sessions: sessions, monthlyData: monthlyData
+    equityCurve: equityCurve, maxDrawdown: maxDrawdown, sessions: sessions, monthlyData: monthlyData,
+    expectancy: expectancy, sharpe: sharpe, currentStreak: currentStreak, bestStreak: bestStreak, streakType: streakType, dayStats: dayStats
   });
 }
 
@@ -1988,6 +2081,9 @@ function renderPerf(d){
     {val: (d.avgRR!==null?d.avgRR+'R':'—'), lbl:'RR Moyen', col:'var(--v2)'},
     {val: (d.weeklyRR>0?'+':'')+d.weeklyRR+'R', lbl:'RR Semaine', col:parseFloat(d.weeklyRR)>=0?'var(--green)':'#F87171'},
     {val: d.avgScore||'—', lbl:'Score Moyen', col:'var(--v2)'},
+    {val: d.expectancy !== undefined ? (parseFloat(d.expectancy)>=0?'+':'')+d.expectancy+'R' : '—', lbl:'Expectancy', col: d.expectancy && parseFloat(d.expectancy)>=0 ? 'var(--green)' : '#F87171'},
+    {val: d.sharpe !== 'N/A' && d.sharpe !== undefined ? d.sharpe : '—', lbl:'Sharpe Ratio', col:'var(--v2)'},
+    {val: d.currentStreak ? (d.streakType==='win'?'🟢':'🔴')+' '+d.currentStreak : '—', lbl:'Série actuelle', col: d.streakType==='win'?'var(--green)':'#F87171'},
   ];
   document.getElementById('statGrid').innerHTML = stats.map(function(s){
     return '<div class="stat-card"><div class="stat-val" style="color:'+s.col+'">'+s.val+'</div><div class="stat-lbl">'+s.lbl+'</div></div>';
@@ -2151,6 +2247,27 @@ function renderPerf(d){
       mbEl.innerHTML = '<svg width="100%" viewBox="0 0 '+svgW+' '+svgH+'" style="display:block">'+rows+'</svg>';
     } else {
       mbEl.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:20px">Pas encore assez de données mensuelles</div>';
+    }
+  }
+
+  // Day of week chart
+  var dowEl = document.getElementById('dayOfWeekChart');
+  if(dowEl && d.dayStats){
+    var activeDays = d.dayStats.filter(function(d){ return d.total > 0; });
+    if(activeDays.length > 0){
+      dowEl.innerHTML = '<div style="display:flex;gap:8px;align-items:flex-end;height:80px">' +
+        d.dayStats.map(function(day){
+          var h = day.wr !== null ? Math.max(8, day.wr * 0.7) : 0;
+          var col = day.wr === null ? 'rgba(255,255,255,.08)' : day.wr >= 50 ? 'rgba(52,211,153,.7)' : 'rgba(248,113,113,.7)';
+          return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">' +
+            '<div style="font-size:10px;color:var(--text3);font-weight:600">'+(day.wr!==null?day.wr+'%':'')+'</div>' +
+            '<div style="width:100%;height:'+h+'px;background:'+col+';border-radius:4px 4px 0 0"></div>' +
+            '<div style="font-size:11px;color:var(--text2);font-weight:600">'+day.name+'</div>' +
+            '<div style="font-size:9px;color:var(--text3)">'+day.total+'</div>' +
+            '</div>';
+        }).join('') + '</div>';
+    } else {
+      dowEl.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:20px">Pas encore assez de données</div>';
     }
   }
 }
@@ -2671,6 +2788,59 @@ async function saveAnalysis(r,pair,d,tf){
     if(res.ok) loadHistory();
   }catch(e){}
 }
+function toggleTheme(){
+  var isLight = document.body.classList.toggle('lt-light');
+  localStorage.setItem('lt_theme', isLight ? 'light' : 'dark');
+  var btn = document.getElementById('themeToggle');
+  if(btn) btn.textContent = isLight ? '☀️' : '🌙';
+}
+// Restore theme on load
+(function(){
+  if(localStorage.getItem('lt_theme')==='light'){
+    document.body.classList.add('lt-light');
+    var btn = document.getElementById('themeToggle');
+    if(btn) btn.textContent = '☀️';
+  }
+})();
+
+var onboardStep = 0;
+var onboardSteps = [
+  { icon: '📊', title: 'Analyse ton setup', desc: 'Remplis les infos de ton trade (paire, direction, TF, entrée/TP/SL), ajoute ton graphique et lance l\'analyse IA.' },
+  { icon: '📋', title: 'Consulte l\'historique', desc: 'Toutes tes analyses sont sauvegardées. Accède à l\'onglet "Historique" pour les revoir.' },
+  { icon: '🎯', title: 'Suis tes résultats', desc: 'Après chaque trade, note si tu l\'as pris et le résultat. L\'IA analyse tes stats chaque semaine.' },
+  { icon: '📈', title: 'Améliore-toi', desc: 'Dans "Perfs", consulte ton win rate, RR moyen, expectancy, Sharpe et les patterns de tes trades.' },
+];
+function renderOnboardStep(){
+  var s = onboardSteps[onboardStep];
+  var stepsEl = document.getElementById('onboardSteps');
+  var dotsEl = document.getElementById('onboardDots');
+  var nextBtn = document.getElementById('onboardNextBtn');
+  if(!stepsEl||!dotsEl||!nextBtn) return;
+  stepsEl.innerHTML = '<div style="font-size:36px;margin-bottom:12px">'+s.icon+'</div>'+
+    '<div style="font-family:\'Bricolage Grotesque\',sans-serif;font-size:17px;font-weight:700;color:#F0EEFF;margin-bottom:8px">'+s.title+'</div>'+
+    '<div style="color:#9B96B8;font-size:13px;line-height:1.7">'+s.desc+'</div>';
+  dotsEl.innerHTML = onboardSteps.map(function(_,i){
+    return '<div style="width:'+(i===onboardStep?16:6)+'px;height:6px;border-radius:3px;background:'+(i===onboardStep?'#38B6FF':'rgba(255,255,255,.15)')+';transition:all .3s"></div>';
+  }).join('');
+  nextBtn.textContent = onboardStep === onboardSteps.length-1 ? 'C\'est parti ! 🚀' : 'Suivant →';
+}
+function nextOnboardStep(){
+  if(onboardStep < onboardSteps.length-1){ onboardStep++; renderOnboardStep(); }
+  else { skipOnboarding(); }
+}
+function skipOnboarding(){
+  var el = document.getElementById('onboardingOverlay');
+  if(el){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.style.display='none'; },300); }
+  localStorage.setItem('lt_onboarded','1');
+}
+// Show onboarding on first visit
+if(!localStorage.getItem('lt_onboarded')){
+  document.addEventListener('DOMContentLoaded', function(){
+    var el = document.getElementById('onboardingOverlay');
+    if(el){ el.style.display='flex'; renderOnboardStep(); }
+  });
+}
+
 checkSession();
 
 
@@ -2935,6 +3105,30 @@ window.deleteAnalysis=deleteAnalysis;
 window.toggleSideMenu=toggleSideMenu;
 window.closeSideMenu=closeSideMenu;
 window.doLogout=doLogout;
+
+function quickSetOutcome(taken){
+  if(!Array.isArray(historyData)||!historyData.length) return;
+  historyData[0].trade_taken = taken;
+  _saveLocalHistory();
+  var qo = document.getElementById('quickOutcome');
+  if(!qo) return;
+  if(taken){
+    var btnRow = qo.querySelector('div:nth-child(2)');
+    if(btnRow) btnRow.style.display='none';
+    var rb = document.getElementById('quickResultBtns');
+    if(rb){ rb.style.display='block'; }
+  } else {
+    qo.innerHTML='<div style="text-align:center;color:var(--text3);font-size:13px;padding:4px">Trade passé — enregistré ✓</div>';
+  }
+}
+function quickSetResult(result){
+  if(!Array.isArray(historyData)||!historyData.length) return;
+  historyData[0].trade_result = result;
+  _saveLocalHistory();
+  var qo = document.getElementById('quickOutcome');
+  var emoji = result==='win'?'🏆':result==='loss'?'❌':'➖';
+  if(qo) qo.innerHTML='<div style="text-align:center;font-size:13px;padding:4px">'+emoji+' Résultat enregistré — <span style="color:var(--text3)">visible dans l\'historique</span></div>';
+}
 </script>
 
 
@@ -2970,6 +3164,7 @@ window.doLogout=doLogout;
   <header class="perf-header">
     <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
     <button class="back-btn" onclick="closePerf()">← Retour</button>
+    <button onclick="window.print()" style="padding:7px 16px;background:rgba(0,149,255,.12);border:1px solid rgba(0,149,255,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">📄 Exporter PDF</button>
   </header>
   <nav class="analyzer-tabs">
     <button class="analyzer-tab" onclick="closePerf('hist');openHistory()">
@@ -3065,6 +3260,12 @@ window.doLogout=doLogout;
         <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
           <div id="monthlyBarsContent"></div>
         </div>
+      </div>
+
+      <!-- DAY OF WEEK -->
+      <div class="perf-section" id="dayOfWeekSection">
+        <div class="perf-section-title">📅 Win rate par jour de la semaine</div>
+        <div id="dayOfWeekChart" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px"></div>
       </div>
 
       <!-- IA RAPPORT HEBDOMADAIRE -->
@@ -3211,5 +3412,20 @@ window.doLogout=doLogout;
 })();
 </script>
 
+<div id="onboardingOverlay" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(8,8,15,.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:#13131F;border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 60px rgba(0,149,255,.15)">
+    <div style="font-size:40px;margin-bottom:16px">👋</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#F0EEFF;margin-bottom:8px">Bienvenue sur Le Terminal</div>
+    <div style="color:#9B96B8;font-size:14px;line-height:1.7;margin-bottom:24px">Ton hub de trading ICT/SMC. Voici comment démarrer :</div>
+    <div id="onboardSteps"></div>
+    <div style="display:flex;justify-content:center;gap:6px;margin:20px 0" id="onboardDots"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#5A5570;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;cursor:pointer">Passer</button>
+      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#0095FF,#38B6FF);border:none;border-radius:10px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(function(){}); }</script>
 </body>
 </html>

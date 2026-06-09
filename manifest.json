@@ -1,0 +1,22 @@
+{
+  "name": "Le Terminal Hub",
+  "short_name": "Le Terminal",
+  "start_url": "./app.html",
+  "display": "standalone",
+  "background_color": "#08080F",
+  "theme_color": "#0095FF",
+  "description": "Votre hub de trading ICT/SMC",
+  "icons": [
+    {
+      "src": "./logo.jpg.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "./logo.jpg.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ],
+  "categories": ["finance", "productivity"]
+}
