@@ -1184,6 +1184,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 <script>
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
+var lastAnalysisParams = null;
 if(localStorage.getItem('lt_pro')==='1') isPro=true;
 
 // ── LANDING ──
@@ -1755,7 +1756,7 @@ function render(r,rrv,tf,pair){
   document.getElementById('adviceText').innerHTML=fmtBlock(r.recommandations);
 
   const mkT=(id,tags,cls)=>{
-    const el=document.getElementById(id);el.innerHTML='';
+    const el=document.getElementById(id);if(!el)return;el.innerHTML='';
     (tags||[]).forEach(tag=>{const s=document.createElement('span');s.className='tag '+cls;s.textContent=tag;el.appendChild(s);});
   };
   mkT('forcesTags',r.forcesTags,'g');
@@ -1774,6 +1775,7 @@ function render(r,rrv,tf,pair){
 
 function renderAnnotatedCanvas(src, anns){
   var canvas = document.getElementById('annotationCanvas');
+  if(!canvas) return;
   var ctx = canvas.getContext('2d');
   var img = new Image();
   img.onload = function(){
@@ -1877,7 +1879,7 @@ async function loadPerf(){
   document.getElementById('perfLoading').style.display='block';
   document.getElementById('perfContent').style.display='none';
   // Try to refresh from API if connected
-  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d))historyData=d;}catch(e){}}
+  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d)&&d.length){var _aIds=new Set(d.map(function(h){return String(h.id);}));var _loc=historyData.filter(function(h){return !_aIds.has(String(h.id));});historyData=_loc.concat(d);historyData.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});}}catch(e){}}
   // Build stats from local historyData
   var all = historyData;
   if(!all.length){ document.getElementById('perfLoading').textContent='Aucune analyse encore. Lance ta première analyse !'; return; }
@@ -2663,6 +2665,7 @@ async function doFetchPrice(pair){
   var bar = document.getElementById('livePriceBar');
   var valEl = document.getElementById('livePriceVal');
   var chEl = document.getElementById('livePriceChange');
+  if(!bar || !valEl || !chEl) return;
 
   // Try Binance first for crypto
   var binanceMap = {'BTC':'BTCUSDT','BTCUSD':'BTCUSDT','ETH':'ETHUSDT','ETHUSD':'ETHUSDT',
@@ -2725,6 +2728,7 @@ function showLivePrice(price, change){
   var bar = document.getElementById('livePriceBar');
   var valEl = document.getElementById('livePriceVal');
   var chEl = document.getElementById('livePriceChange');
+  if(!bar || !valEl || !chEl) return;
   bar.style.display = 'flex';
   valEl.textContent = price;
   if(change !== null && change !== undefined){
@@ -2740,7 +2744,8 @@ function showLivePrice(price, change){
 }
 
 function hideLivePrice(){
-  document.getElementById('livePriceBar').style.display = 'none';
+  var bar=document.getElementById('livePriceBar');
+  if(bar) bar.style.display = 'none';
 }
 window.fetchLivePrice = fetchLivePrice;
 window.showSuggestions = showSuggestions;
@@ -2766,6 +2771,7 @@ function onPairInput(val){
 function showSuggestions(val){
   var box = document.getElementById('pairSuggestions');
   var inp = document.getElementById('pair');
+  if(!box || !inp) return;
   if(!val || val.length < 1){ box.style.display='none'; return; }
   var v = val.toUpperCase();
   var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
@@ -2787,7 +2793,8 @@ function selectPair(p){
 }
 
 function hideSuggestions(){
-  document.getElementById('pairSuggestions').style.display='none';
+  var box=document.getElementById('pairSuggestions');
+  if(box) box.style.display='none';
 }
 
 // ── MULTI-TF UPLOADS ──
