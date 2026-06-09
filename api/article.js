@@ -5,7 +5,11 @@ const https = require('https');
 
 function sbReq(method, path, body) {
   const url = new URL(process.env.SUPABASE_URL);
-  const KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  // Lecture  → anon key (compatible RLS public)
+  // Écriture → service key (bypass RLS) si dispo, sinon anon
+  const READ_KEY  = process.env.SUPABASE_ANON_KEY;
+  const WRITE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  const KEY = (method === 'GET') ? READ_KEY : WRITE_KEY;
   const payload = body ? JSON.stringify(body) : null;
   const headers = {
     'Content-Type': 'application/json',
@@ -154,8 +158,9 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'ID invalide' });
   }
 
-  // Récupère l'article
-  const r = await sbReq('GET', `/rest/v1/news_items?id=eq.${id}&select=*&limit=1`);
+  // Récupère l'article (colonnes explicites comme api/news.js)
+  const r = await sbReq('GET', `/rest/v1/news_items?id=eq.${id}&select=id,guid,title,summary,summary_en,source,url,published_at,zone,sentiment,analysis&limit=1`);
+  console.log('[article] Supabase status:', r.status, 'body type:', Array.isArray(r.body) ? 'array('+r.body.length+')' : typeof r.body);
   if (!Array.isArray(r.body) || r.body.length === 0) {
     return res.status(404).json({ error: 'Article introuvable' });
   }
