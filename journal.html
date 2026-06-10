@@ -1081,7 +1081,7 @@ async function requestGlobalIA() {
 async function syncTrade(trade) {
   if(!authToken) return;
   try {
-    await fetch('/api/history', {
+    await fetch('/api/journal', {
       method: 'POST',
       headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body: JSON.stringify(trade)
@@ -1092,7 +1092,7 @@ async function syncTrade(trade) {
 async function deleteTrade(id) {
   if(!authToken) return;
   try {
-    await fetch('/api/history?id=' + encodeURIComponent(id), {
+    await fetch('/api/journal?id=' + encodeURIComponent(id), {
       method: 'DELETE',
       headers: {'Authorization':'Bearer '+authToken}
     });
@@ -1102,22 +1102,51 @@ async function deleteTrade(id) {
 async function loadFromServer() {
   if(!authToken) return;
   try {
-    var res = await fetch('/api/history', {headers:{'Authorization':'Bearer '+authToken}});
+    var res = await fetch('/api/journal', {headers:{'Authorization':'Bearer '+authToken}});
     var data = await res.json();
     if(Array.isArray(data) && data.length) {
-      // Merge: server wins, keep local img_data
-      var localMap = {};
-      trades.forEach(function(t){ localMap[t.id] = t; });
-      trades = data.map(function(t){
-        var local = localMap[t.id];
-        if(local && local.img) t.img = t.img || local.img;
-        return t;
+      // Map server fields (trade_date, etc.) to local field names
+      var serverTrades = data.map(function(t){
+        return {
+          id: t.id,
+          pair: t.pair || '',
+          direction: t.direction || '',
+          date: t.trade_date || '',
+          session: t.session || '',
+          setup: t.setup || '',
+          result: t.result || '',
+          pnl: t.pnl != null ? parseFloat(t.pnl) : 0,
+          rr: t.rr != null ? parseFloat(t.rr) : 0,
+          fees: t.fees != null ? parseFloat(t.fees) : 0,
+          notes: t.notes || '',
+          img: t.img || null
+        };
       });
+      // Merge: server wins, keep local entries not yet synced (no UUID id)
+      var serverIds = new Set(serverTrades.map(function(t){ return String(t.id); }));
+      var localOnly = trades.filter(function(t){ return !serverIds.has(String(t.id)); });
+      trades = serverTrades.concat(localOnly);
+      trades.sort(function(a,b){ return (b.date||'') > (a.date||'') ? 1 : -1; });
       persist();
       renderStats();
       renderCalendar();
     }
   } catch(e) {}
+}
+
+async function syncAllLocalTrades() {
+  if(!authToken || !trades.length) return;
+  // Upload any local trades that don't have a UUID id yet
+  var unsynced = trades.filter(function(t){ return !/^[0-9a-f-]{36}$/.test(String(t.id)); });
+  for(var i = 0; i < unsynced.length; i++) {
+    try {
+      await fetch('/api/journal', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+        body: JSON.stringify(unsynced[i])
+      });
+    } catch(e) {}
+  }
 }
 
 // ── PAIR AUTOCOMPLETE ──
@@ -1193,6 +1222,7 @@ async function doAuth() {
       localStorage.setItem('ta_email', (data.user&&data.user.email)||email||'');
       closeAuth();
       updateUserUI();
+      await syncAllLocalTrades();
       loadFromServer();
     } else {
       errEl.textContent = data.error_description || data.msg || 'Erreur';
@@ -1235,6 +1265,7 @@ async function checkSession() {
       currentUser = data;
       localStorage.setItem('ta_email', data.email||'');
       updateUserUI();
+      await syncAllLocalTrades();
       loadFromServer();
     } else if(data.error) {
       authToken = null; currentUser = null;
