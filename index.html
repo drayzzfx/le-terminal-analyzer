@@ -544,6 +544,27 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 var authToken=null,currentUser=null,authMode='login';
 var _sbUrl='';
 fetch('/api/config').then(function(r){return r.json();}).then(function(d){_sbUrl=d.supabaseUrl||'';}).catch(function(){});
+
+// Handle Google OAuth callback (token in URL hash)
+(function(){
+  var hash=window.location.hash;
+  if(!hash||hash.indexOf('access_token')===-1)return;
+  var params=new URLSearchParams(hash.slice(1));
+  var token=params.get('access_token');
+  if(!token||params.get('token_type')!=='bearer')return;
+  history.replaceState(null,'',window.location.pathname+window.location.search);
+  fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token:token})})
+    .then(function(r){return r.json();}).then(function(data){
+      if(data.id){
+        authToken=token;currentUser=data;
+        localStorage.setItem('ta_token',token);
+        localStorage.setItem('ta_email',data.email||'');
+        startTrial();updateUserUI();updateTrialBadge();
+        document.getElementById('welcomeMsg').style.display='block';
+        setTimeout(function(){document.getElementById('welcomeMsg').style.display='none';},4000);
+      }
+    }).catch(function(){});
+})();
 function doGoogleAuth(){
   if(!_sbUrl){setTimeout(doGoogleAuth,600);return;}
   window.location.href=_sbUrl+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(window.location.origin+'/index.html');
