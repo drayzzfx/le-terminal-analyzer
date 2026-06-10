@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="fr">
-<!-- v2 -->
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0095FF">
+<meta name="theme-color" content="#7FB8E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Le Terminal">
@@ -12,141 +11,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Calculateur de Pips</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
 <style>
-:root {
-  --bg: #08080F;
-  --bg2: #0E0E1A;
-  --card: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.08);
-  --v: #0095FF;
-  --v2: #38B6FF;
-  --vglow: rgba(0,149,255,0.25);
-  --vglow2: rgba(0,149,255,0.08);
-  --text: #F0EEFF;
-  --text2: #9B96B8;
-  --text3: #5A5570;
-  --green: #34D399;
-  --red: #F87171;
-  --amber: #FBBF24;
-  --r: 16px;
-  --r2: 12px;
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-font-smoothing:antialiased}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* BG */
-.bg-orb{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(0,149,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+/* ── CALCULATEUR — Cinématique Luxe ── */
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em}
-.topbar-brand span{color:var(--v2)}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:64px;background:rgba(7,9,12,.85);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid var(--steel-900)}
+.topbar-brand{font-family:var(--font-display);font-size:15px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:var(--steel-100);display:flex;align-items:center;gap:10px}
+.topbar-brand span{color:var(--ice-500)}
 
 /* MAIN */
 .main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:40px 24px 100px}
 
 /* HERO */
-.hero{text-align:center;margin-bottom:48px}
-.hero h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:10px}
-.hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#00C6FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:14px;color:var(--text2);font-weight:300}
+.hero{text-align:center;margin-bottom:48px;padding-top:8px}
+.hero h1{font-family:var(--font-display);font-size:clamp(36px,6vw,64px);letter-spacing:.04em;text-transform:uppercase;line-height:1;margin-bottom:10px;color:var(--steel-100)}
+.hero h1 em{font-style:normal;background:linear-gradient(160deg,var(--steel-100) 0%,var(--ice-300) 45%,var(--ice-500) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:14px;color:var(--steel-500);font-weight:300}
 
 /* CALCULATOR CARD */
-.calc-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;margin-bottom:20px;position:relative;overflow:hidden}
-.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,149,255,.4),transparent)}
+.calc-card{background:var(--bg-panel);border:1px solid var(--steel-900);border-radius:20px;padding:32px;margin-bottom:20px;position:relative;overflow:hidden}
+.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ice-500),transparent)}
 
-.section-label{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--v2);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.section-label::after{content:'';flex:1;height:1px;background:rgba(0,149,255,.15)}
+.section-label{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:.14em;color:var(--ice-500);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(127,184,232,.12)}
 
 /* PAIR SELECTOR */
 .pair-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:24px}
-.pair-btn{padding:8px 6px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .2s;text-align:center}
-.pair-btn:hover{border-color:rgba(0,149,255,.3);color:var(--text2);background:rgba(0,149,255,.06)}
-.pair-btn.active{border-color:rgba(0,149,255,.5);color:var(--v2);background:rgba(0,149,255,.12)}
+.pair-btn{padding:8px 6px;background:var(--bg-elevated);border:1px solid var(--steel-900);border-radius:8px;font-family:var(--font-mono);font-size:10px;font-weight:500;color:var(--steel-700);cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.04em}
+.pair-btn:hover{border-color:rgba(127,184,232,.3);color:var(--steel-300)}
+.pair-btn.active{border-color:var(--ice-500);color:var(--ice-300);background:rgba(127,184,232,.08)}
 
 /* CUSTOM PAIR INPUT */
 .custom-pair-wrap{position:relative;margin-bottom:24px}
-.custom-pair-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all .2s}
-.custom-pair-input:focus{border-color:rgba(0,149,255,.5);background:rgba(0,149,255,.06)}
-.custom-pair-input::placeholder{color:var(--text3)}
-#pairDropdown{display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px}
+.custom-pair-input{width:100%;background:var(--bg-elevated);border:1px solid var(--steel-900);border-radius:var(--r-md);color:var(--steel-100);padding:11px 14px;font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s}
+.custom-pair-input:focus{border-color:var(--ice-500);box-shadow:0 0 0 3px rgba(127,184,232,.1)}
+.custom-pair-input::placeholder{color:var(--steel-700)}
+#pairDropdown{display:none;position:fixed;background:var(--bg-hangar);border:1px solid rgba(127,184,232,.2);border-radius:10px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px}
 
 /* FIELDS */
 .fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
 .field{display:flex;flex-direction:column;gap:8px}
-.field-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
+.field-label{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:.1em;color:var(--steel-500);text-transform:uppercase}
 .field-input-wrap{position:relative}
-.field-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:14px 50px 14px 16px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;outline:none;transition:all .2s;-webkit-appearance:none}
-.field-input:focus{border-color:rgba(0,149,255,.5);background:rgba(0,149,255,.06)}
-.field-input::placeholder{color:var(--text3);font-size:16px;font-weight:400}
-.field-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--text3)}
+.field-input{width:100%;background:var(--bg-elevated);border:1px solid var(--steel-900);border-radius:var(--r-md);color:var(--steel-100);padding:14px 50px 14px 16px;font-family:var(--font-mono);font-size:20px;font-weight:500;outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none}
+.field-input:focus{border-color:var(--ice-500);box-shadow:0 0 0 3px rgba(127,184,232,.1)}
+.field-input::placeholder{color:var(--steel-700);font-size:16px;font-weight:400}
+.field-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:11px;color:var(--steel-500)}
 
 /* RISK SLIDER */
 .risk-wrap{margin-bottom:24px}
 .risk-display{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.risk-val{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:var(--v2)}
-.risk-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
-input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:50px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--v) var(--pct,50%),rgba(255,255,255,.08) var(--pct,50%))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 0 0 3px var(--v),0 4px 12px rgba(0,149,255,.4);cursor:pointer;transition:transform .15s}
+.risk-val{font-family:var(--font-mono);font-size:28px;font-weight:600;color:var(--ice-500)}
+.risk-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--steel-500);text-transform:uppercase}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:50px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--ice-500) var(--pct,50%),rgba(255,255,255,.06) var(--pct,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--steel-100);box-shadow:0 0 0 3px var(--ice-500),0 4px 12px rgba(127,184,232,.4);cursor:pointer;transition:transform .15s}
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .risk-presets{display:flex;gap:6px;margin-top:10px}
-.risk-preset{padding:4px 12px;background:transparent;border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
-.risk-preset:hover{border-color:rgba(0,149,255,.3);color:var(--v2)}
-.risk-preset.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
+.risk-preset{padding:4px 12px;background:transparent;border:1px solid var(--steel-900);border-radius:50px;font-family:var(--font-mono);font-size:10px;color:var(--steel-500);cursor:pointer;transition:all .18s}
+.risk-preset:hover{border-color:rgba(127,184,232,.3);color:var(--ice-300)}
+.risk-preset.on{background:rgba(127,184,232,.1);border-color:var(--ice-500);color:var(--ice-300)}
 
 /* RR DISPLAY */
-.rr-display{align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid var(--border)}
-.rr-badge{font-size:1em;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
-.rr-green{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.33)}
-.rr-orange{background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.33)}
-.rr-red{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.33)}
+.rr-display{align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--steel-900)}
+.rr-badge{font-family:var(--font-mono);font-size:1em;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
+.rr-green{background:rgba(74,222,156,.12);color:var(--signal-up);border:1px solid rgba(74,222,156,.3)}
+.rr-orange{background:rgba(232,194,104,.12);color:var(--signal-warn);border:1px solid rgba(232,194,104,.3)}
+.rr-red{background:rgba(240,100,122,.12);color:var(--signal-down);border:1px solid rgba(240,100,122,.3)}
 
 /* OPTIONAL PRICE SECTION */
-.price-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
-.price-section-title{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.price-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--steel-900)}
+.price-section-title{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--steel-500);text-transform:uppercase;margin-bottom:12px}
 .dir-toggle{display:flex;gap:8px;margin-bottom:16px}
-.dir-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .2s;letter-spacing:.03em}
-.dir-btn.long.active{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:#34D399}
-.dir-btn.short.active{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.4);color:#F87171}
-.dir-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text2)}
-.rr-warn{font-size:11px;color:#FBBF24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:6px 12px;margin-top:8px}
+.dir-btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--steel-900);background:var(--bg-elevated);font-family:var(--font-display);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel-500);cursor:pointer;transition:all .18s}
+.dir-btn.long.active{background:rgba(74,222,156,.08);border-color:rgba(74,222,156,.35);color:var(--signal-up)}
+.dir-btn.short.active{background:rgba(240,100,122,.08);border-color:rgba(240,100,122,.35);color:var(--signal-down)}
+.dir-btn:hover:not(.active){border-color:var(--steel-700);color:var(--steel-300)}
+.rr-warn{font-family:var(--font-mono);font-size:11px;color:var(--signal-warn);background:rgba(232,194,104,.08);border:1px solid rgba(232,194,104,.25);border-radius:8px;padding:6px 12px;margin-top:8px}
 
 /* CALCULATE BTN */
-.calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.3);position:relative;overflow:hidden}
-.calc-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);opacity:0;transition:opacity .2s}
-.calc-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,149,255,.45)}
+.calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--ice-600),var(--ice-500));border:none;border-radius:var(--r-lg);color:#07090C;font-family:var(--font-display);font-size:15px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(127,184,232,.25);position:relative;overflow:hidden}
+.calc-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .2s}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(127,184,232,.4)}
 .calc-btn:hover::before{opacity:1}
 
 /* RESULT */
-.result-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;display:none;animation:fadeUp .4s ease}
+.result-card{background:var(--bg-panel);border:1px solid var(--steel-900);border-radius:20px;padding:28px;display:none;animation:fadeUp .4s ease}
 .result-card.show{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 .result-main{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.result-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;transition:all .3s}
-.result-box.highlight{background:rgba(0,149,255,.08);border-color:rgba(0,149,255,.3)}
-.result-box-label{font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
-.result-box-val{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;line-height:1}
-.result-box-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.result-box{background:var(--bg-elevated);border:1px solid var(--steel-900);border-radius:14px;padding:20px;text-align:center;transition:all .3s}
+.result-box.highlight{background:rgba(127,184,232,.06);border-color:rgba(127,184,232,.3)}
+.result-box-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;color:var(--steel-500);text-transform:uppercase;margin-bottom:8px}
+.result-box-val{font-family:var(--font-mono);font-size:36px;font-weight:600;letter-spacing:-.01em;line-height:1}
+.result-box-sub{font-family:var(--font-mono);font-size:10px;color:var(--steel-500);margin-top:4px}
 
 .result-details{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.detail-item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:14px;text-align:center}
-.detail-label{font-size:9px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
-.detail-val{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:var(--text2)}
+.detail-item{background:var(--bg-elevated);border:1px solid var(--steel-900);border-radius:12px;padding:14px;text-align:center}
+.detail-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--steel-500);text-transform:uppercase;margin-bottom:6px}
+.detail-val{font-family:var(--font-mono);font-size:16px;font-weight:500;color:var(--steel-300)}
 
 .risk-bar-wrap{margin-top:16px}
-.risk-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:8px}
+.risk-bar-label{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;color:var(--steel-500);margin-bottom:8px}
 .risk-bar-track{height:6px;background:rgba(255,255,255,.06);border-radius:50px;overflow:hidden}
 .risk-bar-fill{height:100%;border-radius:50px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 
 /* TIPS */
-.tips-card{background:rgba(0,149,255,.04);border:1px solid rgba(0,149,255,.12);border-radius:16px;padding:20px}
-.tips-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--v2);text-transform:uppercase;margin-bottom:12px}
-.tip-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--text2);line-height:1.6}
+.tips-card{background:rgba(127,184,232,.03);border:1px solid rgba(127,184,232,.1);border-radius:16px;padding:20px}
+.tips-title{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;color:var(--ice-500);text-transform:uppercase;margin-bottom:12px}
+.tip-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--steel-900);font-size:12px;color:var(--steel-300);line-height:1.6}
 .tip-item:last-child{border:none}
-.tip-icon{flex-shrink:0;font-size:14px}
+.tip-icon{flex-shrink:0;width:16px;height:16px;color:var(--ice-500)}
 
 @media(max-width:640px){
   .fields-grid{grid-template-columns:1fr}
@@ -158,17 +136,15 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 </head>
 <body>
 
-<div class="bg-orb"></div>
-
 <!-- TOPBAR -->
 <header class="topbar">
-  <div style="display:flex;align-items:center;gap:10px">
+  <div style="display:flex;align-items:center;gap:12px">
     <button class="lt-hamburger" onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px">
-      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-      <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:1.5px;background:var(--steel-300);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:1.5px;background:var(--steel-300);border-radius:2px"></span>
+      <span style="display:block;width:20px;height:1.5px;background:var(--steel-300);border-radius:2px"></span>
     </button>
-    <a href="./index.html" class="topbar-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Calculateur</span></a>
+    <a href="./index.html" class="topbar-brand"><img src="./logo.jpg.webp" alt="logo" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--steel-900)">Le Terminal <span>Calculateur</span></a>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <div id="ltUserBar"></div>
@@ -179,7 +155,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
   <!-- HERO -->
   <div class="hero">
-    <h1>Calculateur de <span>Position</span></h1>
+    <h1>Calculateur de <em>Position</em></h1>
     <p>Entre ta paire, ton capital, ton risque et ton SL — obtiens ton lot exact en 1 seconde.</p>
   </div>
 
@@ -235,7 +211,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
           <div class="risk-label">du capital</div>
         </div>
         <div id="riskAmountDisplay" style="text-align:right">
-          <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;color:var(--text2)" id="riskAmount">—</div>
+          <div style="font-family:var(--font-mono);font-size:20px;font-weight:600;color:var(--steel-300)" id="riskAmount">—</div>
           <div class="risk-label">risqué</div>
         </div>
       </div>
@@ -297,11 +273,11 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
           </div>
         </div>
       </div>
-      <div id="simResult" style="display:none;background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;color:var(--text2)"></div>
+      <div id="simResult" style="display:none;background:rgba(127,184,232,.05);border:1px solid rgba(127,184,232,.15);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;color:var(--steel-300)"></div>
 
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--steel-900)">
         <div class="price-section-title" style="margin-bottom:10px">Breakeven (seuil de rentabilité)</div>
-        <div id="breakevenResult" style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px;font-size:13px;color:var(--text2);line-height:1.7"></div>
+        <div id="breakevenResult" style="background:rgba(232,194,104,.05);border:1px solid rgba(232,194,104,.2);border-radius:10px;padding:12px;font-size:13px;color:var(--steel-300);line-height:1.7"></div>
       </div>
     </div>
 
@@ -315,7 +291,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <div class="result-main">
       <div class="result-box highlight">
         <div class="result-box-label">Taille de lot</div>
-        <div class="result-box-val" id="resLot" style="color:var(--v2)">—</div>
+        <div class="result-box-val" id="resLot" style="color:var(--ice-400,var(--ice-500))">—</div>
         <div class="result-box-sub" id="resLotType">lots standard</div>
       </div>
       <div class="result-box">
@@ -329,7 +305,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       <div class="detail-item">
         <div class="detail-label">Valeur pip</div>
         <div class="detail-val" id="resPipVal">—</div>
-        <div style="font-size:9px;color:var(--text3);margin-top:3px" id="resPipNote"></div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--steel-500);margin-top:3px" id="resPipNote"></div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Paire</div>
@@ -355,17 +331,29 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
   <!-- TIPS -->
   <div class="tips-card" style="margin-top:20px">
-    <div class="tips-title">💡 Règles de gestion du risque ICT</div>
-    <div class="tip-item"><span class="tip-icon">🎯</span><span>Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les traders professionnels restent souvent sous 1%.</span></div>
-    <div class="tip-item"><span class="tip-icon">📐</span><span>Ton SL doit être placé sous/sur un niveau de structure logique (OB, FVG, swing high/low) — jamais un montant fixe en pips.</span></div>
-    <div class="tip-item"><span class="tip-icon">⚡</span><span>Pour un RR de 2:1 minimum, ton TP doit être au moins 2× la distance de ton SL. C'est la base d'une espérance positive.</span></div>
-    <div class="tip-item"><span class="tip-icon">🔄</span><span>Ajuste toujours ta taille de position en fonction du SL — pas l'inverse. Le lot découle du risque, jamais l'inverse.</span></div>
+    <div class="tips-title">Règles de gestion du risque ICT</div>
+    <div class="tip-item">
+      <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span>Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les traders professionnels restent souvent sous 1%.</span>
+    </div>
+    <div class="tip-item">
+      <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M12 3v18"/><path d="M3 3l18 18"/></svg>
+      <span>Ton SL doit être placé sous/sur un niveau de structure logique (OB, FVG, swing high/low) — jamais un montant fixe en pips.</span>
+    </div>
+    <div class="tip-item">
+      <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      <span>Pour un RR de 2:1 minimum, ton TP doit être au moins 2× la distance de ton SL. C'est la base d'une espérance positive.</span>
+    </div>
+    <div class="tip-item">
+      <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+      <span>Ajuste toujours ta taille de position en fonction du SL — pas l'inverse. Le lot découle du risque, jamais l'inverse.</span>
+    </div>
   </div>
 
 </div>
 
 <!-- PAIR DROPDOWN (body level) -->
-<div id="pairDropdown" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:220px"></div>
+<div id="pairDropdown" style="display:none;position:fixed;background:var(--bg-hangar);border:1px solid rgba(127,184,232,.2);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:220px"></div>
 
 <script>
 // ── STATE ──
@@ -564,11 +552,11 @@ function calcRR() {
   var profitHtml = '';
   if (riskEur !== null) {
     var profitVal = (riskEur * ratio).toFixed(2);
-    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--text2)">Profit attendu : <strong style="color:'+(ratio>=1?'#34D399':'#F87171')+'">' + profitVal + curSym() + '</strong></span>';
+    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--steel-300)">Profit attendu : <strong style="color:'+(ratio>=1?'var(--signal-up)':'var(--signal-down)')+'">' + profitVal + curSym() + '</strong></span>';
   }
   rrDisplay.style.display = 'flex';
   rrDisplay.innerHTML =
-    '<span style="font-size:.8em;color:var(--text3);margin-right:4px">' + dirLabel + '</span>' +
+    '<span style="font-family:var(--font-mono);font-size:.8em;color:var(--steel-500);margin-right:4px">' + dirLabel + '</span>' +
     '<span class="rr-badge ' + colorClass + '">RR 1:' + ratio.toFixed(2) + '</span>' +
     profitHtml;
 }
@@ -659,8 +647,8 @@ function calculate() {
   document.getElementById('riskBarFill').style.background = barColor;
 
   // Lot color
-  var lotColor = parseFloat(displayLot) >= 1 ? 'var(--text)' :
-                 parseFloat(displayLot) >= 0.1 ? 'var(--v2)' : 'var(--green)';
+  var lotColor = parseFloat(displayLot) >= 1 ? 'var(--steel-100)' :
+                 parseFloat(displayLot) >= 0.1 ? 'var(--ice-500)' : 'var(--signal-up)';
   document.getElementById('resLot').style.color = lotColor;
 
   runSimulator();
@@ -676,9 +664,9 @@ function onCustomPairInput(val) {
   if(!matches.length) { box.style.display='none'; return; }
   box.innerHTML = matches.map(function(p){
     var hasPip = PIP_DATA[p];
-    return '<div onclick="chooseCustomPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between" onmouseover="this.style.background=\'rgba(0,149,255,.1)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">' +
-      '<span>'+(p===v?'<strong style=\'color:var(--v2)\'>'+p+'</strong>':p)+'</span>' +
-      (hasPip?'<span style=\'font-size:10px;color:var(--text3)\'>'+hasPip.pipVal+'$/lot</span>':'') +
+    return '<div onclick="chooseCustomPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:500;color:var(--steel-300);transition:background .15s;border-bottom:1px solid var(--steel-900);display:flex;align-items:center;justify-content:space-between" onmouseover="this.style.background=\'rgba(127,184,232,.08)\';this.style.color=\'var(--steel-100)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--steel-300)\'">' +
+      '<span>'+(p===v?'<strong style=\'color:var(--ice-500)\'>'+p+'</strong>':p)+'</span>' +
+      (hasPip?'<span style=\'font-family:var(--font-mono);font-size:10px;color:var(--steel-500)\'>'+hasPip.pipVal+'$/lot</span>':'') +
     '</div>';
   }).join('');
   var rect = inp.getBoundingClientRect();
@@ -724,9 +712,9 @@ function runSimulator(){
       var beWR = Math.round((1/(1+rr))*100);
       return 'RR 1:'+rr+' → win rate minimum : <strong>'+beWR+'%</strong>';
     });
-    bkRes.innerHTML = beLines.join('<br>') + '<br><span style="color:var(--text3);font-size:11px">En dessous de ce seuil tu perds de l\'argent sur le long terme</span>';
+    bkRes.innerHTML = beLines.join('<br>') + '<br><span style="color:var(--steel-500);font-size:11px">En dessous de ce seuil tu perds de l\'argent sur le long terme</span>';
   } else {
-    bkRes.innerHTML = '<span style="color:var(--text3)">Entre ta taille de compte pour calculer le breakeven.</span>';
+    bkRes.innerHTML = '<span style="color:var(--steel-500)">Entre ta taille de compte pour calculer le breakeven.</span>';
   }
 
   if(isNaN(tradesPerWeek)||isNaN(target)||tradesPerWeek<=0||target<=0||riskAmt<=0){
@@ -743,9 +731,9 @@ function runSimulator(){
   simRes.style.display='block';
   simRes.innerHTML =
     'Pour atteindre <strong>'+target+curSym()+'</strong> à <strong>'+tradesPerWeek+' trades/semaine</strong> :<br>' +
-    '→ <strong style="color:var(--v2)">'+(weeksNeeded<=52?weeksNeeded+' semaines':monthsNeeded+' mois')+'</strong> (hypothèse : 60% WR, RR 1.5)<br>' +
+    '→ <strong style="color:var(--ice-500)">'+(weeksNeeded<=52?weeksNeeded+' semaines':monthsNeeded+' mois')+'</strong> (hypothèse : 60% WR, RR 1.5)<br>' +
     '→ Gain moyen par trade : <strong>'+(riskAmt*defaultExpectancy).toFixed(2)+curSym()+'</strong><br>' +
-    '<span style="font-size:11px;color:var(--text3)">Simulation conservative — vos résultats réels varieront selon votre edge</span>';
+    '<span style="font-size:11px;color:var(--steel-500)">Simulation conservative — vos résultats réels varieront selon votre edge</span>';
 }
 
 // ── INIT ──
