@@ -2729,12 +2729,12 @@ async function loadHistory(){
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();
     if(Array.isArray(data)&&data.length){
-      // Remplace avec les données Supabase (source de vérité) + entrées locales récentes non encore sync
-      var apiIds=new Set(data.map(function(h){return String(h.id);}));
-      var localOnly=historyData.filter(function(h){
-        return !apiIds.has(String(h.id))&&!/^\d{10,}$/.test(String(h.id))===false;
-      });
-      var merged=data.concat(localOnly).filter(function(h){return !_deletedIds.has(String(h.id));});
+      // Filtrer les entrées Supabase incomplètes (score null = sync raté)
+      var validApi=data.filter(function(h){return h.score!=null;});
+      // Garder toutes les entrées locales qui ne sont pas dans Supabase (valides ou timestamp)
+      var apiIds=new Set(validApi.map(function(h){return String(h.id);}));
+      var localOnly=historyData.filter(function(h){return !apiIds.has(String(h.id));});
+      var merged=validApi.concat(localOnly).filter(function(h){return !_deletedIds.has(String(h.id));});
       merged.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
       historyData=merged;
       _saveLocalHistory();
