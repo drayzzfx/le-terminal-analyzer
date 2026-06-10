@@ -1,13 +1,13 @@
 const https = require('https');
 
-function supabaseRequest(method, path, body, key) {
+function supabaseRequest(method, path, body, apiKey, authToken) {
   const url = new URL(process.env.SUPABASE_URL);
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
     const headers = {
       'Content-Type': 'application/json',
-      'apikey': key,
-      'Authorization': `Bearer ${key}`,
+      'apikey': apiKey,
+      'Authorization': `Bearer ${authToken || apiKey}`,
     };
     if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
     const options = { hostname: url.hostname, path, method, headers };
@@ -63,6 +63,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const ANON_KEY = process.env.SUPABASE_ANON_KEY;
+  const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
   const WHOP_API_KEY = process.env.WHOP_API_KEY;
   const authHeader = req.headers.authorization || '';
   const token = authHeader.replace('Bearer ', '');
@@ -70,19 +71,19 @@ module.exports = async function handler(req, res) {
   if (!token) return res.status(401).json({ is_pro: false });
 
   try {
-    // Get user from Supabase
+    // Get user from Supabase using the user's JWT
     const userRes = await supabaseRequest('GET', '/auth/v1/user', null, ANON_KEY, token);
     const userId = userRes.body?.id;
     const userEmail = userRes.body?.email;
 
     if (!userId || !userEmail) return res.status(200).json({ is_pro: false });
 
-    // Check user_profiles table
+    // Check user_profiles table using SERVICE_KEY to bypass RLS
     const profileRes = await supabaseRequest(
       'GET',
       `/rest/v1/user_profiles?id=eq.${userId}&select=is_pro,whop_status`,
       null,
-      ANON_KEY
+      SERVICE_KEY
     );
 
     if (profileRes.body && profileRes.body.length > 0 && profileRes.body[0].is_pro) {
@@ -94,16 +95,15 @@ module.exports = async function handler(req, res) {
       'GET',
       `/rest/v1/pending_activations?email=eq.${encodeURIComponent(userEmail.toLowerCase())}&is_pro=eq.true`,
       null,
-      ANON_KEY
+      SERVICE_KEY
     );
 
     if (pendingRes.body && pendingRes.body.length > 0) {
-      // Activate and move from pending to profile
       await supabaseRequest(
         'POST',
         '/rest/v1/user_profiles',
         { id: userId, email: userEmail, is_pro: true, whop_status: 'active' },
-        ANON_KEY
+        SERVICE_KEY
       );
       return res.status(200).json({ is_pro: true, source: 'pending_activation' });
     }
@@ -112,12 +112,11 @@ module.exports = async function handler(req, res) {
     if (WHOP_API_KEY) {
       const whopIsPro = await checkWhopDirect(userEmail, WHOP_API_KEY);
       if (whopIsPro) {
-        // Save to Supabase for next time
         await supabaseRequest(
           'POST',
           '/rest/v1/user_profiles',
           { id: userId, email: userEmail, is_pro: true, whop_status: 'active' },
-          ANON_KEY
+          SERVICE_KEY
         );
         return res.status(200).json({ is_pro: true, source: 'whop_api' });
       }
