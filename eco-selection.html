@@ -206,6 +206,35 @@
     return out;
   }
 
+  // ── Archive item (liste compacte — même style que les autres pages) ──────
+  function buildArchiveItem(item, idx) {
+    var l = getLang();
+    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+    var bias = l === 'en' ? sent.en : sent.fr;
+    var biasHtml = sent.cls
+      ? '<span class="bias ' + sent.cls + '" style="font-size:10px;padding:2px 8px">' + bias + '</span>'
+      : '';
+    var url   = articleUrl(item);
+    var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var src   = (item.source || '').replace(/</g,'&lt;');
+    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : 'Éco';
+    var d = new Date(item.published_at);
+    var now = new Date();
+    var isToday = d.toDateString() === now.toDateString();
+    var dateStr = isToday
+      ? 'Aujourd\'hui ' + fmt(item.published_at)
+      : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' · ' + fmt(item.published_at);
+
+    return '<a class="eco-arch-item" href="' + url + '" style="--i:' + idx + '">'
+      + '<div class="eco-arch-item__meta">'
+      + '<span class="eco-arch-item__time">' + dateStr + '</span>'
+      + '<span class="eco-arch-item__src">' + zone + ' · ' + src + '</span>'
+      + biasHtml
+      + '</div>'
+      + '<p class="eco-arch-item__title">' + title + '</p>'
+      + '</a>';
+  }
+
   // ── Construction d'une carte ─────────────────────────────────────────────
   function buildCard(item, idx, rank) {
     var l = getLang();
@@ -243,8 +272,9 @@
 
   // ── Chargement depuis toutes les zones ───────────────────────────────────
   async function loadSelection() {
-    var grid = document.getElementById('sel-grid');
-    var sub  = document.getElementById('sel-sub');
+    var grid    = document.getElementById('sel-grid');
+    var sub     = document.getElementById('sel-sub');
+    var archSec = document.querySelector('.eco-archives');
 
     // Fetch toutes les zones en parallèle
     var results = await Promise.allSettled(
@@ -252,7 +282,6 @@
         return fetch('/api/news?zone=' + zone + '&limit=20')
           .then(function(r) { return r.ok ? r.json() : { items: [] }; })
           .then(function(d) {
-            // Attache le nom de zone à chaque article
             return (d.items || []).map(function(item) {
               item.zone = item.zone || zone;
               return item;
@@ -267,32 +296,78 @@
       if (r.status === 'fulfilled') allItems = allItems.concat(r.value);
     });
 
-    // Filtre les articles > 48h (trop vieux pour la sélection)
-    var cutoff = Date.now() - 48 * 3600 * 1000;
-    allItems = allItems.filter(function(i) {
-      return new Date(i.published_at).getTime() > cutoff;
+    // Sépare en : récent (< 4h) et archives (4h–48h)
+    var FOUR_H = 4 * 3600 * 1000;
+    var FORTYEIGHT_H = 48 * 3600 * 1000;
+    var now = Date.now();
+    var recent  = allItems.filter(function(i) { return (now - new Date(i.published_at).getTime()) < FOUR_H; });
+    var archive = allItems.filter(function(i) {
+      var age = now - new Date(i.published_at).getTime();
+      return age >= FOUR_H && age < FORTYEIGHT_H;
     });
 
-    // Score, déduplique et trie
-    allItems = allItems.map(function(i) { i._score = scoreItem(i); return i; });
-    allItems.sort(function(a, b) { return b._score - a._score; });
-    var top = dedupe(allItems).slice(0, 9);
+    // Score + déduplique les deux groupes séparément
+    function sortAndDedupe(items, limit) {
+      items = items.map(function(i) { i._score = scoreItem(i); return i; });
+      items.sort(function(a, b) { return b._score - a._score; });
+      return dedupe(items).slice(0, limit);
+    }
 
+    // Le pool principal = récent en priorité, sinon on complète avec archives
+    var pool = sortAndDedupe(recent.length >= 3 ? recent : allItems.filter(function(i) {
+      return (now - new Date(i.published_at).getTime()) < FORTYEIGHT_H;
+    }), 9);
+
+    var archiveTop = sortAndDedupe(archive, 30);
+
+    // ── Section principale (top picks) ───────────────────────────────────
     if (grid) {
-      if (top.length === 0) {
+      if (pool.length === 0) {
         grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--text3);font-size:13px">Aucune annonce disponible pour l\'instant. Le bot collecte les articles toutes les 30 min.</div>';
       } else {
-        grid.innerHTML = top.map(function(item, i) { return buildCard(item, i, i + 1); }).join('');
+        grid.innerHTML = pool.map(function(item, i) { return buildCard(item, i, i + 1); }).join('');
       }
     }
 
     if (sub) {
-      var n = top.length;
+      var n = pool.length;
       var l = getLang();
       sub.textContent = l === 'en'
         ? n + ' article' + (n > 1 ? 's' : '') + ' · scored across ' + ALL_ZONES.length + ' zones'
         : n + ' annonce' + (n > 1 ? 's' : '') + ' · scorées sur ' + ALL_ZONES.length + ' zones';
       sub.removeAttribute('data-en');
+    }
+
+    // ── Section Annonces précédentes ─────────────────────────────────────
+    if (archSec) {
+      var archHeader = archSec.querySelector('.block__head');
+      var archSub    = archHeader ? archHeader.querySelector('.block__sub') : null;
+
+      // Crée ou réutilise la liste
+      var archList = archSec.querySelector('.eco-archives__list');
+      if (!archList) {
+        archList = document.createElement('div');
+        archList.className = 'eco-archives__list';
+        archSec.appendChild(archList);
+        var oldEmpty = archSec.querySelector('.eco-empty');
+        if (oldEmpty) oldEmpty.remove();
+      }
+
+      // Met à jour le sous-titre
+      if (archSub) {
+        var l2 = getLang();
+        var na = archiveTop.length;
+        archSub.textContent = na > 0
+          ? (l2 === 'en' ? na + ' announcement' + (na > 1 ? 's' : '') + ' · last 48h' : na + ' annonce' + (na > 1 ? 's' : '') + ' · dernières 48h')
+          : (l2 === 'en' ? 'No archives yet' : 'Aucune archive pour l\'instant');
+        archSub.removeAttribute('data-en');
+      }
+
+      if (archiveTop.length > 0) {
+        archList.innerHTML = archiveTop.map(function(item, i) { return buildArchiveItem(item, i); }).join('');
+      } else {
+        archList.innerHTML = '<p style="font-size:13px;color:var(--text3);padding:20px 0">Les annonces publiées il y a plus de 4 heures apparaîtront ici automatiquement.</p>';
+      }
     }
   }
 
