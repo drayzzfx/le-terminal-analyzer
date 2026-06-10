@@ -206,6 +206,41 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 .lightbox.show{display:flex}
 .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;border:1px solid var(--border)}
 
+/* BROKER BANNER */
+.broker-banner{border-radius:16px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.broker-banner.disconnected{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2)}
+.broker-banner.connected{background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2)}
+.broker-banner.syncing{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2)}
+.broker-banner-left{display:flex;align-items:center;gap:12px}
+.broker-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.broker-banner.disconnected .broker-icon{background:rgba(0,149,255,.12)}
+.broker-banner.connected .broker-icon{background:rgba(52,211,153,.12)}
+.broker-banner.syncing .broker-icon{background:rgba(251,191,36,.12)}
+.broker-banner-text{}
+.broker-banner-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px}
+.broker-banner-sub{font-size:11px;color:var(--text3)}
+.broker-banner-actions{display:flex;gap:8px;flex-shrink:0}
+.broker-connect-btn{padding:8px 18px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.broker-connect-btn:hover{background:#0070CC}
+.broker-sync-btn{padding:8px 18px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:50px;color:var(--green);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.broker-sync-btn:hover{background:rgba(52,211,153,.25)}
+.broker-sync-btn:disabled{opacity:.5;cursor:not-allowed}
+.broker-disconnect-btn{padding:8px 14px;background:transparent;border:1px solid rgba(248,113,113,.25);border-radius:50px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
+.broker-disconnect-btn:hover{background:rgba(248,113,113,.1)}
+
+/* BROKER MODAL */
+.broker-modal{max-width:480px}
+.broker-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.broker-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--v3);text-transform:uppercase}
+.broker-field input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
+.broker-field input:focus{border-color:rgba(0,149,255,.5)}
+.broker-field input::placeholder{color:var(--text3)}
+.broker-steps{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.15);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.8}
+.broker-steps b{color:var(--v2)}
+.broker-steps a{color:var(--v2);text-decoration:none}
+.broker-steps a:hover{text-decoration:underline}
+.broker-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
+
 /* AUTH */
 .auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
@@ -289,6 +324,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   </div>
 
 
+
+  <!-- BROKER BANNER -->
+  <div class="broker-banner disconnected" id="brokerBanner">
+    <div class="broker-banner-left">
+      <div class="broker-icon" id="brokerIcon">📡</div>
+      <div class="broker-banner-text">
+        <div class="broker-banner-title" id="brokerTitle">Connecte ton compte MT5</div>
+        <div class="broker-banner-sub" id="brokerSub">Sync automatique de tes trades via MetaApi</div>
+      </div>
+    </div>
+    <div class="broker-banner-actions" id="brokerActions">
+      <button class="broker-connect-btn" onclick="openBrokerModal()">Connecter MT5</button>
+    </div>
+  </div>
 
   <!-- ADD TRADE -->
   <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
@@ -441,6 +490,34 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <!-- IMAGE LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- BROKER MODAL -->
+<div class="modal-overlay" id="brokerModal">
+  <div class="modal-box broker-modal">
+    <button class="modal-close" onclick="closeBrokerModal()">✕</button>
+    <div class="modal-title">Connecter MT5 via MetaApi</div>
+    <div class="modal-sub">Sync automatique de ton historique de trades</div>
+
+    <div class="broker-steps">
+      <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
+      <b>2.</b> Ajoute ton compte MT5 (broker + login + password)<br>
+      <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+    </div>
+
+    <div class="broker-field">
+      <label>Auth Token MetaApi</label>
+      <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+    </div>
+    <div class="broker-field">
+      <label>Account ID</label>
+      <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+    </div>
+    <div class="broker-error" id="brokerError"></div>
+    <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
+      <span id="brokerSaveTxt">Connecter et synchroniser</span>
+    </button>
+  </div>
 </div>
 
 <!-- AUTH MODAL -->
@@ -1284,6 +1361,7 @@ async function checkSession() {
       updateUserUI();
       await syncAllLocalTrades();
       loadFromServer();
+      loadBrokerStatus();
     } else if(data.error) {
       authToken = null; currentUser = null;
       localStorage.removeItem('ta_token');
@@ -1297,6 +1375,148 @@ setCurrency(currency);
 renderStats();
 renderCalendar();
 checkSession();
+
+// ── BROKER CONNECTION ──
+var brokerConnected = false;
+
+function openBrokerModal() {
+  document.getElementById('brokerTokenInput').value = '';
+  document.getElementById('brokerAccountInput').value = '';
+  document.getElementById('brokerError').textContent = '';
+  document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+  document.getElementById('brokerSaveBtn').disabled = false;
+  document.getElementById('brokerModal').classList.add('show');
+}
+function closeBrokerModal() {
+  document.getElementById('brokerModal').classList.remove('show');
+}
+
+async function saveBrokerConnection() {
+  var token = document.getElementById('brokerTokenInput').value.trim();
+  var accountId = document.getElementById('brokerAccountInput').value.trim();
+  var errEl = document.getElementById('brokerError');
+  errEl.textContent = '';
+  if (!token || !accountId) { errEl.textContent = 'Remplis les deux champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+
+  var btn = document.getElementById('brokerSaveBtn');
+  btn.disabled = true;
+  document.getElementById('brokerSaveTxt').textContent = 'Vérification…';
+
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+
+    brokerConnected = true;
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, accountName: data.accountName, lastSyncAt: null });
+
+    // Lance une première sync immédiatement
+    syncBroker();
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau';
+    btn.disabled = false;
+    document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+async function syncBroker() {
+  if (!authToken) return;
+  setBrokerSyncing(true);
+  try {
+    var res = await fetch('/api/sync-broker', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken }
+    });
+    var data = await res.json();
+    if (res.ok && data.ok) {
+      var msg = data.synced + ' nouveau' + (data.synced > 1 ? 'x' : '') + ' trade' + (data.synced > 1 ? 's' : '') + ' importé' + (data.synced > 1 ? 's' : '');
+      if (data.synced === 0) msg = 'Journal à jour';
+      updateBrokerBanner({ connected: true, accountName: null, lastSyncAt: new Date().toISOString(), syncMsg: msg });
+      if (data.synced > 0) loadFromServer();
+    } else {
+      updateBrokerBanner({ connected: true, accountName: null, lastSyncAt: null, syncMsg: data.error || 'Erreur sync' });
+    }
+  } catch(e) {
+    updateBrokerBanner({ connected: true, lastSyncAt: null, syncMsg: 'Erreur réseau' });
+  }
+  setBrokerSyncing(false);
+}
+
+async function disconnectBroker() {
+  if (!authToken) return;
+  if (!confirm('Déconnecter le compte MT5 ?')) return;
+  await fetch('/api/broker-connect', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + authToken } });
+  brokerConnected = false;
+  updateBrokerBanner({ connected: false });
+}
+
+function setBrokerSyncing(on) {
+  var banner = document.getElementById('brokerBanner');
+  var btn = document.getElementById('brokerSyncBtn');
+  if (on) {
+    banner.className = 'broker-banner syncing';
+    document.getElementById('brokerIcon').textContent = '🔄';
+    document.getElementById('brokerTitle').textContent = 'Synchronisation en cours…';
+    if (btn) btn.disabled = true;
+  } else {
+    banner.className = 'broker-banner connected';
+    document.getElementById('brokerIcon').textContent = '✅';
+    if (btn) btn.disabled = false;
+  }
+}
+
+function updateBrokerBanner(info) {
+  var banner = document.getElementById('brokerBanner');
+  var titleEl = document.getElementById('brokerTitle');
+  var subEl = document.getElementById('brokerSub');
+  var actionsEl = document.getElementById('brokerActions');
+
+  if (!info.connected) {
+    banner.className = 'broker-banner disconnected';
+    document.getElementById('brokerIcon').textContent = '📡';
+    titleEl.textContent = 'Connecte ton compte MT5';
+    subEl.textContent = 'Sync automatique de tes trades via MetaApi';
+    actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter MT5</button>';
+    return;
+  }
+
+  banner.className = 'broker-banner connected';
+  document.getElementById('brokerIcon').textContent = '✅';
+  titleEl.textContent = info.accountName ? 'MT5 · ' + info.accountName : 'MT5 connecté';
+  if (info.syncMsg) {
+    subEl.textContent = info.syncMsg;
+  } else if (info.lastSyncAt) {
+    var d = new Date(info.lastSyncAt);
+    subEl.textContent = 'Dernière sync : ' + d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+  } else {
+    subEl.textContent = 'Prêt à synchroniser';
+  }
+  actionsEl.innerHTML =
+    '<button class="broker-sync-btn" id="brokerSyncBtn" onclick="syncBroker()">↻ Sync</button>' +
+    '<button class="broker-disconnect-btn" onclick="disconnectBroker()">Déconnecter</button>';
+}
+
+async function loadBrokerStatus() {
+  if (!authToken) return;
+  try {
+    var res = await fetch('/api/broker-connect', { headers: { 'Authorization': 'Bearer ' + authToken } });
+    var data = await res.json();
+    if (data.connected) {
+      brokerConnected = true;
+      updateBrokerBanner({ connected: true, accountName: data.accountName, lastSyncAt: data.lastSyncAt });
+      // Auto-sync si pas synced depuis > 5min
+      if (!data.lastSyncAt || (Date.now() - new Date(data.lastSyncAt).getTime()) > 5 * 60 * 1000) {
+        syncBroker();
+      }
+    }
+  } catch(e) {}
+}
 </script>
 
 <div id="journalPairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
