@@ -2697,25 +2697,52 @@ async function confirmOk(){
 }
 window.closeConfirm=closeConfirm;
 window.confirmOk=confirmOk;
+// Synchronise les analyses locales (id timestamp) vers Supabase
+async function syncLocalToSupabase(){
+  if(!authToken||!Array.isArray(historyData)||!historyData.length)return;
+  var unsynced=historyData.filter(function(h){
+    var id=String(h.id);
+    return /^\d{10,}$/.test(id); // ID timestamp = non encore sync
+  });
+  for(var i=0;i<unsynced.length;i++){
+    var h=unsynced[i];
+    try{
+      await fetch('/api/history',{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+        body:JSON.stringify({pair:h.pair,direction:h.direction,tf:h.tf,
+          score:h.score,verdict:h.verdict,scoreLabel:h.score_label,
+          forces:h.forces,faiblesses:h.faiblesses,
+          recommandations:h.recommandations,macro:h.macro,
+          scenarios:[],annotations:[]})});
+    }catch(e){}
+  }
+}
+
 async function loadHistory(){
   if(!authToken){
-    // Pas connecté : on rend depuis localStorage (déjà chargé au démarrage)
     renderHistory();renderHistoryGrid();return;
   }
   try{
+    // Sync d'abord les analyses locales non encore envoyées
+    await syncLocalToSupabase();
     var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});
+    if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();
     if(Array.isArray(data)&&data.length){
-      // Fusionner les données Supabase avec celles en mémoire (garder les entrées locales non encore sync)
+      // Remplace avec les données Supabase (source de vérité) + entrées locales récentes non encore sync
       var apiIds=new Set(data.map(function(h){return String(h.id);}));
-      var localOnly=historyData.filter(function(h){return !apiIds.has(String(h.id));});
-      var merged=localOnly.concat(data).filter(function(h){return !_deletedIds.has(String(h.id));});
+      var localOnly=historyData.filter(function(h){
+        return !apiIds.has(String(h.id))&&!/^\d{10,}$/.test(String(h.id))===false;
+      });
+      var merged=data.concat(localOnly).filter(function(h){return !_deletedIds.has(String(h.id));});
       merged.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
       historyData=merged;
       _saveLocalHistory();
+    } else if(Array.isArray(data)&&data.length===0){
+      // Supabase retourne vide — on garde localStorage
     }
     renderHistory();renderHistoryGrid();
-  }catch(e){renderHistory();renderHistoryGrid();}
+  }catch(e){console.warn('[loadHistory]',e.message);renderHistory();renderHistoryGrid();}
 }
 function renderHistory(){
   if(!Array.isArray(historyData)) historyData=[];
