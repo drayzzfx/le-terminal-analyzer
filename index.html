@@ -559,7 +559,7 @@ fetch('/api/config').then(function(r){return r.json();}).then(function(d){_sbUrl
         authToken=token;currentUser=data;
         localStorage.setItem('ta_token',token);
         localStorage.setItem('ta_email',data.email||'');
-        startTrial();updateUserUI();updateTrialBadge();
+        startTrial();updateUserUI();syncTrialFromSupabase();updateTrialBadge();
         document.getElementById('welcomeMsg').style.display='block';
         setTimeout(function(){document.getElementById('welcomeMsg').style.display='none';},4000);
       }
@@ -628,7 +628,37 @@ function getTrialStatus(){
   var elapsed=Date.now()-parseInt(created);
   return elapsed<TRIAL_DURATION?'trial':'expired';
 }
-function startTrial(){if(!localStorage.getItem('ta_trial_start'))localStorage.setItem('ta_trial_start',Date.now().toString());}
+function startTrial(){
+  if(!localStorage.getItem('ta_trial_start')){
+    var ts=Date.now().toString();
+    localStorage.setItem('ta_trial_start',ts);
+    // Save to Supabase so trial is consistent across devices
+    if(authToken){
+      fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({trial_start:parseInt(ts)})}).catch(function(){});
+    }
+  }
+}
+async function syncTrialFromSupabase(){
+  if(!authToken)return;
+  try{
+    var r=await fetch('/api/profile',{headers:{'Authorization':'Bearer '+authToken}});
+    var data=await r.json();
+    if(data.trial_start){
+      var local=localStorage.getItem('ta_trial_start');
+      // Use whichever is older (first usage wins)
+      if(!local||parseInt(local)>data.trial_start){
+        localStorage.setItem('ta_trial_start',data.trial_start.toString());
+        updateTrialBadge();
+      }else if(parseInt(local)<data.trial_start){
+        // Local is older — push it to Supabase
+        fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({trial_start:parseInt(local)})}).catch(function(){});
+      }
+    }else if(localStorage.getItem('ta_trial_start')){
+      // No Supabase record yet — push local
+      fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({trial_start:parseInt(localStorage.getItem('ta_trial_start'))})}).catch(function(){});
+    }
+  }catch(e){}
+}
 function checkFeatureAccess(e){
   var status=getTrialStatus();
   if(!authToken){e.preventDefault();e.stopPropagation();openAuth();return false;}
@@ -643,7 +673,7 @@ async function checkSession(){
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
     var data=await res.json();
-    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();}
+    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();syncTrialFromSupabase();}
     else if(data.error){authToken=null;currentUser=null;localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');updateUserUI();}
   }catch(e){updateUserUI();}
 }
