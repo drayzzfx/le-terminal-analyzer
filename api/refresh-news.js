@@ -139,28 +139,37 @@ async function logFeedError(source, url, error) {
 }
 
 // ── CLAUDE SUMMARY (FR + EN, 3 sentiments) ───────────────────────────────────
+// Pour la zone "flash" : champ supplémentaire market_moving (50+ pts SP500/DAX/Nasdaq)
 async function getSummaryAndSentiment(title, desc, zone) {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) return { summary: '', summary_en: '', sentiment: 'Neutre' };
+  if (!ANTHROPIC_API_KEY) return { summary: '', summary_en: '', sentiment: 'Neutre', market_moving: true };
 
+  const isFlash = zone === 'flash';
   const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 400);
-  const prompt = `Tu es un analyste financier senior. Voici un article économique.
 
-Titre original : ${title}
-Contenu brut : ${cleanDesc}
-Zone géographique : ${zone}
+  const flashExtra = isFlash ? `
+- "market_moving": true UNIQUEMENT si cette annonce est susceptible de faire bouger un indice majeur (SP500, DAX, Nasdaq, CAC40) de plus de 50 points à elle seule. Exemples qui passent : chiffre CPI/NFP très surprenant, décision de taux inattendue, faillite majeure, discours Powell hawkish/dovish fort, guerre/escalade géopolitique, tariff surprise. Exemples qui NE passent PAS : article d'opinion, analyse sans chiffre, news connue d'avance, rappel d'une décision déjà prise.` : '';
 
-Réponds UNIQUEMENT en JSON strict, sans markdown ni texte autour :
+  const flashField = isFlash ? `,
+  "market_moving": <true|false>` : '';
+
+  const prompt = `Tu es un trader institutionnel senior. Voici un article économique.
+
+Titre : ${title}
+Contenu : ${cleanDesc}
+Zone : ${zone}
+
+Réponds UNIQUEMENT en JSON strict, sans markdown :
 {
   "summary_fr": "<résumé factuel 1-2 phrases en FRANÇAIS>",
-  "summary_en": "<same factual summary 1-2 sentences in ENGLISH>",
-  "sentiment": "<Positif|Négatif|Neutre>"
+  "summary_en": "<same 1-2 sentences in ENGLISH>",
+  "sentiment": "<Positif|Négatif|Neutre>"${flashField}
 }
 
 Règles sentiment :
 - Positif : données meilleures qu'attendu, hausse marchés, accord commercial, croissance, emploi fort
 - Négatif : données décevantes, baisse marchés, crise, récession, conflit, faillite
-- Neutre : statu quo, simple publication de données sans surprise, déclaration sans impact clair`;
+- Neutre : statu quo, publication sans surprise, déclaration sans impact clair${flashExtra}`;
 
   const payload = JSON.stringify({
     model: 'claude-haiku-4-5',
@@ -191,9 +200,10 @@ Règles sentiment :
           let sentiment = parsed.sentiment || 'Neutre';
           if (!['Positif','Négatif','Neutre'].includes(sentiment)) sentiment = 'Neutre';
           resolve({
-            summary:    parsed.summary_fr || parsed.summary || '',
-            summary_en: parsed.summary_en || '',
+            summary:      parsed.summary_fr || parsed.summary || '',
+            summary_en:   parsed.summary_en || '',
             sentiment,
+            market_moving: parsed.market_moving !== false, // true par défaut pour zones non-flash
           });
         } catch(e) { resolve({ summary: '', summary_en: '', sentiment: 'Neutre' }); }
       });
@@ -233,7 +243,10 @@ module.exports = async function handler(req, res) {
             if (age > 48 * 3600 * 1000) { stats.skipped++; continue; }
           }
 
-          const { summary, summary_en, sentiment } = await getSummaryAndSentiment(item.title, item.desc, zone);
+          const { summary, summary_en, sentiment, market_moving } = await getSummaryAndSentiment(item.title, item.desc, zone);
+
+          // Zone flash : filtre strict — uniquement les annonces pouvant bouger les marchés de 50+ pts
+          if (zone === 'flash' && !market_moving) { stats.skipped++; continue; }
 
           await insertNewsItem({
             guid: item.guid,
