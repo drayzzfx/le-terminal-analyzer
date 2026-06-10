@@ -1272,6 +1272,15 @@ async function checkSession() {
     if(data.id) {
       currentUser = data;
       localStorage.setItem('ta_email', data.email||'');
+      // Clear local data if a different account logged in
+      var storedUid = localStorage.getItem('ta_user_id');
+      if(storedUid && storedUid !== data.id) {
+        trades = [];
+        localStorage.removeItem('jnl_trades');
+        localStorage.removeItem('ta_user_id');
+        renderStats(); renderCalendar();
+      }
+      localStorage.setItem('ta_user_id', data.id);
       updateUserUI();
       await syncAllLocalTrades();
       loadFromServer();

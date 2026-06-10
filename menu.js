@@ -369,10 +369,19 @@
       '<button class="lt-ub-logout" onclick="ltGlobalLogout()">Déconnexion</button>';
   }
 
-  window.ltGlobalLogout = function() {
+  function _ltClearAllAccountData() {
     localStorage.removeItem('ta_token');
     localStorage.removeItem('ta_email');
+    localStorage.removeItem('ta_user_id');
     localStorage.removeItem('lt_pro');
+    localStorage.removeItem('lt_history');
+    localStorage.removeItem('lt_deleted');
+    localStorage.removeItem('jnl_trades');
+    localStorage.removeItem('ta_trial_start');
+  }
+
+  window.ltGlobalLogout = function() {
+    _ltClearAllAccountData();
     if(typeof doLogout === 'function') { doLogout(); } else { window.location.href = './index.html'; }
   };
 
@@ -386,11 +395,8 @@
   };
 
   window.ltLogout = function() {
-    localStorage.removeItem('ta_token');
-    localStorage.removeItem('ta_email');
-    localStorage.removeItem('lt_pro');
+    _ltClearAllAccountData();
     ltSyncUser();
-    // If page has its own updateUserUI, call it
     if(typeof updateUserUI === 'function') updateUserUI();
     ltCloseMenu();
   };

@@ -2515,6 +2515,10 @@ async function checkSession(){
     if(data.id){
       currentUser=data;
       localStorage.setItem('ta_email', data.email||'');
+      // Clear local data if a different account is now logged in
+      var storedUid=localStorage.getItem('ta_user_id');
+      if(storedUid && storedUid!==data.id) _clearAccountData();
+      localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
       updateUserUI();loadHistory();
     } else {
@@ -2822,11 +2826,20 @@ function openHDetail(i){
 async function saveAnalysis(r,pair,d,tf){
   if(!authToken)return;
   try{
-    // Ne pas envoyer imgData dans le POST — trop volumineuse (plusieurs MB), dépasse la limite Vercel
     var res=await fetch('/api/history',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body:JSON.stringify({pair,direction:d,tf,score:r.score,verdict:r.verdict,scoreLabel:r.scoreLabel,forces:r.forces,faiblesses:r.faiblesses,recommandations:r.recommandations,macro:r.macro,scenarios:r.scenarios||[],annotations:r.annotations||[]})});
-    // Appeler loadHistory SEULEMENT si le POST a réussi — sinon ça écraserait le localStorage avec des données incomplètes
-    if(res.ok) loadHistory();
+    if(res.ok){
+      var created=await res.json();
+      var newId=Array.isArray(created)?created[0]:created;
+      newId=newId&&newId.id;
+      // Update the newest local entry's ID to UUID before loadHistory runs syncLocalToSupabase
+      // This prevents syncLocalToSupabase from re-uploading the same entry (duplication bug)
+      if(newId&&historyData.length&&/^\d{10,}$/.test(String(historyData[0].id))){
+        historyData[0].id=newId;
+        _saveLocalHistory();
+      }
+      loadHistory();
+    }
   }catch(e){}
 }
 function toggleTheme(){
@@ -3186,11 +3199,20 @@ function closeSideMenu(){
   document.getElementById('sideMenu').classList.remove('open');
   document.getElementById('sideMenuOverlay').classList.remove('open');
 }
+function _clearAccountData(){
+  historyData=[];
+  localStorage.removeItem('lt_history');
+  localStorage.removeItem('lt_deleted');
+  localStorage.removeItem('lt_pro');
+  localStorage.removeItem('ta_user_id');
+}
 function doLogout(){
-  authToken=null; currentUser=null; isPro=false; historyData=[];
-  localStorage.removeItem('ta_token'); localStorage.removeItem('lt_pro');
+  authToken=null; currentUser=null; isPro=false;
+  _clearAccountData();
+  localStorage.removeItem('ta_token');
+  localStorage.removeItem('ta_email');
   updateUserUI(); closeSideMenu();
-  document.getElementById('historyList').innerHTML='<div class="history-empty">Connecte-toi pour voir<br>ton historique</div>';
+  renderHistory(); renderHistoryGrid();
 }
 window.deleteAnalysis=deleteAnalysis;
 window.toggleSideMenu=toggleSideMenu;
