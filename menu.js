@@ -17,7 +17,7 @@
 
   var PAGES = [
     { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
-    { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
+    { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html', pro: true },
     { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './eco-edition.html', children: [
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`, label: 'Présentation', href: './eco-edition.html', children: [
         { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`, label: 'La sélection',  href: './eco-selection.html' },
@@ -32,7 +32,7 @@
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>`, label: 'Calendrier éco',  href: './eco-calendrier.html' },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>`, label: 'Crypto',          href: './eco-crypto.html' },
     ] },
-    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html', children: [
+    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html', pro: true, children: [
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`, label: 'Historique', href: './app.html#historique' },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, label: 'Perfs', href: './app.html#perfs' },
     ] },
@@ -97,6 +97,16 @@
       border: 1px solid rgba(0,149,255,.25);
     }
     .lt-nav-item.soon { opacity: .45; cursor: not-allowed; pointer-events: none; }
+    .lt-nav-item.pro-locked { opacity: .55; cursor: pointer; }
+    .lt-nav-item.pro-locked:hover { background: rgba(255,180,0,.08); color: #FFB300; }
+    .lt-nav-pro-badge {
+      margin-left: auto; font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; color: #FFB300;
+      background: rgba(255,180,0,.1); border: 1px solid rgba(255,180,0,.25);
+      border-radius: 50px; padding: 2px 7px;
+    }
+    .lt-subnav-item.pro-locked { opacity: .55; cursor: pointer; }
+    .lt-subnav-item.pro-locked:hover { color: #FFB300; }
     .lt-nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: .7; }
     .lt-nav-item:hover .lt-nav-icon, .lt-nav-item.active .lt-nav-icon { opacity: 1; }
     .lt-nav-soon {
@@ -238,30 +248,39 @@
   }
 
   // Rendu récursif d'une sous-entrée (peut elle-même avoir des enfants → 3e niveau)
-  function renderSub(c, depth) {
-    var act = selfActive(c) ? ' active' : '';
+  function renderSub(c, depth, parentLocked) {
+    var locked = parentLocked || false;
+    var act = (!locked && selfActive(c)) ? ' active' : '';
+    var lockCls = locked ? ' pro-locked' : '';
+    var href = locked ? './index.html?paywall=1' : c.href;
     if(c.children && c.children.length) {
-      var inner = c.children.map(function(cc) { return renderSub(cc); }).join('');
+      var inner = c.children.map(function(cc) { return renderSub(cc, 0, locked); }).join('');
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
-                 '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
+                 '<a class="lt-subnav-item' + act + lockCls + '" href="' + href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
                  '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav lt-subnav--deep"><div>' + inner + '</div></div>' +
              '</div>';
     }
-    return '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+    return '<a class="lt-subnav-item' + act + lockCls + '" href="' + href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
   }
+
+  var isUserPro = localStorage.getItem('lt_pro') === '1';
 
   var navItems = PAGES.map(function(p) {
     var isActive = page === p.id || (page === '' && p.id === 'index.html') || treeActive(p);
-    var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
+    var isLocked = p.pro && !isUserPro;
+    var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '') + (isLocked ? ' pro-locked' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
+    var proBadge = isLocked ? '<span class="lt-nav-pro-badge">⭐ PRO</span>' : '';
+    var href = isLocked ? './index.html?paywall=1' : p.href;
+
     if(p.children && p.children.length) {
-      var subItems = p.children.map(function(c) { return renderSub(c); }).join('');
+      var subItems = p.children.map(function(c) { return renderSub(c, 0, isLocked); }).join('');
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
-                 '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
+                 '<a class="' + cls + '" href="' + href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + proBadge + '</a>' +
                  '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav"><div>' + subItems + '</div></div>' +
@@ -270,7 +289,7 @@
     if(p.soon) {
       return '<div class="' + cls + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + '</div>';
     }
-    return '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + '</a>';
+    return '<a class="' + cls + '" href="' + href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + proBadge + '</a>';
   }).join('');
 
   var menuHTML = `
