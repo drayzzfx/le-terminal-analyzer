@@ -1136,17 +1136,24 @@ async function loadFromServer() {
 
 async function syncAllLocalTrades() {
   if(!authToken || !trades.length) return;
-  // Upload any local trades that don't have a UUID id yet
   var unsynced = trades.filter(function(t){ return !/^[0-9a-f-]{36}$/.test(String(t.id)); });
   for(var i = 0; i < unsynced.length; i++) {
+    var oldId = unsynced[i].id;
     try {
-      await fetch('/api/journal', {
+      var res = await fetch('/api/journal', {
         method: 'POST',
         headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
         body: JSON.stringify(unsynced[i])
       });
+      var created = await res.json();
+      if(created && created.id) {
+        // Replace timestamp ID with server UUID so merge won't re-upload next refresh
+        var idx = trades.findIndex(function(t){ return String(t.id) === String(oldId); });
+        if(idx !== -1) trades[idx].id = created.id;
+      }
     } catch(e) {}
   }
+  persist(); // save UUID ids to localStorage
 }
 
 // ── PAIR AUTOCOMPLETE ──
