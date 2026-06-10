@@ -109,6 +109,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .tool-tag{font-size:9px;font-weight:600;letter-spacing:.09em;padding:3px 9px;border-radius:50px;border:1px solid rgba(255,255,255,.07);color:var(--text3);background:rgba(255,255,255,.02)}
 .tool-arrow{position:absolute;bottom:20px;right:20px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .3s;z-index:2;font-size:13px}
 .tool-card:hover .tool-arrow{border-color:rgba(0,149,255,.4);color:var(--v2);background:rgba(0,149,255,.1);transform:translate(2px,-2px)}
+.tool-card.pro-locked{opacity:.55;border-color:rgba(255,180,0,.18)!important;background:linear-gradient(145deg,rgba(255,180,0,.05) 0%,rgba(255,255,255,.02) 100%)!important}
+.tool-card.pro-locked:hover{border-color:rgba(255,180,0,.35)!important;transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.4),0 0 0 1px rgba(255,180,0,.1)}
+.tool-card.pro-locked:hover::after{opacity:0!important}
+.tool-card.pro-locked .tool-arrow{border-color:rgba(255,180,0,.3);color:#FFB300}
+.tool-card.pro-locked:hover .tool-arrow{border-color:rgba(255,180,0,.5);color:#FFB300;background:rgba(255,180,0,.1);transform:none}
+.tool-pro-badge{position:absolute;top:16px;left:16px;font-size:9px;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:50px;background:rgba(255,180,0,.12);color:#FFB300;border:1px solid rgba(255,180,0,.3);z-index:3}
 
 /* ── STATS BAND ── */
 .stats-section{padding:24px 0 80px}
@@ -263,7 +269,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
     <div class="tools-grid-main">
 
-      <a href="./app.html" class="tool-card featured" onclick="return checkFeatureAccess(event)">
+      <a href="./app.html" class="tool-card featured" data-pro-gate onclick="return checkFeatureAccess(event)">
         <div class="tool-badge badge-live">En ligne</div>
         <div class="tool-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -279,7 +285,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
         <div class="tool-arrow">→</div>
       </a>
 
-      <a href="./journal.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+      <a href="./journal.html" class="tool-card" data-pro-gate onclick="return checkFeatureAccess(event)">
         <div class="tool-badge badge-new">Nouveau</div>
         <div class="tool-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
@@ -515,20 +521,33 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <!-- PAYWALL MODAL -->
 <div id="paywallOverlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(8,8,15,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
-  <div style="max-width:440px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6)">
+  <div id="paywallBox" style="max-width:480px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:32px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6);transition:max-width .3s">
     <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,#0095FF,#38B6FF,transparent)"></div>
     <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:#5A5570;font-size:20px;cursor:pointer;line-height:1">✕</button>
-    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Accès PRO requis</div>
-    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:28px">Le Setup Analyzer et le Journal de Trading<br>font partie de <strong style="color:#F0EEFF">Le Terminal PRO</strong>.</div>
-    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,149,255,.4)">
-      ⚡ Obtenir l'accès PRO sur Whop
-    </a>
-    <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">Paiement sécurisé via Whop · Annulation à tout moment<br><span style="color:#38B6FF;font-weight:500">Utilise le même email que ton compte Le Terminal</span></div>
-    <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-      <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
-      <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:#38B6FF;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">🔄 Vérifier mon accès PRO</button>
-      <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+    <!-- Info view -->
+    <div id="paywallInfo">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Accès PRO requis</div>
+      <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:24px">Le Setup Analyzer et le Journal de Trading<br>font partie de <strong style="color:#F0EEFF">Le Terminal PRO</strong>.</div>
+      <button onclick="showWhopCheckout()" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;margin-bottom:12px;box-shadow:0 8px 24px rgba(0,149,255,.4)">
+        ⚡ Passer PRO — Payer maintenant
+      </button>
+      <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">Paiement sécurisé via Whop · Annulation à tout moment<br><span style="color:#38B6FF;font-weight:500">Utilise le même email que ton compte Le Terminal</span></div>
+      <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
+        <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:#38B6FF;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">🔄 Vérifier mon accès PRO</button>
+        <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+      </div>
+    </div>
+    <!-- Checkout iframe view -->
+    <div id="paywallCheckout" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <button onclick="hideWhopCheckout()" style="background:transparent;border:none;color:#9B96B8;cursor:pointer;font-size:18px;line-height:1;padding:4px">←</button>
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:#F0EEFF">Paiement sécurisé</div>
+        <div style="margin-left:auto;font-size:11px;color:#5A5570">via Whop</div>
+      </div>
+      <iframe id="whopIframe" src="" style="width:100%;height:520px;border:none;border-radius:16px;background:#0D0D1A" allow="payment" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+      <div style="margin-top:10px;font-size:11px;color:#5A5570">Si la page ne charge pas, <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="color:#38B6FF">clique ici pour payer sur Whop</a>.</div>
     </div>
   </div>
 </div>
@@ -620,15 +639,49 @@ function updateUserUI(){
 }
 function isPro(){return localStorage.getItem('lt_pro')==='1';}
 function showPaywall(){document.getElementById('paywallOverlay').classList.add('show');}
-function closePaywall(){document.getElementById('paywallOverlay').classList.remove('show');}
+function closePaywall(){
+  document.getElementById('paywallOverlay').classList.remove('show');
+  hideWhopCheckout();
+}
+function showWhopCheckout(){
+  document.getElementById('paywallInfo').style.display='none';
+  document.getElementById('paywallCheckout').style.display='block';
+  document.getElementById('paywallBox').style.maxWidth='560px';
+  var iframe=document.getElementById('whopIframe');
+  if(!iframe.src||iframe.src==='about:blank'||iframe.src===''){
+    iframe.src='https://whop.com/terminal-analyzer/terminal-analyzer-pro/?d2c=true';
+  }
+}
+function hideWhopCheckout(){
+  document.getElementById('paywallInfo').style.display='block';
+  document.getElementById('paywallCheckout').style.display='none';
+  document.getElementById('paywallBox').style.maxWidth='480px';
+  document.getElementById('whopIframe').src='';
+}
 
 function checkFeatureAccess(e){
   var href=(e.currentTarget&&e.currentTarget.href)||'';
   var gated=href.includes('app.html')||href.includes('journal.html');
   if(!gated)return true;
-  if(!authToken){e.preventDefault();e.stopPropagation();openAuth();return false;}
   if(!isPro()){e.preventDefault();e.stopPropagation();showPaywall();return false;}
+  if(!authToken){e.preventDefault();e.stopPropagation();showPaywall();return false;}
   return true;
+}
+function applyProGating(){
+  var locked=!isPro();
+  document.querySelectorAll('[data-pro-gate]').forEach(function(el){
+    if(locked){
+      el.classList.add('pro-locked');
+      if(!el.querySelector('.tool-pro-badge')){
+        var b=document.createElement('div');
+        b.className='tool-pro-badge';b.textContent='⭐ PRO';
+        el.prepend(b);
+      }
+    } else {
+      el.classList.remove('pro-locked');
+      var b=el.querySelector('.tool-pro-badge');if(b)b.remove();
+    }
+  });
 }
 
 function updateProBadge(){
@@ -637,13 +690,13 @@ function updateProBadge(){
 }
 
 async function checkAndSetPro(){
-  if(!authToken)return;
+  if(!authToken){applyProGating();return;}
   try{
     var res=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
     var data=await res.json();
     if(data.is_pro){localStorage.setItem('lt_pro','1');}
-    updateProBadge();
-  }catch(e){updateProBadge();}
+    updateProBadge();applyProGating();
+  }catch(e){updateProBadge();applyProGating();}
 }
 
 async function checkSession(){
@@ -667,6 +720,7 @@ async function verifyProAccess(){
     else{msg.style.color='#F87171';msg.textContent='Aucun accès PRO trouvé pour cet email.';}
   }catch(e){msg.style.color='#F87171';msg.textContent='Erreur de vérification. Réessaie.';}
 }
+applyProGating();
 checkSession();
 if(new URLSearchParams(window.location.search).get('paywall')==='1'){
   history.replaceState(null,'',window.location.pathname);
