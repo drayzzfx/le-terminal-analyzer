@@ -521,33 +521,30 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <!-- PAYWALL MODAL -->
 <div id="paywallOverlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(8,8,15,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
-  <div id="paywallBox" style="max-width:480px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:32px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6);transition:max-width .3s">
+  <div style="max-width:440px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.6)">
     <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,#0095FF,#38B6FF,transparent)"></div>
     <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:#5A5570;font-size:20px;cursor:pointer;line-height:1">✕</button>
-    <!-- Info view -->
-    <div id="paywallInfo">
-      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Accès PRO requis</div>
-      <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:24px">Le Setup Analyzer et le Journal de Trading<br>font partie de <strong style="color:#F0EEFF">Le Terminal PRO</strong>.</div>
-      <button onclick="showWhopCheckout()" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;margin-bottom:12px;box-shadow:0 8px 24px rgba(0,149,255,.4)">
-        ⚡ Passer PRO — Payer maintenant
-      </button>
-      <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">Paiement sécurisé via Whop · Annulation à tout moment<br><span style="color:#38B6FF;font-weight:500">Utilise le même email que ton compte Le Terminal</span></div>
-      <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-        <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
-        <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:#38B6FF;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">🔄 Vérifier mon accès PRO</button>
-        <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Accès PRO requis</div>
+    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:20px">Le Setup Analyzer et le Journal de Trading<br>font partie de <strong style="color:#F0EEFF">Le Terminal PRO</strong>.</div>
+    <!-- Features list -->
+    <div style="background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.12);border-radius:14px;padding:14px 18px;margin-bottom:20px;text-align:left">
+      <div style="font-size:11px;font-weight:700;color:#38B6FF;letter-spacing:.1em;margin-bottom:10px">INCLUS DANS PRO</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="font-size:12.5px;color:#C8C4DC">✅ <strong>Setup Analyzer</strong> — Score IA illimité</div>
+        <div style="font-size:12.5px;color:#C8C4DC">✅ <strong>Journal de Trading</strong> — Sync broker auto</div>
+        <div style="font-size:12.5px;color:#C8C4DC">✅ <strong>IA sur le Calendrier Éco</strong> — Analyse annonces</div>
+        <div style="font-size:12.5px;color:#C8C4DC">✅ Tous les outils futurs inclus</div>
       </div>
     </div>
-    <!-- Checkout iframe view -->
-    <div id="paywallCheckout" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <button onclick="hideWhopCheckout()" style="background:transparent;border:none;color:#9B96B8;cursor:pointer;font-size:18px;line-height:1;padding:4px">←</button>
-        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:#F0EEFF">Paiement sécurisé</div>
-        <div style="margin-left:auto;font-size:11px;color:#5A5570">via Whop</div>
-      </div>
-      <iframe id="whopIframe" src="" style="width:100%;height:520px;border:none;border-radius:16px;background:#0D0D1A" allow="payment" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
-      <div style="margin-top:10px;font-size:11px;color:#5A5570">Si la page ne charge pas, <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="color:#38B6FF">clique ici pour payer sur Whop</a>.</div>
+    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="display:block;width:100%;padding:15px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;margin-bottom:12px;box-shadow:0 8px 24px rgba(0,149,255,.4)">
+      ⚡ Passer PRO sur Whop →
+    </a>
+    <div style="font-size:11px;color:#5A5570;line-height:1.7;margin-bottom:16px">Paiement sécurisé · Annulation à tout moment<br><span style="color:#38B6FF;font-weight:500">Utilise le même email que ton compte Le Terminal</span></div>
+    <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:11px;color:#5A5570;margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
+      <button onclick="verifyProAccess()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:#38B6FF;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">🔄 Vérifier mon accès PRO</button>
+      <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
     </div>
   </div>
 </div>
@@ -640,21 +637,6 @@ function updateUserUI(){
 function isPro(){return localStorage.getItem('lt_pro')==='1';}
 function showPaywall(){var el=document.getElementById('paywallOverlay');el.style.display='flex';el.classList.add('show');}
 function closePaywall(){var el=document.getElementById('paywallOverlay');el.style.display='none';el.classList.remove('show');hideWhopCheckout();}
-function showWhopCheckout(){
-  document.getElementById('paywallInfo').style.display='none';
-  document.getElementById('paywallCheckout').style.display='block';
-  document.getElementById('paywallBox').style.maxWidth='560px';
-  var iframe=document.getElementById('whopIframe');
-  if(!iframe.src||iframe.src==='about:blank'||iframe.src===''){
-    iframe.src='https://whop.com/terminal-analyzer/terminal-analyzer-pro/?d2c=true';
-  }
-}
-function hideWhopCheckout(){
-  document.getElementById('paywallInfo').style.display='block';
-  document.getElementById('paywallCheckout').style.display='none';
-  document.getElementById('paywallBox').style.maxWidth='480px';
-  document.getElementById('whopIframe').src='';
-}
 
 function checkFeatureAccess(e){
   var href=(e.currentTarget&&e.currentTarget.href)||'';
