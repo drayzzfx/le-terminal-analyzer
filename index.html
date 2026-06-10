@@ -638,11 +638,8 @@ function updateUserUI(){
   }
 }
 function isPro(){return localStorage.getItem('lt_pro')==='1';}
-function showPaywall(){document.getElementById('paywallOverlay').classList.add('show');}
-function closePaywall(){
-  document.getElementById('paywallOverlay').classList.remove('show');
-  hideWhopCheckout();
-}
+function showPaywall(){var el=document.getElementById('paywallOverlay');el.style.display='flex';el.classList.add('show');}
+function closePaywall(){var el=document.getElementById('paywallOverlay');el.style.display='none';el.classList.remove('show');hideWhopCheckout();}
 function showWhopCheckout(){
   document.getElementById('paywallInfo').style.display='none';
   document.getElementById('paywallCheckout').style.display='block';
