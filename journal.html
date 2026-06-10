@@ -1440,7 +1440,7 @@ function updateUserUI() {
 
 async function checkSession() {
   var token = localStorage.getItem('ta_token');
-  if(!token){window.location.href='./index.html';return;}
+  if(!token){window.location.href='./index.html?paywall=1';return;}
   authToken = token;
   var savedEmail = localStorage.getItem('ta_email') || '';
   currentUser = {email: savedEmail};
@@ -1469,7 +1469,7 @@ async function checkSession() {
         var proRes = await fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}});
         var proData = await proRes.json();
         if(proData.is_pro) localStorage.setItem('lt_pro','1');
-        else { localStorage.removeItem('lt_pro'); window.location.href='./index.html'; return; }
+        else { localStorage.removeItem('lt_pro'); window.location.href='./index.html?paywall=1'; return; }
       } catch(e) {
         if(localStorage.getItem('lt_pro')!=='1'){window.location.href='./index.html';return;}
       }

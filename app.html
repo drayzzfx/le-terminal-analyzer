@@ -2504,7 +2504,7 @@ window.requestIAFeedback=requestIAFeedback;
 
 async function checkSession(){
   var token=localStorage.getItem('ta_token');
-  if(!token){window.location.href='./index.html';return;}
+  if(!token){window.location.href='./index.html?paywall=1';return;}
   // Restore session optimistically from token immediately
   authToken=token;
   var savedEmail=localStorage.getItem('ta_email')||'';
@@ -2521,7 +2521,7 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      if(!isPro){window.location.href='./index.html';return;}
+      if(!isPro){window.location.href='./index.html?paywall=1';return;}
       updateUserUI();loadHistory();
     } else {
       // API says invalid - but keep session alive if network error might be the cause

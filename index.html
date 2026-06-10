@@ -668,6 +668,11 @@ async function verifyProAccess(){
   }catch(e){msg.style.color='#F87171';msg.textContent='Erreur de vérification. Réessaie.';}
 }
 checkSession();
+if(new URLSearchParams(window.location.search).get('paywall')==='1'){
+  history.replaceState(null,'',window.location.pathname);
+  // Attend que checkSession finisse avant d'ouvrir le paywall
+  setTimeout(showPaywall, 400);
+}
 </script>
 
 <script src="./menu.js"></script>
