@@ -83,53 +83,104 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // POST — connecte/met à jour un compte MetaApi
+    // POST — connecte/met à jour un compte broker
     if (req.method === 'POST') {
-      const { metaApiToken, metaApiAccountId } = req.body || {};
-      if (!metaApiToken || !metaApiAccountId) {
-        return res.status(400).json({ error: 'metaApiToken et metaApiAccountId requis' });
-      }
+      const body = req.body || {};
+      const platform = body.platform || 'mt5';
 
-      // Valide le token + account via MetaApi provisioning API
-      let accountName = metaApiAccountId;
-      try {
-        const provRes = await httpsGet(
-          `https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai/users/current/accounts/${metaApiAccountId}`,
-          { 'auth-token': metaApiToken, 'Content-Type': 'application/json' }
-        );
-        if (provRes.status === 200 && provRes.body && provRes.body.name) {
-          accountName = provRes.body.name;
-        } else if (provRes.status === 401 || provRes.status === 403) {
-          return res.status(400).json({ error: 'Token MetaApi invalide' });
-        } else if (provRes.status === 404) {
-          return res.status(400).json({ error: 'Account ID introuvable' });
+      let record = { user_id: userId, user_email: userEmail, platform };
+      let accountName = platform.toUpperCase();
+
+      // ── MetaApi (MT4 / MT5) ──
+      if (platform === 'mt4' || platform === 'mt5') {
+        const { metaApiToken, metaApiAccountId } = body;
+        if (!metaApiToken || !metaApiAccountId)
+          return res.status(400).json({ error: 'metaApiToken et metaApiAccountId requis' });
+        try {
+          const provRes = await httpsGet(
+            `https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai/users/current/accounts/${metaApiAccountId}`,
+            { 'auth-token': metaApiToken, 'Content-Type': 'application/json' }
+          );
+          if (provRes.status === 401 || provRes.status === 403)
+            return res.status(400).json({ error: 'Token MetaApi invalide' });
+          if (provRes.status === 404)
+            return res.status(400).json({ error: 'Account ID introuvable' });
+          if (provRes.status === 200 && provRes.body?.name) accountName = provRes.body.name;
+        } catch(e) {
+          return res.status(400).json({ error: 'Impossible de vérifier le compte MetaApi' });
         }
-      } catch(e) {
-        return res.status(400).json({ error: 'Impossible de vérifier le compte MetaApi' });
+        record = { ...record, meta_api_token: metaApiToken, meta_api_account_id: metaApiAccountId, account_name: accountName };
       }
 
-      // Upsert dans broker_connections
-      const existing = await supabaseRequest(
-        'GET',
-        `/rest/v1/broker_connections?user_id=eq.${userId}&limit=1`,
-        null, SERVICE_KEY, SERVICE_KEY
-      );
-      const platform = req.body.platform === 'mt4' ? 'mt4' : 'mt5';
-      const record = {
-        user_id: userId,
-        user_email: userEmail,
-        platform,
-        meta_api_token: metaApiToken,
-        meta_api_account_id: metaApiAccountId,
-        account_name: accountName
-      };
+      // ── TradeLocker ──
+      else if (platform === 'tradelocker') {
+        const { tlEmail, tlPassword, tlServer } = body;
+        if (!tlEmail || !tlPassword || !tlServer)
+          return res.status(400).json({ error: 'Email, mot de passe et serveur requis' });
+        // Validate credentials
+        try {
+          const authRes = await new Promise((resolve, reject) => {
+            const payload = JSON.stringify({ email: tlEmail, password: tlPassword, server: tlServer });
+            const opts = {
+              hostname: 'ttlivewebapi.tradelocker.com', path: '/api/auth/jwt/token',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
+            };
+            const req2 = require('https').request(opts, r => {
+              let d = ''; r.on('data', c => d += c);
+              r.on('end', () => { try { resolve({ status: r.statusCode, body: JSON.parse(d) }); } catch(e) { resolve({ status: r.statusCode, body: d }); } });
+            });
+            req2.on('error', reject); req2.write(payload); req2.end();
+          });
+          if (authRes.status !== 200 || !authRes.body.accessToken)
+            return res.status(400).json({ error: 'Identifiants TradeLocker invalides — vérifie email/mot de passe/serveur' });
+        } catch(e) {
+          return res.status(400).json({ error: 'Impossible de joindre TradeLocker' });
+        }
+        accountName = `TradeLocker · ${tlServer}`;
+        record = { ...record, tl_email: tlEmail, tl_password: tlPassword, tl_server: tlServer, account_name: accountName };
+      }
 
+      // ── DXtrade ──
+      else if (platform === 'dxtrade') {
+        const { dxDomain, dxLogin, dxPassword } = body;
+        if (!dxDomain || !dxLogin || !dxPassword)
+          return res.status(400).json({ error: 'Domaine, login et mot de passe requis' });
+        const domain = dxDomain.replace(/^https?:\/\//, '').replace(/\/$/, '');
+        // Quick validation ping
+        try {
+          const authRes = await new Promise((resolve, reject) => {
+            const payload = JSON.stringify({ login: dxLogin, password: dxPassword, domain });
+            const opts = {
+              hostname: domain, path: '/dxsca-web/accounts',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
+            };
+            const req2 = require('https').request(opts, r => {
+              let d = ''; r.on('data', c => d += c);
+              r.on('end', () => { try { resolve({ status: r.statusCode, body: JSON.parse(d) }); } catch(e) { resolve({ status: r.statusCode }); } });
+            });
+            req2.on('error', reject); req2.write(payload); req2.end();
+          });
+          if (authRes.status === 401 || authRes.status === 403)
+            return res.status(400).json({ error: 'Identifiants DXtrade invalides' });
+        } catch(e) {
+          // Domain may be unreachable — save anyway and let sync handle errors
+        }
+        accountName = `DXtrade · ${domain}`;
+        record = { ...record, dx_domain: domain, dx_login: dxLogin, dx_password: dxPassword, account_name: accountName };
+      }
+
+      else {
+        return res.status(400).json({ error: 'Plateforme non supportée' });
+      }
+
+      // Upsert
+      const existing = await supabaseRequest('GET',
+        `/rest/v1/broker_connections?user_id=eq.${userId}&limit=1`, null, SERVICE_KEY, SERVICE_KEY);
       if (Array.isArray(existing.body) && existing.body[0]) {
-        await supabaseRequest(
-          'PATCH',
-          `/rest/v1/broker_connections?user_id=eq.${userId}`,
-          record, SERVICE_KEY, SERVICE_KEY
-        );
+        await supabaseRequest('PATCH', `/rest/v1/broker_connections?user_id=eq.${userId}`,
+          record, SERVICE_KEY, SERVICE_KEY);
       } else {
         await supabaseRequest('POST', '/rest/v1/broker_connections', record, SERVICE_KEY, SERVICE_KEY);
       }

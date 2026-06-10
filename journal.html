@@ -546,15 +546,15 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
           <div class="platform-card-name">Import CSV</div>
           <div class="platform-card-sub">Topstep, FTMO<br>MyFundedFX, etc.</div>
         </div>
-        <div class="platform-card disabled soon">
-          <div class="platform-card-icon">🏆</div>
-          <div class="platform-card-name">Topstep</div>
-          <div class="platform-card-sub">Via Tradovate API<br>Auto-sync</div>
+        <div class="platform-card" onclick="showBrokerStep2('tradelocker')">
+          <div class="platform-card-icon">🔄</div>
+          <div class="platform-card-name">TradeLocker</div>
+          <div class="platform-card-sub">MyFundedFX, The5ers<br>Sync automatique</div>
         </div>
-        <div class="platform-card disabled soon">
-          <div class="platform-card-icon">🔗</div>
-          <div class="platform-card-name">Autres</div>
-          <div class="platform-card-sub">cTrader, Rithmic<br>En cours</div>
+        <div class="platform-card" onclick="showBrokerStep2('dxtrade')">
+          <div class="platform-card-icon">📈</div>
+          <div class="platform-card-name">DXtrade</div>
+          <div class="platform-card-sub">Funded firms DXtrade<br>Sync automatique</div>
         </div>
       </div>
     </div>
@@ -587,6 +587,62 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="broker-error" id="brokerError"></div>
       <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
         <span id="brokerSaveTxt">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2c: TradeLocker -->
+    <div id="brokerStep2TL" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">TradeLocker</div>
+      <div class="modal-sub">MyFundedFX · The5ers · et autres prop firms</div>
+      <div class="broker-steps">
+        <b>1.</b> Utilise l'email et mot de passe de ton compte TradeLocker<br>
+        <b>2.</b> Le serveur est indiqué dans ton tableau de bord prop firm<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Exemples : <b>TT-LIVE-1</b>, <b>TT-LIVE-2</b>, <b>TradeLocker-Live</b>
+      </div>
+      <div class="broker-field">
+        <label>Email TradeLocker</label>
+        <input type="email" id="tlEmailInput" placeholder="ton@email.com">
+      </div>
+      <div class="broker-field">
+        <label>Mot de passe</label>
+        <input type="password" id="tlPasswordInput" placeholder="••••••••">
+      </div>
+      <div class="broker-field">
+        <label>Serveur</label>
+        <input type="text" id="tlServerInput" placeholder="TT-LIVE-1">
+      </div>
+      <div class="broker-error" id="tlError"></div>
+      <button class="submit-btn" id="tlSaveBtn" onclick="saveTLConnection()">
+        <span id="tlSaveTxt">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2d: DXtrade -->
+    <div id="brokerStep2DX" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">DXtrade</div>
+      <div class="modal-sub">Prop firms utilisant la plateforme DXtrade</div>
+      <div class="broker-steps">
+        <b>1.</b> Le domaine est l'URL de ta plateforme DXtrade<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Exemple : <b>dxtrade.myfirm.com</b><br>
+        <b>2.</b> Login et mot de passe = tes identifiants de la plateforme
+      </div>
+      <div class="broker-field">
+        <label>Domaine DXtrade</label>
+        <input type="text" id="dxDomainInput" placeholder="dxtrade.myfirm.com">
+      </div>
+      <div class="broker-field">
+        <label>Login</label>
+        <input type="text" id="dxLoginInput" placeholder="ton_login">
+      </div>
+      <div class="broker-field">
+        <label>Mot de passe</label>
+        <input type="password" id="dxPasswordInput" placeholder="••••••••">
+      </div>
+      <div class="broker-error" id="dxError"></div>
+      <button class="submit-btn" id="dxSaveBtn" onclick="saveDXConnection()">
+        <span id="dxSaveTxt">Connecter et synchroniser</span>
       </button>
     </div>
 
@@ -1505,9 +1561,10 @@ function openBrokerModal() {
 function closeBrokerModal() { document.getElementById('brokerModal').classList.remove('show'); }
 
 function showBrokerStep1() {
-  document.getElementById('brokerStep1').style.display = '';
-  document.getElementById('brokerStep2MetaApi').style.display = 'none';
-  document.getElementById('brokerStep2CSV').style.display = 'none';
+  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = id === 'brokerStep1' ? '' : 'none';
+  });
 }
 function showBrokerStep2(type) {
   document.getElementById('brokerStep1').style.display = 'none';
@@ -1518,6 +1575,22 @@ function showBrokerStep2(type) {
     document.getElementById('brokerError').textContent = '';
     document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
     document.getElementById('brokerSaveBtn').disabled = false;
+  } else if (type === 'tradelocker') {
+    document.getElementById('brokerStep2TL').style.display = '';
+    document.getElementById('tlEmailInput').value = '';
+    document.getElementById('tlPasswordInput').value = '';
+    document.getElementById('tlServerInput').value = '';
+    document.getElementById('tlError').textContent = '';
+    document.getElementById('tlSaveTxt').textContent = 'Connecter et synchroniser';
+    document.getElementById('tlSaveBtn').disabled = false;
+  } else if (type === 'dxtrade') {
+    document.getElementById('brokerStep2DX').style.display = '';
+    document.getElementById('dxDomainInput').value = '';
+    document.getElementById('dxLoginInput').value = '';
+    document.getElementById('dxPasswordInput').value = '';
+    document.getElementById('dxError').textContent = '';
+    document.getElementById('dxSaveTxt').textContent = 'Connecter et synchroniser';
+    document.getElementById('dxSaveBtn').disabled = false;
   } else {
     document.getElementById('brokerStep2CSV').style.display = '';
     document.getElementById('csvPreviewArea').style.display = 'none';
@@ -1576,11 +1649,74 @@ async function saveBrokerConnection() {
   }
 }
 
-async function syncBroker() {
+// ── TradeLocker connection ──
+async function saveTLConnection() {
+  var email = document.getElementById('tlEmailInput').value.trim();
+  var password = document.getElementById('tlPasswordInput').value.trim();
+  var server = document.getElementById('tlServerInput').value.trim();
+  var errEl = document.getElementById('tlError');
+  errEl.textContent = '';
+  if (!email || !password || !server) { errEl.textContent = 'Remplis tous les champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('tlSaveBtn');
+  btn.disabled = true;
+  document.getElementById('tlSaveTxt').textContent = 'Vérification…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'tradelocker', tlEmail: email, tlPassword: password, tlServer: server })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('tlSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true;
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'tradelocker', accountName: data.accountName });
+    syncBroker('tradelocker');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('tlSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+// ── DXtrade connection ──
+async function saveDXConnection() {
+  var domain = document.getElementById('dxDomainInput').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
+  var login = document.getElementById('dxLoginInput').value.trim();
+  var password = document.getElementById('dxPasswordInput').value.trim();
+  var errEl = document.getElementById('dxError');
+  errEl.textContent = '';
+  if (!domain || !login || !password) { errEl.textContent = 'Remplis tous les champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('dxSaveBtn');
+  btn.disabled = true;
+  document.getElementById('dxSaveTxt').textContent = 'Vérification…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'dxtrade', dxDomain: domain, dxLogin: login, dxPassword: password })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('dxSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true;
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'dxtrade', accountName: data.accountName });
+    syncBroker('dxtrade');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('dxSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+async function syncBroker(platformOverride) {
   if (!authToken) return;
   setBrokerSyncing(true);
+  // Determine endpoint based on platform
+  var platform = platformOverride || (window._brokerPlatform || 'mt5');
+  var endpoint = '/api/sync-broker';
+  if (platform === 'tradelocker') endpoint = '/api/sync-tradelocker';
+  else if (platform === 'dxtrade') endpoint = '/api/sync-dxtrade';
   try {
-    var res = await fetch('/api/sync-broker', {
+    var res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken }
     });
@@ -1652,8 +1788,9 @@ async function loadBrokerStatus() {
     var data = await res.json();
     if (data.connected) {
       brokerConnected = true;
+      window._brokerPlatform = data.platform || 'mt5';
       updateBrokerBanner({ connected: true, platform: data.platform, accountName: data.accountName, lastSyncAt: data.lastSyncAt });
-      if (!data.lastSyncAt || (Date.now() - new Date(data.lastSyncAt).getTime()) > 5 * 60 * 1000) syncBroker();
+      if (!data.lastSyncAt || (Date.now() - new Date(data.lastSyncAt).getTime()) > 5 * 60 * 1000) syncBroker(data.platform);
     }
   } catch(e) {}
 }
