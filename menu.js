@@ -377,7 +377,6 @@
     localStorage.removeItem('lt_history');
     localStorage.removeItem('lt_deleted');
     localStorage.removeItem('jnl_trades');
-    localStorage.removeItem('ta_trial_start');
   }
 
   window.ltGlobalLogout = function() {

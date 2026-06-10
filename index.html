@@ -216,7 +216,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </a>
   </div>
   <div class="topbar-right">
-    <span id="trialBadge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;border:1px solid var(--border);color:var(--text3);letter-spacing:.05em"></span>
+    <span id="proBadge" style="display:none;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;border:1px solid rgba(0,149,255,.4);color:var(--v2);letter-spacing:.05em">⭐ PRO</span>
     <div class="user-chip" id="userChip">
       <div class="user-avatar" id="userAvatar">?</div>
       <span class="user-name" id="userName">—</span>
@@ -295,7 +295,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
         <div class="tool-arrow">→</div>
       </a>
 
-      <a href="./calendrier.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+      <a href="./calendrier.html" class="tool-card">
         <div class="tool-badge badge-live">En ligne</div>
         <div class="tool-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>
@@ -314,7 +314,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
     <div class="tools-grid-sub" style="margin-top:14px">
 
-      <a href="./bubble.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+      <a href="./bubble.html" class="tool-card">
         <div class="tool-badge badge-live">En ligne</div>
         <div class="tool-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
@@ -329,7 +329,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
         <div class="tool-arrow">→</div>
       </a>
 
-      <a href="./calculateur.html" class="tool-card" onclick="return checkFeatureAccess(event)">
+      <a href="./calculateur.html" class="tool-card">
         <div class="tool-badge badge-live">En ligne</div>
         <div class="tool-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/><line x1="16" y1="18" x2="16" y2="18"/></svg>
@@ -510,7 +510,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <!-- WELCOME TOAST -->
 <div id="welcomeMsg" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);border-radius:50px;padding:12px 24px;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:#34D399;z-index:1000;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.4);white-space:nowrap">
-  ✓ Bienvenue ! 24h d'accès gratuit activé.
+  ✓ Connexion réussie !
 </div>
 
 <!-- PAYWALL MODAL -->
@@ -519,8 +519,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,#0095FF,#38B6FF,transparent)"></div>
     <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:#5A5570;font-size:20px;cursor:pointer;line-height:1">✕</button>
     <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0095FF,#00C6FF);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,149,255,.4)">⚡</div>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Essai terminé</div>
-    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:28px">Ton accès gratuit de 24h est expiré.<br>Passe à <strong style="color:#F0EEFF">Le Terminal PRO</strong> pour continuer.</div>
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#F0EEFF;margin-bottom:8px">Accès PRO requis</div>
+    <div style="font-size:13px;font-weight:300;color:#9B96B8;line-height:1.7;margin-bottom:28px">Le Setup Analyzer et le Journal de Trading<br>font partie de <strong style="color:#F0EEFF">Le Terminal PRO</strong>.</div>
     <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0095FF,#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,149,255,.4)">
       ⚡ Obtenir l'accès PRO sur Whop
     </a>
@@ -556,7 +556,7 @@ fetch('/api/config').then(function(r){return r.json();}).then(function(d){_sbUrl
         authToken=token;currentUser=data;
         localStorage.setItem('ta_token',token);
         localStorage.setItem('ta_email',data.email||'');
-        updateUserUI();syncTrialFromSupabase().then(function(){startTrial();updateTrialBadge();});
+        updateUserUI();checkAndSetPro();
         document.getElementById('welcomeMsg').style.display='block';
         setTimeout(function(){document.getElementById('welcomeMsg').style.display='none';},4000);
       }
@@ -590,7 +590,7 @@ async function doAuth(){
       authToken=data.access_token;currentUser=data.user||{email};
       localStorage.setItem('ta_token',authToken);
       localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');
-      closeAuth();updateUserUI();syncTrialFromSupabase().then(function(){startTrial();updateTrialBadge();});
+      closeAuth();updateUserUI();checkAndSetPro();
       document.getElementById('welcomeMsg').style.display='block';
       setTimeout(function(){document.getElementById('welcomeMsg').style.display='none';},4000);
     }else if(data.id){
@@ -618,76 +618,52 @@ function updateUserUI(){
     if(lb)lb.style.display='';if(lo)lo.style.display='none';if(uc)uc.classList.remove('show');
   }
 }
-var TRIAL_DURATION=24*60*60*1000;
-function getTrialStatus(){
-  var created=localStorage.getItem('ta_trial_start');var isPro=localStorage.getItem('lt_pro')==='1';
-  if(isPro)return'pro';if(!created)return'none';
-  var elapsed=Date.now()-parseInt(created);
-  return elapsed<TRIAL_DURATION?'trial':'expired';
-}
-function startTrial(){
-  if(!localStorage.getItem('ta_trial_start')){
-    var ts=Date.now().toString();
-    localStorage.setItem('ta_trial_start',ts);
-    // Save to Supabase so trial is consistent across devices
-    if(authToken){
-      fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({trial_start:parseInt(ts)})}).catch(function(){});
-    }
-  }
-}
-async function syncTrialFromSupabase(){
-  if(!authToken)return;
-  try{
-    var r=await fetch('/api/profile',{headers:{'Authorization':'Bearer '+authToken}});
-    var data=await r.json();
-    if(data.trial_start){
-      var local=localStorage.getItem('ta_trial_start');
-      // Use whichever is older (first usage wins)
-      if(!local||parseInt(local)>data.trial_start){
-        localStorage.setItem('ta_trial_start',data.trial_start.toString());
-        updateTrialBadge();
-      }else if(parseInt(local)<data.trial_start){
-        // Local is older — push it to Supabase
-        fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({trial_start:parseInt(local)})}).catch(function(){});
-      }
-    }else if(localStorage.getItem('ta_trial_start')){
-      // No Supabase record yet — push local
-      fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({trial_start:parseInt(localStorage.getItem('ta_trial_start'))})}).catch(function(){});
-    }
-  }catch(e){}
-}
-function checkFeatureAccess(e){
-  var status=getTrialStatus();
-  if(!authToken){e.preventDefault();e.stopPropagation();openAuth();return false;}
-  if(status==='expired'){e.preventDefault();e.stopPropagation();showPaywall();return false;}
-  return true;
-}
+function isPro(){return localStorage.getItem('lt_pro')==='1';}
 function showPaywall(){document.getElementById('paywallOverlay').classList.add('show');}
 function closePaywall(){document.getElementById('paywallOverlay').classList.remove('show');}
+
+function checkFeatureAccess(e){
+  var href=(e.currentTarget&&e.currentTarget.href)||'';
+  var gated=href.includes('app.html')||href.includes('journal.html');
+  if(!gated)return true;
+  if(!authToken){e.preventDefault();e.stopPropagation();openAuth();return false;}
+  if(!isPro()){e.preventDefault();e.stopPropagation();showPaywall();return false;}
+  return true;
+}
+
+function updateProBadge(){
+  var b=document.getElementById('proBadge');
+  if(b)b.style.display=isPro()?'block':'none';
+}
+
+async function checkAndSetPro(){
+  if(!authToken)return;
+  try{
+    var res=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
+    var data=await res.json();
+    if(data.is_pro){localStorage.setItem('lt_pro','1');}
+    updateProBadge();
+  }catch(e){updateProBadge();}
+}
+
 async function checkSession(){
   var token=localStorage.getItem('ta_token');if(!token)return;
-  authToken=token;currentUser={email:localStorage.getItem('ta_email')||''};updateUserUI();updateTrialBadge();
+  authToken=token;currentUser={email:localStorage.getItem('ta_email')||''};updateUserUI();updateProBadge();
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
     var data=await res.json();
-    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();syncTrialFromSupabase();}
+    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();checkAndSetPro();}
     else if(data.error){authToken=null;currentUser=null;localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');updateUserUI();}
   }catch(e){updateUserUI();}
 }
-function updateTrialBadge(){
-  var status=getTrialStatus();var badge=document.getElementById('trialBadge');if(!badge)return;
-  if(status==='pro'){badge.textContent='⭐ PRO';badge.style.color='var(--v2)';badge.style.borderColor='rgba(0,149,255,.4)';badge.style.display='block';}
-  else if(status==='trial'){var created=parseInt(localStorage.getItem('ta_trial_start'));var remaining=TRIAL_DURATION-(Date.now()-created);var hours=Math.ceil(remaining/(1000*60*60));badge.textContent='⏳ '+hours+'h restantes';badge.style.color='var(--amber)';badge.style.borderColor='rgba(251,191,36,.4)';badge.style.display='block';}
-  else if(status==='expired'){badge.textContent='🔒 Essai expiré';badge.style.color='var(--red)';badge.style.borderColor='rgba(248,113,113,.4)';badge.style.display='block';}
-  else{badge.style.display='none';}
-}
+
 async function verifyProAccess(){
   var msg=document.getElementById('proVerifyMsg');msg.style.color='#9B96B8';msg.textContent='Vérification…';
   if(!authToken){msg.style.color='#FBBF24';msg.textContent="Connecte-toi d'abord avec ton email Whop.";return;}
   try{
     var res=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
     var data=await res.json();
-    if(data.is_pro){localStorage.setItem('lt_pro','1');msg.style.color='#34D399';msg.textContent='✓ Accès PRO activé !';setTimeout(function(){closePaywall();updateTrialBadge();},1000);}
+    if(data.is_pro){localStorage.setItem('lt_pro','1');msg.style.color='#34D399';msg.textContent='✓ Accès PRO activé !';setTimeout(function(){closePaywall();updateProBadge();},1000);}
     else{msg.style.color='#F87171';msg.textContent='Aucun accès PRO trouvé pour cet email.';}
   }catch(e){msg.style.color='#F87171';msg.textContent='Erreur de vérification. Réessaie.';}
 }
