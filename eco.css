@@ -1,35 +1,62 @@
 /* =========================================================================
-   Le Terminal Économies — thème « bleu nuit »
-   Inspiré du logo (hangar industriel, métal brossé, lueur bleu réacteur) :
-   fond noir nuit bleuté, accent bleu électrique → cyan, wordmark métal
-   argenté, cartes en verre, boutons pilule à halo, typo Bricolage
-   Grotesque (titres) / Inter (texte).
+   Le Terminal Économies — Cinématique Luxe
+   Hangar sombre, métal brossé, reflets bleu glacial.
+   Anton (display) / Inter (corps) / JetBrains Mono (chiffres).
    ========================================================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 :root {
-  --bg:           #08080F;
-  --card:         rgba(255,255,255,0.04);
-  --card-hover:   rgba(255,255,255,0.07);
-  --border:       rgba(255,255,255,0.08);
-  --border-active:rgba(0,149,255,0.45);
+  /* ── Fonds ── */
+  --bg-void:    #07090C;
+  --bg-hangar:  #0B0E13;
+  --bg-panel:   #10141B;
+  --bg-elevated:#161B24;
 
-  --v:    #0095FF;   /* violet */
-  --v2:   #38B6FF;
-  --v3:   #93D0FF;
-  --pink: #00C6FF;   /* fin de dégradé */
-  --vglow:  rgba(0,149,255,0.25);
-  --vglow2: rgba(0,149,255,0.08);
+  /* ── Accent bleu glacial ── */
+  --ice-100: #EAF4FF;
+  --ice-300: #BFDCF5;
+  --ice-500: #7FB8E8;
+  --ice-600: #5A9BD4;
+  --ice-glow:rgba(127,184,232,0.35);
 
-  --text:  #F0EEFF;
-  --text2: #97A3BE;
-  --text3: #57617B;
+  /* ── Métal ── */
+  --steel-100: #F2F4F7;
+  --steel-300: #C3CAD4;
+  --steel-500: #7E8794;
+  --steel-700: #3A414C;
+  --steel-900: #1C212A;
 
-  --green: #34D399;
-  --red:   #F87171;
-  --amber: #FBBF24;
+  /* ── Sémantique trading ── */
+  --signal-up:   #4ADE9C;
+  --signal-down: #F0647A;
+  --signal-warn: #E8C268;
 
-  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  /* ── Compat aliases (utilisés dans les règles ci-dessous) ── */
+  --bg:          var(--bg-void);
+  --card:        var(--bg-panel);
+  --card-hover:  var(--bg-elevated);
+  --border:      var(--steel-900);
+  --border-active: rgba(127,184,232,0.4);
+
+  --v:    var(--ice-600);
+  --v2:   var(--ice-500);
+  --v3:   var(--ice-300);
+  --pink: var(--ice-300);
+  --vglow:  var(--ice-glow);
+  --vglow2: rgba(127,184,232,0.08);
+
+  --text:  var(--steel-100);
+  --text2: var(--steel-300);
+  --text3: var(--steel-500);
+
+  --green: var(--signal-up);
+  --red:   var(--signal-down);
+  --amber: var(--signal-warn);
+
+  --display: "Anton", system-ui, sans-serif;
   --sans:    "Inter", system-ui, -apple-system, sans-serif;
+  --mono:    "JetBrains Mono", monospace;
 
   --wrap: 1100px;
   --r: 16px;
@@ -44,8 +71,8 @@ section[id] { scroll-margin-top: 92px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--bg-void);
+  color: var(--steel-100);
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.55;
@@ -66,8 +93,8 @@ a { color: inherit; text-decoration: none; }
 .glow {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(46% 38% at 80% -8%, rgba(0,149,255,0.18), transparent 70%),
-    radial-gradient(42% 34% at 5% 4%, rgba(0,198,255,0.10), transparent 70%);
+    radial-gradient(46% 38% at 80% -8%, rgba(127,184,232,0.07), transparent 70%),
+    radial-gradient(42% 34% at 5% 4%, rgba(127,184,232,0.04), transparent 70%);
 }
 .wrap, .topbar, .ticker, .foot__inner { position: relative; z-index: 1; }
 
@@ -76,9 +103,10 @@ a { color: inherit; text-decoration: none; }
    ========================================================================= */
 .topbar {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(7,10,18,0.82);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  background: rgba(7,9,12,0.88);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--steel-900);
 }
 .topbar__inner {
   height: 60px; padding: 0 18px;
@@ -98,13 +126,12 @@ a { color: inherit; text-decoration: none; }
 .brand__mark { color: var(--v2); font-size: 16px; filter: drop-shadow(0 0 10px var(--vglow)); }
 .brand__name {
   font-family: var(--display);
-  font-weight: 800; font-size: 18px; letter-spacing: -0.01em;
-  /* wordmark métal brossé, comme le lettrage du logo */
-  background: linear-gradient(160deg, #f4f6fb 0%, #c4cad6 38%, #8a93a6 60%, #e8ebf2 100%);
+  font-size: 15px; letter-spacing: .05em; text-transform: uppercase;
+  background: linear-gradient(160deg, var(--steel-100) 0%, var(--steel-300) 45%, var(--steel-100) 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .brand__accent {
-  background: linear-gradient(135deg, var(--v), var(--v2), var(--pink));
+  background: linear-gradient(135deg, var(--ice-300), var(--ice-500));
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 
@@ -236,14 +263,14 @@ body.sb-toggled .sidebar {
 .btn {
   display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
   font-family: var(--display);
-  font-size: 13px; font-weight: 700; letter-spacing: 0.03em;
-  color: #fff;
-  background: linear-gradient(135deg, var(--v), #1E3A8A);
+  font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #07090C;
+  background: linear-gradient(135deg, var(--ice-600), var(--ice-500));
   padding: 11px 20px; border-radius: var(--pill); border: none; cursor: pointer;
-  box-shadow: 0 8px 26px rgba(0,149,255,0.32);
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 8px 26px rgba(127,184,232,0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(0,149,255,0.5); }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(127,184,232,0.4); }
 .btn__arrow { transition: transform 0.2s; }
 .btn:hover .btn__arrow { transform: translateX(3px); }
 .btn--lg { font-size: 15px; padding: 14px 28px; }
@@ -280,8 +307,8 @@ body.sb-toggled .sidebar {
 .intro__eyebrow svg { width: 15px; height: 15px; }
 .intro__title {
   font-family: var(--display);
-  font-weight: 800; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.02;
-  letter-spacing: -0.03em; margin-bottom: 16px;
+  font-size: clamp(30px, 4.4vw, 46px); line-height: 1.02;
+  letter-spacing: .04em; text-transform: uppercase; margin-bottom: 16px;
 }
 .intro__lead { font-size: 16px; font-weight: 300; color: var(--text2); line-height: 1.65; max-width: 56ch; margin-bottom: 18px; }
 .intro__lead strong { color: var(--text); font-weight: 600; }
@@ -413,8 +440,8 @@ body.sb-toggled .sidebar {
 }
 .pagehead__eyebrow svg { width: 16px; height: 16px; }
 .pagehead__title {
-  font-family: var(--display); font-weight: 800;
-  font-size: clamp(28px, 5vw, 44px); letter-spacing: -0.02em; line-height: 1.05;
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 44px); letter-spacing: .04em; text-transform: uppercase; line-height: 1.05;
   margin-bottom: 10px;
 }
 .pagehead__lead {
@@ -451,8 +478,8 @@ body.sb-toggled .sidebar {
   position: relative; display: flex; flex-direction: column; align-items: center;
 }
 .wire__time {
-  font-variant-numeric: tabular-nums; font-size: 12.5px; font-weight: 700;
-  color: var(--text2); padding-top: 16px;
+  font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 11px;
+  color: var(--steel-500); padding-top: 16px;
 }
 .wire__dot {
   width: 11px; height: 11px; border-radius: 50%; margin-top: 8px;
@@ -487,8 +514,8 @@ body.sb-toggled .sidebar {
 .wire__src { color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 .wire__bias { margin-left: auto; }
 .wire__title {
-  font-family: var(--display); font-weight: 700; font-size: 17px; line-height: 1.22;
-  letter-spacing: -0.01em; margin-bottom: 7px;
+  font-family: var(--sans); font-weight: 600; font-size: 16px; line-height: 1.3;
+  letter-spacing: 0; margin-bottom: 7px;
 }
 .wire__card:hover .wire__title { color: var(--v3); }
 .wire__sum { font-size: 13.5px; font-weight: 300; color: var(--text2); line-height: 1.6; margin-bottom: 9px; }
@@ -764,8 +791,8 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 }
 .hero__title {
   font-family: var(--display);
-  font-weight: 800; font-size: clamp(28px, 4.6vw, 50px); line-height: 1.0;
-  letter-spacing: -0.03em; margin-bottom: 14px; max-width: 20ch;
+  font-size: clamp(28px, 4.6vw, 50px); line-height: 1.0;
+  letter-spacing: .04em; text-transform: uppercase; margin-bottom: 14px; max-width: 20ch;
   transition: opacity 0.2s;
 }
 .hero__hit:hover .hero__title { opacity: 0.85; }
@@ -862,8 +889,8 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 .card__source { color: var(--text2); }
 .card__time { margin-left: auto; color: var(--text3); }
 .card__title {
-  font-family: var(--display); font-weight: 700; font-size: 18px; line-height: 1.2;
-  letter-spacing: -0.01em; margin-bottom: 9px; transition: color 0.2s;
+  font-family: var(--sans); font-weight: 600; font-size: 17px; line-height: 1.25;
+  letter-spacing: 0; margin-bottom: 9px; transition: color 0.2s;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
   min-height: 2.4em;
 }
@@ -962,40 +989,40 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 }
 
 
-/* ── TERMINAL OVERRIDES ── */
-/* Topbar Terminal */
+/* ── TERMINAL OVERRIDES — Cinématique Luxe ── */
 .lt-topbar {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 18px; height: 60px;
-  background: rgba(8,8,15,0.92);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  padding: 0 18px; height: 64px;
+  background: rgba(7,9,12,0.88);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--steel-900);
 }
 .lt-brand {
   font-family: var(--display);
-  font-size: 17px; font-weight: 800; letter-spacing: -0.01em;
-  color: var(--text);
+  font-size: 14px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--steel-100); text-decoration: none;
 }
-.lt-brand span { color: var(--v2); }
+.lt-brand span { color: var(--ice-500); }
 .lt-hamburger {
   display: flex; flex-direction: column; gap: 5px;
   background: transparent; border: none; cursor: pointer;
   padding: 6px; border-radius: 8px; transition: background .2s;
 }
-.lt-hamburger:hover { background: rgba(0,149,255,.1); }
+.lt-hamburger:hover { background: rgba(127,184,232,.08); }
 .lt-hamburger span {
-  display: block; width: 20px; height: 2px;
-  background: var(--text2); border-radius: 2px;
+  display: block; width: 20px; height: 1.5px;
+  background: var(--steel-300); border-radius: 2px;
 }
 
 /* Tabs navigation */
 .eco-tabs {
   display: flex; align-items: center; gap: 2px;
   padding: 0 18px;
-  background: rgba(8,8,15,0.85);
+  background: rgba(7,9,12,0.82);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--steel-900);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -1003,15 +1030,15 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 .eco-tab {
   padding: 10px 16px;
   background: transparent; border: none; border-bottom: 2px solid transparent;
-  color: var(--text3); font-family: var(--display);
-  font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--steel-500); font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.06em;
   cursor: pointer; transition: all .2s; white-space: nowrap;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 6px; text-transform: uppercase;
 }
-.eco-tab:hover { color: var(--text2); }
+.eco-tab:hover { color: var(--steel-300); }
 .eco-tab.on {
-  color: var(--v2);
-  border-bottom-color: var(--v2);
+  color: var(--ice-500);
+  border-bottom-color: var(--ice-500);
 }
 
 /* Tab panels */
@@ -1028,11 +1055,11 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 /* Live status */
 .lt-status {
   display: flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 600; letter-spacing: .1em; color: var(--green);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--signal-up);
 }
 .lt-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green); animation: ltPulse 2s ease-in-out infinite;
+  background: var(--signal-up); animation: ltPulse 2s ease-in-out infinite;
 }
 @keyframes ltPulse {
   0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)}
