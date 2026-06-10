@@ -76,7 +76,7 @@ module.exports = async function handler(req, res) {
       if (!conn) return res.status(200).json({ connected: false });
       return res.status(200).json({
         connected: true,
-        platform: conn.platform,
+        platform: conn.platform || 'mt5',
         accountId: conn.meta_api_account_id,
         accountName: conn.account_name,
         lastSyncAt: conn.last_sync_at
@@ -114,10 +114,11 @@ module.exports = async function handler(req, res) {
         `/rest/v1/broker_connections?user_id=eq.${userId}&limit=1`,
         null, SERVICE_KEY, SERVICE_KEY
       );
+      const platform = req.body.platform === 'mt4' ? 'mt4' : 'mt5';
       const record = {
         user_id: userId,
         user_email: userEmail,
-        platform: 'mt5',
+        platform,
         meta_api_token: metaApiToken,
         meta_api_account_id: metaApiAccountId,
         account_name: accountName

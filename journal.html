@@ -241,6 +241,40 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 .broker-steps a:hover{text-decoration:underline}
 .broker-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
 
+/* PLATFORM PICKER */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.platform-card{padding:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
+.platform-card:hover{border-color:rgba(0,149,255,.4);background:rgba(0,149,255,.06)}
+.platform-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.platform-card.soon::after{content:'Bientôt';position:absolute;top:8px;right:8px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.06em}
+.platform-card-icon{font-size:24px;margin-bottom:8px}
+.platform-card-name{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.platform-card-sub{font-size:10px;color:var(--text3);line-height:1.4}
+.broker-back{background:transparent;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:0;margin-bottom:16px;display:flex;align-items:center;gap:4px;transition:color .2s}
+.broker-back:hover{color:var(--text2)}
+
+/* MT TYPE TOGGLE */
+.mt-toggle{display:flex;gap:8px;margin-bottom:16px}
+.mt-btn{flex:1;padding:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
+.mt-btn.on{border-color:rgba(0,149,255,.5);color:var(--v2);background:rgba(0,149,255,.08)}
+
+/* CSV IMPORT */
+.csv-drop{border:1.5px dashed rgba(0,149,255,.3);border-radius:14px;background:rgba(0,149,255,.04);padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;margin-bottom:16px}
+.csv-drop:hover,.csv-drop.over{border-color:var(--v);background:rgba(0,149,255,.1)}
+.csv-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.csv-drop-icon{font-size:28px;margin-bottom:8px}
+.csv-drop-txt{font-size:13px;color:var(--text2);font-weight:500}
+.csv-drop-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.csv-preview{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.csv-preview-header{padding:10px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between;align-items:center}
+.csv-preview-table{width:100%;border-collapse:collapse;font-size:11px}
+.csv-preview-table th{padding:7px 10px;background:rgba(255,255,255,.04);color:var(--text3);font-weight:600;text-align:left;border-bottom:1px solid var(--border)}
+.csv-preview-table td{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text2)}
+.csv-preview-table tr:last-child td{border-bottom:none}
+.csv-platforms{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.csv-platform-btn{padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
+.csv-platform-btn.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
+
 /* AUTH */
 .auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
@@ -330,12 +364,12 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div class="broker-banner-left">
       <div class="broker-icon" id="brokerIcon">📡</div>
       <div class="broker-banner-text">
-        <div class="broker-banner-title" id="brokerTitle">Connecte ton compte MT5</div>
-        <div class="broker-banner-sub" id="brokerSub">Sync automatique de tes trades via MetaApi</div>
+        <div class="broker-banner-title" id="brokerTitle">Connecte ton compte de trading</div>
+        <div class="broker-banner-sub" id="brokerSub">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
       </div>
     </div>
     <div class="broker-banner-actions" id="brokerActions">
-      <button class="broker-connect-btn" onclick="openBrokerModal()">Connecter MT5</button>
+      <button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>
     </div>
   </div>
 
@@ -496,27 +530,99 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <div class="modal-overlay" id="brokerModal">
   <div class="modal-box broker-modal">
     <button class="modal-close" onclick="closeBrokerModal()">✕</button>
-    <div class="modal-title">Connecter MT5 via MetaApi</div>
-    <div class="modal-sub">Sync automatique de ton historique de trades</div>
 
-    <div class="broker-steps">
-      <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
-      <b>2.</b> Ajoute ton compte MT5 (broker + login + password)<br>
-      <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+    <!-- STEP 1: platform picker -->
+    <div id="brokerStep1">
+      <div class="modal-title">Connecter un compte</div>
+      <div class="modal-sub">Choisis ta plateforme de trading</div>
+      <div class="platform-grid">
+        <div class="platform-card" onclick="showBrokerStep2('metaapi')">
+          <div class="platform-card-icon">📊</div>
+          <div class="platform-card-name">MT4 / MT5</div>
+          <div class="platform-card-sub">Via MetaApi<br>Sync automatique</div>
+        </div>
+        <div class="platform-card" onclick="showBrokerStep2('csv')">
+          <div class="platform-card-icon">📂</div>
+          <div class="platform-card-name">Import CSV</div>
+          <div class="platform-card-sub">Topstep, FTMO<br>MyFundedFX, etc.</div>
+        </div>
+        <div class="platform-card disabled soon">
+          <div class="platform-card-icon">🏆</div>
+          <div class="platform-card-name">Topstep</div>
+          <div class="platform-card-sub">Via Tradovate API<br>Auto-sync</div>
+        </div>
+        <div class="platform-card disabled soon">
+          <div class="platform-card-icon">🔗</div>
+          <div class="platform-card-name">Autres</div>
+          <div class="platform-card-sub">cTrader, Rithmic<br>En cours</div>
+        </div>
+      </div>
     </div>
 
-    <div class="broker-field">
-      <label>Auth Token MetaApi</label>
-      <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+    <!-- STEP 2a: MetaApi (MT4/MT5) -->
+    <div id="brokerStep2MetaApi" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">MT4 / MT5 via MetaApi</div>
+      <div class="modal-sub">Sync automatique de ton historique</div>
+
+      <div class="mt-toggle">
+        <button class="mt-btn on" id="mtBtn4" onclick="selectMtType('mt4')">MT4</button>
+        <button class="mt-btn" id="mtBtn5" onclick="selectMtType('mt5')">MT5</button>
+      </div>
+
+      <div class="broker-steps">
+        <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
+        <b>2.</b> Ajoute ton compte <span id="mtTypeLabel">MT4</span> (broker + login + password)<br>
+        <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+      </div>
+
+      <div class="broker-field">
+        <label>Auth Token MetaApi</label>
+        <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+      </div>
+      <div class="broker-field">
+        <label>Account ID</label>
+        <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+      </div>
+      <div class="broker-error" id="brokerError"></div>
+      <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
+        <span id="brokerSaveTxt">Connecter et synchroniser</span>
+      </button>
     </div>
-    <div class="broker-field">
-      <label>Account ID</label>
-      <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+
+    <!-- STEP 2b: CSV Import -->
+    <div id="brokerStep2CSV" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">Import CSV</div>
+      <div class="modal-sub">Topstep · FTMO · MyFundedFX · MT4/MT5 Statement</div>
+
+      <div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--v3);text-transform:uppercase;margin-bottom:8px">Format</div>
+        <div class="csv-platforms">
+          <button class="csv-platform-btn on" id="csvFmtBtn_auto" onclick="selectCsvFormat('auto')">Auto-détect</button>
+          <button class="csv-platform-btn" id="csvFmtBtn_topstep" onclick="selectCsvFormat('topstep')">Topstep</button>
+          <button class="csv-platform-btn" id="csvFmtBtn_ftmo" onclick="selectCsvFormat('ftmo')">FTMO</button>
+          <button class="csv-platform-btn" id="csvFmtBtn_mt4" onclick="selectCsvFormat('mt4')">MT4 Statement</button>
+        </div>
+      </div>
+
+      <div class="csv-drop" id="csvDrop">
+        <input type="file" accept=".csv,.txt" onchange="onCsvFile(event)" id="csvFileInput">
+        <div class="csv-drop-icon">📄</div>
+        <div class="csv-drop-txt">Glisse ton fichier CSV ici</div>
+        <div class="csv-drop-sub">ou clique pour sélectionner</div>
+      </div>
+
+      <div id="csvPreviewArea" style="display:none">
+        <div class="csv-preview" id="csvPreviewTable"></div>
+        <div class="broker-error" id="csvError"></div>
+        <button class="submit-btn" id="csvImportBtn" onclick="importCsvTrades()">
+          <span id="csvImportTxt">Importer les trades</span>
+        </button>
+      </div>
+      <div class="broker-error" id="csvParseError"></div>
     </div>
-    <div class="broker-error" id="brokerError"></div>
-    <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
-      <span id="brokerSaveTxt">Connecter et synchroniser</span>
-    </button>
+
   </div>
 </div>
 
@@ -1378,19 +1484,55 @@ checkSession();
 
 // ── BROKER CONNECTION ──
 var brokerConnected = false;
+var selectedMtType = 'mt4';
+var selectedCsvFormat = 'auto';
+var parsedCsvTrades = [];
 
+// ── Modal navigation ──
 function openBrokerModal() {
-  document.getElementById('brokerTokenInput').value = '';
-  document.getElementById('brokerAccountInput').value = '';
-  document.getElementById('brokerError').textContent = '';
-  document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
-  document.getElementById('brokerSaveBtn').disabled = false;
+  showBrokerStep1();
   document.getElementById('brokerModal').classList.add('show');
 }
-function closeBrokerModal() {
-  document.getElementById('brokerModal').classList.remove('show');
+function closeBrokerModal() { document.getElementById('brokerModal').classList.remove('show'); }
+
+function showBrokerStep1() {
+  document.getElementById('brokerStep1').style.display = '';
+  document.getElementById('brokerStep2MetaApi').style.display = 'none';
+  document.getElementById('brokerStep2CSV').style.display = 'none';
+}
+function showBrokerStep2(type) {
+  document.getElementById('brokerStep1').style.display = 'none';
+  if (type === 'metaapi') {
+    document.getElementById('brokerStep2MetaApi').style.display = '';
+    document.getElementById('brokerTokenInput').value = '';
+    document.getElementById('brokerAccountInput').value = '';
+    document.getElementById('brokerError').textContent = '';
+    document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+    document.getElementById('brokerSaveBtn').disabled = false;
+  } else {
+    document.getElementById('brokerStep2CSV').style.display = '';
+    document.getElementById('csvPreviewArea').style.display = 'none';
+    document.getElementById('csvParseError').textContent = '';
+    document.getElementById('csvFileInput').value = '';
+    parsedCsvTrades = [];
+  }
 }
 
+function selectMtType(t) {
+  selectedMtType = t;
+  document.getElementById('mtBtn4').classList.toggle('on', t === 'mt4');
+  document.getElementById('mtBtn5').classList.toggle('on', t === 'mt5');
+  document.getElementById('mtTypeLabel').textContent = t.toUpperCase();
+}
+
+function selectCsvFormat(f) {
+  selectedCsvFormat = f;
+  document.querySelectorAll('.csv-platform-btn').forEach(function(b) { b.classList.remove('on'); });
+  document.getElementById('csvFmtBtn_' + f).classList.add('on');
+  if (parsedCsvTrades.length) renderCsvPreview(parsedCsvTrades);
+}
+
+// ── MetaApi connection ──
 async function saveBrokerConnection() {
   var token = document.getElementById('brokerTokenInput').value.trim();
   var accountId = document.getElementById('brokerAccountInput').value.trim();
@@ -1398,25 +1540,25 @@ async function saveBrokerConnection() {
   errEl.textContent = '';
   if (!token || !accountId) { errEl.textContent = 'Remplis les deux champs'; return; }
   if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
-
   var btn = document.getElementById('brokerSaveBtn');
   btn.disabled = true;
   document.getElementById('brokerSaveTxt').textContent = 'Vérification…';
-
   try {
     var res = await fetch('/api/broker-connect', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
-      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId })
+      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType })
     });
     var data = await res.json();
-    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser'; return; }
-
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Erreur connexion';
+      btn.disabled = false;
+      document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+      return;
+    }
     brokerConnected = true;
     closeBrokerModal();
-    updateBrokerBanner({ connected: true, accountName: data.accountName, lastSyncAt: null });
-
-    // Lance une première sync immédiatement
+    updateBrokerBanner({ connected: true, platform: selectedMtType, accountName: data.accountName });
     syncBroker();
   } catch(e) {
     errEl.textContent = 'Erreur réseau';
@@ -1435,22 +1577,21 @@ async function syncBroker() {
     });
     var data = await res.json();
     if (res.ok && data.ok) {
-      var msg = data.synced + ' nouveau' + (data.synced > 1 ? 'x' : '') + ' trade' + (data.synced > 1 ? 's' : '') + ' importé' + (data.synced > 1 ? 's' : '');
-      if (data.synced === 0) msg = 'Journal à jour';
-      updateBrokerBanner({ connected: true, accountName: null, lastSyncAt: new Date().toISOString(), syncMsg: msg });
-      if (data.synced > 0) loadFromServer();
+      var n = data.synced;
+      var msg = n > 0 ? n + ' nouveau' + (n > 1 ? 'x' : '') + ' trade' + (n > 1 ? 's' : '') + ' importé' + (n > 1 ? 's' : '') : 'Journal à jour';
+      updateBrokerBanner({ connected: true, lastSyncAt: new Date().toISOString(), syncMsg: msg });
+      if (n > 0) loadFromServer();
     } else {
-      updateBrokerBanner({ connected: true, accountName: null, lastSyncAt: null, syncMsg: data.error || 'Erreur sync' });
+      updateBrokerBanner({ connected: true, syncMsg: data.error || 'Erreur sync' });
     }
   } catch(e) {
-    updateBrokerBanner({ connected: true, lastSyncAt: null, syncMsg: 'Erreur réseau' });
+    updateBrokerBanner({ connected: true, syncMsg: 'Erreur réseau' });
   }
   setBrokerSyncing(false);
 }
 
 async function disconnectBroker() {
-  if (!authToken) return;
-  if (!confirm('Déconnecter le compte MT5 ?')) return;
+  if (!authToken || !confirm('Déconnecter le compte de trading ?')) return;
   await fetch('/api/broker-connect', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + authToken } });
   brokerConnected = false;
   updateBrokerBanner({ connected: false });
@@ -1459,16 +1600,10 @@ async function disconnectBroker() {
 function setBrokerSyncing(on) {
   var banner = document.getElementById('brokerBanner');
   var btn = document.getElementById('brokerSyncBtn');
-  if (on) {
-    banner.className = 'broker-banner syncing';
-    document.getElementById('brokerIcon').textContent = '🔄';
-    document.getElementById('brokerTitle').textContent = 'Synchronisation en cours…';
-    if (btn) btn.disabled = true;
-  } else {
-    banner.className = 'broker-banner connected';
-    document.getElementById('brokerIcon').textContent = '✅';
-    if (btn) btn.disabled = false;
-  }
+  banner.className = 'broker-banner ' + (on ? 'syncing' : 'connected');
+  document.getElementById('brokerIcon').textContent = on ? '🔄' : '✅';
+  document.getElementById('brokerTitle').textContent = on ? 'Synchronisation en cours…' : (document.getElementById('brokerTitle')._name || 'Compte connecté');
+  if (btn) btn.disabled = on;
 }
 
 function updateBrokerBanner(info) {
@@ -1476,27 +1611,26 @@ function updateBrokerBanner(info) {
   var titleEl = document.getElementById('brokerTitle');
   var subEl = document.getElementById('brokerSub');
   var actionsEl = document.getElementById('brokerActions');
-
   if (!info.connected) {
     banner.className = 'broker-banner disconnected';
     document.getElementById('brokerIcon').textContent = '📡';
-    titleEl.textContent = 'Connecte ton compte MT5';
-    subEl.textContent = 'Sync automatique de tes trades via MetaApi';
-    actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter MT5</button>';
+    titleEl.textContent = 'Connecte ton compte de trading';
+    titleEl._name = null;
+    subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
+    actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>';
     return;
   }
-
   banner.className = 'broker-banner connected';
   document.getElementById('brokerIcon').textContent = '✅';
-  titleEl.textContent = info.accountName ? 'MT5 · ' + info.accountName : 'MT5 connecté';
-  if (info.syncMsg) {
-    subEl.textContent = info.syncMsg;
-  } else if (info.lastSyncAt) {
+  var platformLabel = info.platform ? info.platform.toUpperCase() : 'Compte';
+  var nameLabel = info.accountName ? platformLabel + ' · ' + info.accountName : platformLabel + ' connecté';
+  titleEl.textContent = nameLabel;
+  titleEl._name = nameLabel;
+  if (info.syncMsg) subEl.textContent = info.syncMsg;
+  else if (info.lastSyncAt) {
     var d = new Date(info.lastSyncAt);
-    subEl.textContent = 'Dernière sync : ' + d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-  } else {
-    subEl.textContent = 'Prêt à synchroniser';
-  }
+    subEl.textContent = 'Sync ' + d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+  } else subEl.textContent = 'Prêt à synchroniser';
   actionsEl.innerHTML =
     '<button class="broker-sync-btn" id="brokerSyncBtn" onclick="syncBroker()">↻ Sync</button>' +
     '<button class="broker-disconnect-btn" onclick="disconnectBroker()">Déconnecter</button>';
@@ -1509,13 +1643,164 @@ async function loadBrokerStatus() {
     var data = await res.json();
     if (data.connected) {
       brokerConnected = true;
-      updateBrokerBanner({ connected: true, accountName: data.accountName, lastSyncAt: data.lastSyncAt });
-      // Auto-sync si pas synced depuis > 5min
-      if (!data.lastSyncAt || (Date.now() - new Date(data.lastSyncAt).getTime()) > 5 * 60 * 1000) {
-        syncBroker();
-      }
+      updateBrokerBanner({ connected: true, platform: data.platform, accountName: data.accountName, lastSyncAt: data.lastSyncAt });
+      if (!data.lastSyncAt || (Date.now() - new Date(data.lastSyncAt).getTime()) > 5 * 60 * 1000) syncBroker();
     }
   } catch(e) {}
+}
+
+// ── CSV IMPORT ──
+// Détection automatique du format selon les headers
+var CSV_FORMATS = {
+  topstep: {
+    name: 'Topstep',
+    detect: function(h) { return h.some(function(c){return /b\/s|side|buy.sell/i.test(c);}) && h.some(function(c){return /symbol|contract|instrument/i.test(c);}); },
+    map: function(row, h) {
+      var get = function(pat) { for(var i=0;i<h.length;i++){if(pat.test(h[i]))return(row[i]||'').trim();} return ''; };
+      var side = get(/^(b\/s|side|buy.sell)$/i).toLowerCase();
+      var dir = (side==='b'||side==='buy') ? 'long' : 'short';
+      var pnl = parseFloat(get(/p.?l|profit|net/i).replace(/[,$\s]/g,'')) || 0;
+      var fees = Math.abs(parseFloat(get(/comm|fee/i).replace(/[,$\s]/g,'')) || 0);
+      var sym = get(/symbol|contract|instrument/i).replace(/\s/g,'');
+      var rawDate = get(/date|time/i);
+      return { pair: sym, direction: dir, trade_date: parseDate(rawDate), pnl: pnl, fees: fees, result: pnl > 0.01 ? 'win' : pnl < -0.01 ? 'loss' : 'be' };
+    }
+  },
+  ftmo: {
+    name: 'FTMO / MT4 History',
+    detect: function(h) { return h.some(function(c){return /open.time|entry.time/i.test(c);}) && h.some(function(c){return /close.time/i.test(c);}); },
+    map: function(row, h) {
+      var get = function(pat) { for(var i=0;i<h.length;i++){if(pat.test(h[i]))return(row[i]||'').trim();} return ''; };
+      var type = get(/^type$/i).toLowerCase();
+      var dir = (type==='buy') ? 'long' : (type==='sell') ? 'short' : 'long';
+      var pnl = parseFloat(get(/^profit$/i).replace(/[,$\s]/g,'')) || 0;
+      var comm = parseFloat(get(/comm/i).replace(/[,$\s]/g,'')) || 0;
+      var swap = parseFloat(get(/swap/i).replace(/[,$\s]/g,'')) || 0;
+      var fees = Math.abs(comm) + Math.abs(swap);
+      pnl = pnl + comm + swap;
+      var sym = get(/symbol|item/i).replace(/\s/g,'');
+      var rawDate = get(/open.time|entry.time/i);
+      return { pair: sym, direction: dir, trade_date: parseDate(rawDate), pnl: Math.round(pnl*100)/100, fees: Math.round(fees*100)/100, result: pnl > 0.01 ? 'win' : pnl < -0.01 ? 'loss' : 'be' };
+    }
+  },
+  mt4: {
+    name: 'MT4 Statement',
+    detect: function(h) { return h.some(function(c){return /^#$/i.test(c)||/^ticket$/i.test(c);}) && h.some(function(c){return /^item$/i.test(c)||/symbol/i.test(c);}); },
+    map: function(row, h) {
+      var get = function(pat) { for(var i=0;i<h.length;i++){if(pat.test(h[i]))return(row[i]||'').trim();} return ''; };
+      var type = get(/^type$/i).toLowerCase();
+      var dir = (type==='buy') ? 'long' : (type==='sell') ? 'short' : null;
+      if (!dir) return null;
+      var pnl = parseFloat(get(/^profit$/i).replace(/[,$\s]/g,'')) || 0;
+      var comm = parseFloat(get(/comm/i).replace(/[,$\s]/g,'')) || 0;
+      var swap = parseFloat(get(/swap/i).replace(/[,$\s]/g,'')) || 0;
+      pnl = pnl + comm + swap;
+      var fees = Math.abs(comm) + Math.abs(swap);
+      var sym = get(/item|symbol/i).replace(/\s/g,'');
+      var rawDate = get(/^time$/i) || get(/open/i);
+      return { pair: sym, direction: dir, trade_date: parseDate(rawDate), pnl: Math.round(pnl*100)/100, fees: Math.round(fees*100)/100, result: pnl > 0.01 ? 'win' : pnl < -0.01 ? 'loss' : 'be' };
+    }
+  }
+};
+
+function parseDate(str) {
+  if (!str) return '';
+  // Formats courants: "2024.01.15 10:30", "01/15/2024", "2024-01-15"
+  var m;
+  if ((m = str.match(/^(\d{4})[.\-\/](\d{2})[.\-\/](\d{2})/))) return m[1]+'-'+m[2]+'-'+m[3];
+  if ((m = str.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})/))) return m[3]+'-'+m[1]+'-'+m[2];
+  if ((m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))) {
+    var y = m[3].length===2 ? '20'+m[3] : m[3];
+    return y+'-'+(m[1].padStart(2,'0'))+'-'+(m[2].padStart(2,'0'));
+  }
+  return str.slice(0, 10);
+}
+
+function parseCsv(text) {
+  var lines = text.trim().split(/\r?\n/).filter(function(l){ return l.trim(); });
+  if (lines.length < 2) return null;
+  var sep = (lines[0].match(/\t/g)||[]).length > (lines[0].match(/,/g)||[]).length ? '\t' : ',';
+  var headers = lines[0].split(sep).map(function(h){ return h.trim().replace(/^["']|["']$/g,''); });
+  var rows = lines.slice(1).map(function(l){
+    return l.split(sep).map(function(c){ return c.trim().replace(/^["']|["']$/g,''); });
+  }).filter(function(r){ return r.some(function(c){return c;}); });
+  return { headers: headers, rows: rows };
+}
+
+function detectFormat(headers) {
+  if (selectedCsvFormat !== 'auto') return CSV_FORMATS[selectedCsvFormat] || null;
+  for (var key in CSV_FORMATS) {
+    if (CSV_FORMATS[key].detect(headers)) return CSV_FORMATS[key];
+  }
+  return null;
+}
+
+function onCsvFile(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var text = ev.target.result;
+    var parsed = parseCsv(text);
+    if (!parsed) { document.getElementById('csvParseError').textContent = 'Fichier illisible'; return; }
+    var fmt = detectFormat(parsed.headers);
+    if (!fmt) {
+      document.getElementById('csvParseError').textContent = 'Format non reconnu — essaie de sélectionner un format manuellement';
+      return;
+    }
+    document.getElementById('csvParseError').textContent = '';
+    parsedCsvTrades = [];
+    for (var i = 0; i < parsed.rows.length; i++) {
+      var t = fmt.map(parsed.rows[i], parsed.headers);
+      if (t && t.pair && t.trade_date) parsedCsvTrades.push(t);
+    }
+    if (!parsedCsvTrades.length) { document.getElementById('csvParseError').textContent = 'Aucun trade valide trouvé'; return; }
+    renderCsvPreview(parsedCsvTrades);
+  };
+  reader.readAsText(file);
+}
+
+function renderCsvPreview(tds) {
+  var preview = tds.slice(0, 5);
+  var html = '<div class="csv-preview-header"><span>' + tds.length + ' trade' + (tds.length>1?'s':'') + ' détectés</span><span style="color:var(--text3)">Aperçu des 5 premiers</span></div>';
+  html += '<div style="overflow-x:auto"><table class="csv-preview-table"><thead><tr><th>Paire</th><th>Dir.</th><th>Date</th><th>P&L</th><th>Résultat</th></tr></thead><tbody>';
+  preview.forEach(function(t) {
+    var col = t.result==='win'?'var(--green)':t.result==='loss'?'var(--red)':'var(--amber)';
+    html += '<tr><td><b>' + (t.pair||'—') + '</b></td><td>' + (t.direction||'—') + '</td><td>' + (t.trade_date||'—') + '</td><td style="color:'+col+'">' + (t.pnl>=0?'+':'') + (t.pnl||0).toFixed(2) + '</td><td style="color:'+col+'">' + (t.result||'—') + '</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  document.getElementById('csvPreviewTable').innerHTML = html;
+  document.getElementById('csvPreviewArea').style.display = '';
+  document.getElementById('csvImportTxt').textContent = 'Importer ' + tds.length + ' trade' + (tds.length>1?'s':'');
+}
+
+async function importCsvTrades() {
+  if (!parsedCsvTrades.length) return;
+  if (!authToken) { document.getElementById('csvError').textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('csvImportBtn');
+  btn.disabled = true;
+  document.getElementById('csvImportTxt').textContent = 'Import en cours…';
+  document.getElementById('csvError').textContent = '';
+  var ok = 0, fail = 0;
+  for (var i = 0; i < parsedCsvTrades.length; i++) {
+    try {
+      var res = await fetch('/api/journal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+        body: JSON.stringify(parsedCsvTrades[i])
+      });
+      if (res.ok) ok++; else fail++;
+    } catch(e) { fail++; }
+  }
+  btn.disabled = false;
+  if (fail === 0) {
+    closeBrokerModal();
+    updateBrokerBanner({ connected: false }); // reset banner to default (not a broker sync)
+    loadFromServer();
+  } else {
+    document.getElementById('csvImportTxt').textContent = 'Réessayer';
+    document.getElementById('csvError').textContent = ok + ' importés, ' + fail + ' échoués';
+  }
 }
 </script>
 
