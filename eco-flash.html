@@ -99,8 +99,8 @@
 (function () {
   'use strict';
 
-  // Toutes les zones + flash (ZeroHedge 𝕏)
-  var ALL_ZONES = ['flash', 'ameriques', 'europe', 'asie', 'institutions', 'marches', 'crypto', 'international'];
+  // Zone flash uniquement — filtre 50pts marché appliqué à l'ingestion
+  var ALL_ZONES = ['flash'];
   var FOUR_H    = 4  * 3600 * 1000;
   var FORTYEIGHT_H = 48 * 3600 * 1000;
 
