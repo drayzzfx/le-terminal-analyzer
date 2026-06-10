@@ -140,12 +140,15 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   const id = (req.query && req.query.id) || '';
-  if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+  if (!id || !/^[0-9a-f-]{8,}$/i.test(id)) {
     return res.status(400).json({ error: 'ID invalide' });
   }
 
+  // UUID = cherche par id, sinon cherche par guid
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  const filter = isUuid ? `id=eq.${id}` : `guid=eq.${id}`;
   // Récupère l'article — même style que api/news.js
-  const path = `/rest/v1/news_items?id=eq.${id}&select=id,guid,title,summary,summary_en,source,url,published_at,zone,sentiment,analysis&limit=1`;
+  const path = `/rest/v1/news_items?${filter}&select=id,guid,title,summary,summary_en,source,url,published_at,zone,sentiment,analysis&limit=1`;
   const r = await sbGet(path);
 
   console.log('[article] status:', r.status, 'isArray:', Array.isArray(r.body), 'len:', Array.isArray(r.body) ? r.body.length : 'n/a');

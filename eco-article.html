@@ -619,9 +619,14 @@
     try {
       // _t= force une requête fraîche (bypass CDN et cache navigateur)
       var resp = await fetch('/api/article?id=' + encodeURIComponent(id) + '&_t=' + Date.now());
-      if (resp.status === 404 && srcUrl) {
-        // Article introuvable → redirige vers la source externe
-        window.location.replace(srcUrl);
+      if (resp.status === 404 || resp.status === 400) {
+        if (srcUrl) { window.location.replace(srcUrl); return; }
+        var l2 = getLang();
+        showError(
+          (l2==='en' ? 'This article is no longer available.' : 'Cet article n\'est plus disponible.')
+          + '<br><a class="btn" href="./eco-edition.html" style="margin-top:16px;display:inline-flex">← '
+          + (l2==='en' ? 'Back to news' : 'Retour aux actualités') + '</a>'
+        );
         return;
       }
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -631,16 +636,12 @@
     } catch(e) {
       var l = getLang();
       console.error('[eco-article] error:', e);
-      // Si on a l'URL source, propose un lien direct
       var fallback = srcUrl
         ? '<br><a class="btn" href="' + srcUrl + '" target="_blank" rel="noopener" style="margin-top:12px;display:inline-flex">'
           + (l==='en' ? 'Read source article ↗' : 'Lire l\'article source ↗') + '</a>'
-        : '<br><a href="javascript:history.back()">← ' + (l==='en' ? 'Go back' : 'Retour') + '</a>';
-      showError((l==='en'
-        ? 'Unable to generate the analysis.'
-        : 'Impossible de générer l\'analyse.')
-        + fallback
-        + '<br><small style="opacity:0.4;font-size:11px;margin-top:8px">' + (e && e.message ? e.message : '') + '</small>');
+        : '<br><a class="btn" href="./eco-edition.html" style="margin-top:12px;display:inline-flex">← '
+          + (l==='en' ? 'Back to news' : 'Retour aux actualités') + '</a>';
+      showError((l==='en' ? 'Unable to load this article.' : 'Impossible de charger cet article.') + fallback);
     }
   }
 
