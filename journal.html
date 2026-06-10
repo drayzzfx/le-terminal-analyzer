@@ -1146,10 +1146,11 @@ async function syncAllLocalTrades() {
         body: JSON.stringify(unsynced[i])
       });
       var created = await res.json();
-      if(created && created.id) {
-        // Replace timestamp ID with server UUID so merge won't re-upload next refresh
+      var newId = (Array.isArray(created) ? created[0] : created);
+      newId = newId && newId.id;
+      if(newId) {
         var idx = trades.findIndex(function(t){ return String(t.id) === String(oldId); });
-        if(idx !== -1) trades[idx].id = created.id;
+        if(idx !== -1) trades[idx].id = newId;
       }
     } catch(e) {}
   }

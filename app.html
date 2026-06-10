@@ -2717,10 +2717,13 @@ async function syncLocalToSupabase(){
           recommandations:h.recommandations,macro:h.macro,
           scenarios:[],annotations:[]})});
       var created=await res.json();
+      // Supabase returns an array with Prefer:return=representation
+      var newId=(Array.isArray(created)?created[0]:created);
+      newId=newId&&newId.id;
       // Replace timestamp ID with server UUID to prevent re-upload on next refresh
-      if(created&&created.id){
+      if(newId){
         var idx=historyData.findIndex(function(x){return String(x.id)===String(oldId);});
-        if(idx!==-1){historyData[idx].id=created.id;changed=true;}
+        if(idx!==-1){historyData[idx].id=newId;changed=true;}
       }
     }catch(e){}
   }
