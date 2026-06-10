@@ -2704,18 +2704,27 @@ async function syncLocalToSupabase(){
     var id=String(h.id);
     return /^\d{10,}$/.test(id); // ID timestamp = non encore sync
   });
+  var changed=false;
   for(var i=0;i<unsynced.length;i++){
     var h=unsynced[i];
+    var oldId=h.id;
     try{
-      await fetch('/api/history',{method:'POST',
+      var res=await fetch('/api/history',{method:'POST',
         headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
         body:JSON.stringify({pair:h.pair,direction:h.direction,tf:h.tf,
           score:h.score,verdict:h.verdict,scoreLabel:h.score_label,
           forces:h.forces,faiblesses:h.faiblesses,
           recommandations:h.recommandations,macro:h.macro,
           scenarios:[],annotations:[]})});
+      var created=await res.json();
+      // Replace timestamp ID with server UUID to prevent re-upload on next refresh
+      if(created&&created.id){
+        var idx=historyData.findIndex(function(x){return String(x.id)===String(oldId);});
+        if(idx!==-1){historyData[idx].id=created.id;changed=true;}
+      }
     }catch(e){}
   }
+  if(changed)_saveLocalHistory();
 }
 
 async function loadHistory(){
