@@ -40,6 +40,147 @@ const SOURCES = {
   ],
 };
 
+// ── ZEROHEDGE TWITTER — mots-clés d'annonce marché ────────────────────────────
+// Basé sur les patterns réels de @zerohedge :
+//  • "BREAKING: ..." / "FLASH: ..." / "JUST IN: ..."
+//  • Données macro: "CPI", "GDP", "NFP", "%", "bps"
+//  • Banques centrales: "Fed", "FOMC", "Powell", "ECB", "BOJ"
+//  • Événements: "tariff", "recession", "default", "sanctions"
+//  • Citations : "> Source: '...'"
+const ZH_KEYWORDS = [
+  'BREAKING','FLASH','JUST IN','ALERT','REPORT:',
+  'CPI','GDP','NFP','PMI','ISM','PPI','PCE','FOMC','JOLTS','payrolls',
+  'Fed ','Federal Reserve','Powell','ECB','Lagarde','BOJ','Ueda','BOE','SNB','central bank',
+  'rate cut','rate hike','interest rate','basis point','bps',
+  'tariff','tariffs','sanction','recession','default','crisis','collapse','crash',
+  'earnings','bankruptcy','downgrade','upgrade',
+  '> ', // format citation ZeroHedge : "> Source: '...'"
+];
+
+// Exclus : liens seuls, articles promotionnels, threads sans contenu
+function isZHAnnouncement(text) {
+  if (!text || text.length < 40) return false;
+  if (/^RT @/i.test(text)) return false;                          // retweet
+  if (/^@\w/.test(text)) return false;                           // réponse
+  // Lien seul vers leur propre site sans contexte
+  if (/zerohedge\.com/.test(text) && text.length < 130 && !ZH_KEYWORDS.some(k => text.includes(k))) return false;
+  return ZH_KEYWORDS.some(k => text.includes(k));
+}
+
+// Cache du user ID (module-scope, survit aux warm starts)
+let ZH_USER_ID = null;
+
+function twitterGet(path, bearerToken) {
+  return new Promise((resolve, reject) => {
+    const req = https.request({
+      hostname: 'api.twitter.com',
+      path,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${bearerToken}`,
+        'User-Agent': 'LeTerminalBot/1.0',
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch(e) { resolve(null); }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(10000, () => req.destroy());
+    req.end();
+  });
+}
+
+async function fetchZerohedgeTweets(bearerToken) {
+  // 1. Résoudre le user ID si pas encore en cache
+  if (!ZH_USER_ID) {
+    const user = await twitterGet('/2/users/by/username/zerohedge', bearerToken);
+    ZH_USER_ID = user?.data?.id;
+    if (!ZH_USER_ID) throw new Error('ZeroHedge user ID introuvable');
+  }
+
+  // 2. Récupérer les tweets des 2 dernières heures
+  const startTime = new Date(Date.now() - 2 * 3600 * 1000).toISOString();
+  const params = new URLSearchParams({
+    max_results: '20',
+    'tweet.fields': 'created_at,text',
+    exclude: 'retweets,replies',
+    start_time: startTime,
+  });
+
+  const data = await twitterGet(
+    `/2/users/${ZH_USER_ID}/tweets?${params.toString()}`,
+    bearerToken
+  );
+
+  return (data?.data || []).filter(t => isZHAnnouncement(t.text));
+}
+
+async function getTweetSummary(tweetText) {
+  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+  if (!ANTHROPIC_API_KEY) return { summary: '', summary_en: '', sentiment: 'Neutre', is_announcement: true };
+
+  const prompt = `Tweet de @ZeroHedge (compte de veille macro/marchés) :
+"${tweetText.slice(0, 500)}"
+
+Réponds UNIQUEMENT en JSON strict, sans markdown :
+{
+  "summary_fr": "<résumé factuel 1-2 phrases en FRANÇAIS de l'annonce, ou vide si pas d'annonce>",
+  "summary_en": "<same in ENGLISH>",
+  "sentiment": "<Positif|Négatif|Neutre>",
+  "is_announcement": <true|false>
+}
+
+Contexte ZeroHedge : tweets souvent formatés "> Source: 'quote'" ou "BREAKING: data".
+- is_announcement=true si : donnée macro (CPI/GDP/NFP…), banque centrale, tariff, événement marché
+- Sentiment : Positif=bon pour marchés, Négatif=mauvais ou incertitude, Neutre=informatif
+- summary_fr/en vides si is_announcement=false`;
+
+  const payload = JSON.stringify({
+    model: 'claude-haiku-4-5',
+    max_tokens: 250,
+    messages: [{ role: 'user', content: prompt }]
+  });
+
+  return new Promise((resolve) => {
+    const req = https.request({
+      hostname: 'api.anthropic.com',
+      path: '/v1/messages',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try {
+          const body = JSON.parse(data);
+          const text = body.content?.[0]?.text || '{}';
+          const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
+          let sentiment = parsed.sentiment || 'Neutre';
+          if (!['Positif','Négatif','Neutre'].includes(sentiment)) sentiment = 'Neutre';
+          resolve({
+            summary:    parsed.summary_fr || '',
+            summary_en: parsed.summary_en || '',
+            sentiment,
+            is_announcement: parsed.is_announcement !== false,
+          });
+        } catch(e) { resolve({ summary: '', summary_en: '', sentiment: 'Neutre', is_announcement: true }); }
+      });
+    });
+    req.on('error', () => resolve({ summary: '', summary_en: '', sentiment: 'Neutre', is_announcement: true }));
+    req.write(payload);
+    req.end();
+  });
+}
+
 // ── HTTP FETCH ────────────────────────────────────────────────────────────────
 function httpGet(url, timeout = 8000) {
   return new Promise((resolve, reject) => {
@@ -217,12 +358,11 @@ module.exports = async function handler(req, res) {
         const xml = await httpGet(source.url);
         const items = parseRSS(xml);
 
-        for (const item of items.slice(0, 10)) { // max 10 par feed
+        for (const item of items.slice(0, 10)) {
           stats.processed++;
           const exists = await guidExists(item.guid);
           if (exists) { stats.skipped++; continue; }
 
-          // Trop vieux ? (> 48h)
           if (item.pubDate) {
             const age = Date.now() - new Date(item.pubDate).getTime();
             if (age > 48 * 3600 * 1000) { stats.skipped++; continue; }
@@ -243,13 +383,55 @@ module.exports = async function handler(req, res) {
           });
           stats.inserted++;
 
-          // Pause anti-rate-limit Claude
           await new Promise(r => setTimeout(r, 300));
         }
       } catch(err) {
         stats.errors.push(`${source.name}: ${err.message}`);
         await logFeedError(source.name, source.url, err.message).catch(() => {});
       }
+    }
+  }
+
+  // ── ZEROHEDGE TWITTER ────────────────────────────────────────────────────────
+  // Actif uniquement si TWITTER_BEARER_TOKEN est configuré dans Vercel
+  const TWITTER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
+  if (TWITTER_TOKEN) {
+    try {
+      const tweets = await fetchZerohedgeTweets(TWITTER_TOKEN);
+      for (const tweet of tweets) {
+        stats.processed++;
+
+        // guid = tweet ID (stable, pas de doublon)
+        const guid = `zh_tweet_${tweet.id}`;
+        const exists = await guidExists(guid);
+        if (exists) { stats.skipped++; continue; }
+
+        const { summary, summary_en, sentiment, is_announcement } = await getTweetSummary(tweet.text);
+
+        // On ne stocke que les vraies annonces confirmées par Claude
+        if (!is_announcement) { stats.skipped++; continue; }
+
+        // Titre = première phrase du tweet (max 120 chars)
+        const title = tweet.text.split('\n')[0].replace(/https?:\/\/\S+/g, '').trim().slice(0, 120);
+        const tweetUrl = `https://x.com/zerohedge/status/${tweet.id}`;
+
+        await insertNewsItem({
+          guid,
+          title:      title || tweet.text.slice(0, 120),
+          summary:    summary    || tweet.text.replace(/https?:\/\/\S+/g,'').trim().slice(0, 200),
+          summary_en: summary_en || '',
+          source:     'ZeroHedge 𝕏',
+          url:        tweetUrl,
+          published_at: new Date(tweet.created_at).toISOString(),
+          zone:       'flash',
+          sentiment,
+        });
+        stats.inserted++;
+
+        await new Promise(r => setTimeout(r, 400));
+      }
+    } catch(err) {
+      stats.errors.push(`ZeroHedge Twitter: ${err.message}`);
     }
   }
 
