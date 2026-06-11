@@ -1781,6 +1781,127 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <!-- CALENDRIER -->
     <div class="eco-panel" id="panel-calendrier">
       <main class="wrap">
+
+        <!-- ░ TABLEAU D'ÉVÉNEMENTS CUSTOM (style maquette, données ForexFactory) ░ -->
+        <style>
+        .ecal__head{margin-bottom:18px}
+        .ecal__eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--v,#38B6FF);display:inline-flex;align-items:center;gap:8px;margin-bottom:10px}
+        .ecal__eyebrow .lt-dot{width:7px;height:7px;border-radius:50%;background:var(--v,#38B6FF)}
+        .ecal__title{font-family:'Bricolage Grotesque','Anton',sans-serif;text-transform:uppercase;font-size:clamp(26px,3.4vw,40px);font-weight:800;letter-spacing:-.01em;line-height:1.05;margin:0 0 8px}
+        .ecal__sub{font-size:14px;color:var(--text2,#aeb6c4);max-width:62ch;margin:0}
+        .ecal__bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:18px 0 12px}
+        .ecal__filt{font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 16px;border-radius:50px;border:1px solid var(--border,rgba(255,255,255,.1));background:transparent;color:var(--text3,#8a93a5);cursor:pointer;transition:all .2s}
+        .ecal__filt.on{background:rgba(56,182,255,.12);border-color:rgba(56,182,255,.5);color:#9fd4ff}
+        .ecal__impactToggle{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--text3,#8a93a5);cursor:pointer;user-select:none}
+        .ecal__impactToggle .dot{width:8px;height:8px;border-radius:50%;background:#444;transition:all .2s}
+        .ecal__impactToggle.on .dot{background:#F0647A;box-shadow:0 0 8px rgba(240,100,122,.6)}
+        .ecal__group{background:rgba(255,255,255,.02);border:1px solid var(--border,rgba(255,255,255,.08));border-radius:16px;overflow:hidden;margin-bottom:18px}
+        .ecal__gh{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--v,#7FB8E8);padding:14px 20px;border-bottom:1px solid var(--border,rgba(255,255,255,.06))}
+        .ecal__row{display:grid;grid-template-columns:64px 56px 1fr 64px repeat(3,84px);gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+        .ecal__row:last-child{border-bottom:none}
+        .ecal__row.hot{background:rgba(240,100,122,.05)}
+        .ecal__row:hover{background:rgba(255,255,255,.03)}
+        .ecal__time{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text2,#aeb6c4)}
+        .ecal__cur{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-align:center;padding:3px 0;border-radius:6px;border:1px solid}
+        .ecal__cur.usd{color:#9fd4ff;border-color:rgba(56,182,255,.4);background:rgba(56,182,255,.08)}
+        .ecal__cur.eur{color:#E8C268;border-color:rgba(232,194,104,.4);background:rgba(232,194,104,.08)}
+        .ecal__cur.oth{color:#aeb6c4;border-color:var(--border,rgba(255,255,255,.15))}
+        .ecal__ev{font-size:14px;color:var(--text,#e8ecf4);font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .ecal__imp{display:inline-flex;gap:4px}
+        .ecal__imp i{width:7px;height:7px;border-radius:50%;background:#333}
+        .ecal__imp i.h{background:#F0647A}.ecal__imp i.m{background:#E8C268}.ecal__imp i.l{background:#4ADE9C}
+        .ecal__cell{font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right}
+        .ecal__cell .k{display:block;font-size:8px;letter-spacing:.1em;color:var(--text3,#6b7280);text-transform:uppercase;margin-bottom:2px}
+        .ecal__cell.real{color:var(--text,#e8ecf4);font-weight:700}
+        .ecal__state{padding:30px 20px;text-align:center;color:var(--text3,#8a93a5);font-size:13px}
+        @media(max-width:780px){.ecal__row{grid-template-columns:54px 48px 1fr;row-gap:6px}.ecal__row .ecal__imp,.ecal__row .ecal__cell{grid-column:span 1}.ecal__cell{text-align:left}}
+        </style>
+        <section aria-label="Calendrier d'événements">
+          <div class="ecal__head">
+            <span class="ecal__eyebrow"><span class="lt-dot"></span> <span data-en="Macro">Macro</span></span>
+            <h1 class="ecal__title">Calendrier Éco</h1>
+            <p class="ecal__sub" data-en="The key macroeconomic events — NFP, CPI, FOMC — organized by region and expected impact.">Les événements macroéconomiques clés — NFP, CPI, FOMC — organisés par région et impact attendu.</p>
+          </div>
+          <div class="ecal__bar" id="ecalFilters">
+            <button class="ecal__filt on" data-cur="all">Toutes</button>
+            <button class="ecal__filt" data-cur="USD">USD</button>
+            <button class="ecal__filt" data-cur="EUR">EUR</button>
+            <button class="ecal__filt" data-cur="GBP">GBP</button>
+            <button class="ecal__filt" data-cur="JPY">JPY</button>
+            <span class="ecal__impactToggle" id="ecalImpact"><span class="dot"></span> <span data-en="High impact only">Impact fort uniquement</span></span>
+          </div>
+          <div id="ecalList"><div class="ecal__state">Chargement du calendrier…</div></div>
+        </section>
+
+        <script>
+        (function(){
+          var ECAL={ events:[], cur:'all', hot:false };
+          var EL=function(id){return document.getElementById(id);};
+          function curClass(c){ c=(c||'').toUpperCase(); return c==='USD'?'usd':c==='EUR'?'eur':'oth'; }
+          function frDay(iso){
+            var d=new Date(iso+'T00:00:00'); if(isNaN(d)) return iso;
+            var today=new Date(); today.setHours(0,0,0,0);
+            var diff=Math.round((d-today)/86400000);
+            var J=['DIM','LUN','MAR','MER','JEU','VEN','SAM'], M=['JANV','FÉVR','MARS','AVR','MAI','JUIN','JUIL','AOÛT','SEPT','OCT','NOV','DÉC'];
+            var lbl=J[d.getDay()]+' '+d.getDate()+' '+M[d.getMonth()];
+            if(diff===0) return "AUJOURD'HUI · "+lbl;
+            if(diff===1) return 'DEMAIN · '+lbl;
+            return lbl;
+          }
+          function impDots(n){ var s=''; for(var i=0;i<3;i++){ s+='<i class="'+(i<n?(n>=3?'h':n===2?'m':'l'):'')+'"></i>'; } return s; }
+          function render(){
+            var box=EL('ecalList'); if(!box) return;
+            var evs=ECAL.events.filter(function(e){
+              if(ECAL.cur!=='all' && (e.currency||'').toUpperCase()!==ECAL.cur) return false;
+              if(ECAL.hot && e.impact<3) return false;
+              return true;
+            });
+            if(!evs.length){ box.innerHTML='<div class="ecal__state">Aucun événement pour ces filtres.</div>'; return; }
+            var groups={}, order=[];
+            evs.forEach(function(e){ var k=e.date||'?'; if(!groups[k]){groups[k]=[];order.push(k);} groups[k].push(e); });
+            order.sort();
+            var html='';
+            order.forEach(function(k){
+              html+='<div class="ecal__group"><div class="ecal__gh">'+frDay(k)+'</div>';
+              groups[k].forEach(function(e){
+                var cc=curClass(e.currency);
+                html+='<div class="ecal__row'+(e.impact>=3?' hot':'')+'">'
+                  + '<span class="ecal__time">'+(e.time||'—')+'</span>'
+                  + '<span class="ecal__cur '+cc+'">'+(e.currency||'—')+'</span>'
+                  + '<span class="ecal__ev" title="'+(e.title||'').replace(/"/g,'&quot;')+'">'+(e.title||'—')+'</span>'
+                  + '<span class="ecal__imp">'+impDots(e.impact)+'</span>'
+                  + '<span class="ecal__cell"><span class="k">Préc.</span>'+(e.previous||'—')+'</span>'
+                  + '<span class="ecal__cell"><span class="k">Prév.</span>'+(e.forecast||'—')+'</span>'
+                  + '<span class="ecal__cell real"><span class="k">Réel</span>'+(e.actual||'—')+'</span>'
+                  + '</div>';
+              });
+              html+='</div>';
+            });
+            box.innerHTML=html;
+          }
+          // filtres
+          var fbar=EL('ecalFilters');
+          if(fbar) fbar.addEventListener('click',function(ev){
+            var b=ev.target.closest('.ecal__filt'); if(!b) return;
+            ECAL.cur=b.getAttribute('data-cur');
+            fbar.querySelectorAll('.ecal__filt').forEach(function(x){ x.classList.toggle('on', x===b); });
+            render();
+          });
+          var imp=EL('ecalImpact');
+          if(imp) imp.addEventListener('click',function(){ ECAL.hot=!ECAL.hot; imp.classList.toggle('on',ECAL.hot); render(); });
+          // données
+          function load(){
+            fetch('/api/calendar').then(function(r){return r.json();}).then(function(d){
+              if(d && d.events && d.events.length){ ECAL.events=d.events; render(); }
+              else { EL('ecalList').innerHTML='<div class="ecal__state">Calendrier détaillé indisponible pour le moment — voir le calendrier complet ci-dessous.</div>'; }
+            }).catch(function(){
+              EL('ecalList').innerHTML='<div class="ecal__state">Calendrier détaillé indisponible pour le moment — voir le calendrier complet ci-dessous.</div>';
+            });
+          }
+          if(document.readyState!=='loading') load(); else document.addEventListener('DOMContentLoaded', load);
+        })();
+        </script>
+
         <section class="prose" aria-label="Calendrier économique">
   <span class="prose__kicker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg> <span data-en="Economic calendar">Calendrier économique</span></span>
   <h1 class="prose__h" data-en="The week's high-impact events">Les rendez-vous à fort impact de la semaine</h1>
