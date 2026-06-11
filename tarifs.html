@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Terminal — Tarifs</title>
+<meta name="description" content="Le Terminal — commence gratuitement, passe en PRO quand tu veux. Cinq outils, un seul abonnement.">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./home.css">
+<link rel="stylesheet" href="./tarifs.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html" class="is-current">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
+      <a class="lt-btn lt-btn--ghost lt-btn--sm" href="./app.html">Connexion</a>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Accès PRO</a>
+    </div>
+  </header>
+</div>
+
+<!-- DOCK -->
+<nav class="lt-dock" aria-label="Pages">
+  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
+  <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
+  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
+  <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
+  <a class="lt-dock__item" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
+  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+</nav>
+
+<!-- HERO -->
+<section class="pr-hero">
+  <div class="pr-hero__halo" aria-hidden="true"></div>
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Tarifs simples, sans surprise</span>
+  <h1 class="pr-hero__title"><span class="lt-metal">Passe en PRO</span></h1>
+  <p class="pr-hero__lede">Commence gratuitement, sans carte bancaire. Quand tes analyses deviennent quotidiennes, PRO enlève toutes les limites — pour le prix d'un seul mauvais trade évité.</p>
+  <div class="pr-toggle" role="group" aria-label="Période de facturation">
+    <button class="pr-toggle__opt" id="prMonthly">Mensuel</button>
+    <button class="pr-toggle__opt is-on" id="prAnnual">Annuel <em>−34 %</em></button>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="pr-plans">
+  <div class="pr-grid">
+    <!-- Découverte -->
+    <div class="pr-card">
+      <div class="pr-card__head"><span class="pr-card__name">Découverte</span><span class="pr-card__tag">Pour commencer</span></div>
+      <div class="pr-card__price"><span class="pr-card__amount">0 €</span><span class="pr-card__per">/ mois</span></div>
+      <ul class="pr-card__feats">
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 analyses Setup Analyzer / mois</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal limité à 20 trades / mois</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calendrier économique complet</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calculateur de pips</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bubble Map en temps réel</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 1 compte de trading</li>
+      </ul>
+      <div class="pr-card__cta"><a class="lt-btn lt-btn--secondary lt-btn--lg" style="width:100%" href="./app.html">Créer un compte</a></div>
+    </div>
+    <!-- PRO -->
+    <div class="pr-card is-pro">
+      <span class="pr-card__flag">Recommandé</span>
+      <div class="pr-card__head"><span class="pr-card__name">PRO</span><span class="pr-card__tag">Tous les outils, sans limite</span></div>
+      <div class="pr-card__price"><span class="pr-card__amount" id="prProAmount">19 €</span><span class="pr-card__per" id="prProPer">/ mois · facturé 228 € / an</span></div>
+      <span class="pr-card__save" id="prProSave">Économise 34 % par rapport au mensuel</span>
+      <ul class="pr-card__feats">
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Alertes macro (NFP · CPI · FOMC)</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Jusqu'à 5 comptes de trading</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Communauté privée Telegram</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Accès anticipé aux nouveaux outils</li>
+      </ul>
+      <div class="pr-card__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" style="width:100%" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Passer en PRO</a></div>
+      <span class="pr-card__note">Garantie 14 jours satisfait ou remboursé</span>
+    </div>
+  </div>
+</section>
+
+<!-- POURQUOI -->
+<section class="pr-why" data-reveal>
+  <div class="pr-why__item"><span class="pr-why__n">01</span><h3>Un seul abonnement, cinq outils</h3><p>Analyse de setups, journal, calendrier macro, flux de capitaux et calculateur — ailleurs, c'est trois abonnements séparés. Ici, un seul cockpit.</p></div>
+  <div class="pr-why__item"><span class="pr-why__n">02</span><h3>L'IA qui connaît ta stratégie</h3><p>ICT, SMC, price action — le moteur s'adapte à ta méthode et apprend de ton historique. Le plan PRO débloque l'analyse comportementale complète.</p></div>
+  <div class="pr-why__item"><span class="pr-why__n">03</span><h3>Sans engagement, vraiment</h3><p>Plan gratuit à vie, annulation en deux clics et garantie 14 jours remboursé. Tu ne paies que tant que ça te fait progresser.</p></div>
+</section>
+
+<!-- COMPARATIF -->
+<section class="pr-compare" data-reveal>
+  <h2 class="pr-compare__title">Comparer en détail</h2>
+  <div class="pr-table">
+    <div class="pr-table__row pr-table__row--head"><span></span><span>Découverte</span><span class="pr-table__pro">PRO</span></div>
+
+    <div class="pr-table__group">Setup Analyzer</div>
+    <div class="pr-table__row"><span class="pr-table__feat">Analyses IA par mois</span><span class="pr-table__cell">3</span><span class="pr-table__cell pr-table__pro">Illimitées</span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Annotations sur graphique</span><span class="pr-table__cell"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Verdict GO / ATTENDRE / NO-GO</span><span class="pr-table__cell"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Rapport PDF par analyse</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+
+    <div class="pr-table__group">Journal de Trading</div>
+    <div class="pr-table__row"><span class="pr-table__feat">Trades par mois</span><span class="pr-table__cell">20</span><span class="pr-table__cell pr-table__pro">Illimités</span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Calendrier P&amp;L &amp; statistiques</span><span class="pr-table__cell"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">IA Coach (analyse de tes patterns)</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Comptes de trading</span><span class="pr-table__cell">1</span><span class="pr-table__cell pr-table__pro">5</span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Export PDF / CSV</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+
+    <div class="pr-table__group">Macro &amp; Marchés</div>
+    <div class="pr-table__row"><span class="pr-table__feat">Calendrier économique</span><span class="pr-table__cell"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Alertes avant événements à fort impact</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Bubble Map temps réel</span><span class="pr-table__cell"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Historique des flux (30 jours)</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+
+    <div class="pr-table__group">Services</div>
+    <div class="pr-table__row"><span class="pr-table__feat">Calculateur de pips</span><span class="pr-table__cell"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Communauté privée Telegram</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Support</span><span class="pr-table__cell">Standard</span><span class="pr-table__cell pr-table__pro">Prioritaire</span></div>
+    <div class="pr-table__row"><span class="pr-table__feat">Accès anticipé aux nouveaux outils</span><span class="pr-table__cell"><span class="pr-dash">—</span></span><span class="pr-table__cell pr-table__pro"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="pr-faq" data-reveal>
+  <h2 class="pr-faq__title">Questions fréquentes</h2>
+  <div class="pr-faq__list">
+    <div class="pr-faq__item is-open"><button class="pr-faq__q" aria-expanded="true">Puis-je vraiment utiliser Le Terminal gratuitement ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui. Le plan Découverte est gratuit pour toujours — pas de carte bancaire demandée. Tu as accès aux cinq outils avec des limites mensuelles, de quoi te faire un avis réel avant de passer en PRO.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Comment fonctionne la garantie 14 jours ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Si PRO ne te convient pas, écris-nous dans les 14 jours suivant ton paiement : remboursement intégral, sans question. La plupart des plateformes équivalentes ne remboursent pas — nous, si.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Puis-je changer de plan ou annuler à tout moment ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui. Le passage Découverte → PRO est immédiat. L'annulation se fait en deux clics depuis ton compte : tu gardes l'accès PRO jusqu'à la fin de la période payée, puis tu repasses automatiquement en Découverte. Tes données sont conservées.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Quels moyens de paiement acceptez-vous ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Carte bancaire (Visa, Mastercard, Amex) et PayPal. Le paiement est sécurisé et la facturation s'arrête dès l'annulation.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">L'abonnement PRO est-il adapté aux traders prop firm ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui — c'est même notre cœur d'utilisateurs. Multi-comptes (jusqu'à 5 challenges en parallèle), journal illimité et alertes macro avant les annonces à fort impact : tout est pensé pour la gestion de challenges.</p></div></div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="pr-final" data-reveal>
+  <h2 class="pr-final__title"><span class="lt-metal">Prêt à décoller ?</span></h2>
+  <p class="pr-final__lede">Crée ton compte gratuit en 30 secondes. Aucun engagement.</p>
+  <div class="pr-final__cta">
+    <a class="lt-btn lt-btn--primary lt-btn--lg" href="./app.html">Créer un compte gratuit</a>
+    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Passer en PRO</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="lt-footer">
+  <div class="lt-footer__top">
+    <div class="lt-footer__brand"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></div>
+    <nav class="lt-footer__links"><a href="./index.html#tools">Outils</a><a href="./index.html#strategies">Stratégies</a><a href="./tarifs.html">Tarifs</a><a href="./index.html#method">Méthode</a><a href="./index.html#community">Communauté</a></nav>
+  </div>
+  <div class="lt-footer__bottom">
+    <span class="lt-footer__copy">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    <span class="lt-footer__note">Outils éducatifs. Le trading comporte des risques de perte en capital.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  // Progress + chrome scrolled
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // Reveal
+  if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); },{threshold:0.12}); document.querySelectorAll('[data-reveal]').forEach(function(el){ io.observe(el); }); }
+  else { document.querySelectorAll('[data-reveal]').forEach(function(el){ el.classList.add('is-in'); }); }
+
+  // Nav dropdown
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+
+  // Language pill
+  var pill=document.getElementById('ltLangPill');
+  if(pill){ try{ pill.textContent=(localStorage.getItem('lt_lang')==='en')?'EN':'FR'; }catch(e){} pill.style.cursor='pointer';
+    pill.addEventListener('click',function(){ var n=(pill.textContent==='FR')?'en':'fr'; try{ localStorage.setItem('lt_lang',n); localStorage.setItem('lte_lang',n); }catch(e){} pill.textContent=n.toUpperCase(); }); }
+
+  // Pricing toggle (mensuel / annuel)
+  var bM=document.getElementById('prMonthly'), bA=document.getElementById('prAnnual');
+  var amt=document.getElementById('prProAmount'), per=document.getElementById('prProPer'), save=document.getElementById('prProSave');
+  function setPeriod(annual){
+    if(bA) bA.classList.toggle('is-on', annual); if(bM) bM.classList.toggle('is-on', !annual);
+    if(amt) amt.textContent = (annual?'19':'29')+' €';
+    if(per) per.textContent = annual ? '/ mois · facturé 228 € / an' : '/ mois';
+    if(save){ if(annual){ save.textContent='Économise 34 % par rapport au mensuel'; save.classList.remove('pr-card__save--mute'); } else { save.textContent='Ou 19 € / mois en annuel'; save.classList.add('pr-card__save--mute'); } }
+  }
+  if(bM) bM.addEventListener('click',function(){ setPeriod(false); });
+  if(bA) bA.addEventListener('click',function(){ setPeriod(true); });
+
+  // FAQ accordion
+  document.querySelectorAll('.pr-faq__item .pr-faq__q').forEach(function(q){
+    q.addEventListener('click',function(){
+      var item=q.closest('.pr-faq__item'); var open=item.classList.contains('is-open');
+      document.querySelectorAll('.pr-faq__item').forEach(function(it){ it.classList.remove('is-open'); var b=it.querySelector('.pr-faq__q'); if(b) b.setAttribute('aria-expanded','false'); });
+      if(!open){ item.classList.add('is-open'); q.setAttribute('aria-expanded','true'); }
+    });
+  });
+})();
+</script>
+</body>
+</html>

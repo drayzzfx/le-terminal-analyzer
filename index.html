@@ -1,232 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
-<!-- v3 — design "Le Terminal" (nouveau design system) -->
 <head>
 <meta charset="UTF-8">
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#07090C">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Le Terminal">
-<link rel="apple-touch-icon" href="./logo.jpg.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LE TERMINAL — Hub Trading</title>
+<title>Le Terminal — Hub trading propulsé par l'IA</title>
+<meta name="description" content="Le Terminal — analyse tes setups avec l'IA, tiens ton journal, suis le calendrier éco et maîtrise ton risque. Cinq outils, un seul cockpit.">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
-<style>
-/* Alias des anciennes variables → tokens du design system :
-   re-thème instantanément toutes les sections existantes en palette glaciale. */
-:root {
-  --bg: #0B0E13; --bg2: #10141B;
-  --card: rgba(255,255,255,0.03);
-  --border: #1C212A;
-  --v: var(--accent); --v2: var(--accent-bright); --vglow: var(--accent-glow);
-  --text: var(--text-title); --text2: var(--text-body); --text3: var(--text-muted);
-  --green: var(--bull); --red: var(--bear); --amber: var(--neutral);
-}
-body { background: var(--bg); color: var(--text-body); font-family: var(--font-text); overflow-x: hidden; position: relative; }
-
-/* ---------- ATMOSPHÈRE GLOBALE (du design marketing) ---------- */
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(127,184,232,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(127,184,232,0.035) 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 0%, transparent 75%);
-  mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 0%, transparent 75%);
-}
-body::after {
-  content: ''; position: fixed; inset: -20%; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(closest-side, rgba(127,184,232,0.09), transparent 70%),
-    radial-gradient(closest-side, rgba(90,155,212,0.07), transparent 70%),
-    radial-gradient(closest-side, rgba(127,184,232,0.05), transparent 70%);
-  background-size: 60% 60%, 50% 50%, 45% 45%;
-  background-position: 12% 8%, 85% 35%, 55% 85%;
-  background-repeat: no-repeat; filter: blur(30px);
-  /* Perf : on anime transform (composité GPU) et jamais background-position,
-     sinon le blur(30px) plein écran est recalculé à chaque frame. */
-  will-change: transform;
-  animation: lt-drift 34s ease-in-out infinite alternate;
-}
-@keyframes lt-drift { 0%{transform:translate3d(-1.5%,-1%,0)} 50%{transform:translate3d(1.2%,1.4%,0)} 100%{transform:translate3d(-0.8%,1.8%,0)} }
-@media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
-
-/* ---------- HERO : MIDNIGHT RUNWAY (fidèle au design) ---------- */
-.lt-metal { background: var(--metal-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; position: relative; padding: 0 0.08em; }
-.lt-accent-text { color: var(--accent-bright); }
-.lt-hero { position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg-void); text-align: center; padding-top: var(--chrome-h, 64px); z-index: 1; }
-/* Perf : drift en transform (composité GPU) — animer background-position forcerait
-   le recalcul du blur(40px) sur 150% du hero à chaque frame. */
-.lt-aurora { position: absolute; inset: -25%; pointer-events: none; z-index: 0; background: radial-gradient(closest-side, rgba(127,184,232,0.10), transparent 70%), radial-gradient(closest-side, rgba(90,155,212,0.08), transparent 70%); background-size: 55% 55%, 45% 45%; background-position: 30% 18%, 72% 30%; background-repeat: no-repeat; filter: blur(40px); will-change: transform; animation: lt-aurora 28s ease-in-out infinite alternate; }
-@keyframes lt-aurora { 0%{transform:translate3d(-2%,-1.5%,0)} 100%{transform:translate3d(2.5%,1.5%,0)} }
-@media (prefers-reduced-motion: reduce) { .lt-aurora { animation: none; } }
-.lt-runway { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 1; pointer-events: none; perspective: 520px; overflow: hidden; }
-.lt-runway__floor { position: absolute; left: -50%; right: -50%; top: 0; bottom: -60%; transform: rotateX(72deg); transform-origin: 50% 0; background-image: repeating-linear-gradient(0deg, rgba(191,220,245,0.45) 0 26px, transparent 26px 78px), repeating-linear-gradient(0deg, rgba(127,184,232,0.14) 0 1px, transparent 1px 90px), repeating-linear-gradient(90deg, rgba(127,184,232,0.12) 0 1px, transparent 1px 160px); background-size: 3px 100%, 100% 100%, 100% 100%; background-position: 50% 0, 0 0, 0 0; background-repeat: repeat; }
-@media (prefers-reduced-motion: no-preference) { .lt-runway__floor { animation: lt-taxi 7s linear infinite; } }
-@keyframes lt-taxi { from{background-position:50% 0,0 0,0 0} to{background-position:50% 360px,0 360px,0 0} }
-.lt-runway__edge { position: absolute; bottom: -4%; width: 4px; height: 96%; z-index: 2; }
-.lt-runway__edge--l { left: 50%; transform: translateX(-50%) rotate(24deg); transform-origin: 50% 0; }
-.lt-runway__edge--r { left: 50%; transform: translateX(-50%) rotate(-24deg); transform-origin: 50% 0; }
-.lt-runway__edge i { position: absolute; left: 50%; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 999px; background: var(--accent-bright); box-shadow: 0 0 12px var(--accent-glow), 0 0 28px var(--accent-glow); }
-.lt-runway__edge i:nth-child(1){top:8%;transform:scale(.35);opacity:.5} .lt-runway__edge i:nth-child(2){top:26%;transform:scale(.5);opacity:.6} .lt-runway__edge i:nth-child(3){top:46%;transform:scale(.7);opacity:.75} .lt-runway__edge i:nth-child(4){top:68%;transform:scale(.9);opacity:.9} .lt-runway__edge i:nth-child(5){top:92%;transform:scale(1.15);opacity:1}
-.lt-runway__horizon { position: absolute; top: -1px; left: 8%; right: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(127,184,232,0.5), transparent); box-shadow: 0 0 24px 2px var(--accent-glow); }
-.lt-runway::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, var(--bg-void) 0%, transparent 36%); }
-/* Perf : disque de taille fixe déplacé en transform (composité) — un gradient
-   repositionné via background serait repeint à chaque mousemove. */
-.lt-hero__spotlight { position: absolute; left: 50%; top: 0; width: 840px; height: 840px; margin: -420px 0 0 -420px; pointer-events: none; z-index: 2; background: radial-gradient(circle closest-side, rgba(127,184,232,0.07), transparent 70%); transform: translate3d(var(--sx,0px), var(--sy,0px), 0); transition: transform 120ms linear; will-change: transform; }
-.lt-hero__grain { position: absolute; inset: 0; pointer-events: none; z-index: 3; mix-blend-mode: overlay; opacity: var(--grain-opacity); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); }
-.lt-hero__vignette { position: absolute; inset: 0; pointer-events: none; z-index: 3; background: var(--vignette); }
-.lt-hero__inner { position: relative; z-index: 5; max-width: 980px; padding: 30px 24px 110px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.lt-hero__eyebrow { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; text-transform: uppercase; letter-spacing: var(--ls-caps); color: var(--accent); transform: translate3d(calc(var(--px,0) * 10px), calc(var(--py,0) * 6px), 0); transition: transform 240ms var(--ease-out); }
-.lt-hero__titlewrap { position: relative; perspective: 900px; }
-.lt-hero__title { margin: 0; font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-hero); line-height: var(--lh-display); letter-spacing: var(--ls-display); display: flex; flex-direction: column; transform: rotateX(calc(var(--py,0) * -7deg)) rotateY(calc(var(--px,0) * 10deg)); transition: transform 260ms var(--ease-out); }
-@media (prefers-reduced-motion: no-preference) {
-  .lt-hero__title .lt-metal { background-image: var(--metal-gradient), linear-gradient(100deg, transparent 38%, rgba(191,220,245,0.5) 50%, transparent 62%); background-size: 110% 130%, 240% 100%; background-position: calc(50% + var(--px,0) * 30%) calc(50% + var(--py,0) * 40%), calc(50% + var(--px,0) * -120%) 0; -webkit-background-clip: text; background-clip: text; transition: background-position 220ms var(--ease-out); }
-}
-.lt-hero__subhead { margin: 6px 0 0; font-size: clamp(1.3rem, 2.6vw, 2rem); font-weight: 700; color: var(--text-title); letter-spacing: var(--ls-tight); }
-.lt-hero__lede { max-width: 60ch; font-size: clamp(1rem, 1.4vw, 1.18rem); line-height: 1.6; color: var(--text-body); margin: 0; }
-.lt-hero__cta { display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
-.lt-hero__chips { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
-.lt-chip { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: rgba(16,20,27,0.85); transition: border-color var(--dur-fast) var(--ease-out); }
-.lt-chip:hover { border-color: var(--border); }
-.lt-chip__ic { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--r-sm); color: var(--accent); background: var(--accent-glow-soft); }
-.lt-chip__txt { display: flex; flex-direction: column; text-align: left; line-height: 1.25; }
-.lt-chip__label { font-size: 13px; font-weight: 600; color: var(--text-title); white-space: nowrap; }
-.lt-chip__sub { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
-.lt-hero__scroll { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 5; color: var(--text-muted); display: inline-flex; animation: lt-bob 2.4s var(--ease-in-out) infinite; }
-.lt-hero__scroll:hover { color: var(--accent); }
-@keyframes lt-bob { 0%,100%{transform:translate(-50%,0)} 50%{transform:translate(-50%,7px)} }
-@media (prefers-reduced-motion: reduce) { .lt-hero__scroll { animation: none; } }
-@media (prefers-reduced-motion: no-preference) {
-  .lt-anim { animation: lt-rise 0.9s var(--ease-out) backwards; }
-  .lt-anim--1{animation-delay:.10s} .lt-anim--2{animation-delay:.24s} .lt-anim--3{animation-delay:.34s} .lt-anim--4{animation-delay:.62s} .lt-anim--5{animation-delay:.74s} .lt-anim--6{animation-delay:.88s} .lt-anim--7{animation-delay:1.02s}
-}
-@keyframes lt-rise { from{transform:translateY(30px)} to{transform:translateY(0)} }
-
-/* Barre auth dans le nav */
-#ltNavUser { display: flex; align-items: center; gap: 8px; }
-.trial-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: var(--r-sm); border: 1px solid var(--border-subtle); color: var(--text-muted); letter-spacing: .04em; display: none; }
-.user-chip { display: none; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: var(--r-pill); border: 1px solid var(--border-subtle); background: var(--bg-elevated); cursor: pointer; }
-.user-chip.show { display: flex; }
-.user-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(160deg, var(--accent-deep), var(--bg-elevated)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-title); }
-.user-name { font-size: 12px; font-weight: 500; color: var(--text-body); }
-.logout-btn { display: none; }
-
-/* ---------- MAIN (sections existantes, re-thémées) ---------- */
-.main { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; padding: 0 24px 120px; }
-@media (max-width: 1360px) and (min-width: 761px) { .main { padding-left: 92px; padding-right: 48px; } }
-
-/* ── SECTION HEADERS ── */
-.section-header{text-align:center;margin-bottom:48px}
-.section-eyebrow{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
-.section-title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(28px,3.6vw,42px);font-weight:400;letter-spacing:.01em;color:var(--text-title);line-height:1.05}
-.section-sub{font-size:14px;color:var(--text-body);line-height:1.7;margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto}
-
-/* ── TOOLS ── */
-.tools-section{padding:90px 0 40px}
-.tools-grid-main{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
-.tools-grid-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.tool-card{position:relative;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:28px 26px 52px;cursor:pointer;text-decoration:none;color:inherit;transition:all .3s var(--ease-out);overflow:hidden;display:block}
-.tool-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow-lg),0 0 0 1px var(--accent-glow-soft)}
-.tool-card.featured{border-color:var(--border);background:rgba(127,184,232,0.05)}
-.tool-badge{position:absolute;top:16px;right:16px;font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.1em;padding:3px 9px;border-radius:var(--r-sm);text-transform:uppercase;z-index:2}
-.badge-live{background:var(--bull-glow);color:var(--bull);border:1px solid rgba(74,222,156,.4)}
-.badge-new{background:var(--accent-glow-soft);color:var(--accent-bright);border:1px solid var(--accent-glow)}
-.badge-soon{background:rgba(255,255,255,.04);color:var(--text-muted);border:1px solid var(--border-subtle)}
-.tool-icon-wrap{width:46px;height:46px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;z-index:1;border:1px solid var(--border-subtle);background:var(--accent-glow-soft);color:var(--accent)}
-.tool-name{font-family:var(--font-display);text-transform:uppercase;font-size:19px;font-weight:400;letter-spacing:.02em;margin-bottom:8px;color:var(--text-title);position:relative;z-index:1}
-.tool-desc{font-size:12.5px;color:var(--text-body);line-height:1.65;position:relative;z-index:1}
-.tool-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;position:relative;z-index:1}
-.tool-tag{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:.06em;padding:3px 9px;border-radius:var(--r-pill);border:1px solid var(--border-subtle);color:var(--text-muted);background:var(--bg-surface)}
-.tool-arrow{position:absolute;bottom:20px;right:20px;width:30px;height:30px;border-radius:50%;border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all .3s;z-index:2;font-size:13px}
-.tool-card:hover .tool-arrow{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-glow-soft);transform:translate(2px,-2px)}
-
-/* ── STATS BAND ── */
-.stats-section{padding:24px 0 80px}
-.stats-band{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border-subtle);border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border-subtle)}
-.stat-item{background:var(--bg-elevated);padding:28px 24px;text-align:center;transition:background .2s}
-.stat-item:hover{background:rgba(127,184,232,.04)}
-.stat-val{font-family:var(--font-display);font-size:38px;font-weight:400;letter-spacing:.01em;color:var(--accent-bright);line-height:1}
-.stat-lbl{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.12em;color:var(--text-muted);margin-top:10px;text-transform:uppercase}
-
-/* ── STRATEGY SECTION ── */
-.strategy-section{padding:60px 0}
-.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-.strategy-left{padding-right:20px}
-.strategy-left .section-header{text-align:left;margin-bottom:28px}
-.strategy-desc{font-size:14px;color:var(--text-body);line-height:1.75;margin-bottom:32px}
-.strat-tags{display:flex;flex-wrap:wrap;gap:8px}
-.strat-tag{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r-md);background:var(--bg-elevated);border:1px solid var(--border-subtle);font-size:12px;font-weight:500;color:var(--text-body);transition:all .2s}
-.strat-tag:hover{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-glow-soft)}
-.strat-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.strategy-right{display:flex;flex-direction:column;gap:12px}
-.feat-card{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--r-lg);background:var(--bg-elevated);border:1px solid var(--border-subtle);transition:all .2s}
-.feat-card:hover{border-color:var(--accent);background:rgba(127,184,232,.04)}
-.feat-icon{width:40px;height:40px;border-radius:var(--r-md);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
-.feat-body strong{display:block;font-size:14px;font-weight:700;color:var(--text-title);margin-bottom:4px}
-.feat-body span{font-size:12px;color:var(--text-body);line-height:1.6}
-
-/* ── PROCESS SECTION ── */
-.process-section{padding:80px 0}
-.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative}
-.process-step{padding:32px 24px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);text-align:center;position:relative}
-.step-num{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--accent);margin-bottom:16px;text-transform:uppercase}
-.step-icon{font-size:28px;margin-bottom:14px}
-.step-title{font-size:15px;font-weight:700;color:var(--text-title);margin-bottom:8px}
-.step-desc{font-size:12px;color:var(--text-body);line-height:1.6}
-
-/* ── TELEGRAM ── */
-.tg-section{padding:40px 0 60px}
-.tg-banner{display:flex;align-items:center;gap:20px;background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:var(--r-lg);padding:28px 32px;text-decoration:none;color:inherit;transition:all .25s;position:relative;overflow:hidden}
-.tg-banner:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.tg-icon{width:52px;height:52px;border-radius:var(--r-md);background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 24px rgba(42,171,238,.3)}
-.tg-body strong{display:block;font-size:17px;font-weight:700;color:var(--text-title);margin-bottom:4px}
-.tg-body span{font-size:13px;color:var(--text-body)}
-.tg-chips{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.tg-chip{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:var(--r-pill);background:rgba(42,171,238,.1);border:1px solid rgba(42,171,238,.25);color:#5BB8F0}
-.tg-cta{margin-left:auto;flex-shrink:0;padding:11px 22px;background:linear-gradient(135deg,#2AABEE,#229ED9);border:none;border-radius:var(--r-sm);color:white;font-family:var(--font-text);font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap}
-.tg-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(42,171,238,.4)}
-
-/* ── AUTH MODAL ── */
-.auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(7,9,12,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
-.auth-overlay.show{display:flex;animation:fadeUp .3s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.auth-box{max-width:380px;width:100%;background:var(--bg-elevated);border:1px solid var(--accent-glow);border-radius:var(--r-lg);padding:32px;position:relative;text-align:center}
-.auth-box::before{content:'';position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent-bright),transparent)}
-.auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;text-align:left}
-.auth-field label{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase}
-.auth-field input{background:var(--bg-void);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-title);padding:11px 14px;font-family:var(--font-text);font-size:13px;outline:none;transition:border-color .2s;width:100%}
-.auth-field input:focus{border-color:var(--accent)}
-.auth-tabs{display:flex;margin-bottom:20px;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden}
-.auth-tab{flex:1;padding:9px;background:transparent;border:none;font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .2s}
-.auth-tab.on{background:var(--accent);color:#07090C}
-.auth-submit{width:100%;padding:13px;background:var(--accent);border:none;border-radius:var(--r-sm);color:#07090C;font-family:var(--font-text);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;margin-top:6px;transition:all .2s}
-.auth-submit:hover{background:var(--accent-bright)}
-.auth-error{font-size:11px;color:var(--bear);margin-top:8px;min-height:16px}
-.auth-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:4px}
-
-/* ── RESPONSIVE ── */
-@media(max-width:900px){
-  .tools-grid-main,.tools-grid-sub{grid-template-columns:1fr 1fr}
-  .strategy-grid{grid-template-columns:1fr}.strategy-left{padding-right:0}
-  .stats-band{grid-template-columns:repeat(2,1fr)}
-  .process-steps{grid-template-columns:1fr 1fr}
-}
-@media(max-width:600px){
-  .tools-grid-main,.tools-grid-sub{grid-template-columns:1fr}
-  .tg-banner{flex-wrap:wrap}.tg-cta{width:100%;text-align:center}
-  .process-steps{grid-template-columns:1fr}.stats-band{grid-template-columns:1fr 1fr}
-}
-#paywallOverlay.show{display:flex;animation:fadeUp .3s ease}
-</style>
+<link rel="stylesheet" href="./home.css">
 </head>
 <body>
+<a id="top"></a>
 
-<!-- ============ GLOBAL CHROME : NAV ============ -->
+<!-- Progress hairline -->
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- ░░░ CHROME : top nav ░░░ -->
 <div class="lt-chrome" id="ltChrome">
   <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
@@ -234,47 +26,42 @@ body::after {
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </a>
     <nav class="lt-nav__links">
-      <div class="lt-nav__drop">
-        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
         <div class="lt-nav__menu">
-          <a class="lt-nav__menuitem" href="./journal.html" onclick="return checkFeatureAccess(event)"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./calendrier.html" onclick="return checkFeatureAccess(event)"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="./app.html" onclick="return checkFeatureAccess(event)"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
-          <a class="lt-nav__menuitem" href="./bubble.html" onclick="return checkFeatureAccess(event)"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
-          <a class="lt-nav__menuitem" href="./calculateur.html" onclick="return checkFeatureAccess(event)"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
         </div>
       </div>
+      <a href="./tarifs.html">Tarifs</a>
       <a href="#method">Méthode</a>
       <a href="#community">Communauté</a>
     </nav>
     <div class="lt-nav__actions">
-      <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
-      <div id="ltNavUser">
-        <span id="trialBadge" class="trial-badge"></span>
-        <div class="user-chip" id="userChip">
-          <div class="user-avatar" id="userAvatar">?</div>
-          <span class="user-name" id="userName">—</span>
-        </div>
-        <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="openAuth()">Connexion</button>
-        <button class="lt-btn lt-btn--ghost lt-btn--sm logout-btn" id="logoutBtn" onclick="doLogout()" style="border-color:rgba(240,100,122,.4);color:var(--bear)">Déconnexion</button>
-      </div>
-      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="showPaywall()">Accès PRO</button>
+      <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
+      <a class="lt-btn lt-btn--ghost lt-btn--sm" href="./app.html">Connexion</a>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
     </div>
   </header>
 </div>
 
-<!-- ============ LEFT DOCK ============ -->
+<!-- ░░░ SIDE DOCK ░░░ -->
 <nav class="lt-dock" aria-label="Pages">
   <a class="lt-dock__item is-active" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
-  <a class="lt-dock__item" href="./journal.html" onclick="return checkFeatureAccess(event)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
-  <a class="lt-dock__item" href="./calendrier.html" onclick="return checkFeatureAccess(event)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
-  <a class="lt-dock__item" href="./app.html" onclick="return checkFeatureAccess(event)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
-  <a class="lt-dock__item" href="./bubble.html" onclick="return checkFeatureAccess(event)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
-  <a class="lt-dock__item" href="./calculateur.html" onclick="return checkFeatureAccess(event)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+  <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
+  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
+  <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
+  <a class="lt-dock__item" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
+  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
 </nav>
 
-<!-- ============ HERO ============ -->
-<section class="lt-hero" id="ltHero">
+<!-- ░░░ HERO ░░░ -->
+<section class="lt-hero" id="ltHero" style="--mx:50%;--my:0%;--px:0;--py:0">
   <div class="lt-aurora"></div>
   <div class="lt-runway" aria-hidden="true">
     <div class="lt-runway__horizon"></div>
@@ -283,20 +70,22 @@ body::after {
     <div class="lt-runway__edge lt-runway__edge--r"><i></i><i></i><i></i><i></i><i></i></div>
   </div>
   <div class="lt-hero__spotlight"></div>
+  <canvas class="lt-hero__dust" id="ltDust"></canvas>
   <div class="lt-hero__grain"></div>
+
   <div class="lt-hero__inner">
-    <div class="lt-hero__eyebrow lt-anim lt-anim--1"><span class="lt-dot"></span> <span data-i18n="hero-pill">Plateforme active · Mis à jour quotidiennement</span></div>
+    <div class="lt-hero__eyebrow lt-anim lt-anim--1"><span class="lt-dot"></span> Plateforme active · Mis à jour quotidiennement</div>
     <div class="lt-hero__titlewrap">
       <h1 class="lt-hero__title">
         <span class="lt-metal lt-anim lt-anim--2">Le</span>
         <span class="lt-metal lt-anim lt-anim--3">Terminal</span>
       </h1>
     </div>
-    <p class="lt-hero__subhead lt-anim lt-anim--4"><span data-i18n="hero-title-1">Ton hub trading</span>, <span class="lt-accent-text" data-i18n="hero-title-2">propulsé par l'IA.</span></p>
-    <p class="lt-hero__lede lt-anim lt-anim--5" data-i18n="hero-sub">Analyse tes setups en quelques secondes, tiens ton journal, consulte le calendrier éco et maîtrise ta gestion du risque. Tout au même endroit.</p>
+    <p class="lt-hero__subhead lt-anim lt-anim--4">Ton hub trading, <span class="lt-accent-text">propulsé par l'IA.</span></p>
+    <p class="lt-hero__lede lt-anim lt-anim--5">Analyse tes setups en quelques secondes, tiens ton journal, consulte le calendrier éco et maîtrise ta gestion du risque. Tout au même endroit.</p>
     <div class="lt-hero__cta lt-anim lt-anim--6">
-      <a href="#tools" class="lt-btn lt-btn--primary lt-btn--lg"><span data-i18n="hero-cta">Voir les outils</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <a href="./app.html" class="lt-btn lt-btn--ghost lt-btn--lg" onclick="return checkFeatureAccess(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg> Voir la démo</a>
+      <a class="lt-btn lt-btn--primary lt-btn--lg" href="#tools">Voir les outils <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="lt-btn lt-btn--ghost lt-btn--lg" href="./app.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg> Voir la démo</a>
     </div>
     <div class="lt-hero__chips lt-anim lt-anim--7">
       <div class="lt-chip"><span class="lt-chip__ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M16.5 13.5v6M13.5 16.5h6"/></svg></span><span class="lt-chip__txt"><span class="lt-chip__label">5 outils intégrés</span><span class="lt-chip__sub">Un seul cockpit</span></span></div>
@@ -305,291 +94,422 @@ body::after {
       <div class="lt-chip"><span class="lt-chip__ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.7-3 2.9-4.5 5.5-4.5S13.8 16 14.5 19"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.7c2.2.2 3.9 1.5 4.5 3.8"/></svg></span><span class="lt-chip__txt"><span class="lt-chip__label">Communauté privée</span><span class="lt-chip__sub">Traders actifs 24/7</span></span></div>
     </div>
   </div>
+
   <div class="lt-hero__vignette"></div>
   <a class="lt-hero__scroll" href="#tools" aria-label="Défiler"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
 </section>
 
-<div class="main">
+<!-- ░░░ LIVE TICKER ░░░ -->
+<div class="lt-live" id="ltLive" aria-label="Prix en direct">
+  <span class="lt-live__badge"><span class="lt-dot"></span> LIVE</span>
+  <div class="lt-live__viewport"><div class="lt-live__rail" id="ltRail"></div></div>
+</div>
 
-  <!-- ── TOOLS ── -->
-  <section class="tools-section" id="tools">
-    <div class="section-header">
-      <div class="section-eyebrow" data-i18n="tools-eyebrow">Arsenal complet</div>
-      <div class="section-title" data-i18n="tools-title">Tous les outils dont tu as besoin</div>
-      <div class="section-sub" data-i18n="tools-sub">Chaque outil est conçu pour un aspect précis de ton trading. Ensemble, ils forment un écosystème complet.</div>
+<!-- ░░░ COCKPIT — board ░░░ -->
+<section class="lt-board" id="tools" data-reveal>
+  <div class="lt-board__head">
+    <div class="lt-board__headleft">
+      <span class="lt-eyebrow"><span class="lt-dot"></span> Arsenal complet</span>
+      <h2 class="lt-board__title">Les outils<br>du cockpit</h2>
     </div>
-
-    <div class="tools-grid-main">
-      <a href="./app.html" class="tool-card featured" onclick="return checkFeatureAccess(event)">
-        <div class="tool-badge badge-live">En ligne</div>
-        <div class="tool-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="tool-name" data-i18n="tool-analyzer-name">Setup Analyzer</div>
-        <div class="tool-desc" data-i18n="tool-analyzer-desc">Score IA de ton setup, compatible avec toutes les stratégies (ICT, SMC, Price Action…). Feedback instantané et annotations sur ton graphique.</div>
-        <div class="tool-tags"><span class="tool-tag">Score /100</span><span class="tool-tag">Toutes stratégies</span><span class="tool-tag">Annotations IA</span><span class="tool-tag">Rapport PDF</span></div>
-        <div class="tool-arrow">→</div>
-      </a>
-      <a href="./journal.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-        <div class="tool-badge badge-new">Nouveau</div>
-        <div class="tool-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></div>
-        <div class="tool-name" data-i18n="tool-journal-name">Journal de Trading</div>
-        <div class="tool-desc" data-i18n="tool-journal-desc">Calendrier de tes trades, suivi P&L, screenshots, notes et analyse IA de tes patterns de performance.</div>
-        <div class="tool-tags"><span class="tool-tag">Calendrier</span><span class="tool-tag">P&L</span><span class="tool-tag">Win Rate</span><span class="tool-tag">IA Coach</span></div>
-        <div class="tool-arrow">→</div>
-      </a>
-      <a href="./calendrier.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-        <div class="tool-badge badge-live">En ligne</div>
-        <div class="tool-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        <div class="tool-name" data-i18n="tool-eco-name">Calendrier Éco</div>
-        <div class="tool-desc" data-i18n="tool-eco-desc">Tous les événements macroéconomiques clés — NFP, CPI, FOMC — organisés par région et impact attendu.</div>
-        <div class="tool-tags"><span class="tool-tag">NFP · CPI · FOMC</span><span class="tool-tag">Multi-régions</span><span class="tool-tag">Flash Info</span></div>
-        <div class="tool-arrow">→</div>
-      </a>
-    </div>
-
-    <div class="tools-grid-sub" style="margin-top:14px">
-      <a href="./bubble.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-        <div class="tool-badge badge-live">En ligne</div>
-        <div class="tool-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg></div>
-        <div class="tool-name" data-i18n="tool-bubble-name">Bubble Map</div>
-        <div class="tool-desc" data-i18n="tool-bubble-desc">Visualise les flux de capitaux entre actifs en temps réel — crypto, forex, indices et matières premières.</div>
-        <div class="tool-tags"><span class="tool-tag">Flux capitaux</span><span class="tool-tag">Corrélations</span><span class="tool-tag">Live</span></div>
-        <div class="tool-arrow">→</div>
-      </a>
-      <a href="./calculateur.html" class="tool-card" onclick="return checkFeatureAccess(event)">
-        <div class="tool-badge badge-live">En ligne</div>
-        <div class="tool-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="18" x2="12" y2="18"/></svg></div>
-        <div class="tool-name" data-i18n="tool-calc-name">Calculateur de Pips</div>
-        <div class="tool-desc" data-i18n="tool-calc-desc">Taille de position, valeur du pip, risque en devise et R:R optimal. Long/Short avec validation automatique.</div>
-        <div class="tool-tags"><span class="tool-tag">Position size</span><span class="tool-tag">Risque %</span><span class="tool-tag">Long / Short</span></div>
-        <div class="tool-arrow">→</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ── STATS ── -->
-  <section class="stats-section">
-    <div class="stats-band">
-      <div class="stat-item"><div class="stat-val">5</div><div class="stat-lbl" data-i18n="stat-lbl-1">Outils actifs</div></div>
-      <div class="stat-item"><div class="stat-val" style="color:var(--bull)">IA</div><div class="stat-lbl" data-i18n="stat-lbl-2">Claude Opus</div></div>
-      <div class="stat-item"><div class="stat-val">∞</div><div class="stat-lbl" data-i18n="stat-lbl-3">Stratégies</div></div>
-      <div class="stat-item"><div class="stat-val" style="color:var(--neutral)">24/7</div><div class="stat-lbl" data-i18n="stat-lbl-4">Disponible</div></div>
-    </div>
-  </section>
-
-  <!-- ── STRATEGY COMPAT ── -->
-  <section class="strategy-section">
-    <div class="strategy-grid">
-      <div class="strategy-left">
-        <div class="section-header">
-          <div class="section-eyebrow">Compatibilité universelle</div>
-          <div class="section-title">Toutes les stratégies, un seul outil.</div>
-        </div>
-        <p class="strategy-desc">Le Terminal Analyzer adapte son analyse à ta stratégie. Que tu trades l'ICT, le SMC, le Price Action pur ou la structure de Wyckoff, l'IA détecte les confluences qui correspondent à ta méthode.</p>
-        <div class="strat-tags">
-          <div class="strat-tag"><div class="strat-tag-dot"></div>ICT / Inner Circle Trader</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Smart Money Concepts</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Price Action classique</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Wyckoff</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Supply & Demand</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Fibonacci / OTE</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Structure de marché</div>
-          <div class="strat-tag"><div class="strat-tag-dot"></div>Orderflow & Footprint</div>
-        </div>
-      </div>
-      <div class="strategy-right">
-        <div class="feat-card"><div class="feat-icon" style="background:var(--accent-glow-soft);border:1px solid var(--accent-glow)">📍</div><div class="feat-body"><strong>Order Blocks & FVG</strong><span>Détection automatique des zones clés, Fair Value Gaps et liquidity pools sur ton graphique.</span></div></div>
-        <div class="feat-card"><div class="feat-icon" style="background:var(--bull-glow);border:1px solid rgba(74,222,156,.3)">📈</div><div class="feat-body"><strong>BOS / CHoCH / Structure</strong><span>Analyse de la structure de marché HTF vers LTF, confirmation des changements de caractère.</span></div></div>
-        <div class="feat-card"><div class="feat-icon" style="background:var(--neutral-glow);border:1px solid rgba(232,194,104,.3)">⏰</div><div class="feat-body"><strong>Killzones & Sessions</strong><span>Prise en compte automatique des sessions London, NY, Asia et des killzones à haute probabilité.</span></div></div>
-        <div class="feat-card"><div class="feat-icon" style="background:var(--accent-glow-soft);border:1px solid var(--accent-glow)">🎯</div><div class="feat-body"><strong>Verdict GO / ATTENDRE / NO-GO</strong><span>Verdict net et sans ambiguïté avec niveau de confiance, cibles et conseils actionnables.</span></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── PROCESS ── -->
-  <section class="process-section" id="method">
-    <div class="section-header">
-      <div class="section-eyebrow" data-i18n="process-eyebrow">Comment ça marche</div>
-      <div class="section-title" data-i18n="process-title">Une analyse complète en 4 étapes</div>
-    </div>
-    <div class="process-steps">
-      <div class="process-step"><div class="step-num" data-i18n="step1-num">Étape 01</div><div class="step-icon">📸</div><div class="step-title" data-i18n="step1-title">Upload ton chart</div><div class="step-desc" data-i18n="step1-desc">Capture d'écran de ton setup depuis TradingView ou ta plateforme. Glisse-dépose ou colle directement.</div></div>
-      <div class="process-step"><div class="step-num" data-i18n="step2-num">Étape 02</div><div class="step-icon">🧠</div><div class="step-title" data-i18n="step2-title">L'IA analyse</div><div class="step-desc" data-i18n="step2-desc">Claude Opus scanne la structure, les zones clés, le contexte macro et les confluences de ta stratégie.</div></div>
-      <div class="process-step"><div class="step-num" data-i18n="step3-num">Étape 03</div><div class="step-icon">📊</div><div class="step-title" data-i18n="step3-title">Score & feedback</div><div class="step-desc" data-i18n="step3-desc">Score /100, forces, faiblesses, niveaux de prix précis et verdict GO / ATTENDRE / NO-GO.</div></div>
-      <div class="process-step"><div class="step-num" data-i18n="step4-num">Étape 04</div><div class="step-icon">📁</div><div class="step-title" data-i18n="step4-title">Sauvegarde & suivi</div><div class="step-desc" data-i18n="step4-desc">Chaque analyse est archivée. Enregistre le résultat du trade et analyse tes stats dans le journal.</div></div>
-    </div>
-  </section>
-
-  <!-- ── TELEGRAM ── -->
-  <section class="tg-section" id="community">
-    <a href="https://t.me/leterminalfx" target="_blank" class="tg-banner">
-      <div class="tg-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z"/></svg></div>
-      <div class="tg-body">
-        <strong data-i18n="tg-title">Rejoindre la communauté Telegram</strong>
-        <span data-i18n="tg-sub">Analyses quotidiennes, setups en live et entraide entre traders</span>
-        <div class="tg-chips"><span class="tg-chip">Analyses live</span><span class="tg-chip">Setups du jour</span><span class="tg-chip">Entraide</span><span class="tg-chip">Alertes macro</span></div>
-      </div>
-      <a href="https://t.me/leterminalfx" target="_blank" class="tg-cta" onclick="event.stopPropagation()" data-i18n="tg-cta">Rejoindre →</a>
+    <p class="lt-board__lede">Cinq outils, un seul abonnement. Chaque instrument est conçu pour un aspect précis de ton trading — ensemble, ils forment un écosystème complet.</p>
+  </div>
+  <div class="lt-board__legend" aria-hidden="true"><span>N°</span><span>Outil</span><span>Description</span><span>Statut</span><span></span></div>
+  <div class="lt-board__rows">
+    <a class="lt-board__row is-featured" href="./app.html" style="--d:0s">
+      <span class="lt-board__num">01</span>
+      <span class="lt-board__name">Setup Analyzer<span class="lt-board__tags"><span>Score /100</span><span>Annotations IA</span><span>Rapport PDF</span></span></span>
+      <span class="lt-board__desc">Score IA de ton setup, toutes stratégies. Feedback instantané et annotations directement sur ton graphique.</span>
+      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
+      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
-  </section>
-
-</div>
-
-<!-- ── AUTH MODAL ── -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-box">
-    <button class="auth-close" onclick="closeAuth()">✕</button>
-    <div style="font-family:var(--font-display);text-transform:uppercase;font-size:24px;letter-spacing:.02em;color:var(--text-title);margin-bottom:6px">Bienvenue</div>
-    <div style="font-size:13px;color:var(--text-body);margin-bottom:20px">Connecte-toi pour synchroniser ton compte sur tous les outils</div>
-    <div class="auth-tabs">
-      <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Connexion</button>
-      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
-    </div>
-    <div class="auth-field"><label>EMAIL</label><input type="email" id="authEmail" placeholder="ton@email.com" autocomplete="username"></div>
-    <div class="auth-field"><label>MOT DE PASSE</label><input type="password" id="authPassword" placeholder="••••••••" autocomplete="new-password"></div>
-    <button class="auth-submit" onclick="doAuth()"><span id="authTxt">Se connecter</span></button>
-    <div class="auth-error" id="authError"></div>
-    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-subtle);font-size:11px;color:var(--text-muted)">🔒 Connexion sécurisée · Données synchronisées sur tous les outils</div>
+    <a class="lt-board__row" href="./journal.html" style="--d:0.09s">
+      <span class="lt-board__num">02</span>
+      <span class="lt-board__name">Journal de Trading<span class="lt-board__tags"><span>Calendrier</span><span>P&amp;L · Win Rate</span><span>IA Coach</span></span></span>
+      <span class="lt-board__desc">Calendrier de tes trades, suivi du P&amp;L, screenshots et analyse IA de tes patterns de performance.</span>
+      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="accent"><span class="lt-tag-badge__dot"></span>Nouveau</span></span>
+      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+    </a>
+    <a class="lt-board__row" href="./calendrier.html" style="--d:0.18s">
+      <span class="lt-board__num">03</span>
+      <span class="lt-board__name">Calendrier Éco<span class="lt-board__tags"><span>NFP · CPI · FOMC</span><span>Multi-régions</span></span></span>
+      <span class="lt-board__desc">Tous les événements macro clés — NFP, CPI, FOMC — par région et impact attendu.</span>
+      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
+      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+    </a>
+    <a class="lt-board__row" href="./bubble.html" style="--d:0.27s">
+      <span class="lt-board__num">04</span>
+      <span class="lt-board__name">Bubble Map<span class="lt-board__tags"><span>Flux capitaux</span><span>Live</span></span></span>
+      <span class="lt-board__desc">Les flux de capitaux entre actifs en temps réel — crypto, forex, indices, matières premières.</span>
+      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
+      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+    </a>
+    <a class="lt-board__row" href="./calculateur.html" style="--d:0.36s">
+      <span class="lt-board__num">05</span>
+      <span class="lt-board__name">Calculateur de Pips<span class="lt-board__tags"><span>Position size</span><span>Long / Short</span></span></span>
+      <span class="lt-board__desc">Taille de position, valeur du pip, risque en devise et R:R optimal, validés automatiquement.</span>
+      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
+      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+    </a>
   </div>
-</div>
+  <div class="lt-board__foot">
+    <span class="lt-board__footnote">Un seul abonnement. Cinq outils. Zéro friction.</span>
+    <a class="lt-btn lt-btn--secondary" href="./tarifs.html">Comparer les offres <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </div>
+</section>
 
-<!-- WELCOME TOAST -->
-<div id="welcomeMsg" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--bull-glow);border:1px solid rgba(74,222,156,.4);border-radius:var(--r-pill);padding:12px 24px;font-size:14px;font-weight:700;color:var(--bull);z-index:1000;backdrop-filter:blur(12px);box-shadow:var(--shadow-md);white-space:nowrap">
-  ✓ Bienvenue ! 24h d'accès gratuit activé.
-</div>
+<!-- ░░░ STATS STRIP ░░░ -->
+<section class="lt-statstrip" data-reveal>
+  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">5</span><span class="lt-statstrip__l">Outils actifs</span></div>
+  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">Propriétaire</span><span class="lt-statstrip__l">Moteur d'analyse IA</span></div>
+  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">∞</span><span class="lt-statstrip__l">Stratégies supportées</span></div>
+  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">24/7</span><span class="lt-statstrip__l">Disponible</span></div>
+</section>
 
-<!-- PAYWALL MODAL -->
-<div id="paywallOverlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(7,9,12,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
-  <div style="max-width:440px;width:100%;background:var(--bg-elevated);border:1px solid var(--accent-glow);border-radius:var(--r-lg);padding:36px;position:relative;text-align:center;box-shadow:var(--shadow-lg)">
-    <div style="position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent-bright),transparent)"></div>
-    <button onclick="closePaywall()" style="position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1">✕</button>
-    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(160deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 18px;box-shadow:0 0 30px var(--accent-glow);color:#07090C">⚡</div>
-    <div style="font-family:var(--font-display);text-transform:uppercase;font-size:26px;letter-spacing:.02em;color:var(--text-title);margin-bottom:8px">Essai terminé</div>
-    <div style="font-size:13px;color:var(--text-body);line-height:1.7;margin-bottom:28px">Ton accès gratuit de 24h est expiré.<br>Passe à <strong style="color:var(--text-title)">Le Terminal PRO</strong> pour continuer.</div>
-    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro/" target="_blank" class="lt-btn lt-btn--primary lt-btn--lg" style="display:flex;width:100%;margin-bottom:14px">⚡ Obtenir l'accès PRO sur Whop</a>
-    <div style="font-size:11px;color:var(--text-muted);line-height:1.7;margin-bottom:16px">Paiement sécurisé via Whop · Annulation à tout moment<br><span style="color:var(--accent-bright);font-weight:500">Utilise le même email que ton compte Le Terminal</span></div>
-    <div style="padding-top:14px;border-top:1px solid var(--border-subtle)">
-      <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Tu as déjà acheté l'accès ?</div>
-      <button onclick="verifyProAccess()" class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%">🔄 Vérifier mon accès PRO</button>
-      <div id="proVerifyMsg" style="font-size:11px;margin-top:8px;min-height:16px;text-align:center"></div>
+<!-- ░░░ SHOWCASE — visite guidée ░░░ -->
+<section class="shx" id="showcase">
+  <div class="shx__head" data-reveal>
+    <span class="lt-eyebrow"><span class="lt-dot"></span> Visite guidée</span>
+    <h2 class="shx__title">À quoi sert chaque outil</h2>
+    <p class="shx__lede">Cinq instruments, cinq problèmes de trader résolus. Voilà ce que chacun fait, concrètement.</p>
+  </div>
+  <div class="shx__rows">
+
+    <article class="shx-row" data-reveal>
+      <div class="shx-row__txt">
+        <span class="shx-row__n">T-01</span>
+        <h3 class="shx-row__title">Setup Analyzer</h3>
+        <p class="shx-row__lede">Upload ton graphique, l'IA fait le reste.</p>
+        <p class="shx-row__desc">Le moteur scanne ta capture comme un mentor : structure de marché, zones clés, confluences propres à TA stratégie. En retour : un score /100, des annotations directement sur le chart et un verdict net — GO, ATTENDRE ou NO-GO.</p>
+        <ul class="shx-row__points"><li>Verdict en ~30 secondes</li><li>Annotations sur ton graphique</li><li>Adapté ICT · SMC · Price Action</li></ul>
+        <a class="shx-row__link" href="./app.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+      <div class="shx-row__viz">
+        <div class="shx-viz shx-viz--analyzer">
+          <div class="shx-chart">
+            <span class="shx-candle is-up" style="height:34%;margin-top:18%"></span><span class="shx-candle is-down" style="height:28%;margin-top:24%"></span><span class="shx-candle is-up" style="height:40%;margin-top:12%"></span><span class="shx-candle is-down" style="height:22%;margin-top:30%"></span><span class="shx-candle is-up" style="height:46%;margin-top:10%"></span><span class="shx-candle is-up" style="height:38%;margin-top:20%"></span><span class="shx-candle is-down" style="height:26%;margin-top:26%"></span><span class="shx-candle is-up" style="height:50%;margin-top:8%"></span><span class="shx-candle is-up" style="height:42%;margin-top:16%"></span><span class="shx-candle is-down" style="height:30%;margin-top:22%"></span><span class="shx-candle is-up" style="height:54%;margin-top:6%"></span>
+            <span class="shx-zone"></span>
+            <span class="shx-annot">Order Block H4</span>
+          </div>
+          <div class="shx-score">
+            <svg viewBox="0 0 80 80" class="shx-ring"><circle cx="40" cy="40" r="34" class="shx-ring__bg"></circle><circle cx="40" cy="40" r="34" class="shx-ring__val"></circle></svg>
+            <span class="shx-score__n">87</span><span class="shx-score__cap">/100</span><span class="shx-score__go">GO</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="shx-row is-flip" data-reveal>
+      <div class="shx-row__txt">
+        <span class="shx-row__n">T-02</span>
+        <h3 class="shx-row__title">Journal de Trading</h3>
+        <p class="shx-row__lede">Ton mois entier, en un coup d'œil.</p>
+        <p class="shx-row__desc">Chaque trade enregistré nourrit ton calendrier P&amp;L, ta courbe d'équité et tes statistiques. L'IA Coach repère les patterns que tu ne vois pas : les sessions où tu perds, les setups qui paient, les jours à éviter.</p>
+        <ul class="shx-row__points"><li>Calendrier P&amp;L vert / rouge</li><li>IA Coach sur tes patterns</li><li>Win rate, R moyen, drawdown</li></ul>
+        <a class="shx-row__link" href="./journal.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+      <div class="shx-row__viz">
+        <div class="shx-viz shx-viz--journal">
+          <div class="shx-jr__head"><span class="shx-jr__month">Juin 2026</span><span class="shx-jr__pnl">+1 840 €</span></div>
+          <div class="shx-jr__grid">
+            <span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span>
+          </div>
+          <div class="shx-jr__foot"><span>Win rate <b>63 %</b></span><span>14 trades</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="shx-row" data-reveal>
+      <div class="shx-row__txt">
+        <span class="shx-row__n">T-03</span>
+        <h3 class="shx-row__title">Calendrier Éco</h3>
+        <p class="shx-row__lede">Ne te fais plus surprendre par une annonce.</p>
+        <p class="shx-row__desc">NFP, CPI, FOMC, BCE — tous les événements macro classés par jour, devise et niveau d'impact, à l'heure de Paris. En PRO, une alerte te prévient avant chaque annonce à fort impact pour ajuster ton exposition.</p>
+        <ul class="shx-row__points"><li>Impact visualisé ● ● ●</li><li>Filtres par devise</li><li>Alertes avant les annonces (PRO)</li></ul>
+        <a class="shx-row__link" href="./calendrier.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+      <div class="shx-row__viz">
+        <div class="shx-viz shx-viz--eco">
+          <div class="shx-eco__row"><span class="shx-eco__t">14:30</span><span class="shx-eco__cur">USD</span><span class="shx-eco__ev">CPI a/a</span><span class="shx-eco__imp"><i></i><i></i><i></i></span></div>
+          <div class="shx-eco__row is-hot"><span class="shx-eco__t">20:00</span><span class="shx-eco__cur">USD</span><span class="shx-eco__ev">Décision FOMC</span><span class="shx-eco__imp"><i></i><i></i><i></i></span></div>
+          <div class="shx-eco__row"><span class="shx-eco__t">14:15</span><span class="shx-eco__cur shx-eco__cur--eur">EUR</span><span class="shx-eco__ev">Taux BCE</span><span class="shx-eco__imp"><i></i><i></i><i class="off"></i></span></div>
+          <span class="shx-eco__alert"><span class="lt-dot"></span> Alerte 30 min avant</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="shx-row is-flip" data-reveal>
+      <div class="shx-row__txt">
+        <span class="shx-row__n">T-04</span>
+        <h3 class="shx-row__title">Bubble Map</h3>
+        <p class="shx-row__lede">Vois où va l'argent, en direct.</p>
+        <p class="shx-row__desc">Chaque actif est une bulle : sa taille suit le volume des flux, sa couleur la direction des dernières 24 h. En un regard tu vois si le capital fuit le risque ou le recherche — crypto, forex, indices et matières premières.</p>
+        <ul class="shx-row__points"><li>Physique temps réel</li><li>Filtres par classe d'actifs</li><li>Rotation des capitaux visible</li></ul>
+        <a class="shx-row__link" href="./bubble.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+      <div class="shx-row__viz">
+        <div class="shx-viz shx-viz--bubble">
+          <span class="shx-bub is-up" style="width:84px;height:84px;left:8%;top:16%;animation-duration:9s">BTC</span>
+          <span class="shx-bub is-up" style="width:58px;height:58px;left:46%;top:8%;animation-duration:11s">GOLD</span>
+          <span class="shx-bub is-down" style="width:64px;height:64px;left:70%;top:38%;animation-duration:8s">EUR</span>
+          <span class="shx-bub is-up" style="width:72px;height:72px;left:26%;top:48%;animation-duration:10s">US100</span>
+          <span class="shx-bub is-down" style="width:46px;height:46px;left:56%;top:62%;animation-duration:12s">WTI</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="shx-row" data-reveal>
+      <div class="shx-row__txt">
+        <span class="shx-row__n">T-05</span>
+        <h3 class="shx-row__title">Calculateur de Pips</h3>
+        <p class="shx-row__lede">La bonne taille de position, à chaque fois.</p>
+        <p class="shx-row__desc">Capital, pourcentage de risque, stop loss : le calculateur te donne instantanément la taille de lot exacte, la valeur du pip et ton R:R. Fini les positions surdimensionnées qui ruinent un mois de discipline.</p>
+        <ul class="shx-row__points"><li>Lot exact en un clic</li><li>Valeur du pip par paire</li><li>R:R validé avant l'entrée</li></ul>
+        <a class="shx-row__link" href="./calculateur.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+      <div class="shx-row__viz">
+        <div class="shx-viz shx-viz--calc">
+          <div class="shx-calc__row"><span>Capital</span><b>10 000 €</b></div>
+          <div class="shx-calc__row"><span>Risque</span><b>1 %</b></div>
+          <div class="shx-calc__row"><span>Stop loss</span><b>25 pips</b></div>
+          <div class="shx-calc__sep"></div>
+          <div class="shx-calc__out"><span class="shx-calc__lbl">Taille de position</span><span class="shx-calc__val">0.40 lot</span><span class="shx-calc__rr">R:R 1:2.5 · risque 100 €</span></div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ░░░ VERDICT BAND — le marché ne dort jamais ░░░ -->
+<section class="lt-chartband" data-reveal>
+  <canvas class="lt-chartband__canvas" id="ltChartband"></canvas>
+  <div class="lt-chartband__overlay">
+    <span class="lt-eyebrow"><span class="lt-dot"></span> En continu</span>
+    <h2 class="lt-chartband__title"><span class="lt-metal">Le marché ne dort jamais.</span></h2>
+    <p class="lt-chartband__sub">Ton edge non plus. Analyses, alertes et suivi — 24/7.</p>
+  </div>
+  <span class="lt-chartband__tag">FLUX SIMULÉ · TEMPS RÉEL</span>
+</section>
+
+<!-- ░░░ STRATEGIES ░░░ -->
+<section class="lt-strat" id="strategies" data-reveal>
+  <div class="lt-strat__grid">
+    <div class="lt-strat__intro">
+      <span class="lt-eyebrow"><span class="lt-dot"></span> Compatibilité universelle</span>
+      <h2 class="lt-strat__title">Toutes les stratégies,<br>un seul outil.</h2>
+      <p class="lt-strat__lede">Le Terminal adapte son analyse à ta méthode. L'IA détecte les confluences qui correspondent à ta façon de trader — pas à un modèle générique.</p>
+      <ul class="lt-strat__index">
+        <li><span class="lt-strat__idxnum">01</span><span class="lt-strat__idxname">ICT / Inner Circle Trader</span></li>
+        <li><span class="lt-strat__idxnum">02</span><span class="lt-strat__idxname">Smart Money Concepts</span></li>
+        <li><span class="lt-strat__idxnum">03</span><span class="lt-strat__idxname">Price Action classique</span></li>
+        <li><span class="lt-strat__idxnum">04</span><span class="lt-strat__idxname">Wyckoff</span></li>
+        <li><span class="lt-strat__idxnum">05</span><span class="lt-strat__idxname">Supply &amp; Demand</span></li>
+        <li><span class="lt-strat__idxnum">06</span><span class="lt-strat__idxname">Fibonacci / OTE</span></li>
+        <li><span class="lt-strat__idxnum">07</span><span class="lt-strat__idxname">Structure de marché</span></li>
+        <li><span class="lt-strat__idxnum">08</span><span class="lt-strat__idxname">Orderflow &amp; Footprint</span></li>
+      </ul>
+    </div>
+    <div class="lt-strat__features">
+      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/><path d="M11 7h4a2 2 0 0 1 2 2v4"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">Order Blocks &amp; FVG</h4><p class="lt-feature__desc">Détection automatique des zones clés, Fair Value Gaps et liquidity pools sur ton graphique.</p></div></div>
+      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 3 3 4-6 3 4 3-3"/><circle cx="8" cy="12" r="1"/><circle cx="11" cy="15" r="1"/><circle cx="15" cy="9" r="1"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">BOS / CHoCH / Structure</h4><p class="lt-feature__desc">Analyse de la structure de marché du HTF vers le LTF, confirmation des changements de caractère.</p></div></div>
+      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">Killzones &amp; Sessions</h4><p class="lt-feature__desc">Prise en compte automatique des sessions London, NY, Asia et des killzones à haute probabilité.</p></div></div>
+      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">Verdict GO / ATTENDRE / NO-GO</h4><p class="lt-feature__desc">Verdict net et sans ambiguïté avec niveau de confiance, cibles et conseils actionnables.</p></div></div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- ░░░ MÉTHODE — plan de vol ░░░ -->
+<section class="lt-flight" id="method" data-reveal>
+  <div class="lt-flight__head">
+    <span class="lt-eyebrow"><span class="lt-dot"></span> Comment ça marche</span>
+    <h2 class="lt-flight__title">La méthode</h2>
+    <span class="lt-flight__route">CHART → VERDICT · 4 étapes · ~30 s</span>
+  </div>
+  <div class="lt-flight__route-line" aria-hidden="true"><span class="lt-flight__plane"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21.5 15.5 13.5 11V4.5a1.5 1.5 0 0 0-3 0V11l-8 4.5V18l8-2.5V20l-2 1.5V23l3.5-1 3.5 1v-1.5L13.5 20v-4.5l8 2.5z"/></svg></span></div>
+  <div class="lt-flight__steps">
+    <div class="lt-flight__step" style="--d:0s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">UPLOAD</span><h4 class="lt-flight__steptitle">Upload ton chart</h4><p class="lt-flight__stepdesc">Capture d'écran depuis TradingView ou ta plateforme. Glisse-dépose ou colle directement.</p></div>
+    <div class="lt-flight__step" style="--d:0.12s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">SCAN</span><h4 class="lt-flight__steptitle">L'IA analyse</h4><p class="lt-flight__stepdesc">Le moteur IA propriétaire scanne la structure, les zones clés, le contexte macro et tes confluences.</p></div>
+    <div class="lt-flight__step" style="--d:0.24s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">SCORE</span><h4 class="lt-flight__steptitle">Score &amp; feedback</h4><p class="lt-flight__stepdesc">Score /100, forces, faiblesses, niveaux de prix précis et verdict GO / ATTENDRE / NO-GO.</p></div>
+    <div class="lt-flight__step" style="--d:0.36s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">SUIVI</span><h4 class="lt-flight__steptitle">Sauvegarde &amp; suivi</h4><p class="lt-flight__stepdesc">Chaque analyse est archivée. Enregistre le résultat et analyse tes stats dans le journal.</p></div>
+  </div>
+</section>
+
+<!-- ░░░ COMMUNAUTÉ — carte d'embarquement ░░░ -->
+<section class="lt-pass" id="community" data-reveal>
+  <div class="lt-pass__card">
+    <div class="lt-pass__main">
+      <span class="lt-pass__label">Accès privé</span>
+      <h2 class="lt-pass__title">Rejoins la communauté</h2>
+      <p class="lt-pass__lede">Analyses quotidiennes, setups en live et entraide entre traders, sur Telegram.</p>
+      <div class="lt-pass__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" href="https://t.me/leterminalfx" target="_blank" rel="noopener">Rejoindre le canal <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+    </div>
+    <div class="lt-pass__stub">
+      <div class="lt-pass__row"><span>Canal</span><b>Telegram</b></div>
+      <div class="lt-pass__row"><span>Accès</span><b>Privé</b></div>
+      <div class="lt-pass__row"><span>Setups</span><b>Quotidiens</b></div>
+      <div class="lt-pass__row"><span>Alertes</span><b>Macro</b></div>
+      <div class="lt-pass__barcode" aria-hidden="true"></div>
+      <span class="lt-pass__serial">LT-2026 · TELEGRAM</span>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ FOOTER ░░░ -->
+<footer class="lt-footer">
+  <div class="lt-footer__top">
+    <div class="lt-footer__brand"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></div>
+    <nav class="lt-footer__links">
+      <a href="#tools">Outils</a><a href="#strategies">Stratégies</a><a href="./tarifs.html">Tarifs</a><a href="#method">Méthode</a><a href="#community">Communauté</a>
+    </nav>
+  </div>
+  <div class="lt-footer__bottom">
+    <span class="lt-footer__copy">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    <span class="lt-footer__note">Outils éducatifs. Le trading comporte des risques de perte en capital.</span>
+  </div>
+</footer>
 
 <script>
-var authToken=null,currentUser=null,authMode='login';
-
-function openAuth(){document.getElementById('authOverlay').classList.add('show');}
-function closeAuth(){document.getElementById('authOverlay').classList.remove('show');document.getElementById('authError').textContent='';}
-function switchTab(m){
-  authMode=m;
-  document.getElementById('tabLogin').classList.toggle('on',m==='login');
-  document.getElementById('tabSignup').classList.toggle('on',m==='signup');
-  document.getElementById('authTxt').textContent=m==='login'?'Se connecter':'Créer mon compte';
-}
-async function doAuth(){
-  var email=document.getElementById('authEmail').value.trim();
-  var password=document.getElementById('authPassword').value;
-  var errEl=document.getElementById('authError');
-  errEl.textContent='';errEl.style.color='var(--red)';
-  if(!email||!password){errEl.textContent='Remplis tous les champs';return;}
-  var btn=document.querySelector('.auth-submit');btn.disabled=true;
-  document.getElementById('authTxt').textContent=authMode==='login'?'Connexion…':'Création…';
-  try{
-    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
-    var data=await res.json();
-    if(data.access_token){
-      authToken=data.access_token;currentUser=data.user||{email};
-      localStorage.setItem('ta_token',authToken);
-      localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');
-      startTrial();closeAuth();updateUserUI();updateTrialBadge();
-      document.getElementById('welcomeMsg').style.display='block';
-      setTimeout(function(){document.getElementById('welcomeMsg').style.display='none';},4000);
-    }else if(data.id){
-      errEl.style.color='var(--green)';errEl.textContent='Compte créé ! Vérifie ton email pour confirmer.';
-    }else{errEl.textContent=data.error_description||data.msg||data.message||'Erreur';}
-  }catch(e){errEl.textContent='Erreur réseau';}
-  btn.disabled=false;
-  document.getElementById('authTxt').textContent=authMode==='login'?'Se connecter':'Créer mon compte';
-}
-function doLogout(){
-  authToken=null;currentUser=null;
-  localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');localStorage.removeItem('lt_pro');
-  updateUserUI();
-}
-function updateUserUI(){
-  var lb=document.getElementById('loginBtn');
-  var lo=document.getElementById('logoutBtn');
-  var uc=document.getElementById('userChip');
-  if(currentUser&&currentUser.email){
-    if(lb)lb.style.display='none';if(lo)lo.style.display='';if(uc)uc.classList.add('show');
-    var em=currentUser.email||'';
-    var av=document.getElementById('userAvatar');var un=document.getElementById('userName');
-    if(av)av.textContent=em.charAt(0).toUpperCase();if(un)un.textContent=em.split('@')[0];
-  }else{
-    if(lb)lb.style.display='';if(lo)lo.style.display='none';if(uc)uc.classList.remove('show');
-  }
-}
-var TRIAL_DURATION=24*60*60*1000;
-function getTrialStatus(){
-  var created=localStorage.getItem('ta_trial_start');var isPro=localStorage.getItem('lt_pro')==='1';
-  if(isPro)return'pro';if(!created)return'none';
-  var elapsed=Date.now()-parseInt(created);
-  return elapsed<TRIAL_DURATION?'trial':'expired';
-}
-function startTrial(){if(!localStorage.getItem('ta_trial_start'))localStorage.setItem('ta_trial_start',Date.now().toString());}
-function checkFeatureAccess(e){
-  var status=getTrialStatus();
-  if(!authToken){e.preventDefault();e.stopPropagation();openAuth();return false;}
-  if(status==='expired'){e.preventDefault();e.stopPropagation();showPaywall();return false;}
-  return true;
-}
-function showPaywall(){document.getElementById('paywallOverlay').classList.add('show');}
-function closePaywall(){document.getElementById('paywallOverlay').classList.remove('show');}
-async function checkSession(){
-  var token=localStorage.getItem('ta_token');if(!token)return;
-  authToken=token;currentUser={email:localStorage.getItem('ta_email')||''};updateUserUI();updateTrialBadge();
-  try{
-    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
-    var data=await res.json();
-    if(data.id){currentUser=data;localStorage.setItem('ta_email',data.email||'');updateUserUI();}
-    else if(data.error){authToken=null;currentUser=null;localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');updateUserUI();}
-  }catch(e){updateUserUI();}
-}
-function updateTrialBadge(){
-  var status=getTrialStatus();var badge=document.getElementById('trialBadge');if(!badge)return;
-  if(status==='pro'){badge.textContent='⭐ PRO';badge.style.color='var(--accent-bright)';badge.style.borderColor='var(--accent-glow)';badge.style.display='block';}
-  else if(status==='trial'){var created=parseInt(localStorage.getItem('ta_trial_start'));var remaining=TRIAL_DURATION-(Date.now()-created);var hours=Math.ceil(remaining/(1000*60*60));badge.textContent='⏳ '+hours+'h restantes';badge.style.color='var(--neutral)';badge.style.borderColor='rgba(232,194,104,.4)';badge.style.display='block';}
-  else if(status==='expired'){badge.textContent='🔒 Essai expiré';badge.style.color='var(--bear)';badge.style.borderColor='rgba(240,100,122,.4)';badge.style.display='block';}
-  else{badge.style.display='none';}
-}
-async function verifyProAccess(){
-  var msg=document.getElementById('proVerifyMsg');msg.style.color='var(--text-body)';msg.textContent='Vérification…';
-  if(!authToken){msg.style.color='var(--neutral)';msg.textContent="Connecte-toi d'abord avec ton email Whop.";return;}
-  try{
-    var res=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
-    var data=await res.json();
-    if(data.is_pro){localStorage.setItem('lt_pro','1');msg.style.color='var(--bull)';msg.textContent='✓ Accès PRO activé !';setTimeout(function(){closePaywall();updateTrialBadge();},1000);}
-    else{msg.style.color='var(--bear)';msg.textContent='Aucun accès PRO trouvé pour cet email.';}
-  }catch(e){msg.style.color='var(--bear)';msg.textContent='Erreur de vérification. Réessaie.';}
-}
-
-// ── Nav scroll effect + spotlight parallax du hero ──
-window.addEventListener('scroll',function(){var c=document.getElementById('ltChrome');if(c)c.classList.toggle('is-scrolled',window.scrollY>24);});
 (function(){
-  var hero=document.getElementById('ltHero');
-  if(!hero||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)||window.innerWidth<760)return;
-  hero.addEventListener('mousemove',function(e){
-    var r=hero.getBoundingClientRect();var nx=(e.clientX-r.left)/r.width,ny=(e.clientY-r.top)/r.height;
-    hero.style.setProperty('--sx',((nx-0.5)*r.width).toFixed(1)+'px');hero.style.setProperty('--sy',(ny*r.height).toFixed(1)+'px');
-    hero.style.setProperty('--px',(nx-0.5).toFixed(3));hero.style.setProperty('--py',(ny-0.5).toFixed(3));
-  });
-  hero.addEventListener('mouseleave',function(){hero.style.setProperty('--px',0);hero.style.setProperty('--py',0);});
+  'use strict';
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Scroll : progress hairline + chrome state ──
+  var fill = document.querySelector('.lt-progress__fill');
+  var chrome = document.getElementById('ltChrome');
+  var rafScroll = 0;
+  function onScroll(){
+    if(rafScroll) return;
+    rafScroll = requestAnimationFrame(function(){
+      rafScroll = 0;
+      var h = document.documentElement;
+      if(fill) fill.style.width = ((h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight)) * 100).toFixed(2) + '%';
+      if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY > 24);
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // ── Reveal on scroll ──
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, {threshold:0.12});
+    document.querySelectorAll('[data-reveal]').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(function(el){ el.classList.add('is-in'); });
+  }
+
+  // ── Nav dropdown (Outils) ──
+  var drop = document.getElementById('ltDrop');
+  if(drop){
+    var menu = drop.querySelector('.lt-nav__menu');
+    var trig = drop.querySelector('.lt-nav__droptrigger');
+    var caret = drop.querySelector('.lt-nav__caret');
+    function setOpen(o){ if(menu) menu.classList.toggle('is-open', o); if(caret) caret.classList.toggle('is-open', o); if(trig) trig.setAttribute('aria-expanded', o); }
+    drop.addEventListener('mouseenter', function(){ setOpen(true); });
+    drop.addEventListener('mouseleave', function(){ setOpen(false); });
+    if(trig) trig.addEventListener('click', function(){ setOpen(!(menu && menu.classList.contains('is-open'))); });
+  }
+
+  // ── Language pill (FR/EN) ──
+  var pill = document.getElementById('ltLangPill');
+  if(pill){
+    try { pill.textContent = (localStorage.getItem('lt_lang') === 'en') ? 'EN' : 'FR'; } catch(e){}
+    pill.style.cursor = 'pointer';
+    pill.addEventListener('click', function(){
+      var next = (pill.textContent === 'FR') ? 'en' : 'fr';
+      try { localStorage.setItem('lt_lang', next); localStorage.setItem('lte_lang', next); } catch(e){}
+      pill.textContent = next.toUpperCase();
+    });
+  }
+
+  // ── Live ticker ──
+  (function(){
+    var rail = document.getElementById('ltRail'); if(!rail) return;
+    var seed = [
+      {s:'BTC/USD',p:67841.2},{s:'ETH/USD',p:3514.8},{s:'SOL/USD',p:168.42},{s:'EUR/USD',p:1.0847},
+      {s:'GBP/USD',p:1.2724},{s:'XAU/USD',p:2384.6},{s:'WTI',p:78.42},{s:'US500',p:5487.0},
+      {s:'US100',p:19420.5},{s:'NVDA',p:1204.9},{s:'AAPL',p:214.09},{s:'TSLA',p:178.34}
+    ];
+    var base = seed.map(function(x){ return x.p; });
+    function fmt(p){ return p>=1000 ? p.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1}) : p.toLocaleString('fr-FR',{minimumFractionDigits:p<10?4:2,maximumFractionDigits:p<10?4:2}); }
+    function build(){
+      var two = seed.concat(seed), html = '';
+      two.forEach(function(r,i){
+        var b = base[i % seed.length];
+        var d = ((r.p - b) / b) * 100, up = d >= 0;
+        html += '<span class="lt-live__item"><span class="lt-live__sym">'+r.s+'</span>'
+             +  '<span class="lt-live__px '+(r._dir>0?'is-up':r._dir<0?'is-down':'')+'">'+fmt(r.p)+'</span>'
+             +  '<span class="lt-live__dl" style="color:'+(up?'var(--bull)':'var(--bear)')+'">'+(up?'▲':'▼')+' '+Math.abs(d).toFixed(2)+'%</span></span>';
+      });
+      rail.innerHTML = html;
+    }
+    build();
+    if(!reduced){
+      setInterval(function(){
+        seed.forEach(function(r){
+          var vol = r.p>1000 ? r.p*0.0006 : r.p>50 ? r.p*0.0009 : r.p*0.0012;
+          var np = r.p + (Math.random()-0.5)*vol*2;
+          r._dir = np>=r.p ? 1 : -1; r.p = np;
+        });
+        build();
+      }, 1500);
+    }
+  })();
+
+  // ── Hero : mouse parallax + dust ──
+  (function(){
+    var stage = document.getElementById('ltHero');
+    if(!stage || reduced || window.innerWidth < 760) return;
+    var raf=0, tx=0, ty=0;
+    function apply(){ stage.style.setProperty('--px', tx.toFixed(3)); stage.style.setProperty('--py', ty.toFixed(3)); raf=0; }
+    stage.addEventListener('mousemove', function(e){
+      var r = stage.getBoundingClientRect();
+      var nx = (e.clientX-r.left)/r.width, ny = (e.clientY-r.top)/r.height;
+      stage.style.setProperty('--mx', nx*100+'%'); stage.style.setProperty('--my', ny*100+'%');
+      tx = nx-0.5; ty = ny-0.5; if(!raf) raf = requestAnimationFrame(apply);
+    });
+    stage.addEventListener('mouseleave', function(){ tx=0; ty=0; if(!raf) raf = requestAnimationFrame(apply); });
+
+    var canvas = document.getElementById('ltDust'); if(!canvas) return;
+    var ctx = canvas.getContext('2d'), dpr = Math.min(window.devicePixelRatio||1,2), w,h;
+    function resize(){ w=canvas.offsetWidth; h=canvas.offsetHeight; canvas.width=w*dpr; canvas.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    resize(); window.addEventListener('resize', resize);
+    var dust = Array.from({length:50}, function(){ return {x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.4+0.3,vy:Math.random()*0.25+0.05,vx:(Math.random()-0.5)*0.15,a:Math.random()*0.4+0.1}; });
+    (function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(var i=0;i<dust.length;i++){ var p=dust[i]; p.y+=p.vy; p.x+=p.vx; if(p.y>h){p.y=-5;p.x=Math.random()*w;}
+        var beam = 1 - Math.min(1, Math.abs(p.x-w/2)/(w*0.4))*(p.y/h);
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(191,220,245,'+(p.a*beam*0.6)+')'; ctx.fill(); }
+      requestAnimationFrame(draw);
+    })();
+  })();
+
+  // ── Chartband : live line ──
+  (function(){
+    var c = document.getElementById('ltChartband'); if(!c) return;
+    var ctx = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio||1,2), w,h;
+    function resize(){ w=c.offsetWidth; h=c.offsetHeight; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    resize(); window.addEventListener('resize', resize);
+    var N=180, data=[], v=0.5, i;
+    for(i=0;i<N;i++){ v+=(Math.random()-0.5)*0.055; v=Math.max(0.14,Math.min(0.86,v)); data.push(v); }
+    var t=0;
+    (function draw(){
+      t++;
+      if(t%4===0){ v+=(Math.random()-0.49)*0.05; v=Math.max(0.14,Math.min(0.86,v)); data.push(v); data.shift(); }
+      ctx.clearRect(0,0,w,h);
+      ctx.strokeStyle='rgba(127,184,232,0.07)'; ctx.lineWidth=1;
+      for(var y=1;y<4;y++){ ctx.beginPath(); ctx.moveTo(0,h*y/4); ctx.lineTo(w,h*y/4); ctx.stroke(); }
+      var px=function(i){return (i/(N-1))*w;}, py=function(val){return h*(1-val)*0.86 + h*0.07;};
+      ctx.beginPath(); data.forEach(function(d,i){ if(i) ctx.lineTo(px(i),py(d)); else ctx.moveTo(px(i),py(d)); });
+      ctx.strokeStyle='rgba(127,184,232,0.9)'; ctx.lineWidth=1.6; ctx.shadowColor='rgba(127,184,232,0.45)'; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0;
+      ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
+      var g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'rgba(127,184,232,0.13)'); g.addColorStop(1,'rgba(127,184,232,0)'); ctx.fillStyle=g; ctx.fill();
+      var lx=px(N-1), ly=py(data[N-1]); ctx.beginPath(); ctx.arc(lx-2,ly,3,0,Math.PI*2); ctx.fillStyle='#BFDCF5'; ctx.shadowColor='rgba(127,184,232,0.8)'; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
+      if(!reduced) requestAnimationFrame(draw);
+    })();
+  })();
 })();
-
-checkSession();
 </script>
-
-<script src="./menu.js"></script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(function(){});}</script>
 </body>
 </html>
