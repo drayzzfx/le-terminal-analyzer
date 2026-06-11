@@ -1005,7 +1005,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <div class="user-avatar" id="userAvatar">?</div>
         <span class="user-name" id="userName">Mon compte</span>
       </div>
-      <button class="pay-btn" id="loginBtn" onclick="openAuth()" style="width:auto;padding:6px 16px;font-size:12px;margin:0;border-radius:50px">Connexion</button>
+      <button class="pay-btn" id="loginBtn" onclick="openAuth()" style="display:none;width:auto;padding:6px 16px;font-size:12px;margin:0;border-radius:50px">Connexion</button>
       <div class="lang-switch">
         <button class="lang-btn on" onclick="setLang('fr')">FR</button>
         <button class="lang-btn" onclick="setLang('en')">EN</button>
@@ -1857,6 +1857,7 @@ applyLang();
 // ── AUTH ──
 var currentUser=null,authToken=null,authMode='login';
 function openAuth(){
+    if(currentUser) return;
     authMode='login';
     document.getElementById('tabLogin').classList.add('on');
     document.getElementById('tabSignup').classList.remove('on');
@@ -3521,7 +3522,7 @@ function quickSetResult(result){
     </a>
   </nav>
   <div class="side-menu-footer">
-    <button class="side-nav-item" id="sideLoginBtn" onclick="closeSideMenu();openAuth()" style="color:var(--v2)">
+    <button class="side-nav-item" id="sideLoginBtn" onclick="closeSideMenu();openAuth()" style="display:none;color:var(--v2)">
       <span class="nav-icon">👤</span> Connexion / Créer un compte
     </button>
     <div id="sideUserInfo" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2)">
