@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
+<!-- v3 — design "Le Terminal" (nouveau design system) -->
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0095FF">
+<meta name="theme-color" content="#07090C">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Le Terminal">
@@ -11,65 +12,90 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Bubble Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
 <link rel="dns-prefetch" href="https://s3.tradingview.com">
 <link rel="preconnect" href="https://www.tradingview-widget.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.tradingview-widget.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
 <style>
-:root{--bg-void:#07090C;--bg-panel:#10141B;--bg-elevated:#161B24;--ice-500:#7FB8E8;--ice-600:#5A9BD4;--ice-300:#BFDCF5;--ice-glow:rgba(127,184,232,0.35);--steel-100:#F2F4F7;--steel-300:#C3CAD4;--steel-500:#7E8794;--steel-900:#1C212A;--signal-up:#4ADE9C;--signal-down:#F0647A;--bg:var(--bg-void);--border:var(--steel-900);--v:var(--ice-600);--v2:var(--ice-500);--text:var(--steel-100);--text2:var(--steel-300);--text3:var(--steel-500);--green:var(--signal-up)}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg-panel:#10141B;--v:var(--accent-deep);--v2:var(--accent);--text:var(--text-title);--text2:var(--text-body);--text3:var(--text-muted);--green:var(--bull)}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh;overflow:hidden}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;background:rgba(8,8,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
-.brand{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800}
-.brand span{color:var(--v2)}
-.hbtn{display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px}
-.hbtn span{display:block;width:20px;height:2px;background:var(--text2);border-radius:2px}
-.eco-tabs{display:flex;align-items:center;gap:2px;padding:0 18px;background:rgba(8,8,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);display:flex;flex-direction:column;height:100vh;overflow:hidden;padding-top:var(--chrome-h,64px)}
+
+/* Barre d'onglets (sélecteur de marché) */
+.eco-tabs{display:flex;align-items:center;gap:2px;padding:0 18px;background:rgba(8,11,16,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-subtle);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .eco-tabs::-webkit-scrollbar{display:none}
-.eco-tab{padding:10px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
-.eco-tab:hover{color:var(--text2)}
-.eco-tab.on{color:var(--v2);border-bottom-color:var(--v2)}
-.sz-group{display:flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0}
-.sz-btn{padding:4px 10px;background:transparent;border:1px solid transparent;border-radius:50px;color:var(--text3);font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
-.sz-btn:hover{color:var(--text2)}
-.sz-btn.on{background:rgba(0,149,255,.15);border-color:rgba(0,149,255,.3);color:var(--v2)}
-.live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green);flex-shrink:0;padding:0 4px}
-.ld{width:6px;height:6px;border-radius:50%;background:var(--green);animation:p 2s ease-in-out infinite}
+.eco-tab{padding:11px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-muted);font-family:var(--font-text);font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:all var(--dur-fast) var(--ease-out);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.eco-tab:hover{color:var(--text-body)}
+.eco-tab.on{color:var(--accent-bright);border-bottom-color:var(--accent)}
+.sz-group{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0}
+.sz-btn{padding:5px 12px;background:transparent;border:1px solid var(--border-subtle);border-radius:var(--r-pill);color:var(--text-muted);font-family:var(--font-mono);font-size:11px;font-weight:500;cursor:pointer;transition:all var(--dur-fast) var(--ease-out);white-space:nowrap}
+.sz-btn:hover{color:var(--text-body);border-color:var(--border)}
+.sz-btn.on{background:var(--accent-glow-soft);border-color:var(--accent);color:var(--accent-bright)}
+.live{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--bull);flex-shrink:0;padding:0 4px}
+.ld{width:6px;height:6px;border-radius:50%;background:var(--bull);box-shadow:0 0 8px var(--bull-glow);animation:p 2s ease-in-out infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* MAP takes ALL remaining space */
-.map{flex:1;min-height:0;position:relative;background:#131722}
+@media (min-width:761px){ .eco-tabs{padding-left:74px} .foot{padding-left:74px} }
+
+.map{flex:1;min-height:0;position:relative;background:#0B0E13}
 .map .tradingview-widget-container{position:absolute;top:0;left:0;right:0;bottom:0}
 .map .tradingview-widget-container__widget{width:100%;height:100%}
-
-/* SKELETON LOADER */
-.map-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#131722;z-index:10;transition:opacity .4s}
+.map-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0B0E13;z-index:10;transition:opacity .4s}
 .map-loader.hidden{opacity:0;pointer-events:none}
-.map-loader-bar{width:120px;height:3px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
-.map-loader-bar::after{content:'';display:block;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,149,255,.6),transparent);animation:shimmer 1.2s infinite}
+.map-loader-bar{width:120px;height:3px;background:var(--border-subtle);border-radius:4px;overflow:hidden}
+.map-loader-bar::after{content:'';display:block;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--accent-glow),transparent);animation:shimmer 1.2s infinite}
 @keyframes shimmer{from{transform:translateX(-200%)}to{transform:translateX(400%)}}
-
-.foot{display:flex;align-items:center;gap:10px;padding:5px 16px;background:rgba(8,8,15,.9);border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
-.leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)}
+.foot{display:flex;align-items:center;gap:12px;padding:6px 16px;background:rgba(8,11,16,.9);border-top:1px solid var(--border-subtle);flex-shrink:0;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
 .ldc{width:8px;height:8px;border-radius:50%}
-.src{font-size:10px;color:var(--text3);margin-left:auto}
-.src a{color:var(--v2);text-decoration:none}
+.src{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-left:auto}
+.src a{color:var(--accent);text-decoration:none}
+#ltUserBar{display:inline-flex;align-items:center;gap:8px}
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div style="display:flex;align-items:center;gap:10px">
-    <button class="hbtn" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-    <a href="./index.html" class="brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Bubble Map</span></a>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <div class="live"><div class="ld"></div>LIVE</div>
-    <div id="ltUserBar"></div>
-  </div>
-</header>
+<!-- ============ GLOBAL CHROME : NAV ============ -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
+      <div id="ltUserBar"></div>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./index.html'">Accès PRO</button>
+    </div>
+  </header>
+</div>
+
+<!-- ============ LEFT DOCK ============ -->
+<nav class="lt-dock" aria-label="Pages">
+  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
+  <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
+  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
+  <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
+  <a class="lt-dock__item is-active" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
+  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+</nav>
 
 <nav class="eco-tabs">
   <button class="eco-tab on" onclick="setMkt('crypto',this)">
@@ -97,7 +123,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 
 <div class="map" id="mapWrap">
   <div class="map-loader" id="mapLoader">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(0,149,255,.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
     <div class="map-loader-bar"></div>
   </div>
 </div>
@@ -118,7 +144,6 @@ var loaderTimer = null;
 function showLoader() {
   var l = document.getElementById('mapLoader');
   if (l) { l.classList.remove('hidden'); }
-  // Masquer automatiquement après 4s max (TradingView ne notifie pas la fin)
   if (loaderTimer) clearTimeout(loaderTimer);
   loaderTimer = setTimeout(function() {
     var l = document.getElementById('mapLoader');
@@ -144,58 +169,33 @@ function setSz(v, btn) {
 
 function render() {
   var wrap = document.getElementById('mapWrap');
-  var loader = document.getElementById('mapLoader');
-
-  // Retirer l'ancien widget mais garder le loader
   var old = wrap.querySelector('.tradingview-widget-container');
   if (old) wrap.removeChild(old);
-
   showLoader();
 
   var container = document.createElement('div');
   container.className = 'tradingview-widget-container';
-
   var inner = document.createElement('div');
   inner.className = 'tradingview-widget-container__widget';
   container.appendChild(inner);
-
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.async = true;
 
-  var cfg = {
-    colorTheme: 'dark',
-    locale: 'fr',
-    hasTopBar: false,
-    isDataSetEnabled: false,
-    isZoomEnabled: true,
-    hasSymbolTooltip: true,
-    width: '100%',
-    height: '100%'
-  };
+  var cfg = { colorTheme: 'dark', locale: 'fr', hasTopBar: false, isDataSetEnabled: false, isZoomEnabled: true, hasSymbolTooltip: true, width: '100%', height: '100%' };
 
   if (mkt === 'crypto') {
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js';
-    cfg.dataSource = 'Crypto';
-    cfg.blockSize = sz;
-    cfg.blockColor = 'change';
-    cfg.isMonoSize = false;
+    cfg.dataSource = 'Crypto'; cfg.blockSize = sz; cfg.blockColor = 'change'; cfg.isMonoSize = false;
   } else if (mkt === 'forex') {
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js';
     cfg.currencies = ['EUR','USD','JPY','GBP','CHF','AUD','CAD','NZD'];
   } else if (mkt === 'stocks') {
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js';
-    cfg.exchanges = [];
-    cfg.dataSource = 'SPX500';
-    cfg.grouping = 'sector';
-    cfg.blockSize = 'market_cap_basic';
-    cfg.blockColor = 'change';
+    cfg.exchanges = []; cfg.dataSource = 'SPX500'; cfg.grouping = 'sector'; cfg.blockSize = 'market_cap_basic'; cfg.blockColor = 'change';
   } else if (mkt === 'etf') {
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-etf-heatmap.js';
-    cfg.dataSource = 'AllUSEtf';
-    cfg.grouping = 'asset_class';
-    cfg.blockSize = 'aum';
-    cfg.blockColor = 'change';
+    cfg.dataSource = 'AllUSEtf'; cfg.grouping = 'asset_class'; cfg.blockSize = 'aum'; cfg.blockColor = 'change';
   }
 
   script.textContent = JSON.stringify(cfg);
@@ -203,6 +203,7 @@ function render() {
   wrap.appendChild(container);
 }
 
+window.addEventListener('scroll',function(){var c=document.getElementById('ltChrome');if(c)c.classList.toggle('is-scrolled',window.scrollY>24);});
 render();
 </script>
 

@@ -48,6 +48,27 @@
   --surface-card: var(--bg-elevated);
   --surface-raised: var(--bg-surface);
 
+  /* ---- ALIAS : vocabulaire "steel / ice / signal" (mêmes valeurs)
+     Utilisé par index/app/journal/calendrier/bubble/landing & eco.css.
+     Source unique pour éviter les tokens non définis. ---- */
+  --bg-panel: var(--bg-surface);
+  --ice-100: #EAF4FF;
+  --ice-300: var(--accent-bright);   /* #BFDCF5 */
+  --ice-500: var(--accent);          /* #7FB8E8 */
+  --ice-600: var(--accent-deep);     /* #5A9BD4 */
+  --ice-glow: var(--accent-glow);
+  --steel-100: var(--text-title);    /* #F2F4F7 */
+  --steel-300: var(--text-body);     /* #C3CAD4 */
+  --steel-500: var(--text-muted);    /* #7E8794 */
+  --steel-700: var(--border);        /* #3A414C */
+  --steel-900: var(--border-subtle); /* #1C212A */
+  --signal-up: var(--bull);          /* #4ADE9C */
+  --signal-down: var(--bear);        /* #F0647A */
+  --signal-warn: var(--neutral);     /* #E8C268 */
+  --green: var(--bull);
+  --red: var(--bear);
+  --font-body: var(--font-text);
+
   /* ---- Families ---- */
   --font-display: 'Anton', 'Arial Narrow', sans-serif;
   --font-text: 'Inter', system-ui, -apple-system, sans-serif;

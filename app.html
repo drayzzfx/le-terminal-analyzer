@@ -11,7 +11,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Setup Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
+<style>#app>.topbar{display:none!important}#app{padding-top:var(--chrome-h,64px)}@media(min-width:761px){#app .analyzer-tabs{padding-left:74px}}</style>
 <style>
 
 :root {
@@ -989,30 +992,51 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 <!-- ═══ APP ═══ -->
 <div id="app">
 
-  <!-- Topbar -->
-  <header class="topbar">
-    <div style="display:flex;align-items:center;gap:10px">
-      <button onclick="ltOpenMenu()" style="display:flex;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(0,149,255,.1)'" onmouseout="this.style.background='transparent'">
-        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-        <span style="display:block;width:20px;height:2px;background:var(--text2);border-radius:2px"></span>
-      </button>
-      <a href="./index.html" class="topbar-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Analyzer</span></a>
-    </div>
-    <div class="topbar-right">
-      <div class="user-chip" id="userChip" onclick="openHistory()">
+  <!-- ============ GLOBAL CHROME : NAV ============ -->
+  <div class="lt-chrome" id="ltChrome">
+    <header class="lt-nav">
+      <a class="lt-nav__brand" href="./index.html">
+        <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+        <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+      </a>
+      <nav class="lt-nav__links">
+        <div class="lt-nav__drop">
+          <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="lt-nav__menu">
+            <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+            <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+            <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+            <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+            <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+          </div>
+        </div>
+        <a href="./index.html#method">Méthode</a>
+        <a href="./index.html#community">Communauté</a>
+      </nav>
+      <div class="lt-nav__actions">
+        <div class="lang-switch" style="display:inline-flex;gap:2px">
+          <button class="lang-btn on" onclick="setLang('fr')">FR</button>
+          <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <button id="themeToggle" onclick="toggleTheme()" class="lt-nav__pill" title="Thème clair/sombre">🌙</button>
+        <div class="user-chip" id="userChip" onclick="openHistory()">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span class="user-name" id="userName">Mon compte</span>
+        </div>
+        <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="openAuth()" style="display:none">Connexion</button>
+      </div>
+    </header>
+  </div>
 
-        <div class="user-avatar" id="userAvatar">?</div>
-        <span class="user-name" id="userName">Mon compte</span>
-      </div>
-      <button class="pay-btn" id="loginBtn" onclick="openAuth()" style="display:none;width:auto;padding:6px 16px;font-size:12px;margin:0;border-radius:50px">Connexion</button>
-      <div class="lang-switch">
-        <button class="lang-btn on" onclick="setLang('fr')">FR</button>
-        <button class="lang-btn" onclick="setLang('en')">EN</button>
-      <button id="themeToggle" onclick="toggleTheme()" style="background:transparent;border:1px solid var(--border);border-radius:50px;padding:6px 12px;color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s" title="Thème clair/sombre">🌙</button>
-      </div>
-    </div>
-  </header>
+  <!-- ============ LEFT DOCK ============ -->
+  <nav class="lt-dock" aria-label="Pages">
+    <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
+    <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
+    <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
+    <a class="lt-dock__item is-active" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
+    <a class="lt-dock__item" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
+    <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+  </nav>
 
   <!-- TABS — Historique / Perfs -->
   <nav class="analyzer-tabs">
