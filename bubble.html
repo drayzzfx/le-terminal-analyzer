@@ -119,7 +119,11 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     <button class="sz-btn on" onclick="setSz('market_cap_calc',this)">Cap.</button>
     <button class="sz-btn" onclick="setSz('volume',this)">Volume</button>
   </div>
-  <div class="live"><div class="ld"></div>TradingView</div>
+  <div class="view-toggle" style="display:inline-flex;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:50px;overflow:hidden;margin-left:8px">
+    <button class="vt-btn on" id="vtMap" onclick="setView('map')">Heatmap</button>
+    <button class="vt-btn" id="vtBub" onclick="setView('bubbles')">Bulles</button>
+  </div>
+  <div class="live" id="tvLive"><div class="ld"></div>TradingView</div>
 </nav>
 
 <div class="map" id="mapWrap">
@@ -127,6 +131,35 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
     <div class="map-loader-bar"></div>
   </div>
+</div>
+
+<style>
+.vt-btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;background:transparent;border:none;color:var(--text3,#8a93a5);cursor:pointer;transition:all .2s}
+.vt-btn.on{background:rgba(56,182,255,.16);color:#9fd4ff}
+.bub-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 20px}
+.bub-filters{display:flex;gap:8px;flex-wrap:wrap}
+.bub-f{font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 16px;border-radius:50px;border:1px solid var(--border,rgba(255,255,255,.1));background:transparent;color:var(--text3,#8a93a5);cursor:pointer;transition:all .2s}
+.bub-f.on{background:rgba(56,182,255,.12);border-color:rgba(56,182,255,.5);color:#9fd4ff}
+.bub-stats{margin-left:auto;display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.bub-stats .up{color:#4ADE9C}.bub-stats .dn{color:#F0647A}
+.bub-stage{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:12px;padding:24px;min-height:56vh}
+.bub{border-radius:50%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .2s;cursor:default}
+.bub:hover{transform:scale(1.07)}
+.bub-n{font-family:'Bricolage Grotesque','Anton',sans-serif;font-weight:700;font-size:15px;color:#fff;line-height:1}
+.bub-c{font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px}
+.bub-state{color:var(--text3,#8a93a5);font-size:13px;padding:40px;text-align:center;width:100%}
+</style>
+<div class="bub-wrap" id="bubbleWrap" style="display:none">
+  <div class="bub-bar">
+    <div class="bub-filters" id="bubFilters">
+      <button class="bub-f on" data-cls="all">Tous</button>
+      <button class="bub-f" data-cls="crypto">Crypto</button>
+      <button class="bub-f" data-cls="index">Indices</button>
+      <button class="bub-f" data-cls="commodity">Mat. premières</button>
+    </div>
+    <div class="bub-stats" id="bubStats"></div>
+  </div>
+  <div class="bub-stage" id="bubStage"><div class="bub-state">Chargement des flux…</div></div>
 </div>
 
 <div class="foot">
@@ -203,6 +236,71 @@ function render() {
   container.appendChild(script);
   wrap.appendChild(container);
 }
+
+// ── Vue Bulles (données réelles /api/price) ──
+var BUB_ASSETS=[
+  {sym:'BTCUSD',name:'BTC',cls:'crypto'},{sym:'ETHUSD',name:'ETH',cls:'crypto'},
+  {sym:'US500',name:'US500',cls:'index'},{sym:'US100',name:'US100',cls:'index'},
+  {sym:'US30',name:'US30',cls:'index'},{sym:'DAX',name:'DAX',cls:'index'},{sym:'UK100',name:'UK100',cls:'index'},
+  {sym:'XAUUSD',name:'GOLD',cls:'commodity'},{sym:'XAGUSD',name:'SILVER',cls:'commodity'},
+  {sym:'USOIL',name:'WTI',cls:'commodity'},{sym:'BRENT',name:'BRENT',cls:'commodity'}
+];
+var bubData=[], bubCls='all', bubLoaded=false;
+
+function setView(v){
+  var map=v==='map';
+  document.getElementById('vtMap').classList.toggle('on',map);
+  document.getElementById('vtBub').classList.toggle('on',!map);
+  document.getElementById('mapWrap').style.display=map?'':'none';
+  document.getElementById('bubbleWrap').style.display=map?'none':'';
+  document.querySelectorAll('.eco-tab').forEach(function(b){ b.style.display=map?'':'none'; });
+  var szG=document.getElementById('szG'); if(szG) szG.style.visibility=(map&&mkt==='crypto')?'visible':'hidden';
+  var tv=document.getElementById('tvLive'); if(tv) tv.style.display=map?'':'none';
+  if(!map) loadBubbles();
+}
+
+function loadBubbles(){
+  if(bubLoaded){ renderBubbles(); return; }
+  var stage=document.getElementById('bubStage'); if(stage) stage.innerHTML='<div class="bub-state">Chargement des flux…</div>';
+  Promise.all(BUB_ASSETS.map(function(a){
+    return fetch('/api/price?symbol='+a.sym).then(function(r){return r.json();}).then(function(d){
+      return {name:a.name,cls:a.cls,change:(d&&typeof d.change==='number')?d.change:null};
+    }).catch(function(){ return {name:a.name,cls:a.cls,change:null}; });
+  })).then(function(res){
+    bubData=res.filter(function(x){return x.change!==null;});
+    bubLoaded=true; renderBubbles();
+  });
+}
+
+function renderBubbles(){
+  var stage=document.getElementById('bubStage'); if(!stage) return;
+  if(!bubData.length){ stage.innerHTML='<div class="bub-state">Données de flux indisponibles pour le moment.</div>'; return; }
+  var data=bubData.filter(function(x){ return bubCls==='all'||x.cls===bubCls; });
+  if(!data.length){ stage.innerHTML='<div class="bub-state">Aucun actif pour ce filtre.</div>'; return; }
+  var maxAbs=Math.max.apply(null,data.map(function(x){return Math.abs(x.change);}).concat([0.5]));
+  data.sort(function(a,b){return Math.abs(b.change)-Math.abs(a.change);});
+  stage.innerHTML=data.map(function(x){
+    var sz=72+Math.round((Math.abs(x.change)/maxAbs)*92);
+    var up=x.change>=0, col=up?'74,222,156':'240,100,122';
+    var inten=Math.min(1,0.3+Math.abs(x.change)/maxAbs*0.6);
+    return '<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="width:'+sz+'px;height:'+sz+'px;background:rgba('+col+','+(inten*0.16).toFixed(2)+');border-color:rgba('+col+',.7)">'
+      +'<span class="bub-n">'+x.name+'</span>'
+      +'<span class="bub-c" style="color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span></div>';
+  }).join('');
+  var ups=bubData.filter(function(x){return x.change>=0;}).length, downs=bubData.length-ups;
+  var st=document.getElementById('bubStats');
+  if(st) st.innerHTML='<span class="up">● '+ups+' en hausse</span><span class="dn">● '+downs+' en baisse</span>';
+}
+
+(function(){
+  var f=document.getElementById('bubFilters');
+  if(f) f.addEventListener('click',function(e){
+    var b=e.target.closest('.bub-f'); if(!b) return;
+    bubCls=b.getAttribute('data-cls');
+    f.querySelectorAll('.bub-f').forEach(function(x){ x.classList.toggle('on',x===b); });
+    renderBubbles();
+  });
+})();
 
 window.addEventListener('scroll',function(){var c=document.getElementById('ltChrome');if(c)c.classList.toggle('is-scrolled',window.scrollY>24);});
 render();
