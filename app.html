@@ -3064,23 +3064,38 @@ async function doFetchPrice(pair){
     }catch(e){}
   }
 
-  // Indicative prices for indices/metals (update daily)
-  var indicative = {
-    'XAUUSD':'4 329','GOLD':'4 329','XAU':'4 329',
-    'XAGUSD':'32.80','SILVER':'32.80',
-    'NAS100':'21 340','NASDAQ':'21 340','US100':'21 340',
-    'US30':'43 250','DJ30':'43 250','DOW':'43 250',
-    'SP500':'5 890','SPX':'5 890','US500':'5 890',
-    'DAX':'23 450','GER40':'23 450','DE40':'23 450',
-    'UK100':'8 820','FTSE':'8 820',
-    'USOIL':'61.20','OIL':'61.20','BRENT':'64.80'
-  };
-  if(indicative[pair]){
-    bar.style.display = 'flex';
-    valEl.textContent = indicative[pair];
-    chEl.textContent = 'indicatif';
-    chEl.style.background = 'rgba(255,255,255,0.06)';
-    chEl.style.color = 'var(--text3)';
+  // Live price via /api/price for indices/metals
+  var apiSymbols = ['XAUUSD','GOLD','XAU','XAGUSD','SILVER','NAS100','US100','NASDAQ',
+    'US30','DJ30','DOW','SP500','SPX','US500','DAX','GER40','DE40','UK100','FTSE','USOIL','OIL','BRENT'];
+  if(apiSymbols.indexOf(pair) !== -1){
+    try{
+      var r = await fetch('/api/price?symbol='+encodeURIComponent(pair));
+      var d = await r.json();
+      if(d.price){
+        var p = d.price;
+        var fmt = p >= 1000 ? p.toLocaleString('en-US',{maximumFractionDigits:2}) : p < 10 ? p.toFixed(4) : p.toFixed(2);
+        showLivePrice(fmt, d.change !== null ? d.change : undefined);
+        return;
+      }
+    }catch(e){}
+    // fallback indicative
+    var indicative = {
+      'XAUUSD':'3 350','GOLD':'3 350','XAU':'3 350',
+      'XAGUSD':'33.20','SILVER':'33.20',
+      'NAS100':'21 340','NASDAQ':'21 340','US100':'21 340',
+      'US30':'43 250','DJ30':'43 250','DOW':'43 250',
+      'SP500':'5 890','SPX':'5 890','US500':'5 890',
+      'DAX':'23 450','GER40':'23 450','DE40':'23 450',
+      'UK100':'8 820','FTSE':'8 820',
+      'USOIL':'61.20','OIL':'61.20','BRENT':'64.80'
+    };
+    if(indicative[pair]){
+      bar.style.display = 'flex';
+      valEl.textContent = indicative[pair];
+      chEl.textContent = 'indicatif';
+      chEl.style.background = 'rgba(255,255,255,0.06)';
+      chEl.style.color = 'var(--text3)';
+    }
     return;
   }
 
