@@ -98,6 +98,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
 </nav>
 
+<div class="main">
 <nav class="eco-tabs">
   <button class="eco-tab on" onclick="setMkt('crypto',this)">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>
@@ -169,6 +170,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   <div class="leg"><div class="ldc" style="background:#ef5350"></div>Baisse</div>
   <div class="leg"><div class="ldc" style="background:#c62828"></div>Forte baisse</div>
   <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
+</div>
 </div>
 
 <script>
@@ -306,6 +308,7 @@ window.addEventListener('scroll',function(){var c=document.getElementById('ltChr
 render();
 </script>
 
+<script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(function(){}); }</script>
 </body>

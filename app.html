@@ -1015,16 +1015,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <a href="./index.html#community">Communauté</a>
       </nav>
       <div class="lt-nav__actions">
-        <div class="lang-switch" style="display:inline-flex;gap:2px">
-          <button class="lang-btn on" onclick="setLang('fr')">FR</button>
-          <button class="lang-btn" onclick="setLang('en')">EN</button>
-        </div>
+        <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
+        <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
         <div class="user-chip" id="userChip" onclick="openHistory()">
           <div class="user-avatar" id="userAvatar">?</div>
           <span class="user-name" id="userName">Mon compte</span>
         </div>
-        <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="openAuth()" style="display:none">Connexion</button>
-        <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="if(window.ltLogout){ltLogout()}else{localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');location.href='./index.html'}" title="Déconnexion">Déconnexion</button>
         <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
       </div>
     </header>
@@ -3591,6 +3587,7 @@ function quickSetResult(result){
   </div>
 </div>
 <div id="pairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
+<script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>
 // Ouvre le bon panneau si on arrive via un lien ancré depuis le menu

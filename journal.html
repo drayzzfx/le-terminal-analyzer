@@ -357,12 +357,11 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <button class="cur-btn" onclick="setCurrency('USD')">$</button>
       </div>
       <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
       <div class="user-chip" id="userChip">
         <div class="user-avatar" id="userAvatar">?</div>
         <span class="user-name" id="userName">—</span>
       </div>
-      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="openAuth()">Connexion</button>
-      <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="if(window.ltLogout){ltLogout()}else{localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');location.href='./index.html'}">Déconnexion</button>
       <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
     </div>
   </header>
@@ -2083,6 +2082,7 @@ async function importCsvTrades() {
   window.addEventListener('resize', function(){ try{ jrDrawEquity(); }catch(e){} });
 })();
 </script>
+<script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 </body>
 </html>
