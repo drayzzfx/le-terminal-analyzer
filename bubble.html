@@ -155,6 +155,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     <div class="bub-filters" id="bubFilters">
       <button class="bub-f on" data-cls="all">Tous</button>
       <button class="bub-f" data-cls="crypto">Crypto</button>
+      <button class="bub-f" data-cls="forex">Forex</button>
       <button class="bub-f" data-cls="index">Indices</button>
       <button class="bub-f" data-cls="commodity">Mat. premières</button>
     </div>
@@ -241,11 +242,24 @@ function render() {
 
 // ── Vue Bulles (données réelles /api/price) ──
 var BUB_ASSETS=[
+  // Crypto
   {sym:'BTCUSD',name:'BTC',cls:'crypto'},{sym:'ETHUSD',name:'ETH',cls:'crypto'},
+  {sym:'SOLUSD',name:'SOL',cls:'crypto'},{sym:'XRPUSD',name:'XRP',cls:'crypto'},
+  {sym:'BNBUSD',name:'BNB',cls:'crypto'},{sym:'DOGEUSD',name:'DOGE',cls:'crypto'},
+  {sym:'ADAUSD',name:'ADA',cls:'crypto'},{sym:'AVAXUSD',name:'AVAX',cls:'crypto'},
+  {sym:'LINKUSD',name:'LINK',cls:'crypto'},{sym:'LTCUSD',name:'LTC',cls:'crypto'},
+  // Indices
   {sym:'US500',name:'US500',cls:'index'},{sym:'US100',name:'US100',cls:'index'},
-  {sym:'US30',name:'US30',cls:'index'},{sym:'DAX',name:'DAX',cls:'index'},{sym:'UK100',name:'UK100',cls:'index'},
+  {sym:'US30',name:'US30',cls:'index'},{sym:'DAX',name:'DAX',cls:'index'},
+  {sym:'UK100',name:'UK100',cls:'index'},{sym:'CAC40',name:'CAC40',cls:'index'},
+  {sym:'JP225',name:'NIKKEI',cls:'index'},
+  // Matières premières
   {sym:'XAUUSD',name:'GOLD',cls:'commodity'},{sym:'XAGUSD',name:'SILVER',cls:'commodity'},
-  {sym:'USOIL',name:'WTI',cls:'commodity'},{sym:'BRENT',name:'BRENT',cls:'commodity'}
+  {sym:'USOIL',name:'WTI',cls:'commodity'},{sym:'BRENT',name:'BRENT',cls:'commodity'},
+  // Forex
+  {sym:'EURUSD',name:'EUR/USD',cls:'forex'},{sym:'GBPUSD',name:'GBP/USD',cls:'forex'},
+  {sym:'USDJPY',name:'USD/JPY',cls:'forex'},{sym:'AUDUSD',name:'AUD/USD',cls:'forex'},
+  {sym:'USDCAD',name:'USD/CAD',cls:'forex'}
 ];
 var bubData=[], bubCls='all', bubLoaded=false;
 
