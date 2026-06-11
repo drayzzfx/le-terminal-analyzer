@@ -1665,7 +1665,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({system:c().sys,messages:[{role:'user',content}]})
     });
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'Erreur '+res.status);}
+    if(!res.ok){const e=await res.json().catch(()=>({}));const msg=typeof e.error==='string'?e.error:(e.error?.message||'Erreur '+res.status);throw new Error(msg);}
     clearInterval(iv);
     const data=await res.json();
     if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
