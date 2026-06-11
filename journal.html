@@ -362,6 +362,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <span class="user-name" id="userName">—</span>
       </div>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="openAuth()">Connexion</button>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="if(window.ltLogout){ltLogout()}else{localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');location.href='./index.html'}">Déconnexion</button>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
     </div>
   </header>
 </div>
@@ -410,8 +412,10 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
   <!-- ░ TABLEAU DE BORD (équité + derniers trades) — style maquette ░ -->
   <style>
-  .jr-dash{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin:18px 0}
-  @media(max-width:880px){.jr-dash{grid-template-columns:1fr}}
+  .jr-dash{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin:18px 0;align-items:start}
+  @media(max-width:980px){.jr-dash{grid-template-columns:1fr}}
+  .jr-side{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .jr-dash .calendar-section{min-width:0}
   .jr-panel{background:var(--surface,rgba(255,255,255,.02));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:16px;padding:18px 20px}
   .jr-panel__title{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#8a93a5);margin-bottom:14px}
   .jr-eq{width:100%;height:150px;display:block}
@@ -428,13 +432,26 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jr-empty{color:var(--text3,#8a93a5);font-size:13px;padding:18px 4px;text-align:center}
   </style>
   <div class="jr-dash">
-    <div class="jr-panel">
-      <span class="jr-panel__title">Courbe d'équité</span>
-      <canvas id="jrEquity" class="jr-eq"></canvas>
+    <div class="calendar-section" style="margin:0">
+      <div class="cal-header">
+        <div class="cal-title" id="calTitle">—</div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+          <div class="cal-month" id="calMonth">—</div>
+          <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
     </div>
-    <div class="jr-panel">
-      <span class="jr-panel__title">Derniers trades</span>
-      <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
+    <div class="jr-side">
+      <div class="jr-panel">
+        <span class="jr-panel__title">Courbe d'équité</span>
+        <canvas id="jrEquity" class="jr-eq"></canvas>
+      </div>
+      <div class="jr-panel">
+        <span class="jr-panel__title">Derniers trades</span>
+        <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
+      </div>
     </div>
   </div>
 
@@ -457,18 +474,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <!-- ADD TRADE -->
   <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
 
-  <!-- CALENDAR -->
-  <div class="calendar-section">
-    <div class="cal-header">
-      <div class="cal-title" id="calTitle">—</div>
-      <div class="cal-nav">
-        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
-        <div class="cal-month" id="calMonth">—</div>
-        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
-      </div>
-    </div>
-    <div class="cal-grid" id="calGrid"></div>
-  </div>
+  <!-- CALENDAR : déplacé dans le tableau de bord 2 colonnes (en haut) -->
 
   <!-- GLOBAL IA - condensed, below calendar -->
   <div style="background:rgba(0,149,255,.05);border:1px solid rgba(0,149,255,.15);border-radius:16px;padding:18px;margin-top:16px">
