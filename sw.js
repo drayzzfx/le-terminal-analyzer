@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lt-cache-v2';
+const CACHE_NAME = 'lt-cache-v3';
 const ASSETS_TO_CACHE = [
   './app.html',
   './calculateur.html',

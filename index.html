@@ -47,17 +47,22 @@ body::after {
   background-size: 60% 60%, 50% 50%, 45% 45%;
   background-position: 12% 8%, 85% 35%, 55% 85%;
   background-repeat: no-repeat; filter: blur(30px);
+  /* Perf : on anime transform (composité GPU) et jamais background-position,
+     sinon le blur(30px) plein écran est recalculé à chaque frame. */
+  will-change: transform;
   animation: lt-drift 34s ease-in-out infinite alternate;
 }
-@keyframes lt-drift { 0%{background-position:12% 8%,85% 35%,55% 85%} 50%{background-position:22% 18%,70% 22%,40% 70%} 100%{background-position:8% 14%,90% 45%,62% 92%} }
+@keyframes lt-drift { 0%{transform:translate3d(-1.5%,-1%,0)} 50%{transform:translate3d(1.2%,1.4%,0)} 100%{transform:translate3d(-0.8%,1.8%,0)} }
 @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
 
 /* ---------- HERO : MIDNIGHT RUNWAY (fidèle au design) ---------- */
 .lt-metal { background: var(--metal-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; position: relative; padding: 0 0.08em; }
 .lt-accent-text { color: var(--accent-bright); }
 .lt-hero { position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg-void); text-align: center; padding-top: var(--chrome-h, 64px); z-index: 1; }
-.lt-aurora { position: absolute; inset: -25%; pointer-events: none; z-index: 0; background: radial-gradient(closest-side, rgba(127,184,232,0.10), transparent 70%), radial-gradient(closest-side, rgba(90,155,212,0.08), transparent 70%); background-size: 55% 55%, 45% 45%; background-position: 30% 18%, 72% 30%; background-repeat: no-repeat; filter: blur(40px); animation: lt-aurora 28s ease-in-out infinite alternate; }
-@keyframes lt-aurora { 0%{background-position:30% 18%,72% 30%} 100%{background-position:42% 26%,60% 18%} }
+/* Perf : drift en transform (composité GPU) — animer background-position forcerait
+   le recalcul du blur(40px) sur 150% du hero à chaque frame. */
+.lt-aurora { position: absolute; inset: -25%; pointer-events: none; z-index: 0; background: radial-gradient(closest-side, rgba(127,184,232,0.10), transparent 70%), radial-gradient(closest-side, rgba(90,155,212,0.08), transparent 70%); background-size: 55% 55%, 45% 45%; background-position: 30% 18%, 72% 30%; background-repeat: no-repeat; filter: blur(40px); will-change: transform; animation: lt-aurora 28s ease-in-out infinite alternate; }
+@keyframes lt-aurora { 0%{transform:translate3d(-2%,-1.5%,0)} 100%{transform:translate3d(2.5%,1.5%,0)} }
 @media (prefers-reduced-motion: reduce) { .lt-aurora { animation: none; } }
 .lt-runway { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 1; pointer-events: none; perspective: 520px; overflow: hidden; }
 .lt-runway__floor { position: absolute; left: -50%; right: -50%; top: 0; bottom: -60%; transform: rotateX(72deg); transform-origin: 50% 0; background-image: repeating-linear-gradient(0deg, rgba(191,220,245,0.45) 0 26px, transparent 26px 78px), repeating-linear-gradient(0deg, rgba(127,184,232,0.14) 0 1px, transparent 1px 90px), repeating-linear-gradient(90deg, rgba(127,184,232,0.12) 0 1px, transparent 1px 160px); background-size: 3px 100%, 100% 100%, 100% 100%; background-position: 50% 0, 0 0, 0 0; background-repeat: repeat; }
@@ -70,7 +75,9 @@ body::after {
 .lt-runway__edge i:nth-child(1){top:8%;transform:scale(.35);opacity:.5} .lt-runway__edge i:nth-child(2){top:26%;transform:scale(.5);opacity:.6} .lt-runway__edge i:nth-child(3){top:46%;transform:scale(.7);opacity:.75} .lt-runway__edge i:nth-child(4){top:68%;transform:scale(.9);opacity:.9} .lt-runway__edge i:nth-child(5){top:92%;transform:scale(1.15);opacity:1}
 .lt-runway__horizon { position: absolute; top: -1px; left: 8%; right: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(127,184,232,0.5), transparent); box-shadow: 0 0 24px 2px var(--accent-glow); }
 .lt-runway::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, var(--bg-void) 0%, transparent 36%); }
-.lt-hero__spotlight { position: absolute; inset: 0; pointer-events: none; z-index: 2; background: radial-gradient(circle 420px at var(--mx,50%) var(--my,0%), rgba(127,184,232,0.07), transparent 70%); transition: background 120ms linear; }
+/* Perf : disque de taille fixe déplacé en transform (composité) — un gradient
+   repositionné via background serait repeint à chaque mousemove. */
+.lt-hero__spotlight { position: absolute; left: 50%; top: 0; width: 840px; height: 840px; margin: -420px 0 0 -420px; pointer-events: none; z-index: 2; background: radial-gradient(circle closest-side, rgba(127,184,232,0.07), transparent 70%); transform: translate3d(var(--sx,0px), var(--sy,0px), 0); transition: transform 120ms linear; will-change: transform; }
 .lt-hero__grain { position: absolute; inset: 0; pointer-events: none; z-index: 3; mix-blend-mode: overlay; opacity: var(--grain-opacity); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); }
 .lt-hero__vignette { position: absolute; inset: 0; pointer-events: none; z-index: 3; background: var(--vignette); }
 .lt-hero__inner { position: relative; z-index: 5; max-width: 980px; padding: 30px 24px 110px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
@@ -573,7 +580,7 @@ window.addEventListener('scroll',function(){var c=document.getElementById('ltChr
   if(!hero||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)||window.innerWidth<760)return;
   hero.addEventListener('mousemove',function(e){
     var r=hero.getBoundingClientRect();var nx=(e.clientX-r.left)/r.width,ny=(e.clientY-r.top)/r.height;
-    hero.style.setProperty('--mx',(nx*100)+'%');hero.style.setProperty('--my',(ny*100)+'%');
+    hero.style.setProperty('--sx',((nx-0.5)*r.width).toFixed(1)+'px');hero.style.setProperty('--sy',(ny*r.height).toFixed(1)+'px');
     hero.style.setProperty('--px',(nx-0.5).toFixed(3));hero.style.setProperty('--py',(ny-0.5).toFixed(3));
   });
   hero.addEventListener('mouseleave',function(){hero.style.setProperty('--px',0);hero.style.setProperty('--py',0);});
