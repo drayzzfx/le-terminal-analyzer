@@ -1,10 +1,11 @@
-const CACHE_NAME = 'lt-cache-v1';
+const CACHE_NAME = 'lt-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './app.html',
   './calculateur.html',
   './bubble.html',
   './menu.js',
+  './design-system.css',
   './logo.jpg.webp'
 ];
 
@@ -18,7 +19,11 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(
+    caches.keys().then((keys) => Promise.all(
+      keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
+    )).then(() => clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {
