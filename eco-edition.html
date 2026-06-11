@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Le Terminal — Présentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="./eco.css">
 </head>
 <body class="eco-page">
@@ -71,8 +71,8 @@
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg> <span data-en="Credited sources">Sources créditées</span></li>
     </ul>
     <div class="intro__actions">
-      <a class="btn" href="annonces/0072c8418747a19c.html"><span data-en="Read the headline">Lire la une</span> <span class="btn__arrow" aria-hidden="true">→</span></a>
-      <a class="btn btn--ghost" href="a-propos.html" data-en="Learn more">En savoir plus</a>
+      <a class="btn" href="#une"><span data-en="Read the headline">Lire la une</span> <span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn--ghost" href="./eco-flash.html" data-en="Live flash feed">Fil Flash</a>
       <div class="intro__stats">
         <span class="stat"><b>26</b> <span data-en="sources">sources</span></span>
         <span class="stat"><b>6</b> <span data-en="zones">zones</span></span>
@@ -142,18 +142,25 @@
 <section id="une" class="hero" aria-label="À la une">
   <div class="hero__chrome">
     <span class="dots"><i></i><i></i><i></i></span>
-    <span class="hero__pair"><span class="js-term">Institutions</span> · <span data-en="EDITION">ÉDITION</span></span>
+    <span class="hero__pair" id="une-zone-label"><span class="js-term">Éco</span> · <span data-en="EDITION">ÉDITION</span></span>
     <span class="hero__live">● LIVE</span>
   </div>
-  <a class="hero__hit" href="annonces/0072c8418747a19c.html">
+  <a class="hero__hit" id="une-hit" href="#">
     <p class="hero__kicker">
       <span class="hero__badge" data-en="FRONT PAGE">À LA UNE</span>
-      <span class="card__source">Banque centrale européenne</span>
-<span class="card__time">08:48</span><span class="bias bias--flat" data-en="Neutral">Neutre</span>    </p>
-    <h2 class="hero__title" data-en="The ECB holds rates and confirms a meeting-by-meeting approach">La BCE maintient ses taux et confirme une approche réunion par réunion</h2>
-    <p class="hero__summary" data-en="The Governing Council leaves the deposit rate unchanged.">Le Conseil des gouverneurs laisse le taux de dépôt inchangé.</p>
+      <span class="card__source" id="une-source"></span>
+      <span class="card__time" id="une-time"></span>
+      <span class="bias card__bias" id="une-bias"></span>
+    </p>
+    <h2 class="hero__title" id="une-title">
+      <span class="card__skel-line" style="display:block;height:1.4em;width:70%;border-radius:4px;background:rgba(255,255,255,.08);animation:skel 1.4s ease infinite alternate"></span>
+      <span class="card__skel-line" style="display:block;height:1.4em;width:50%;border-radius:4px;background:rgba(255,255,255,.08);animation:skel 1.4s ease .2s infinite alternate;margin-top:8px"></span>
+    </h2>
+    <p class="hero__summary" id="une-summary">
+      <span class="card__skel-line" style="display:block;height:1em;width:85%;border-radius:4px;background:rgba(255,255,255,.06);animation:skel 1.4s ease .1s infinite alternate"></span>
+    </p>
   </a>
-  <a class="btn btn--lg" href="annonces/0072c8418747a19c.html">
+  <a class="btn btn--lg" id="une-btn" href="#">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </section>
@@ -161,39 +168,12 @@
 <section id="selection" class="block" aria-label="La sélection">
   <header class="block__head">
     <h2 class="block__title" data-en='<span class="block__dot">●</span> The selection'><span class="block__dot">●</span> La sélection</h2>
-    <span class="block__sub" data-en="Editor's picks">Le choix de la rédaction</span>
+    <span class="block__sub" id="sel-sub" data-en="Auto-selected — latest high-impact articles">Sélection automatique — dernières annonces à fort impact</span>
   </header>
-  <div class="grid">
-    <article class="card card--pick" style="--i: 0">
-  <a class="card__hit" href="annonces/3af88624c50a45c7.html" aria-label="Lire le résumé : Pourquoi la désinflation française résiste mieux que prévu">
-    <p class="card__kicker">
-      <span class="card__cat js-term">La sélection</span>
-      <span class="card__sep">·</span>
-      <span class="card__source">Analyse maison</span>
-<span class="bias bias--up card__bias" data-en="Positive">Positif</span>    </p>
-    <h3 class="card__title" data-en="Why French disinflation is holding up better than expected">Pourquoi la désinflation française résiste mieux que prévu</h3>
-    <p class="card__summary" data-en="Despite the euro-area slowdown, consumer prices are easing faster in France than in…">Malgré le ralentissement de la zone euro, les prix à la consommation ralentissent plus…</p>
-  </a>
-  <a class="btn" href="annonces/3af88624c50a45c7.html">
-    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
-  </a>
-</article>
-
-    <article class="card card--pick" style="--i: 1">
-  <a class="card__hit" href="annonces/31e289e5c10bb16b.html" aria-label="Lire le résumé : Budget 2027 : les trois arbitrages qui vont compter">
-    <p class="card__kicker">
-      <span class="card__cat js-term">La sélection</span>
-      <span class="card__sep">·</span>
-      <span class="card__source">Note de veille</span>
-<span class="bias bias--down card__bias" data-en="Negative">Négatif</span>    </p>
-    <h3 class="card__title" data-en="2027 Budget: the three trade-offs that will matter">Budget 2027 : les trois arbitrages qui vont compter</h3>
-    <p class="card__summary" data-en="Preparing the 2027 budget is shaping up to be one of the most sensitive files of the…">La préparation du budget 2027 s&#39;annonce comme l&#39;un des dossiers les plus sensibles de la…</p>
-  </a>
-  <a class="btn" href="annonces/31e289e5c10bb16b.html">
-    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
-  </a>
-</article>
-
+  <div class="grid" id="sel-grid">
+    <article class="card card--skeleton" style="--i:0" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:1" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:2" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
   </div>
 </section>
 
@@ -312,5 +292,174 @@
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
 <script src="./menu.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var SENTIMENT_MAP = {
+    'Positif': { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
+    'Négatif': { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
+    'Neutre':  { cls: 'bias--flat', fr: 'Neutre',   en: 'Neutral'  },
+    'Risk-on':  { cls: 'bias--up',  fr: 'Positif',  en: 'Positive' },
+    'Risk-off': { cls: 'bias--down',fr: 'Négatif',  en: 'Negative' },
+    'Hawkish':  { cls: 'bias--up',  fr: 'Positif',  en: 'Positive' },
+    'Dovish':   { cls: 'bias--down',fr: 'Négatif',  en: 'Negative' },
+  };
+
+  function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
+
+  function fmt(iso) {
+    try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
+    catch(e) { return ''; }
+  }
+
+  function relTime(iso) {
+    try {
+      var m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+      if (m < 1) return 'À l\'instant';
+      if (m < 60) return 'Il y a ' + m + ' min';
+      var h = Math.floor(m / 60);
+      if (h < 24) return 'Il y a ' + h + 'h';
+      return 'Il y a ' + Math.floor(h / 24) + 'j';
+    } catch(e) { return ''; }
+  }
+
+  function articleUrl(item) {
+    if (!item.id) return item.url || '#';
+    var u = '/eco-article.html?id=' + encodeURIComponent(item.id);
+    if (item.url) u += '&src=' + encodeURIComponent(item.url);
+    return u;
+  }
+
+  function getTitle(item) {
+    var l = getLang();
+    return (l === 'en' && item.title_en ? item.title_en : item.title) || '';
+  }
+
+  function getSummary(item) {
+    var l = getLang();
+    return (l === 'en' && item.summary_en ? item.summary_en : item.summary) || '';
+  }
+
+  function getSentiment(item) {
+    return SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+  }
+
+  function renderHero(item) {
+    var s = getSentiment(item);
+    var l = getLang();
+    var url = articleUrl(item);
+    var zone = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : 'Éco';
+
+    var zoneEl  = document.getElementById('une-zone-label');
+    var hitEl   = document.getElementById('une-hit');
+    var srcEl   = document.getElementById('une-source');
+    var timeEl  = document.getElementById('une-time');
+    var biasEl  = document.getElementById('une-bias');
+    var titleEl = document.getElementById('une-title');
+    var sumEl   = document.getElementById('une-summary');
+    var btnEl   = document.getElementById('une-btn');
+
+    if (zoneEl) zoneEl.innerHTML = '<span class="js-term">' + zone + '</span> · <span>' + (l === 'en' ? 'EDITION' : 'ÉDITION') + '</span>';
+    if (hitEl)  { hitEl.href = url; }
+    if (srcEl)  srcEl.textContent = item.source || '';
+    if (timeEl) { timeEl.textContent = fmt(item.published_at); timeEl.title = relTime(item.published_at); }
+    if (biasEl) { biasEl.className = 'bias ' + s.cls + ' card__bias'; biasEl.textContent = l === 'en' ? s.en : s.fr; }
+    if (titleEl) titleEl.textContent = getTitle(item);
+    if (sumEl)  sumEl.textContent = getSummary(item);
+    if (btnEl)  btnEl.href = url;
+  }
+
+  function buildCard(item, idx) {
+    var s = getSentiment(item);
+    var l = getLang();
+    var url   = articleUrl(item);
+    var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var sum   = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var src   = (item.source || '').replace(/</g,'&lt;');
+    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : 'Éco';
+    var bias  = l === 'en' ? s.en : s.fr;
+
+    return '<article class="card card--featured" style="--i:' + idx + '" data-eco-dynamic>'
+      + '<a class="card__hit" href="' + url + '">'
+      + '<p class="card__kicker">'
+      + '<span class="card__cat js-term">' + zone + '</span>'
+      + '<span class="card__sep">·</span>'
+      + '<span class="card__source">' + src + '</span>'
+      + '<span class="card__time" title="' + relTime(item.published_at) + '">' + fmt(item.published_at) + '</span>'
+      + (s.cls ? '<span class="bias ' + s.cls + ' card__bias">' + bias + '</span>' : '')
+      + '</p>'
+      + '<h3 class="card__title">' + title + '</h3>'
+      + '<p class="card__summary">' + sum + '</p>'
+      + '</a>'
+      + '<a class="btn" href="' + url + '"><span>' + (l === 'en' ? 'Read article' : 'Lire le résumé') + '</span> <span class="btn__arrow">→</span></a>'
+      + '</article>';
+  }
+
+  function selectTop(items) {
+    var PRIORITY = { 'Positif':3,'Négatif':3,'Risk-on':3,'Risk-off':3,'Hawkish':3,'Dovish':3,'Neutre':0 };
+    return items
+      .filter(function(i) { return (PRIORITY[i.sentiment] || 0) >= 3; })
+      .sort(function(a,b) { return new Date(b.published_at) - new Date(a.published_at); });
+  }
+
+  async function loadEdition() {
+    var grid = document.getElementById('sel-grid');
+    var zones = ['edition', 'flash', 'selection', 'europe', 'ameriques'];
+    var items = [];
+
+    // Essaie les zones dans l'ordre jusqu'à en trouver une avec des articles
+    for (var i = 0; i < zones.length; i++) {
+      try {
+        var resp = await fetch('/api/news?zone=' + zones[i] + '&limit=30');
+        if (!resp.ok) continue;
+        var data = await resp.json();
+        if (data.items && data.items.length > 0) {
+          items = data.items;
+          break;
+        }
+      } catch(e) { continue; }
+    }
+
+    if (items.length === 0) {
+      if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text3);font-size:13px">Aucune annonce disponible pour l\'instant.</div>';
+      return;
+    }
+
+    // Sélectionne les articles prioritaires (non-Neutre) pour le hero + sélection
+    var top = selectTop(items);
+    var pool = top.length >= 4 ? top : items.sort(function(a,b){ return new Date(b.published_at) - new Date(a.published_at); });
+
+    // Hero : premier article
+    renderHero(pool[0]);
+
+    // Sélection : les 3-6 suivants
+    var selItems = pool.slice(1, 7);
+    if (grid) {
+      grid.innerHTML = selItems.length > 0
+        ? selItems.map(function(item, i) { return buildCard(item, i); }).join('')
+        : '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text3);font-size:13px">En attente des nouvelles annonces.</div>';
+    }
+
+    // Mise à jour du compteur dans le sous-titre
+    var sub = document.getElementById('sel-sub');
+    if (sub) {
+      var n = selItems.length;
+      sub.textContent = getLang() === 'en'
+        ? n + ' article' + (n > 1 ? 's' : '') + ' · auto-selected'
+        : n + ' annonce' + (n > 1 ? 's' : '') + ' · sélection automatique';
+      sub.removeAttribute('data-en');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadEdition);
+  } else {
+    loadEdition();
+  }
+
+  setInterval(loadEdition, 5 * 60 * 1000);
+})();
+</script>
 </body>
 </html>

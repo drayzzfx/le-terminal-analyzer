@@ -48,17 +48,25 @@ module.exports = async function handler(req, res) {
     const userRes = await supabaseRequest('GET', '/auth/v1/user', null, ANON_KEY, token);
     if (!userRes.body.id) return res.status(401).json({ error: 'Invalid token' });
     const userId = userRes.body.id;
+    const userEmail = userRes.body.email || '';
 
     if (req.method === 'GET') {
-      // Get history
-      const r = await supabaseRequest('GET', `/rest/v1/analyses?user_id=eq.${userId}&order=created_at.desc&limit=50`, null, ANON_KEY, token);
-      return res.status(200).json(r.body);
+      // Query by user_id OR user_email to handle multiple accounts (email/password + Google) with same email
+      const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ANON_KEY;
+      const emailFilter = userEmail ? `,user_email.eq.${encodeURIComponent(userEmail)}` : '';
+      const r = await supabaseRequest(
+        'GET',
+        `/rest/v1/analyses?or=(user_id.eq.${userId}${emailFilter})&order=created_at.desc&limit=50`,
+        null, SERVICE_KEY, SERVICE_KEY
+      );
+      return res.status(200).json(Array.isArray(r.body) ? r.body : []);
     }
 
     if (req.method === 'POST') {
       const { pair, direction, tf, score, verdict, scoreLabel, forces, faiblesses, recommandations, macro, scenarios, annotations, imgData } = req.body;
       const r = await supabaseRequest('POST', '/rest/v1/analyses', {
         user_id: userId,
+        user_email: userEmail,
         pair, direction, tf, score, verdict, score_label: scoreLabel,
         forces, faiblesses, recommandations, macro,
         scenarios: JSON.stringify(scenarios || []),

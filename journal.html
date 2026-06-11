@@ -5,25 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Journal de Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #08080F;
-  --bg2: #0E0E1A;
-  --card: rgba(255,255,255,0.04);
-  --card-hover: rgba(255,255,255,0.07);
-  --border: rgba(255,255,255,0.08);
-  --v: #0095FF;
-  --v2: #38B6FF;
-  --v3: #93D0FF;
-  --vglow: rgba(0,149,255,0.25);
-  --vglow2: rgba(0,149,255,0.08);
-  --text: #F0EEFF;
-  --text2: #9B96B8;
-  --text3: #5A5570;
-  --green: #34D399;
-  --red: #F87171;
-  --amber: #FBBF24;
+  --bg-void:    #07090C;
+  --bg-hangar:  #0B0E13;
+  --bg-panel:   #10141B;
+  --bg-elevated:#161B24;
+  --ice-100: #EAF4FF;
+  --ice-300: #BFDCF5;
+  --ice-500: #7FB8E8;
+  --ice-600: #5A9BD4;
+  --ice-glow:rgba(127,184,232,0.35);
+  --steel-100: #F2F4F7;
+  --steel-300: #C3CAD4;
+  --steel-500: #7E8794;
+  --steel-700: #3A414C;
+  --steel-900: #1C212A;
+  --signal-up:   #4ADE9C;
+  --signal-down: #F0647A;
+  --signal-warn: #E8C268;
+  /* Compat */
+  --bg:          var(--bg-void);
+  --bg2:         var(--bg-hangar);
+  --card:        var(--bg-panel);
+  --card-hover:  var(--bg-elevated);
+  --border:      var(--steel-900);
+  --border-active:rgba(127,184,232,0.4);
+  --v:    var(--ice-600);
+  --v2:   var(--ice-500);
+  --v3:   var(--ice-300);
+  --vglow:  var(--ice-glow);
+  --vglow2: rgba(127,184,232,0.08);
+  --text:  var(--steel-100);
+  --text2: var(--steel-300);
+  --text3: var(--steel-500);
+  --green: var(--signal-up);
+  --red:   var(--signal-down);
+  --amber: var(--signal-warn);
   --r: 16px;
   --r2: 12px;
 }
@@ -206,6 +225,75 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 .lightbox.show{display:flex}
 .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;border:1px solid var(--border)}
 
+/* BROKER BANNER */
+.broker-banner{border-radius:16px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.broker-banner.disconnected{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2)}
+.broker-banner.connected{background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2)}
+.broker-banner.syncing{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2)}
+.broker-banner-left{display:flex;align-items:center;gap:12px}
+.broker-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.broker-banner.disconnected .broker-icon{background:rgba(0,149,255,.12)}
+.broker-banner.connected .broker-icon{background:rgba(52,211,153,.12)}
+.broker-banner.syncing .broker-icon{background:rgba(251,191,36,.12)}
+.broker-banner-text{}
+.broker-banner-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px}
+.broker-banner-sub{font-size:11px;color:var(--text3)}
+.broker-banner-actions{display:flex;gap:8px;flex-shrink:0}
+.broker-connect-btn{padding:8px 18px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.broker-connect-btn:hover{background:#0070CC}
+.broker-sync-btn{padding:8px 18px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:50px;color:var(--green);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.broker-sync-btn:hover{background:rgba(52,211,153,.25)}
+.broker-sync-btn:disabled{opacity:.5;cursor:not-allowed}
+.broker-disconnect-btn{padding:8px 14px;background:transparent;border:1px solid rgba(248,113,113,.25);border-radius:50px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
+.broker-disconnect-btn:hover{background:rgba(248,113,113,.1)}
+
+/* BROKER MODAL */
+.broker-modal{max-width:480px}
+.broker-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.broker-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--v3);text-transform:uppercase}
+.broker-field input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
+.broker-field input:focus{border-color:rgba(0,149,255,.5)}
+.broker-field input::placeholder{color:var(--text3)}
+.broker-steps{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.15);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.8}
+.broker-steps b{color:var(--v2)}
+.broker-steps a{color:var(--v2);text-decoration:none}
+.broker-steps a:hover{text-decoration:underline}
+.broker-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
+
+/* PLATFORM PICKER */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.platform-card{padding:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
+.platform-card:hover{border-color:rgba(0,149,255,.4);background:rgba(0,149,255,.06)}
+.platform-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.platform-card.soon::after{content:'Bientôt';position:absolute;top:8px;right:8px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.06em}
+.platform-card-icon{font-size:24px;margin-bottom:8px}
+.platform-card-name{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.platform-card-sub{font-size:10px;color:var(--text3);line-height:1.4}
+.broker-back{background:transparent;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:0;margin-bottom:16px;display:flex;align-items:center;gap:4px;transition:color .2s}
+.broker-back:hover{color:var(--text2)}
+
+/* MT TYPE TOGGLE */
+.mt-toggle{display:flex;gap:8px;margin-bottom:16px}
+.mt-btn{flex:1;padding:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
+.mt-btn.on{border-color:rgba(0,149,255,.5);color:var(--v2);background:rgba(0,149,255,.08)}
+
+/* CSV IMPORT */
+.csv-drop{border:1.5px dashed rgba(0,149,255,.3);border-radius:14px;background:rgba(0,149,255,.04);padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;margin-bottom:16px}
+.csv-drop:hover,.csv-drop.over{border-color:var(--v);background:rgba(0,149,255,.1)}
+.csv-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.csv-drop-icon{font-size:28px;margin-bottom:8px}
+.csv-drop-txt{font-size:13px;color:var(--text2);font-weight:500}
+.csv-drop-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.csv-preview{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.csv-preview-header{padding:10px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between;align-items:center}
+.csv-preview-table{width:100%;border-collapse:collapse;font-size:11px}
+.csv-preview-table th{padding:7px 10px;background:rgba(255,255,255,.04);color:var(--text3);font-weight:600;text-align:left;border-bottom:1px solid var(--border)}
+.csv-preview-table td{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text2)}
+.csv-preview-table tr:last-child td{border-bottom:none}
+.csv-platforms{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.csv-platform-btn{padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
+.csv-platform-btn.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
+
 /* AUTH */
 .auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
@@ -289,6 +377,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   </div>
 
 
+
+  <!-- BROKER BANNER -->
+  <div class="broker-banner disconnected" id="brokerBanner">
+    <div class="broker-banner-left">
+      <div class="broker-icon" id="brokerIcon">📡</div>
+      <div class="broker-banner-text">
+        <div class="broker-banner-title" id="brokerTitle">Connecte ton compte de trading</div>
+        <div class="broker-banner-sub" id="brokerSub">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
+      </div>
+    </div>
+    <div class="broker-banner-actions" id="brokerActions">
+      <button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>
+    </div>
+  </div>
 
   <!-- ADD TRADE -->
   <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
@@ -441,6 +543,162 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <!-- IMAGE LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- BROKER MODAL -->
+<div class="modal-overlay" id="brokerModal">
+  <div class="modal-box broker-modal">
+    <button class="modal-close" onclick="closeBrokerModal()">✕</button>
+
+    <!-- STEP 1: platform picker -->
+    <div id="brokerStep1">
+      <div class="modal-title">Connecter un compte</div>
+      <div class="modal-sub">Choisis ta plateforme de trading</div>
+      <div class="platform-grid">
+        <div class="platform-card" onclick="showBrokerStep2('metaapi')">
+          <div class="platform-card-icon">📊</div>
+          <div class="platform-card-name">MT4 / MT5</div>
+          <div class="platform-card-sub">Via MetaApi<br>Sync automatique</div>
+        </div>
+        <div class="platform-card" onclick="showBrokerStep2('csv')">
+          <div class="platform-card-icon">📂</div>
+          <div class="platform-card-name">Import CSV</div>
+          <div class="platform-card-sub">Topstep, FTMO<br>MyFundedFX, etc.</div>
+        </div>
+        <div class="platform-card" onclick="showBrokerStep2('tradelocker')">
+          <div class="platform-card-icon">🔄</div>
+          <div class="platform-card-name">TradeLocker</div>
+          <div class="platform-card-sub">MyFundedFX, The5ers<br>Sync automatique</div>
+        </div>
+        <div class="platform-card" onclick="showBrokerStep2('dxtrade')">
+          <div class="platform-card-icon">📈</div>
+          <div class="platform-card-name">DXtrade</div>
+          <div class="platform-card-sub">Funded firms DXtrade<br>Sync automatique</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2a: MetaApi (MT4/MT5) -->
+    <div id="brokerStep2MetaApi" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">MT4 / MT5 via MetaApi</div>
+      <div class="modal-sub">Sync automatique de ton historique</div>
+
+      <div class="mt-toggle">
+        <button class="mt-btn on" id="mtBtn4" onclick="selectMtType('mt4')">MT4</button>
+        <button class="mt-btn" id="mtBtn5" onclick="selectMtType('mt5')">MT5</button>
+      </div>
+
+      <div class="broker-steps">
+        <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
+        <b>2.</b> Ajoute ton compte <span id="mtTypeLabel">MT4</span> (broker + login + password)<br>
+        <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+      </div>
+
+      <div class="broker-field">
+        <label>Auth Token MetaApi</label>
+        <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+      </div>
+      <div class="broker-field">
+        <label>Account ID</label>
+        <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+      </div>
+      <div class="broker-error" id="brokerError"></div>
+      <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
+        <span id="brokerSaveTxt">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2c: TradeLocker -->
+    <div id="brokerStep2TL" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">TradeLocker</div>
+      <div class="modal-sub">MyFundedFX · The5ers · et autres prop firms</div>
+      <div class="broker-steps">
+        <b>1.</b> Utilise l'email et mot de passe de ton compte TradeLocker<br>
+        <b>2.</b> Le serveur est indiqué dans ton tableau de bord prop firm<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Exemples : <b>TT-LIVE-1</b>, <b>TT-LIVE-2</b>, <b>TradeLocker-Live</b>
+      </div>
+      <div class="broker-field">
+        <label>Email TradeLocker</label>
+        <input type="email" id="tlEmailInput" placeholder="ton@email.com">
+      </div>
+      <div class="broker-field">
+        <label>Mot de passe</label>
+        <input type="password" id="tlPasswordInput" placeholder="••••••••">
+      </div>
+      <div class="broker-field">
+        <label>Serveur</label>
+        <input type="text" id="tlServerInput" placeholder="TT-LIVE-1">
+      </div>
+      <div class="broker-error" id="tlError"></div>
+      <button class="submit-btn" id="tlSaveBtn" onclick="saveTLConnection()">
+        <span id="tlSaveTxt">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2d: DXtrade -->
+    <div id="brokerStep2DX" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">DXtrade</div>
+      <div class="modal-sub">Prop firms utilisant la plateforme DXtrade</div>
+      <div class="broker-steps">
+        <b>1.</b> Le domaine est l'URL de ta plateforme DXtrade<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Exemple : <b>dxtrade.myfirm.com</b><br>
+        <b>2.</b> Login et mot de passe = tes identifiants de la plateforme
+      </div>
+      <div class="broker-field">
+        <label>Domaine DXtrade</label>
+        <input type="text" id="dxDomainInput" placeholder="dxtrade.myfirm.com">
+      </div>
+      <div class="broker-field">
+        <label>Login</label>
+        <input type="text" id="dxLoginInput" placeholder="ton_login">
+      </div>
+      <div class="broker-field">
+        <label>Mot de passe</label>
+        <input type="password" id="dxPasswordInput" placeholder="••••••••">
+      </div>
+      <div class="broker-error" id="dxError"></div>
+      <button class="submit-btn" id="dxSaveBtn" onclick="saveDXConnection()">
+        <span id="dxSaveTxt">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2b: CSV Import -->
+    <div id="brokerStep2CSV" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <div class="modal-title">Import CSV</div>
+      <div class="modal-sub">Topstep · FTMO · MyFundedFX · MT4/MT5 Statement</div>
+
+      <div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--v3);text-transform:uppercase;margin-bottom:8px">Format</div>
+        <div class="csv-platforms">
+          <button class="csv-platform-btn on" id="csvFmtBtn_auto" onclick="selectCsvFormat('auto')">Auto-détect</button>
+          <button class="csv-platform-btn" id="csvFmtBtn_topstep" onclick="selectCsvFormat('topstep')">Topstep</button>
+          <button class="csv-platform-btn" id="csvFmtBtn_ftmo" onclick="selectCsvFormat('ftmo')">FTMO</button>
+          <button class="csv-platform-btn" id="csvFmtBtn_mt4" onclick="selectCsvFormat('mt4')">MT4 Statement</button>
+        </div>
+      </div>
+
+      <div class="csv-drop" id="csvDrop">
+        <input type="file" accept=".csv,.txt" onchange="onCsvFile(event)" id="csvFileInput">
+        <div class="csv-drop-icon">📄</div>
+        <div class="csv-drop-txt">Glisse ton fichier CSV ici</div>
+        <div class="csv-drop-sub">ou clique pour sélectionner</div>
+      </div>
+
+      <div id="csvPreviewArea" style="display:none">
+        <div class="csv-preview" id="csvPreviewTable"></div>
+        <div class="broker-error" id="csvError"></div>
+        <button class="submit-btn" id="csvImportBtn" onclick="importCsvTrades()">
+          <span id="csvImportTxt">Importer les trades</span>
+        </button>
+      </div>
+      <div class="broker-error" id="csvParseError"></div>
+    </div>
+
+  </div>
 </div>
 
 <!-- AUTH MODAL -->
@@ -1081,7 +1339,7 @@ async function requestGlobalIA() {
 async function syncTrade(trade) {
   if(!authToken) return;
   try {
-    await fetch('/api/history', {
+    await fetch('/api/journal', {
       method: 'POST',
       headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body: JSON.stringify(trade)
@@ -1092,7 +1350,7 @@ async function syncTrade(trade) {
 async function deleteTrade(id) {
   if(!authToken) return;
   try {
-    await fetch('/api/history?id=' + encodeURIComponent(id), {
+    await fetch('/api/journal?id=' + encodeURIComponent(id), {
       method: 'DELETE',
       headers: {'Authorization':'Bearer '+authToken}
     });
@@ -1102,22 +1360,59 @@ async function deleteTrade(id) {
 async function loadFromServer() {
   if(!authToken) return;
   try {
-    var res = await fetch('/api/history', {headers:{'Authorization':'Bearer '+authToken}});
+    var res = await fetch('/api/journal', {headers:{'Authorization':'Bearer '+authToken}});
     var data = await res.json();
     if(Array.isArray(data) && data.length) {
-      // Merge: server wins, keep local img_data
-      var localMap = {};
-      trades.forEach(function(t){ localMap[t.id] = t; });
-      trades = data.map(function(t){
-        var local = localMap[t.id];
-        if(local && local.img) t.img = t.img || local.img;
-        return t;
+      // Map server fields (trade_date, etc.) to local field names
+      var serverTrades = data.map(function(t){
+        return {
+          id: t.id,
+          pair: t.pair || '',
+          direction: t.direction || '',
+          date: t.trade_date || '',
+          session: t.session || '',
+          setup: t.setup || '',
+          result: t.result || '',
+          pnl: t.pnl != null ? parseFloat(t.pnl) : 0,
+          rr: t.rr != null ? parseFloat(t.rr) : 0,
+          fees: t.fees != null ? parseFloat(t.fees) : 0,
+          notes: t.notes || '',
+          img: t.img || null
+        };
       });
+      // Merge: server wins, keep local entries not yet synced (no UUID id)
+      var serverIds = new Set(serverTrades.map(function(t){ return String(t.id); }));
+      var localOnly = trades.filter(function(t){ return !serverIds.has(String(t.id)); });
+      trades = serverTrades.concat(localOnly);
+      trades.sort(function(a,b){ return (b.date||'') > (a.date||'') ? 1 : -1; });
       persist();
       renderStats();
       renderCalendar();
     }
   } catch(e) {}
+}
+
+async function syncAllLocalTrades() {
+  if(!authToken || !trades.length) return;
+  var unsynced = trades.filter(function(t){ return !/^[0-9a-f-]{36}$/.test(String(t.id)); });
+  for(var i = 0; i < unsynced.length; i++) {
+    var oldId = unsynced[i].id;
+    try {
+      var res = await fetch('/api/journal', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+        body: JSON.stringify(unsynced[i])
+      });
+      var created = await res.json();
+      var newId = (Array.isArray(created) ? created[0] : created);
+      newId = newId && newId.id;
+      if(newId) {
+        var idx = trades.findIndex(function(t){ return String(t.id) === String(oldId); });
+        if(idx !== -1) trades[idx].id = newId;
+      }
+    } catch(e) {}
+  }
+  persist(); // save UUID ids to localStorage
 }
 
 // ── PAIR AUTOCOMPLETE ──
@@ -1193,6 +1488,7 @@ async function doAuth() {
       localStorage.setItem('ta_email', (data.user&&data.user.email)||email||'');
       closeAuth();
       updateUserUI();
+      await syncAllLocalTrades();
       loadFromServer();
     } else {
       errEl.textContent = data.error_description || data.msg || 'Erreur';
@@ -1219,7 +1515,7 @@ function updateUserUI() {
 
 async function checkSession() {
   var token = localStorage.getItem('ta_token');
-  if(!token) return;
+  if(!token){window.location.href='./index.html?paywall=1';return;}
   authToken = token;
   var savedEmail = localStorage.getItem('ta_email') || '';
   currentUser = {email: savedEmail};
@@ -1234,8 +1530,28 @@ async function checkSession() {
     if(data.id) {
       currentUser = data;
       localStorage.setItem('ta_email', data.email||'');
+      // Clear local data if a different account logged in
+      var storedUid = localStorage.getItem('ta_user_id');
+      if(storedUid && storedUid !== data.id) {
+        trades = [];
+        localStorage.removeItem('jnl_trades');
+        localStorage.removeItem('ta_user_id');
+        renderStats(); renderCalendar();
+      }
+      localStorage.setItem('ta_user_id', data.id);
+      // PRO gate — vérif côté serveur puis redirect si pas pro
+      try {
+        var proRes = await fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}});
+        var proData = await proRes.json();
+        if(proData.is_pro) localStorage.setItem('lt_pro','1');
+        else { localStorage.removeItem('lt_pro'); window.location.href='./index.html?paywall=1'; return; }
+      } catch(e) {
+        if(localStorage.getItem('lt_pro')!=='1'){window.location.href='./index.html';return;}
+      }
       updateUserUI();
+      await syncAllLocalTrades();
       loadFromServer();
+      loadBrokerStatus();
     } else if(data.error) {
       authToken = null; currentUser = null;
       localStorage.removeItem('ta_token');
@@ -1249,6 +1565,408 @@ setCurrency(currency);
 renderStats();
 renderCalendar();
 checkSession();
+
+// ── BROKER CONNECTION ──
+var brokerConnected = false;
+var selectedMtType = 'mt4';
+var selectedCsvFormat = 'auto';
+var parsedCsvTrades = [];
+
+// ── Modal navigation ──
+function openBrokerModal() {
+  showBrokerStep1();
+  document.getElementById('brokerModal').classList.add('show');
+}
+function closeBrokerModal() { document.getElementById('brokerModal').classList.remove('show'); }
+
+function showBrokerStep1() {
+  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = id === 'brokerStep1' ? '' : 'none';
+  });
+}
+function showBrokerStep2(type) {
+  document.getElementById('brokerStep1').style.display = 'none';
+  if (type === 'metaapi') {
+    document.getElementById('brokerStep2MetaApi').style.display = '';
+    document.getElementById('brokerTokenInput').value = '';
+    document.getElementById('brokerAccountInput').value = '';
+    document.getElementById('brokerError').textContent = '';
+    document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+    document.getElementById('brokerSaveBtn').disabled = false;
+  } else if (type === 'tradelocker') {
+    document.getElementById('brokerStep2TL').style.display = '';
+    document.getElementById('tlEmailInput').value = '';
+    document.getElementById('tlPasswordInput').value = '';
+    document.getElementById('tlServerInput').value = '';
+    document.getElementById('tlError').textContent = '';
+    document.getElementById('tlSaveTxt').textContent = 'Connecter et synchroniser';
+    document.getElementById('tlSaveBtn').disabled = false;
+  } else if (type === 'dxtrade') {
+    document.getElementById('brokerStep2DX').style.display = '';
+    document.getElementById('dxDomainInput').value = '';
+    document.getElementById('dxLoginInput').value = '';
+    document.getElementById('dxPasswordInput').value = '';
+    document.getElementById('dxError').textContent = '';
+    document.getElementById('dxSaveTxt').textContent = 'Connecter et synchroniser';
+    document.getElementById('dxSaveBtn').disabled = false;
+  } else {
+    document.getElementById('brokerStep2CSV').style.display = '';
+    document.getElementById('csvPreviewArea').style.display = 'none';
+    document.getElementById('csvParseError').textContent = '';
+    document.getElementById('csvFileInput').value = '';
+    parsedCsvTrades = [];
+  }
+}
+
+function selectMtType(t) {
+  selectedMtType = t;
+  document.getElementById('mtBtn4').classList.toggle('on', t === 'mt4');
+  document.getElementById('mtBtn5').classList.toggle('on', t === 'mt5');
+  document.getElementById('mtTypeLabel').textContent = t.toUpperCase();
+}
+
+function selectCsvFormat(f) {
+  selectedCsvFormat = f;
+  document.querySelectorAll('.csv-platform-btn').forEach(function(b) { b.classList.remove('on'); });
+  document.getElementById('csvFmtBtn_' + f).classList.add('on');
+  if (parsedCsvTrades.length) renderCsvPreview(parsedCsvTrades);
+}
+
+// ── MetaApi connection ──
+async function saveBrokerConnection() {
+  var token = document.getElementById('brokerTokenInput').value.trim();
+  var accountId = document.getElementById('brokerAccountInput').value.trim();
+  var errEl = document.getElementById('brokerError');
+  errEl.textContent = '';
+  if (!token || !accountId) { errEl.textContent = 'Remplis les deux champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('brokerSaveBtn');
+  btn.disabled = true;
+  document.getElementById('brokerSaveTxt').textContent = 'Vérification…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType })
+    });
+    var data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Erreur connexion';
+      btn.disabled = false;
+      document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+      return;
+    }
+    brokerConnected = true;
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: selectedMtType, accountName: data.accountName });
+    syncBroker();
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau';
+    btn.disabled = false;
+    document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+// ── TradeLocker connection ──
+async function saveTLConnection() {
+  var email = document.getElementById('tlEmailInput').value.trim();
+  var password = document.getElementById('tlPasswordInput').value.trim();
+  var server = document.getElementById('tlServerInput').value.trim();
+  var errEl = document.getElementById('tlError');
+  errEl.textContent = '';
+  if (!email || !password || !server) { errEl.textContent = 'Remplis tous les champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('tlSaveBtn');
+  btn.disabled = true;
+  document.getElementById('tlSaveTxt').textContent = 'Vérification…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'tradelocker', tlEmail: email, tlPassword: password, tlServer: server })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('tlSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true;
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'tradelocker', accountName: data.accountName });
+    syncBroker('tradelocker');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('tlSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+// ── DXtrade connection ──
+async function saveDXConnection() {
+  var domain = document.getElementById('dxDomainInput').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
+  var login = document.getElementById('dxLoginInput').value.trim();
+  var password = document.getElementById('dxPasswordInput').value.trim();
+  var errEl = document.getElementById('dxError');
+  errEl.textContent = '';
+  if (!domain || !login || !password) { errEl.textContent = 'Remplis tous les champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('dxSaveBtn');
+  btn.disabled = true;
+  document.getElementById('dxSaveTxt').textContent = 'Vérification…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'dxtrade', dxDomain: domain, dxLogin: login, dxPassword: password })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('dxSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true;
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'dxtrade', accountName: data.accountName });
+    syncBroker('dxtrade');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('dxSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+async function syncBroker(platformOverride) {
+  if (!authToken) return;
+  setBrokerSyncing(true);
+  // Determine endpoint based on platform
+  var platform = platformOverride || (window._brokerPlatform || 'mt5');
+  var endpoint = '/api/sync-broker';
+  if (platform === 'tradelocker') endpoint = '/api/sync-tradelocker';
+  else if (platform === 'dxtrade') endpoint = '/api/sync-dxtrade';
+  try {
+    var res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken }
+    });
+    var data = await res.json();
+    if (res.ok && data.ok) {
+      var n = data.synced;
+      var msg = n > 0 ? n + ' nouveau' + (n > 1 ? 'x' : '') + ' trade' + (n > 1 ? 's' : '') + ' importé' + (n > 1 ? 's' : '') : 'Journal à jour';
+      updateBrokerBanner({ connected: true, lastSyncAt: new Date().toISOString(), syncMsg: msg });
+      if (n > 0) loadFromServer();
+    } else {
+      updateBrokerBanner({ connected: true, syncMsg: data.error || 'Erreur sync' });
+    }
+  } catch(e) {
+    updateBrokerBanner({ connected: true, syncMsg: 'Erreur réseau' });
+  }
+  setBrokerSyncing(false);
+}
+
+async function disconnectBroker() {
+  if (!authToken || !confirm('Déconnecter le compte de trading ?')) return;
+  await fetch('/api/broker-connect', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + authToken } });
+  brokerConnected = false;
+  updateBrokerBanner({ connected: false });
+}
+
+function setBrokerSyncing(on) {
+  var banner = document.getElementById('brokerBanner');
+  var btn = document.getElementById('brokerSyncBtn');
+  banner.className = 'broker-banner ' + (on ? 'syncing' : 'connected');
+  document.getElementById('brokerIcon').textContent = on ? '🔄' : '✅';
+  document.getElementById('brokerTitle').textContent = on ? 'Synchronisation en cours…' : (document.getElementById('brokerTitle')._name || 'Compte connecté');
+  if (btn) btn.disabled = on;
+}
+
+function updateBrokerBanner(info) {
+  var banner = document.getElementById('brokerBanner');
+  var titleEl = document.getElementById('brokerTitle');
+  var subEl = document.getElementById('brokerSub');
+  var actionsEl = document.getElementById('brokerActions');
+  if (!info.connected) {
+    banner.className = 'broker-banner disconnected';
+    document.getElementById('brokerIcon').textContent = '📡';
+    titleEl.textContent = 'Connecte ton compte de trading';
+    titleEl._name = null;
+    subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
+    actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>';
+    return;
+  }
+  banner.className = 'broker-banner connected';
+  document.getElementById('brokerIcon').textContent = '✅';
+  var platformLabel = info.platform ? info.platform.toUpperCase() : 'Compte';
+  var nameLabel = info.accountName ? platformLabel + ' · ' + info.accountName : platformLabel + ' connecté';
+  titleEl.textContent = nameLabel;
+  titleEl._name = nameLabel;
+  if (info.syncMsg) subEl.textContent = info.syncMsg;
+  else if (info.lastSyncAt) {
+    var d = new Date(info.lastSyncAt);
+    subEl.textContent = 'Sync ' + d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+  } else subEl.textContent = 'Prêt à synchroniser';
+  actionsEl.innerHTML =
+    '<button class="broker-sync-btn" id="brokerSyncBtn" onclick="syncBroker()">↻ Sync</button>' +
+    '<button class="broker-disconnect-btn" onclick="disconnectBroker()">Déconnecter</button>';
+}
+
+async function loadBrokerStatus() {
+  if (!authToken) return;
+  try {
+    var res = await fetch('/api/broker-connect', { headers: { 'Authorization': 'Bearer ' + authToken } });
+    var data = await res.json();
+    if (data.connected) {
+      brokerConnected = true;
+      window._brokerPlatform = data.platform || 'mt5';
+      updateBrokerBanner({ connected: true, platform: data.platform, accountName: data.accountName, lastSyncAt: data.lastSyncAt });
+      if (!data.lastSyncAt || (Date.now() - new Date(data.lastSyncAt).getTime()) > 5 * 60 * 1000) syncBroker(data.platform);
+    }
+  } catch(e) {}
+}
+
+// ── CSV IMPORT ──
+// Détection automatique du format selon les headers
+var CSV_FORMATS = {
+  topstep: {
+    name: 'Topstep',
+    detect: function(h) { return h.some(function(c){return /b\/s|side|buy.sell/i.test(c);}) && h.some(function(c){return /symbol|contract|instrument/i.test(c);}); },
+    map: function(row, h) {
+      var get = function(pat) { for(var i=0;i<h.length;i++){if(pat.test(h[i]))return(row[i]||'').trim();} return ''; };
+      var side = get(/^(b\/s|side|buy.sell)$/i).toLowerCase();
+      var dir = (side==='b'||side==='buy') ? 'long' : 'short';
+      var pnl = parseFloat(get(/p.?l|profit|net/i).replace(/[,$\s]/g,'')) || 0;
+      var fees = Math.abs(parseFloat(get(/comm|fee/i).replace(/[,$\s]/g,'')) || 0);
+      var sym = get(/symbol|contract|instrument/i).replace(/\s/g,'');
+      var rawDate = get(/date|time/i);
+      return { pair: sym, direction: dir, trade_date: parseDate(rawDate), pnl: pnl, fees: fees, result: pnl > 0.01 ? 'win' : pnl < -0.01 ? 'loss' : 'be' };
+    }
+  },
+  ftmo: {
+    name: 'FTMO / MT4 History',
+    detect: function(h) { return h.some(function(c){return /open.time|entry.time/i.test(c);}) && h.some(function(c){return /close.time/i.test(c);}); },
+    map: function(row, h) {
+      var get = function(pat) { for(var i=0;i<h.length;i++){if(pat.test(h[i]))return(row[i]||'').trim();} return ''; };
+      var type = get(/^type$/i).toLowerCase();
+      var dir = (type==='buy') ? 'long' : (type==='sell') ? 'short' : 'long';
+      var pnl = parseFloat(get(/^profit$/i).replace(/[,$\s]/g,'')) || 0;
+      var comm = parseFloat(get(/comm/i).replace(/[,$\s]/g,'')) || 0;
+      var swap = parseFloat(get(/swap/i).replace(/[,$\s]/g,'')) || 0;
+      var fees = Math.abs(comm) + Math.abs(swap);
+      pnl = pnl + comm + swap;
+      var sym = get(/symbol|item/i).replace(/\s/g,'');
+      var rawDate = get(/open.time|entry.time/i);
+      return { pair: sym, direction: dir, trade_date: parseDate(rawDate), pnl: Math.round(pnl*100)/100, fees: Math.round(fees*100)/100, result: pnl > 0.01 ? 'win' : pnl < -0.01 ? 'loss' : 'be' };
+    }
+  },
+  mt4: {
+    name: 'MT4 Statement',
+    detect: function(h) { return h.some(function(c){return /^#$/i.test(c)||/^ticket$/i.test(c);}) && h.some(function(c){return /^item$/i.test(c)||/symbol/i.test(c);}); },
+    map: function(row, h) {
+      var get = function(pat) { for(var i=0;i<h.length;i++){if(pat.test(h[i]))return(row[i]||'').trim();} return ''; };
+      var type = get(/^type$/i).toLowerCase();
+      var dir = (type==='buy') ? 'long' : (type==='sell') ? 'short' : null;
+      if (!dir) return null;
+      var pnl = parseFloat(get(/^profit$/i).replace(/[,$\s]/g,'')) || 0;
+      var comm = parseFloat(get(/comm/i).replace(/[,$\s]/g,'')) || 0;
+      var swap = parseFloat(get(/swap/i).replace(/[,$\s]/g,'')) || 0;
+      pnl = pnl + comm + swap;
+      var fees = Math.abs(comm) + Math.abs(swap);
+      var sym = get(/item|symbol/i).replace(/\s/g,'');
+      var rawDate = get(/^time$/i) || get(/open/i);
+      return { pair: sym, direction: dir, trade_date: parseDate(rawDate), pnl: Math.round(pnl*100)/100, fees: Math.round(fees*100)/100, result: pnl > 0.01 ? 'win' : pnl < -0.01 ? 'loss' : 'be' };
+    }
+  }
+};
+
+function parseDate(str) {
+  if (!str) return '';
+  // Formats courants: "2024.01.15 10:30", "01/15/2024", "2024-01-15"
+  var m;
+  if ((m = str.match(/^(\d{4})[.\-\/](\d{2})[.\-\/](\d{2})/))) return m[1]+'-'+m[2]+'-'+m[3];
+  if ((m = str.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})/))) return m[3]+'-'+m[1]+'-'+m[2];
+  if ((m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))) {
+    var y = m[3].length===2 ? '20'+m[3] : m[3];
+    return y+'-'+(m[1].padStart(2,'0'))+'-'+(m[2].padStart(2,'0'));
+  }
+  return str.slice(0, 10);
+}
+
+function parseCsv(text) {
+  var lines = text.trim().split(/\r?\n/).filter(function(l){ return l.trim(); });
+  if (lines.length < 2) return null;
+  var sep = (lines[0].match(/\t/g)||[]).length > (lines[0].match(/,/g)||[]).length ? '\t' : ',';
+  var headers = lines[0].split(sep).map(function(h){ return h.trim().replace(/^["']|["']$/g,''); });
+  var rows = lines.slice(1).map(function(l){
+    return l.split(sep).map(function(c){ return c.trim().replace(/^["']|["']$/g,''); });
+  }).filter(function(r){ return r.some(function(c){return c;}); });
+  return { headers: headers, rows: rows };
+}
+
+function detectFormat(headers) {
+  if (selectedCsvFormat !== 'auto') return CSV_FORMATS[selectedCsvFormat] || null;
+  for (var key in CSV_FORMATS) {
+    if (CSV_FORMATS[key].detect(headers)) return CSV_FORMATS[key];
+  }
+  return null;
+}
+
+function onCsvFile(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var text = ev.target.result;
+    var parsed = parseCsv(text);
+    if (!parsed) { document.getElementById('csvParseError').textContent = 'Fichier illisible'; return; }
+    var fmt = detectFormat(parsed.headers);
+    if (!fmt) {
+      document.getElementById('csvParseError').textContent = 'Format non reconnu — essaie de sélectionner un format manuellement';
+      return;
+    }
+    document.getElementById('csvParseError').textContent = '';
+    parsedCsvTrades = [];
+    for (var i = 0; i < parsed.rows.length; i++) {
+      var t = fmt.map(parsed.rows[i], parsed.headers);
+      if (t && t.pair && t.trade_date) parsedCsvTrades.push(t);
+    }
+    if (!parsedCsvTrades.length) { document.getElementById('csvParseError').textContent = 'Aucun trade valide trouvé'; return; }
+    renderCsvPreview(parsedCsvTrades);
+  };
+  reader.readAsText(file);
+}
+
+function renderCsvPreview(tds) {
+  var preview = tds.slice(0, 5);
+  var html = '<div class="csv-preview-header"><span>' + tds.length + ' trade' + (tds.length>1?'s':'') + ' détectés</span><span style="color:var(--text3)">Aperçu des 5 premiers</span></div>';
+  html += '<div style="overflow-x:auto"><table class="csv-preview-table"><thead><tr><th>Paire</th><th>Dir.</th><th>Date</th><th>P&L</th><th>Résultat</th></tr></thead><tbody>';
+  preview.forEach(function(t) {
+    var col = t.result==='win'?'var(--green)':t.result==='loss'?'var(--red)':'var(--amber)';
+    html += '<tr><td><b>' + (t.pair||'—') + '</b></td><td>' + (t.direction||'—') + '</td><td>' + (t.trade_date||'—') + '</td><td style="color:'+col+'">' + (t.pnl>=0?'+':'') + (t.pnl||0).toFixed(2) + '</td><td style="color:'+col+'">' + (t.result||'—') + '</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  document.getElementById('csvPreviewTable').innerHTML = html;
+  document.getElementById('csvPreviewArea').style.display = '';
+  document.getElementById('csvImportTxt').textContent = 'Importer ' + tds.length + ' trade' + (tds.length>1?'s':'');
+}
+
+async function importCsvTrades() {
+  if (!parsedCsvTrades.length) return;
+  if (!authToken) { document.getElementById('csvError').textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('csvImportBtn');
+  btn.disabled = true;
+  document.getElementById('csvImportTxt').textContent = 'Import en cours…';
+  document.getElementById('csvError').textContent = '';
+  var ok = 0, fail = 0;
+  for (var i = 0; i < parsedCsvTrades.length; i++) {
+    try {
+      var res = await fetch('/api/journal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+        body: JSON.stringify(parsedCsvTrades[i])
+      });
+      if (res.ok) ok++; else fail++;
+    } catch(e) { fail++; }
+  }
+  btn.disabled = false;
+  if (fail === 0) {
+    closeBrokerModal();
+    updateBrokerBanner({ connected: false }); // reset banner to default (not a broker sync)
+    loadFromServer();
+  } else {
+    document.getElementById('csvImportTxt').textContent = 'Réessayer';
+    document.getElementById('csvError').textContent = ok + ' importés, ' + fail + ' échoués';
+  }
+}
 </script>
 
 <div id="journalPairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>

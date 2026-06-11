@@ -17,22 +17,22 @@
 
   var PAGES = [
     { id: 'index.html',       icon: ICONS.dashboard,  label: 'Dashboard',           href: './index.html' },
-    { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html' },
-    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './eco-edition.html', children: [
-      { icon: '📰', label: 'Présentation', href: './eco-edition.html', children: [
-        { icon: '⭐', label: 'La sélection',  href: './eco-selection.html' },
-        { icon: '🇪🇺', label: 'Europe',        href: './eco-europe.html' },
-        { icon: '🌎', label: 'Amériques',     href: './eco-ameriques.html' },
-        { icon: '🌏', label: 'Asie',          href: './eco-asie.html' },
-        { icon: '📈', label: 'Marchés',       href: './eco-marches.html' },
-        { icon: '🏛️', label: 'Institutions',  href: './eco-institutions.html' },
-        { icon: '🌐', label: 'International',  href: './eco-international.html' },
+    { id: 'journal.html',     icon: ICONS.journal,    label: 'Journal de Trading',  href: './journal.html', pro: true },
+    { id: 'calendrier.html',  icon: ICONS.calendrier, label: 'Calendrier Éco',      href: './eco-edition.html', pro: true, children: [
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`, label: 'Présentation', href: './eco-edition.html', children: [
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`, label: 'La sélection',  href: './eco-selection.html' },
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7.2a6.3 6.3 0 1 0 0 9.6"/><path d="M4.5 10.5h9M4.5 13.5h9"/></svg>`, label: 'Europe',        href: './eco-europe.html' },
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>`, label: 'Amériques',     href: './eco-ameriques.html' },
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5l5 7 5-7"/><path d="M12 11.5V20"/><path d="M8 13.5h8"/></svg>`, label: 'Asie',          href: './eco-asie.html' },
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, label: 'Marchés',       href: './eco-marches.html' },
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 12 4l8.5 5.5"/><path d="M5.5 10v8M9.5 10v8M14.5 10v8M18.5 10v8"/><path d="M3 20.5h18"/></svg>`, label: 'Institutions',  href: './eco-institutions.html' },
+        { icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`, label: 'International',  href: './eco-international.html' },
       ] },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, label: 'Flash Info',      href: './eco-flash.html' },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r=".8" fill="currentColor"/><circle cx="12" cy="14" r=".8" fill="currentColor"/><circle cx="16" cy="14" r=".8" fill="currentColor"/></svg>`, label: 'Calendrier éco',  href: './eco-calendrier.html' },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>`, label: 'Crypto',          href: './eco-crypto.html' },
     ] },
-    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html', children: [
+    { id: 'app.html',         icon: ICONS.analyzer,   label: 'Setup Analyzer',      href: './app.html', pro: true, children: [
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`, label: 'Historique', href: './app.html#historique' },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, label: 'Perfs', href: './app.html#perfs' },
     ] },
@@ -97,6 +97,16 @@
       border: 1px solid rgba(0,149,255,.25);
     }
     .lt-nav-item.soon { opacity: .45; cursor: not-allowed; pointer-events: none; }
+    .lt-nav-item.pro-locked { opacity: .55; cursor: pointer; }
+    .lt-nav-item.pro-locked:hover { background: rgba(255,180,0,.08); color: #FFB300; }
+    .lt-nav-pro-badge {
+      margin-left: auto; font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; color: #FFB300;
+      background: rgba(255,180,0,.1); border: 1px solid rgba(255,180,0,.25);
+      border-radius: 50px; padding: 2px 7px;
+    }
+    .lt-subnav-item.pro-locked { opacity: .55; cursor: pointer; }
+    .lt-subnav-item.pro-locked:hover { color: #FFB300; }
     .lt-nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: .7; }
     .lt-nav-item:hover .lt-nav-icon, .lt-nav-item.active .lt-nav-icon { opacity: 1; }
     .lt-nav-soon {
@@ -238,30 +248,39 @@
   }
 
   // Rendu récursif d'une sous-entrée (peut elle-même avoir des enfants → 3e niveau)
-  function renderSub(c, depth) {
-    var act = selfActive(c) ? ' active' : '';
+  function renderSub(c, depth, parentLocked) {
+    var locked = parentLocked || false;
+    var act = (!locked && selfActive(c)) ? ' active' : '';
+    var lockCls = locked ? ' pro-locked' : '';
+    var href = locked ? './index.html?paywall=1' : c.href;
     if(c.children && c.children.length) {
-      var inner = c.children.map(function(cc) { return renderSub(cc); }).join('');
+      var inner = c.children.map(function(cc) { return renderSub(cc, 0, locked); }).join('');
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
-                 '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
+                 '<a class="lt-subnav-item' + act + lockCls + '" href="' + href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
                  '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav lt-subnav--deep"><div>' + inner + '</div></div>' +
              '</div>';
     }
-    return '<a class="lt-subnav-item' + act + '" href="' + c.href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+    return '<a class="lt-subnav-item' + act + lockCls + '" href="' + href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
   }
+
+  var isUserPro = localStorage.getItem('lt_pro') === '1';
 
   var navItems = PAGES.map(function(p) {
     var isActive = page === p.id || (page === '' && p.id === 'index.html') || treeActive(p);
-    var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '');
+    var isLocked = p.pro && !isUserPro;
+    var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '') + (isLocked ? ' pro-locked' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
+    var proBadge = isLocked ? '<span class="lt-nav-pro-badge">⭐ PRO</span>' : '';
+    var href = isLocked ? './index.html?paywall=1' : p.href;
+
     if(p.children && p.children.length) {
-      var subItems = p.children.map(function(c) { return renderSub(c); }).join('');
+      var subItems = p.children.map(function(c) { return renderSub(c, 0, isLocked); }).join('');
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
-                 '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + '</a>' +
+                 '<a class="' + cls + '" href="' + href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + proBadge + '</a>' +
                  '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav"><div>' + subItems + '</div></div>' +
@@ -270,7 +289,7 @@
     if(p.soon) {
       return '<div class="' + cls + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + '</div>';
     }
-    return '<a class="' + cls + '" href="' + p.href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + '</a>';
+    return '<a class="' + cls + '" href="' + href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + proBadge + '</a>';
   }).join('');
 
   var menuHTML = `
@@ -369,10 +388,18 @@
       '<button class="lt-ub-logout" onclick="ltGlobalLogout()">Déconnexion</button>';
   }
 
-  window.ltGlobalLogout = function() {
+  function _ltClearAllAccountData() {
     localStorage.removeItem('ta_token');
     localStorage.removeItem('ta_email');
+    localStorage.removeItem('ta_user_id');
     localStorage.removeItem('lt_pro');
+    localStorage.removeItem('lt_history');
+    localStorage.removeItem('lt_deleted');
+    localStorage.removeItem('jnl_trades');
+  }
+
+  window.ltGlobalLogout = function() {
+    _ltClearAllAccountData();
     if(typeof doLogout === 'function') { doLogout(); } else { window.location.href = './index.html'; }
   };
 
@@ -386,11 +413,8 @@
   };
 
   window.ltLogout = function() {
-    localStorage.removeItem('ta_token');
-    localStorage.removeItem('ta_email');
-    localStorage.removeItem('lt_pro');
+    _ltClearAllAccountData();
     ltSyncUser();
-    // If page has its own updateUserUI, call it
     if(typeof updateUserUI === 'function') updateUserUI();
     ltCloseMenu();
   };
@@ -447,7 +471,121 @@
     }
   };
 
-  // ── LANGUE ──
+  // ── SYSTÈME I18N GLOBAL ──
+  var LT_TRANSLATIONS = {
+    fr: {
+      // index.html — hero
+      'hero-pill':        'Plateforme active · Mis à jour quotidiennement',
+      'hero-title-1':     'Ton hub trading',
+      'hero-title-2':     'propulsé par l\'IA.',
+      'hero-sub':         'Analyse tes setups en quelques secondes, tiens ton journal, consulte le calendrier économique et maîtrise ta gestion du risque. Tout en un seul endroit.',
+      'hero-cta':         'Voir les outils',
+      'chip-1':           'Feedback instantané',
+      'chip-2':           'Toutes stratégies',
+      'chip-3':           'Objectif & précis',
+      'chip-4':           '100% sécurisé · Données privées',
+      // index.html — sections
+      'tools-eyebrow':    'Arsenal complet',
+      'tools-title':      'Tous les outils dont tu as besoin',
+      'tools-sub':        'Chaque outil est conçu pour un aspect précis de ton trading. Ensemble, ils forment un écosystème complet.',
+      'strat-eyebrow':    'Suite complète',
+      'strat-title':      'Tous les outils, une seule plateforme.',
+      'strat-desc':       'Du Setup Analyzer à la gestion du risque, en passant par la veille macro et le journal de trading — chaque outil est conçu pour t\'aider à performer, pas juste à t\'informer.',
+      'process-eyebrow':  'Comment ça marche',
+      'process-title':    'Une analyse complète en 4 étapes',
+      'step1-num':'Étape 01','step1-title':'Upload ton chart','step1-desc':'Capture d\'écran de ton setup depuis TradingView ou ta plateforme. Glisse-dépose ou colle directement.',
+      'step2-num':'Étape 02','step2-title':'L\'IA analyse','step2-desc':'Claude Opus scanne la structure, les zones clés, le contexte macro et les confluences de ta stratégie.',
+      'step3-num':'Étape 03','step3-title':'Score & feedback','step3-desc':'Score /100, forces, faiblesses, niveaux de prix précis et verdict GO / ATTENDRE / NO-GO.',
+      'step4-num':'Étape 04','step4-title':'Sauvegarde & suivi','step4-desc':'Chaque analyse est archivée. Enregistre le résultat du trade et analyse tes stats dans le journal.',
+      'tg-title':         'Rejoindre la communauté Telegram',
+      'tg-sub':           'Analyses quotidiennes, setups en live et entraide entre traders',
+      'tg-cta':           'Rejoindre →',
+      'stat-lbl-1':'Outils actifs','stat-lbl-2':'Claude Opus','stat-lbl-3':'Stratégies','stat-lbl-4':'Disponible',
+      // tool cards
+      'tool-analyzer-name':'Setup Analyzer','tool-analyzer-desc':'Score IA de ton setup, compatible avec toutes les stratégies (ICT, SMC, Price Action…). Feedback instantané et annotations sur ton graphique.',
+      'tool-journal-name':'Journal de Trading','tool-journal-desc':'Calendrier de tes trades, suivi P&L, screenshots, notes et analyse IA de tes patterns de performance.',
+      'tool-eco-name':'Calendrier Éco','tool-eco-desc':'Tous les événements macroéconomiques clés — NFP, CPI, FOMC — organisés par région et impact attendu.',
+      'tool-bubble-name':'Bubble Map','tool-bubble-desc':'Visualise les flux de capitaux entre actifs en temps réel — crypto, forex, indices et matières premières.',
+      'tool-calc-name':'Calculateur de Pips','tool-calc-desc':'Taille de position, valeur du pip, risque en devise et R:R optimal. Long/Short avec validation automatique.',
+      // calculateur.html
+      'calc-title':       'Calculateur de Pips',
+      'calc-sub':         'Calcule ta taille de position et ton risque en quelques secondes.',
+      'calc-pair-label':  'Paire / Instrument',
+      'calc-account-label':'Solde du compte',
+      'calc-risk-label':  'Risque par trade',
+      'calc-entry-label': 'Prix d\'entrée',
+      'calc-sl-label':    'Stop Loss',
+      'calc-tp-label':    'Take Profit',
+      'calc-size-label':  'Taille de position',
+      'calc-btn':         'Calculer',
+      // auth / menu
+      'login-btn':        'Connexion',
+      'logout-btn':       'Déconnexion',
+    },
+    en: {
+      // index.html — hero
+      'hero-pill':        'Platform active · Updated daily',
+      'hero-title-1':     'Your trading hub',
+      'hero-title-2':     'powered by AI.',
+      'hero-sub':         'Analyze your setups in seconds, keep your journal, check the economic calendar and master your risk management. All in one place.',
+      'hero-cta':         'See tools',
+      'chip-1':           'Instant feedback',
+      'chip-2':           'All strategies',
+      'chip-3':           'Objective & precise',
+      'chip-4':           '100% secure · Private data',
+      // index.html — sections
+      'tools-eyebrow':    'Full arsenal',
+      'tools-title':      'Every tool you need',
+      'tools-sub':        'Each tool is designed for a precise aspect of your trading. Together, they form a complete ecosystem.',
+      'strat-eyebrow':    'Complete suite',
+      'strat-title':      'All tools, one platform.',
+      'strat-desc':       'From the Setup Analyzer to risk management, live macro news and your trading journal — every tool is built to help you perform, not just stay informed.',
+      'process-eyebrow':  'How it works',
+      'process-title':    'A complete analysis in 4 steps',
+      'step1-num':'Step 01','step1-title':'Upload your chart','step1-desc':'Screenshot your setup from TradingView or your platform. Drag & drop or paste directly.',
+      'step2-num':'Step 02','step2-title':'AI analyzes','step2-desc':'Claude Opus scans the structure, key zones, macro context and your strategy\'s confluences.',
+      'step3-num':'Step 03','step3-title':'Score & feedback','step3-desc':'Score /100, strengths, weaknesses, precise price levels and GO / WAIT / NO-GO verdict.',
+      'step4-num':'Step 04','step4-title':'Save & track','step4-desc':'Every analysis is archived. Record the trade outcome and analyze your stats in the journal.',
+      'tg-title':         'Join the Telegram community',
+      'tg-sub':           'Daily analyses, live setups and peer support',
+      'tg-cta':           'Join →',
+      'stat-lbl-1':'Active tools','stat-lbl-2':'Claude Opus','stat-lbl-3':'Strategies','stat-lbl-4':'Available',
+      // tool cards
+      'tool-analyzer-name':'Setup Analyzer','tool-analyzer-desc':'AI score for your setup, compatible with all strategies (ICT, SMC, Price Action…). Instant feedback and chart annotations.',
+      'tool-journal-name':'Trading Journal','tool-journal-desc':'Trade calendar, P&L tracking, screenshots, notes and AI analysis of your performance patterns.',
+      'tool-eco-name':'Eco Calendar','tool-eco-desc':'All key macroeconomic events — NFP, CPI, FOMC — organized by region and expected impact.',
+      'tool-bubble-name':'Bubble Map','tool-bubble-desc':'Visualize capital flows between assets in real time — crypto, forex, indices and commodities.',
+      'tool-calc-name':'Pip Calculator','tool-calc-desc':'Position size, pip value, currency risk and optimal R:R. Long/Short with automatic validation.',
+      // calculateur.html
+      'calc-title':       'Pip Calculator',
+      'calc-sub':         'Calculate your position size and risk in seconds.',
+      'calc-pair-label':  'Pair / Instrument',
+      'calc-account-label':'Account balance',
+      'calc-risk-label':  'Risk per trade',
+      'calc-entry-label': 'Entry price',
+      'calc-sl-label':    'Stop Loss',
+      'calc-tp-label':    'Take Profit',
+      'calc-size-label':  'Position size',
+      'calc-btn':         'Calculate',
+      // auth / menu
+      'login-btn':        'Login',
+      'logout-btn':       'Logout',
+    }
+  };
+
+  function ltApplyI18n(l) {
+    var t = LT_TRANSLATIONS[l] || LT_TRANSLATIONS['fr'];
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if(t[key] !== undefined) el.textContent = t[key];
+    });
+    // Boutons login/logout dans topbar (sans data-i18n)
+    var lb = document.getElementById('loginBtn');
+    var lo = document.getElementById('logoutBtn');
+    if(lb) lb.textContent = t['login-btn'];
+    if(lo) lo.textContent = t['logout-btn'];
+  }
+
   function ltUpdateLangBtns(l) {
     var fr = document.getElementById('ltLangFR');
     var en = document.getElementById('ltLangEN');
@@ -455,13 +593,39 @@
     if(l === 'en') { fr.classList.remove('active'); en.classList.add('active'); }
     else           { fr.classList.add('active');    en.classList.remove('active'); }
   }
+
   window.ltSetLang = function(l) {
-    localStorage.setItem('lt_lang', l);
+    var en = (l === 'en');
+    // ── Synchro des deux clés localStorage (lt_lang + lte_lang) ──
+    localStorage.setItem('lt_lang',  l);
+    localStorage.setItem('lte_lang', l);
+    // ── Boutons sidebar ──
     ltUpdateLangBtns(l);
-    // Appelle setLang de la page si elle existe
-    if(typeof window.setLang === 'function') window.setLang(l);
+    // ── Système data-i18n (index, calculateur…) ──
+    ltApplyI18n(l);
+    // ── Système data-en (pages éco — eco.js) ──
+    if (typeof window.ecoApplyLang === 'function') window.ecoApplyLang(en);
+    // ── Système setLang (app.html) ──
+    if (typeof window.setLang === 'function') window.setLang(l);
+    // ── Met à jour le bouton topbar #langToggle si présent ──
+    var topBtn = document.getElementById('langToggle');
+    if (topBtn) {
+      var lbl = topBtn.querySelector('.lang__label');
+      if (lbl) lbl.textContent = en ? 'FR' : 'EN';
+      document.documentElement.lang = en ? 'en' : 'fr';
+    }
+    // ── Recharge les cartes dynamiques éco si présentes ──
+    if (typeof window.ecoReloadNews === 'function') window.ecoReloadNews();
   };
-  ltUpdateLangBtns(localStorage.getItem('lt_lang') || 'fr');
+
+  var _currentLang = localStorage.getItem('lt_lang') || 'fr';
+  ltUpdateLangBtns(_currentLang);
+  // Applique les traductions après chargement du DOM
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ ltApplyI18n(_currentLang); });
+  } else {
+    ltApplyI18n(_currentLang);
+  }
 
   // Init - run immediately and after checkSession completes
   ltSyncUser();

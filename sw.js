@@ -1,6 +1,5 @@
 const CACHE_NAME = 'lt-cache-v2';
 const ASSETS_TO_CACHE = [
-  './',
   './app.html',
   './calculateur.html',
   './bubble.html',
@@ -11,9 +10,7 @@ const ASSETS_TO_CACHE = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
   self.skipWaiting();
 });
@@ -27,11 +24,16 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  // Pages HTML : toujours réseau (jamais de cache pour les pages de navigation)
+  if (url.pathname === '/' || url.pathname.endsWith('.html')) {
+    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+    return;
+  }
+  // Assets statiques : cache-first
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+      if (cachedResponse) return cachedResponse;
       return fetch(event.request);
     })
   );

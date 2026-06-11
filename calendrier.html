@@ -9,40 +9,64 @@
 <link rel="dns-prefetch" href="https://s3.tradingview.com">
 <link rel="preconnect" href="https://www.tradingview-widget.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.tradingview-widget.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* =========================================================================
-   Le Terminal Économies — thème « bleu nuit »
-   Inspiré du logo (hangar industriel, métal brossé, lueur bleu réacteur) :
-   fond noir nuit bleuté, accent bleu électrique → cyan, wordmark métal
-   argenté, cartes en verre, boutons pilule à halo, typo Bricolage
-   Grotesque (titres) / Inter (texte).
+   Le Terminal Économies — Cinématique Luxe
+   Hangar sombre, métal brossé, reflets bleu glacial.
    ========================================================================= */
 
 :root {
-  --bg:           #08080F;
-  --card:         rgba(255,255,255,0.04);
-  --card-hover:   rgba(255,255,255,0.07);
-  --border:       rgba(255,255,255,0.08);
-  --border-active:rgba(0,149,255,0.45);
+  /* ── Fonds ── */
+  --bg-void:    #07090C;
+  --bg-hangar:  #0B0E13;
+  --bg-panel:   #10141B;
+  --bg-elevated:#161B24;
 
-  --v:    #0095FF;   /* violet */
-  --v2:   #38B6FF;
-  --v3:   #93D0FF;
-  --pink: #00C6FF;   /* fin de dégradé */
-  --vglow:  rgba(0,149,255,0.25);
-  --vglow2: rgba(0,149,255,0.08);
+  /* ── Accent bleu glacial ── */
+  --ice-100: #EAF4FF;
+  --ice-300: #BFDCF5;
+  --ice-500: #7FB8E8;
+  --ice-600: #5A9BD4;
+  --ice-glow:rgba(127,184,232,0.35);
 
-  --text:  #F0EEFF;
-  --text2: #97A3BE;
-  --text3: #57617B;
+  /* ── Métal ── */
+  --steel-100: #F2F4F7;
+  --steel-300: #C3CAD4;
+  --steel-500: #7E8794;
+  --steel-700: #3A414C;
+  --steel-900: #1C212A;
 
-  --green: #34D399;
-  --red:   #F87171;
-  --amber: #FBBF24;
+  /* ── Sémantique trading ── */
+  --signal-up:   #4ADE9C;
+  --signal-down: #F0647A;
+  --signal-warn: #E8C268;
 
-  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  /* ── Compat aliases ── */
+  --bg:           var(--bg-void);
+  --card:         var(--bg-panel);
+  --card-hover:   var(--bg-elevated);
+  --border:       var(--steel-900);
+  --border-active:rgba(127,184,232,0.4);
+
+  --v:    var(--ice-600);
+  --v2:   var(--ice-500);
+  --v3:   var(--ice-300);
+  --pink: var(--ice-300);
+  --vglow:  var(--ice-glow);
+  --vglow2: rgba(127,184,232,0.08);
+
+  --text:  var(--steel-100);
+  --text2: var(--steel-300);
+  --text3: var(--steel-500);
+
+  --green: var(--signal-up);
+  --red:   var(--signal-down);
+  --amber: var(--signal-warn);
+
+  --display: "Anton", system-ui, sans-serif;
   --sans:    "Inter", system-ui, -apple-system, sans-serif;
+  --mono:    "JetBrains Mono", monospace;
 
   --wrap: 1100px;
   --r: 16px;
@@ -1150,7 +1174,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg> <span data-en="Credited sources">Sources créditées</span></li>
     </ul>
     <div class="intro__actions">
-      <a class="btn" href="annonces/0072c8418747a19c.html"><span data-en="Read the headline">Lire la une</span> <span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a class="btn" href="eco-article.html?id=0072c8418747a19c"><span data-en="Read the headline">Lire la une</span> <span class="btn__arrow" aria-hidden="true">→</span></a>
       <a class="btn btn--ghost" href="a-propos.html" data-en="Learn more">En savoir plus</a>
       <div class="intro__stats">
         <span class="stat"><b>26</b> <span data-en="sources">sources</span></span>
@@ -1224,7 +1248,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <span class="hero__pair"><span class="js-term">Institutions</span> · <span data-en="EDITION">ÉDITION</span></span>
     <span class="hero__live">● LIVE</span>
   </div>
-  <a class="hero__hit" href="annonces/0072c8418747a19c.html">
+  <a class="hero__hit" href="eco-article.html?id=0072c8418747a19c">
     <p class="hero__kicker">
       <span class="hero__badge" data-en="FRONT PAGE">À LA UNE</span>
       <span class="card__source">Banque centrale européenne</span>
@@ -1232,7 +1256,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h2 class="hero__title" data-en="The ECB holds rates and confirms a meeting-by-meeting approach">La BCE maintient ses taux et confirme une approche réunion par réunion</h2>
     <p class="hero__summary" data-en="The Governing Council leaves the deposit rate unchanged.">Le Conseil des gouverneurs laisse le taux de dépôt inchangé.</p>
   </a>
-  <a class="btn btn--lg" href="annonces/0072c8418747a19c.html">
+  <a class="btn btn--lg" href="eco-article.html?id=0072c8418747a19c">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </section>
@@ -1245,7 +1269,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card card--pick" style="--i: 0">
-  <a class="card__hit" href="annonces/3af88624c50a45c7.html" aria-label="Lire le résumé : Pourquoi la désinflation française résiste mieux que prévu">
+  <a class="card__hit" href="eco-article.html?id=3af88624c50a45c7" aria-label="Lire le résumé : Pourquoi la désinflation française résiste mieux que prévu">
     <p class="card__kicker">
       <span class="card__cat js-term">La sélection</span>
       <span class="card__sep">·</span>
@@ -1254,13 +1278,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Why French disinflation is holding up better than expected">Pourquoi la désinflation française résiste mieux que prévu</h3>
     <p class="card__summary" data-en="Despite the euro-area slowdown, consumer prices are easing faster in France than in…">Malgré le ralentissement de la zone euro, les prix à la consommation ralentissent plus…</p>
   </a>
-  <a class="btn" href="annonces/3af88624c50a45c7.html">
+  <a class="btn" href="eco-article.html?id=3af88624c50a45c7">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card card--pick" style="--i: 1">
-  <a class="card__hit" href="annonces/31e289e5c10bb16b.html" aria-label="Lire le résumé : Budget 2027 : les trois arbitrages qui vont compter">
+  <a class="card__hit" href="eco-article.html?id=31e289e5c10bb16b" aria-label="Lire le résumé : Budget 2027 : les trois arbitrages qui vont compter">
     <p class="card__kicker">
       <span class="card__cat js-term">La sélection</span>
       <span class="card__sep">·</span>
@@ -1269,7 +1293,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="2027 Budget: the three trade-offs that will matter">Budget 2027 : les trois arbitrages qui vont compter</h3>
     <p class="card__summary" data-en="Preparing the 2027 budget is shaping up to be one of the most sensitive files of the…">La préparation du budget 2027 s&#39;annonce comme l&#39;un des dossiers les plus sensibles de la…</p>
   </a>
-  <a class="btn" href="annonces/31e289e5c10bb16b.html">
+  <a class="btn" href="eco-article.html?id=31e289e5c10bb16b">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1284,7 +1308,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/7675a9fcc863f9e1.html" aria-label="Lire le résumé : Zone euro : la croissance accélère légèrement au deuxième trimestre">
+  <a class="card__hit" href="eco-article.html?id=7675a9fcc863f9e1" aria-label="Lire le résumé : Zone euro : la croissance accélère légèrement au deuxième trimestre">
     <p class="card__kicker">
       <span class="card__cat js-term">Europe</span>
       <span class="card__sep">·</span>
@@ -1293,13 +1317,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Euro zone: growth accelerates slightly in the second quarter">Zone euro : la croissance accélère légèrement au deuxième trimestre</h3>
     <p class="card__summary" data-en="Activity rises 0.4% on services.">L&#39;activité progresse de 0,4 % portée par les services.</p>
   </a>
-  <a class="btn" href="annonces/7675a9fcc863f9e1.html">
+  <a class="btn" href="eco-article.html?id=7675a9fcc863f9e1">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 1">
-  <a class="card__hit" href="annonces/541bc9777db31434.html" aria-label="Lire le résumé : Les rendements obligataires européens reculent sur fond de pari de baisse des taux">
+  <a class="card__hit" href="eco-article.html?id=541bc9777db31434" aria-label="Lire le résumé : Les rendements obligataires européens reculent sur fond de pari de baisse des taux">
     <p class="card__kicker">
       <span class="card__cat js-term">Europe</span>
       <span class="card__sep">·</span>
@@ -1308,13 +1332,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="European bond yields edge lower as traders bet on a rate cut">Les rendements obligataires européens reculent sur fond de pari de baisse des taux</h3>
     <p class="card__summary" data-en="Investors trim bets on a hawkish ECB.">Les investisseurs réduisent leurs paris sur une BCE restrictive.</p>
   </a>
-  <a class="btn" href="annonces/541bc9777db31434.html">
+  <a class="btn" href="eco-article.html?id=541bc9777db31434">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 2">
-  <a class="card__hit" href="annonces/bdbed2164f9610da.html" aria-label="Lire le résumé : Énergie : les prix de gros du gaz repartent à la baisse en Europe">
+  <a class="card__hit" href="eco-article.html?id=bdbed2164f9610da" aria-label="Lire le résumé : Énergie : les prix de gros du gaz repartent à la baisse en Europe">
     <p class="card__kicker">
       <span class="card__cat js-term">Europe</span>
       <span class="card__sep">·</span>
@@ -1323,7 +1347,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Energy: European wholesale gas prices fall again">Énergie : les prix de gros du gaz repartent à la baisse en Europe</h3>
     <p class="card__summary" data-en="Falling prices give breathing room to industry.">Le repli des cours redonne de l&#39;air aux industriels.</p>
   </a>
-  <a class="btn" href="annonces/bdbed2164f9610da.html">
+  <a class="btn" href="eco-article.html?id=bdbed2164f9610da">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1337,7 +1361,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/7372fe440a258896.html" aria-label="Lire le résumé : États-Unis : les créations d&#39;emplois ralentissent mais restent solides">
+  <a class="card__hit" href="eco-article.html?id=7372fe440a258896" aria-label="Lire le résumé : États-Unis : les créations d&#39;emplois ralentissent mais restent solides">
     <p class="card__kicker">
       <span class="card__cat js-term">Amériques</span>
       <span class="card__sep">·</span>
@@ -1346,13 +1370,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="U.S. job growth cools but stays resilient">États-Unis : les créations d&#39;emplois ralentissent mais restent solides</h3>
     <p class="card__summary" data-en="Hiring slows.">Les embauches progressent moins vite.</p>
   </a>
-  <a class="btn" href="annonces/7372fe440a258896.html">
+  <a class="btn" href="eco-article.html?id=7372fe440a258896">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 1">
-  <a class="card__hit" href="annonces/60fb4a2c2c0d3b26.html" aria-label="Lire le résumé : Wall Street finit en hausse, le Nasdaq porté par la tech à un record">
+  <a class="card__hit" href="eco-article.html?id=60fb4a2c2c0d3b26" aria-label="Lire le résumé : Wall Street finit en hausse, le Nasdaq porté par la tech à un record">
     <p class="card__kicker">
       <span class="card__cat js-term">Amériques</span>
       <span class="card__sep">·</span>
@@ -1361,7 +1385,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Wall Street closes higher as tech lifts the Nasdaq to a record">Wall Street finit en hausse, le Nasdaq porté par la tech à un record</h3>
     <p class="card__summary" data-en="Megacap tech leads gains.">Les grandes valeurs technologiques mènent la hausse.</p>
   </a>
-  <a class="btn" href="annonces/60fb4a2c2c0d3b26.html">
+  <a class="btn" href="eco-article.html?id=60fb4a2c2c0d3b26">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1375,7 +1399,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/802cbdf145a5c3d8.html" aria-label="Lire le résumé : Japon : les exportations rebondissent grâce à un yen plus faible">
+  <a class="card__hit" href="eco-article.html?id=802cbdf145a5c3d8" aria-label="Lire le résumé : Japon : les exportations rebondissent grâce à un yen plus faible">
     <p class="card__kicker">
       <span class="card__cat js-term">Asie</span>
       <span class="card__sep">·</span>
@@ -1384,7 +1408,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Japan&#39;s exports rebound as a weaker yen helps carmakers">Japon : les exportations rebondissent grâce à un yen plus faible</h3>
     <p class="card__summary" data-en="Shipments rise for a third month.">Les expéditions augmentent pour un troisième mois.</p>
   </a>
-  <a class="btn" href="annonces/802cbdf145a5c3d8.html">
+  <a class="btn" href="eco-article.html?id=802cbdf145a5c3d8">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1398,7 +1422,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/0cfd45407d810a63.html" aria-label="Lire le résumé : Natixis : pourquoi les taux longs resteront durablement plus élevés">
+  <a class="card__hit" href="eco-article.html?id=0cfd45407d810a63" aria-label="Lire le résumé : Natixis : pourquoi les taux longs resteront durablement plus élevés">
     <p class="card__kicker">
       <span class="card__cat js-term">Marchés</span>
       <span class="card__sep">·</span>
@@ -1407,13 +1431,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Natixis: why long-term yields will stay structurally higher">Natixis : pourquoi les taux longs resteront durablement plus élevés</h3>
     <p class="card__summary" data-en="Natixis research expects long yields durably above the 2010s.">La recherche de Natixis anticipe des taux longs durablement supérieurs à la décennie 2010.</p>
   </a>
-  <a class="btn" href="annonces/0cfd45407d810a63.html">
+  <a class="btn" href="eco-article.html?id=0cfd45407d810a63">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 1">
-  <a class="card__hit" href="annonces/da9e923dab8aa52c.html" aria-label="Lire le résumé : Ostrum (Natixis) : surpondérer le crédit de qualité, prudence sur la duration">
+  <a class="card__hit" href="eco-article.html?id=da9e923dab8aa52c" aria-label="Lire le résumé : Ostrum (Natixis) : surpondérer le crédit de qualité, prudence sur la duration">
     <p class="card__kicker">
       <span class="card__cat js-term">Marchés</span>
       <span class="card__sep">·</span>
@@ -1422,7 +1446,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Ostrum (Natixis): overweight quality credit, cautious on duration">Ostrum (Natixis) : surpondérer le crédit de qualité, prudence sur la duration</h3>
     <p class="card__summary" data-en="Ostrum&#39;s weekly strategy favours investment-grade credit.">La stratégie hebdomadaire d&#39;Ostrum privilégie le crédit investment grade.</p>
   </a>
-  <a class="btn" href="annonces/da9e923dab8aa52c.html">
+  <a class="btn" href="eco-article.html?id=da9e923dab8aa52c">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1436,7 +1460,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/a22c74101c1821ed.html" aria-label="Lire le résumé : La Fed appelle à la patience avant tout mouvement sur les taux">
+  <a class="card__hit" href="eco-article.html?id=a22c74101c1821ed" aria-label="Lire le résumé : La Fed appelle à la patience avant tout mouvement sur les taux">
     <p class="card__kicker">
       <span class="card__cat js-term">Institutions</span>
       <span class="card__sep">·</span>
@@ -1445,13 +1469,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Fed officials signal patience before any move on rates">La Fed appelle à la patience avant tout mouvement sur les taux</h3>
     <p class="card__summary" data-en="Minutes show cautious officials.">Les minutes montrent des responsables prudents.</p>
   </a>
-  <a class="btn" href="annonces/a22c74101c1821ed.html">
+  <a class="btn" href="eco-article.html?id=a22c74101c1821ed">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 1">
-  <a class="card__hit" href="annonces/02111acdcf61052a.html" aria-label="Lire le résumé : Le FMI relève légèrement sa prévision de croissance mondiale pour 2026">
+  <a class="card__hit" href="eco-article.html?id=02111acdcf61052a" aria-label="Lire le résumé : Le FMI relève légèrement sa prévision de croissance mondiale pour 2026">
     <p class="card__kicker">
       <span class="card__cat js-term">Institutions</span>
       <span class="card__sep">·</span>
@@ -1460,13 +1484,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="The IMF nudges up its 2026 global growth forecast">Le FMI relève légèrement sa prévision de croissance mondiale pour 2026</h3>
     <p class="card__summary" data-en="The Fund expects more resilient activity.">L&#39;institution table sur une activité plus résiliente.</p>
   </a>
-  <a class="btn" href="annonces/02111acdcf61052a.html">
+  <a class="btn" href="eco-article.html?id=02111acdcf61052a">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 2">
-  <a class="card__hit" href="annonces/906fa1e09fcd8b98.html" aria-label="Lire le résumé : L&#39;OCDE invite les pays à investir davantage dans les compétences">
+  <a class="card__hit" href="eco-article.html?id=906fa1e09fcd8b98" aria-label="Lire le résumé : L&#39;OCDE invite les pays à investir davantage dans les compétences">
     <p class="card__kicker">
       <span class="card__cat js-term">Institutions</span>
       <span class="card__sep">·</span>
@@ -1475,13 +1499,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="The OECD urges countries to invest more in skills">L&#39;OCDE invite les pays à investir davantage dans les compétences</h3>
     <p class="card__summary" data-en="A report stresses the role of training.">Un rapport souligne le rôle de la formation.</p>
   </a>
-  <a class="btn" href="annonces/906fa1e09fcd8b98.html">
+  <a class="btn" href="eco-article.html?id=906fa1e09fcd8b98">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 3">
-  <a class="card__hit" href="annonces/59a18a020ea75285.html" aria-label="Lire le résumé : La Banque de France confirme une inflation sous les 2 % à l&#39;horizon 2027">
+  <a class="card__hit" href="eco-article.html?id=59a18a020ea75285" aria-label="Lire le résumé : La Banque de France confirme une inflation sous les 2 % à l&#39;horizon 2027">
     <p class="card__kicker">
       <span class="card__cat js-term">Institutions</span>
       <span class="card__sep">·</span>
@@ -1490,13 +1514,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Banque de France sees inflation below 2% by 2027">La Banque de France confirme une inflation sous les 2 % à l&#39;horizon 2027</h3>
     <p class="card__summary" data-en="Disinflation continues.">La désinflation se poursuit.</p>
   </a>
-  <a class="btn" href="annonces/59a18a020ea75285.html">
+  <a class="btn" href="eco-article.html?id=59a18a020ea75285">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 4">
-  <a class="card__hit" href="annonces/7c3b932286c44384.html" aria-label="Lire le résumé : Le climat des affaires se stabilise en France en juin">
+  <a class="card__hit" href="eco-article.html?id=7c3b932286c44384" aria-label="Lire le résumé : Le climat des affaires se stabilise en France en juin">
     <p class="card__kicker">
       <span class="card__cat js-term">Institutions</span>
       <span class="card__sep">·</span>
@@ -1505,7 +1529,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Business confidence stabilizes in France in June">Le climat des affaires se stabilise en France en juin</h3>
     <p class="card__summary" data-en="The indicator stays above its average.">L&#39;indicateur reste au-dessus de sa moyenne.</p>
   </a>
-  <a class="btn" href="annonces/7c3b932286c44384.html">
+  <a class="btn" href="eco-article.html?id=7c3b932286c44384">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1519,7 +1543,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/352fa986356c82d3.html" aria-label="Lire le résumé : Les marchés mondiaux stables, entre croissance et banques centrales">
+  <a class="card__hit" href="eco-article.html?id=352fa986356c82d3" aria-label="Lire le résumé : Les marchés mondiaux stables, entre croissance et banques centrales">
     <p class="card__kicker">
       <span class="card__cat js-term">International</span>
       <span class="card__sep">·</span>
@@ -1528,7 +1552,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Global markets steady between growth and central banks">Les marchés mondiaux stables, entre croissance et banques centrales</h3>
     <p class="card__summary" data-en="Equities hold and the dollar eases.">Les actions tiennent et le dollar s&#39;assouplit.</p>
   </a>
-  <a class="btn" href="annonces/352fa986356c82d3.html">
+  <a class="btn" href="eco-article.html?id=352fa986356c82d3">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
@@ -1669,7 +1693,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       <span class="wire__time">08:57</span>
       <span class="wire__dot"></span>
     </div>
-    <a class="wire__card" href="annonces/f587008d8880ce11.html">
+    <a class="wire__card" href="eco-article.html?id=f587008d8880ce11">
       <p class="wire__kicker">
         <span class="wire__live" data-en="LIVE">DIRECT</span>
         <span class="wire__src">ForexLive</span>
@@ -1684,7 +1708,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       <span class="wire__time">08:49</span>
       <span class="wire__dot"></span>
     </div>
-    <a class="wire__card" href="annonces/de73496212a821f1.html">
+    <a class="wire__card" href="eco-article.html?id=de73496212a821f1">
       <p class="wire__kicker">
         <span class="wire__live" data-en="LIVE">DIRECT</span>
         <span class="wire__src">ZeroHedge</span>
@@ -1699,7 +1723,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       <span class="wire__time">08:36</span>
       <span class="wire__dot"></span>
     </div>
-    <a class="wire__card" href="annonces/fa98566864e58849.html">
+    <a class="wire__card" href="eco-article.html?id=fa98566864e58849">
       <p class="wire__kicker">
         <span class="wire__live" data-en="LIVE">DIRECT</span>
         <span class="wire__src">Trump · marchés (live)</span>
@@ -1714,7 +1738,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       <span class="wire__time">08:22</span>
       <span class="wire__dot"></span>
     </div>
-    <a class="wire__card" href="annonces/a15067b88d450a8d.html">
+    <a class="wire__card" href="eco-article.html?id=a15067b88d450a8d">
       <p class="wire__kicker">
         <span class="wire__live" data-en="LIVE">DIRECT</span>
         <span class="wire__src">FXStreet – News</span>
@@ -1806,7 +1830,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   </header>
   <div class="grid">
     <article class="card " style="--i: 0">
-  <a class="card__hit" href="annonces/e7d09ded30eabb4c.html" aria-label="Lire le résumé : Bitcoin repasse au-dessus d&#39;un seuil clé porté par les entrées en ETF">
+  <a class="card__hit" href="eco-article.html?id=e7d09ded30eabb4c" aria-label="Lire le résumé : Bitcoin repasse au-dessus d&#39;un seuil clé porté par les entrées en ETF">
     <p class="card__kicker">
       <span class="card__cat js-term">Crypto</span>
       <span class="card__sep">·</span>
@@ -1815,13 +1839,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Bitcoin tops a key level on strong ETF inflows">Bitcoin repasse au-dessus d&#39;un seuil clé porté par les entrées en ETF</h3>
     <p class="card__summary" data-en="Bitcoin rebounds, supported by record spot-ETF inflows.">Le bitcoin rebondit, soutenu par des entrées record dans les ETF au comptant.</p>
   </a>
-  <a class="btn" href="annonces/e7d09ded30eabb4c.html">
+  <a class="btn" href="eco-article.html?id=e7d09ded30eabb4c">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 1">
-  <a class="card__hit" href="annonces/4f471aaa73349cda.html" aria-label="Lire le résumé : Ethereum : la mise à jour réseau relance le débat sur les frais">
+  <a class="card__hit" href="eco-article.html?id=4f471aaa73349cda" aria-label="Lire le résumé : Ethereum : la mise à jour réseau relance le débat sur les frais">
     <p class="card__kicker">
       <span class="card__cat js-term">Crypto</span>
       <span class="card__sep">·</span>
@@ -1830,13 +1854,13 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Ethereum: network upgrade reignites the fee debate">Ethereum : la mise à jour réseau relance le débat sur les frais</h3>
     <p class="card__summary" data-en="An upgrade aims to cut fees and improve Ethereum scalability.">Une mise à jour vise à réduire les frais et améliorer la scalabilité d&#39;Ethereum.</p>
   </a>
-  <a class="btn" href="annonces/4f471aaa73349cda.html">
+  <a class="btn" href="eco-article.html?id=4f471aaa73349cda">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>
 
     <article class="card " style="--i: 2">
-  <a class="card__hit" href="annonces/a957264b5de004d7.html" aria-label="Lire le résumé : Régulation : un nouveau cadre crypto se précise en Europe">
+  <a class="card__hit" href="eco-article.html?id=a957264b5de004d7" aria-label="Lire le résumé : Régulation : un nouveau cadre crypto se précise en Europe">
     <p class="card__kicker">
       <span class="card__cat js-term">Crypto</span>
       <span class="card__sep">·</span>
@@ -1845,7 +1869,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
     <h3 class="card__title" data-en="Regulation: a new crypto framework takes shape in Europe">Régulation : un nouveau cadre crypto se précise en Europe</h3>
     <p class="card__summary" data-en="European regulators clarify rules for digital assets.">Les régulateurs européens précisent les règles applicables aux actifs numériques.</p>
   </a>
-  <a class="btn" href="annonces/a957264b5de004d7.html">
+  <a class="btn" href="eco-article.html?id=a957264b5de004d7">
     <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
   </a>
 </article>

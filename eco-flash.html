@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Le Terminal — Flash Info</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="./eco.css">
 </head>
 <body class="eco-page">
@@ -64,67 +64,14 @@
   </p>
 </section>
 
-<ol class="wire" aria-label="Fil en direct">
-  <li class="wire__item" style="--i: 0">
-    <div class="wire__rail">
-      <span class="wire__time">08:57</span>
-      <span class="wire__dot"></span>
-    </div>
-    <a class="wire__card" href="annonces/f587008d8880ce11.html">
-      <p class="wire__kicker">
-        <span class="wire__live" data-en="LIVE">DIRECT</span>
-        <span class="wire__src">ForexLive</span>
-<span class="bias bias--up wire__bias" data-en="Positive">Positif</span>      </p>
-      <h3 class="wire__title" data-en="FLASH: U.S. inflation comes in at 3.1%, below expectations">FLASH : l&#39;inflation américaine ressort à 3,1 %, sous les attentes</h3>
-      <p class="wire__sum" data-en="CPI 3.1% YoY vs 3.3% expected; the dollar drops.">CPI à 3,1 % sur un an contre 3,3 % attendu ; le dollar décroche.</p>
-      <span class="wire__more" data-en="Read the summary">Lire le résumé <span aria-hidden="true">→</span></span>
-    </a>
-  </li>
-  <li class="wire__item" style="--i: 1">
-    <div class="wire__rail">
-      <span class="wire__time">08:49</span>
-      <span class="wire__dot"></span>
-    </div>
-    <a class="wire__card" href="annonces/de73496212a821f1.html">
-      <p class="wire__kicker">
-        <span class="wire__live" data-en="LIVE">DIRECT</span>
-        <span class="wire__src">ZeroHedge</span>
-<span class="bias bias--up wire__bias" data-en="Positive">Positif</span>      </p>
-      <h3 class="wire__title" data-en="Fed may slow its balance-sheet runoff, source says">La Fed pourrait ralentir la réduction de son bilan, selon une source</h3>
-      <p class="wire__sum" data-en="Reported comments hint at a possible QT slowdown.">Des propos rapportés évoquent un possible ralentissement du QT.</p>
-      <span class="wire__more" data-en="Read the summary">Lire le résumé <span aria-hidden="true">→</span></span>
-    </a>
-  </li>
-  <li class="wire__item" style="--i: 2">
-    <div class="wire__rail">
-      <span class="wire__time">08:36</span>
-      <span class="wire__dot"></span>
-    </div>
-    <a class="wire__card" href="annonces/fa98566864e58849.html">
-      <p class="wire__kicker">
-        <span class="wire__live" data-en="LIVE">DIRECT</span>
-        <span class="wire__src">Trump · marchés (live)</span>
-<span class="bias bias--down wire__bias" data-en="Negative">Négatif</span>      </p>
-      <h3 class="wire__title" data-en="Trump threatens fresh tariffs, markets turn jittery">Trump menace de nouveaux droits de douane, les marchés se tendent</h3>
-      <p class="wire__sum" data-en="Comments on possible tariffs ripple through stock markets.">Des déclarations sur de possibles tarifs douaniers font réagir les Bourses.</p>
-      <span class="wire__more" data-en="Read the summary">Lire le résumé <span aria-hidden="true">→</span></span>
-    </a>
-  </li>
-  <li class="wire__item" style="--i: 3">
-    <div class="wire__rail">
-      <span class="wire__time">08:22</span>
-      <span class="wire__dot"></span>
-    </div>
-    <a class="wire__card" href="annonces/a15067b88d450a8d.html">
-      <p class="wire__kicker">
-        <span class="wire__live" data-en="LIVE">DIRECT</span>
-        <span class="wire__src">FXStreet – News</span>
-<span class="bias bias--up wire__bias" data-en="Positive">Positif</span>      </p>
-      <h3 class="wire__title" data-en="EUR/USD breaks above 1.09 after the U.S. data">EUR/USD : cassure au-dessus de 1,09 après les chiffres américains</h3>
-      <p class="wire__sum" data-en="The pair clears a key resistance amid a weaker dollar.">La paire franchit une résistance clé sur fond de dollar faible.</p>
-      <span class="wire__more" data-en="Read the summary">Lire le résumé <span aria-hidden="true">→</span></span>
-    </a>
-  </li>
+<div id="flash-status" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--text3)">
+  <span class="fi-livedot" style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse-dot 2s infinite"></span>
+  <span id="flash-status-txt">Chargement du fil…</span>
+</div>
+<ol class="wire" id="flash-wire" aria-label="Fil en direct">
+  <li class="wire__item wire__item--skel" style="--i:0" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med" style="margin-top:6px"></div></div></li>
+  <li class="wire__item wire__item--skel" style="--i:1" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med" style="margin-top:6px"></div></div></li>
+  <li class="wire__item wire__item--skel" style="--i:2" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med" style="margin-top:6px"></div></div></li>
 </ol>
 
 <section class="prose" aria-label="Pourquoi cette page">
@@ -148,5 +95,239 @@
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
 <script src="./menu.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // Zone flash uniquement — filtre 50pts marché appliqué à l'ingestion
+  var ALL_ZONES = ['flash'];
+  var FOUR_H    = 4  * 3600 * 1000;
+  var FORTYEIGHT_H = 48 * 3600 * 1000;
+
+  var SENTIMENT_MAP = {
+    'Positif':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
+    'Négatif':  { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
+    'Neutre':   { cls: 'bias--flat', fr: 'Neutre',   en: 'Neutral'  },
+    'Risk-on':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
+    'Risk-off': { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
+    'Hawkish':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
+    'Dovish':   { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
+  };
+
+  function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
+
+  function fmt(iso) {
+    try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
+    catch(e) { return '--:--'; }
+  }
+
+  function relTime(iso) {
+    try {
+      var m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+      if (m < 1)  return 'À l\'instant';
+      if (m < 60) return 'Il y a ' + m + ' min';
+      var h = Math.floor(m / 60);
+      if (h < 24) return 'Il y a ' + h + 'h';
+      return 'Il y a ' + Math.floor(h / 24) + 'j';
+    } catch(e) { return ''; }
+  }
+
+  function articleUrl(item) {
+    // Tweets ZeroHedge → lien direct X
+    if (item.source && item.source.indexOf('ZeroHedge') !== -1 && item.url && item.url.indexOf('x.com') !== -1) {
+      return item.url;
+    }
+    if (!item.id) return item.url || '#';
+    var u = '/eco-article.html?id=' + encodeURIComponent(item.id);
+    if (item.url) u += '&src=' + encodeURIComponent(item.url);
+    return u;
+  }
+
+  function isZeroHedge(item) {
+    return item.source && item.source.indexOf('ZeroHedge') !== -1;
+  }
+
+  function getTitle(item) {
+    var l = getLang();
+    return (l === 'en' && item.title_en ? item.title_en : item.title) || '';
+  }
+
+  function getSummary(item) {
+    var l = getLang();
+    return (l === 'en' && item.summary_en ? item.summary_en : item.summary) || '';
+  }
+
+  // ── Wire item (fil live) ─────────────────────────────────────────────────
+  function buildWireItem(item, idx) {
+    var l    = getLang();
+    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+    var url  = articleUrl(item);
+    var title   = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var src     = (item.source || '').replace(/</g,'&lt;');
+    var bias    = l === 'en' ? sent.en : sent.fr;
+    var isZH    = isZeroHedge(item);
+    var isBreaking = /^(BREAKING|FLASH|JUST IN|ALERT)/i.test(item.title || '');
+
+    // Badge : BREAKING pour annonces urgentes, 𝕏 pour ZeroHedge, DIRECT sinon
+    var liveLabel = isBreaking ? 'BREAKING' : (isZH ? '𝕏' : (l === 'en' ? 'LIVE' : 'DIRECT'));
+    var liveStyle = isBreaking
+      ? ' style="background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.25)"'
+      : (isZH ? ' style="background:rgba(29,161,242,.12);color:#1D9BF0;border:1px solid rgba(29,161,242,.25)"' : '');
+
+    // Lien externe pour tweets X
+    var targetAttr = isZH ? ' target="_blank" rel="noopener nofollow"' : '';
+
+    return '<li class="wire__item" style="--i:' + idx + '">'
+      + '<div class="wire__rail">'
+      + '<span class="wire__time" title="' + relTime(item.published_at) + '">' + fmt(item.published_at) + '</span>'
+      + '<span class="wire__dot' + (isBreaking ? ' wire__dot--alert' : '') + '"></span>'
+      + '</div>'
+      + '<a class="wire__card" href="' + url + '"' + targetAttr + '>'
+      + '<p class="wire__kicker">'
+      + '<span class="wire__live"' + liveStyle + '>' + liveLabel + '</span>'
+      + '<span class="wire__src">' + src + '</span>'
+      + (sent.cls ? '<span class="bias ' + sent.cls + ' wire__bias">' + bias + '</span>' : '')
+      + '</p>'
+      + '<h3 class="wire__title">' + title + '</h3>'
+      + (summary ? '<p class="wire__sum">' + summary + '</p>' : '')
+      + '<span class="wire__more">' + (l === 'en' ? 'Read ' : 'Lire ') + '<span aria-hidden="true">→</span></span>'
+      + '</a>'
+      + '</li>';
+  }
+
+  // ── Archive item ─────────────────────────────────────────────────────────
+  function buildArchiveItem(item, idx) {
+    var l    = getLang();
+    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+    var bias = l === 'en' ? sent.en : sent.fr;
+    var url  = articleUrl(item);
+    var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var src   = (item.source || '').replace(/</g,'&lt;');
+    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : '';
+    var d = new Date(item.published_at), now = new Date();
+    var isToday = d.toDateString() === now.toDateString();
+    var dateStr = isToday
+      ? 'Aujourd\'hui ' + fmt(item.published_at)
+      : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' · ' + fmt(item.published_at);
+    var targetAttr = isZeroHedge(item) ? ' target="_blank" rel="noopener nofollow"' : '';
+
+    return '<a class="eco-arch-item" href="' + url + '"' + targetAttr + ' style="--i:' + idx + '">'
+      + '<div class="eco-arch-item__meta">'
+      + '<span class="eco-arch-item__time">' + dateStr + '</span>'
+      + '<span class="eco-arch-item__src">' + (zone && zone !== 'Flash' ? zone + ' · ' : '') + src + '</span>'
+      + (sent.cls ? '<span class="bias ' + sent.cls + '" style="font-size:10px;padding:2px 8px">' + bias + '</span>' : '')
+      + '</div>'
+      + '<p class="eco-arch-item__title">' + title + '</p>'
+      + '</a>';
+  }
+
+  // ── Déduplication par titre ───────────────────────────────────────────────
+  function normalize(s) { return (s||'').toLowerCase().replace(/[^a-z0-9\s]/g,'').trim(); }
+  function dedupe(items) {
+    var seen = [], out = [];
+    items.forEach(function(item) {
+      var n = normalize(getTitle(item)).slice(0, 40);
+      if (n && seen.indexOf(n) === -1) { seen.push(n); out.push(item); }
+    });
+    return out;
+  }
+
+  // ── Chargement ────────────────────────────────────────────────────────────
+  async function loadFlash() {
+    var wire    = document.getElementById('flash-wire');
+    var statusEl = document.getElementById('flash-status-txt');
+    var archSec = document.querySelector('.eco-archives');
+
+    // Fetch toutes les zones en parallèle
+    var results = await Promise.allSettled(
+      ALL_ZONES.map(function(zone) {
+        return fetch('/api/news?zone=' + zone + '&limit=25')
+          .then(function(r) { return r.ok ? r.json() : { items: [] }; })
+          .then(function(d) {
+            return (d.items || []).map(function(item) {
+              item.zone = item.zone || zone;
+              return item;
+            });
+          });
+      })
+    );
+
+    var allItems = [];
+    results.forEach(function(r) {
+      if (r.status === 'fulfilled') allItems = allItems.concat(r.value);
+    });
+
+    // Sépare récent (< 4h) et archive (4h–48h), tri par fraîcheur
+    var now = Date.now();
+    var recent  = allItems
+      .filter(function(i) { return (now - new Date(i.published_at).getTime()) < FOUR_H; })
+      .sort(function(a, b) { return new Date(b.published_at) - new Date(a.published_at); });
+    var archive = allItems
+      .filter(function(i) {
+        var age = now - new Date(i.published_at).getTime();
+        return age >= FOUR_H && age < FORTYEIGHT_H;
+      })
+      .sort(function(a, b) { return new Date(b.published_at) - new Date(a.published_at); });
+
+    var wireItems = dedupe(recent).slice(0, 30);
+    var archItems = dedupe(archive).slice(0, 40);
+
+    // ── Fil live ─────────────────────────────────────────────────────────
+    if (wire) {
+      if (wireItems.length === 0) {
+        wire.innerHTML = '<li style="padding:48px 16px;text-align:center;color:var(--text3);font-size:13px;list-style:none">'
+          + 'Aucune annonce récente (< 4h). Les nouvelles arrivent dès que le bot collecte. '
+          + 'Les annonces précédentes sont visibles ci-dessous.</li>';
+      } else {
+        wire.innerHTML = wireItems.map(function(item, i) { return buildWireItem(item, i); }).join('');
+      }
+    }
+
+    if (statusEl) {
+      var n = wireItems.length;
+      var l = getLang();
+      statusEl.textContent = n > 0
+        ? (n + (l === 'en' ? ' item' : ' annonce') + (n > 1 ? 's' : '') + ' · ' + (l === 'en' ? 'updated ' : 'mis à jour ') + relTime(new Date().toISOString()))
+        : (l === 'en' ? 'Live monitoring — waiting for new items' : 'Surveillance active — en attente de nouvelles annonces');
+    }
+
+    // ── Annonces précédentes ─────────────────────────────────────────────
+    if (archSec) {
+      var archSub  = archSec.querySelector('.block__sub');
+      var archList = archSec.querySelector('.eco-archives__list');
+      if (!archList) {
+        archList = document.createElement('div');
+        archList.className = 'eco-archives__list';
+        archSec.appendChild(archList);
+        var oldEmpty = archSec.querySelector('.eco-empty');
+        if (oldEmpty) oldEmpty.remove();
+      }
+
+      if (archSub) {
+        var l2 = getLang(), na = archItems.length;
+        archSub.textContent = na > 0
+          ? (na + (l2 === 'en' ? ' announcement' : ' annonce') + (na > 1 ? 's' : '') + ' · ' + (l2 === 'en' ? 'last 48h' : 'dernières 48h'))
+          : (l2 === 'en' ? 'No archives yet' : 'Aucune archive pour l\'instant');
+        archSub.removeAttribute('data-en');
+      }
+
+      archList.innerHTML = archItems.length > 0
+        ? archItems.map(function(item, i) { return buildArchiveItem(item, i); }).join('')
+        : '<p style="font-size:13px;color:var(--text3);padding:20px 0">Les annonces de plus de 4h apparaîtront ici automatiquement.</p>';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadFlash);
+  } else {
+    loadFlash();
+  }
+
+  // Refresh toutes les 90 secondes (fil live)
+  setInterval(loadFlash, 90 * 1000);
+  window.ecoReloadFlash = loadFlash;
+})();
+</script>
 </body>
 </html>

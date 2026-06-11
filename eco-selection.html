@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Le Terminal — La sélection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="./eco.css">
 </head>
 <body class="eco-page">
@@ -55,43 +55,23 @@
 </div>
 <main class="wrap">
 <section class="pagehead" aria-label="La sélection">
-  <p class="pagehead__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg> <span data-en="Editor's picks">Le choix de la rédaction</span></p>
+  <p class="pagehead__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg> <span data-en="Best of all zones · Auto-selected">Meilleur de toutes les zones · Sélection auto</span></p>
   <h1 class="pagehead__title" data-en="The selection">La sélection</h1>
-  <p class="pagehead__lead" data-en="Analyses hand-picked for the day — what truly deserves your attention.">Les analyses choisies à la main pour la journée — ce qui mérite vraiment votre attention.</p>
+  <p class="pagehead__lead" id="sel-lead" data-en="The most market-moving announcements across all zones, scored and ranked automatically.">Les annonces les plus impactantes toutes zones confondues — scorées et classées automatiquement.</p>
 </section>
 
 <section id="selection" class="block" aria-label="La sélection">
-  <div class="grid">
-    <article class="card card--pick" style="--i: 0">
-  <a class="card__hit" href="annonces/3af88624c50a45c7.html" aria-label="Lire le résumé : Pourquoi la désinflation française résiste mieux que prévu">
-    <p class="card__kicker">
-      <span class="card__cat js-term">La sélection</span>
-      <span class="card__sep">·</span>
-      <span class="card__source">Analyse maison</span>
-<span class="bias bias--up card__bias" data-en="Positive">Positif</span>    </p>
-    <h3 class="card__title" data-en="Why French disinflation is holding up better than expected">Pourquoi la désinflation française résiste mieux que prévu</h3>
-    <p class="card__summary" data-en="Despite the euro-area slowdown, consumer prices are easing faster in France than in…">Malgré le ralentissement de la zone euro, les prix à la consommation ralentissent plus…</p>
-  </a>
-  <a class="btn" href="annonces/3af88624c50a45c7.html">
-    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
-  </a>
-</article>
-
-    <article class="card card--pick" style="--i: 1">
-  <a class="card__hit" href="annonces/31e289e5c10bb16b.html" aria-label="Lire le résumé : Budget 2027 : les trois arbitrages qui vont compter">
-    <p class="card__kicker">
-      <span class="card__cat js-term">La sélection</span>
-      <span class="card__sep">·</span>
-      <span class="card__source">Note de veille</span>
-<span class="bias bias--down card__bias" data-en="Negative">Négatif</span>    </p>
-    <h3 class="card__title" data-en="2027 Budget: the three trade-offs that will matter">Budget 2027 : les trois arbitrages qui vont compter</h3>
-    <p class="card__summary" data-en="Preparing the 2027 budget is shaping up to be one of the most sensitive files of the…">La préparation du budget 2027 s&#39;annonce comme l&#39;un des dossiers les plus sensibles de la…</p>
-  </a>
-  <a class="btn" href="annonces/31e289e5c10bb16b.html">
-    <span data-en="Read the summary">Lire le résumé</span> <span class="btn__arrow" aria-hidden="true">→</span>
-  </a>
-</article>
-
+  <header class="block__head">
+    <h2 class="block__title"><span class="block__ico">⚡</span> <span data-en="Top picks · All zones">Top picks · Toutes zones</span></h2>
+    <span class="block__sub" id="sel-sub" data-en="Loading…">Chargement…</span>
+  </header>
+  <div class="grid" id="sel-grid">
+    <article class="card card--skeleton" style="--i:0" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:1" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:2" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:3" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:4" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
+    <article class="card card--skeleton" style="--i:5" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
   </div>
 </section>
 
@@ -116,5 +96,290 @@
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
 <script src="./menu.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // Toutes les zones disponibles — on les fetch en parallèle
+  var ALL_ZONES = ['ameriques', 'europe', 'asie', 'institutions', 'marches', 'crypto', 'international', 'flash'];
+
+  var SENTIMENT_MAP = {
+    'Positif':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive', score: 4 },
+    'Négatif':  { cls: 'bias--down', fr: 'Négatif',  en: 'Negative', score: 4 },
+    'Neutre':   { cls: 'bias--flat', fr: 'Neutre',   en: 'Neutral',  score: 1 },
+    'Risk-on':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive', score: 4 },
+    'Risk-off': { cls: 'bias--down', fr: 'Négatif',  en: 'Negative', score: 4 },
+    'Hawkish':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive', score: 4 },
+    'Dovish':   { cls: 'bias--down', fr: 'Négatif',  en: 'Negative', score: 4 },
+  };
+
+  // Sources à fort impact — bonus de score
+  var HIGH_IMPACT_SOURCES = ['fed', 'bce', 'ecb', 'banque de france', 'imf', 'fmi', 'ocde', 'oecd',
+    'bloomberg', 'reuters', 'financial times', 'wsj', 'wall street journal', 'ft', 'les échos'];
+
+  function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
+
+  function fmt(iso) {
+    try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
+    catch(e) { return ''; }
+  }
+
+  function relTime(iso) {
+    try {
+      var m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+      if (m < 1)  return 'À l\'instant';
+      if (m < 60) return 'Il y a ' + m + ' min';
+      var h = Math.floor(m / 60);
+      if (h < 24) return 'Il y a ' + h + 'h';
+      return 'Il y a ' + Math.floor(h / 24) + 'j';
+    } catch(e) { return ''; }
+  }
+
+  function articleUrl(item) {
+    if (!item.id) return item.url || '#';
+    var u = '/eco-article.html?id=' + encodeURIComponent(item.id);
+    if (item.url) u += '&src=' + encodeURIComponent(item.url);
+    return u;
+  }
+
+  function getTitle(item) {
+    var l = getLang();
+    return (l === 'en' && item.title_en ? item.title_en : item.title) || '';
+  }
+
+  function getSummary(item) {
+    var l = getLang();
+    return (l === 'en' && item.summary_en ? item.summary_en : item.summary) || '';
+  }
+
+  // ── Score d'impact d'un article ─────────────────────────────────────────
+  function scoreItem(item) {
+    var s = 0;
+
+    // Sentiment : Positif/Négatif = fort impact marché
+    var sent = SENTIMENT_MAP[item.sentiment];
+    s += sent ? sent.score : 1;
+
+    // Fraîcheur : plus c'est récent, mieux c'est
+    var ageMin = (Date.now() - new Date(item.published_at).getTime()) / 60000;
+    if (ageMin < 60)        s += 4;  // < 1h : très chaud
+    else if (ageMin < 240)  s += 3;  // < 4h : chaud
+    else if (ageMin < 720)  s += 2;  // < 12h
+    else if (ageMin < 1440) s += 1;  // < 24h
+    // > 24h : pas de bonus fraîcheur
+
+    // Source à fort impact
+    var srcLower = (item.source || '').toLowerCase();
+    var isHighImpact = HIGH_IMPACT_SOURCES.some(function(k) { return srcLower.indexOf(k) !== -1; });
+    if (isHighImpact) s += 2;
+
+    // Résumé complet = plus utile
+    if (getSummary(item).length > 80) s += 1;
+
+    return s;
+  }
+
+  // ── Déduplique par similarité de titre ──────────────────────────────────
+  function normalize(str) {
+    return (str || '').toLowerCase().replace(/[^a-zàâçéèêëîïôûùüÿœæ0-9\s]/g, '').trim();
+  }
+
+  function isSimilar(a, b) {
+    var na = normalize(a), nb = normalize(b);
+    if (!na || !nb) return false;
+    // Même début (60+ chars) = doublon probable
+    var minLen = Math.min(na.length, nb.length);
+    if (minLen > 40 && na.slice(0, 50) === nb.slice(0, 50)) return true;
+    // Inclusion totale
+    if (na.length > 20 && nb.indexOf(na.slice(0, 30)) !== -1) return true;
+    if (nb.length > 20 && na.indexOf(nb.slice(0, 30)) !== -1) return true;
+    return false;
+  }
+
+  function dedupe(items) {
+    var out = [];
+    items.forEach(function(item) {
+      var title = getTitle(item);
+      var dup = out.some(function(o) { return isSimilar(getTitle(o), title); });
+      if (!dup) out.push(item);
+    });
+    return out;
+  }
+
+  // ── Archive item (liste compacte — même style que les autres pages) ──────
+  function buildArchiveItem(item, idx) {
+    var l = getLang();
+    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+    var bias = l === 'en' ? sent.en : sent.fr;
+    var biasHtml = sent.cls
+      ? '<span class="bias ' + sent.cls + '" style="font-size:10px;padding:2px 8px">' + bias + '</span>'
+      : '';
+    var url   = articleUrl(item);
+    var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var src   = (item.source || '').replace(/</g,'&lt;');
+    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : 'Éco';
+    var d = new Date(item.published_at);
+    var now = new Date();
+    var isToday = d.toDateString() === now.toDateString();
+    var dateStr = isToday
+      ? 'Aujourd\'hui ' + fmt(item.published_at)
+      : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' · ' + fmt(item.published_at);
+
+    return '<a class="eco-arch-item" href="' + url + '" style="--i:' + idx + '">'
+      + '<div class="eco-arch-item__meta">'
+      + '<span class="eco-arch-item__time">' + dateStr + '</span>'
+      + '<span class="eco-arch-item__src">' + zone + ' · ' + src + '</span>'
+      + biasHtml
+      + '</div>'
+      + '<p class="eco-arch-item__title">' + title + '</p>'
+      + '</a>';
+  }
+
+  // ── Construction d'une carte ─────────────────────────────────────────────
+  function buildCard(item, idx, rank) {
+    var l = getLang();
+    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
+    var url   = articleUrl(item);
+    var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var sum   = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var src   = (item.source || '').replace(/</g,'&lt;');
+    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : 'Éco';
+    var bias  = l === 'en' ? sent.en : sent.fr;
+    var readBtn = l === 'en' ? 'Read article' : 'Lire le résumé';
+
+    // Badge rang pour les 3 premiers
+    var rankBadge = '';
+    if (rank === 1) rankBadge = '<span class="hero__badge" style="background:rgba(251,191,36,.15);color:#FCD34D;border:1px solid rgba(251,191,36,.3);font-size:9px;padding:2px 8px;border-radius:3px;margin-right:6px">#1 TOP</span>';
+    else if (rank === 2) rankBadge = '<span style="font-size:9px;color:var(--text3);margin-right:4px">#2</span>';
+    else if (rank === 3) rankBadge = '<span style="font-size:9px;color:var(--text3);margin-right:4px">#3</span>';
+
+    return '<article class="card card--featured" style="--i:' + idx + '" data-sel-dynamic>'
+      + '<a class="card__hit" href="' + url + '">'
+      + '<p class="card__kicker">'
+      + rankBadge
+      + '<span class="card__cat js-term">' + zone + '</span>'
+      + '<span class="card__sep">·</span>'
+      + '<span class="card__source">' + src + '</span>'
+      + '<span class="card__time" title="' + relTime(item.published_at) + '">' + fmt(item.published_at) + '</span>'
+      + (sent.cls ? '<span class="bias ' + sent.cls + ' card__bias">' + bias + '</span>' : '')
+      + '</p>'
+      + '<h3 class="card__title">' + title + '</h3>'
+      + '<p class="card__summary">' + sum + '</p>'
+      + '</a>'
+      + '<a class="btn" href="' + url + '"><span>' + readBtn + '</span> <span class="btn__arrow">→</span></a>'
+      + '</article>';
+  }
+
+  // ── Chargement depuis toutes les zones ───────────────────────────────────
+  async function loadSelection() {
+    var grid    = document.getElementById('sel-grid');
+    var sub     = document.getElementById('sel-sub');
+    var archSec = document.querySelector('.eco-archives');
+
+    // Fetch toutes les zones en parallèle
+    var results = await Promise.allSettled(
+      ALL_ZONES.map(function(zone) {
+        return fetch('/api/news?zone=' + zone + '&limit=20')
+          .then(function(r) { return r.ok ? r.json() : { items: [] }; })
+          .then(function(d) {
+            return (d.items || []).map(function(item) {
+              item.zone = item.zone || zone;
+              return item;
+            });
+          });
+      })
+    );
+
+    // Fusionne tous les articles récupérés
+    var allItems = [];
+    results.forEach(function(r) {
+      if (r.status === 'fulfilled') allItems = allItems.concat(r.value);
+    });
+
+    // Sépare en : récent (< 4h) et archives (4h–48h)
+    var FOUR_H = 4 * 3600 * 1000;
+    var FORTYEIGHT_H = 48 * 3600 * 1000;
+    var now = Date.now();
+    var recent  = allItems.filter(function(i) { return (now - new Date(i.published_at).getTime()) < FOUR_H; });
+    var archive = allItems.filter(function(i) {
+      var age = now - new Date(i.published_at).getTime();
+      return age >= FOUR_H && age < FORTYEIGHT_H;
+    });
+
+    // Score + déduplique les deux groupes séparément
+    function sortAndDedupe(items, limit) {
+      items = items.map(function(i) { i._score = scoreItem(i); return i; });
+      items.sort(function(a, b) { return b._score - a._score; });
+      return dedupe(items).slice(0, limit);
+    }
+
+    // Le pool principal = récent en priorité, sinon on complète avec archives
+    var pool = sortAndDedupe(recent.length >= 3 ? recent : allItems.filter(function(i) {
+      return (now - new Date(i.published_at).getTime()) < FORTYEIGHT_H;
+    }), 9);
+
+    var archiveTop = sortAndDedupe(archive, 30);
+
+    // ── Section principale (top picks) ───────────────────────────────────
+    if (grid) {
+      if (pool.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--text3);font-size:13px">Aucune annonce disponible pour l\'instant. Le bot collecte les articles toutes les 30 min.</div>';
+      } else {
+        grid.innerHTML = pool.map(function(item, i) { return buildCard(item, i, i + 1); }).join('');
+      }
+    }
+
+    if (sub) {
+      var n = pool.length;
+      var l = getLang();
+      sub.textContent = l === 'en'
+        ? n + ' article' + (n > 1 ? 's' : '') + ' · scored across ' + ALL_ZONES.length + ' zones'
+        : n + ' annonce' + (n > 1 ? 's' : '') + ' · scorées sur ' + ALL_ZONES.length + ' zones';
+      sub.removeAttribute('data-en');
+    }
+
+    // ── Section Annonces précédentes ─────────────────────────────────────
+    if (archSec) {
+      var archHeader = archSec.querySelector('.block__head');
+      var archSub    = archHeader ? archHeader.querySelector('.block__sub') : null;
+
+      // Crée ou réutilise la liste
+      var archList = archSec.querySelector('.eco-archives__list');
+      if (!archList) {
+        archList = document.createElement('div');
+        archList.className = 'eco-archives__list';
+        archSec.appendChild(archList);
+        var oldEmpty = archSec.querySelector('.eco-empty');
+        if (oldEmpty) oldEmpty.remove();
+      }
+
+      // Met à jour le sous-titre
+      if (archSub) {
+        var l2 = getLang();
+        var na = archiveTop.length;
+        archSub.textContent = na > 0
+          ? (l2 === 'en' ? na + ' announcement' + (na > 1 ? 's' : '') + ' · last 48h' : na + ' annonce' + (na > 1 ? 's' : '') + ' · dernières 48h')
+          : (l2 === 'en' ? 'No archives yet' : 'Aucune archive pour l\'instant');
+        archSub.removeAttribute('data-en');
+      }
+
+      if (archiveTop.length > 0) {
+        archList.innerHTML = archiveTop.map(function(item, i) { return buildArchiveItem(item, i); }).join('');
+      } else {
+        archList.innerHTML = '<p style="font-size:13px;color:var(--text3);padding:20px 0">Les annonces publiées il y a plus de 4 heures apparaîtront ici automatiquement.</p>';
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadSelection);
+  } else {
+    loadSelection();
+  }
+
+  setInterval(loadSelection, 5 * 60 * 1000);
+  window.ecoReloadSelection = loadSelection;
+})();
+</script>
 </body>
 </html>

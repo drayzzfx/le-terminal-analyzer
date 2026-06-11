@@ -12,10 +12,17 @@ module.exports = async function handler(req, res) {
   if (!ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key not configured' });
 
   try {
-    const { system, messages } = req.body;
+    const body = req.body;
+    const system = body && body.system;
+    const messages = body && body.messages;
+
+    if (!messages || !Array.isArray(messages)) {
+      console.error('[analyze] ERR: missing or invalid messages. body keys:', body ? Object.keys(body) : 'null');
+      return res.status(400).json({ error: 'Missing messages' });
+    }
 
     const payload = JSON.stringify({
-      model: 'claude-opus-4-5',
+      model: 'claude-sonnet-4-6',
       max_tokens: 4096,
       system,
       messages
@@ -39,7 +46,7 @@ module.exports = async function handler(req, res) {
         r.on('data', c => data += c);
         r.on('end', () => {
           try { resolve({ status: r.statusCode, body: JSON.parse(data) }); }
-          catch(e) { resolve({ status: r.statusCode, body: { error: data.slice(0, 300) } }); }
+          catch(e) { resolve({ status: r.statusCode, body: { error: data.slice(0, 500) } }); }
         });
       });
 
@@ -48,9 +55,16 @@ module.exports = async function handler(req, res) {
       req2.end();
     });
 
-    return res.status(result.status).json(result.body);
+    if (result.status !== 200) {
+      const errType = result.body?.error?.type || '?';
+      const errMsg = result.body?.error?.message || JSON.stringify(result.body).slice(0, 300);
+      console.error('[analyze] ERR ' + result.status + ' type=' + errType + ' msg=' + errMsg);
+      return res.status(result.status).json({ error: errMsg });
+    }
+    return res.status(200).json(result.body);
 
   } catch(err) {
+    console.error('[analyze] EXCEPTION:', err.message);
     return res.status(500).json({ error: err.message });
   }
 };
