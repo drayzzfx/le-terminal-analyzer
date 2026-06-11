@@ -1019,12 +1019,13 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <button class="lang-btn on" onclick="setLang('fr')">FR</button>
           <button class="lang-btn" onclick="setLang('en')">EN</button>
         </div>
-        <button id="themeToggle" onclick="toggleTheme()" class="lt-nav__pill" title="Thème clair/sombre">🌙</button>
         <div class="user-chip" id="userChip" onclick="openHistory()">
           <div class="user-avatar" id="userAvatar">?</div>
           <span class="user-name" id="userName">Mon compte</span>
         </div>
         <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="openAuth()" style="display:none">Connexion</button>
+        <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="if(window.ltLogout){ltLogout()}else{localStorage.removeItem('ta_token');localStorage.removeItem('ta_email');location.href='./index.html'}" title="Déconnexion">Déconnexion</button>
+        <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
       </div>
     </header>
   </div>
@@ -1165,46 +1166,70 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
     <!-- RESULT -->
     <div class="result-view" id="resView">
 
-      <div class="result-hero">
-        <div class="score-ring">
-          <svg width="88" height="88" viewBox="0 0 88 88">
-            <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(0,149,255,0.1)" stroke-width="5"/>
-            <circle cx="44" cy="44" r="36" fill="none" stroke="var(--v2)" stroke-width="5"
-              stroke-dasharray="226" id="scoreArc" stroke-dashoffset="226" stroke-linecap="round"
-              style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .4s"/>
-          </svg>
-          <div class="score-center">
-            <div class="score-num" id="scoreNum">—</div>
-            <div class="score-den">/10</div>
+      <style>
+      .result-2col{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:14px}
+      @media(max-width:980px){.result-2col{grid-template-columns:1fr}}
+      .rp{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:16px;padding:18px;min-width:0}
+      .rp__title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+      .result-2col .result-hero{margin-bottom:14px}
+      .result-2col .verdict{margin-top:0;margin-bottom:14px}
+      .result-2col .metrics-row{margin:0;grid-template-columns:1fr 1fr}
+      .rp .chart-result{display:none}
+      .rp .chart-result.show{display:block}
+      .fb-grid.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+      @media(max-width:760px){.fb-grid.three{grid-template-columns:1fr}}
+      </style>
+
+      <div class="result-2col">
+        <div class="rp">
+          <div class="rp__title">Ton graphique</div>
+          <div class="chart-result" id="chartResult" style="position:relative;padding:0">
+            <canvas id="annotationCanvas" style="width:100%;display:block;border-radius:12px"></canvas>
+            <div class="chart-result-tag" id="crt-lbl">Graphique annoté par l'IA</div>
           </div>
         </div>
-        <div class="result-meta">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <div class="result-tag" id="res-tag">RÉSULTAT D'ANALYSE</div>
-            <div id="niveau-badge" style="font-size:9px;font-weight:600;letter-spacing:0.14em;padding:3px 10px;border-radius:50px;border:1px solid;display:none"></div>
+        <div class="rp">
+          <div class="rp__title">Verdict</div>
+          <div class="result-hero">
+            <div class="score-ring">
+              <svg width="88" height="88" viewBox="0 0 88 88">
+                <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(0,149,255,0.1)" stroke-width="5"/>
+                <circle cx="44" cy="44" r="36" fill="none" stroke="var(--v2)" stroke-width="5"
+                  stroke-dasharray="226" id="scoreArc" stroke-dashoffset="226" stroke-linecap="round"
+                  style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .4s"/>
+              </svg>
+              <div class="score-center">
+                <div class="score-num" id="scoreNum">—</div>
+                <div class="score-den">/10</div>
+              </div>
+            </div>
+            <div class="result-meta">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <div class="result-tag" id="res-tag">RÉSULTAT D'ANALYSE</div>
+                <div id="niveau-badge" style="font-size:9px;font-weight:600;letter-spacing:0.14em;padding:3px 10px;border-radius:50px;border:1px solid;display:none"></div>
+              </div>
+              <div class="result-title" id="res-title">—</div>
+              <div class="result-sub" id="res-sub">—</div>
+            </div>
           </div>
-          <div class="result-title" id="res-title">—</div>
-          <div class="result-sub" id="res-sub">—</div>
+          <div class="verdict" id="verdictBox">
+            <div class="v-badge" id="v-badge">—</div>
+            <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
+          </div>
+          <div class="metrics-row">
+            <div class="metric"><div class="metric-lbl">R:R</div><div class="metric-val" id="m-rr">—</div></div>
+            <div class="metric"><div class="metric-lbl" id="m-dir-lbl">Direction</div><div class="metric-val" id="m-dir">—</div></div>
+            <div class="metric"><div class="metric-lbl">TF</div><div class="metric-val" id="m-tf">—</div></div>
+            <div class="metric"><div class="metric-lbl" id="m-pair-lbl">Actif</div><div class="metric-val" id="m-pair" style="font-size:15px">—</div></div>
+          </div>
         </div>
       </div>
 
-      <div class="metrics-row">
-        <div class="metric"><div class="metric-lbl">R:R</div><div class="metric-val" id="m-rr">—</div></div>
-        <div class="metric"><div class="metric-lbl" id="m-dir-lbl">Direction</div><div class="metric-val" id="m-dir">—</div></div>
-        <div class="metric"><div class="metric-lbl">TF</div><div class="metric-val" id="m-tf">—</div></div>
-        <div class="metric"><div class="metric-lbl" id="m-pair-lbl">Actif</div><div class="metric-val" id="m-pair" style="font-size:15px">—</div></div>
-      </div>
-
-      <div class="chart-result" id="chartResult" style="position:relative;padding:0">
-        <canvas id="annotationCanvas" style="width:100%;display:block;border-radius:12px"></canvas>
-        <div class="chart-result-tag" id="crt-lbl">Graphique annoté par l'IA</div>
-      </div>
-
-      <div class="fb-grid">
+      <div class="fb-grid three">
         <div class="fb-card">
           <div class="fb-head">
             <div class="fb-dot" style="background:var(--green)"></div>
-            <span class="fb-title" id="fc-forces" style="color:var(--green)">Points Forts</span>
+            <span class="fb-title" id="fc-forces" style="color:var(--green)">Forces</span>
           </div>
           <div class="fb-body" id="forcesText">—</div>
           <div class="tag-row" id="forcesTags"></div>
@@ -1212,24 +1237,18 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <div class="fb-card">
           <div class="fb-head">
             <div class="fb-dot" style="background:var(--red)"></div>
-            <span class="fb-title" id="fc-weak" style="color:var(--red)">Points Faibles</span>
+            <span class="fb-title" id="fc-weak" style="color:var(--red)">Points de vigilance</span>
           </div>
           <div class="fb-body" id="weakText">—</div>
           <div class="tag-row" id="weakTags"></div>
         </div>
-      </div>
-
-      <div class="fb-full">
-        <div class="fb-head" style="margin-bottom:10px">
-          <div class="fb-dot" style="background:#60A5FA"></div>
-          <span class="fb-title" id="fc-advice" style="color:#60A5FA">Recommandations</span>
+        <div class="fb-card">
+          <div class="fb-head">
+            <div class="fb-dot" style="background:#60A5FA"></div>
+            <span class="fb-title" id="fc-advice" style="color:#60A5FA">Recommandations</span>
+          </div>
+          <div class="fb-body" id="adviceText">—</div>
         </div>
-        <div class="fb-body" id="adviceText">—</div>
-      </div>
-
-      <div class="verdict" id="verdictBox">
-        <div class="v-badge" id="v-badge">—</div>
-        <div class="v-text"><strong id="v-title">—</strong><span id="v-sub">—</span></div>
       </div>
       <div id="quickOutcome" style="margin-top:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px">
         <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>
