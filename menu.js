@@ -653,9 +653,10 @@
         'width:4px;height:4px;border-radius:50%;',
         'background:#38B6FF;',
         'box-shadow:0 0 4px 1px #38B6FF,0 0 9px 2px rgba(56,182,255,.45);',
+        // Perf : déplacement via transform (composité GPU) — left/top forcerait un layout par frame
         'transform:translate(-50%,-50%);',
-        'transition:transform .08s ease,width .2s,height .2s,background .2s;',
-        'will-change:left,top;',
+        'transition:width .2s,height .2s,background .2s;',
+        'will-change:transform;',
       '}',
       '#lt-cur-ring {',
         'position:fixed;top:0;left:0;z-index:99998;pointer-events:none;',
@@ -664,7 +665,7 @@
         'box-shadow:0 0 5px 1px rgba(56,182,255,.15);',
         'transform:translate(-50%,-50%);',
         'transition:width .25s,height .25s,border-color .25s;',
-        'will-change:left,top;',
+        'will-change:transform;',
       '}',
       'body.lt-cur-hover #lt-cur-dot {',
         'width:6px;height:6px;',
@@ -688,11 +689,17 @@
 
     var mx = window.innerWidth/2, my = window.innerHeight/2;
     var rx = mx, ry = my;
+    var dotScale = 1, ringScale = 1;
+
+    // Position + échelle composées en un seul transform (jamais left/top → pas de layout)
+    function drawDot(){  dot.style.transform  = 'translate3d('+mx+'px,'+my+'px,0) translate(-50%,-50%) scale('+dotScale+')'; }
+    function drawRing(){ ring.style.transform = 'translate3d('+rx+'px,'+ry+'px,0) translate(-50%,-50%) scale('+ringScale+')'; }
+    drawDot(); drawRing();
 
     document.addEventListener('mousemove', function(e){
       mx = e.clientX; my = e.clientY;
-      dot.style.left = mx + 'px';
-      dot.style.top  = my + 'px';
+      drawDot();
+      wakeLoop();
     });
 
     var hoverSel = 'a,button,input,select,textarea,[onclick],[role="button"]';
@@ -704,12 +711,12 @@
     });
 
     document.addEventListener('mousedown', function(){
-      dot.style.transform = 'translate(-50%,-50%) scale(0.6)';
-      ring.style.transform = 'translate(-50%,-50%) scale(0.85)';
+      dotScale = 0.6; ringScale = 0.85;
+      drawDot(); drawRing();
     });
     document.addEventListener('mouseup', function(){
-      dot.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+      dotScale = 1; ringScale = 1;
+      drawDot(); drawRing();
     });
 
     // Quand la souris entre dans un iframe (ex: TradingView bubble map),
@@ -728,13 +735,18 @@
     document.addEventListener('mousemove', function(){ lastMove = Date.now(); leaveIframe(); });
     setInterval(function(){ if(Date.now() - lastMove > 200) enterIframe(); }, 100);
 
-    (function loop(){
+    // Perf : la boucle rAF ne tourne que pendant le mouvement — quand l'anneau
+    // a rattrapé le point, elle s'arrête (zéro travail souris immobile).
+    var looping = false;
+    function wakeLoop(){ if(!looping){ looping = true; requestAnimationFrame(loop); } }
+    function loop(){
       rx += (mx - rx) * 0.13;
       ry += (my - ry) * 0.13;
-      ring.style.left = rx + 'px';
-      ring.style.top  = ry + 'px';
-      requestAnimationFrame(loop);
-    })();
+      if(Math.abs(mx - rx) < 0.1 && Math.abs(my - ry) < 0.1){ rx = mx; ry = my; looping = false; }
+      drawRing();
+      if(looping) requestAnimationFrame(loop);
+    }
+    wakeLoop();
   })();
 
 })();
