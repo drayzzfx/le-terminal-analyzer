@@ -408,6 +408,36 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
   </div>
 
+  <!-- ░ TABLEAU DE BORD (équité + derniers trades) — style maquette ░ -->
+  <style>
+  .jr-dash{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin:18px 0}
+  @media(max-width:880px){.jr-dash{grid-template-columns:1fr}}
+  .jr-panel{background:var(--surface,rgba(255,255,255,.02));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:16px;padding:18px 20px}
+  .jr-panel__title{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#8a93a5);margin-bottom:14px}
+  .jr-eq{width:100%;height:150px;display:block}
+  .jr-tbl{display:flex;flex-direction:column}
+  .jr-rowh,.jr-row2{display:grid;grid-template-columns:74px 1fr auto auto;gap:10px;align-items:center;padding:8px 4px}
+  .jr-rowh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3,#8a93a5);border-bottom:1px solid var(--border,rgba(255,255,255,.08))}
+  .jr-row2{border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}
+  .jr-row2:last-child{border-bottom:none}
+  .jr-row2 .jr-pair{font-weight:700;color:var(--text,#e8ecf4)}
+  .jr-side{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid}
+  .jr-side.long{color:var(--green);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08)}
+  .jr-side.short{color:var(--red);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
+  .jr-pnl2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-align:right;min-width:74px}
+  .jr-empty{color:var(--text3,#8a93a5);font-size:13px;padding:18px 4px;text-align:center}
+  </style>
+  <div class="jr-dash">
+    <div class="jr-panel">
+      <span class="jr-panel__title">Courbe d'équité</span>
+      <canvas id="jrEquity" class="jr-eq"></canvas>
+    </div>
+    <div class="jr-panel">
+      <span class="jr-panel__title">Derniers trades</span>
+      <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
+    </div>
+  </div>
+
 
 
   <!-- BROKER BANNER -->
@@ -2002,6 +2032,51 @@ async function importCsvTrades() {
 </script>
 
 <div id="journalPairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
+<script>
+(function(){
+  function jrSym(){ try{ return window.curSym?curSym():'€'; }catch(e){ return '€'; } }
+  function jrFmt(v){ v=Math.round(v); return (v>0?'+':v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR')+jrSym(); }
+  function jrTrades(){ try{ return window.trades||[]; }catch(e){ return []; } }
+  function jrDrawEquity(){
+    var c=document.getElementById('jrEquity'); if(!c) return;
+    var ctx=c.getContext('2d'), dpr=Math.min(window.devicePixelRatio||1,2);
+    var w=c.offsetWidth||600, h=c.offsetHeight||150; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    var arr=jrTrades().slice().sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
+    var series=[0],cum=0; arr.forEach(function(t){ cum+=parseFloat(t.pnl)||0; series.push(cum); });
+    if(series.length<2){ ctx.fillStyle='rgba(138,147,165,.55)'; ctx.font='12px sans-serif'; ctx.fillText('Pas encore assez de trades pour la courbe.',8,h/2); return; }
+    var min=Math.min.apply(null,series), max=Math.max.apply(null,series), rng=(max-min)||1;
+    var up=cum>=0, line=up?'rgba(52,211,153,0.9)':'rgba(248,113,113,0.9)', fillA=up?'rgba(52,211,153,0.14)':'rgba(248,113,113,0.14)';
+    ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+    for(var y=1;y<3;y++){ ctx.beginPath(); ctx.moveTo(0,h*y/3); ctx.lineTo(w,h*y/3); ctx.stroke(); }
+    var px=function(i){ return (i/(series.length-1))*w; }, py=function(v){ return h-8-((v-min)/rng)*(h-16); };
+    ctx.beginPath(); series.forEach(function(v,i){ i?ctx.lineTo(px(i),py(v)):ctx.moveTo(px(i),py(v)); });
+    ctx.strokeStyle=line; ctx.lineWidth=2; ctx.stroke();
+    ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
+    var g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,fillA); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fill();
+  }
+  function jrRenderRecent(){
+    var el=document.getElementById('jrRecent'); if(!el) return;
+    var arr=jrTrades().slice().sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,6);
+    if(!arr.length){ el.innerHTML='<div class="jr-empty">Aucun trade enregistré pour l\'instant.</div>'; return; }
+    var html='<div class="jr-rowh"><span>Date</span><span>Paire</span><span>Sens</span><span>P&amp;L</span></div>';
+    arr.forEach(function(t){
+      var pnl=parseFloat(t.pnl)||0, col=pnl>=0?'var(--green)':'var(--red)';
+      var side=String(t.dir||'').toLowerCase(); var sideCls=(side.indexOf('long')>=0||side.indexOf('achat')>=0||side.indexOf('buy')>=0)?'long':(side?'short':'');
+      html+='<div class="jr-row2"><span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3,#8a93a5)">'+(t.date||'—')+'</span>'
+          + '<span class="jr-pair">'+(t.pair||'—')+'</span>'
+          + '<span>'+(t.dir?'<span class="jr-side '+sideCls+'">'+t.dir+'</span>':'—')+'</span>'
+          + '<span class="jr-pnl2" style="color:'+col+'">'+jrFmt(pnl)+'</span></div>';
+    });
+    el.innerHTML=html;
+  }
+  function jrRender(){ try{ jrDrawEquity(); jrRenderRecent(); }catch(e){} }
+  window.jrRender=jrRender;
+  if(typeof window.renderStats==='function'){ var _rs=window.renderStats; window.renderStats=function(){ var r=_rs.apply(this,arguments); jrRender(); return r; }; }
+  window.addEventListener('load', function(){ setTimeout(jrRender,80); });
+  window.addEventListener('resize', function(){ try{ jrDrawEquity(); }catch(e){} });
+})();
+</script>
 <script src="./menu.js"></script>
 </body>
 </html>
