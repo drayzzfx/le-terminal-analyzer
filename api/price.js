@@ -12,6 +12,22 @@ const SYMBOL_MAP = {
   'BRENT': 'BZ=F',
   'BTCUSD': 'BTC-USD', 'BTC': 'BTC-USD',
   'ETHUSD': 'ETH-USD', 'ETH': 'ETH-USD',
+  'SOLUSD': 'SOL-USD', 'SOL': 'SOL-USD',
+  'XRPUSD': 'XRP-USD', 'XRP': 'XRP-USD',
+  'BNBUSD': 'BNB-USD', 'BNB': 'BNB-USD',
+  'DOGEUSD': 'DOGE-USD', 'DOGE': 'DOGE-USD',
+  'ADAUSD': 'ADA-USD', 'ADA': 'ADA-USD',
+  'AVAXUSD': 'AVAX-USD', 'AVAX': 'AVAX-USD',
+  'LINKUSD': 'LINK-USD', 'LINK': 'LINK-USD',
+  'DOTUSD': 'DOT-USD', 'DOT': 'DOT-USD',
+  'LTCUSD': 'LTC-USD', 'LTC': 'LTC-USD',
+  'MATICUSD': 'MATIC-USD', 'MATIC': 'MATIC-USD',
+  // Forex
+  'EURUSD': 'EURUSD=X', 'GBPUSD': 'GBPUSD=X', 'USDJPY': 'JPY=X',
+  'AUDUSD': 'AUDUSD=X', 'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'NZDUSD': 'NZDUSD=X',
+  // Indices supplémentaires
+  'JP225': '^N225', 'NIKKEI': '^N225', 'CAC40': '^FCHI', 'FR40': '^FCHI',
+  'HK50': '^HSI', 'AUS200': '^AXJO',
 };
 
 function fetchYahoo(yahooSym) {
