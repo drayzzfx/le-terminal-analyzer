@@ -13,13 +13,11 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = req.body;
-    console.log('[analyze] body type:', typeof body, 'keys:', body ? Object.keys(body) : 'null');
-
     const system = body && body.system;
     const messages = body && body.messages;
 
-    if (!messages) {
-      console.error('[analyze] Missing messages in body');
+    if (!messages || !Array.isArray(messages)) {
+      console.error('[analyze] ERR: missing or invalid messages. body keys:', body ? Object.keys(body) : 'null');
       return res.status(400).json({ error: 'Missing messages' });
     }
 
@@ -29,8 +27,6 @@ module.exports = async function handler(req, res) {
       system,
       messages
     });
-
-    console.log('[analyze] payload size:', payload.length, 'has system:', !!system, 'messages count:', messages.length);
 
     const result = await new Promise((resolve, reject) => {
       const options = {
@@ -60,14 +56,15 @@ module.exports = async function handler(req, res) {
     });
 
     if (result.status !== 200) {
-      console.error('[analyze] Anthropic error status:', result.status, 'body:', JSON.stringify(result.body).slice(0, 500));
-      const msg = result.body?.error?.message || JSON.stringify(result.body);
-      return res.status(result.status).json({ error: msg });
+      const errType = result.body?.error?.type || '?';
+      const errMsg = result.body?.error?.message || JSON.stringify(result.body).slice(0, 300);
+      console.error('[analyze] ERR ' + result.status + ' type=' + errType + ' msg=' + errMsg);
+      return res.status(result.status).json({ error: errMsg });
     }
     return res.status(200).json(result.body);
 
   } catch(err) {
-    console.error('[analyze] Exception:', err.message);
+    console.error('[analyze] EXCEPTION:', err.message);
     return res.status(500).json({ error: err.message });
   }
 };
