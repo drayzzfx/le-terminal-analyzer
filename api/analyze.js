@@ -48,7 +48,12 @@ module.exports = async function handler(req, res) {
       req2.end();
     });
 
-    return res.status(result.status).json(result.body);
+    if (result.status !== 200) {
+      console.error('[analyze] Anthropic error:', JSON.stringify(result.body));
+      const msg = result.body?.error?.message || JSON.stringify(result.body);
+      return res.status(result.status).json({ error: msg });
+    }
+    return res.status(200).json(result.body);
 
   } catch(err) {
     return res.status(500).json({ error: err.message });
