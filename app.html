@@ -294,11 +294,15 @@ body {
 .lang-btn.on { background: var(--v); color: white; }
 
 /* MAIN LAYOUT */
-.main {
-  max-width: 1060px;
-  margin: 0 auto;
-  padding: 40px 24px 80px;
-}
+.main { padding: 0; }
+/* Form — intégré au design (panneau, labels mono, bouton accent) */
+#formView{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:24px 24px 28px}
+#formView .form-section-title:first-child{margin-top:0}
+.form-section-title{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--accent,#7FB8E8)!important;letter-spacing:.14em!important}
+.lbl{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--text-muted,#8a93a5)!important;font-size:10px!important;letter-spacing:.12em!important;text-transform:uppercase!important}
+.analyze-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important}
+.analyze-btn::before{display:none!important}
+.analyze-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)!important}
 
 /* PAGE TITLE */
 .page-hero {
@@ -1049,11 +1053,13 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   </nav>
 
   <div class="main">
+  <div class="content">
 
-    <!-- Page title -->
-    <div class="page-hero">
-      <h2 class="page-title" id="page-title">Analyse ton <span>Setup</span></h2>
-      <p class="page-sub" id="page-sub">Configure ton trade, ajoute ton graphique. Score IA + feedback instantané.</p>
+    <!-- Page title — style maquette -->
+    <div class="page-head" style="margin-bottom:8px">
+      <span class="eyebrow"><span class="lt-dot"></span> Setup Analyzer</span>
+      <h1 id="page-title">Analyse de Setup</h1>
+      <p id="page-sub">Glisse la capture de ton setup. Le moteur IA propriétaire évalue la structure, les zones clés et les confluences de ta stratégie, puis rend un verdict net.</p>
     </div>
 
     <!-- FORM -->
@@ -1269,6 +1275,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
     </div>
 
   </div>
+  </div>
 </div>
 
 <script>
@@ -1295,8 +1302,8 @@ function enterApp(){
 // ── LANG ──
 const T={
   fr:{
-    pageTitle:'Analyse ton <span>Setup</span>',
-    pageSub:'Configure ton trade, ajoute ton graphique. Score IA + feedback instantané.',
+    pageTitle:'Analyse de Setup',
+    pageSub:'Glisse la capture de ton setup. Le moteur IA propriétaire évalue la structure, les zones clés et les confluences de ta stratégie, puis rend un verdict net.',
     fst1:'Trade', fst2:'Niveaux', fst3:'Contexte', fst4:'Graphique',
     lblPair:'Paire / Actif', lblDir:'Direction', lblTf:'Timeframe',
     lblEntry:'Entrée', lblTp:'Take Profit', lblSl:'Stop Loss',
@@ -1426,8 +1433,8 @@ FORMAT DE RÉPONSE — JSON UNIQUEMENT, sans markdown :
 Réponds en français.`
   },
   en:{
-    pageTitle:'Analyze your <span>Setup</span>',
-    pageSub:'Configure your trade, add your chart. AI score + instant feedback.',
+    pageTitle:'Setup Analysis',
+    pageSub:'Drop your setup screenshot. The proprietary AI engine evaluates structure, key zones and your strategy\'s confluences, then renders a clear verdict.',
     fst1:'Trade', fst2:'Levels', fst3:'Context', fst4:'Chart',
     lblPair:'Pair / Asset', lblDir:'Direction', lblTf:'Timeframe',
     lblEntry:'Entry', lblTp:'Take Profit', lblSl:'Stop Loss',
