@@ -267,16 +267,17 @@ function render() {
   wrap.appendChild(container);
 }
 
-// ── Vue Bulles (données réelles /api/price) ──
+// ── Vue Bulles (données réelles) ──
+// Cryptos : top du marché en direct via /api/bubbles (CoinGecko, façon CryptoBubbles).
+// Autres classes : /api/price (Yahoo). Repli crypto par /api/price si l'API échoue.
+var BUB_CRYPTO_FB=[
+  {sym:'BTCUSD',name:'BTC'},{sym:'ETHUSD',name:'ETH'},{sym:'SOLUSD',name:'SOL'},
+  {sym:'XRPUSD',name:'XRP'},{sym:'BNBUSD',name:'BNB'},{sym:'DOGEUSD',name:'DOGE'},
+  {sym:'ADAUSD',name:'ADA'},{sym:'AVAXUSD',name:'AVAX'},{sym:'LINKUSD',name:'LINK'},
+  {sym:'LTCUSD',name:'LTC'},{sym:'TRXUSD',name:'TRX'},{sym:'BCHUSD',name:'BCH'},
+  {sym:'XLMUSD',name:'XLM'},{sym:'NEARUSD',name:'NEAR'}
+];
 var BUB_ASSETS=[
-  // Crypto
-  {sym:'BTCUSD',name:'BTC',cls:'crypto'},{sym:'ETHUSD',name:'ETH',cls:'crypto'},
-  {sym:'SOLUSD',name:'SOL',cls:'crypto'},{sym:'XRPUSD',name:'XRP',cls:'crypto'},
-  {sym:'BNBUSD',name:'BNB',cls:'crypto'},{sym:'DOGEUSD',name:'DOGE',cls:'crypto'},
-  {sym:'ADAUSD',name:'ADA',cls:'crypto'},{sym:'AVAXUSD',name:'AVAX',cls:'crypto'},
-  {sym:'LINKUSD',name:'LINK',cls:'crypto'},{sym:'LTCUSD',name:'LTC',cls:'crypto'},
-  {sym:'TRXUSD',name:'TRX',cls:'crypto'},{sym:'BCHUSD',name:'BCH',cls:'crypto'},
-  {sym:'XLMUSD',name:'XLM',cls:'crypto'},{sym:'NEARUSD',name:'NEAR',cls:'crypto'},
   // Indices
   {sym:'US500',name:'US500',cls:'index'},{sym:'US100',name:'US100',cls:'index'},
   {sym:'US30',name:'US30',cls:'index'},{sym:'DAX',name:'DAX',cls:'index'},
@@ -312,16 +313,27 @@ function setView(v){
   if(!map) loadBubbles();
 }
 
+function bubFetchPrice(a, cls){
+  return fetch('/api/price?symbol='+a.sym).then(function(r){return r.json();}).then(function(d){
+    return {name:a.name,cls:cls||a.cls,change:(d&&typeof d.change==='number')?d.change:null};
+  }).catch(function(){ return {name:a.name,cls:cls||a.cls,change:null}; });
+}
 function loadBubbles(){
   if(bubLoaded){ renderBubbles(); return; }
   var stage=document.getElementById('bubStage');
   if(stage && !bubData.length) stage.innerHTML='<div class="bub-state">Chargement des flux…</div>';
-  Promise.all(BUB_ASSETS.map(function(a){
-    return fetch('/api/price?symbol='+a.sym).then(function(r){return r.json();}).then(function(d){
-      return {name:a.name,cls:a.cls,change:(d&&typeof d.change==='number')?d.change:null};
-    }).catch(function(){ return {name:a.name,cls:a.cls,change:null}; });
-  })).then(function(res){
-    bubData=res.filter(function(x){return x.change!==null;});
+  // Cryptos : top marché en direct (1 appel), repli sur /api/price si échec
+  var cryptos=fetch('/api/bubbles').then(function(r){return r.json();}).then(function(d){
+    if(d && d.assets && d.assets.length){
+      return d.assets.map(function(a){ return {name:a.name,cls:'crypto',change:a.change}; });
+    }
+    throw new Error('empty');
+  }).catch(function(){
+    return Promise.all(BUB_CRYPTO_FB.map(function(a){ return bubFetchPrice(a,'crypto'); }));
+  });
+  var others=Promise.all(BUB_ASSETS.map(function(a){ return bubFetchPrice(a); }));
+  Promise.all([cryptos, others]).then(function(res){
+    bubData=res[0].concat(res[1]).filter(function(x){return x && x.change!==null;});
     bubLoaded=true; renderBubbles();
   });
 }
@@ -338,15 +350,15 @@ function renderBubbles(){
   // Marge de collision élargie pour laisser la place au flottement (±12px).
   var placed=[];
   data.forEach(function(x,i){
-    var r=23+Math.round((Math.abs(x.change)/maxAbs)*41);
+    var r=17+Math.round((Math.abs(x.change)/maxAbs)*37);
     var ang=i*2.39996, px=0, py=0, ok=false;
-    for(var step=0; step<3400; step++){
-      var rad=step*1.3;
+    for(var step=0; step<4200; step++){
+      var rad=step*1.1;
       px=W/2+Math.cos(ang)*rad; py=H/2+Math.sin(ang)*rad*0.72;
-      ang+=0.29;
-      if(px-r<14||px+r>W-14||py-r<14||py+r>H-14) continue;
+      ang+=0.27;
+      if(px-r<12||px+r>W-12||py-r<12||py+r>H-12) continue;
       var coll=false;
-      for(var k=0;k<placed.length;k++){ var p=placed[k]; if(Math.hypot(p.x-px,p.y-py)<p.r+r+14){coll=true;break;} }
+      for(var k=0;k<placed.length;k++){ var p=placed[k]; if(Math.hypot(p.x-px,p.y-py)<p.r+r+12){coll=true;break;} }
       if(!coll){ok=true;break;}
     }
     if(ok) placed.push({x:px,y:py,r:r,d:x});
@@ -354,14 +366,14 @@ function renderBubbles(){
   stage.innerHTML=placed.map(function(p,i){
     var x=p.d, up=x.change>=0, col=up?'74,222,156':'240,100,122';
     var inten=Math.min(1,0.3+Math.abs(x.change)/maxAbs*0.6);
-    var fs=Math.max(10,Math.round(p.r*0.30)), fc=Math.max(8,Math.round(p.r*0.20));
-    // Paramètres de dérive uniques par bulle (lents : 9-15s, ±6-13px)
-    var fx=((i%2?1:-1)*(6+(i*7)%8)), fy=((i%3?-1:1)*(6+(i*5)%8));
-    var fd=(9+(i*13)%7)+'s', fdel='-'+((i*17)%90)/10+'s';
+    var fs=Math.max(9,Math.round(p.r*0.32)), fc=Math.max(8,Math.round(p.r*0.22));
+    // Paramètres de dérive uniques par bulle (visibles mais lisibles : 7-12s, ±10-22px)
+    var fx=((i%2?1:-1)*(10+(i*7)%13)), fy=((i%3?-1:1)*(10+(i*5)%13));
+    var fd=(7+(i*13)%6)+'s', fdel='-'+((i*17)%90)/10+'s';
+    var pct=(p.r>=22)?('<span class="bub-c" style="font-size:'+fc+'px;color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span>'):'';
     return '<div class="bub-w" style="left:'+Math.round(p.x-p.r)+'px;top:'+Math.round(p.y-p.r)+'px;width:'+(p.r*2)+'px;height:'+(p.r*2)+'px;--fx:'+fx+'px;--fy:'+fy+'px;--fd:'+fd+';--fdel:'+fdel+'">'
       +'<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="background:rgba('+col+','+(inten*0.14).toFixed(2)+');border-color:rgba('+col+',.7);box-shadow:0 0 24px rgba('+col+',.12) inset">'
-      +'<span class="bub-n" style="font-size:'+fs+'px">'+x.name+'</span>'
-      +'<span class="bub-c" style="font-size:'+fc+'px;color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span></div></div>';
+      +'<span class="bub-n" style="font-size:'+fs+'px">'+x.name+'</span>'+pct+'</div></div>';
   }).join('');
   var ups=bubData.filter(function(x){return x.change>=0;}).length, downs=bubData.length-ups;
   var st=document.getElementById('bubStats');
