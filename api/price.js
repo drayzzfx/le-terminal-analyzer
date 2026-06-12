@@ -25,9 +25,20 @@ const SYMBOL_MAP = {
   // Forex
   'EURUSD': 'EURUSD=X', 'GBPUSD': 'GBPUSD=X', 'USDJPY': 'JPY=X',
   'AUDUSD': 'AUDUSD=X', 'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'NZDUSD': 'NZDUSD=X',
+  'EURGBP': 'EURGBP=X', 'EURJPY': 'EURJPY=X', 'GBPJPY': 'GBPJPY=X',
   // Indices supplémentaires
   'JP225': '^N225', 'NIKKEI': '^N225', 'CAC40': '^FCHI', 'FR40': '^FCHI',
   'HK50': '^HSI', 'AUS200': '^AXJO',
+  // Actions US
+  'NVDA': 'NVDA', 'AAPL': 'AAPL', 'TSLA': 'TSLA', 'MSFT': 'MSFT',
+  'AMZN': 'AMZN', 'META': 'META', 'GOOGL': 'GOOGL', 'AMD': 'AMD', 'NFLX': 'NFLX',
+  // Matières premières supplémentaires
+  'NATGAS': 'NG=F', 'COPPER': 'HG=F', 'PLATINUM': 'PL=F',
+  // Crypto supplémentaires
+  'TRXUSD': 'TRX-USD', 'TRX': 'TRX-USD',
+  'BCHUSD': 'BCH-USD', 'BCH': 'BCH-USD',
+  'XLMUSD': 'XLM-USD', 'XLM': 'XLM-USD',
+  'NEARUSD': 'NEAR-USD', 'NEAR': 'NEAR-USD',
 };
 
 function fetchYahoo(yahooSym) {
