@@ -109,8 +109,16 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 .bub-stats .up{color:#4ADE9C}.bub-stats .dn{color:#F0647A}
 /* Scène : cluster sur fond quadrillé (maquette) */
 .bub-stage{position:relative;height:640px;border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:12px;overflow:hidden;background-image:linear-gradient(rgba(127,184,232,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,184,232,.05) 1px,transparent 1px);background-size:72px 72px}
-.bub{position:absolute;border-radius:50%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .2s;cursor:default}
-.bub:hover{transform:scale(1.06);z-index:5}
+/* Flottement continu : chaque bulle dérive lentement (lisible), via un wrapper
+   pour ne pas entrer en conflit avec le scale au survol */
+.bub-w{position:absolute}
+.bub-w:hover{z-index:6}
+@media (prefers-reduced-motion: no-preference){
+  .bub-w{animation:bubFloat var(--fd,11s) ease-in-out var(--fdel,0s) infinite alternate}
+}
+@keyframes bubFloat{from{transform:translate(0,0)}to{transform:translate(var(--fx,8px),var(--fy,-10px))}}
+.bub{position:relative;width:100%;height:100%;border-radius:50%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .2s;cursor:default}
+.bub:hover{transform:scale(1.08)}
 .bub-n{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;color:#fff;line-height:1}
 .bub-c{font-family:'JetBrains Mono',monospace;margin-top:4px}
 .bub-state{color:var(--text3,#8a93a5);font-size:13px;padding:40px;text-align:center;width:100%}
@@ -134,6 +142,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
       <button class="bub-f" data-cls="crypto">Crypto</button>
       <button class="bub-f" data-cls="forex">Forex</button>
       <button class="bub-f" data-cls="index">Indices</button>
+      <button class="bub-f" data-cls="stock">Actions</button>
       <button class="bub-f" data-cls="commodity">Mat. premières</button>
     </div>
     <div class="bub-stats" id="bubStats"></div>
@@ -266,6 +275,8 @@ var BUB_ASSETS=[
   {sym:'BNBUSD',name:'BNB',cls:'crypto'},{sym:'DOGEUSD',name:'DOGE',cls:'crypto'},
   {sym:'ADAUSD',name:'ADA',cls:'crypto'},{sym:'AVAXUSD',name:'AVAX',cls:'crypto'},
   {sym:'LINKUSD',name:'LINK',cls:'crypto'},{sym:'LTCUSD',name:'LTC',cls:'crypto'},
+  {sym:'TRXUSD',name:'TRX',cls:'crypto'},{sym:'BCHUSD',name:'BCH',cls:'crypto'},
+  {sym:'XLMUSD',name:'XLM',cls:'crypto'},{sym:'NEARUSD',name:'NEAR',cls:'crypto'},
   // Indices
   {sym:'US500',name:'US500',cls:'index'},{sym:'US100',name:'US100',cls:'index'},
   {sym:'US30',name:'US30',cls:'index'},{sym:'DAX',name:'DAX',cls:'index'},
@@ -274,10 +285,17 @@ var BUB_ASSETS=[
   // Matières premières
   {sym:'XAUUSD',name:'GOLD',cls:'commodity'},{sym:'XAGUSD',name:'SILVER',cls:'commodity'},
   {sym:'USOIL',name:'WTI',cls:'commodity'},{sym:'BRENT',name:'BRENT',cls:'commodity'},
+  {sym:'NATGAS',name:'NATGAS',cls:'commodity'},{sym:'COPPER',name:'COPPER',cls:'commodity'},
+  {sym:'PLATINUM',name:'PLATINUM',cls:'commodity'},
   // Forex
   {sym:'EURUSD',name:'EUR/USD',cls:'forex'},{sym:'GBPUSD',name:'GBP/USD',cls:'forex'},
   {sym:'USDJPY',name:'USD/JPY',cls:'forex'},{sym:'AUDUSD',name:'AUD/USD',cls:'forex'},
-  {sym:'USDCAD',name:'USD/CAD',cls:'forex'}
+  {sym:'USDCAD',name:'USD/CAD',cls:'forex'},{sym:'EURGBP',name:'EUR/GBP',cls:'forex'},
+  {sym:'EURJPY',name:'EUR/JPY',cls:'forex'},{sym:'GBPJPY',name:'GBP/JPY',cls:'forex'},
+  // Actions US
+  {sym:'NVDA',name:'NVDA',cls:'stock'},{sym:'AAPL',name:'AAPL',cls:'stock'},
+  {sym:'TSLA',name:'TSLA',cls:'stock'},{sym:'MSFT',name:'MSFT',cls:'stock'},
+  {sym:'AMZN',name:'AMZN',cls:'stock'},{sym:'META',name:'META',cls:'stock'}
 ];
 var bubData=[], bubCls='all', bubLoaded=false;
 
@@ -296,7 +314,8 @@ function setView(v){
 
 function loadBubbles(){
   if(bubLoaded){ renderBubbles(); return; }
-  var stage=document.getElementById('bubStage'); if(stage) stage.innerHTML='<div class="bub-state">Chargement des flux…</div>';
+  var stage=document.getElementById('bubStage');
+  if(stage && !bubData.length) stage.innerHTML='<div class="bub-state">Chargement des flux…</div>';
   Promise.all(BUB_ASSETS.map(function(a){
     return fetch('/api/price?symbol='+a.sym).then(function(r){return r.json();}).then(function(d){
       return {name:a.name,cls:a.cls,change:(d&&typeof d.change==='number')?d.change:null};
@@ -315,29 +334,34 @@ function renderBubbles(){
   var W=stage.clientWidth||1100, H=stage.clientHeight||640;
   var maxAbs=Math.max.apply(null,data.map(function(x){return Math.abs(x.change);}).concat([0.5]));
   data=data.slice().sort(function(a,b){return Math.abs(b.change)-Math.abs(a.change);});
-  // Placement en cluster : spirale depuis le centre, sans chevauchement (maquette)
+  // Placement en cluster : spirale depuis le centre, sans chevauchement (maquette).
+  // Marge de collision élargie pour laisser la place au flottement (±12px).
   var placed=[];
   data.forEach(function(x,i){
-    var r=36+Math.round((Math.abs(x.change)/maxAbs)*54);
+    var r=23+Math.round((Math.abs(x.change)/maxAbs)*41);
     var ang=i*2.39996, px=0, py=0, ok=false;
-    for(var step=0; step<2400; step++){
-      var rad=step*1.6;
+    for(var step=0; step<3400; step++){
+      var rad=step*1.3;
       px=W/2+Math.cos(ang)*rad; py=H/2+Math.sin(ang)*rad*0.72;
-      ang+=0.33;
-      if(px-r<10||px+r>W-10||py-r<10||py+r>H-10) continue;
+      ang+=0.29;
+      if(px-r<14||px+r>W-14||py-r<14||py+r>H-14) continue;
       var coll=false;
-      for(var k=0;k<placed.length;k++){ var p=placed[k]; if(Math.hypot(p.x-px,p.y-py)<p.r+r+10){coll=true;break;} }
+      for(var k=0;k<placed.length;k++){ var p=placed[k]; if(Math.hypot(p.x-px,p.y-py)<p.r+r+14){coll=true;break;} }
       if(!coll){ok=true;break;}
     }
     if(ok) placed.push({x:px,y:py,r:r,d:x});
   });
-  stage.innerHTML=placed.map(function(p){
+  stage.innerHTML=placed.map(function(p,i){
     var x=p.d, up=x.change>=0, col=up?'74,222,156':'240,100,122';
     var inten=Math.min(1,0.3+Math.abs(x.change)/maxAbs*0.6);
-    var fs=Math.max(11,Math.round(p.r*0.30)), fc=Math.max(9,Math.round(p.r*0.20));
-    return '<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="left:'+Math.round(p.x-p.r)+'px;top:'+Math.round(p.y-p.r)+'px;width:'+(p.r*2)+'px;height:'+(p.r*2)+'px;background:rgba('+col+','+(inten*0.14).toFixed(2)+');border-color:rgba('+col+',.7);box-shadow:0 0 24px rgba('+col+',.12) inset">'
+    var fs=Math.max(10,Math.round(p.r*0.30)), fc=Math.max(8,Math.round(p.r*0.20));
+    // Paramètres de dérive uniques par bulle (lents : 9-15s, ±6-13px)
+    var fx=((i%2?1:-1)*(6+(i*7)%8)), fy=((i%3?-1:1)*(6+(i*5)%8));
+    var fd=(9+(i*13)%7)+'s', fdel='-'+((i*17)%90)/10+'s';
+    return '<div class="bub-w" style="left:'+Math.round(p.x-p.r)+'px;top:'+Math.round(p.y-p.r)+'px;width:'+(p.r*2)+'px;height:'+(p.r*2)+'px;--fx:'+fx+'px;--fy:'+fy+'px;--fd:'+fd+';--fdel:'+fdel+'">'
+      +'<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="background:rgba('+col+','+(inten*0.14).toFixed(2)+');border-color:rgba('+col+',.7);box-shadow:0 0 24px rgba('+col+',.12) inset">'
       +'<span class="bub-n" style="font-size:'+fs+'px">'+x.name+'</span>'
-      +'<span class="bub-c" style="font-size:'+fc+'px;color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span></div>';
+      +'<span class="bub-c" style="font-size:'+fc+'px;color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span></div></div>';
   }).join('');
   var ups=bubData.filter(function(x){return x.change>=0;}).length, downs=bubData.length-ups;
   var st=document.getElementById('bubStats');
@@ -345,6 +369,13 @@ function renderBubbles(){
 }
 var _bubRz=null;
 window.addEventListener('resize',function(){ clearTimeout(_bubRz); _bubRz=setTimeout(function(){ if(document.getElementById('bubbleWrap').style.display!=='none') renderBubbles(); },200); });
+// Données en direct : rafraîchit les variations toutes les 90 s (onglet visible uniquement)
+setInterval(function(){
+  if(document.hidden) return;
+  var bw=document.getElementById('bubbleWrap');
+  if(!bw || bw.style.display==='none') return;
+  bubLoaded=false; loadBubbles();
+}, 90000);
 
 (function(){
   var f=document.getElementById('bubFilters');
