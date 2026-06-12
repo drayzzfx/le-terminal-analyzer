@@ -17,12 +17,12 @@
 <link rel="dns-prefetch" href="https://s3.tradingview.com">
 <link rel="preconnect" href="https://www.tradingview-widget.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.tradingview-widget.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <style>
 :root{--bg-panel:#10141B;--v:var(--accent-deep);--v2:var(--accent);--text:var(--text-title);--text2:var(--text-body);--text3:var(--text-muted);--green:var(--bull)}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
-body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);display:flex;flex-direction:column;height:100vh;overflow:hidden;padding-top:var(--chrome-h,64px)}
+body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
 
 /* Barre d'onglets (sélecteur de marché) */
 .eco-tabs{display:flex;align-items:center;gap:2px;padding:0 18px;background:rgba(8,11,16,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-subtle);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
@@ -38,9 +38,9 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 .ld{width:6px;height:6px;border-radius:50%;background:var(--bull);box-shadow:0 0 8px var(--bull-glow);animation:p 2s ease-in-out infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 
-@media (min-width:761px){ .eco-tabs{padding-left:74px} .foot{padding-left:74px} }
+.eco-tabs{border:1px solid var(--border-subtle);border-radius:12px 12px 0 0}
 
-.map{flex:1;min-height:0;position:relative;background:#0B0E13}
+.map{position:relative;height:68vh;min-height:460px;background:#0B0E13;border:1px solid var(--border-subtle);border-top:none}
 .map .tradingview-widget-container{position:absolute;top:0;left:0;right:0;bottom:0}
 .map .tradingview-widget-container__widget{width:100%;height:100%}
 .map-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0B0E13;z-index:10;transition:opacity .4s}
@@ -48,7 +48,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 .map-loader-bar{width:120px;height:3px;background:var(--border-subtle);border-radius:4px;overflow:hidden}
 .map-loader-bar::after{content:'';display:block;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--accent-glow),transparent);animation:shimmer 1.2s infinite}
 @keyframes shimmer{from{transform:translateX(-200%)}to{transform:translateX(400%)}}
-.foot{display:flex;align-items:center;gap:12px;padding:6px 16px;background:rgba(8,11,16,.9);border-top:1px solid var(--border-subtle);flex-shrink:0;flex-wrap:wrap}
+.foot{display:flex;align-items:center;gap:12px;padding:8px 16px;background:rgba(8,11,16,.9);border:1px solid var(--border-subtle);border-top:none;border-radius:0 0 12px 12px;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
 .ldc{width:8px;height:8px;border-radius:50%}
 .src{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-left:auto}
@@ -98,59 +98,36 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
 </nav>
 
-<div class="main">
-<nav class="eco-tabs">
-  <button class="eco-tab on" onclick="setMkt('crypto',this)">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>
-    Crypto
-  </button>
-  <button class="eco-tab" onclick="setMkt('forex',this)">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2c2.5 2.5 2.5 15 0 18M12 2c-2.5 2.5-2.5 15 0 18"/></svg>
-    Forex
-  </button>
-  <button class="eco-tab" onclick="setMkt('stocks',this)">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Actions US
-  </button>
-  <button class="eco-tab" onclick="setMkt('etf',this)">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-    ETF
-  </button>
-  <div class="sz-group" id="szG">
-    <button class="sz-btn on" onclick="setSz('market_cap_calc',this)">Cap.</button>
-    <button class="sz-btn" onclick="setSz('volume',this)">Volume</button>
-  </div>
-  <div class="view-toggle" style="display:inline-flex;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:50px;overflow:hidden;margin-left:8px">
-    <button class="vt-btn on" id="vtMap" onclick="setView('map')">Heatmap</button>
-    <button class="vt-btn" id="vtBub" onclick="setView('bubbles')">Bulles</button>
-  </div>
-  <div class="live" id="tvLive"><div class="ld"></div>TradingView</div>
-</nav>
-
-<div class="map" id="mapWrap">
-  <div class="map-loader" id="mapLoader">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
-    <div class="map-loader-bar"></div>
-  </div>
-</div>
-
 <style>
 .vt-btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;background:transparent;border:none;color:var(--text3,#8a93a5);cursor:pointer;transition:all .2s}
 .vt-btn.on{background:rgba(56,182,255,.16);color:#9fd4ff}
-.bub-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 20px}
+.bub-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .bub-filters{display:flex;gap:8px;flex-wrap:wrap}
 .bub-f{font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 16px;border-radius:50px;border:1px solid var(--border,rgba(255,255,255,.1));background:transparent;color:var(--text3,#8a93a5);cursor:pointer;transition:all .2s}
 .bub-f.on{background:rgba(56,182,255,.12);border-color:rgba(56,182,255,.5);color:#9fd4ff}
-.bub-stats{margin-left:auto;display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.bub-stats{margin-left:auto;display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:12px;align-items:center}
 .bub-stats .up{color:#4ADE9C}.bub-stats .dn{color:#F0647A}
-.bub-stage{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:12px;padding:24px;min-height:56vh}
-.bub{border-radius:50%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .2s;cursor:default}
-.bub:hover{transform:scale(1.07)}
-.bub-n{font-family:'Bricolage Grotesque','Anton',sans-serif;font-weight:700;font-size:15px;color:#fff;line-height:1}
-.bub-c{font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px}
+/* Scène : cluster sur fond quadrillé (maquette) */
+.bub-stage{position:relative;height:640px;border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:12px;overflow:hidden;background-image:linear-gradient(rgba(127,184,232,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,184,232,.05) 1px,transparent 1px);background-size:72px 72px}
+.bub{position:absolute;border-radius:50%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .2s;cursor:default}
+.bub:hover{transform:scale(1.06);z-index:5}
+.bub-n{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;color:#fff;line-height:1}
+.bub-c{font-family:'JetBrains Mono',monospace;margin-top:4px}
 .bub-state{color:var(--text3,#8a93a5);font-size:13px;padding:40px;text-align:center;width:100%}
+@media(max-width:760px){.bub-stage{height:480px}}
 </style>
-<div class="bub-wrap" id="bubbleWrap" style="display:none">
+
+<div class="main">
+<div class="content">
+
+  <!-- PAGE HEAD — maquette -->
+  <div class="page-head" style="margin-bottom:4px">
+    <span class="eyebrow"><span class="lt-dot"></span> Flux de capitaux</span>
+    <h1>Bubble Map</h1>
+    <p>Les flux de capitaux entre actifs en temps réel. Taille = volume du flux, couleur = direction sur 24 h. Survole une bulle pour le détail.</p>
+  </div>
+
+  <!-- BARRE : filtres (bulles) + stats + bascule de vue -->
   <div class="bub-bar">
     <div class="bub-filters" id="bubFilters">
       <button class="bub-f on" data-cls="all">Tous</button>
@@ -160,17 +137,58 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
       <button class="bub-f" data-cls="commodity">Mat. premières</button>
     </div>
     <div class="bub-stats" id="bubStats"></div>
+    <div class="view-toggle" style="display:inline-flex;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:50px;overflow:hidden">
+      <button class="vt-btn on" id="vtBub" onclick="setView('bubbles')">Bulles</button>
+      <button class="vt-btn" id="vtMap" onclick="setView('map')">Heatmap</button>
+    </div>
   </div>
-  <div class="bub-stage" id="bubStage"><div class="bub-state">Chargement des flux…</div></div>
-</div>
 
-<div class="foot">
-  <div class="leg"><div class="ldc" style="background:#1a9e6e"></div>Forte hausse</div>
-  <div class="leg"><div class="ldc" style="background:#4caf80"></div>Hausse</div>
-  <div class="leg"><div class="ldc" style="background:#888"></div>Neutre</div>
-  <div class="leg"><div class="ldc" style="background:#ef5350"></div>Baisse</div>
-  <div class="leg"><div class="ldc" style="background:#c62828"></div>Forte baisse</div>
-  <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
+  <!-- VUE BULLES (défaut) -->
+  <div class="bub-wrap" id="bubbleWrap">
+    <div class="bub-stage" id="bubStage"><div class="bub-state">Chargement des flux…</div></div>
+  </div>
+
+  <!-- VUE HEATMAP (TradingView) -->
+  <div id="heatWrap" style="display:none">
+    <nav class="eco-tabs">
+      <button class="eco-tab on" onclick="setMkt('crypto',this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17m2.4-9.5V6m0 12.5V17"/></svg>
+        Crypto
+      </button>
+      <button class="eco-tab" onclick="setMkt('forex',this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2c2.5 2.5 2.5 15 0 18M12 2c-2.5 2.5-2.5 15 0 18"/></svg>
+        Forex
+      </button>
+      <button class="eco-tab" onclick="setMkt('stocks',this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Actions US
+      </button>
+      <button class="eco-tab" onclick="setMkt('etf',this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        ETF
+      </button>
+      <div class="sz-group" id="szG">
+        <button class="sz-btn on" onclick="setSz('market_cap_calc',this)">Cap.</button>
+        <button class="sz-btn" onclick="setSz('volume',this)">Volume</button>
+      </div>
+      <div class="live" id="tvLive"><div class="ld"></div>TradingView</div>
+    </nav>
+    <div class="map" id="mapWrap">
+      <div class="map-loader" id="mapLoader">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2.5"/><circle cx="6" cy="17" r="1.5"/><circle cx="18" cy="16" r="2"/></svg>
+        <div class="map-loader-bar"></div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="leg"><div class="ldc" style="background:#1a9e6e"></div>Forte hausse</div>
+      <div class="leg"><div class="ldc" style="background:#4caf80"></div>Hausse</div>
+      <div class="leg"><div class="ldc" style="background:#888"></div>Neutre</div>
+      <div class="leg"><div class="ldc" style="background:#ef5350"></div>Baisse</div>
+      <div class="leg"><div class="ldc" style="background:#c62828"></div>Forte baisse</div>
+      <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
+    </div>
+  </div>
+
 </div>
 </div>
 
@@ -263,15 +281,16 @@ var BUB_ASSETS=[
 ];
 var bubData=[], bubCls='all', bubLoaded=false;
 
+var mapBuilt=false;
 function setView(v){
   var map=v==='map';
   document.getElementById('vtMap').classList.toggle('on',map);
   document.getElementById('vtBub').classList.toggle('on',!map);
-  document.getElementById('mapWrap').style.display=map?'':'none';
+  document.getElementById('heatWrap').style.display=map?'':'none';
   document.getElementById('bubbleWrap').style.display=map?'none':'';
-  document.querySelectorAll('.eco-tab').forEach(function(b){ b.style.display=map?'':'none'; });
-  var szG=document.getElementById('szG'); if(szG) szG.style.visibility=(map&&mkt==='crypto')?'visible':'hidden';
-  var tv=document.getElementById('tvLive'); if(tv) tv.style.display=map?'':'none';
+  var f=document.getElementById('bubFilters'); if(f) f.style.display=map?'none':'';
+  var st=document.getElementById('bubStats'); if(st) st.style.display=map?'none':'';
+  if(map && !mapBuilt){ render(); mapBuilt=true; }
   if(!map) loadBubbles();
 }
 
@@ -293,20 +312,39 @@ function renderBubbles(){
   if(!bubData.length){ stage.innerHTML='<div class="bub-state">Données de flux indisponibles pour le moment.</div>'; return; }
   var data=bubData.filter(function(x){ return bubCls==='all'||x.cls===bubCls; });
   if(!data.length){ stage.innerHTML='<div class="bub-state">Aucun actif pour ce filtre.</div>'; return; }
+  var W=stage.clientWidth||1100, H=stage.clientHeight||640;
   var maxAbs=Math.max.apply(null,data.map(function(x){return Math.abs(x.change);}).concat([0.5]));
-  data.sort(function(a,b){return Math.abs(b.change)-Math.abs(a.change);});
-  stage.innerHTML=data.map(function(x){
-    var sz=72+Math.round((Math.abs(x.change)/maxAbs)*92);
-    var up=x.change>=0, col=up?'74,222,156':'240,100,122';
+  data=data.slice().sort(function(a,b){return Math.abs(b.change)-Math.abs(a.change);});
+  // Placement en cluster : spirale depuis le centre, sans chevauchement (maquette)
+  var placed=[];
+  data.forEach(function(x,i){
+    var r=36+Math.round((Math.abs(x.change)/maxAbs)*54);
+    var ang=i*2.39996, px=0, py=0, ok=false;
+    for(var step=0; step<2400; step++){
+      var rad=step*1.6;
+      px=W/2+Math.cos(ang)*rad; py=H/2+Math.sin(ang)*rad*0.72;
+      ang+=0.33;
+      if(px-r<10||px+r>W-10||py-r<10||py+r>H-10) continue;
+      var coll=false;
+      for(var k=0;k<placed.length;k++){ var p=placed[k]; if(Math.hypot(p.x-px,p.y-py)<p.r+r+10){coll=true;break;} }
+      if(!coll){ok=true;break;}
+    }
+    if(ok) placed.push({x:px,y:py,r:r,d:x});
+  });
+  stage.innerHTML=placed.map(function(p){
+    var x=p.d, up=x.change>=0, col=up?'74,222,156':'240,100,122';
     var inten=Math.min(1,0.3+Math.abs(x.change)/maxAbs*0.6);
-    return '<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="width:'+sz+'px;height:'+sz+'px;background:rgba('+col+','+(inten*0.16).toFixed(2)+');border-color:rgba('+col+',.7)">'
-      +'<span class="bub-n">'+x.name+'</span>'
-      +'<span class="bub-c" style="color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span></div>';
+    var fs=Math.max(11,Math.round(p.r*0.30)), fc=Math.max(9,Math.round(p.r*0.20));
+    return '<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="left:'+Math.round(p.x-p.r)+'px;top:'+Math.round(p.y-p.r)+'px;width:'+(p.r*2)+'px;height:'+(p.r*2)+'px;background:rgba('+col+','+(inten*0.14).toFixed(2)+');border-color:rgba('+col+',.7);box-shadow:0 0 24px rgba('+col+',.12) inset">'
+      +'<span class="bub-n" style="font-size:'+fs+'px">'+x.name+'</span>'
+      +'<span class="bub-c" style="font-size:'+fc+'px;color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span></div>';
   }).join('');
   var ups=bubData.filter(function(x){return x.change>=0;}).length, downs=bubData.length-ups;
   var st=document.getElementById('bubStats');
-  if(st) st.innerHTML='<span class="up">● '+ups+' en hausse</span><span class="dn">● '+downs+' en baisse</span>';
+  if(st) st.innerHTML='<span class="up">● Entrées '+ups+'</span><span class="dn">● Sorties '+downs+'</span>';
 }
+var _bubRz=null;
+window.addEventListener('resize',function(){ clearTimeout(_bubRz); _bubRz=setTimeout(function(){ if(document.getElementById('bubbleWrap').style.display!=='none') renderBubbles(); },200); });
 
 (function(){
   var f=document.getElementById('bubFilters');
@@ -319,7 +357,7 @@ function renderBubbles(){
 })();
 
 window.addEventListener('scroll',function(){var c=document.getElementById('ltChrome');if(c)c.classList.toggle('is-scrolled',window.scrollY>24);});
-render();
+setView('bubbles'); // vue Bulles par défaut (maquette) — la heatmap se construit au 1er clic
 </script>
 
 <script src="./appshell.js"></script>
