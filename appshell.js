@@ -66,6 +66,21 @@
   app.appendChild(main);
   main.insertBefore(top, main.firstChild);
 
+  // ── corrige le double décalage : .app gère déjà l'espace sous le chrome,
+  //    donc on neutralise le padding-top du body (sinon barre noire au-dessus). ──
+  document.body.style.setProperty('padding-top', '0', 'important');
+
+  // ── barres d'onglets résiduelles (ex. Historique/Perfs de l'Analyzer), sœurs
+  //    directes de .app : on les rentre dans .main pour que la barre latérale
+  //    démarre bien en haut, sans perdre les onglets. ──
+  Array.prototype.slice.call(app.parentNode.children).forEach(function (el) {
+    if (el !== app && el.classList && el.classList.contains('analyzer-tabs')) {
+      el.style.position = 'static';
+      el.style.paddingLeft = '0';
+      main.insertBefore(el, top.nextSibling);
+    }
+  });
+
   // ── dock icônes → mobile uniquement (la barre latérale prend le relais sur desktop) ──
   var dock = document.querySelector('nav.lt-dock:not(.lt-dock--mobile-only)');
   if (dock) dock.classList.add('lt-dock--mobile-only');
