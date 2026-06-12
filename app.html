@@ -1021,10 +1021,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="lt-nav__actions">
         <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
         <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
-        <div class="user-chip" id="userChip" onclick="openHistory()">
-          <div class="user-avatar" id="userAvatar">?</div>
-          <span class="user-name" id="userName">Mon compte</span>
-        </div>
+        <div id="ltUserBar"></div>
         <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
       </div>
     </header>
@@ -2541,8 +2538,8 @@ function updateUserUI(){
     if(lb) lb.style.display='none';
     if(uc) uc.classList.add('show');
     var em=currentUser.email||'';
-    document.getElementById('userAvatar').textContent=em.charAt(0).toUpperCase();
-    document.getElementById('userName').textContent=em.split('@')[0];
+    var _av=document.getElementById('userAvatar'); if(_av) _av.textContent=em.charAt(0).toUpperCase();
+    var _un=document.getElementById('userName'); if(_un) _un.textContent=em.split('@')[0];
     if(sli) sli.style.display='none';
     if(sui){ sui.style.display='block'; document.getElementById('sideUserEmail').textContent=em; }
   } else {
