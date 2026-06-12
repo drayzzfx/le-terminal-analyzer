@@ -382,10 +382,11 @@
     if(!token || !email) { bar.innerHTML = ''; return; }
     var initial = email.charAt(0).toUpperCase();
     var username = email.split('@')[0];
+    // Style unifié (maquette) : chip avatar + nom, sans badge ★PRO ni bouton rouge.
+    // La déconnexion reste accessible via le menu (pastille FR → « Se déconnecter »).
     bar.innerHTML =
-      (isPro ? '<div class="lt-ub-pro"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> PRO</div>' : '') +
-      '<div class="lt-ub-chip"><div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>' +
-      '<button class="lt-ub-logout" onclick="ltGlobalLogout()">Déconnexion</button>';
+      '<div class="lt-ub-chip" style="cursor:pointer" title="' + email + (isPro ? ' · PRO' : '') + '" onclick="window.ltOpenMenu&&ltOpenMenu()">' +
+      '<div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>';
   }
 
   function _ltClearAllAccountData() {
