@@ -2823,6 +2823,7 @@ async function loadHistory(){
 function renderHistory(){
   if(!Array.isArray(historyData)) historyData=[];
   var list=document.getElementById('historyList');
+  if(!list) return; // panneau pas encore dans le DOM (réponse réseau plus rapide que le parse)
   if(!historyData.length){list.innerHTML='<div class="history-empty">Aucune analyse encore<br>Lance ta première analyse !</div>';return;}
   list.innerHTML=historyData.map(function(item,i){
     var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
