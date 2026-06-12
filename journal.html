@@ -6,7 +6,7 @@
 <title>LE TERMINAL — Journal de Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <style>
 :root {
@@ -105,7 +105,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .cal-day.loss:hover{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)}
 .cal-day.breakeven{background:rgba(251,191,36,.05);border-color:rgba(251,191,36,.2)}
 .day-num{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);line-height:1}
-.day-pnl{font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;margin-top:4px}
+.day-pnl{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;margin-top:4px}
 .day-pnl.pos{color:var(--green)}
 .day-pnl.neg{color:var(--red)}
 .day-pnl.be{color:var(--amber)}
@@ -352,10 +352,6 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <a href="./index.html#community">Communauté</a>
     </nav>
     <div class="lt-nav__actions">
-      <div class="currency-toggle">
-        <button class="cur-btn on" onclick="setCurrency('EUR')">€</button>
-        <button class="cur-btn" onclick="setCurrency('USD')">$</button>
-      </div>
       <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
       <div class="user-chip" id="userChip">
@@ -379,33 +375,34 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
 <div class="main">
 
-  <!-- HERO -->
-  <div class="page-hero">
-    <h1>Mon <span>Journal</span> de Trading</h1>
-    <p>Enregistre chaque trade · Suis ta progression · Analyse tes patterns avec l'IA</p>
+  <!-- HERO — style maquette -->
+  <div class="page-head" style="margin-bottom:24px">
+    <span class="eyebrow"><span class="lt-dot"></span> Suivi de performance</span>
+    <h1>Journal de Trading</h1>
+    <p>Ton mois en un coup d'œil : P&L par jour, win rate, et l'analyse IA de tes patterns de performance.</p>
   </div>
 
-  <!-- STATS -->
+  <!-- STATS — P&L en premier, style maquette -->
   <div class="stats-row" id="statsRow">
-    <div class="stat-card">
-      <div class="stat-val" id="statTotal" style="color:var(--v2)">0</div>
-      <div class="stat-lbl">Trades</div>
+    <div class="jr-stat">
+      <span class="jr-stat__l">P&L Total</span>
+      <span class="jr-stat__v" id="statPnL" style="color:var(--green)">—</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statWR" style="color:var(--green)">—</div>
-      <div class="stat-lbl">Win Rate</div>
+    <div class="jr-stat">
+      <span class="jr-stat__l">Trades</span>
+      <span class="jr-stat__v" id="statTotal">0</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statPnL" style="color:var(--green)">—</div>
-      <div class="stat-lbl">P&L Total</div>
+    <div class="jr-stat">
+      <span class="jr-stat__l">Win Rate</span>
+      <span class="jr-stat__v" id="statWR" style="color:var(--green)">—</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statRR" style="color:var(--v2)">—</div>
-      <div class="stat-lbl">RR Moyen</div>
+    <div class="jr-stat">
+      <span class="jr-stat__l">RR Moyen</span>
+      <span class="jr-stat__v" id="statRR">—</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statStreak" style="color:var(--amber)">—</div>
-      <div class="stat-lbl">Série actuelle</div>
+    <div class="jr-stat">
+      <span class="jr-stat__l">Série actuelle</span>
+      <span class="jr-stat__v" id="statStreak" style="color:var(--amber)">—</span>
     </div>
   </div>
 
@@ -419,16 +416,30 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jr-panel__title{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#8a93a5);margin-bottom:14px}
   .jr-eq{width:100%;height:150px;display:block}
   .jr-tbl{display:flex;flex-direction:column}
-  .jr-rowh,.jr-row2{display:grid;grid-template-columns:74px 1fr auto auto;gap:10px;align-items:center;padding:8px 4px}
+  .jr-rowh,.jr-row2{display:grid;grid-template-columns:80px 110px 80px 1fr 70px 100px;gap:10px;align-items:center;padding:10px 4px}
+  @media(max-width:780px){.jr-rowh,.jr-row2{grid-template-columns:70px 90px 70px 1fr}.jr-rowh span:nth-child(4),.jr-rowh span:nth-child(5),.jr-row2 .jr-hidemob{display:none}}
   .jr-rowh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3,#8a93a5);border-bottom:1px solid var(--border,rgba(255,255,255,.08))}
   .jr-row2{border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}
   .jr-row2:last-child{border-bottom:none}
   .jr-row2 .jr-pair{font-weight:700;color:var(--text,#e8ecf4)}
-  .jr-side{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid}
-  .jr-side.long{color:var(--green);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08)}
-  .jr-side.short{color:var(--red);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
-  .jr-pnl2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-align:right;min-width:74px}
+  .jr-sideb{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid;display:inline-block}
+  .jr-sideb.long{color:var(--green);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08)}
+  .jr-sideb.short{color:var(--red);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
+  .jr-pnl2{font-family:var(--font-mono,'JetBrains Mono',monospace);font-weight:700;text-align:right;min-width:74px}
   .jr-empty{color:var(--text3,#8a93a5);font-size:13px;padding:18px 4px;text-align:center}
+  .jr-mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2,#aeb6c4)}
+  /* Stats — style maquette (label mono en haut, valeur dessous) */
+  .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+  @media(max-width:880px){.stats-row{grid-template-columns:1fr 1fr}}
+  .jr-stat{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+  .jr-stat__l{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#8a93a5)}
+  .jr-stat__v{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:22px;font-weight:700;color:var(--text,#e8ecf4);line-height:1}
+  /* Calendrier — titre mono comme la maquette */
+  .cal-title,.cal-month{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;font-size:12px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--text-muted,#8a93a5)!important;font-weight:500!important}
+  /* Boutons bas de page — intégrés au design */
+  .broker-banner{background:var(--bg-elevated,rgba(255,255,255,.02))!important;border:1px solid var(--border-subtle,rgba(255,255,255,.08))!important;border-radius:var(--r-lg,16px)!important}
+  .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border:1px solid transparent!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;transition:all .15s!important}
+  .add-trade-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -448,13 +459,22 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
       <div class="jr-panel">
-        <span class="jr-panel__title">Derniers trades</span>
-        <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
+          <span class="jr-panel__title" style="margin:0">IA Coach</span>
+          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()">Analyser</button>
+        </div>
+        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+          <span style="color:var(--text3);font-size:13px">Lance une analyse pour voir tes patterns.</span>
+        </div>
       </div>
     </div>
   </div>
 
-
+  <!-- DERNIERS TRADES — pleine largeur, style maquette -->
+  <div class="jr-panel" style="margin-bottom:18px">
+    <span class="jr-panel__title">Derniers trades</span>
+    <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
+  </div>
 
   <!-- BROKER BANNER -->
   <div class="broker-banner disconnected" id="brokerBanner">
@@ -466,28 +486,12 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
     </div>
     <div class="broker-banner-actions" id="brokerActions">
-      <button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>
+      <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="openBrokerModal()">Connecter</button>
     </div>
   </div>
 
   <!-- ADD TRADE -->
   <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
-
-  <!-- CALENDAR : déplacé dans le tableau de bord 2 colonnes (en haut) -->
-
-  <!-- GLOBAL IA - condensed, below calendar -->
-  <div style="background:rgba(0,149,255,.05);border:1px solid rgba(0,149,255,.15);border-radius:16px;padding:18px;margin-top:16px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0" id="globalIaHeader">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:14px">🧠</span>
-        <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text)">Analyse IA de mes performances</span>
-      </div>
-      <button class="ia-btn" id="globalIaBtn" onclick="toggleGlobalIA()" style="font-size:11px;padding:5px 14px">Analyser</button>
-    </div>
-    <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-      <span style="color:var(--text3);font-size:13px">Lance une analyse pour voir tes patterns.</span>
-    </div>
-  </div>
 
 </div>
 
@@ -820,7 +824,8 @@ function setCurrency(c) {
   currency = c;
   localStorage.setItem('jnl_currency', c);
   document.querySelectorAll('.cur-btn').forEach(function(b){ b.classList.remove('on'); });
-  document.querySelector('.cur-btn:' + (c==='EUR'?'first':'last') + '-child').classList.add('on');
+  var cb=document.querySelector('.cur-btn:' + (c==='EUR'?'first':'last') + '-child');
+  if(cb) cb.classList.add('on');
   document.getElementById('curSymbolLabel').textContent = c==='EUR'?'€':'$';
   renderStats();
   renderCalendar();
@@ -2064,13 +2069,16 @@ async function importCsvTrades() {
     var el=document.getElementById('jrRecent'); if(!el) return;
     var arr=jrTrades().slice().sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,6);
     if(!arr.length){ el.innerHTML='<div class="jr-empty">Aucun trade enregistré pour l\'instant.</div>'; return; }
-    var html='<div class="jr-rowh"><span>Date</span><span>Paire</span><span>Sens</span><span>P&amp;L</span></div>';
+    var html='<div class="jr-rowh"><span>Date</span><span>Paire</span><span>Sens</span><span>Stratégie</span><span>R</span><span style="text-align:right">P&amp;L</span></div>';
     arr.forEach(function(t){
       var pnl=parseFloat(t.pnl)||0, col=pnl>=0?'var(--green)':'var(--red)';
       var side=String(t.dir||'').toLowerCase(); var sideCls=(side.indexOf('long')>=0||side.indexOf('achat')>=0||side.indexOf('buy')>=0)?'long':(side?'short':'');
-      html+='<div class="jr-row2"><span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3,#8a93a5)">'+(t.date||'—')+'</span>'
+      var rr=t.rr?((parseFloat(t.rr)>=0?'+':'')+t.rr+'R'):'—';
+      html+='<div class="jr-row2"><span class="jr-mono" style="font-size:11px;color:var(--text3,#8a93a5)">'+(t.date||'—')+'</span>'
           + '<span class="jr-pair">'+(t.pair||'—')+'</span>'
-          + '<span>'+(t.dir?'<span class="jr-side '+sideCls+'">'+t.dir+'</span>':'—')+'</span>'
+          + '<span>'+(t.dir?'<span class="jr-sideb '+sideCls+'">'+t.dir+'</span>':'—')+'</span>'
+          + '<span class="jr-mono jr-hidemob">'+(t.setup||'—')+'</span>'
+          + '<span class="jr-mono jr-hidemob">'+rr+'</span>'
           + '<span class="jr-pnl2" style="color:'+col+'">'+jrFmt(pnl)+'</span></div>';
     });
     el.innerHTML=html;
