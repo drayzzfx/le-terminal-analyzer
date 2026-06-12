@@ -6,7 +6,7 @@
 <title>LE TERMINAL — Journal de Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <style>
 :root {
@@ -105,7 +105,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .cal-day.loss:hover{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)}
 .cal-day.breakeven{background:rgba(251,191,36,.05);border-color:rgba(251,191,36,.2)}
 .day-num{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);line-height:1}
-.day-pnl{font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;margin-top:4px}
+.day-pnl{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;margin-top:4px}
 .day-pnl.pos{color:var(--green)}
 .day-pnl.neg{color:var(--red)}
 .day-pnl.be{color:var(--amber)}
@@ -425,7 +425,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jr-sideb{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid;display:inline-block}
   .jr-sideb.long{color:var(--green);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08)}
   .jr-sideb.short{color:var(--red);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
-  .jr-pnl2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-align:right;min-width:74px}
+  .jr-pnl2{font-family:var(--font-mono,'JetBrains Mono',monospace);font-weight:700;text-align:right;min-width:74px}
   .jr-empty{color:var(--text3,#8a93a5);font-size:13px;padding:18px 4px;text-align:center}
   .jr-mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2,#aeb6c4)}
   /* Stats — style maquette (label mono en haut, valeur dessous) */
@@ -433,7 +433,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   @media(max-width:880px){.stats-row{grid-template-columns:1fr 1fr}}
   .jr-stat{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
   .jr-stat__l{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#8a93a5)}
-  .jr-stat__v{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;color:var(--text,#e8ecf4);line-height:1}
+  .jr-stat__v{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:22px;font-weight:700;color:var(--text,#e8ecf4);line-height:1}
   /* Calendrier — titre mono comme la maquette */
   .cal-title,.cal-month{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;font-size:12px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--text-muted,#8a93a5)!important;font-weight:500!important}
   /* Boutons bas de page — intégrés au design */
