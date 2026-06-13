@@ -139,10 +139,11 @@
 
     document.body.style.setProperty('padding-top', '0', 'important');
 
+    // La barre d'onglets Historique/Perfs est désormais redondante avec la barre
+    // latérale (Setup Analyzer ▸ Historique / Perfs) → on la masque.
     Array.prototype.slice.call(app.parentNode.children).forEach(function (el) {
       if (el !== app && el.classList && el.classList.contains('analyzer-tabs')) {
-        el.style.position = 'static'; el.style.paddingLeft = '0';
-        main.insertBefore(el, top.nextSibling);
+        el.style.display = 'none';
       }
     });
 
