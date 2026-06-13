@@ -775,7 +775,7 @@
     cs.textContent = [
       '* { cursor: none !important; }',
       '#lt-cur-dot {',
-        'position:fixed;top:0;left:0;z-index:99999;pointer-events:none;',
+        'position:fixed;top:0;left:0;z-index:2147483647;pointer-events:none;',
         'width:6px;height:6px;border-radius:50%;',
         'background:#ffffff;',
         'box-shadow:0 0 6px 2px rgba(255,255,255,.95),0 0 14px 4px rgba(255,255,255,.55);',
@@ -785,7 +785,7 @@
         'will-change:transform;',
       '}',
       '#lt-cur-ring {',
-        'position:fixed;top:0;left:0;z-index:99998;pointer-events:none;',
+        'position:fixed;top:0;left:0;z-index:2147483646;pointer-events:none;',
         'width:22px;height:22px;border-radius:50%;',
         'border:1.5px solid rgba(255,255,255,.75);',
         'box-shadow:0 0 7px 1px rgba(255,255,255,.3),inset 0 0 4px rgba(255,255,255,.15);',
