@@ -164,6 +164,10 @@
     document.head.appendChild(st);
   }
 
+  // ── Retire le ticker de prix (pricetape) des pages d'actus éco : non désiré,
+  //    et il décalait l'AppShell vers le bas (mauvaise position de la barre latérale). ──
+  Array.prototype.slice.call(document.querySelectorAll('.pricetape')).forEach(function (el) { el.remove(); });
+
   // ── PART 1 : enveloppe AppShell si absente (pages injectées) ──
   // Conteneur de contenu : .main (nouvelles pages) ou <main> (pages éco)
   var main = document.querySelector('.main') || document.querySelector('main');
