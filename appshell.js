@@ -97,11 +97,23 @@
   }
 
   function buildSideInner() {
+    var isPro = false;
+    try { isPro = localStorage.getItem('lt_pro') === '1'; } catch(e) {}
+    var footer;
+    if (isPro) {
+      var email = '';
+      try { email = localStorage.getItem('ta_email') || ''; } catch(e) {}
+      footer = '<div class="side__pro side__account">'
+        + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#9B96B8);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
+        + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
+    } else {
+      footer = '<div class="side__pro"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
+        + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer PRO</button></div>';
+    }
     return '<span class="side__label">Outils</span>'
       + buildNav()
       + '<div class="side__spacer"></div>'
-      + '<div class="side__pro"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
-      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer PRO</button></div>';
+      + footer;
   }
 
   // ── CSS additionnel (sous-menus au style du design) ──
