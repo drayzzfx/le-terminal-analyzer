@@ -10,7 +10,20 @@
     'calendrier.html':  { crumb: 'Calendrier Éco',      key: 'calendrier' },
     'app.html':         { crumb: 'Setup Analyzer',      key: 'analyzer' },
     'bubble.html':      { crumb: 'Bubble Map',          key: 'bubble' },
-    'calculateur.html': { crumb: 'Calculateur de Pips', key: 'calculateur' }
+    'calculateur.html': { crumb: 'Calculateur de Pips', key: 'calculateur' },
+    // Pages Éco (anciennes pages d'actus) — rattachées à la branche Calendrier
+    'eco-edition.html':      { crumb: 'Calendrier Éco · Présentation', key: 'calendrier' },
+    'eco-selection.html':    { crumb: 'Calendrier Éco · La sélection',  key: 'calendrier' },
+    'eco-europe.html':       { crumb: 'Calendrier Éco · Europe',        key: 'calendrier' },
+    'eco-ameriques.html':    { crumb: 'Calendrier Éco · Amériques',     key: 'calendrier' },
+    'eco-asie.html':         { crumb: 'Calendrier Éco · Asie',          key: 'calendrier' },
+    'eco-marches.html':      { crumb: 'Calendrier Éco · Marchés',       key: 'calendrier' },
+    'eco-institutions.html': { crumb: 'Calendrier Éco · Institutions',  key: 'calendrier' },
+    'eco-international.html': { crumb: 'Calendrier Éco · International',  key: 'calendrier' },
+    'eco-flash.html':        { crumb: 'Calendrier Éco · Flash Info',    key: 'calendrier' },
+    'eco-calendrier.html':   { crumb: 'Calendrier Éco · Calendrier',    key: 'calendrier' },
+    'eco-crypto.html':       { crumb: 'Calendrier Éco · Crypto',        key: 'calendrier' },
+    'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
   };
   var cfg = PAGES[path];
   if (!cfg) return;
@@ -117,7 +130,8 @@
   }
 
   // ── PART 1 : enveloppe AppShell si absente (pages injectées) ──
-  var main = document.querySelector('.main');
+  // Conteneur de contenu : .main (nouvelles pages) ou <main> (pages éco)
+  var main = document.querySelector('.main') || document.querySelector('main');
   if (main && !document.querySelector('.app > .side') && !document.querySelector('aside.side')) {
     var initials = 'LT';
     try { var em = localStorage.getItem('ta_email') || ''; if (em) initials = em.slice(0, 2).toUpperCase(); } catch (e) {}

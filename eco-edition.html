@@ -6,26 +6,41 @@
 <title>Le Terminal — Présentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
 </head>
 <body class="eco-page">
 <div class="glow" aria-hidden="true"></div>
-<header class="lt-topbar">
-  <div style="display:flex;align-items:center;gap:10px">
-    <button class="lt-hamburger" onclick="ltOpenMenu()">
-      <span></span><span></span><span></span>
-    </button>
-    <a href="./index.html" class="lt-brand" style="text-decoration:none;color:inherit"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3);margin-right:8px;vertical-align:middle">Le Terminal <span>Éco</span></a>
-  </div>
-  <div style="display:flex;align-items:center;gap:14px">
-    <div class="lt-status"><div class="lt-dot"></div>LIVE</div>
-    <span class="liveclock" id="liveClock" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums"></span>
-    <button class="langbtn" id="langToggle" type="button" aria-label="Switch language" title="English / Français">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>
-      <span class="lang__label">EN</span>
-    </button>
-  </div>
-</header>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltOpenMenu&&ltOpenMenu())">Connexion</button>
+      <div id="ltUserBar"></div>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'">Accès PRO</button>
+    </div>
+  </header>
+</div>
 <!-- PRICETAPE (TradingView ticker) -->
 <div class="pricetape">
   <div class="tradingview-widget-container">
@@ -291,6 +306,7 @@
 </main>
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
+<script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>
 (function () {
