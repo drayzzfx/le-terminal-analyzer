@@ -370,6 +370,19 @@
 </footer>
 
 <script>
+// ── OAuth callback : si on atterrit ici avec un token (Google), on le capte et on file vers l'app ──
+(function(){
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('access_token=') !== -1) {
+    var params = new URLSearchParams(hash.slice(1));
+    var accessToken = params.get('access_token');
+    if (accessToken) {
+      localStorage.setItem('ta_token', accessToken);
+      window.location.href = './app.html';
+      return;
+    }
+  }
+})();
 (function(){
   'use strict';
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
