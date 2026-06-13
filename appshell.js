@@ -96,12 +96,47 @@
     }).join('');
   }
 
+  function buildFooter() {
+    var isPro = false, loggedIn = false, email = '';
+    try {
+      isPro = localStorage.getItem('lt_pro') === '1';
+      loggedIn = !!localStorage.getItem('ta_token');
+      email = localStorage.getItem('ta_email') || '';
+    } catch(e) {}
+    // Connecté (et a fortiori PRO) → on remplace la pub PRO par email + déconnexion
+    if (loggedIn && isPro) {
+      return '<div class="side__pro side__account" id="sideFooter">'
+        + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#9B96B8);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
+        + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
+    }
+    return '<div class="side__pro" id="sideFooter"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
+      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer PRO</button></div>';
+  }
+
   function buildSideInner() {
     return '<span class="side__label">Outils</span>'
       + buildNav()
       + '<div class="side__spacer"></div>'
-      + '<div class="side__pro"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
-      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer PRO</button></div>';
+      + buildFooter();
+  }
+
+  // Vérifie le statut PRO côté serveur (les pages hors analyseur ne le font pas),
+  // met à jour lt_pro puis rafraîchit le pied de la barre latérale.
+  function refreshProFooter() {
+    var token;
+    try { token = localStorage.getItem('ta_token'); } catch(e) {}
+    if (!token) return;
+    fetch('/api/check-pro', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d && d.is_pro) { try { localStorage.setItem('lt_pro', '1'); } catch(e) {} }
+        var f = document.getElementById('sideFooter');
+        if (f) {
+          var tmp = document.createElement('div');
+          tmp.innerHTML = buildFooter();
+          f.replaceWith(tmp.firstChild);
+        }
+      }).catch(function(){});
   }
 
   // ── CSS additionnel (sous-menus au style du design) ──
@@ -192,5 +227,7 @@
         btn.classList.toggle('is-open');
       }
     });
+    // Vérifie le PRO côté serveur et met à jour le pied (email + déconnexion)
+    refreshProFooter();
   }
 })();
