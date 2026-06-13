@@ -324,17 +324,20 @@
   document.body.appendChild(container);
 
   // ── FUNCTIONS ──
+  // Menu latéral désactivé : la navigation + déconnexion passent par la barre
+  // latérale « Outils » (appshell.js). Le bouton FR/EN bascule juste la langue.
   window.ltOpenMenu = function() {
-    var menu = document.getElementById('ltSideMenu');
-    if(menu.classList.contains('open')) {
-      ltCloseMenu();
-    } else {
-      menu.classList.add('open');
-      document.body.classList.add('lt-menu-open');
-    }
+    var cur = (localStorage.getItem('lt_lang') === 'en') ? 'en' : 'fr';
+    var next = cur === 'en' ? 'fr' : 'en';
+    ltSetLang(next);
+    // Met à jour le libellé des pastilles FR/EN dans les topbars
+    Array.prototype.forEach.call(document.querySelectorAll('.lt-nav__pill'), function(p){
+      if(p.id !== 'langToggle') p.textContent = next.toUpperCase();
+    });
   };
   window.ltCloseMenu = function() {
-    document.getElementById('ltSideMenu').classList.remove('open');
+    var m = document.getElementById('ltSideMenu');
+    if(m) m.classList.remove('open');
     document.body.classList.remove('lt-menu-open');
   };
 
