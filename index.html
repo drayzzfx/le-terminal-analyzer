@@ -44,7 +44,7 @@
     </nav>
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
-      <a class="lt-btn lt-btn--ghost lt-btn--sm" href="./app.html">Connexion</a>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" style="display:none">Connexion</button>
       <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
     </div>
   </header>
@@ -370,6 +370,28 @@
 </footer>
 
 <script>
+// ── OAuth callback : si on atterrit ici avec un token (Google), on le capte et on file vers l'app ──
+(function(){
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('access_token=') !== -1) {
+    var params = new URLSearchParams(hash.slice(1));
+    var accessToken = params.get('access_token');
+    if (accessToken) {
+      localStorage.setItem('ta_token', accessToken);
+      // Nettoie le token de l'URL et reste sur la page principale
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      // Récupère l'email + statut pro puis met à jour l'UI (sans rediriger)
+      fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'user', token:accessToken})})
+        .then(function(r){return r.json();}).then(function(d){
+          if(d.email) localStorage.setItem('ta_email', d.email);
+          return fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken}});
+        }).then(function(r){return r.json();}).then(function(d){
+          if(d && d.is_pro) localStorage.setItem('lt_pro','1');
+          if(typeof ltSyncUser === 'function') ltSyncUser();
+        }).catch(function(){});
+    }
+  }
+})();
 (function(){
   'use strict';
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -511,5 +533,6 @@
   })();
 })();
 </script>
+<script src="./menu.js"></script>
 </body>
 </html>
