@@ -36,18 +36,18 @@
     { key: 'dashboard', label: 'Dashboard', href: './index.html', icon: I.dashboard },
     { key: 'journal', label: 'Journal de Trading', href: './journal.html', icon: I.journal, pro: true },
     { key: 'calendrier', label: 'Calendrier Éco', href: './calendrier.html', icon: I.calendrier, pro: true, children: [
-      { label: 'Présentation', href: './calendrier.html#edition', icon: I.pres, children: [
-        { label: 'La sélection', href: './calendrier.html#edition' },
-        { label: 'Europe', href: './calendrier.html#edition' },
-        { label: 'Amériques', href: './calendrier.html#edition' },
-        { label: 'Asie', href: './calendrier.html#edition' },
-        { label: 'Marchés', href: './calendrier.html#edition' },
-        { label: 'Institutions', href: './calendrier.html#edition' },
-        { label: 'International', href: './calendrier.html#edition' }
+      { label: 'Présentation', href: './eco-edition.html', icon: I.pres, children: [
+        { label: 'La sélection', href: './eco-selection.html' },
+        { label: 'Europe', href: './eco-europe.html' },
+        { label: 'Amériques', href: './eco-ameriques.html' },
+        { label: 'Asie', href: './eco-asie.html' },
+        { label: 'Marchés', href: './eco-marches.html' },
+        { label: 'Institutions', href: './eco-institutions.html' },
+        { label: 'International', href: './eco-international.html' }
       ] },
-      { label: 'Flash Info', href: './calendrier.html#flash', icon: I.flash },
-      { label: 'Calendrier éco', href: './calendrier.html#calendrier', icon: I.calendrier },
-      { label: 'Crypto', href: './calendrier.html#crypto', icon: I.crypto }
+      { label: 'Flash Info', href: './eco-flash.html', icon: I.flash },
+      { label: 'Calendrier éco', href: './eco-calendrier.html', icon: I.calendrier },
+      { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto }
     ] },
     { key: 'analyzer', label: 'Setup Analyzer', href: './app.html', icon: I.analyzer, pro: true, children: [
       { label: 'Historique', href: './app.html#historique', icon: I.hist },
