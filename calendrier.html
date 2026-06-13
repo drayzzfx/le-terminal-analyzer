@@ -2028,11 +2028,19 @@ updateClock(); setInterval(updateClock, 1000);
 // Tab switching
 function showTab(id){
   document.querySelectorAll('.eco-panel').forEach(function(p){ p.classList.remove('show'); });
-  document.querySelectorAll('.eco-tab').forEach(function(t){ t.classList.remove('on'); });
+  document.querySelectorAll('.eco-tab').forEach(function(t){
+    t.classList.toggle('on', (t.getAttribute('onclick')||'').indexOf("showTab('"+id+"')") >= 0);
+  });
   var panel = document.getElementById('panel-'+id);
   if(panel) panel.classList.add('show');
-  event.currentTarget.classList.add('on');
 }
+// Ouvre le bon onglet depuis l'ancre (#flash, #calendrier, #crypto, #edition) — liens du menu
+(function(){
+  var TABS = {edition:1, flash:1, calendrier:1, crypto:1};
+  function fromHash(){ var h=(location.hash||'').replace('#',''); if(TABS[h]) showTab(h); }
+  if(document.readyState!=='loading') fromHash(); else document.addEventListener('DOMContentLoaded', fromHash);
+  window.addEventListener('hashchange', fromHash);
+})();
 
 // Original app.js logic (lang toggle, sidebar)
 /* Le Terminal Économies — barre latérale rétractable (façon YouTube).

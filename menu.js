@@ -323,19 +323,6 @@
   container.innerHTML = menuHTML;
   document.body.appendChild(container);
 
-  // ── BARRE LATÉRALE FIXE (AppShell .side) = même menu hiérarchique que le tiroir ──
-  // On remplace la nav plate par l'arbre complet, en conservant la carte Accès PRO.
-  (function fillSidebar() {
-    var sideEl = document.querySelector('aside.side, .app > .side');
-    if (!sideEl) return;
-    var pro = sideEl.querySelector('.side__pro');
-    sideEl.innerHTML = '<nav class="lt-side-tree">' + navItems + '</nav>';
-    var spacer = document.createElement('div');
-    spacer.className = 'side__spacer';
-    sideEl.appendChild(spacer);
-    if (pro) sideEl.appendChild(pro);
-  })();
-
   // ── FUNCTIONS ──
   window.ltOpenMenu = function() {
     var menu = document.getElementById('ltSideMenu');
