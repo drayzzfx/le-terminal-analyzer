@@ -174,6 +174,10 @@
       + 'body.eco-page .app > main.wrap > .top{margin:0;width:auto;align-self:stretch}'
       + 'body.eco-page .app > main.wrap > :not(.top){max-width:1264px;width:100%;margin:0;padding-left:32px;padding-right:32px;box-sizing:border-box}'
       + 'body.eco-page .app > main.wrap > .pagehead{padding-top:32px}'
+      // Le calendrier Investing.com (.calcard + son iframe) doit occuper toute la
+      // largeur disponible (jusqu'à 1264px) comme le reste du contenu éco.
+      + 'body.eco-page .calcard{width:100%;max-width:1264px;box-sizing:border-box}'
+      + 'body.eco-page .calcard__frame{width:100%}'
       // Le fil d'ariane est « sticky » : son fond doit être opaque + flouté, sinon
       // le contenu qui défile dessous transparaît (effet de chevauchement).
       + '.top{background:var(--bg-base,#080B10);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}';
