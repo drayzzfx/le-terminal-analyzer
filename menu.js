@@ -152,13 +152,21 @@
     .lt-subnav-item--deep { padding: 7px 10px; font-size: 12px; opacity: .85; }
 
     /* ── USER BAR ── */
-    #ltUserBar { display: flex; align-items: center; gap: 8px; }
-    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 50px; color: #FACC15; font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
-    .lt-ub-chip { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 50px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
-    .lt-ub-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#0095FF,#38B6FF); display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
-    .lt-ub-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; color: #F0EEFF; }
-    .lt-ub-logout { padding: 5px 13px; background: transparent; border: 1px solid rgba(248,113,113,.3); border-radius: 50px; color: #F87171; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
-    .lt-ub-logout:hover { background: rgba(248,113,113,.1); }
+    #ltUserBar { display: flex; align-items: center; gap: 8px; position: relative; }
+    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 10px; color: #FACC15; font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+    /* Chip utilisateur : rectangulaire, même esprit que les boutons (Accès Premium) */
+    .lt-ub-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); cursor: pointer; transition: all .2s; }
+    .lt-ub-chip:hover { border-color: rgba(56,182,255,.45); background: rgba(56,182,255,.08); }
+    .lt-ub-avatar { width: 24px; height: 24px; border-radius: 7px; background: linear-gradient(135deg,#0095FF,#38B6FF); display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .lt-ub-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 600; color: #F0EEFF; }
+    .lt-ub-caret { color: #9B96B8; display: flex; transition: transform .2s; }
+    .lt-ub-chip.open .lt-ub-caret { transform: rotate(180deg); }
+    /* Menu déroulant (déconnexion) */
+    .lt-ub-menu { position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px; background: rgba(16,20,27,.98); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; box-shadow: 0 24px 60px rgba(0,0,0,.6); padding: 8px; z-index: 100001; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all .18s ease; }
+    .lt-ub-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lt-ub-menu__mail { padding: 8px 10px 10px; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: #9B96B8; word-break: break-all; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 6px; }
+    .lt-ub-logout { width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: none; border-radius: 8px; color: #F87171; font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; }
+    .lt-ub-logout:hover { background: rgba(248,113,113,.12); }
 
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
@@ -385,11 +393,34 @@
     if(!token || !email) { bar.innerHTML = ''; return; }
     var initial = email.charAt(0).toUpperCase();
     var username = email.split('@')[0];
-    // Style unifié (maquette) : chip avatar + nom, sans badge ★PRO ni bouton rouge.
-    // La déconnexion reste accessible via le menu (pastille FR → « Se déconnecter »).
+    var caret = '<span class="lt-ub-caret"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>';
+    // Chip rectangulaire (même DA que les boutons) + menu déroulant avec déconnexion
     bar.innerHTML =
-      '<div class="lt-ub-chip" style="cursor:pointer" title="' + email + (isPro ?  ' · Premium' : '') + '" onclick="window.ltOpenMenu&&ltOpenMenu()">' +
-      '<div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>';
+      '<div class="lt-ub-chip" id="ltUbChip" title="' + email + (isPro ? ' · Premium' : '') + '">' +
+        '<div class="lt-ub-avatar">' + initial + '</div>' +
+        '<span class="lt-ub-name">' + username + '</span>' + caret +
+      '</div>' +
+      '<div class="lt-ub-menu" id="ltUbMenu">' +
+        '<div class="lt-ub-menu__mail">' + email + (isPro ? ' · Premium' : '') + '</div>' +
+        '<button type="button" class="lt-ub-logout" onclick="ltGlobalLogout()">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
+          'Se déconnecter</button>' +
+      '</div>';
+
+    var chip = document.getElementById('ltUbChip');
+    var menu = document.getElementById('ltUbMenu');
+    if(chip && menu) {
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        menu.classList.toggle('show');
+        chip.classList.toggle('open');
+      });
+      // Ferme le menu si on clique ailleurs
+      document.addEventListener('click', function(){
+        menu.classList.remove('show');
+        chip.classList.remove('open');
+      });
+    }
   }
 
   function _ltClearAllAccountData() {
