@@ -273,7 +273,7 @@
     var isLocked = p.pro && !isUserPro;
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '') + (isLocked ? ' pro-locked' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
-    var proBadge = isLocked ? '<span class="lt-nav-pro-badge">⭐ PRO</span>' : '';
+    var proBadge = isLocked ? '<span class="lt-nav-pro-badge">⭐ Premium</span>' : '';
     var href = isLocked ? './index.html?paywall=1' : p.href;
 
     if(p.children && p.children.length) {
@@ -388,7 +388,7 @@
     // Style unifié (maquette) : chip avatar + nom, sans badge ★PRO ni bouton rouge.
     // La déconnexion reste accessible via le menu (pastille FR → « Se déconnecter »).
     bar.innerHTML =
-      '<div class="lt-ub-chip" style="cursor:pointer" title="' + email + (isPro ? ' · PRO' : '') + '" onclick="window.ltOpenMenu&&ltOpenMenu()">' +
+      '<div class="lt-ub-chip" style="cursor:pointer" title="' + email + (isPro ?  ' · Premium' : '') + '" onclick="window.ltOpenMenu&&ltOpenMenu()">' +
       '<div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>';
   }
 

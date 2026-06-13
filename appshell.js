@@ -43,7 +43,7 @@
     dot:        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/></svg>'
   };
   var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-  var PRO = '<span class="side__pro-tag">PRO</span>';
+  var PRO = '<span class="side__pro-tag">PREMIUM</span>';
 
   var NAV = [
     { key: 'dashboard', label: 'Dashboard', href: './index.html', icon: I.dashboard },
@@ -109,8 +109,8 @@
         + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#9B96B8);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
         + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
     }
-    return '<div class="side__pro" id="sideFooter"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
-      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer PRO</button></div>';
+    return '<div class="side__pro" id="sideFooter"><h4>Accès Premium</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
+      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer Premium</button></div>';
   }
 
   function buildSideInner() {
