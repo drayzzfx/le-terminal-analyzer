@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lt-cache-v8';
+const CACHE_NAME = 'lt-cache-v9';
 const ASSETS_TO_CACHE = [
   './app.html',
   './calculateur.html',
@@ -25,12 +25,16 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  // Pages HTML : toujours réseau (jamais de cache pour les pages de navigation)
-  if (url.pathname === '/' || url.pathname.endsWith('.html')) {
+  // Ne jamais intercepter les appels API (cross-origin ou /api/) ni les requêtes non-GET
+  if (event.request.method !== 'GET' || url.pathname.startsWith('/api/') || url.origin !== self.location.origin) {
+    return;
+  }
+  // Pages HTML + JS : toujours réseau (network-first) pour avoir les dernières versions
+  if (url.pathname === '/' || url.pathname.endsWith('.html') || url.pathname.endsWith('.js')) {
     event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
     return;
   }
-  // Assets statiques : cache-first
+  // Autres assets statiques (css, images) : cache-first
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
