@@ -881,4 +881,60 @@
     wakeLoop();
   })();
 
+  // ── BANNIÈRE COOKIES (toutes les pages, conformité RGPD) ──
+  (function(){
+    var KEY = 'lt_cookie_consent';
+    var existing;
+    try { existing = localStorage.getItem(KEY); } catch(e) { existing = null; }
+    if (existing === 'accepted' || existing === 'refused') return; // choix déjà fait
+
+    function inject(){
+      if (document.getElementById('ltCookieBar')) return;
+      var st = document.createElement('style');
+      st.textContent = [
+        '#ltCookieBar{position:fixed;left:0;right:0;bottom:0;z-index:100000;display:flex;justify-content:center;padding:16px;pointer-events:none;animation:ltCookieUp .4s ease}',
+        '@keyframes ltCookieUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}',
+        '#ltCookieBox{pointer-events:auto;max-width:680px;width:100%;background:rgba(16,20,27,.97);backdrop-filter:blur(18px);border:1px solid rgba(56,182,255,.25);border-radius:16px;padding:20px 22px;box-shadow:0 24px 60px rgba(0,0,0,.6);display:flex;flex-wrap:wrap;align-items:center;gap:16px}',
+        '#ltCookieBox .ltck-txt{flex:1;min-width:220px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;line-height:1.6;color:#C3CAD4}',
+        '#ltCookieBox .ltck-txt b{color:#F0EEFF;font-family:\'Bricolage Grotesque\',sans-serif;display:block;font-size:14px;margin-bottom:4px}',
+        '#ltCookieBox .ltck-txt a{color:#38B6FF;text-decoration:underline}',
+        '#ltCookieBox .ltck-actions{display:flex;gap:10px;flex-shrink:0}',
+        '.ltck-btn{padding:10px 20px;border-radius:50px;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .2s;white-space:nowrap}',
+        '.ltck-refuse{background:transparent;border-color:rgba(255,255,255,.18);color:#C3CAD4}',
+        '.ltck-refuse:hover{border-color:rgba(255,255,255,.4);color:#fff}',
+        '.ltck-accept{background:linear-gradient(135deg,#0095ff,#0070cc);color:#fff}',
+        '.ltck-accept:hover{opacity:.9}',
+        '@media(max-width:560px){#ltCookieBox{flex-direction:column;align-items:stretch}#ltCookieBox .ltck-actions{justify-content:stretch}.ltck-btn{flex:1;text-align:center}}'
+      ].join('');
+      document.head.appendChild(st);
+
+      var bar = document.createElement('div');
+      bar.id = 'ltCookieBar';
+      bar.innerHTML =
+        '<div id="ltCookieBox">'
+        + '<div class="ltck-txt"><b>🍪 Nous utilisons des cookies</b>'
+        + 'Le Terminal utilise des cookies pour assurer le bon fonctionnement du site (connexion, préférences) et mesurer son audience. '
+        + 'Tu peux accepter ou refuser les cookies non essentiels.</div>'
+        + '<div class="ltck-actions">'
+        + '<button type="button" class="ltck-btn ltck-refuse" id="ltCookieRefuse">Refuser</button>'
+        + '<button type="button" class="ltck-btn ltck-accept" id="ltCookieAccept">Accepter</button>'
+        + '</div></div>';
+      document.body.appendChild(bar);
+
+      function choose(val){
+        try { localStorage.setItem(KEY, val); } catch(e) {}
+        bar.style.animation = 'ltCookieUp .3s ease reverse forwards';
+        setTimeout(function(){ if(bar.parentNode) bar.parentNode.removeChild(bar); }, 300);
+      }
+      document.getElementById('ltCookieAccept').addEventListener('click', function(){ choose('accepted'); });
+      document.getElementById('ltCookieRefuse').addEventListener('click', function(){ choose('refused'); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', inject);
+    } else {
+      inject();
+    }
+  })();
+
 })();
