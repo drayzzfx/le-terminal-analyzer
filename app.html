@@ -3003,6 +3003,26 @@ window.doGoogleAuth = doGoogleAuth;
   }).catch(function(){});
 })();
 
+// Extract OAuth token from URL hash (Google OAuth redirect)
+(function() {
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('access_token=') !== -1) {
+    var params = {};
+    hash.replace(/^#/, '').split('&').forEach(function(p) {
+      var kv = p.split('=');
+      params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+    });
+    if (params.access_token) {
+      localStorage.setItem('ta_token', params.access_token);
+      if (params.type === 'recovery') {
+        // password reset - skip
+      }
+    }
+    // Clean URL
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+})();
+
 checkSession();
 
 

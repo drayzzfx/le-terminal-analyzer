@@ -566,7 +566,7 @@
         ltSyncUser();
         if(typeof updateUserUI === 'function') updateUserUI();
         // Check pro then redirect to app if on landing page
-        fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token: data.access_token})})
+        fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+data.access_token}})
           .then(function(r){return r.json();}).then(function(d){
             if(d.is_pro) localStorage.setItem('lt_pro','1');
             ltRenderUserBar();
