@@ -165,7 +165,15 @@
       + '.side__item, .side__subitem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
       + '.side__item > *, .side__subitem > *{min-width:0}'
       + '.side__pro-tag{margin-left:auto;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.08em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:2px 7px}'
-      + '.side{overflow-y:auto}';
+      + '.side{overflow-y:auto}'
+      // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
+      // intégré dans .app, on le fait se comporter comme .main (pleine largeur,
+      // aligné à gauche) pour que le fil d'ariane (.top) couvre toute la largeur
+      // comme sur le Journal, et que le contenu reste limité à 1200px à gauche.
+      + 'body.eco-page .app > main.wrap{max-width:none;width:auto;margin:0;padding:0;display:flex;flex-direction:column;min-width:0}'
+      + 'body.eco-page .app > main.wrap > .top{margin:0;width:auto;align-self:stretch}'
+      + 'body.eco-page .app > main.wrap > :not(.top){max-width:1264px;width:100%;margin:0;padding-left:32px;padding-right:32px;box-sizing:border-box}'
+      + 'body.eco-page .app > main.wrap > .pagehead{padding-top:32px}';
     document.head.appendChild(st);
   }
 
