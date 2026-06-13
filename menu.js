@@ -776,9 +776,9 @@
       '* { cursor: none !important; }',
       '#lt-cur-dot {',
         'position:fixed;top:0;left:0;z-index:99999;pointer-events:none;',
-        'width:4px;height:4px;border-radius:50%;',
-        'background:#38B6FF;',
-        'box-shadow:0 0 4px 1px #38B6FF,0 0 9px 2px rgba(56,182,255,.45);',
+        'width:6px;height:6px;border-radius:50%;',
+        'background:#ffffff;',
+        'box-shadow:0 0 6px 2px rgba(255,255,255,.95),0 0 14px 4px rgba(255,255,255,.55);',
         // Perf : déplacement via transform (composité GPU) — left/top forcerait un layout par frame
         'transform:translate(-50%,-50%);',
         'transition:width .2s,height .2s,background .2s;',
@@ -786,22 +786,22 @@
       '}',
       '#lt-cur-ring {',
         'position:fixed;top:0;left:0;z-index:99998;pointer-events:none;',
-        'width:20px;height:20px;border-radius:50%;',
-        'border:1px solid rgba(56,182,255,.5);',
-        'box-shadow:0 0 5px 1px rgba(56,182,255,.15);',
+        'width:22px;height:22px;border-radius:50%;',
+        'border:1.5px solid rgba(255,255,255,.75);',
+        'box-shadow:0 0 7px 1px rgba(255,255,255,.3),inset 0 0 4px rgba(255,255,255,.15);',
         'transform:translate(-50%,-50%);',
         'transition:width .25s,height .25s,border-color .25s;',
         'will-change:transform;',
       '}',
       'body.lt-cur-hover #lt-cur-dot {',
-        'width:6px;height:6px;',
-        'background:#A78BFA;',
-        'box-shadow:0 0 7px 2px #A78BFA,0 0 14px 4px rgba(167,139,250,.4);',
+        'width:8px;height:8px;',
+        'background:#ffffff;',
+        'box-shadow:0 0 9px 3px rgba(255,255,255,1),0 0 18px 6px rgba(255,255,255,.6);',
       '}',
       'body.lt-cur-hover #lt-cur-ring {',
-        'width:28px;height:28px;',
-        'border-color:rgba(167,139,250,.55);',
-        'box-shadow:0 0 8px 1px rgba(167,139,250,.2);',
+        'width:30px;height:30px;',
+        'border-color:rgba(255,255,255,.95);',
+        'box-shadow:0 0 10px 2px rgba(255,255,255,.4);',
       '}',
       '@media (pointer:coarse){#lt-cur-dot,#lt-cur-ring{display:none!important}*{cursor:auto!important}}'
     ].join('');
@@ -854,12 +854,18 @@
     function enterIframe(){ document.body.classList.add('lt-in-iframe'); }
     function leaveIframe(){ document.body.classList.remove('lt-in-iframe'); }
 
+    // On masque le curseur custom UNIQUEMENT quand le pointeur quitte réellement
+    // la fenêtre/le document (ex: entre dans un iframe TradingView) — jamais sur
+    // simple immobilité. Détection via mouseleave document + blur de la fenêtre
+    // (un iframe qui prend le focus déclenche un blur du parent).
     document.addEventListener('mouseleave', enterIframe);
     document.addEventListener('mouseenter', leaveIframe);
-    // Fallback polling : si pas de mousemove pendant 200ms → dans un iframe
-    var lastMove = Date.now();
-    document.addEventListener('mousemove', function(){ lastMove = Date.now(); leaveIframe(); });
-    setInterval(function(){ if(Date.now() - lastMove > 200) enterIframe(); }, 100);
+    document.addEventListener('mousemove', leaveIframe);
+    window.addEventListener('blur', function(){
+      // Si le focus part vers un iframe de la page → on masque le curseur custom.
+      if(document.activeElement && document.activeElement.tagName === 'IFRAME') enterIframe();
+    });
+    window.addEventListener('focus', leaveIframe);
 
     // Perf : la boucle rAF ne tourne que pendant le mouvement — quand l'anneau
     // a rattrapé le point, elle s'arrête (zéro travail souris immobile).
