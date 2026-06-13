@@ -124,6 +124,11 @@
       + '.side__subitem:hover .side__ic{color:var(--accent)}'
       + '.side__sub--deep{margin-left:12px}'
       + '.side__subitem--deep{font-size:12.5px;padding:6px 10px}'
+      // Force la police/interligne du design dans la barre latérale (eco.css impose
+      // sinon sa propre police plus large → libellés sur 2 lignes sur les pages éco)
+      + '.side, .side__label, .side__item, .side__subitem, .side__pro, .side__pro *{font-family:var(--font-text,"Inter",system-ui,sans-serif);line-height:1.2}'
+      + '.side__item, .side__subitem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+      + '.side__item > *, .side__subitem > *{min-width:0}'
       + '.side__pro-tag{margin-left:auto;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.08em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:2px 7px}'
       + '.side{overflow-y:auto}';
     document.head.appendChild(st);
