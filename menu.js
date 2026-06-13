@@ -365,7 +365,7 @@
       if(loginItem) loginItem.style.display = 'flex';
       var lb = document.getElementById('loginBtn');
       var uc = document.getElementById('userChip');
-      if(lb) lb.style.display = '';
+      if(lb) lb.style.display = 'inline-flex';
       if(uc) { uc.classList.remove('show'); uc.style.display = ''; }
       var lo = document.getElementById('logoutBtn');
       if(lo) lo.style.display = 'none';
