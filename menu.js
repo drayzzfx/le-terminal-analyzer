@@ -544,7 +544,7 @@
 
   window.ltDoGoogleAuth = function() {
     if(!_ltSbUrl) { setTimeout(ltDoGoogleAuth, 500); return; }
-    window.location.href = _ltSbUrl + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(window.location.origin + '/app.html');
+    window.location.href = _ltSbUrl + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(window.location.origin + '/index.html');
   };
 
   window.ltDoAuth = async function() {
@@ -571,10 +571,6 @@
             if(d.is_pro) localStorage.setItem('lt_pro','1');
             ltRenderUserBar();
           }).catch(function(){});
-        if(!window.location.pathname.includes('app.html')) {
-          window.location.href = './app.html';
-          return;
-        }
       } else if(data.id) {
         if(errEl) { errEl.style.color='#4ade80'; errEl.textContent='Compte créé ! Vérifie ton email.'; }
       } else {
