@@ -9,6 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
+<style>
+/* Présentation : en-têtes de section alignés sur la maquette (intitulé « ● » + grand titre).
+   Scopé à cette page via .pres-edition pour ne pas impacter les autres pages éco. */
+.pres-edition .prose__h { text-transform: uppercase; letter-spacing: .01em; }
+.pres-edition .home-about::before { display: none; }
+.pres-edition .sel-head { margin-bottom: 18px; }
+.pres-edition .sel-head .prose__kicker { margin-bottom: 10px; }
+</style>
 </head>
 <body class="eco-page">
 <div class="glow" aria-hidden="true"></div>
@@ -68,7 +76,7 @@
     </script>
   </div>
 </div>
-<main class="wrap">
+<main class="wrap pres-edition">
 <section class="intro" aria-label="Présentation">
   <div class="intro__text">
     <p class="intro__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg> <span data-en="Economic press review · Daily">Revue de presse économique · Quotidienne</span></p>
@@ -181,9 +189,9 @@
 </section>
 
 <section id="selection" class="block" aria-label="La sélection">
-  <header class="block__head">
-    <h2 class="block__title" data-en='<span class="block__dot">●</span> The selection'><span class="block__dot">●</span> La sélection</h2>
-    <span class="block__sub" id="sel-sub" data-en="Auto-selected — latest high-impact articles">Sélection automatique — dernières annonces à fort impact</span>
+  <header class="sel-head">
+    <span class="prose__kicker"><span class="block__dot">●</span> <span data-en="The selection">La sélection</span> · <span id="sel-sub" data-en="auto-selection">sélection automatique</span></span>
+    <h2 class="prose__h" data-en="What deserves your attention">Ce qui mérite votre attention</h2>
   </header>
   <div class="grid" id="sel-grid">
     <article class="card card--skeleton" style="--i:0" aria-hidden="true"><div class="card__skel-line card__skel-line--short"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med"></div></article>
@@ -194,7 +202,7 @@
 
 <div class="home-about" aria-label="À propos">
 <section class="prose" aria-label="Notre mission">
-  <span class="prose__kicker" data-en="Our mission">Notre mission</span>
+  <span class="prose__kicker"><span class="block__dot">●</span> <span data-en="About · Our mission">À propos · Notre mission</span></span>
   <h2 class="prose__h" data-en="Bringing order to the flood of economic news">Remettre de l'ordre dans le flot de l'info éco</h2>
   <p data-en="We have all been there: you just want to know “what's going on” in the economy, and you end up with fifteen tabs open, alarmist headlines, articles that repeat each other and others you already read yesterday. Information is everywhere… but time is always short.">
     On a tous vécu ça : on veut juste savoir « ce qui se passe » en économie,
@@ -241,7 +249,7 @@
 </section>
 
 <section class="steps" aria-label="En pratique">
-  <span class="prose__kicker" data-en="In practice">En pratique</span>
+  <span class="prose__kicker"><span class="block__dot">●</span> <span data-en="In practice">En pratique</span></span>
   <h2 class="prose__h" data-en="How the daily edition is made">Comment l'édition du jour est fabriquée</h2>
   <div class="steps__grid">
     <div class="step">
@@ -268,7 +276,7 @@
 </section>
 
 <section class="faq" aria-label="Questions fréquentes">
-  <span class="prose__kicker">FAQ</span>
+  <span class="prose__kicker"><span class="block__dot">●</span> FAQ</span>
   <h2 class="prose__h" data-en="The questions we get asked">Les questions qu'on nous pose</h2>
 
   <details class="qa">
