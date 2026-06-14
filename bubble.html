@@ -108,7 +108,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   <div class="page-head" style="margin-bottom:4px">
     <span class="eyebrow"><span class="lt-dot"></span> Flux de capitaux</span>
     <h1>Bubble Map</h1>
-    <p>Les flux de capitaux entre actifs en temps réel. Taille = volume du flux, couleur = direction sur 24 h. Survole une bulle pour le détail.</p>
+    <p>Les principales cryptomonnaies en direct. Taille = capitalisation, couleur = variation sur 24 h. Survole une bulle pour le détail.</p>
   </div>
 
   <!-- BASCULE DE VUE (segmented control) -->
@@ -124,16 +124,14 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     <div class="bm-bar" id="bmBar">
       <div class="bm-filters" id="bmFilters">
         <button class="bm-filter is-on" data-cat="all">Tous</button>
-        <button class="bm-filter" data-cat="crypto">Crypto</button>
-        <button class="bm-filter" data-cat="forex">Forex</button>
-        <button class="bm-filter" data-cat="indices">Indices</button>
-        <button class="bm-filter" data-cat="matieres">Mat. premières</button>
+        <button class="bm-filter" data-cat="up">Hausse</button>
+        <button class="bm-filter" data-cat="down">Baisse</button>
       </div>
       <div class="bm-legend" id="bmLegend"></div>
     </div>
     <div class="bm-stage panel">
       <canvas class="bm-canvas" id="bmCanvas"></canvas>
-      <span class="bm-tag">DONNÉES SIMULÉES · MISE À JOUR CONTINUE</span>
+      <span class="bm-tag">TOP CRYPTOS · COINGECKO · MAJ 60 S</span>
     </div>
   </div>
 
@@ -250,157 +248,133 @@ function render() {
 // ── Vue Bulles (canvas, données simulées — intention du design) ──
 // Taille = volume du flux, couleur = direction 24 h (haussier/baissier).
 // Physique douce, survol = surbrillance + infobulle, filtres par catégorie.
-var BUBBLE_ASSETS=[
-  {s:'BTC',cat:'crypto',flow:4.2,d:2.18},{s:'ETH',cat:'crypto',flow:2.6,d:1.04},
-  {s:'SOL',cat:'crypto',flow:1.4,d:-0.33},{s:'XRP',cat:'crypto',flow:0.8,d:-1.2},
-  {s:'DOGE',cat:'crypto',flow:0.5,d:3.4},
-  {s:'EUR/USD',cat:'forex',flow:3.4,d:-0.42},{s:'GBP/USD',cat:'forex',flow:1.9,d:0.18},
-  {s:'USD/JPY',cat:'forex',flow:2.2,d:0.65},{s:'AUD/USD',cat:'forex',flow:0.9,d:-0.51},
-  {s:'US500',cat:'indices',flow:3.8,d:0.58},{s:'US100',cat:'indices',flow:3.1,d:0.91},
-  {s:'DAX',cat:'indices',flow:1.6,d:-0.27},{s:'NIKKEI',cat:'indices',flow:1.2,d:1.12},
-  {s:'GOLD',cat:'matieres',flow:2.9,d:0.31},{s:'WTI',cat:'matieres',flow:1.8,d:-1.12},
-  {s:'SILVER',cat:'matieres',flow:0.9,d:0.74},{s:'COPPER',cat:'matieres',flow:0.7,d:1.6}
-];
-var bmCat='all', bmStarted=false;
+/* Bubble Map — données live /api/bubbles (CoinGecko : top cryptos, MAJ 60 s).
+   Taille = capitalisation, couleur = variation 24 h. */
+var bmCat='all', bmStarted=false, bmReduced=false, bmBubbles=[], bmMaxCap=1;
+var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
 
-// Légende : entrées/sorties calculées depuis BUBBLE_ASSETS
-(function(){
-  var inflow=BUBBLE_ASSETS.filter(function(a){return a.d>=0;}).reduce(function(s,a){return s+a.flow;},0);
-  var outflow=BUBBLE_ASSETS.filter(function(a){return a.d<0;}).reduce(function(s,a){return s+a.flow;},0);
+function bmRadius(cap){ return 22 + Math.sqrt((cap||1)/bmMaxCap)*58; }
+function bmMd(v){ return (v/1e9).toLocaleString('fr-FR',{maximumFractionDigits:0}); }
+
+function bmUpdateLegend(){
+  var up=0,down=0,i;
+  for(i=0;i<bmBubbles.length;i++){ if(bmBubbles[i].d>=0) up+=bmBubbles[i].cap||0; else down+=bmBubbles[i].cap||0; }
   var lg=document.getElementById('bmLegend');
   if(lg) lg.innerHTML=
-    '<span class="bm-legend__item"><i style="background:var(--bull)"></i> Entrées '+inflow.toFixed(1)+' Md$</span>'+
-    '<span class="bm-legend__item"><i style="background:var(--bear)"></i> Sorties '+outflow.toFixed(1)+' Md$</span>';
-})();
+    '<span class="bm-legend__item"><i style="background:var(--bull)"></i> Hausse '+bmMd(up)+' Md$</span>'+
+    '<span class="bm-legend__item"><i style="background:var(--bear)"></i> Baisse '+bmMd(down)+' Md$</span>';
+}
+
+function bmApplyAssets(assets){
+  var caps=assets.map(function(a){return a.cap||1;}); caps.push(1);
+  bmMaxCap=Math.max.apply(null,caps);
+  var byS={},i; for(i=0;i<bmBubbles.length;i++) byS[bmBubbles[i].s]=bmBubbles[i];
+  bmBubbles=assets.map(function(a){
+    var ex=byS[a.name], r=bmRadius(a.cap);
+    if(ex){ ex.d=a.change; ex.cap=a.cap; ex.r=r; return ex; }
+    var W=bmW||700, H=bmH||440;
+    return { s:a.name, d:a.change, cap:a.cap, r:r, x:W*0.2+Math.random()*W*0.6, y:H*0.2+Math.random()*H*0.6, vx:0, vy:0, k:1 };
+  });
+  bmUpdateLegend();
+  if(bmReduced && bmStarted) bmSettle();
+}
+
+function bmLoad(){
+  fetch('/api/bubbles').then(function(r){return r.json();}).then(function(d){
+    if(d && d.assets && d.assets.length) bmApplyAssets(d.assets);
+  }).catch(function(){});
+}
+
+function bmStep(){
+  var i,j,active=bmCat;
+  for(i=0;i<bmBubbles.length;i++){
+    var b=bmBubbles[i];
+    var on=active==='all'||(active==='up'&&b.d>=0)||(active==='down'&&b.d<0);
+    b.k+=((on?1:0.1)-b.k)*0.08;
+    b.vx+=(bmW/2-b.x)*0.0004; b.vy+=(bmH/2-b.y)*0.0006;
+    b.vx+=(Math.random()-0.5)*0.02; b.vy+=(Math.random()-0.5)*0.02;
+  }
+  for(i=0;i<bmBubbles.length;i++) for(j=i+1;j<bmBubbles.length;j++){
+    var a=bmBubbles[i], b2=bmBubbles[j];
+    var dx=b2.x-a.x, dy=b2.y-a.y, dist=Math.max(1,Math.hypot(dx,dy));
+    var min=a.r*a.k+b2.r*b2.k+6;
+    if(dist<min){ var f=(min-dist)/dist*0.04; a.vx-=dx*f;a.vy-=dy*f;b2.vx+=dx*f;b2.vy+=dy*f; }
+  }
+  for(i=0;i<bmBubbles.length;i++){
+    var b3=bmBubbles[i]; b3.vx*=0.92;b3.vy*=0.92;b3.x+=b3.vx;b3.y+=b3.vy;
+    var m=b3.r*b3.k+4; b3.x=Math.max(m,Math.min(bmW-m,b3.x)); b3.y=Math.max(m,Math.min(bmH-m,b3.y));
+  }
+}
+
+function bmDraw(){
+  var ctx=bmCtx,w=bmW,h=bmH,i;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle='rgba(127,184,232,0.05)';ctx.lineWidth=1;
+  for(var x=0;x<w;x+=64){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+  for(var y=0;y<h;y+=64){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+  var hovered=null;
+  for(i=0;i<bmBubbles.length;i++){
+    var b=bmBubbles[i], r=b.r*b.k; if(r<2) continue;
+    var up=b.d>=0, isHover=Math.hypot(bmMouse.x-b.x,bmMouse.y-b.y)<r;
+    if(isHover&&b.k>0.7) hovered=b;
+    var col=up?'74,222,156':'240,100,122';
+    var grad=ctx.createRadialGradient(b.x,b.y,r*0.2,b.x,b.y,r);
+    grad.addColorStop(0,'rgba('+col+','+(0.16*b.k)+')'); grad.addColorStop(1,'rgba('+col+','+(0.04*b.k)+')');
+    ctx.beginPath();ctx.arc(b.x,b.y,r,0,Math.PI*2);ctx.fillStyle=grad;ctx.fill();
+    ctx.lineWidth=isHover?2:1.2; ctx.strokeStyle='rgba('+col+','+((isHover?0.95:0.55)*b.k)+')';
+    if(isHover){ctx.shadowColor='rgba('+col+',0.6)';ctx.shadowBlur=18;}
+    ctx.stroke();ctx.shadowBlur=0;
+    if(b.k>0.5){
+      ctx.textAlign='center';
+      ctx.fillStyle='rgba(242,244,247,'+(0.95*b.k)+')';
+      ctx.font='600 '+Math.max(10,r*0.32)+'px Inter, sans-serif';
+      ctx.fillText(b.s,b.x,b.y-2);
+      ctx.fillStyle='rgba('+col+','+(0.95*b.k)+')';
+      ctx.font='500 '+Math.max(9,r*0.24)+'px "JetBrains Mono", monospace';
+      ctx.fillText((up?'▲':'▼')+' '+Math.abs(b.d).toFixed(2)+'%',b.x,b.y+r*0.32);
+    }
+  }
+  if(hovered){
+    var label=hovered.s+' · cap '+bmMd(hovered.cap)+' Md$ · '+(hovered.d>=0?'+':'−')+Math.abs(hovered.d).toFixed(2)+'% 24h';
+    ctx.font='500 12px "JetBrains Mono", monospace';
+    var tw=ctx.measureText(label).width+24;
+    var tx=Math.min(Math.max(hovered.x-tw/2,10),w-tw-10), ty=Math.max(12,hovered.y-hovered.r-44);
+    ctx.fillStyle='rgba(10,13,18,0.95)';ctx.strokeStyle='rgba(58,65,76,1)';ctx.lineWidth=1;
+    ctx.beginPath(); if(ctx.roundRect){ctx.roundRect(tx,ty,tw,30,5);}else{ctx.rect(tx,ty,tw,30);} ctx.fill();ctx.stroke();
+    ctx.fillStyle='#F2F4F7';ctx.textAlign='left';ctx.fillText(label,tx+12,ty+19);
+  }
+}
+
+function bmSettle(){ if(!bmCtx) return; for(var n=0;n<220;n++) bmStep(); bmDraw(); }
 
 var bmResize=null;
 function initBubbles(){
   if(bmStarted) return; bmStarted=true;
-  var reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var c=document.getElementById('bmCanvas'); if(!c) return;
-  var ctx=c.getContext('2d');
-  var raf, w, h;
+  bmReduced=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  bmC=document.getElementById('bmCanvas'); if(!bmC) return;
+  bmCtx=bmC.getContext('2d');
   var dpr=Math.min(window.devicePixelRatio||1,2);
-  function resize(){ w=c.offsetWidth; h=c.offsetHeight; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
-  resize();
-  bmResize=resize;
-  window.addEventListener('resize',resize);
-
-  var maxFlow=Math.max.apply(null,BUBBLE_ASSETS.map(function(a){return a.flow;}));
-  var bubbles=BUBBLE_ASSETS.map(function(a){
-    return { s:a.s, cat:a.cat, flow:a.flow, d:a.d,
-      r:26+(a.flow/maxFlow)*52,
-      x:Math.random()*600+100, y:Math.random()*300+100,
-      vx:0, vy:0, k:1 };
-  });
-
-  var mouse={x:-999,y:-999};
-  function onMove(e){ var r=c.getBoundingClientRect(); mouse={x:e.clientX-r.left,y:e.clientY-r.top}; }
-  function onLeave(){ mouse={x:-999,y:-999}; }
-  c.addEventListener('mousemove',onMove);
-  c.addEventListener('mouseleave',onLeave);
-
-  function step(){
-    var active=bmCat;
-    for(var i0=0;i0<bubbles.length;i0++){
-      var b=bubbles[i0];
-      var on=active==='all'||b.cat===active;
-      b.k+=((on?1:0.12)-b.k)*0.08;
-      b.vx+=(w/2-b.x)*0.0004;
-      b.vy+=(h/2-b.y)*0.0006;
-      b.vx+=(Math.random()-0.5)*0.02;
-      b.vy+=(Math.random()-0.5)*0.02;
-    }
-    for(var i=0;i<bubbles.length;i++){
-      for(var j=i+1;j<bubbles.length;j++){
-        var a=bubbles[i], b2=bubbles[j];
-        var dx=b2.x-a.x, dy=b2.y-a.y;
-        var dist=Math.max(1,Math.hypot(dx,dy));
-        var min=a.r*a.k+b2.r*b2.k+6;
-        if(dist<min){
-          var f=(min-dist)/dist*0.04;
-          a.vx-=dx*f; a.vy-=dy*f;
-          b2.vx+=dx*f; b2.vy+=dy*f;
-        }
-      }
-    }
-    for(var i2=0;i2<bubbles.length;i2++){
-      var b3=bubbles[i2];
-      b3.vx*=0.92; b3.vy*=0.92;
-      b3.x+=b3.vx; b3.y+=b3.vy;
-      var m=b3.r*b3.k+4;
-      b3.x=Math.max(m,Math.min(w-m,b3.x));
-      b3.y=Math.max(m,Math.min(h-m,b3.y));
-    }
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,w,h);
-    ctx.strokeStyle='rgba(127,184,232,0.05)'; ctx.lineWidth=1;
-    for(var x=0;x<w;x+=64){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
-    for(var y=0;y<h;y+=64){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
-    var hovered=null;
-    for(var i=0;i<bubbles.length;i++){
-      var b=bubbles[i];
-      var r=b.r*b.k;
-      if(r<2) continue;
-      var up=b.d>=0;
-      var isHover=Math.hypot(mouse.x-b.x,mouse.y-b.y)<r;
-      if(isHover && b.k>0.7) hovered=b;
-      var col=up?'74,222,156':'240,100,122';
-      var grad=ctx.createRadialGradient(b.x,b.y,r*0.2,b.x,b.y,r);
-      grad.addColorStop(0,'rgba('+col+','+(0.16*b.k)+')');
-      grad.addColorStop(1,'rgba('+col+','+(0.04*b.k)+')');
-      ctx.beginPath(); ctx.arc(b.x,b.y,r,0,Math.PI*2);
-      ctx.fillStyle=grad; ctx.fill();
-      ctx.lineWidth=isHover?2:1.2;
-      ctx.strokeStyle='rgba('+col+','+((isHover?0.95:0.55)*b.k)+')';
-      if(isHover){ ctx.shadowColor='rgba('+col+',0.6)'; ctx.shadowBlur=18; }
-      ctx.stroke(); ctx.shadowBlur=0;
-      if(b.k>0.5){
-        ctx.textAlign='center';
-        ctx.fillStyle='rgba(242,244,247,'+(0.95*b.k)+')';
-        ctx.font='600 '+Math.max(10,r*0.3)+'px Inter, sans-serif';
-        ctx.fillText(b.s,b.x,b.y-2);
-        ctx.fillStyle='rgba('+col+','+(0.95*b.k)+')';
-        ctx.font='500 '+Math.max(9,r*0.22)+'px "JetBrains Mono", monospace';
-        ctx.fillText((up?'▲':'▼')+' '+Math.abs(b.d).toFixed(2)+'%',b.x,b.y+r*0.3);
-      }
-    }
-    if(hovered){
-      var label=hovered.s+' · flux '+hovered.flow.toFixed(1)+' Md$ · '+(hovered.d>=0?'+':'−')+Math.abs(hovered.d).toFixed(2)+'% 24h';
-      ctx.font='500 12px "JetBrains Mono", monospace';
-      var tw=ctx.measureText(label).width+24;
-      var tx=Math.min(Math.max(hovered.x-tw/2,10),w-tw-10);
-      var ty=Math.max(12,hovered.y-hovered.r-44);
-      ctx.fillStyle='rgba(10,13,18,0.95)';
-      ctx.strokeStyle='rgba(58,65,76,1)'; ctx.lineWidth=1;
-      ctx.beginPath();
-      if(ctx.roundRect){ ctx.roundRect(tx,ty,tw,30,5); } else { ctx.rect(tx,ty,tw,30); }
-      ctx.fill(); ctx.stroke();
-      ctx.fillStyle='#F2F4F7'; ctx.textAlign='left';
-      ctx.fillText(label,tx+12,ty+19);
-    }
-  }
-
-  if(reduced){
-    for(var n=0;n<260;n++) step();
-    draw();
-  } else {
-    var loop=function(){ step(); draw(); raf=requestAnimationFrame(loop); };
-    loop();
-  }
+  function resize(){ bmW=bmC.offsetWidth; bmH=bmC.offsetHeight; bmC.width=bmW*dpr; bmC.height=bmH*dpr; bmCtx.setTransform(dpr,0,0,dpr,0,0); if(bmReduced) bmDraw(); }
+  resize(); bmResize=resize; window.addEventListener('resize',resize);
+  bmC.addEventListener('mousemove',function(e){ var rc=bmC.getBoundingClientRect(); bmMouse={x:e.clientX-rc.left,y:e.clientY-rc.top}; });
+  bmC.addEventListener('mouseleave',function(){ bmMouse={x:-999,y:-999}; });
+  if(!bmReduced){ var loop=function(){ bmStep(); bmDraw(); bmRaf=requestAnimationFrame(loop); }; loop(); }
+  else if(bmBubbles.length) bmSettle();
 }
 
-// Filtres de catégorie (bm-filter)
+// Filtres direction (Tous / Hausse / Baisse)
 (function(){
   var f=document.getElementById('bmFilters');
   if(f) f.addEventListener('click',function(e){
     var b=e.target.closest('.bm-filter'); if(!b) return;
     bmCat=b.getAttribute('data-cat');
     f.querySelectorAll('.bm-filter').forEach(function(x){ x.classList.toggle('is-on',x===b); });
+    if(bmReduced) bmSettle();
   });
 })();
+// Données live + rafraîchissement chaque minute
+bmLoad();
+setInterval(bmLoad, 60000);
 
 var mapBuilt=false;
 function setView(v){
