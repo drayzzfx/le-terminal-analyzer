@@ -56,11 +56,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* TOPBAR (remplacée par le chrome global — masquée) */
 .topbar{display:none !important}
 .topbar--legacy{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.topbar-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em;color:var(--text)}
+.topbar-brand{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.01em;color:var(--text)}
 .topbar-brand span{color:var(--v2)}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .back-link{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text2);text-decoration:none;font-size:16px;transition:all .2s;flex-shrink:0}
-.back-link:hover{border-color:rgba(0,149,255,.4);color:var(--v2)}
+.back-link:hover{border-color:rgba(127,184,232,.4);color:var(--v2)}
 
 /* CURRENCY TOGGLE */
 .currency-toggle{display:flex;border-radius:50px;overflow:hidden;border:1px solid var(--border)}
@@ -72,39 +72,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* HERO */
 .page-hero{margin-bottom:32px}
-.page-hero h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:8px}
-.page-hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#00C6FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-hero h1{font-family:'Anton', 'Arial Narrow', sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:8px}
+.page-hero h1 span{background:linear-gradient(135deg,var(--v),var(--v2),#BFDCF5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .page-hero p{font-size:14px;color:var(--text2);font-weight:300}
 
 /* STATS ROW */
 .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;text-align:center}
-.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;letter-spacing:-0.02em;line-height:1;margin-bottom:4px}
+.stat-val{font-family:'Anton', 'Arial Narrow', sans-serif;font-size:24px;font-weight:800;letter-spacing:-0.02em;line-height:1;margin-bottom:4px}
 .stat-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;color:var(--text3);text-transform:uppercase}
 
 /* CALENDAR */
 .calendar-section{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.cal-title{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.01em}
+.cal-title{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.01em}
 .cal-nav{display:flex;align-items:center;gap:10px}
 .cal-nav-btn{width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:14px;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.cal-nav-btn:hover{border-color:rgba(0,149,255,.4);color:var(--v2)}
+.cal-nav-btn:hover{border-color:rgba(127,184,232,.4);color:var(--v2)}
 .cal-month{font-size:13px;font-weight:600;color:var(--text2);min-width:130px;text-align:center}
 
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-dow{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--text3);text-align:center;padding:6px 0;text-transform:uppercase}
 .cal-day{position:relative;border-radius:10px;padding:6px;min-height:72px;cursor:pointer;transition:all .2s;border:1px solid transparent;background:rgba(255,255,255,.02)}
-.cal-day:hover{background:rgba(0,149,255,.06);border-color:rgba(0,149,255,.2)}
+.cal-day:hover{background:rgba(127,184,232,.06);border-color:rgba(127,184,232,.2)}
 .cal-day.other-month{opacity:.3;pointer-events:none}
 .cal-day.today .day-num{color:var(--v2);font-weight:700}
 .cal-day.today::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--v2)}
 .cal-day.has-trades{border-color:rgba(255,255,255,.06)}
-.cal-day.profit{background:rgba(52,211,153,.07);border-color:rgba(52,211,153,.2)}
-.cal-day.profit:hover{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.35)}
-.cal-day.loss{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.18)}
-.cal-day.loss:hover{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)}
-.cal-day.breakeven{background:rgba(251,191,36,.05);border-color:rgba(251,191,36,.2)}
-.day-num{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);line-height:1}
+.cal-day.profit{background:rgba(74,222,156,.07);border-color:rgba(74,222,156,.2)}
+.cal-day.profit:hover{background:rgba(74,222,156,.12);border-color:rgba(74,222,156,.35)}
+.cal-day.loss{background:rgba(240,100,122,.06);border-color:rgba(240,100,122,.18)}
+.cal-day.loss:hover{background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.3)}
+.cal-day.breakeven{background:rgba(232,194,104,.05);border-color:rgba(232,194,104,.2)}
+.day-num{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:600;color:var(--text2);line-height:1}
 .day-pnl{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;margin-top:4px}
 .day-pnl.pos{color:var(--green)}
 .day-pnl.neg{color:var(--red)}
@@ -117,16 +117,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .day-dot.b{background:var(--amber)}
 
 /* ADD TRADE BTN */
-.add-trade-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,149,255,.3);margin-bottom:20px}
-.add-trade-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,149,255,.45)}
+.add-trade-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:var(--r);color:white;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(127,184,232,.3);margin-bottom:20px}
+.add-trade-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(127,184,232,.45)}
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .modal-overlay.show{display:flex;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.modal-box{max-width:580px;width:100%;background:var(--bg2);border:1px solid rgba(0,149,255,.25);border-radius:24px;padding:32px;position:relative;margin:auto;overflow:visible}
+.modal-box{max-width:580px;width:100%;background:var(--bg2);border:1px solid rgba(127,184,232,.25);border-radius:24px;padding:32px;position:relative;margin:auto;overflow:visible}
 .modal-box::before{content:'';position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
-.modal-title{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px}
+.modal-title{font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px}
 .modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
 .modal-close{position:absolute;top:16px;right:18px;background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1;padding:4px;transition:color .2s}
 .modal-close:hover{color:var(--text)}
@@ -137,26 +137,26 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .field{display:flex;flex-direction:column;gap:6px}
 .lbl{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--v3);text-transform:uppercase}
 input[type=text],input[type=number],input[type=date],select,textarea{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;width:100%;transition:border-color .2s,background .2s;-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{border-color:rgba(0,149,255,.5);background:rgba(0,149,255,.06)}
+input:focus,select:focus,textarea:focus{border-color:rgba(127,184,232,.5);background:rgba(127,184,232,.06)}
 input::placeholder,textarea::placeholder{color:var(--text3)}
 select{cursor:pointer}
-select option{background:#13131f}
+select option{background:#10141B}
 textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
 .dir-group{display:flex;gap:8px}
-.dir-btn{flex:1;padding:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r2);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
-.dir-btn.long.on{border-color:rgba(52,211,153,.5);color:var(--green);background:rgba(52,211,153,.08)}
-.dir-btn.short.on{border-color:rgba(248,113,113,.5);color:var(--red);background:rgba(248,113,113,.08)}
+.dir-btn{flex:1;padding:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r2);font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
+.dir-btn.long.on{border-color:rgba(74,222,156,.5);color:var(--green);background:rgba(74,222,156,.08)}
+.dir-btn.short.on{border-color:rgba(240,100,122,.5);color:var(--red);background:rgba(240,100,122,.08)}
 
 .result-group{display:flex;gap:8px}
-.res-btn{flex:1;padding:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
-.res-btn.win.on{border-color:rgba(52,211,153,.5);color:var(--green);background:rgba(52,211,153,.1)}
-.res-btn.loss.on{border-color:rgba(248,113,113,.5);color:var(--red);background:rgba(248,113,113,.1)}
-.res-btn.be.on{border-color:rgba(251,191,36,.5);color:var(--amber);background:rgba(251,191,36,.08)}
+.res-btn{flex:1;padding:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
+.res-btn.win.on{border-color:rgba(74,222,156,.5);color:var(--green);background:rgba(74,222,156,.1)}
+.res-btn.loss.on{border-color:rgba(240,100,122,.5);color:var(--red);background:rgba(240,100,122,.1)}
+.res-btn.be.on{border-color:rgba(232,194,104,.5);color:var(--amber);background:rgba(232,194,104,.08)}
 
 /* UPLOAD */
-.upload-zone{border:1.5px dashed rgba(0,149,255,.25);border-radius:var(--r2);background:var(--vglow2);padding:16px;text-align:center;cursor:pointer;transition:all .25s;position:relative;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.upload-zone:hover{border-color:var(--v);background:rgba(0,149,255,.1)}
+.upload-zone{border:1.5px dashed rgba(127,184,232,.25);border-radius:var(--r2);background:var(--vglow2);padding:16px;text-align:center;cursor:pointer;transition:all .25s;position:relative;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.upload-zone:hover{border-color:var(--v);background:rgba(127,184,232,.1)}
 .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-text{font-size:11px;color:var(--text2)}
 .upload-preview{display:none;position:relative;border-radius:10px;overflow:hidden;margin-top:6px}
@@ -165,64 +165,64 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 .preview-rm:hover{border-color:var(--red);color:var(--red)}
 
 /* SUBMIT BTN */
-.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:var(--r);color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(0,149,255,.3);margin-top:8px}
-.submit-btn:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(0,149,255,.45)}
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:var(--r);color:white;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(127,184,232,.3);margin-top:8px}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(127,184,232,.45)}
 .submit-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
 /* DAY DETAIL MODAL */
-.detail-box{max-width:680px;width:100%;background:var(--bg2);border:1px solid rgba(0,149,255,.2);border-radius:24px;padding:28px;position:relative;margin:auto;max-height:90vh;overflow-y:auto}
+.detail-box{max-width:680px;width:100%;background:var(--bg2);border:1px solid rgba(127,184,232,.2);border-radius:24px;padding:28px;position:relative;margin:auto;max-height:90vh;overflow-y:auto}
 .detail-box::-webkit-scrollbar{width:3px}
 .detail-box::-webkit-scrollbar-thumb{background:var(--v)}
 
 .day-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.day-detail-date{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em}
-.day-pnl-badge{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;padding:6px 16px;border-radius:50px;border:1px solid}
+.day-detail-date{font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em}
+.day-pnl-badge{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:18px;font-weight:800;padding:6px 16px;border-radius:50px;border:1px solid}
 
 .trade-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;transition:all .2s}
-.trade-card:hover{border-color:rgba(0,149,255,.2)}
+.trade-card:hover{border-color:rgba(127,184,232,.2)}
 .trade-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.trade-pair{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700}
+.trade-pair{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:16px;font-weight:700}
 .trade-result-badge{font-size:10px;font-weight:700;letter-spacing:.1em;padding:4px 12px;border-radius:50px}
-.trade-result-badge.win{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
-.trade-result-badge.loss{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)}
-.trade-result-badge.be{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.3)}
+.trade-result-badge.win{background:rgba(74,222,156,.15);color:var(--green);border:1px solid rgba(74,222,156,.3)}
+.trade-result-badge.loss{background:rgba(240,100,122,.12);color:var(--red);border:1px solid rgba(240,100,122,.3)}
+.trade-result-badge.be{background:rgba(232,194,104,.1);color:var(--amber);border:1px solid rgba(232,194,104,.3)}
 .trade-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--text3);margin-bottom:8px}
 .trade-meta span b{color:var(--text2);font-weight:500}
-.trade-pnl{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800}
+.trade-pnl{font-family:'Anton', 'Arial Narrow', sans-serif;font-size:20px;font-weight:800}
 .trade-notes-text{font-size:12px;color:var(--text2);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .trade-img{width:100%;border-radius:10px;margin-top:10px;border:1px solid var(--border);max-height:200px;object-fit:cover;cursor:pointer;transition:opacity .2s}
 .trade-img:hover{opacity:.85}
 .trade-actions{display:flex;gap:6px;margin-top:10px}
-.trade-del-btn{padding:5px 12px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:8px;color:#F87171;font-size:11px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
-.trade-del-btn:hover{background:rgba(248,113,113,.15)}
-.trade-edit-btn{padding:5px 12px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.25);border-radius:8px;color:var(--v2);font-size:11px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
-.trade-edit-btn:hover{background:rgba(0,149,255,.15)}
+.trade-del-btn{padding:5px 12px;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.25);border-radius:8px;color:#F0647A;font-size:11px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.trade-del-btn:hover{background:rgba(240,100,122,.15)}
+.trade-edit-btn{padding:5px 12px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.25);border-radius:8px;color:var(--v2);font-size:11px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.trade-edit-btn:hover{background:rgba(127,184,232,.15)}
 
 /* IA ANALYSIS */
-.ia-section{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:14px;padding:20px;margin-top:16px}
+.ia-section{background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:14px;padding:20px;margin-top:16px}
 .ia-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .ia-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--v2);text-transform:uppercase}
-.ia-btn{padding:7px 16px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.ia-btn{padding:7px 16px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
 .ia-btn:hover{background:#5A9BD4}
 .ia-btn:disabled{opacity:.5;cursor:not-allowed}
 .ia-content{font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-line}
 .ia-loading{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text3)}
-.ia-orb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--v),#00C6FF);animation:orbPulse 1.5s ease-in-out infinite}
+.ia-orb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--v),#BFDCF5);animation:orbPulse 1.5s ease-in-out infinite}
 @keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 
 /* GLOBAL IA PANEL */
 .global-ia{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px}
 .global-ia-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.global-ia-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700}
+.global-ia-title{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:16px;font-weight:700}
 .global-ia-content{font-size:13px;color:var(--text2);line-height:1.8}
 
 /* CONFIRM */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px)}
 .confirm-overlay.show{opacity:1;pointer-events:all}
-.confirm-box{background:#0E0E1A;border:1px solid rgba(248,113,113,.25);border-radius:20px;padding:28px;width:min(340px,90vw);text-align:center}
+.confirm-box{background:#0B0E13;border:1px solid rgba(240,100,122,.25);border-radius:20px;padding:28px;width:min(340px,90vw);text-align:center}
 .confirm-btns{display:flex;gap:10px;justify-content:center;margin-top:20px}
-.confirm-cancel{flex:1;padding:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
-.confirm-ok{flex:1;padding:10px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);border-radius:12px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.confirm-cancel{flex:1;padding:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.confirm-ok{flex:1;padding:10px;background:rgba(240,100,122,.15);border:1px solid rgba(240,100,122,.4);border-radius:12px;color:#F0647A;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 
 /* IMAGE LIGHTBOX */
 .lightbox{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);align-items:center;justify-content:center;cursor:zoom-out}
@@ -231,34 +231,34 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
 /* BROKER BANNER */
 .broker-banner{border-radius:16px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.broker-banner.disconnected{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2)}
-.broker-banner.connected{background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2)}
-.broker-banner.syncing{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2)}
+.broker-banner.disconnected{background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2)}
+.broker-banner.connected{background:rgba(74,222,156,.06);border:1px solid rgba(74,222,156,.2)}
+.broker-banner.syncing{background:rgba(232,194,104,.06);border:1px solid rgba(232,194,104,.2)}
 .broker-banner-left{display:flex;align-items:center;gap:12px}
 .broker-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.broker-banner.disconnected .broker-icon{background:rgba(0,149,255,.12)}
-.broker-banner.connected .broker-icon{background:rgba(52,211,153,.12)}
-.broker-banner.syncing .broker-icon{background:rgba(251,191,36,.12)}
+.broker-banner.disconnected .broker-icon{background:rgba(127,184,232,.12)}
+.broker-banner.connected .broker-icon{background:rgba(74,222,156,.12)}
+.broker-banner.syncing .broker-icon{background:rgba(232,194,104,.12)}
 .broker-banner-text{}
-.broker-banner-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px}
+.broker-banner-title{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:14px;font-weight:700;margin-bottom:2px}
 .broker-banner-sub{font-size:11px;color:var(--text3)}
 .broker-banner-actions{display:flex;gap:8px;flex-shrink:0}
-.broker-connect-btn{padding:8px 18px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.broker-connect-btn{padding:8px 18px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
 .broker-connect-btn:hover{background:#5A9BD4}
-.broker-sync-btn{padding:8px 18px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:50px;color:var(--green);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
-.broker-sync-btn:hover{background:rgba(52,211,153,.25)}
+.broker-sync-btn{padding:8px 18px;background:rgba(74,222,156,.15);border:1px solid rgba(74,222,156,.3);border-radius:50px;color:var(--green);font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.broker-sync-btn:hover{background:rgba(74,222,156,.25)}
 .broker-sync-btn:disabled{opacity:.5;cursor:not-allowed}
-.broker-disconnect-btn{padding:8px 14px;background:transparent;border:1px solid rgba(248,113,113,.25);border-radius:50px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
-.broker-disconnect-btn:hover{background:rgba(248,113,113,.1)}
+.broker-disconnect-btn{padding:8px 14px;background:transparent;border:1px solid rgba(240,100,122,.25);border-radius:50px;color:#F0647A;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
+.broker-disconnect-btn:hover{background:rgba(240,100,122,.1)}
 
 /* BROKER MODAL */
 .broker-modal{max-width:480px}
 .broker-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .broker-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--v3);text-transform:uppercase}
 .broker-field input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
-.broker-field input:focus{border-color:rgba(0,149,255,.5)}
+.broker-field input:focus{border-color:rgba(127,184,232,.5)}
 .broker-field input::placeholder{color:var(--text3)}
-.broker-steps{background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.15);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.8}
+.broker-steps{background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.15);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.8}
 .broker-steps b{color:var(--v2)}
 .broker-steps a{color:var(--v2);text-decoration:none}
 .broker-steps a:hover{text-decoration:underline}
@@ -267,23 +267,23 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 /* PLATFORM PICKER */
 .platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
 .platform-card{padding:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
-.platform-card:hover{border-color:rgba(0,149,255,.4);background:rgba(0,149,255,.06)}
+.platform-card:hover{border-color:rgba(127,184,232,.4);background:rgba(127,184,232,.06)}
 .platform-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
-.platform-card.soon::after{content:'Bientôt';position:absolute;top:8px;right:8px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.06em}
+.platform-card.soon::after{content:'Bientôt';position:absolute;top:8px;right:8px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.3);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.06em}
 .platform-card-icon{font-size:24px;margin-bottom:8px}
-.platform-card-name{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.platform-card-name{font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
 .platform-card-sub{font-size:10px;color:var(--text3);line-height:1.4}
 .broker-back{background:transparent;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:0;margin-bottom:16px;display:flex;align-items:center;gap:4px;transition:color .2s}
 .broker-back:hover{color:var(--text2)}
 
 /* MT TYPE TOGGLE */
 .mt-toggle{display:flex;gap:8px;margin-bottom:16px}
-.mt-btn{flex:1;padding:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
-.mt-btn.on{border-color:rgba(0,149,255,.5);color:var(--v2);background:rgba(0,149,255,.08)}
+.mt-btn{flex:1;padding:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center}
+.mt-btn.on{border-color:rgba(127,184,232,.5);color:var(--v2);background:rgba(127,184,232,.08)}
 
 /* CSV IMPORT */
-.csv-drop{border:1.5px dashed rgba(0,149,255,.3);border-radius:14px;background:rgba(0,149,255,.04);padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;margin-bottom:16px}
-.csv-drop:hover,.csv-drop.over{border-color:var(--v);background:rgba(0,149,255,.1)}
+.csv-drop{border:1.5px dashed rgba(127,184,232,.3);border-radius:14px;background:rgba(127,184,232,.04);padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;margin-bottom:16px}
+.csv-drop:hover,.csv-drop.over{border-color:var(--v);background:rgba(127,184,232,.1)}
 .csv-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .csv-drop-icon{font-size:28px;margin-bottom:8px}
 .csv-drop-txt{font-size:13px;color:var(--text2);font-weight:500}
@@ -296,20 +296,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 .csv-preview-table tr:last-child td{border-bottom:none}
 .csv-platforms{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .csv-platform-btn{padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
-.csv-platform-btn.on{background:rgba(0,149,255,.12);border-color:rgba(0,149,255,.4);color:var(--v2)}
+.csv-platform-btn.on{background:rgba(127,184,232,.12);border-color:rgba(127,184,232,.4);color:var(--v2)}
 
 /* AUTH */
 .auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
-.auth-box{max-width:380px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:20px;padding:28px;position:relative;text-align:center}
+.auth-box{max-width:380px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(127,184,232,.3);border-radius:20px;padding:28px;position:relative;text-align:center}
 .auth-box::before{content:'';position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
 .auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;text-align:left}
-.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
+.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#7E8794;text-transform:uppercase}
 .auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%}
-.auth-field input:focus{border-color:rgba(0,149,255,.5)}
-.auth-submit{width:100%;padding:12px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+.auth-field input:focus{border-color:rgba(127,184,232,.5)}
+.auth-submit{width:100%;padding:12px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
 .auth-tabs{display:flex;gap:0;margin-bottom:20px;border:1px solid var(--border);border-radius:50px;overflow:hidden}
-.auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
+.auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
 .auth-tab.on{background:var(--v);color:white}
 .auth-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
 .auth-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer}
@@ -317,7 +317,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 /* USER CHIP */
 .user-chip{display:none;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s}
 .user-chip.show{display:flex}
-.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#00C6FF);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#BFDCF5);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
 .user-name{font-size:11px;font-weight:500;color:var(--text2)}
 
 @media(max-width:680px){
@@ -411,29 +411,29 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jr-side{display:flex;flex-direction:column;gap:16px;min-width:0}
   .jr-dash .calendar-section{min-width:0}
   .jr-panel{background:var(--surface,rgba(255,255,255,.02));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:16px;padding:18px 20px}
-  .jr-panel__title{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#8a93a5);margin-bottom:14px}
+  .jr-panel__title{display:block;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#7E8794);margin-bottom:14px}
   .jr-eq{width:100%;height:150px;display:block}
   .jr-tbl{display:flex;flex-direction:column}
   .jr-rowh,.jr-row2{display:grid;grid-template-columns:80px 110px 80px 1fr 70px 100px;gap:10px;align-items:center;padding:10px 4px}
   @media(max-width:780px){.jr-rowh,.jr-row2{grid-template-columns:70px 90px 70px 1fr}.jr-rowh span:nth-child(4),.jr-rowh span:nth-child(5),.jr-row2 .jr-hidemob{display:none}}
-  .jr-rowh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3,#8a93a5);border-bottom:1px solid var(--border,rgba(255,255,255,.08))}
+  .jr-rowh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3,#7E8794);border-bottom:1px solid var(--border,rgba(255,255,255,.08))}
   .jr-row2{border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}
   .jr-row2:last-child{border-bottom:none}
-  .jr-row2 .jr-pair{font-weight:700;color:var(--text,#e8ecf4)}
+  .jr-row2 .jr-pair{font-weight:700;color:var(--text,#EEF2F7)}
   .jr-sideb{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid;display:inline-block}
-  .jr-sideb.long{color:var(--green);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08)}
-  .jr-sideb.short{color:var(--red);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
+  .jr-sideb.long{color:var(--green);border-color:rgba(74,222,156,.4);background:rgba(74,222,156,.08)}
+  .jr-sideb.short{color:var(--red);border-color:rgba(240,100,122,.4);background:rgba(240,100,122,.08)}
   .jr-pnl2{font-family:var(--font-mono,'JetBrains Mono',monospace);font-weight:700;text-align:right;min-width:74px}
-  .jr-empty{color:var(--text3,#8a93a5);font-size:13px;padding:18px 4px;text-align:center}
-  .jr-mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2,#aeb6c4)}
+  .jr-empty{color:var(--text3,#7E8794);font-size:13px;padding:18px 4px;text-align:center}
+  .jr-mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2,#C3CAD4)}
   /* Stats — style maquette (label mono en haut, valeur dessous) */
   .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
   @media(max-width:880px){.stats-row{grid-template-columns:1fr 1fr}}
   .jr-stat{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
-  .jr-stat__l{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#8a93a5)}
-  .jr-stat__v{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:22px;font-weight:700;color:var(--text,#e8ecf4);line-height:1}
+  .jr-stat__l{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#7E8794)}
+  .jr-stat__v{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:22px;font-weight:700;color:var(--text,#EEF2F7);line-height:1}
   /* Calendrier — titre mono comme la maquette */
-  .cal-title,.cal-month{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;font-size:12px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--text-muted,#8a93a5)!important;font-weight:500!important}
+  .cal-title,.cal-month{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;font-size:12px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--text-muted,#7E8794)!important;font-weight:500!important}
   /* Boutons bas de page — intégrés au design */
   .broker-banner{background:var(--bg-elevated,rgba(255,255,255,.02))!important;border:1px solid var(--border-subtle,rgba(255,255,255,.08))!important;border-radius:var(--r-lg,16px)!important}
   .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border:1px solid transparent!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;transition:all .15s!important}
@@ -477,7 +477,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <!-- BROKER BANNER -->
   <div class="broker-banner disconnected" id="brokerBanner">
     <div class="broker-banner-left">
-      <div class="broker-icon" id="brokerIcon">📡</div>
+      <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
       <div class="broker-banner-text">
         <div class="broker-banner-title" id="brokerTitle">Connecte ton compte de trading</div>
         <div class="broker-banner-sub" id="brokerSub">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
@@ -575,7 +575,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <label class="lbl">Screenshot du trade</label>
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="tradeImg" accept="image/*" onchange="onTradeImg(this)">
-        <div style="font-size:20px">📈</div>
+        <div style="font-size:20px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></div>
         <div class="upload-text">Glisse ou clique pour ajouter un screenshot</div>
         <div style="font-size:10px;color:var(--text3)">PNG, JPG</div>
       </div>
@@ -585,7 +585,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
     </div>
 
-    <button class="submit-btn" id="submitTradeBtn" onclick="saveTrade()">💾 Enregistrer le trade</button>
+    <button class="submit-btn" id="submitTradeBtn" onclick="saveTrade()"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Enregistrer le trade</button>
   </div>
 </div>
 
@@ -600,8 +600,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <!-- CONFIRM DELETE -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
-    <div style="font-size:32px;margin-bottom:12px">🗑</div>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px">Supprimer ce trade ?</div>
+    <div style="font-size:32px;margin-bottom:12px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></div>
+    <div style="font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:18px;font-weight:800;margin-bottom:8px">Supprimer ce trade ?</div>
     <div style="font-size:13px;color:var(--text2)">Cette action est irréversible.</div>
     <div class="confirm-btns">
       <button class="confirm-cancel" onclick="closeConfirm()">Annuler</button>
@@ -626,22 +626,22 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="modal-sub">Choisis ta plateforme de trading</div>
       <div class="platform-grid">
         <div class="platform-card" onclick="showBrokerStep2('metaapi')">
-          <div class="platform-card-icon">📊</div>
+          <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
           <div class="platform-card-name">MT4 / MT5</div>
           <div class="platform-card-sub">Via MetaApi<br>Sync automatique</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('csv')">
-          <div class="platform-card-icon">📂</div>
+          <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
           <div class="platform-card-name">Import CSV</div>
           <div class="platform-card-sub">Topstep, FTMO<br>MyFundedFX, etc.</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('tradelocker')">
-          <div class="platform-card-icon">🔄</div>
+          <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
           <div class="platform-card-name">TradeLocker</div>
           <div class="platform-card-sub">MyFundedFX, The5ers<br>Sync automatique</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('dxtrade')">
-          <div class="platform-card-icon">📈</div>
+          <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
           <div class="platform-card-name">DXtrade</div>
           <div class="platform-card-sub">Funded firms DXtrade<br>Sync automatique</div>
         </div>
@@ -753,7 +753,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
       <div class="csv-drop" id="csvDrop">
         <input type="file" accept=".csv,.txt" onchange="onCsvFile(event)" id="csvFileInput">
-        <div class="csv-drop-icon">📄</div>
+        <div class="csv-drop-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
         <div class="csv-drop-txt">Glisse ton fichier CSV ici</div>
         <div class="csv-drop-sub">ou clique pour sélectionner</div>
       </div>
@@ -775,7 +775,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuth()">✕</button>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:20px">Connexion</div>
+    <div style="font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;margin-bottom:20px">Connexion</div>
     <div class="auth-tabs">
       <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Connexion</button>
       <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
@@ -870,7 +870,7 @@ function renderStats() {
 
   var streakEl = document.getElementById('statStreak');
   if(streak > 0 && streakType) {
-    streakEl.textContent = (streakType === 'win' ? '🔥' : '❄️') + ' ' + streak;
+    streakEl.textContent = (streakType === 'win' ? '▲' : '▼') + ' ' + streak;
     streakEl.style.color = streakType === 'win' ? 'var(--green)' : 'var(--red)';
   } else {
     streakEl.textContent = '—';
@@ -978,7 +978,7 @@ function openDayDetail(dateStr) {
   var pnl = dayTrades.reduce(function(s,t){ return s+(parseFloat(t.pnl)||0); }, 0);
   var pnlStr = (pnl>0?'+':'')+pnl.toFixed(2)+curSym();
   var pnlColor = pnl>0?'var(--green)':pnl<0?'var(--red)':'var(--amber)';
-  var pnlBorder = pnl>0?'rgba(52,211,153,.4)':pnl<0?'rgba(248,113,113,.4)':'rgba(251,191,36,.4)';
+  var pnlBorder = pnl>0?'rgba(74,222,156,.4)':pnl<0?'rgba(240,100,122,.4)':'rgba(232,194,104,.4)';
 
   var html = '<div class="day-detail-header">'+
     '<div>'+
@@ -990,9 +990,9 @@ function openDayDetail(dateStr) {
 
   if(!dayTrades.length) {
     html += '<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">'+
-      '<div style="font-size:40px;margin-bottom:12px">📅</div>'+
+      '<div style="font-size:40px;margin-bottom:12px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>'+
       'Aucun trade ce jour<br><br>'+
-      '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">+ Ajouter un trade</button>'+
+      '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer">+ Ajouter un trade</button>'+
     '</div>';
   } else {
     // Trade cards
@@ -1017,8 +1017,8 @@ function openDayDetail(dateStr) {
         (t.notes?'<div class="trade-notes-text">'+t.notes+'</div>':'')+
         (t.img?'<img class="trade-img" src="'+t.img+'" alt="screenshot" onclick="openLightbox(\''+t.id+'\')">':'')+
         '<div class="trade-actions">'+
-          '<button class="trade-edit-btn" onclick="editTrade(\''+t.id+'\')">✏️ Modifier</button>'+
-          '<button class="trade-del-btn" onclick="askDelete(\''+t.id+'\')">🗑 Supprimer</button>'+
+          '<button class="trade-edit-btn" onclick="editTrade(\''+t.id+'\')"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Modifier</button>'+
+          '<button class="trade-del-btn" onclick="askDelete(\''+t.id+'\')"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Supprimer</button>'+
         '</div>'+
       '</div>';
     });
@@ -1026,7 +1026,7 @@ function openDayDetail(dateStr) {
     // Day IA analysis
     html += '<div class="ia-section">'+
       '<div class="ia-header">'+
-        '<div class="ia-title">🧠 Analyse IA de cette journée</div>'+
+        '<div class="ia-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="9" y="9" width="6" height="6"/><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> Analyse IA de cette journée</div>'+
         '<button class="ia-btn" id="dayIaBtn" onclick="requestDayIA(\''+dateStr+'\')">Analyser</button>'+
       '</div>'+
       '<div id="dayIaContent" class="ia-content" style="color:var(--text3)">Clique sur "Analyser" pour obtenir un feedback IA sur tes trades de la journée.</div>'+
@@ -1034,7 +1034,7 @@ function openDayDetail(dateStr) {
 
     // Add trade for this day
     html += '<div style="margin-top:16px;text-align:center">'+
-      '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:9px 20px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:var(--v2);font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">+ Ajouter un trade ce jour</button>'+
+      '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:9px 20px;background:transparent;border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;cursor:pointer">+ Ajouter un trade ce jour</button>'+
     '</div>';
   }
 
@@ -1283,7 +1283,7 @@ function renderIAText(txt) {
     if(line.match(/^#{1,3}\s/)) {
       if(inList) { html += '</div>'; inList = false; }
       var heading = line.replace(/^#{1,3}\s/, '');
-      html += '<div style="font-family:Bricolage Grotesque,sans-serif;font-size:15px;font-weight:800;color:var(--text);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06)">' + heading + '</div>';
+      html += '<div style="font-family:Inter, system-ui, -apple-system, sans-serif;font-size:15px;font-weight:800;color:var(--text);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06)">' + heading + '</div>';
       return;
     }
 
@@ -1302,7 +1302,7 @@ function renderIAText(txt) {
       var isHeader = cells.some(function(c){ return c.includes('<strong>') || c.trim() === c.trim().toUpperCase(); });
       html += '<div style="display:flex;gap:0;margin:2px 0">';
       cells.forEach(function(cell, i) {
-        var bg = i===0 ? 'rgba(0,149,255,.06)' : 'transparent';
+        var bg = i===0 ? 'rgba(127,184,232,.06)' : 'transparent';
         var fw = i===0 ? '600' : '400';
         html += '<div style="flex:1;padding:7px 12px;border:1px solid rgba(255,255,255,.06);font-size:12px;color:var(--text2);font-weight:'+fw+';background:'+bg+'">' + cell.trim() + '</div>';
       });
@@ -1329,7 +1329,7 @@ function renderIAText(txt) {
       var num = line.match(/^(\d+)[.)]/)[1];
       var item = line.replace(/^\d+[.)]\s/, '');
       html += '<div style="display:flex;align-items:flex-start;gap:10px;margin:10px 0 4px">' +
-        '<span style="font-family:Bricolage Grotesque,sans-serif;font-size:13px;font-weight:800;color:var(--v2);min-width:20px;flex-shrink:0">' + num + '</span>' +
+        '<span style="font-family:Inter, system-ui, -apple-system, sans-serif;font-size:13px;font-weight:800;color:var(--v2);min-width:20px;flex-shrink:0">' + num + '</span>' +
         '<div style="font-size:13px;color:var(--text2);line-height:1.6">' + item + '</div></div>';
       return;
     }
@@ -1365,7 +1365,7 @@ async function requestGlobalIA() {
   var btn = document.getElementById('globalIaBtn');
   var content = document.getElementById('globalIaContent');
   btn.disabled = true;
-  btn.textContent = '⏳…';
+  btn.textContent = '…';
   content.innerHTML = '<div class="ia-loading"><div class="ia-orb"></div><span>Analyse de tes patterns en cours…</span></div>';
 
   var wins = trades.filter(function(t){ return t.result==='win'; }).length;
@@ -1403,7 +1403,7 @@ async function requestGlobalIA() {
     content.innerHTML = '<span style="color:var(--red)">Erreur lors de l\'analyse.</span>';
   }
   btn.disabled = false;
-  btn.textContent = '🔄 Relancer';
+  btn.textContent = '↻ Relancer';
 }
 
 // ── SUPABASE SYNC ──
@@ -1503,7 +1503,7 @@ function showJournalSuggestions(val){
   var matches = JOURNAL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
   if(!matches.length){ box.style.display='none'; return; }
   box.innerHTML = matches.map(function(p){
-    return '<div onclick="selectJournalPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(0,149,255,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+(p===v?'<strong style=\"color:var(--v2)\">'+p+'</strong>':p)+'</div>';
+    return '<div onclick="selectJournalPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(127,184,232,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+(p===v?'<strong style=\"color:var(--v2)\">'+p+'</strong>':p)+'</div>';
   }).join('');
   // Position relative to input
   var rect = inp.getBoundingClientRect();
@@ -1836,7 +1836,7 @@ function setBrokerSyncing(on) {
   var banner = document.getElementById('brokerBanner');
   var btn = document.getElementById('brokerSyncBtn');
   banner.className = 'broker-banner ' + (on ? 'syncing' : 'connected');
-  document.getElementById('brokerIcon').textContent = on ? '🔄' : '✅';
+  document.getElementById('brokerIcon').textContent = on ? '↻' : '✓';
   document.getElementById('brokerTitle').textContent = on ? 'Synchronisation en cours…' : (document.getElementById('brokerTitle')._name || 'Compte connecté');
   if (btn) btn.disabled = on;
 }
@@ -1848,7 +1848,7 @@ function updateBrokerBanner(info) {
   var actionsEl = document.getElementById('brokerActions');
   if (!info.connected) {
     banner.className = 'broker-banner disconnected';
-    document.getElementById('brokerIcon').textContent = '📡';
+    document.getElementById('brokerIcon').textContent = '';
     titleEl.textContent = 'Connecte ton compte de trading';
     titleEl._name = null;
     subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
@@ -1856,7 +1856,7 @@ function updateBrokerBanner(info) {
     return;
   }
   banner.className = 'broker-banner connected';
-  document.getElementById('brokerIcon').textContent = '✅';
+  document.getElementById('brokerIcon').textContent = '✓';
   var platformLabel = info.platform ? info.platform.toUpperCase() : 'Compte';
   var nameLabel = info.accountName ? platformLabel + ' · ' + info.accountName : platformLabel + ' connecté';
   titleEl.textContent = nameLabel;
@@ -2040,7 +2040,7 @@ async function importCsvTrades() {
 }
 </script>
 
-<div id="journalPairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
+<div id="journalPairSuggestions" style="display:none;position:fixed;background:#10141B;border:1px solid rgba(127,184,232,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
 <script>
 (function(){
   function jrSym(){ try{ return window.curSym?curSym():'€'; }catch(e){ return '€'; } }
@@ -2055,7 +2055,7 @@ async function importCsvTrades() {
     var series=[0],cum=0; arr.forEach(function(t){ cum+=parseFloat(t.pnl)||0; series.push(cum); });
     if(series.length<2){ ctx.fillStyle='rgba(138,147,165,.55)'; ctx.font='12px sans-serif'; ctx.fillText('Pas encore assez de trades pour la courbe.',8,h/2); return; }
     var min=Math.min.apply(null,series), max=Math.max.apply(null,series), rng=(max-min)||1;
-    var up=cum>=0, line=up?'rgba(52,211,153,0.9)':'rgba(248,113,113,0.9)', fillA=up?'rgba(52,211,153,0.14)':'rgba(248,113,113,0.14)';
+    var up=cum>=0, line=up?'rgba(74,222,156,0.9)':'rgba(240,100,122,0.9)', fillA=up?'rgba(74,222,156,0.14)':'rgba(240,100,122,0.14)';
     ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
     for(var y=1;y<3;y++){ ctx.beginPath(); ctx.moveTo(0,h*y/3); ctx.lineTo(w,h*y/3); ctx.stroke(); }
     var px=function(i){ return (i/(series.length-1))*w; }, py=function(v){ return h-8-((v-min)/rng)*(h-16); };
@@ -2073,7 +2073,7 @@ async function importCsvTrades() {
       var pnl=parseFloat(t.pnl)||0, col=pnl>=0?'var(--green)':'var(--red)';
       var side=String(t.dir||'').toLowerCase(); var sideCls=(side.indexOf('long')>=0||side.indexOf('achat')>=0||side.indexOf('buy')>=0)?'long':(side?'short':'');
       var rr=t.rr?((parseFloat(t.rr)>=0?'+':'')+t.rr+'R'):'—';
-      html+='<div class="jr-row2"><span class="jr-mono" style="font-size:11px;color:var(--text3,#8a93a5)">'+(t.date||'—')+'</span>'
+      html+='<div class="jr-row2"><span class="jr-mono" style="font-size:11px;color:var(--text3,#7E8794)">'+(t.date||'—')+'</span>'
           + '<span class="jr-pair">'+(t.pair||'—')+'</span>'
           + '<span>'+(t.dir?'<span class="jr-sideb '+sideCls+'">'+t.dir+'</span>':'—')+'</span>'
           + '<span class="jr-mono jr-hidemob">'+(t.setup||'—')+'</span>'

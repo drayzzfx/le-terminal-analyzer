@@ -106,7 +106,7 @@
     // Connecté (et a fortiori PRO) → on remplace la pub PRO par email + déconnexion
     if (loggedIn && isPro) {
       return '<div class="side__pro side__account" id="sideFooter">'
-        + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#9B96B8);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
+        + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#7E8794);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
         + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
     }
     return '<div class="side__pro" id="sideFooter"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
@@ -181,7 +181,7 @@
       + 'body.eco-page .calcard__frame{width:100%}'
       // Le fil d'ariane est « sticky » : son fond doit être opaque + flouté, sinon
       // le contenu qui défile dessous transparaît (effet de chevauchement).
-      + '.top{background:var(--bg-base,#080B10);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}';
+      + '.top{background:var(--bg-base,#07090C);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}';
     document.head.appendChild(st);
   }
 

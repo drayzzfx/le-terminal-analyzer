@@ -39,12 +39,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,15,0);backdrop-filter:blur(0px);transition:all .4s;border-bottom:1px solid transparent}
 nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color:var(--border)}
-.nav-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.02em;color:var(--text);text-decoration:none}
+.nav-brand{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.02em;color:var(--text);text-decoration:none}
 .nav-brand span{color:var(--v2)}
 .nav-right{display:flex;align-items:center;gap:12px}
 .nav-link{font-size:13px;font-weight:400;color:var(--text2);text-decoration:none;transition:color .2s}
 .nav-link:hover{color:var(--text)}
-.nav-cta{padding:8px 20px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.nav-cta{padding:8px 20px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
 .nav-cta:hover{background:var(--v2);box-shadow:0 0 24px var(--vglow)}
 
 /* HERO */
@@ -57,20 +57,20 @@ nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color
 .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(48px,7vw,88px);font-weight:800;letter-spacing:-0.04em;line-height:.95;margin-bottom:24px;animation:fadeUp .8s .1s ease both}
-.hero-title span{background:linear-gradient(135deg,var(--v) 0%,var(--v2) 40%,#E879F9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title{font-family:'Anton','Arial Narrow',sans-serif;font-size:clamp(48px,7vw,88px);font-weight:800;letter-spacing:-0.04em;line-height:.95;margin-bottom:24px;animation:fadeUp .8s .1s ease both}
+.hero-title span{background:linear-gradient(135deg,var(--v) 0%,var(--v2) 40%,#BFDCF5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 .hero-sub{font-size:clamp(16px,2vw,20px);font-weight:300;color:var(--text2);max-width:560px;line-height:1.7;margin-bottom:40px;animation:fadeUp .8s .2s ease both}
 
 .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .3s ease both}
-.btn-primary{padding:16px 36px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(127,184,232,.35)}
+.btn-primary{padding:16px 36px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(127,184,232,.35)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(127,184,232,.5)}
-.btn-secondary{padding:16px 36px;background:transparent;border:1px solid var(--border);border-radius:50px;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-secondary{padding:16px 36px;background:transparent;border:1px solid var(--border);border-radius:50px;color:var(--text2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
 .btn-secondary:hover{border-color:rgba(127,184,232,.4);color:var(--v2)}
 
 .hero-stats{display:flex;gap:40px;justify-content:center;margin-top:60px;animation:fadeUp .8s .4s ease both;flex-wrap:wrap}
 .hero-stat{text-align:center}
-.hero-stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.hero-stat-num{font-family:'Anton','Arial Narrow',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,var(--v2),#BFDCF5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
 .hero-stat-lbl{font-size:11px;font-weight:400;color:var(--text3);letter-spacing:.1em;margin-top:4px;text-transform:uppercase}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -79,17 +79,17 @@ nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color
 .ticker{background:rgba(127,184,232,0.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden;position:relative}
 .ticker-track{display:flex;gap:48px;animation:ticker 30s linear infinite;white-space:nowrap}
 .ticker-item{display:flex;align-items:center;gap:10px;font-size:13px;flex-shrink:0}
-.ticker-pair{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;color:var(--text);letter-spacing:.04em}
+.ticker-pair{font-family:'Inter',system-ui,-apple-system,sans-serif;font-weight:700;color:var(--text);letter-spacing:.04em}
 .ticker-price{font-weight:400;color:var(--text2)}
 .ticker-change{font-size:11px;font-weight:600;padding:2px 8px;border-radius:50px}
-.ticker-change.up{background:rgba(52,211,153,.15);color:var(--green)}
-.ticker-change.down{background:rgba(248,113,113,.12);color:#F87171}
+.ticker-change.up{background:rgba(74,222,156,.15);color:var(--green)}
+.ticker-change.down{background:rgba(240,100,122,.12);color:#F0647A}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* FEATURES */
 .section{padding:100px 24px;max-width:1100px;margin:0 auto}
 .section-eyebrow{font-size:11px;font-weight:600;letter-spacing:.25em;color:var(--v2);text-transform:uppercase;margin-bottom:14px;text-align:center}
-.section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1.05;text-align:center;margin-bottom:16px}
+.section-title{font-family:'Anton','Arial Narrow',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1.05;text-align:center;margin-bottom:16px}
 .section-title span{background:linear-gradient(135deg,var(--v),var(--v2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .section-sub{font-size:16px;font-weight:300;color:var(--text2);text-align:center;max-width:480px;margin:0 auto 64px;line-height:1.7}
 
@@ -99,7 +99,7 @@ nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color
 .feature-card:hover{border-color:rgba(127,184,232,.25);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
 .feature-card:hover::before{opacity:1}
 .feature-icon{font-size:28px;margin-bottom:16px}
-.feature-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px}
+.feature-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px}
 .feature-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.7}
 
 /* HOW IT WORKS */
@@ -109,8 +109,8 @@ nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color
 .step{text-align:center;position:relative}
 .step::after{content:'→';position:absolute;right:-16px;top:28px;font-size:20px;color:var(--text3)}
 .step:last-child::after{display:none}
-.step-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--v),#5A9BD4);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:white;margin:0 auto 16px;box-shadow:0 0 24px var(--vglow)}
-.step-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.step-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--v),#5A9BD4);display:flex;align-items:center;justify-content:center;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:20px;font-weight:800;color:white;margin:0 auto 16px;box-shadow:0 0 24px var(--vglow)}
+.step-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
 .step-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.7}
 
 /* PRICING */
@@ -118,28 +118,28 @@ nav.scrolled{background:rgba(8,8,15,0.9);backdrop-filter:blur(20px);border-color
 .pricing-card{background:var(--card);border:1px solid rgba(127,184,232,.3);border-radius:24px;padding:40px;position:relative;overflow:hidden;margin-top:48px}
 .pricing-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
 .pricing-glow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(127,184,232,.12),transparent 70%);border-radius:50%}
-.pricing-badge{display:inline-block;padding:4px 14px;background:linear-gradient(135deg,var(--v),#E879F9);border-radius:50px;font-size:11px;font-weight:700;letter-spacing:.1em;color:white;margin-bottom:20px}
-.pricing-name{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px}
-.pricing-price{font-family:'Bricolage Grotesque',sans-serif;font-size:64px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px}
+.pricing-badge{display:inline-block;padding:4px 14px;background:linear-gradient(135deg,var(--v),#BFDCF5);border-radius:50px;font-size:11px;font-weight:700;letter-spacing:.1em;color:white;margin-bottom:20px}
+.pricing-name{font-family:'Anton','Arial Narrow',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px}
+.pricing-price{font-family:'Anton','Arial Narrow',sans-serif;font-size:64px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px}
 .pricing-price span{font-size:20px;font-weight:400;color:var(--text2)}
 .pricing-period{font-size:13px;color:var(--text3);margin-bottom:32px}
 .pricing-feats{list-style:none;text-align:left;margin-bottom:32px}
 .pricing-feats li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;font-weight:300;color:var(--text2)}
 .pricing-feats li:last-child{border:none}
 .pricing-feats li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
-.pricing-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(127,184,232,.35)}
+.pricing-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 8px 32px rgba(127,184,232,.35)}
 .pricing-cta:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(127,184,232,.5)}
 .pricing-note{font-size:11px;color:var(--text3);margin-top:14px}
 
 /* CTA SECTION */
 .cta-section{padding:120px 24px;text-align:center;position:relative;overflow:hidden}
 .cta-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(127,184,232,.12),transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-.cta-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:20px;position:relative;z-index:1}
+.cta-title{font-family:'Anton','Arial Narrow',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:20px;position:relative;z-index:1}
 .cta-sub{font-size:16px;font-weight:300;color:var(--text2);margin-bottom:36px;position:relative;z-index:1}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.footer-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;color:var(--text2)}
+.footer-brand{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:15px;font-weight:700;color:var(--text2)}
 .footer-brand span{color:var(--v2)}
 .footer-note{font-size:12px;color:var(--text3)}
 
@@ -176,7 +176,7 @@ footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-i
   <h1 class="hero-title">Analyse ton<br><span>Setup</span> en secondes.</h1>
   <p class="hero-sub">L'IA analyse ta structure de marché, identifie les zones ICT, évalue ta confluence et te donne un verdict précis — en moins de 5 secondes.</p>
   <div class="hero-actions">
-    <a href="./index.html" class="btn-primary">⚡ Commencer gratuitement</a>
+    <a href="./index.html" class="btn-primary"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Commencer gratuitement</a>
     <a href="#how" class="btn-secondary">Comment ça marche →</a>
   </div>
   <div class="hero-stats">
@@ -229,32 +229,32 @@ footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-i
   </div>
   <div class="features-grid reveal">
     <div class="feature-card">
-      <div class="feature-icon">🧠</div>
+      <div class="feature-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="9" y="9" width="6" height="6"/><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></div>
       <div class="feature-title">Analyse ICT & SMC</div>
       <div class="feature-desc">Order Blocks, FVG, BOS/CHoCH, Liquidity Sweeps, OTE — l'IA identifie les zones institutionnelles sur ton graphique et évalue la qualité de ta confluence.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">📊</div>
+      <div class="feature-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
       <div class="feature-title">Score sur 10</div>
       <div class="feature-desc">Scoring pondéré sur 5 dimensions : structure HTF, zone d'entrée, risk management, confluences et timing. Un verdict clair : GO, ATTENDRE ou NO-GO.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🎯</div>
+      <div class="feature-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
       <div class="feature-title">Feedback personnalisé</div>
       <div class="feature-desc">L'IA détecte ton niveau (Débutant / Intermédiaire / Avancé) et adapte son feedback. Des conseils concrets avec des niveaux de prix précis.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">📈</div>
+      <div class="feature-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
       <div class="feature-title">Scénarios probables</div>
       <div class="feature-desc">2 à 3 scénarios avec probabilités estimées basées sur la structure actuelle. Anticipe les moves possibles avant d'entrer en position.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🌍</div>
+      <div class="feature-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
       <div class="feature-title">Contexte macro</div>
       <div class="feature-desc">Analyse de l'actif dans son contexte macro — corrélations DXY, sentiment dominant, catalyseurs à venir (NFP, FOMC, CPI).</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">📋</div>
+      <div class="feature-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
       <div class="feature-title">Historique complet</div>
       <div class="feature-desc">Toutes tes analyses sauvegardées avec le graphique, le score et le feedback détaillé. Revois tes setups passés et suis ta progression.</div>
     </div>
@@ -309,7 +309,7 @@ footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-i
       <li>Feedback adapté à ton niveau</li>
       <li>Accès prioritaire aux nouvelles features</li>
     </ul>
-    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" class="pricing-cta">🔓 S'abonner maintenant</a>
+    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" class="pricing-cta"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> S'abonner maintenant</a>
     <div class="pricing-note">Paiement sécurisé via Whop · Annulation à tout moment</div>
   </div>
 </section>
@@ -317,9 +317,9 @@ footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-i
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-glow"></div>
-  <h2 class="cta-title reveal">Prêt à analyser<br><span style="background:linear-gradient(135deg,var(--v),var(--v2),#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">ton prochain setup ?</span></h2>
+  <h2 class="cta-title reveal">Prêt à analyser<br><span style="background:linear-gradient(135deg,var(--v),var(--v2),#BFDCF5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">ton prochain setup ?</span></h2>
   <p class="cta-sub reveal">1 analyse gratuite. Aucune carte bancaire requise.</p>
-  <a href="./index.html" class="btn-primary reveal">⚡ Commencer maintenant</a>
+  <a href="./index.html" class="btn-primary reveal"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Commencer maintenant</a>
 </section>
 
 <footer>
