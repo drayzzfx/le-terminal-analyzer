@@ -19,6 +19,8 @@
 <link rel="dns-prefetch" href="https://www.tradingview-widget.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./calendar-eco.css">
+<link rel="stylesheet" href="./bubble-map.css">
 <style>
 :root{--bg-panel:#10141B;--v:var(--accent-deep);--v2:var(--accent);--text:var(--text-title);--text2:var(--text-body);--text3:var(--text-muted);--green:var(--bull)}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
@@ -99,63 +101,40 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
 </nav>
 
-<style>
-.vt-btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;background:transparent;border:none;color:var(--text3,#7E8794);cursor:pointer;transition:all .2s}
-.vt-btn.on{background:rgba(56,182,255,.16);color:#BFDCF5}
-.bub-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.bub-filters{display:flex;gap:8px;flex-wrap:wrap}
-.bub-f{font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 16px;border-radius:50px;border:1px solid var(--border,rgba(255,255,255,.1));background:transparent;color:var(--text3,#7E8794);cursor:pointer;transition:all .2s}
-.bub-f.on{background:rgba(56,182,255,.12);border-color:rgba(56,182,255,.5);color:#BFDCF5}
-.bub-stats{margin-left:auto;display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:12px;align-items:center}
-.bub-stats .up{color:#4ADE9C}.bub-stats .dn{color:#F0647A}
-/* Scène : cluster sur fond quadrillé (maquette) */
-.bub-stage{position:relative;height:640px;border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:12px;overflow:hidden;background-image:linear-gradient(rgba(127,184,232,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,184,232,.05) 1px,transparent 1px);background-size:72px 72px}
-/* Flottement continu : chaque bulle dérive lentement (lisible), via un wrapper
-   pour ne pas entrer en conflit avec le scale au survol */
-.bub-w{position:absolute}
-.bub-w:hover{z-index:6}
-@media (prefers-reduced-motion: no-preference){
-  .bub-w{animation:bubFloat var(--fd,11s) ease-in-out var(--fdel,0s) infinite alternate}
-}
-@keyframes bubFloat{from{transform:translate(0,0)}to{transform:translate(var(--fx,8px),var(--fy,-10px))}}
-.bub{position:relative;width:100%;height:100%;border-radius:50%;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .2s;cursor:default}
-.bub:hover{transform:scale(1.08)}
-.bub-n{font-family:'Inter',system-ui,-apple-system,sans-serif;font-weight:700;color:#fff;line-height:1}
-.bub-c{font-family:'JetBrains Mono',monospace;margin-top:4px}
-.bub-state{color:var(--text3,#7E8794);font-size:13px;padding:40px;text-align:center;width:100%}
-@media(max-width:760px){.bub-stage{height:480px}}
-</style>
-
 <div class="main">
 <div class="content">
 
-  <!-- PAGE HEAD — maquette -->
+  <!-- PAGE HEAD -->
   <div class="page-head" style="margin-bottom:4px">
     <span class="eyebrow"><span class="lt-dot"></span> Flux de capitaux</span>
     <h1>Bubble Map</h1>
     <p>Les flux de capitaux entre actifs en temps réel. Taille = volume du flux, couleur = direction sur 24 h. Survole une bulle pour le détail.</p>
   </div>
 
-  <!-- BARRE : filtres (bulles) + stats + bascule de vue -->
-  <div class="bub-bar">
-    <div class="bub-filters" id="bubFilters">
-      <button class="bub-f on" data-cls="all">Tous</button>
-      <button class="bub-f" data-cls="crypto">Crypto</button>
-      <button class="bub-f" data-cls="forex">Forex</button>
-      <button class="bub-f" data-cls="index">Indices</button>
-      <button class="bub-f" data-cls="stock">Actions</button>
-      <button class="bub-f" data-cls="commodity">Mat. premières</button>
-    </div>
-    <div class="bub-stats" id="bubStats"></div>
-    <div class="view-toggle" style="display:inline-flex;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:50px;overflow:hidden">
+  <!-- BASCULE DE VUE (segmented control) -->
+  <div class="bm-bar">
+    <div class="view-toggle">
       <button class="vt-btn on" id="vtBub" onclick="setView('bubbles')">Bulles</button>
       <button class="vt-btn" id="vtMap" onclick="setView('map')">Heatmap</button>
     </div>
   </div>
 
   <!-- VUE BULLES (défaut) -->
-  <div class="bub-wrap" id="bubbleWrap">
-    <div class="bub-stage" id="bubStage"><div class="bub-state">Chargement des flux…</div></div>
+  <div id="bubbleWrap">
+    <div class="bm-bar" id="bmBar">
+      <div class="bm-filters" id="bmFilters">
+        <button class="bm-filter is-on" data-cat="all">Tous</button>
+        <button class="bm-filter" data-cat="crypto">Crypto</button>
+        <button class="bm-filter" data-cat="forex">Forex</button>
+        <button class="bm-filter" data-cat="indices">Indices</button>
+        <button class="bm-filter" data-cat="matieres">Mat. premières</button>
+      </div>
+      <div class="bm-legend" id="bmLegend"></div>
+    </div>
+    <div class="bm-stage panel">
+      <canvas class="bm-canvas" id="bmCanvas"></canvas>
+      <span class="bm-tag">DONNÉES SIMULÉES · MISE À JOUR CONTINUE</span>
+    </div>
   </div>
 
   <!-- VUE HEATMAP (TradingView) -->
@@ -192,7 +171,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     <div class="foot">
       <div class="leg"><div class="ldc" style="background:#4ADE9C"></div>Forte hausse</div>
       <div class="leg"><div class="ldc" style="background:#4ADE9C"></div>Hausse</div>
-      <div class="leg"><div class="ldc" style="background:#888"></div>Neutre</div>
+      <div class="leg"><div class="ldc" style="background:var(--text-muted)"></div>Neutre</div>
       <div class="leg"><div class="ldc" style="background:#F0647A"></div>Baisse</div>
       <div class="leg"><div class="ldc" style="background:#F0647A"></div>Forte baisse</div>
       <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
@@ -268,38 +247,160 @@ function render() {
   wrap.appendChild(container);
 }
 
-// ── Vue Bulles (données réelles) ──
-// Cryptos : top du marché en direct via /api/bubbles (CoinGecko, façon CryptoBubbles).
-// Autres classes : /api/price (Yahoo). Repli crypto par /api/price si l'API échoue.
-var BUB_CRYPTO_FB=[
-  {sym:'BTCUSD',name:'BTC'},{sym:'ETHUSD',name:'ETH'},{sym:'SOLUSD',name:'SOL'},
-  {sym:'XRPUSD',name:'XRP'},{sym:'BNBUSD',name:'BNB'},{sym:'DOGEUSD',name:'DOGE'},
-  {sym:'ADAUSD',name:'ADA'},{sym:'AVAXUSD',name:'AVAX'},{sym:'LINKUSD',name:'LINK'},
-  {sym:'LTCUSD',name:'LTC'},{sym:'TRXUSD',name:'TRX'},{sym:'BCHUSD',name:'BCH'},
-  {sym:'XLMUSD',name:'XLM'},{sym:'NEARUSD',name:'NEAR'}
+// ── Vue Bulles (canvas, données simulées — intention du design) ──
+// Taille = volume du flux, couleur = direction 24 h (haussier/baissier).
+// Physique douce, survol = surbrillance + infobulle, filtres par catégorie.
+var BUBBLE_ASSETS=[
+  {s:'BTC',cat:'crypto',flow:4.2,d:2.18},{s:'ETH',cat:'crypto',flow:2.6,d:1.04},
+  {s:'SOL',cat:'crypto',flow:1.4,d:-0.33},{s:'XRP',cat:'crypto',flow:0.8,d:-1.2},
+  {s:'DOGE',cat:'crypto',flow:0.5,d:3.4},
+  {s:'EUR/USD',cat:'forex',flow:3.4,d:-0.42},{s:'GBP/USD',cat:'forex',flow:1.9,d:0.18},
+  {s:'USD/JPY',cat:'forex',flow:2.2,d:0.65},{s:'AUD/USD',cat:'forex',flow:0.9,d:-0.51},
+  {s:'US500',cat:'indices',flow:3.8,d:0.58},{s:'US100',cat:'indices',flow:3.1,d:0.91},
+  {s:'DAX',cat:'indices',flow:1.6,d:-0.27},{s:'NIKKEI',cat:'indices',flow:1.2,d:1.12},
+  {s:'GOLD',cat:'matieres',flow:2.9,d:0.31},{s:'WTI',cat:'matieres',flow:1.8,d:-1.12},
+  {s:'SILVER',cat:'matieres',flow:0.9,d:0.74},{s:'COPPER',cat:'matieres',flow:0.7,d:1.6}
 ];
-var BUB_ASSETS=[
-  // Indices
-  {sym:'US500',name:'US500',cls:'index'},{sym:'US100',name:'US100',cls:'index'},
-  {sym:'US30',name:'US30',cls:'index'},{sym:'DAX',name:'DAX',cls:'index'},
-  {sym:'UK100',name:'UK100',cls:'index'},{sym:'CAC40',name:'CAC40',cls:'index'},
-  {sym:'JP225',name:'NIKKEI',cls:'index'},
-  // Matières premières
-  {sym:'XAUUSD',name:'GOLD',cls:'commodity'},{sym:'XAGUSD',name:'SILVER',cls:'commodity'},
-  {sym:'USOIL',name:'WTI',cls:'commodity'},{sym:'BRENT',name:'BRENT',cls:'commodity'},
-  {sym:'NATGAS',name:'NATGAS',cls:'commodity'},{sym:'COPPER',name:'COPPER',cls:'commodity'},
-  {sym:'PLATINUM',name:'PLATINUM',cls:'commodity'},
-  // Forex
-  {sym:'EURUSD',name:'EUR/USD',cls:'forex'},{sym:'GBPUSD',name:'GBP/USD',cls:'forex'},
-  {sym:'USDJPY',name:'USD/JPY',cls:'forex'},{sym:'AUDUSD',name:'AUD/USD',cls:'forex'},
-  {sym:'USDCAD',name:'USD/CAD',cls:'forex'},{sym:'EURGBP',name:'EUR/GBP',cls:'forex'},
-  {sym:'EURJPY',name:'EUR/JPY',cls:'forex'},{sym:'GBPJPY',name:'GBP/JPY',cls:'forex'},
-  // Actions US
-  {sym:'NVDA',name:'NVDA',cls:'stock'},{sym:'AAPL',name:'AAPL',cls:'stock'},
-  {sym:'TSLA',name:'TSLA',cls:'stock'},{sym:'MSFT',name:'MSFT',cls:'stock'},
-  {sym:'AMZN',name:'AMZN',cls:'stock'},{sym:'META',name:'META',cls:'stock'}
-];
-var bubData=[], bubCls='all', bubLoaded=false;
+var bmCat='all', bmStarted=false;
+
+// Légende : entrées/sorties calculées depuis BUBBLE_ASSETS
+(function(){
+  var inflow=BUBBLE_ASSETS.filter(function(a){return a.d>=0;}).reduce(function(s,a){return s+a.flow;},0);
+  var outflow=BUBBLE_ASSETS.filter(function(a){return a.d<0;}).reduce(function(s,a){return s+a.flow;},0);
+  var lg=document.getElementById('bmLegend');
+  if(lg) lg.innerHTML=
+    '<span class="bm-legend__item"><i style="background:var(--bull)"></i> Entrées '+inflow.toFixed(1)+' Md$</span>'+
+    '<span class="bm-legend__item"><i style="background:var(--bear)"></i> Sorties '+outflow.toFixed(1)+' Md$</span>';
+})();
+
+var bmResize=null;
+function initBubbles(){
+  if(bmStarted) return; bmStarted=true;
+  var reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var c=document.getElementById('bmCanvas'); if(!c) return;
+  var ctx=c.getContext('2d');
+  var raf, w, h;
+  var dpr=Math.min(window.devicePixelRatio||1,2);
+  function resize(){ w=c.offsetWidth; h=c.offsetHeight; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  resize();
+  bmResize=resize;
+  window.addEventListener('resize',resize);
+
+  var maxFlow=Math.max.apply(null,BUBBLE_ASSETS.map(function(a){return a.flow;}));
+  var bubbles=BUBBLE_ASSETS.map(function(a){
+    return { s:a.s, cat:a.cat, flow:a.flow, d:a.d,
+      r:26+(a.flow/maxFlow)*52,
+      x:Math.random()*600+100, y:Math.random()*300+100,
+      vx:0, vy:0, k:1 };
+  });
+
+  var mouse={x:-999,y:-999};
+  function onMove(e){ var r=c.getBoundingClientRect(); mouse={x:e.clientX-r.left,y:e.clientY-r.top}; }
+  function onLeave(){ mouse={x:-999,y:-999}; }
+  c.addEventListener('mousemove',onMove);
+  c.addEventListener('mouseleave',onLeave);
+
+  function step(){
+    var active=bmCat;
+    for(var i0=0;i0<bubbles.length;i0++){
+      var b=bubbles[i0];
+      var on=active==='all'||b.cat===active;
+      b.k+=((on?1:0.12)-b.k)*0.08;
+      b.vx+=(w/2-b.x)*0.0004;
+      b.vy+=(h/2-b.y)*0.0006;
+      b.vx+=(Math.random()-0.5)*0.02;
+      b.vy+=(Math.random()-0.5)*0.02;
+    }
+    for(var i=0;i<bubbles.length;i++){
+      for(var j=i+1;j<bubbles.length;j++){
+        var a=bubbles[i], b2=bubbles[j];
+        var dx=b2.x-a.x, dy=b2.y-a.y;
+        var dist=Math.max(1,Math.hypot(dx,dy));
+        var min=a.r*a.k+b2.r*b2.k+6;
+        if(dist<min){
+          var f=(min-dist)/dist*0.04;
+          a.vx-=dx*f; a.vy-=dy*f;
+          b2.vx+=dx*f; b2.vy+=dy*f;
+        }
+      }
+    }
+    for(var i2=0;i2<bubbles.length;i2++){
+      var b3=bubbles[i2];
+      b3.vx*=0.92; b3.vy*=0.92;
+      b3.x+=b3.vx; b3.y+=b3.vy;
+      var m=b3.r*b3.k+4;
+      b3.x=Math.max(m,Math.min(w-m,b3.x));
+      b3.y=Math.max(m,Math.min(h-m,b3.y));
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle='rgba(127,184,232,0.05)'; ctx.lineWidth=1;
+    for(var x=0;x<w;x+=64){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+    for(var y=0;y<h;y+=64){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+    var hovered=null;
+    for(var i=0;i<bubbles.length;i++){
+      var b=bubbles[i];
+      var r=b.r*b.k;
+      if(r<2) continue;
+      var up=b.d>=0;
+      var isHover=Math.hypot(mouse.x-b.x,mouse.y-b.y)<r;
+      if(isHover && b.k>0.7) hovered=b;
+      var col=up?'74,222,156':'240,100,122';
+      var grad=ctx.createRadialGradient(b.x,b.y,r*0.2,b.x,b.y,r);
+      grad.addColorStop(0,'rgba('+col+','+(0.16*b.k)+')');
+      grad.addColorStop(1,'rgba('+col+','+(0.04*b.k)+')');
+      ctx.beginPath(); ctx.arc(b.x,b.y,r,0,Math.PI*2);
+      ctx.fillStyle=grad; ctx.fill();
+      ctx.lineWidth=isHover?2:1.2;
+      ctx.strokeStyle='rgba('+col+','+((isHover?0.95:0.55)*b.k)+')';
+      if(isHover){ ctx.shadowColor='rgba('+col+',0.6)'; ctx.shadowBlur=18; }
+      ctx.stroke(); ctx.shadowBlur=0;
+      if(b.k>0.5){
+        ctx.textAlign='center';
+        ctx.fillStyle='rgba(242,244,247,'+(0.95*b.k)+')';
+        ctx.font='600 '+Math.max(10,r*0.3)+'px Inter, sans-serif';
+        ctx.fillText(b.s,b.x,b.y-2);
+        ctx.fillStyle='rgba('+col+','+(0.95*b.k)+')';
+        ctx.font='500 '+Math.max(9,r*0.22)+'px "JetBrains Mono", monospace';
+        ctx.fillText((up?'▲':'▼')+' '+Math.abs(b.d).toFixed(2)+'%',b.x,b.y+r*0.3);
+      }
+    }
+    if(hovered){
+      var label=hovered.s+' · flux '+hovered.flow.toFixed(1)+' Md$ · '+(hovered.d>=0?'+':'−')+Math.abs(hovered.d).toFixed(2)+'% 24h';
+      ctx.font='500 12px "JetBrains Mono", monospace';
+      var tw=ctx.measureText(label).width+24;
+      var tx=Math.min(Math.max(hovered.x-tw/2,10),w-tw-10);
+      var ty=Math.max(12,hovered.y-hovered.r-44);
+      ctx.fillStyle='rgba(10,13,18,0.95)';
+      ctx.strokeStyle='rgba(58,65,76,1)'; ctx.lineWidth=1;
+      ctx.beginPath();
+      if(ctx.roundRect){ ctx.roundRect(tx,ty,tw,30,5); } else { ctx.rect(tx,ty,tw,30); }
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle='#F2F4F7'; ctx.textAlign='left';
+      ctx.fillText(label,tx+12,ty+19);
+    }
+  }
+
+  if(reduced){
+    for(var n=0;n<260;n++) step();
+    draw();
+  } else {
+    var loop=function(){ step(); draw(); raf=requestAnimationFrame(loop); };
+    loop();
+  }
+}
+
+// Filtres de catégorie (bm-filter)
+(function(){
+  var f=document.getElementById('bmFilters');
+  if(f) f.addEventListener('click',function(e){
+    var b=e.target.closest('.bm-filter'); if(!b) return;
+    bmCat=b.getAttribute('data-cat');
+    f.querySelectorAll('.bm-filter').forEach(function(x){ x.classList.toggle('is-on',x===b); });
+  });
+})();
 
 var mapBuilt=false;
 function setView(v){
@@ -308,100 +409,12 @@ function setView(v){
   document.getElementById('vtBub').classList.toggle('on',!map);
   document.getElementById('heatWrap').style.display=map?'':'none';
   document.getElementById('bubbleWrap').style.display=map?'none':'';
-  var f=document.getElementById('bubFilters'); if(f) f.style.display=map?'none':'';
-  var st=document.getElementById('bubStats'); if(st) st.style.display=map?'none':'';
   if(map && !mapBuilt){ render(); mapBuilt=true; }
-  if(!map) loadBubbles();
+  if(!map){ initBubbles(); if(bmResize) bmResize(); }
 }
-
-function bubFetchPrice(a, cls){
-  return fetch('/api/price?symbol='+a.sym).then(function(r){return r.json();}).then(function(d){
-    return {name:a.name,cls:cls||a.cls,change:(d&&typeof d.change==='number')?d.change:null};
-  }).catch(function(){ return {name:a.name,cls:cls||a.cls,change:null}; });
-}
-function loadBubbles(){
-  if(bubLoaded){ renderBubbles(); return; }
-  var stage=document.getElementById('bubStage');
-  if(stage && !bubData.length) stage.innerHTML='<div class="bub-state">Chargement des flux…</div>';
-  // Cryptos : top marché en direct (1 appel), repli sur /api/price si échec
-  var cryptos=fetch('/api/bubbles').then(function(r){return r.json();}).then(function(d){
-    if(d && d.assets && d.assets.length){
-      return d.assets.map(function(a){ return {name:a.name,cls:'crypto',change:a.change}; });
-    }
-    throw new Error('empty');
-  }).catch(function(){
-    return Promise.all(BUB_CRYPTO_FB.map(function(a){ return bubFetchPrice(a,'crypto'); }));
-  });
-  var others=Promise.all(BUB_ASSETS.map(function(a){ return bubFetchPrice(a); }));
-  Promise.all([cryptos, others]).then(function(res){
-    bubData=res[0].concat(res[1]).filter(function(x){return x && x.change!==null;});
-    bubLoaded=true; renderBubbles();
-  });
-}
-
-function renderBubbles(){
-  var stage=document.getElementById('bubStage'); if(!stage) return;
-  if(!bubData.length){ stage.innerHTML='<div class="bub-state">Données de flux indisponibles pour le moment.</div>'; return; }
-  var data=bubData.filter(function(x){ return bubCls==='all'||x.cls===bubCls; });
-  if(!data.length){ stage.innerHTML='<div class="bub-state">Aucun actif pour ce filtre.</div>'; return; }
-  var W=stage.clientWidth||1100, H=stage.clientHeight||640;
-  var maxAbs=Math.max.apply(null,data.map(function(x){return Math.abs(x.change);}).concat([0.5]));
-  data=data.slice().sort(function(a,b){return Math.abs(b.change)-Math.abs(a.change);});
-  // Placement en cluster : spirale depuis le centre, sans chevauchement (maquette).
-  // Marge de collision élargie pour laisser la place au flottement (±12px).
-  var placed=[];
-  data.forEach(function(x,i){
-    var r=17+Math.round((Math.abs(x.change)/maxAbs)*37);
-    var ang=i*2.39996, px=0, py=0, ok=false;
-    for(var step=0; step<4200; step++){
-      var rad=step*1.1;
-      px=W/2+Math.cos(ang)*rad; py=H/2+Math.sin(ang)*rad*0.72;
-      ang+=0.27;
-      if(px-r<12||px+r>W-12||py-r<12||py+r>H-12) continue;
-      var coll=false;
-      for(var k=0;k<placed.length;k++){ var p=placed[k]; if(Math.hypot(p.x-px,p.y-py)<p.r+r+12){coll=true;break;} }
-      if(!coll){ok=true;break;}
-    }
-    if(ok) placed.push({x:px,y:py,r:r,d:x});
-  });
-  stage.innerHTML=placed.map(function(p,i){
-    var x=p.d, up=x.change>=0, col=up?'74,222,156':'240,100,122';
-    var inten=Math.min(1,0.3+Math.abs(x.change)/maxAbs*0.6);
-    var fs=Math.max(9,Math.round(p.r*0.32)), fc=Math.max(8,Math.round(p.r*0.22));
-    // Paramètres de dérive uniques par bulle (visibles mais lisibles : 7-12s, ±10-22px)
-    var fx=((i%2?1:-1)*(10+(i*7)%13)), fy=((i%3?-1:1)*(10+(i*5)%13));
-    var fd=(7+(i*13)%6)+'s', fdel='-'+((i*17)%90)/10+'s';
-    var pct=(p.r>=22)?('<span class="bub-c" style="font-size:'+fc+'px;color:rgb('+col+')">'+(up?'▲':'▼')+' '+Math.abs(x.change).toFixed(2)+'%</span>'):'';
-    return '<div class="bub-w" style="left:'+Math.round(p.x-p.r)+'px;top:'+Math.round(p.y-p.r)+'px;width:'+(p.r*2)+'px;height:'+(p.r*2)+'px;--fx:'+fx+'px;--fy:'+fy+'px;--fd:'+fd+';--fdel:'+fdel+'">'
-      +'<div class="bub" title="'+x.name+' '+x.change.toFixed(2)+'%" style="background:rgba('+col+','+(inten*0.14).toFixed(2)+');border-color:rgba('+col+',.7);box-shadow:0 0 24px rgba('+col+',.12) inset">'
-      +'<span class="bub-n" style="font-size:'+fs+'px">'+x.name+'</span>'+pct+'</div></div>';
-  }).join('');
-  var ups=bubData.filter(function(x){return x.change>=0;}).length, downs=bubData.length-ups;
-  var st=document.getElementById('bubStats');
-  if(st) st.innerHTML='<span class="up">● Entrées '+ups+'</span><span class="dn">● Sorties '+downs+'</span>';
-}
-var _bubRz=null;
-window.addEventListener('resize',function(){ clearTimeout(_bubRz); _bubRz=setTimeout(function(){ if(document.getElementById('bubbleWrap').style.display!=='none') renderBubbles(); },200); });
-// Données en direct : rafraîchit les variations toutes les 90 s (onglet visible uniquement)
-setInterval(function(){
-  if(document.hidden) return;
-  var bw=document.getElementById('bubbleWrap');
-  if(!bw || bw.style.display==='none') return;
-  bubLoaded=false; loadBubbles();
-}, 90000);
-
-(function(){
-  var f=document.getElementById('bubFilters');
-  if(f) f.addEventListener('click',function(e){
-    var b=e.target.closest('.bub-f'); if(!b) return;
-    bubCls=b.getAttribute('data-cls');
-    f.querySelectorAll('.bub-f').forEach(function(x){ x.classList.toggle('on',x===b); });
-    renderBubbles();
-  });
-})();
 
 window.addEventListener('scroll',function(){var c=document.getElementById('ltChrome');if(c)c.classList.toggle('is-scrolled',window.scrollY>24);});
-setView('bubbles'); // vue Bulles par défaut (maquette) — la heatmap se construit au 1er clic
+setView('bubbles'); // vue Bulles par défaut — la heatmap se construit au 1er clic
 </script>
 
 <script src="./appshell.js"></script>
