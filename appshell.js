@@ -172,7 +172,7 @@
       // intégré dans .app, on le fait se comporter comme .main (pleine largeur,
       // aligné à gauche) pour que le fil d'ariane (.top) couvre toute la largeur
       // comme sur le Journal, et que le contenu reste limité à 1200px à gauche.
-      + 'body.eco-page .app > main.wrap{max-width:none;width:auto;margin:0;padding:0;display:flex;flex-direction:column;min-width:0}'
+      + 'body.eco-page .app > main.wrap{max-width:none;width:auto;margin:0;padding:0 0 56px;display:flex;flex-direction:column;gap:40px;min-width:0}'
       + 'body.eco-page .app > main.wrap > .top{margin:0;width:auto;align-self:stretch}'
       + 'body.eco-page .app > main.wrap > :not(.top){max-width:1200px;width:auto;margin:0 32px;box-sizing:border-box}'
       + 'body.eco-page .app > main.wrap > .pagehead{padding-top:32px}'
