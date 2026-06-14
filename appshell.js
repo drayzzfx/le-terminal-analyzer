@@ -174,7 +174,7 @@
       // comme sur le Journal, et que le contenu reste limité à 1200px à gauche.
       + 'body.eco-page .app > main.wrap{max-width:none;width:auto;margin:0;padding:0;display:flex;flex-direction:column;min-width:0}'
       + 'body.eco-page .app > main.wrap > .top{margin:0;width:auto;align-self:stretch}'
-      + 'body.eco-page .app > main.wrap > :not(.top){max-width:1264px;width:100%;margin:0;padding-left:32px;padding-right:32px;box-sizing:border-box}'
+      + 'body.eco-page .app > main.wrap > :not(.top){max-width:1200px;width:auto;margin:0 32px;box-sizing:border-box}'
       + 'body.eco-page .app > main.wrap > .pagehead{padding-top:32px}'
       // Le calendrier Investing.com (.calcard) doit s'aligner sur le texte : son
       // fond blanc ne doit pas coller au menu. On retire le padding hérité et on
