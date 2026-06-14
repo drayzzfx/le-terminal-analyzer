@@ -2,7 +2,10 @@
 /* Le Terminal — pricing styles (full page + homepage band). */
 
 /* ---------- PLAN CARDS ---------- */
-.pr-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 420px)); gap: 26px; justify-content: center; }
+.pr-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 360px)); gap: 22px; justify-content: center; }
+@media (max-width: 1080px) {
+  .pr-grid { grid-template-columns: repeat(2, minmax(0, 420px)); }
+}
 @media (max-width: 760px) {
   .pr-grid { grid-template-columns: 1fr; }
 }

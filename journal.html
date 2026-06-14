@@ -1111,7 +1111,7 @@ function removeTradeImg() {
   document.getElementById('uploadZone').style.display = 'flex';
 }
 
-function saveTrade() {
+async function saveTrade() {
   var pair = document.getElementById('tradePair').value.trim();
   var date = document.getElementById('tradeDate').value;
   var pnl  = document.getElementById('tradePnL').value;
@@ -1119,6 +1119,8 @@ function saveTrade() {
     alert('Remplis au minimum : paire, date, direction et résultat.');
     return;
   }
+  // Tokens : ajouter un nouveau trade consomme un crédit (1 token = 5 trades). L'édition est gratuite.
+  if(!editingId){ if(!(await journalTradeToken())) return; }
 
   var trade = {
     id: editingId || Date.now().toString(),
@@ -1362,6 +1364,8 @@ async function requestGlobalIA() {
     document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il te faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
     return;
   }
+  // Analyse de performance = 2 tokens (Premium = illimité)
+  if(!(await spendToken('journal_perf'))) return;
   var btn = document.getElementById('globalIaBtn');
   var content = document.getElementById('globalIaContent');
   btn.disabled = true;
@@ -1584,6 +1588,46 @@ function updateUserUI() {
   }
 }
 
+// ── SYSTÈME DE TOKENS ──
+var isProJ = false;
+var userTokens = null;
+function jnlNoTokens(){
+  if(confirm("Tu n'as plus de tokens. Passe en Premium pour un accès illimité ?")) window.location.href='./tarifs.html';
+}
+async function refreshTokens(){
+  if(!authToken) return;
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
+    var d=await res.json();
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(d.is_pro) isProJ=true;
+  }catch(e){}
+}
+async function spendToken(reason){
+  if(isProJ) return true;
+  if(!authToken){ window.location.href='./index.html'; return false; }
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
+    var d=await res.json();
+    if(d.unlimited){ isProJ=true; return true; }
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(d.ok) return true;
+    jnlNoTokens(); return false;
+  }catch(e){ return true; }
+}
+async function journalTradeToken(){
+  if(isProJ) return true;
+  if(!authToken){ window.location.href='./index.html'; return false; }
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'journal_trade'})});
+    var d=await res.json();
+    if(d.unlimited){ isProJ=true; return true; }
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(d.ok) return true;
+    jnlNoTokens(); return false;
+  }catch(e){ return true; }
+}
+
 async function checkSession() {
   var token = localStorage.getItem('ta_token');
   if(!token){window.location.href='./index.html?paywall=1';return;}
@@ -1610,15 +1654,16 @@ async function checkSession() {
         renderStats(); renderCalendar();
       }
       localStorage.setItem('ta_user_id', data.id);
-      // PRO gate — vérif côté serveur puis redirect si pas pro
+      // Accès gratuit + tokens : on vérifie le statut Premium puis on charge les tokens
       try {
         var proRes = await fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}});
         var proData = await proRes.json();
-        if(proData.is_pro) localStorage.setItem('lt_pro','1');
-        else { localStorage.removeItem('lt_pro'); window.location.href='./index.html?paywall=1'; return; }
+        if(proData.is_pro){ isProJ=true; localStorage.setItem('lt_pro','1'); }
+        else localStorage.removeItem('lt_pro');
       } catch(e) {
-        if(localStorage.getItem('lt_pro')!=='1'){window.location.href='./index.html';return;}
+        if(localStorage.getItem('lt_pro')==='1') isProJ=true;
       }
+      await refreshTokens();
       updateUserUI();
       await syncAllLocalTrades();
       loadFromServer();

@@ -1150,6 +1150,9 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         </div>
       </div>
 
+      <div id="tokenChip" style="display:none;text-align:center;margin-bottom:10px;font-size:12px;color:var(--text2)">
+        <span id="tokenChipTxt"></span>
+      </div>
       <button class="analyze-btn" id="submitBtn" onclick="analyze()">
         <span id="btn-txt">Analyser mon setup</span>
       </button>
@@ -1666,6 +1669,8 @@ async function analyze(){
   // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){window.location.href="./index.html";return}
+  // Système de tokens : 1 token par analyse (Premium = illimité)
+  if(!(await spendToken('analyze'))) return;
 
   const rrv=calcRR();
   const steps=c().steps; let si=0;
@@ -2576,7 +2581,7 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      if(!isPro){window.location.href='./index.html?paywall=1';return;}
+      await refreshTokens();
       updateUserUI();loadHistory();
     } else {
       // API says invalid - but keep session alive if network error might be the cause
@@ -2591,6 +2596,48 @@ async function checkSession(){
   }catch(e){
     // Network error - keep session from localStorage, user stays logged in
     updateUserUI();
+  }
+}
+
+var userTokens = null;
+function renderTokenChip(){
+  var chip=document.getElementById('tokenChip');
+  var txt=document.getElementById('tokenChipTxt');
+  if(!chip||!txt) return;
+  if(isPro){ chip.style.display='block'; txt.innerHTML='<strong style="color:var(--v2)">Premium</strong> · analyses illimitées'; return; }
+  if(userTokens==null){ chip.style.display='none'; return; }
+  chip.style.display='block';
+  txt.innerHTML='Il te reste <strong style="color:'+(userTokens>0?'var(--v2)':'#F87171')+'">'+userTokens+' token'+(userTokens>1?'s':'')+'</strong> · 1 token = 1 analyse';
+}
+async function refreshTokens(){
+  if(!authToken) return;
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
+    var d=await res.json();
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(d.is_pro) isPro=true;
+  }catch(e){}
+  renderTokenChip();
+}
+// Dépense des tokens pour une action ; renvoie true si autorisé. Premium = toujours true.
+async function spendToken(reason){
+  if(isPro) return true;
+  if(!authToken){ window.location.href='./index.html'; return false; }
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
+    var d=await res.json();
+    if(d.unlimited){ isPro=true; renderTokenChip(); return true; }
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    renderTokenChip();
+    if(d.ok) return true;
+    showNoTokens();
+    return false;
+  }catch(e){ return true; } // en cas d'erreur réseau on ne bloque pas
+}
+function showNoTokens(){
+  renderTokenChip();
+  if(confirm('Tu n\'as plus de tokens. Passe en Premium pour des analyses illimitées ?')){
+    window.location.href='./tarifs.html';
   }
 }
 
