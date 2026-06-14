@@ -167,7 +167,11 @@
       + '.side__ic{flex-shrink:0;display:inline-flex;align-items:center}'
       + '.side__lbl{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
       + '.side__pro-tag{margin-left:auto;flex-shrink:0;white-space:nowrap;line-height:1.5;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:3px 8px}'
-      + '.side{overflow-y:auto}'
+      + '.side{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}'
+      + '.side::-webkit-scrollbar{width:8px}'
+      + '.side::-webkit-scrollbar-track{background:transparent}'
+      + '.side::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}'
+      + '.side::-webkit-scrollbar-thumb:hover{background:rgba(127,184,232,.5);background-clip:padding-box}'
       // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
       // intégré dans .app, on le fait se comporter comme .main (pleine largeur,
       // aligné à gauche) pour que le fil d'ariane (.top) couvre toute la largeur
