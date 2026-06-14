@@ -69,7 +69,7 @@
       flex-shrink: 0;
     }
     .lt-menu-brand {
-      font-family: 'Bricolage Grotesque', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       font-size: 16px; font-weight: 800; color: #F0EEFF;
     }
     .lt-menu-brand span { color: #38B6FF; }
@@ -87,7 +87,7 @@
       padding: 11px 14px; border-radius: 10px;
       cursor: pointer; transition: all .2s;
       text-decoration: none; color: #9B96B8;
-      font-family: 'Bricolage Grotesque', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       font-size: 14px; font-weight: 600;
       border: none; background: transparent; width: 100%; text-align: left;
     }
@@ -153,18 +153,18 @@
 
     /* ── USER BAR ── */
     #ltUserBar { display: flex; align-items: center; gap: 8px; }
-    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 50px; color: #FACC15; font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 50px; color: #FACC15; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
     .lt-ub-chip { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 50px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
-    .lt-ub-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#0095FF,#38B6FF); display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
-    .lt-ub-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; color: #F0EEFF; }
-    .lt-ub-logout { padding: 5px 13px; background: transparent; border: 1px solid rgba(248,113,113,.3); border-radius: 50px; color: #F87171; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
+    .lt-ub-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#0095FF,#38B6FF); display: flex; align-items: center; justify-content: center; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
+    .lt-ub-name { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; color: #F0EEFF; }
+    .lt-ub-logout { padding: 5px 13px; background: transparent; border: 1px solid rgba(248,113,113,.3); border-radius: 50px; color: #F87171; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
     .lt-ub-logout:hover { background: rgba(248,113,113,.1); }
 
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
       padding: 9px 12px; border-radius: 8px;
       text-decoration: none; color: #9B96B8;
-      font-family: 'Bricolage Grotesque', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       font-size: 13px; font-weight: 600;
       transition: all .2s;
     }
@@ -224,7 +224,7 @@
     }
     .lt-lang-btn {
       flex: 1; background: transparent; border: none; cursor: pointer;
-      padding: 6px 0; font-family: 'Bricolage Grotesque', sans-serif;
+      padding: 6px 0; font-family: 'Inter', system-ui, -apple-system, sans-serif;
       font-size: 11px; font-weight: 700; letter-spacing: .08em;
       color: #5A5570; transition: all .2s;
     }
@@ -273,7 +273,7 @@
     var isLocked = p.pro && !isUserPro;
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '') + (isLocked ? ' pro-locked' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
-    var proBadge = isLocked ? '<span class="lt-nav-pro-badge">⭐ PRO</span>' : '';
+    var proBadge = isLocked ? '<span class="lt-nav-pro-badge"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> PRO</span>' : '';
     var href = isLocked ? './index.html?paywall=1' : p.href;
 
     if(p.children && p.children.length) {
@@ -309,7 +309,7 @@
           <button class="lt-logout-btn" onclick="ltLogout()">Se déconnecter</button>
         </div>
         <a class="lt-nav-item" id="ltLoginItem" href="#" onclick="ltOpenLogin();return false;">
-          <span class="lt-nav-icon">👤</span> Connexion / Inscription
+          <span class="lt-nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Connexion / Inscription
         </a>
         <div class="lt-lang-toggle">
           <button class="lt-lang-btn" id="ltLangFR" onclick="ltSetLang('fr')">FR</button>

@@ -311,10 +311,10 @@
           <!-- Tips -->
           <div class="panel">
             <div class="tips-title">Règles de gestion du risque ICT</div>
-            <div class="tip-item"><span class="tip-icon">🎯</span><span>Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les pros restent souvent sous 1%.</span></div>
-            <div class="tip-item"><span class="tip-icon">📐</span><span>Ton SL doit être placé sous/sur un niveau de structure logique (OB, FVG, swing) — jamais un montant fixe en pips.</span></div>
-            <div class="tip-item"><span class="tip-icon">⚡</span><span>Pour un RR de 2:1 minimum, ton TP doit valoir au moins 2× la distance du SL. Base d'une espérance positive.</span></div>
-            <div class="tip-item"><span class="tip-icon">🔄</span><span>Ajuste toujours ta taille de position en fonction du SL — le lot découle du risque, jamais l'inverse.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><span>Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les pros restent souvent sous 1%.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 20h18L3 4z"/><path d="M7 16h2M9.5 12h1.5"/></svg></span><span>Ton SL doit être placé sous/sur un niveau de structure logique (OB, FVG, swing) — jamais un montant fixe en pips.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span>Pour un RR de 2:1 minimum, ton TP doit valoir au moins 2× la distance du SL. Base d'une espérance positive.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span><span>Ajuste toujours ta taille de position en fonction du SL — le lot découle du risque, jamais l'inverse.</span></div>
           </div>
         </div>
       </div>
@@ -446,10 +446,10 @@ function calcPriceToSL() {
 
   if (warn) {
     if (calcDir === 'long' && sl >= entry) {
-      warn.textContent = '⚠️ En LONG, le Stop Loss doit être SOUS le prix d\'entrée.';
+      warn.textContent = 'En LONG, le Stop Loss doit être SOUS le prix d\'entrée.';
       warn.style.display = 'block';
     } else if (calcDir === 'short' && sl <= entry) {
-      warn.textContent = '⚠️ En SHORT, le Stop Loss doit être AU-DESSUS du prix d\'entrée.';
+      warn.textContent = 'En SHORT, le Stop Loss doit être AU-DESSUS du prix d\'entrée.';
       warn.style.display = 'block';
     } else {
       warn.style.display = 'none';
@@ -478,8 +478,8 @@ function calcRR() {
   if (tpWrong) {
     if (warn) {
       warn.textContent = calcDir === 'long'
-        ? '⚠️ En LONG, le Take Profit doit être AU-DESSUS du prix d\'entrée.'
-        : '⚠️ En SHORT, le Take Profit doit être SOUS le prix d\'entrée.';
+        ? 'En LONG, le Take Profit doit être AU-DESSUS du prix d\'entrée.'
+        : 'En SHORT, le Take Profit doit être SOUS le prix d\'entrée.';
       warn.style.display = 'block';
     }
     rrDisplay.style.display = 'none'; return;
