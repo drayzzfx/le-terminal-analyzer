@@ -1084,7 +1084,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         </div>
         <div class="field">
           <label class="lbl" style="color:#93D0FF" id="lbl-tf">Timeframe</label>
-          <select id="tf"><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
+          <select id="tf"><option>M1</option><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
         </div>
       </div>
 
@@ -1151,7 +1151,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       </div>
 
       <button class="analyze-btn" id="submitBtn" onclick="analyze()">
-        <span id="btn-txt">⚡ Analyser mon setup</span>
+        <span id="btn-txt">Analyser mon setup</span>
       </button>
     </div>
 
@@ -1265,9 +1265,9 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         </div>
       </div>
       <div class="actions">
-        <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
-        <button class="act-btn accent" onclick="window.location.href='./tarifs.html'" id="act-pro">★ Passer Premium</button>
-        <button class="act-btn" onclick="deleteLastAnalysis()" id="act-del" style="display:none;border-color:rgba(248,113,113,.3);color:#F87171">🗑</button>
+        <button class="act-btn" onclick="showForm()" id="act-new">Nouvelle analyse</button>
+        <button class="act-btn accent" onclick="window.location.href='./tarifs.html'" id="act-pro">Passer Premium</button>
+        <button class="act-btn" onclick="deleteLastAnalysis()" id="act-del" style="display:none;border-color:rgba(248,113,113,.3);color:#F87171">Supprimer</button>
       </div>
     </div>
 
@@ -1307,13 +1307,13 @@ const T={
     lblBias:'Biais marché', lblSess:'Session', lblConf:'Confluences & Notes',
     ob:'Haussier', obr:'Baissier', on:'Neutre',
     ucta:'Ajoute ton graphique', uhint:'PNG, JPG · Glisse ou clique', rmImg:'✕ Retirer',
-    btnTxt:'⚡ Analyser mon setup',
+    btnTxt:'Analyser mon setup',
     ldTitle:'Analyse en cours…',
     steps:['ÉVALUATION DES CONFLUENCES','CALCUL DU RISQUE','ANALYSE DE LA STRUCTURE','GÉNÉRATION DU FEEDBACK'],
     resTag:'RÉSULTAT D\'ANALYSE', mDirLbl:'Direction', mPairLbl:'Actif',
     crtLbl:'Graphique soumis',
     fcForces:'Points Forts', fcWeak:'Points Faibles', fcAdvice:'Recommandations',
-    actNew:'↩ Nouvelle analyse', actPro:'★ Passer Premium',
+    actNew:'Nouvelle analyse', actPro:'Passer Premium',
     pwTitle:'Limite atteinte', pwSub:'Tu as utilisé tes 3 analyses gratuites.<br>Passe à Premium pour des analyses illimitées.',
     pmName:'Mensuel', pyName:'Annuel', pyTop:'★ MEILLEURE OFFRE',
     pmPer:'/ mois', pyPer:'/ mois · 99€/an',
@@ -1438,13 +1438,13 @@ Réponds en français.`
     lblBias:'Market Bias', lblSess:'Session', lblConf:'Confluences & Notes',
     ob:'Bullish', obr:'Bearish', on:'Neutral',
     ucta:'Add your chart', uhint:'PNG, JPG · Drag or click', rmImg:'✕ Remove',
-    btnTxt:'⚡ Analyze my setup',
+    btnTxt:'Analyze my setup',
     ldTitle:'Analyzing…',
     steps:['EVALUATING CONFLUENCES','CALCULATING RISK','ANALYZING STRUCTURE','GENERATING FEEDBACK'],
     resTag:'ANALYSIS RESULT', mDirLbl:'Direction', mPairLbl:'Asset',
     crtLbl:'Submitted chart',
     fcForces:'Strengths', fcWeak:'Weaknesses', fcAdvice:'Recommendations',
-    actNew:'↩ New analysis', actPro:'★ Go Premium',
+    actNew:'New analysis', actPro:'Go Premium',
     pwTitle:'Limit reached', pwSub:'You\'ve used your 3 free analyses.<br>Go Premium for unlimited analyses.',
     pmName:'Monthly', pyName:'Annual', pyTop:'★ BEST VALUE',
     pmPer:'/ month', pyPer:'/ month · €99/year',
@@ -3200,11 +3200,31 @@ window.onPairInput = onPairInput;
 
 // ── AUTOCOMPLETE PAIRS ──
 var ALL_PAIRS = [
-  'XAUUSD','XAGUSD','EURUSD','GBPUSD','USDJPY','AUDUSD','USDCAD','NZDUSD','USDCHF',
-  'EURGBP','EURJPY','GBPJPY','CADJPY','CHFJPY','EURCHF','EURAUD','GBPAUD',
-  'NAS100','US30','SP500','DAX','UK100','CAC40','AU200','JP225',
+  // Métaux
+  'XAUUSD','XAGUSD','XPTUSD','XPDUSD',
+  // Forex — majeures
+  'EURUSD','GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD',
+  // Forex — crosses EUR
+  'EURGBP','EURJPY','EURCHF','EURCAD','EURAUD','EURNZD',
+  // Forex — crosses GBP
+  'GBPJPY','GBPCHF','GBPCAD','GBPAUD','GBPNZD',
+  // Forex — crosses AUD / NZD
+  'AUDJPY','AUDCHF','AUDCAD','AUDNZD','NZDJPY','NZDCHF','NZDCAD',
+  // Forex — crosses CAD / CHF
+  'CADJPY','CADCHF','CHFJPY',
+  // Forex — exotiques
+  'USDMXN','USDZAR','USDTRY','USDSGD','USDHKD','USDNOK','USDSEK','USDDKK',
+  'USDPLN','USDHUF','USDCZK','USDCNH','USDTHB','USDINR','USDILS',
+  'EURTRY','EURPLN','EURSEK','EURNOK','EURHUF','EURCZK','EURZAR',
+  'GBPSEK','GBPNOK','ZARJPY','TRYJPY','NOKJPY','SEKJPY','SGDJPY',
+  // Indices
+  'NAS100','US30','SP500','US500','DAX','GER40','UK100','CAC40','FR40','EU50',
+  'AU200','JP225','HK50','ES35','IT40','SWI20','NETH25',
+  // Crypto
   'BTCUSD','ETHUSD','SOLUSD','XRPUSD','BNBUSD','ADAUSD','DOTUSD','AVAXUSD',
-  'USOIL','UKOIL','NATGAS','COPPER','PLATINUM','PALLADIUM'
+  'DOGEUSD','LINKUSD','LTCUSD','MATICUSD','TRXUSD','BCHUSD','XLMUSD','NEARUSD',
+  // Matières premières
+  'USOIL','UKOIL','BRENT','NATGAS','COPPER','PLATINUM','PALLADIUM'
 ];
 
 function onPairInput(val){
