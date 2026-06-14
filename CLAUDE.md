@@ -20,7 +20,24 @@ La référence complète (tokens, guidelines, composants, UI kits) est versionn�
 - **Rayons nets** (2/4/6/10px), bordures hairline 1px, ombres froides, conteneur 1200px, base d'espacement 4px.
 - **Animation** : ease-out cinématique `cubic-bezier(0.16,1,0.3,1)`, reveals au scroll une seule fois, toujours honorer `prefers-reduced-motion`.
 
-NB : le code de production utilise `design-system.css` + `eco.css` (noms de variables historiques `--v`, `--card`, `--display`…). `design-system-ref/` est la **source de vérité visuelle** : en cas de divergence, s'aligner sur le design system pour les nouveaux écrans, sans casser l'existant.
+NB : le code de production utilise `design-system.css` + `eco.css` (noms de variables historiques `--v`, `--card`, `--display`…). `design-system-ref/` est la **source de vérité visuelle** : en cas de divergence, s'aligner sur le design system.
+
+### RÈGLE PERMANENTE (obligatoire, sans rappel de l'utilisateur)
+Pour **toute page existante** ET **toute nouvelle page/écran**, présente ou future, se baser **par défaut** sur ce design system — l'utilisateur n'a pas à le redemander. Concrètement :
+- **Avant** de créer/modifier une page : lire `design-system-ref/readme.md` + les tokens, et réutiliser les variables CSS existantes (`design-system.css` / `eco.css`).
+- **Polices** : uniquement Anton (titres display, CAPITALES) / Inter (UI, corps) / JetBrains Mono (chiffres). **Bannir `Bricolage Grotesque`** et toute autre police.
+- **Couleurs** : uniquement la palette ci-dessus (4 noirs + accent `#7FB8E8`/`#5A9BD4`/`#BFDCF5` + sémantiques `#4ADE9C`/`#F0647A`/`#E8C268` + gris steel). **Aucun hex hors-palette** (pas de bleu vif, violet, orange, vert/rouge approximatifs). Seule exception tolérée : un logo de marque tierce (ex. « G » Google).
+- **Zéro emoji** : remplacer par une icône SVG trait fin (`viewBox 0 0 24 24`, `fill:none`, `stroke:currentColor`). Glyphes tolérés : `→ ← ↗ ★ ✓ ✕ ▲ ▼ —`.
+- **Ne jamais casser le fonctionnel** : ne toucher qu'au design (CSS/markup présentationnel), jamais la logique/JS/API/IDs.
+
+### Checklist de conformité (à vérifier après tout changement UI)
+```
+grep -rn "font-family[^;]*Bricolage" *.html *.css *.js   # → vide
+# emoji : scan Python sur [\U0001F000-\U0001FAFF\U00002600-\U000027BF…] hors → ← ★ ✓ ✕ ▲ ▼
+# couleurs : tout #hex doit appartenir à la palette DS (sauf logo Google)
+node --check <fichiers JS / scripts inline>                # syntaxe intacte
+```
+État au 2026-06-14 : tout le site est **conforme** sur typographie + emoji + couleurs. Reste optionnel : normaliser les rayons « pilule » 50px des boutons vers l'échelle nette du DS (2/4/6/10px) — à faire si demandé.
 
 ## Deployment
 
