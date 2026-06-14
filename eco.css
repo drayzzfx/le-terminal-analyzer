@@ -350,7 +350,7 @@ body.sb-toggled .sidebar {
 
 /* Cartes « comment ça marche » */
 .features {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
   margin-bottom: 34px;
 }
 .feat {
@@ -628,7 +628,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
 
 /* Étapes */
 .steps { margin-bottom: 38px; }
-.steps__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.steps__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .step {
   position: relative;
   background: var(--card); border: 1px solid var(--border);
@@ -818,7 +818,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
   border-radius: var(--pill); padding: 2px 11px;
 }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
 
 /* =========================================================================
    Flash — fil des dernières annonces (compact, 2 colonnes)
