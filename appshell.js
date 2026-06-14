@@ -46,7 +46,7 @@
   var PRO = '<span class="side__pro-tag">PREMIUM</span>';
 
   var NAV = [
-    { key: 'dashboard', label: 'Dashboard', href: './index.html', icon: I.dashboard },
+    { key: 'dashboard', label: 'Accueil', href: './index.html', icon: I.dashboard },
     { key: 'journal', label: 'Journal de Trading', href: './journal.html', icon: I.journal, pro: true },
     { key: 'calendrier', label: 'Calendrier Éco', href: './calendrier.html', icon: I.calendrier, pro: true, children: [
       { label: 'Présentation', href: './eco-edition.html', icon: I.pres, children: [
