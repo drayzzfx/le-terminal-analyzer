@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0095FF">
+<meta name="theme-color" content="#7FB8E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Le Terminal">
@@ -458,7 +458,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* ANALYZE BTN */
 .analyze-btn {
   width: 100%; padding: 16px;
-  background: linear-gradient(135deg, var(--v), #0070CC);
+  background: linear-gradient(135deg, var(--v), #5A9BD4);
   border: none; border-radius: var(--r);
   color: white;
   font-family: 'Bricolage Grotesque', sans-serif;
@@ -503,7 +503,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .ld-orb {
   width: 64px; height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--v), #0070CC, #00C6FF);
+  background: linear-gradient(135deg, var(--v), #5A9BD4, #00C6FF);
   margin: 0 auto 28px;
   animation: orbPulse 2s ease-in-out infinite;
   box-shadow: 0 0 40px var(--vglow);
@@ -743,7 +743,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
 .pay-btn {
   width: 100%; padding: 14px;
-  background: linear-gradient(135deg, var(--v), #0070CC);
+  background: linear-gradient(135deg, var(--v), #5A9BD4);
   border: none; border-radius: 50px;
   color: white; font-family: 'Bricolage Grotesque', sans-serif;
   font-size: 15px; font-weight: 700; letter-spacing: 0.04em;
@@ -780,7 +780,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
 .auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
 .auth-field input:focus{border-color:var(--border-active)}
-.auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
 .auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,149,255,.4)}
 .auth-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .auth-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
@@ -1243,8 +1243,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         </div>
         <div class="fb-card">
           <div class="fb-head">
-            <div class="fb-dot" style="background:#60A5FA"></div>
-            <span class="fb-title" id="fc-advice" style="color:#60A5FA">Recommandations</span>
+            <div class="fb-dot" style="background:#7FB8E8"></div>
+            <span class="fb-title" id="fc-advice" style="color:#7FB8E8">Recommandations</span>
           </div>
           <div class="fb-body" id="adviceText">—</div>
         </div>
@@ -2848,7 +2848,7 @@ function openHDetail(i){
     '<div><div style="font-family:Bricolage Grotesque,sans-serif;font-size:18px;font-weight:700">'+(item.score_label||'')+'</div>'+
     '<div style="font-size:12px;color:var(--text2);margin-top:3px">'+(item.pair||'')+' · '+(item.direction||'')+' · '+(item.tf||'')+' · '+ds+'</div></div></div>'+
     (item.img_data?'<img src="'+item.img_data+'" style="width:100%;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">':'')+
-    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#60A5FA')+
+    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#7FB8E8')+
     (item.macro?'<div style="background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
   // Add outcome section
   content += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">' +
@@ -2932,7 +2932,7 @@ function renderOnboardStep(){
     '<div style="font-family:\'Bricolage Grotesque\',sans-serif;font-size:17px;font-weight:700;color:#F0EEFF;margin-bottom:8px">'+s.title+'</div>'+
     '<div style="color:#9B96B8;font-size:13px;line-height:1.7">'+s.desc+'</div>';
   dotsEl.innerHTML = onboardSteps.map(function(_,i){
-    return '<div style="width:'+(i===onboardStep?16:6)+'px;height:6px;border-radius:3px;background:'+(i===onboardStep?'#38B6FF':'rgba(255,255,255,.15)')+';transition:all .3s"></div>';
+    return '<div style="width:'+(i===onboardStep?16:6)+'px;height:6px;border-radius:3px;background:'+(i===onboardStep?'#BFDCF5':'rgba(255,255,255,.15)')+';transition:all .3s"></div>';
   }).join('');
   nextBtn.textContent = onboardStep === onboardSteps.length-1 ? 'C\'est parti ! 🚀' : 'Suivant →';
 }
@@ -3632,7 +3632,7 @@ function quickSetResult(result){
     <div style="display:flex;justify-content:center;gap:6px;margin:20px 0" id="onboardDots"></div>
     <div style="display:flex;gap:10px">
       <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#5A5570;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;cursor:pointer">Passer</button>
-      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#0095FF,#38B6FF);border:none;border-radius:10px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
+      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#7FB8E8,#BFDCF5);border:none;border-radius:10px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
     </div>
   </div>
 </div>
