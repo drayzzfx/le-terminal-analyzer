@@ -10,13 +10,42 @@
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
 <style>
-/* Présentation : en-têtes de section alignés sur la maquette (intitulé « ● » + grand titre).
-   Scopé à cette page via .pres-edition pour ne pas impacter les autres pages éco. */
-.pres-edition .prose__h { text-transform: uppercase; letter-spacing: .01em; }
+/* Présentation : page alignée fidèlement sur la maquette.
+   Tout est scopé via .pres-edition pour ne pas impacter les autres pages éco. */
+
+/* Titres de section, cartes « Comment ça marche », étapes et citation en capitales */
+.pres-edition .prose__h,
+.pres-edition .quote__text,
+.pres-edition .steps .step__title,
 .pres-edition > .features .feat__title { text-transform: uppercase; letter-spacing: .01em; }
+
+/* En-tête « La sélection » (intitulé « ● » + grand titre) */
 .pres-edition .home-about::before { display: none; }
 .pres-edition .sel-head { margin-bottom: 18px; }
 .pres-edition .sel-head .prose__kicker { margin-bottom: 10px; }
+
+/* « À propos » sur 2 colonnes : mission (gauche) + bénéfices (droite) */
+.pres-edition .about-split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 30px; align-items: start; margin-bottom: 38px; }
+.pres-edition .about-split .prose { max-width: none; margin: 0; }
+.pres-edition .about-split .features { display: flex; flex-direction: column; gap: 14px; margin: 0; }
+.pres-edition .about-split .feat { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; }
+.pres-edition .about-split .feat__ico { grid-column: 1; grid-row: 1 / span 2; margin: 0; align-self: start; }
+.pres-edition .about-split .feat__title { grid-column: 2; margin: 0 0 4px; text-transform: none; }
+.pres-edition .about-split .feat__desc { grid-column: 2; margin: 0; }
+@media (max-width: 880px) { .pres-edition .about-split { grid-template-columns: 1fr; } }
+
+/* Lettrine sur le 1er paragraphe de la mission */
+.pres-edition .about-split .prose p:first-of-type::first-letter {
+  float: left; font-family: var(--display); font-weight: 700;
+  font-size: 62px; line-height: .82; padding: 6px 12px 0 0; color: var(--v2);
+}
+
+/* Étapes : gros numéros 01/02/03 en contour (au lieu des pastilles pleines) */
+.pres-edition .steps .step__num {
+  width: auto; height: auto; border-radius: 0; background: none; box-shadow: none;
+  font-size: 56px; font-weight: 800; line-height: 1; margin-bottom: 10px;
+  color: transparent; -webkit-text-stroke: 1.6px var(--v2); text-stroke: 1.6px var(--v2);
+}
 </style>
 </head>
 <body class="eco-page">
@@ -202,6 +231,7 @@
 </section>
 
 <div class="home-about" aria-label="À propos">
+<div class="about-split">
 <section class="prose" aria-label="Notre mission">
   <span class="prose__kicker"><span class="block__dot">●</span> <span data-en="About · Our mission">À propos · Notre mission</span></span>
   <h2 class="prose__h" data-en="Bringing order to the flood of economic news">Remettre de l'ordre dans le flot de l'info éco</h2>
@@ -248,23 +278,24 @@
     <p class="feat__desc" data-en="Every item leads to the original article, always credited. You read the real source, never a copy.">Chaque annonce mène à l'article d'origine, toujours crédité. Vous lisez la vraie source, jamais une copie.</p>
   </article>
 </section>
+</div>
 
 <section class="steps" aria-label="En pratique">
   <span class="prose__kicker"><span class="block__dot">●</span> <span data-en="In practice">En pratique</span></span>
   <h2 class="prose__h" data-en="How the daily edition is made">Comment l'édition du jour est fabriquée</h2>
   <div class="steps__grid">
     <div class="step">
-      <span class="step__num">1</span>
+      <span class="step__num">01</span>
       <h3 class="step__title" data-en="We gather">On rassemble</h3>
       <p class="step__desc" data-en="The site automatically fetches the feeds of the media and institutions followed, then cleans each item.">Le site récupère automatiquement les flux des médias et institutions suivis, puis nettoie chaque annonce.</p>
     </div>
     <div class="step">
-      <span class="step__num">2</span>
+      <span class="step__num">02</span>
       <h3 class="step__title" data-en="We sort">On trie</h3>
       <p class="step__desc" data-en="Duplicates removed, items too old discarded, the rest sorted by freshness and by zone.">Doublons écartés, annonces trop anciennes retirées, le reste classé par fraîcheur et par zone.</p>
     </div>
     <div class="step">
-      <span class="step__num">3</span>
+      <span class="step__num">03</span>
       <h3 class="step__title" data-en="You read">Vous lisez</h3>
       <p class="step__desc" data-en="The edition is published, highlighted and archived every day. You browse, you click, you read the source.">L'édition est publiée, mise en avant et archivée chaque jour. Vous parcourez, vous cliquez, vous lisez la source.</p>
     </div>
