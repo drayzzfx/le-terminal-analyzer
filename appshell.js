@@ -243,6 +243,24 @@
       if (c0) c0.classList.add('is-open');
       if (s0) s0.classList.add('is-open');
     }
+    // Déplie toute la chaîne jusqu'à la page active + surligne l'item courant,
+    // pour que le menu reste ouvert après navigation (ex: Calendrier ▸ Présentation ▸ Amériques)
+    var navLinks = sideEl.querySelectorAll('a.side__item, a.side__subitem');
+    Array.prototype.forEach.call(navLinks, function (a) {
+      var href = (a.getAttribute('href') || '').split('#')[0].split('/').pop().toLowerCase();
+      if (href && href === path) {
+        a.classList.add('is-active');
+        var el = a.parentElement;
+        while (el && el !== sideEl) {
+          if (el.classList && el.classList.contains('side__sub')) {
+            el.classList.add('is-open');
+            var row = el.previousElementSibling;
+            if (row) { var car = row.querySelector('.side__caret'); if (car) car.classList.add('is-open'); }
+          }
+          el = el.parentElement;
+        }
+      }
+    });
     // toggles
     sideEl.addEventListener('click', function (e) {
       var btn = e.target.closest('.side__caret');
