@@ -1098,9 +1098,7 @@ html[lang="en"] .home-about::before { content: "ABOUT"; }
       <a href="./index.html#community">Communauté</a>
     </nav>
     <div class="lt-nav__actions">
-      <div class="lt-status" style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:var(--bull)"><span class="lt-dot" style="background:var(--bull);box-shadow:0 0 8px var(--bull-glow)"></span>LIVE</div>
-      <span class="liveclock" id="liveClock" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums"></span>
-      <button class="lt-nav__pill" id="langToggle" type="button" aria-label="Switch language" title="English / Français"><span class="lang__label">EN</span></button>
+      <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltOpenMenu&&ltOpenMenu())">Connexion</button>
       <div id="ltUserBar"></div>
       <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'">Accès PRO</button>
