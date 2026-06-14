@@ -22,10 +22,27 @@ const SYMBOL_MAP = {
   'DOTUSD': 'DOT-USD', 'DOT': 'DOT-USD',
   'LTCUSD': 'LTC-USD', 'LTC': 'LTC-USD',
   'MATICUSD': 'MATIC-USD', 'MATIC': 'MATIC-USD',
-  // Forex
+  // Forex — majeures
   'EURUSD': 'EURUSD=X', 'GBPUSD': 'GBPUSD=X', 'USDJPY': 'JPY=X',
   'AUDUSD': 'AUDUSD=X', 'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'NZDUSD': 'NZDUSD=X',
-  'EURGBP': 'EURGBP=X', 'EURJPY': 'EURJPY=X', 'GBPJPY': 'GBPJPY=X',
+  // Forex — crosses EUR
+  'EURGBP': 'EURGBP=X', 'EURJPY': 'EURJPY=X', 'EURCHF': 'EURCHF=X', 'EURCAD': 'EURCAD=X',
+  'EURAUD': 'EURAUD=X', 'EURNZD': 'EURNZD=X',
+  // Forex — crosses GBP
+  'GBPJPY': 'GBPJPY=X', 'GBPCHF': 'GBPCHF=X', 'GBPCAD': 'GBPCAD=X', 'GBPAUD': 'GBPAUD=X', 'GBPNZD': 'GBPNZD=X',
+  // Forex — crosses AUD / NZD / CAD / CHF
+  'AUDJPY': 'AUDJPY=X', 'AUDCHF': 'AUDCHF=X', 'AUDCAD': 'AUDCAD=X', 'AUDNZD': 'AUDNZD=X',
+  'NZDJPY': 'NZDJPY=X', 'NZDCHF': 'NZDCHF=X', 'NZDCAD': 'NZDCAD=X',
+  'CADJPY': 'CADJPY=X', 'CADCHF': 'CADCHF=X', 'CHFJPY': 'CHFJPY=X',
+  // Forex — exotiques (USD base → XXX=X)
+  'USDMXN': 'MXN=X', 'USDZAR': 'ZAR=X', 'USDTRY': 'TRY=X', 'USDSGD': 'SGD=X',
+  'USDHKD': 'HKD=X', 'USDNOK': 'NOK=X', 'USDSEK': 'SEK=X', 'USDDKK': 'DKK=X',
+  'USDPLN': 'PLN=X', 'USDHUF': 'HUF=X', 'USDCZK': 'CZK=X', 'USDCNH': 'CNH=X',
+  'USDTHB': 'THB=X', 'USDINR': 'INR=X', 'USDILS': 'ILS=X',
+  'EURTRY': 'EURTRY=X', 'EURPLN': 'EURPLN=X', 'EURSEK': 'EURSEK=X', 'EURNOK': 'EURNOK=X',
+  'EURHUF': 'EURHUF=X', 'EURCZK': 'EURCZK=X', 'EURZAR': 'EURZAR=X',
+  'GBPSEK': 'GBPSEK=X', 'GBPNOK': 'GBPNOK=X',
+  'ZARJPY': 'ZARJPY=X', 'TRYJPY': 'TRYJPY=X', 'NOKJPY': 'NOKJPY=X', 'SEKJPY': 'SEKJPY=X', 'SGDJPY': 'SGDJPY=X',
   // Indices supplémentaires
   'JP225': '^N225', 'NIKKEI': '^N225', 'CAC40': '^FCHI', 'FR40': '^FCHI',
   'HK50': '^HSI', 'AUS200': '^AXJO',

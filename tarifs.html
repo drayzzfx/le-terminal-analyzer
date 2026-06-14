@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Le Terminal — Tarifs</title>
-<meta name="description" content="Le Terminal — commence gratuitement, passe en PRO quand tu veux. Cinq outils, un seul abonnement.">
+<meta name="description" content="Le Terminal — commence gratuitement, passe en Premium quand tu veux. Cinq outils, un seul abonnement.">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./logo.jpg.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +42,7 @@
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" style="display:none">Connexion</button>
-      <a class="lt-btn lt-btn--primary lt-btn--sm" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Accès PRO</a>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Accès Premium</a>
     </div>
   </header>
 </div>
@@ -61,37 +61,35 @@
 <section class="pr-hero">
   <div class="pr-hero__halo" aria-hidden="true"></div>
   <span class="lt-eyebrow"><span class="lt-dot"></span> Tarifs simples, sans surprise</span>
-  <h1 class="pr-hero__title"><span class="lt-metal">Passe en PRO</span></h1>
-  <p class="pr-hero__lede">Commence gratuitement, sans carte bancaire. Quand tes analyses deviennent quotidiennes, PRO enlève toutes les limites — pour le prix d'un seul mauvais trade évité.</p>
-  <div class="pr-toggle" role="group" aria-label="Période de facturation">
-    <button class="pr-toggle__opt" id="prMonthly">Mensuel</button>
-    <button class="pr-toggle__opt is-on" id="prAnnual">Annuel <em>−34 %</em></button>
-  </div>
+  <h1 class="pr-hero__title"><span class="lt-metal">Passe en Premium</span></h1>
+  <p class="pr-hero__lede">Tous les outils, sans limite. Choisis ta formule : flexible au mois, ou annuel pour économiser 33 %.</p>
 </section>
 
 <!-- PLANS -->
 <section class="pr-plans">
   <div class="pr-grid">
-    <!-- Découverte -->
+    <!-- Mensuel -->
     <div class="pr-card">
-      <div class="pr-card__head"><span class="pr-card__name">Découverte</span><span class="pr-card__tag">Pour commencer</span></div>
-      <div class="pr-card__price"><span class="pr-card__amount">0 €</span><span class="pr-card__per">/ mois</span></div>
+      <div class="pr-card__head"><span class="pr-card__name">MENSUEL</span><span class="pr-card__tag">Flexible, sans engagement</span></div>
+      <div class="pr-card__price"><span class="pr-card__amount">29,99 €</span><span class="pr-card__per">/ mois</span></div>
       <ul class="pr-card__feats">
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 analyses Setup Analyzer / mois</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal limité à 20 trades / mois</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calendrier économique complet</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calculateur de pips</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bubble Map en temps réel</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 1 compte de trading</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Alertes macro (NFP · CPI · FOMC)</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Jusqu'à 5 comptes de trading</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Communauté privée Telegram</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
       </ul>
-      <div class="pr-card__cta"><a class="lt-btn lt-btn--secondary lt-btn--lg" style="width:100%" href="./app.html">Créer un compte</a></div>
+      <div class="pr-card__cta"><a class="lt-btn lt-btn--secondary lt-btn--lg" style="width:100%" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Choisir le mensuel</a></div>
+      <span class="pr-card__note">Annulable à tout moment</span>
     </div>
-    <!-- PRO -->
+    <!-- Annuel -->
     <div class="pr-card is-pro">
       <span class="pr-card__flag">Recommandé</span>
-      <div class="pr-card__head"><span class="pr-card__name">PRO</span><span class="pr-card__tag">Tous les outils, sans limite</span></div>
-      <div class="pr-card__price"><span class="pr-card__amount" id="prProAmount">19 €</span><span class="pr-card__per" id="prProPer">/ mois · facturé 228 € / an</span></div>
-      <span class="pr-card__save" id="prProSave">Économise 34 % par rapport au mensuel</span>
+      <div class="pr-card__head"><span class="pr-card__name">ANNUEL</span><span class="pr-card__tag">Le meilleur prix · −33 %</span></div>
+      <div class="pr-card__price"><span class="pr-card__amount" id="prProAmount">19,99 €</span><span class="pr-card__per" id="prProPer">/ mois · facturé 239,88 € / an</span></div>
+      <span class="pr-card__save" id="prProSave">Économise 33 % par rapport au mensuel</span>
       <ul class="pr-card__feats">
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
@@ -102,7 +100,7 @@
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Accès anticipé aux nouveaux outils</li>
       </ul>
-      <div class="pr-card__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" style="width:100%" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Passer en PRO</a></div>
+      <div class="pr-card__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" style="width:100%" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Passer en Premium</a></div>
       <span class="pr-card__note">Garantie 14 jours satisfait ou remboursé</span>
     </div>
   </div>
@@ -111,7 +109,7 @@
 <!-- POURQUOI -->
 <section class="pr-why" data-reveal>
   <div class="pr-why__item"><span class="pr-why__n">01</span><h3>Un seul abonnement, cinq outils</h3><p>Analyse de setups, journal, calendrier macro, flux de capitaux et calculateur — ailleurs, c'est trois abonnements séparés. Ici, un seul cockpit.</p></div>
-  <div class="pr-why__item"><span class="pr-why__n">02</span><h3>L'IA qui connaît ta stratégie</h3><p>ICT, SMC, price action — le moteur s'adapte à ta méthode et apprend de ton historique. Le plan PRO débloque l'analyse comportementale complète.</p></div>
+  <div class="pr-why__item"><span class="pr-why__n">02</span><h3>L'IA qui connaît ta stratégie</h3><p>ICT, SMC, price action — le moteur s'adapte à ta méthode et apprend de ton historique. Le plan Premium débloque l'analyse comportementale complète.</p></div>
   <div class="pr-why__item"><span class="pr-why__n">03</span><h3>Sans engagement, vraiment</h3><p>Plan gratuit à vie, annulation en deux clics et garantie 14 jours remboursé. Tu ne paies que tant que ça te fait progresser.</p></div>
 </section>
 
@@ -119,7 +117,7 @@
 <section class="pr-compare" data-reveal>
   <h2 class="pr-compare__title">Comparer en détail</h2>
   <div class="pr-table">
-    <div class="pr-table__row pr-table__row--head"><span></span><span>Découverte</span><span class="pr-table__pro">PRO</span></div>
+    <div class="pr-table__row pr-table__row--head"><span></span><span>Découverte</span><span class="pr-table__pro">PREMIUM</span></div>
 
     <div class="pr-table__group">Setup Analyzer</div>
     <div class="pr-table__row"><span class="pr-table__feat">Analyses IA par mois</span><span class="pr-table__cell">3</span><span class="pr-table__cell pr-table__pro">Illimitées</span></div>
@@ -152,11 +150,11 @@
 <section class="pr-faq" data-reveal>
   <h2 class="pr-faq__title">Questions fréquentes</h2>
   <div class="pr-faq__list">
-    <div class="pr-faq__item is-open"><button class="pr-faq__q" aria-expanded="true">Puis-je vraiment utiliser Le Terminal gratuitement ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui. Le plan Découverte est gratuit pour toujours — pas de carte bancaire demandée. Tu as accès aux cinq outils avec des limites mensuelles, de quoi te faire un avis réel avant de passer en PRO.</p></div></div>
-    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Comment fonctionne la garantie 14 jours ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Si PRO ne te convient pas, écris-nous dans les 14 jours suivant ton paiement : remboursement intégral, sans question. La plupart des plateformes équivalentes ne remboursent pas — nous, si.</p></div></div>
-    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Puis-je changer de plan ou annuler à tout moment ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui. Le passage Découverte → PRO est immédiat. L'annulation se fait en deux clics depuis ton compte : tu gardes l'accès PRO jusqu'à la fin de la période payée, puis tu repasses automatiquement en Découverte. Tes données sont conservées.</p></div></div>
+    <div class="pr-faq__item is-open"><button class="pr-faq__q" aria-expanded="true">Puis-je vraiment utiliser Le Terminal gratuitement ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui. Le plan Découverte est gratuit pour toujours — pas de carte bancaire demandée. Tu as accès aux cinq outils avec des limites mensuelles, de quoi te faire un avis réel avant de passer en Premium.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Comment fonctionne la garantie 14 jours ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Si Premium ne te convient pas, écris-nous dans les 14 jours suivant ton paiement : remboursement intégral, sans question. La plupart des plateformes équivalentes ne remboursent pas — nous, si.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Puis-je changer de plan ou annuler à tout moment ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui. Le passage Découverte → Premium est immédiat. L'annulation se fait en deux clics depuis ton compte : tu gardes l'accès Premium jusqu'à la fin de la période payée, puis tu repasses automatiquement en Découverte. Tes données sont conservées.</p></div></div>
     <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">Quels moyens de paiement acceptez-vous ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Carte bancaire (Visa, Mastercard, Amex) et PayPal. Le paiement est sécurisé et la facturation s'arrête dès l'annulation.</p></div></div>
-    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">L'abonnement PRO est-il adapté aux traders prop firm ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui — c'est même notre cœur d'utilisateurs. Multi-comptes (jusqu'à 5 challenges en parallèle), journal illimité et alertes macro avant les annonces à fort impact : tout est pensé pour la gestion de challenges.</p></div></div>
+    <div class="pr-faq__item"><button class="pr-faq__q" aria-expanded="false">L'abonnement Premium est-il adapté aux traders prop firm ?<span class="pr-faq__chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="pr-faq__a"><p>Oui — c'est même notre cœur d'utilisateurs. Multi-comptes (jusqu'à 5 challenges en parallèle), journal illimité et alertes macro avant les annonces à fort impact : tout est pensé pour la gestion de challenges.</p></div></div>
   </div>
 </section>
 
@@ -166,7 +164,7 @@
   <p class="pr-final__lede">Crée ton compte gratuit en 30 secondes. Aucun engagement.</p>
   <div class="pr-final__cta">
     <a class="lt-btn lt-btn--primary lt-btn--lg" href="./app.html">Créer un compte gratuit</a>
-    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Passer en PRO</a>
+    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener">Passer en Premium</a>
   </div>
 </section>
 
@@ -174,7 +172,7 @@
 <footer class="lt-footer">
   <div class="lt-footer__top">
     <div class="lt-footer__brand"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></div>
-    <nav class="lt-footer__links"><a href="./index.html#tools">Outils</a><a href="./index.html#strategies">Stratégies</a><a href="./tarifs.html">Tarifs</a><a href="./index.html#method">Méthode</a><a href="./index.html#community">Communauté</a></nav>
+    <nav class="lt-footer__links"><a href="./index.html#tools">Outils</a><a href="./tarifs.html">Tarifs</a><a href="./index.html#method">Méthode</a><a href="./legal.html#mentions">Mentions légales</a><a href="./legal.html#confidentialite">Confidentialité</a><a href="./legal.html#cgv">CGV</a></nav>
   </div>
   <div class="lt-footer__bottom">
     <span class="lt-footer__copy">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
@@ -205,18 +203,6 @@
   var pill=document.getElementById('ltLangPill');
   if(pill){ try{ pill.textContent=(localStorage.getItem('lt_lang')==='en')?'EN':'FR'; }catch(e){} pill.style.cursor='pointer';
     pill.addEventListener('click',function(){ var n=(pill.textContent==='FR')?'en':'fr'; try{ localStorage.setItem('lt_lang',n); localStorage.setItem('lte_lang',n); }catch(e){} pill.textContent=n.toUpperCase(); }); }
-
-  // Pricing toggle (mensuel / annuel)
-  var bM=document.getElementById('prMonthly'), bA=document.getElementById('prAnnual');
-  var amt=document.getElementById('prProAmount'), per=document.getElementById('prProPer'), save=document.getElementById('prProSave');
-  function setPeriod(annual){
-    if(bA) bA.classList.toggle('is-on', annual); if(bM) bM.classList.toggle('is-on', !annual);
-    if(amt) amt.textContent = (annual?'19':'29')+' €';
-    if(per) per.textContent = annual ? '/ mois · facturé 228 € / an' : '/ mois';
-    if(save){ if(annual){ save.textContent='Économise 34 % par rapport au mensuel'; save.classList.remove('pr-card__save--mute'); } else { save.textContent='Ou 19 € / mois en annuel'; save.classList.add('pr-card__save--mute'); } }
-  }
-  if(bM) bM.addEventListener('click',function(){ setPeriod(false); });
-  if(bA) bA.addEventListener('click',function(){ setPeriod(true); });
 
   // FAQ accordion
   document.querySelectorAll('.pr-faq__item .pr-faq__q').forEach(function(q){
