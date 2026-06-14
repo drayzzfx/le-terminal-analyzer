@@ -152,13 +152,19 @@
     .lt-subnav-item--deep { padding: 7px 10px; font-size: 12px; opacity: .85; }
 
     /* ── USER BAR ── */
-    #ltUserBar { display: flex; align-items: center; gap: 8px; }
-    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.3); border-radius: 50px; color: #E8C268; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
-    .lt-ub-chip { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 50px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
-    .lt-ub-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#7FB8E8,#BFDCF5); display: flex; align-items: center; justify-content: center; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
-    .lt-ub-name { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; color: #EEF2F7; }
-    .lt-ub-logout { padding: 5px 13px; background: transparent; border: 1px solid rgba(240,100,122,.3); border-radius: 50px; color: #F0647A; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
-    .lt-ub-logout:hover { background: rgba(240,100,122,.1); }
+    #ltUserBar { display: flex; align-items: center; gap: 8px; position: relative; }
+    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(232,194,104,.12); border: 1px solid rgba(232,194,104,.3); border-radius: 6px; color: #E8C268; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+    .lt-ub-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); cursor: pointer; transition: all .2s; }
+    .lt-ub-chip:hover { border-color: rgba(127,184,232,.45); background: rgba(127,184,232,.08); }
+    .lt-ub-avatar { width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg,#7FB8E8,#BFDCF5); display: flex; align-items: center; justify-content: center; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #07090C; flex-shrink: 0; }
+    .lt-ub-name { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #F2F4F7; }
+    .lt-ub-caret { color: #7E8794; display: flex; transition: transform .2s; }
+    .lt-ub-chip.open .lt-ub-caret { transform: rotate(180deg); }
+    .lt-ub-menu { position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px; background: rgba(16,20,27,.98); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; box-shadow: 0 24px 60px rgba(0,0,0,.6); padding: 8px; z-index: 100001; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all .18s ease; }
+    .lt-ub-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lt-ub-menu__mail { padding: 8px 10px 10px; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; color: #7E8794; word-break: break-all; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 6px; }
+    .lt-ub-logout { width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: none; border-radius: 6px; color: #F0647A; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; }
+    .lt-ub-logout:hover { background: rgba(240,100,122,.12); }
 
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
