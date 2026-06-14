@@ -1,0 +1,45 @@
+<!-- @dsCard group="Brand" viewport="700x260" name="Cinematic Atmosphere" subtitle="Cold spotlight halo + film grain + vignette" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; }
+  .stage {
+    position: relative; width: 100%; height: 260px; overflow: hidden;
+    background: var(--bg-void);
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* cold spotlight descending from top */
+  .halo {
+    position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+    width: 70%; height: 130%;
+    background: radial-gradient(ellipse 50% 60% at 50% 0%, var(--accent-glow) 0%, transparent 60%);
+    filter: blur(8px);
+  }
+  .vignette { position: absolute; inset: 0; background: var(--vignette); pointer-events: none; }
+  .grain {
+    position: absolute; inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.05; pointer-events: none;
+  }
+  .title {
+    position: relative; z-index: 2;
+    font-family: var(--font-display); text-transform: uppercase;
+    font-size: 64px; line-height: .9; letter-spacing: .01em; text-align: center;
+    background: var(--metal-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .meta { position: absolute; bottom: 14px; left: 18px; z-index: 3; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); letter-spacing:.04em; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="halo"></div>
+    <div class="grain"></div>
+    <div class="title">Le Terminal</div>
+    <div class="vignette"></div>
+    <div class="meta">halo · grain 0.05 · vignette · metal title</div>
+  </div>
+</body>
+</html>

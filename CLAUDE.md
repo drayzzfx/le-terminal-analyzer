@@ -2,6 +2,26 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Design System — « Cinematic Luxury » (À SUIVRE pour tout travail UI)
+
+Toute création/modification d'interface DOIT respecter le design system « Cinematic Luxury » du client.
+La référence complète (tokens, guidelines, composants, UI kits) est versionnée dans **`design-system-ref/`** :
+- `design-system-ref/readme.md` — la bible (ton, palette, typo, animation, layout). **À lire avant tout travail UI.**
+- `design-system-ref/tokens/` — valeurs exactes (`colors.css`, `fonts.css`, `typography.css`, `spacing.css`).
+- `design-system-ref/guidelines/` — fiches spécimen (couleurs, type, espacement, marque).
+- `design-system-ref/components/` & `design-system-ref/ui_kits/` — composants React + kits HTML/CSS de référence (dont `ui_kits/app/presentation.css` pour la page Présentation éco).
+
+**Essentiel à respecter :**
+- **Esthétique** : salle des marchés privée, à minuit, dans un hangar de jets. Froid, précis, retenu.
+- **Palette** : 4 noirs (`#07090C` → `#161B24`) ; **un seul** accent bleu glacial `#7FB8E8`, employé avec parcimonie (CTA, liens, lueurs). Sémantique marché : haussier `#4ADE9C`, baissier `#F0647A`, neutre `#E8C268`. **Pas de violet, pas de néon, pas de dégradé bleu-mauve.**
+- **Typo** : Anton (display, CAPITALES massives, métal brossé via `background-clip:text`), Inter (texte), JetBrains Mono (TOUS les chiffres, tabulaires). Titres display en CAPITALES ; eyebrows/labels en capitales interlettrées.
+- **Icônes** : SVG trait fin (`stroke-width:1.5`, `fill:none`) uniquement. **JAMAIS d'emoji.**
+- **Copy** : français, ton direct/feutré, on tutoie le trader. Chiffres format français (`68 412,50`).
+- **Rayons nets** (2/4/6/10px), bordures hairline 1px, ombres froides, conteneur 1200px, base d'espacement 4px.
+- **Animation** : ease-out cinématique `cubic-bezier(0.16,1,0.3,1)`, reveals au scroll une seule fois, toujours honorer `prefers-reduced-motion`.
+
+NB : le code de production utilise `design-system.css` + `eco.css` (noms de variables historiques `--v`, `--card`, `--display`…). `design-system-ref/` est la **source de vérité visuelle** : en cas de divergence, s'aligner sur le design system pour les nouveaux écrans, sans casser l'existant.
+
 ## Deployment
 
 This project deploys on **Vercel** with no build step — static HTML files are served directly and `api/` functions run as Vercel serverless functions (Node.js).

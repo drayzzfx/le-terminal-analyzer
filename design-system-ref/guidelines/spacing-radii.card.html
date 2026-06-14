@@ -1,0 +1,33 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Radii & Elevation" subtitle="Sharp architectural corners + cold deep shadows" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-base); font-family: var(--font-text); padding: 22px 28px; }
+  .row { display: flex; gap: 28px; align-items: center; }
+  .group { display: flex; gap: 16px; align-items: flex-end; }
+  .box { width: 64px; height: 64px; background: var(--bg-elevated); border: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; }
+  .cap { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+  .sep { width: 1px; height: 72px; background: var(--border-subtle); }
+  .sh { width: 80px; height: 64px; background: var(--bg-elevated); border-radius: 6px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="group">
+      <div class="box" style="border-radius:2px"><span class="cap">xs 2</span></div>
+      <div class="box" style="border-radius:4px"><span class="cap">sm 4</span></div>
+      <div class="box" style="border-radius:6px"><span class="cap">md 6</span></div>
+      <div class="box" style="border-radius:10px"><span class="cap">lg 10</span></div>
+    </div>
+    <div class="sep"></div>
+    <div class="group">
+      <div class="sh" style="box-shadow:0 8px 24px rgba(0,0,0,.55)"></div>
+      <div class="sh" style="box-shadow:0 24px 64px rgba(0,0,0,.65)"></div>
+      <div class="sh" style="box-shadow:0 0 0 1px rgba(127,184,232,.35),0 12px 40px rgba(127,184,232,.35)"></div>
+    </div>
+  </div>
+</body>
+</html>
