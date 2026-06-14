@@ -164,6 +164,7 @@
       + '.side, .side__label, .side__item, .side__subitem, .side__pro, .side__pro *{font-family:var(--font-text,"Inter",system-ui,sans-serif);line-height:1.2}'
       + '.side__item, .side__subitem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
       + '.side__item > *, .side__subitem > *{min-width:0}'
+      + '.side__ic{flex-shrink:0;display:inline-flex;align-items:center}'
       + '.side__pro-tag{margin-left:auto;flex-shrink:0;white-space:nowrap;line-height:1.5;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:3px 8px}'
       + '.side{overflow-y:auto}'
       // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
