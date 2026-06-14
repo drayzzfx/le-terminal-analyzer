@@ -65,7 +65,7 @@
   <p class="pr-hero__lede">Commence gratuitement, sans carte bancaire. Quand tes analyses deviennent quotidiennes, Premium enlève toutes les limites — pour le prix d'un seul mauvais trade évité.</p>
   <div class="pr-toggle" role="group" aria-label="Période de facturation">
     <button class="pr-toggle__opt" id="prMonthly">Mensuel</button>
-    <button class="pr-toggle__opt is-on" id="prAnnual">Annuel <em>−34 %</em></button>
+    <button class="pr-toggle__opt is-on" id="prAnnual">Annuel <em>−33 %</em></button>
   </div>
 </section>
 
@@ -90,8 +90,8 @@
     <div class="pr-card is-pro">
       <span class="pr-card__flag">Recommandé</span>
       <div class="pr-card__head"><span class="pr-card__name">PREMIUM</span><span class="pr-card__tag">Tous les outils, sans limite</span></div>
-      <div class="pr-card__price"><span class="pr-card__amount" id="prProAmount">19 €</span><span class="pr-card__per" id="prProPer">/ mois · facturé 228 € / an</span></div>
-      <span class="pr-card__save" id="prProSave">Économise 34 % par rapport au mensuel</span>
+      <div class="pr-card__price"><span class="pr-card__amount" id="prProAmount">19,99 €</span><span class="pr-card__per" id="prProPer">/ mois · facturé 239,88 € / an</span></div>
+      <span class="pr-card__save" id="prProSave">Économise 33 % par rapport au mensuel</span>
       <ul class="pr-card__feats">
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
@@ -211,9 +211,9 @@
   var amt=document.getElementById('prProAmount'), per=document.getElementById('prProPer'), save=document.getElementById('prProSave');
   function setPeriod(annual){
     if(bA) bA.classList.toggle('is-on', annual); if(bM) bM.classList.toggle('is-on', !annual);
-    if(amt) amt.textContent = (annual?'19':'29')+' €';
-    if(per) per.textContent = annual ? '/ mois · facturé 228 € / an' : '/ mois';
-    if(save){ if(annual){ save.textContent='Économise 34 % par rapport au mensuel'; save.classList.remove('pr-card__save--mute'); } else { save.textContent='Ou 19 € / mois en annuel'; save.classList.add('pr-card__save--mute'); } }
+    if(amt) amt.textContent = (annual?'19,99':'29,99')+' €';
+    if(per) per.textContent = annual ? '/ mois · facturé 239,88 € / an' : '/ mois';
+    if(save){ if(annual){ save.textContent='Économise 33 % par rapport au mensuel'; save.classList.remove('pr-card__save--mute'); } else { save.textContent='Ou 19,99 € / mois en annuel'; save.classList.add('pr-card__save--mute'); } }
   }
   if(bM) bM.addEventListener('click',function(){ setPeriod(false); });
   if(bA) bA.addEventListener('click',function(){ setPeriod(true); });
