@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Market Semantics" subtitle="Bullish / bearish / neutral signal colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-base); font-family: var(--font-text); }
+  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 16px; }
+  .sw { border: 1px solid var(--border-subtle); border-radius: 6px; padding: 16px; background: var(--bg-elevated); display: flex; flex-direction: column; gap: 8px; }
+  .dot { width: 18px; height: 18px; border-radius: 999px; }
+  .lbl { font-family: var(--font-text); font-size: 13px; color: var(--text-body); }
+  .val { font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .hex { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="dot" style="background:#4ADE9C"></div><span class="lbl">Bullish</span><span class="val" style="color:#4ADE9C">+12.4%</span><span class="hex">#4ADE9C</span></div>
+    <div class="sw"><div class="dot" style="background:#F0647A"></div><span class="lbl">Bearish</span><span class="val" style="color:#F0647A">−8.1%</span><span class="hex">#F0647A</span></div>
+    <div class="sw"><div class="dot" style="background:#E8C268"></div><span class="lbl">Neutral</span><span class="val" style="color:#E8C268">0.00%</span><span class="hex">#E8C268</span></div>
+  </div>
+</body>
+</html>

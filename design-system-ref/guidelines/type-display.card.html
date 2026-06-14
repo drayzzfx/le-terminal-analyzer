@@ -1,0 +1,28 @@
+<!-- @dsCard group="Type" viewport="700x200" name="Display — Brushed Metal" subtitle="Anton caps with silver metal gradient clip" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-void); font-family: var(--font-text); padding: 24px 28px; }
+  .metal {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 88px;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    background: var(--metal-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+  }
+  .meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 12px; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <h1 class="metal">Le Terminal</h1>
+  <div class="meta">Anton · uppercase · background-clip: text · --metal-gradient</div>
+</body>
+</html>

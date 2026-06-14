@@ -1,0 +1,54 @@
+/* ============================================================
+   LE TERMINAL — COLOR TOKENS
+   "Cinematic Luxury" — cold, precise, midnight trading floor
+   ============================================================ */
+
+:root {
+  /* ---- Backgrounds (deepest → raised surface) ---- */
+  --bg-void: #07090C;       /* page floor, deepest black */
+  --bg-base: #0B0E13;       /* default page background */
+  --bg-surface: #10141B;    /* raised panels, sections */
+  --bg-elevated: #161B24;   /* cards, modals, popovers */
+
+  /* ---- Glacial blue accent (used SPARINGLY) ---- */
+  --accent: #7FB8E8;        /* primary accent — CTA, active links */
+  --accent-deep: #5A9BD4;   /* pressed / darker accent */
+  --accent-bright: #BFDCF5; /* highlight, hover sheen */
+  --accent-glow: rgba(127, 184, 232, 0.35); /* halos, glows */
+  --accent-glow-soft: rgba(127, 184, 232, 0.12);
+
+  /* ---- Text ---- */
+  --text-title: #F2F4F7;    /* headings, high emphasis */
+  --text-body: #C3CAD4;     /* body copy, default */
+  --text-muted: #7E8794;    /* secondary, captions, labels */
+
+  /* ---- Borders / dividers ---- */
+  --border: #3A414C;        /* visible borders, focus rings base */
+  --border-subtle: #1C212A; /* hairlines, dividers */
+
+  /* ---- Semantic (market) ---- */
+  --bull: #4ADE9C;          /* bullish / up / positive */
+  --bear: #F0647A;          /* bearish / down / negative */
+  --neutral: #E8C268;       /* neutral / warning / pending */
+
+  --bull-glow: rgba(74, 222, 156, 0.18);
+  --bear-glow: rgba(240, 100, 122, 0.18);
+  --neutral-glow: rgba(232, 194, 104, 0.18);
+
+  /* ---- Brushed-metal title gradient ---- */
+  --metal-gradient: linear-gradient(
+    180deg,
+    #FBFCFE 0%,
+    #C9CFD8 18%,
+    #8A929E 42%,
+    #EEF2F7 52%,
+    #9AA2AE 64%,
+    #6E7682 88%,
+    #B7BEC9 100%
+  ); /* @kind color */
+
+  /* ---- Semantic surface aliases ---- */
+  --surface-page: var(--bg-base);
+  --surface-card: var(--bg-elevated);
+  --surface-raised: var(--bg-surface);
+}

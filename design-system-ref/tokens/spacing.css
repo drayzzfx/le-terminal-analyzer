@@ -1,0 +1,51 @@
+/* ============================================================
+   LE TERMINAL — SPACING, RADII, SHADOWS, MOTION
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (4px base) ---- */
+  --sp-1: 0.25rem;   /* 4 */
+  --sp-2: 0.5rem;    /* 8 */
+  --sp-3: 0.75rem;   /* 12 */
+  --sp-4: 1rem;      /* 16 */
+  --sp-5: 1.5rem;    /* 24 */
+  --sp-6: 2rem;      /* 32 */
+  --sp-7: 3rem;      /* 48 */
+  --sp-8: 4rem;      /* 64 */
+  --sp-9: 6rem;      /* 96 */
+  --sp-10: 8rem;     /* 128 */
+
+  /* ---- Radii (sharp, architectural — luxury is restrained) ---- */
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+  --r-pill: 999px;
+
+  /* ---- Borders ---- */
+  --bw: 1px;
+  --bw-thick: 1.5px;
+
+  /* ---- Shadows / elevation (deep, cold) ---- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 0 1px var(--accent-glow), 0 12px 40px var(--accent-glow);
+  --shadow-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --dur-fast: 160ms; /* @kind other */
+  --dur-base: 280ms; /* @kind other */
+  --dur-slow: 560ms; /* @kind other */
+  --dur-reveal: 900ms; /* @kind other */
+
+  /* ---- Film grain / noise opacity ---- */
+  --grain-opacity: 0.04; /* @kind other */
+  --vignette: radial-gradient(ellipse 120% 90% at 50% 0%, transparent 35%, rgba(0,0,0,0.75) 100%); /* @kind other */
+
+  /* ---- Layout ---- */
+  --container: 1200px; /* @kind spacing */
+  --container-wide: 1440px; /* @kind spacing */
+}
