@@ -88,11 +88,11 @@
       var tag = p.pro ? PRO : '';
       if (p.children && p.children.length) {
         return '<div class="side__group" data-key="' + p.key + '">'
-          + '<div class="side__row"><a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span>' + p.label + tag + '</a>'
+          + '<div class="side__row"><a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span><span class="side__lbl">' + p.label + '</span>' + tag + '</a>'
           + '<button class="side__caret" type="button" aria-label="Déplier" data-toggle="1">' + CARET + '</button></div>'
           + subTree(p.children, false) + '</div>';
       }
-      return '<a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span>' + p.label + tag + '</a>';
+      return '<a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span><span class="side__lbl">' + p.label + '</span>' + tag + '</a>';
     }).join('');
   }
 
@@ -165,6 +165,7 @@
       + '.side__item, .side__subitem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
       + '.side__item > *, .side__subitem > *{min-width:0}'
       + '.side__ic{flex-shrink:0;display:inline-flex;align-items:center}'
+      + '.side__lbl{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
       + '.side__pro-tag{margin-left:auto;flex-shrink:0;white-space:nowrap;line-height:1.5;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:3px 8px}'
       + '.side{overflow-y:auto}'
       // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
