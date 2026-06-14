@@ -56,7 +56,7 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) { .lt-aurora { animation: none; } }
 
 /* — Runway floor: 3D plane receding to the horizon — */
-.lt-runway { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 1; pointer-events: none; perspective: 520px; overflow: hidden; }
+.lt-runway { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 1; pointer-events: none; perspective: 520px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22%); mask-image: linear-gradient(180deg, transparent 0, #000 22%); }
 .lt-runway__floor {
   position: absolute; left: -50%; right: -50%; top: 0; bottom: -60%;
   transform: rotateX(72deg); transform-origin: 50% 0;
