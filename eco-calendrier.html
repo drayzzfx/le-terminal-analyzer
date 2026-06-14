@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./calendar-eco.css">
 </head>
 <body class="eco-page">
 <div class="glow" aria-hidden="true"></div>
@@ -69,46 +70,39 @@
   </div>
 </div>
 <main class="wrap">
-<section class="pagehead" aria-label="Calendrier éco">
-  <p class="pagehead__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg> <span data-en="Agenda · Week">Agenda · Semaine</span></p>
-  <h1 class="pagehead__title" data-en="Economic calendar">Calendrier éco</h1>
-  <p class="pagehead__lead" data-en="The week's high-impact events — only 3-star ★★★ releases.">Les rendez-vous à fort impact de la semaine — uniquement les annonces 3 étoiles ★★★.</p>
-</section>
-
-<div class="calcard">
-  <div class="calcard__bar">
-    <span class="calcard__legend" data-en="★★★ High importance only">★★★ Forte importance uniquement</span>
-    <a class="calcard__full" href="https://fr.investing.com/economic-calendar/" target="_blank" rel="noopener nofollow">
-      <span data-en="Full calendar on Investing.com">Calendrier complet sur Investing.com</span> <span aria-hidden="true">↗</span>
-    </a>
+<!-- ░ CALENDRIER ÉCO — design « Calendrier Éco », données live /api/calendar (calendar-eco.js) ░ -->
+<section aria-label="Calendrier éco">
+  <div class="page-head">
+    <span class="eyebrow"><span class="lt-dot"></span> <span data-en="Agenda · Week">Agenda · Semaine</span></span>
+    <h1 data-en="Economic calendar">Calendrier éco</h1>
+    <p data-en="The week's key macroeconomic events — NFP, CPI, FOMC — organized by region and expected impact. Paris time.">Les rendez-vous macroéconomiques clés de la semaine — NFP, CPI, FOMC — organisés par région et impact attendu. Heures de Paris.</p>
   </div>
 
-  <iframe
-    class="calcard__frame"
-    title="Calendrier économique 3 étoiles — Investing.com"
-    src="https://sslecal2.investing.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&importance=3&features=datepicker,timezone&countries=25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&calType=week&timeZone=58&lang=5"
-    loading="lazy"
-    frameborder="0"
-    allowtransparency="true">
-  </iframe>
+  <div class="bm-bar">
+    <div class="bm-filters" id="ecoCalFilters"></div>
+    <button class="eco-imptoggle" id="ecoCalImpToggle" type="button"><span class="eco-imptoggle__dot"></span> <span data-en="High impact only">Impact fort uniquement</span></button>
+  </div>
 
-  <p class="calcard__credit" data-en='Real-time economic calendar provided by <a href="https://www.investing.com/" target="_blank" rel="noopener nofollow">Investing.com</a>.'>
-    Calendrier économique en temps réel fourni par
-    <a href="https://fr.investing.com/" target="_blank" rel="noopener nofollow">Investing.com France</a>.
-  </p>
-</div>
+  <div id="ecoCalList"></div>
+
+  <div class="eco-note">
+    <span class="eco-note__badge"><span class="lt-dot"></span> <span data-en="Flash Info">Flash Info</span></span>
+    <p data-en="High-impact releases bring volatility on FX, indices and gold. Trim your position size around the announcements.">Les annonces à fort impact apportent de la volatilité sur le forex, les indices et l'or. Réduis ta taille de position autour des annonces.</p>
+  </div>
+</section>
 
 <section class="prose" aria-label="Pourquoi cette page">
   <span class="prose__kicker" data-en="Our coverage">Notre couverture</span>
   <h2 class="prose__h" data-en="Why this page">Pourquoi cette page</h2>
   <p data-en="This calendar gathers the week&#39;s high-impact economic events: central-bank decisions, inflation, employment, GDP… Only releases rated « high importance » (3 stars ★★★) appear here — the ones that really move markets. Minor publications are deliberately hidden to keep things essential.">Ce calendrier rassemble les rendez-vous économiques à fort impact de la semaine : décisions de banques centrales, inflation, emploi, PIB… Seules les annonces classées « forte importance » (3 étoiles ★★★) y figurent — celles qui font réellement bouger les marchés. Les publications mineures sont volontairement masquées pour aller à l'essentiel.</p>
-  <p data-en="The interactive calendar is shown at the top of the page, with date, country, forecast and actual in real time (data provided by Investing.com). You can filter by time zone and move from one week to the next.">Le calendrier interactif s'affiche en haut de page, avec date, pays, prévision et résultat en temps réel (données fournies par Investing.com). Vous pouvez filtrer par fuseau horaire et naviguer d'une semaine à l'autre.</p>
+  <p data-en="The calendar is shown at the top of the page, grouped by day, with time, currency, forecast, previous and actual updated in real time. You can filter by currency and keep only the high-impact releases.">Le calendrier s'affiche en haut de page, groupé par jour, avec heure, devise, prévision, précédent et résultat mis à jour en temps réel. Tu peux filtrer par devise et ne conserver que les annonces à fort impact.</p>
   <p data-en="Why a filtered calendar? Because a full economic agenda is unreadable: dozens of releases a day, most with no effect on prices. By keeping only the three-star events, this page shows you where to look and when — the moments when volatility rises and a surprise versus consensus can move rates, currencies and equities.">Pourquoi un calendrier filtré ? Parce qu'un agenda économique complet est illisible : des dizaines de publications par jour, dont la plupart sans effet sur les cours. En ne gardant que les événements à trois étoiles, cette page vous montre où regarder et quand — les moments où la volatilité grimpe et où une surprise par rapport au consensus peut faire réagir taux, devises et actions.</p>
 </section>
 
 </main>
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
+<script src="./calendar-eco.js"></script>
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 </body>
