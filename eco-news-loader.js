@@ -29,7 +29,7 @@
       noNews:      'Aucune news pour l\'instant — le bot collecte les articles toutes les 30 min.',
       loadError:   'Impossible de charger les news. Nouvelle tentative dans 30s…',
       readBtn:     'Lire l\'article',
-      toRead:      '⚡ À lire',
+      toRead:      '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> À lire',
       archNone:    'Les annonces publiées il y a plus de 4 heures apparaîtront ici automatiquement.',
       archCount:   function(n) { return n + ' annonce' + (n > 1 ? 's' : '') + ' · dernières 48h'; },
       archNoneCount:'Aucune archive pour l\'instant',
@@ -42,7 +42,7 @@
       noNews:      'No news yet — the bot collects articles every 30 min.',
       loadError:   'Unable to load news. Retrying in 30s…',
       readBtn:     'Read article',
-      toRead:      '⚡ Must read',
+      toRead:      '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Must read',
       archNone:    'Announcements older than 4 hours will appear here automatically.',
       archCount:   function(n) { return n + ' announcement' + (n > 1 ? 's' : '') + ' · last 48h'; },
       archNoneCount:'No archives yet',
@@ -128,7 +128,7 @@
       + '</article>';
   }
 
-  // ── Card Top — même structure que la carte normale, juste un badge ⚡ ──────
+  // ── Card Top — même structure que la carte normale, juste un badge ──────
   function buildTopCard(item, idx) {
     var zone = (window.ECO_ZONE || 'eco');
     var zoneLabel = zone.charAt(0).toUpperCase() + zone.slice(1);
@@ -259,7 +259,7 @@
           ts.className = 'block eco-top';
           ts.setAttribute('aria-label', t('topTitle'));
           ts.innerHTML = '<header class="block__head">'
-            + '<h2 class="block__title"><span class="block__ico">⚡</span> <span>' + t('topTitle') + '</span></h2>'
+            + '<h2 class="block__title"><span class="block__ico"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> <span>' + t('topTitle') + '</span></h2>'
             + '<span class="block__sub">' + t('topSub') + '</span>'
             + '</header>'
             + '<div class="grid eco-top__grid" id="eco-top-grid"></div>';

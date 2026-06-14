@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0095FF">
+<meta name="theme-color" content="#7FB8E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Le Terminal">
@@ -48,13 +48,13 @@
   --r2: 12px;
 }
 body.lt-light {
-  --bg: #F4F6FA;
-  --bg2: #ECEEF5;
+  --bg: #EEF2F7;
+  --bg2: #EEF2F7;
   --card: rgba(0,0,0,0.03);
   --border: rgba(0,0,0,0.08);
-  --text: #12111A;
-  --text2: #4A4660;
-  --text3: #9B96B8;
+  --text: #0B0E13;
+  --text2: #3A414C;
+  --text3: #7E8794;
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
@@ -95,7 +95,7 @@ body {
 }
 
 .landing-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
   font-size: clamp(52px, 8vw, 96px);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -105,7 +105,7 @@ body {
 }
 
 .landing-title span {
-  background: linear-gradient(135deg, var(--v) 0%, var(--v2) 50%, #00C6FF 100%);
+  background: linear-gradient(135deg, var(--v) 0%, var(--v2) 50%, #BFDCF5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -137,7 +137,7 @@ body {
 .chart-card:hover {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px var(--vglow);
-  border-color: rgba(0,149,255,0.3);
+  border-color: rgba(127,184,232,0.3);
 }
 
 .chart-card.zooming {
@@ -160,12 +160,12 @@ body {
 .chart-dot {
   width: 10px; height: 10px; border-radius: 50%;
 }
-.chart-dot:nth-child(1) { background: #FF5F57; }
-.chart-dot:nth-child(2) { background: #FFBD2E; }
-.chart-dot:nth-child(3) { background: #28C840; }
+.chart-dot:nth-child(1) { background: #F0647A; }
+.chart-dot:nth-child(2) { background: #E8C268; }
+.chart-dot:nth-child(3) { background: #4ADE9C; }
 
 .chart-pair {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 13px; font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--text2);
@@ -178,7 +178,7 @@ body {
   background: var(--vglow2);
   padding: 3px 10px;
   border-radius: 20px;
-  border: 1px solid rgba(0,149,255,0.2);
+  border: 1px solid rgba(127,184,232,0.2);
 }
 
 .chart-body { padding: 24px 20px 20px; }
@@ -201,7 +201,7 @@ body {
 .chart-cta {
   background: var(--v);
   color: white;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 15px; font-weight: 700;
   letter-spacing: 0.05em;
   padding: 14px 32px;
@@ -215,14 +215,14 @@ body {
 
 .chart-cta:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 60px rgba(0,149,255,0.5);
+  box-shadow: 0 0 60px rgba(127,184,232,0.5);
 }
 
 /* ambient glow behind chart */
 .glow-bg {
   position: absolute;
   width: 500px; height: 300px;
-  background: radial-gradient(ellipse, rgba(0,149,255,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(127,184,232,0.12) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   top: 50%; left: 50%;
@@ -250,7 +250,7 @@ body {
 }
 
 .topbar-brand {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 17px; font-weight: 800;
   letter-spacing: -0.01em;
   color: var(--text);
@@ -274,12 +274,12 @@ body {
 .analyzer-tab {
   padding: 10px 16px;
   background: transparent; border: none; border-bottom: 2px solid transparent;
-  color: var(--text3); font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text3); font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
   cursor: pointer; transition: all .2s; white-space: nowrap;
   display: flex; align-items: center; gap: 6px;
 }
-.analyzer-tab:hover { color: var(--text2); border-bottom-color: rgba(0,149,255,.3); }
+.analyzer-tab:hover { color: var(--text2); border-bottom-color: rgba(127,184,232,.3); }
 .analyzer-tab[data-count]:not([data-count=''])::after { content: ' (' attr(data-count) ')'; font-size: 11px; opacity: .7; }
 
 
@@ -299,7 +299,7 @@ body {
 #formView{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:24px 24px 28px}
 #formView .form-section-title:first-child{margin-top:0}
 .form-section-title{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--accent,#7FB8E8)!important;letter-spacing:.14em!important}
-.lbl{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--text-muted,#8a93a5)!important;font-size:10px!important;letter-spacing:.12em!important;text-transform:uppercase!important}
+.lbl{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--text-muted,#7E8794)!important;font-size:10px!important;letter-spacing:.12em!important;text-transform:uppercase!important}
 .analyze-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important}
 .analyze-btn::before{display:none!important}
 .analyze-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)!important}
@@ -311,7 +311,7 @@ body {
 }
 
 .page-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -320,7 +320,7 @@ body {
 }
 
 .page-title span {
-  background: linear-gradient(135deg, var(--v), var(--v2), #00C6FF);
+  background: linear-gradient(135deg, var(--v), var(--v2), #BFDCF5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -348,7 +348,7 @@ body {
   padding: 20px;
   transition: border-color 0.2s;
 }
-.card:focus-within { border-color: rgba(0,149,255,0.35); }
+.card:focus-within { border-color: rgba(127,184,232,0.35); }
 
 .card-label {
   font-size: 10px; font-weight: 600;
@@ -388,18 +388,18 @@ input[type=text], input[type=number], select, textarea {
 }
 input:focus, select:focus, textarea:focus {
   border-color: var(--border-active);
-  background: rgba(0,149,255,0.06);
+  background: rgba(127,184,232,0.06);
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0px 1000px #0D0D1A inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0B0E13 inset !important;
   -webkit-text-fill-color: var(--text) !important;
   border-color: var(--border) !important;
 }
 input::placeholder, textarea::placeholder { color: var(--text3); }
 select { cursor: pointer; }
-select option { background: #13131f; }
+select option { background: #10141B; }
 textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
 /* DIRECTION */
@@ -409,18 +409,18 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
   border-radius: var(--r2);
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 14px; font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--text2); cursor: pointer;
   transition: all 0.2s; text-align: center;
 }
-.dir-btn.long.on { border-color: rgba(52,211,153,0.5); color: var(--green); background: rgba(52,211,153,0.08); }
-.dir-btn.short.on { border-color: rgba(248,113,113,0.5); color: var(--red); background: rgba(248,113,113,0.08); }
+.dir-btn.long.on { border-color: rgba(74,222,156,0.5); color: var(--green); background: rgba(74,222,156,0.08); }
+.dir-btn.short.on { border-color: rgba(240,100,122,0.5); color: var(--red); background: rgba(240,100,122,0.08); }
 
 /* UPLOAD */
 .upload-zone {
-  border: 1.5px dashed rgba(0,149,255,0.25);
+  border: 1.5px dashed rgba(127,184,232,0.25);
   border-radius: var(--r2);
   background: var(--vglow2);
   padding: 20px;
@@ -431,7 +431,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 }
 .upload-zone:hover, .upload-zone.drag {
   border-color: var(--v);
-  background: rgba(0,149,255,0.1);
+  background: rgba(127,184,232,0.1);
 }
 .upload-zone input[type=file] {
   position: absolute; inset: 0;
@@ -458,15 +458,15 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* ANALYZE BTN */
 .analyze-btn {
   width: 100%; padding: 16px;
-  background: linear-gradient(135deg, var(--v), #0070CC);
+  background: linear-gradient(135deg, var(--v), #5A9BD4);
   border: none; border-radius: var(--r);
   color: white;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px; font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: all 0.25s;
-  box-shadow: 0 8px 32px rgba(0,149,255,0.3);
+  box-shadow: 0 8px 32px rgba(127,184,232,0.3);
   position: relative; overflow: hidden;
 }
 .analyze-btn::before {
@@ -475,12 +475,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
   opacity: 0; transition: opacity 0.2s;
 }
-.analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,149,255,0.45); }
+.analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(127,184,232,0.45); }
 .analyze-btn:hover::before { opacity: 1; }
 .analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .form-section-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 11px; font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--text3);
@@ -503,18 +503,18 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .ld-orb {
   width: 64px; height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--v), #0070CC, #00C6FF);
+  background: linear-gradient(135deg, var(--v), #5A9BD4, #BFDCF5);
   margin: 0 auto 28px;
   animation: orbPulse 2s ease-in-out infinite;
   box-shadow: 0 0 40px var(--vglow);
 }
 @keyframes orbPulse {
   0%,100% { transform: scale(1); box-shadow: 0 0 40px var(--vglow); }
-  50%      { transform: scale(1.12); box-shadow: 0 0 70px rgba(0,149,255,0.45); }
+  50%      { transform: scale(1.12); box-shadow: 0 0 70px rgba(127,184,232,0.45); }
 }
 
 .ld-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
   font-size: 24px; font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text); margin-bottom: 8px;
@@ -552,7 +552,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   content: '';
   position: absolute; top: -40px; right: -40px;
   width: 220px; height: 220px;
-  background: radial-gradient(circle, rgba(0,149,255,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(127,184,232,0.08) 0%, transparent 70%);
   border-radius: 50%;
 }
 
@@ -573,7 +573,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .result-meta {}
 .result-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; color: var(--v2); margin-bottom: 6px; }
 .result-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
   font-size: 22px; font-weight: 700;
   letter-spacing: -0.01em; color: var(--text);
   margin-bottom: 4px; line-height: 1.2;
@@ -613,7 +613,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   color: var(--v2); background: rgba(8,8,15,0.75);
   backdrop-filter: blur(8px);
   padding: 3px 10px; border-radius: 50px;
-  border: 1px solid rgba(0,149,255,0.25);
+  border: 1px solid rgba(127,184,232,0.25);
 }
 
 /* Feedback */
@@ -638,8 +638,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   border: 1px solid var(--border);
   color: var(--text3);
 }
-.tag.g { border-color: rgba(52,211,153,0.35); color: var(--green); background: rgba(52,211,153,0.06); }
-.tag.r { border-color: rgba(248,113,113,0.35); color: var(--red); background: rgba(248,113,113,0.06); }
+.tag.g { border-color: rgba(74,222,156,0.35); color: var(--green); background: rgba(74,222,156,0.06); }
+.tag.r { border-color: rgba(240,100,122,0.35); color: var(--red); background: rgba(240,100,122,0.06); }
 
 .fb-full {
   background: var(--card);
@@ -656,23 +656,23 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   display: flex; align-items: center; gap: 16px;
   margin-bottom: 20px;
 }
-.verdict.go  { border-color: rgba(52,211,153,0.35); background: rgba(52,211,153,0.06); }
-.verdict.wait{ border-color: rgba(251,191,36,0.35);  background: rgba(251,191,36,0.06);  }
-.verdict.no  { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+.verdict.go  { border-color: rgba(74,222,156,0.35); background: rgba(74,222,156,0.06); }
+.verdict.wait{ border-color: rgba(232,194,104,0.35);  background: rgba(232,194,104,0.06);  }
+.verdict.no  { border-color: rgba(240,100,122,0.35); background: rgba(240,100,122,0.06); }
 
 .v-badge {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 13px; font-weight: 800;
   letter-spacing: 0.08em;
   padding: 6px 14px; border-radius: 50px;
   border: 1px solid; flex-shrink: 0;
 }
-.verdict.go  .v-badge { color: var(--green); border-color: rgba(52,211,153,0.5);  background: rgba(52,211,153,0.1); }
-.verdict.wait .v-badge { color: var(--amber); border-color: rgba(251,191,36,0.5);  background: rgba(251,191,36,0.1); }
-.verdict.no  .v-badge { color: var(--red);   border-color: rgba(248,113,113,0.5); background: rgba(248,113,113,0.1); }
+.verdict.go  .v-badge { color: var(--green); border-color: rgba(74,222,156,0.5);  background: rgba(74,222,156,0.1); }
+.verdict.wait .v-badge { color: var(--amber); border-color: rgba(232,194,104,0.5);  background: rgba(232,194,104,0.1); }
+.verdict.no  .v-badge { color: var(--red);   border-color: rgba(240,100,122,0.5); background: rgba(240,100,122,0.1); }
 
 .v-text { font-size: 13px; font-weight: 300; color: var(--text2); line-height: 1.6; }
-.v-text strong { display: block; font-family: 'Bricolage Grotesque', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.v-text strong { display: block; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 
 .actions { display: flex; gap: 8px; }
 .act-btn {
@@ -684,8 +684,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   transition: all 0.2s;
 }
 .act-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
-.act-btn.accent { border-color: rgba(0,149,255,0.4); color: var(--v2); background: var(--vglow2); }
-.act-btn.accent:hover { background: rgba(0,149,255,0.15); }
+.act-btn.accent { border-color: rgba(127,184,232,0.4); color: var(--v2); background: var(--vglow2); }
+.act-btn.accent:hover { background: rgba(127,184,232,0.15); }
 
 /* ── PAYWALL ── */
 .pw-overlay {
@@ -699,7 +699,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .pw-box {
   max-width: 460px; width: 100%;
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(0,149,255,0.3);
+  border: 1px solid rgba(127,184,232,0.3);
   border-radius: 24px;
   padding: 36px;
   position: relative; text-align: center;
@@ -713,14 +713,14 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 
 .pw-orb {
   width: 48px; height: 48px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--v), #00C6FF);
+  background: linear-gradient(135deg, var(--v), #BFDCF5);
   margin: 0 auto 18px;
   display: flex; align-items: center; justify-content: center;
   font-size: 20px;
   box-shadow: 0 0 30px var(--vglow);
 }
 .pw-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
   font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
   color: var(--text); margin-bottom: 8px;
 }
@@ -732,26 +732,26 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   padding: 18px; cursor: pointer; transition: all 0.2s;
   text-align: left; position: relative;
 }
-.plan:hover, .plan.sel { border-color: rgba(0,149,255,0.5); background: var(--vglow2); }
+.plan:hover, .plan.sel { border-color: rgba(127,184,232,0.5); background: var(--vglow2); }
 .plan.sel::after { content: '✓'; position: absolute; top: 10px; right: 12px; font-size: 11px; color: var(--v2); }
 .plan-badge-top { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; color: var(--v2); margin-bottom: 6px; display: block; }
-.plan-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: 0.04em; }
-.plan-price { font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 800; color: var(--v2); line-height: 1; margin-bottom: 2px; }
+.plan-name { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: 0.04em; }
+.plan-price { font-family: 'Anton', 'Arial Narrow', sans-serif; font-size: 28px; font-weight: 800; color: var(--v2); line-height: 1; margin-bottom: 2px; }
 .plan-per { font-size: 9px; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 12px; }
 .plan-feats { list-style: none; font-size: 10px; color: var(--text2); line-height: 2.1; }
 .plan-feats li::before { content: '+ '; color: var(--v); font-weight: 600; }
 
 .pay-btn {
   width: 100%; padding: 14px;
-  background: linear-gradient(135deg, var(--v), #0070CC);
+  background: linear-gradient(135deg, var(--v), #5A9BD4);
   border: none; border-radius: 50px;
-  color: white; font-family: 'Bricolage Grotesque', sans-serif;
+  color: white; font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 15px; font-weight: 700; letter-spacing: 0.04em;
   cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 8px 24px rgba(0,149,255,0.4);
+  box-shadow: 0 8px 24px rgba(127,184,232,0.4);
   margin-bottom: 14px;
 }
-.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(0,149,255,0.55); }
+.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(127,184,232,0.55); }
 .pay-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 .pay-note { font-size: 10px; color: var(--text3); line-height: 1.8; }
@@ -771,39 +771,39 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* AUTH MODAL */
 .auth-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(8,8,15,.95);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}
 .auth-overlay.show{display:flex;animation:fadeUp .3s ease}
-.auth-box{max-width:400px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(0,149,255,.3);border-radius:20px;padding:32px;position:relative;text-align:center;max-height:calc(100dvh - 40px);overflow-y:auto}
+.auth-box{max-width:400px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(127,184,232,.3);border-radius:20px;padding:32px;position:relative;text-align:center;max-height:calc(100dvh - 40px);overflow-y:auto}
 .auth-box::before{content:'';position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--v),var(--v2),transparent)}
 .auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:50px;overflow:hidden}
-.auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
+.auth-tab{flex:1;padding:8px;background:transparent;border:none;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s}
 .auth-tab.on{background:var(--v);color:white}
 .auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;text-align:left}
-.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#9B96B8;text-transform:uppercase}
+.auth-field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:#7E8794;text-transform:uppercase}
 .auth-field input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
 .auth-field input:focus{border-color:var(--border-active)}
-.auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#0070CC);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
-.auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,149,255,.4)}
+.auth-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),#5A9BD4);border:none;border-radius:50px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(127,184,232,.4)}
 .auth-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .auth-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
 .auth-close{position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;padding:4px}
 .auth-close:hover{color:var(--text)}
 .auth-sep{font-size:10px;color:var(--text3);margin:12px 0;letter-spacing:.1em}
-.whop-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(0,149,255,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.whop-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
 .whop-btn:hover{background:var(--vglow2);border-color:var(--v)}
-.google-btn{width:100%;padding:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:50px;color:var(--text);font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.google-btn{width:100%;padding:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:50px;color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
 .google-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
 
 /* USER CHIP */
 .user-chip{display:none;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:50px;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s}
-.user-chip:hover{border-color:rgba(0,149,255,.3)}
+.user-chip:hover{border-color:rgba(127,184,232,.3)}
 .user-chip.show{display:flex}
-.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#00C6FF);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--v),#BFDCF5);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white}
 .user-name{font-size:11px;font-weight:500;color:var(--text2)}
 
 /* HISTORY PANEL */
 .history-panel{position:fixed;right:-380px;top:0;bottom:0;width:380px;background:var(--bg2);border-left:1px solid var(--border);z-index:200;transition:right .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
 .history-panel.open{right:0;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
 .history-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
-.history-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+.history-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:700;color:var(--text)}
 .history-close{background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px;line-height:1}
 .history-close:hover{color:var(--text)}
 .history-list{flex:1;overflow-y:auto;padding:12px}
@@ -811,19 +811,19 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .history-list::-webkit-scrollbar-thumb{background:var(--v)}
 .history-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px;line-height:1.8}
 .history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .2s}
-.history-item:hover{border-color:rgba(0,149,255,.3);background:var(--vglow2)}
+.history-item:hover{border-color:rgba(127,184,232,.3);background:var(--vglow2)}
 .hi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.hi-pair{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.hi-pair{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;color:var(--text)}
 .hi-verdict{font-size:9px;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:50px}
-.hi-verdict.go{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
-.hi-verdict.wait{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
-.hi-verdict.no{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.hi-verdict.go{background:rgba(74,222,156,.15);color:var(--green);border:1px solid rgba(74,222,156,.3)}
+.hi-verdict.wait{background:rgba(232,194,104,.1);color:var(--amber);border:1px solid rgba(232,194,104,.25)}
+.hi-verdict.no{background:rgba(240,100,122,.12);color:var(--red);border:1px solid rgba(240,100,122,.3)}
 .hi-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text3)}
-.hi-score{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800}
+.hi-score{font-family:'Anton','Arial Narrow',sans-serif;font-size:18px;font-weight:800}
 .hi-date{font-size:10px;color:var(--text3);margin-top:4px}
 .hi-img{width:100%;height:60px;object-fit:cover;border-radius:8px;margin-top:8px;opacity:.8}
 .history-btn{display:none;align-items:center;gap:6px;padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
-.history-btn:hover{border-color:rgba(0,149,255,.3);color:var(--v2)}
+.history-btn:hover{border-color:rgba(127,184,232,.3);color:var(--v2)}
 .history-btn.show{display:flex}
 
 /* HISTORY DETAIL MODAL */
@@ -850,7 +850,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 }
 
 .history-page-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
   font-size: 20px; font-weight: 800;
   letter-spacing: -0.02em; color: var(--text);
 }
@@ -861,11 +861,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   display: flex; align-items: center; gap: 6px;
   background: var(--card); border: 1px solid var(--border);
   border-radius: 50px; padding: 7px 16px;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 13px; font-weight: 600;
   color: var(--text2); cursor: pointer; transition: all .2s;
 }
-.back-btn:hover { border-color: rgba(0,149,255,.4); color: var(--v2); }
+.back-btn:hover { border-color: rgba(127,184,232,.4); color: var(--v2); }
 
 .history-page-content {
   max-width: 900px; margin: 0 auto; padding: 32px 24px 80px;
@@ -882,19 +882,19 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   transition: all .2s;
 }
 .history-card:hover {
-  border-color: rgba(0,149,255,.35);
-  background: rgba(0,149,255,.04);
+  border-color: rgba(127,184,232,.35);
+  background: rgba(127,184,232,.04);
   transform: translateY(-2px);
 }
 
 .hc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.hc-pair { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.hc-pair { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
 .hc-verdict { font-size: 9px; font-weight: 700; letter-spacing: .1em; padding: 3px 10px; border-radius: 50px; }
-.hc-verdict.go  { background: rgba(52,211,153,.15); color: var(--green); border: 1px solid rgba(52,211,153,.3); }
-.hc-verdict.wait{ background: rgba(251,191,36,.1);  color: var(--amber); border: 1px solid rgba(251,191,36,.25); }
-.hc-verdict.no  { background: rgba(248,113,113,.12); color: var(--red);  border: 1px solid rgba(248,113,113,.3); }
+.hc-verdict.go  { background: rgba(74,222,156,.15); color: var(--green); border: 1px solid rgba(74,222,156,.3); }
+.hc-verdict.wait{ background: rgba(232,194,104,.1);  color: var(--amber); border: 1px solid rgba(232,194,104,.25); }
+.hc-verdict.no  { background: rgba(240,100,122,.12); color: var(--red);  border: 1px solid rgba(240,100,122,.3); }
 
-.hc-score { font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; }
+.hc-score { font-family: 'Anton', 'Arial Narrow', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; }
 .hc-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
 .hc-meta  { font-size: 10px; color: var(--text3); margin-top: 8px; }
 .hc-img   { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-top: 10px; opacity: .85; }
@@ -904,22 +904,22 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   min-height: 60vh; text-align: center; padding: 80px 20px;
   color: var(--text3); font-size: 14px; line-height: 2;
 }
-.history-empty-page .big { margin-bottom: 20px; color: rgba(0,149,255,.35); }
+.history-empty-page .big { margin-bottom: 20px; color: rgba(127,184,232,.35); }
 
 /* OUTCOMES */
 .outcome-bar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.outcome-btn{flex:1;min-width:80px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
-.outcome-btn:hover{border-color:rgba(0,149,255,.4);color:var(--v2)}
-.outcome-btn.taken{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:var(--green)}
-.outcome-btn.skipped{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:#F87171}
+.outcome-btn{flex:1;min-width:80px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',system-ui,-apple-system,sans-serif}
+.outcome-btn:hover{border-color:rgba(127,184,232,.4);color:var(--v2)}
+.outcome-btn.taken{background:rgba(74,222,156,.12);border-color:rgba(74,222,156,.4);color:var(--green)}
+.outcome-btn.skipped{background:rgba(240,100,122,.08);border-color:rgba(240,100,122,.3);color:#F0647A}
 .result-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.result-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
-.result-btn.win:hover{border-color:rgba(52,211,153,.4);color:var(--green)}
-.result-btn.active-win{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:var(--green)}
-.result-btn.loss:hover{border-color:rgba(248,113,113,.35);color:#F87171}
-.result-btn.active-loss{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);color:#F87171}
-.result-btn.be:hover{border-color:rgba(251,191,36,.3);color:var(--amber)}
-.result-btn.active-be{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--amber)}
+.result-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',system-ui,-apple-system,sans-serif}
+.result-btn.win:hover{border-color:rgba(74,222,156,.4);color:var(--green)}
+.result-btn.active-win{background:rgba(74,222,156,.15);border-color:rgba(74,222,156,.4);color:var(--green)}
+.result-btn.loss:hover{border-color:rgba(240,100,122,.35);color:#F0647A}
+.result-btn.active-loss{background:rgba(240,100,122,.12);border-color:rgba(240,100,122,.35);color:#F0647A}
+.result-btn.be:hover{border-color:rgba(232,194,104,.3);color:var(--amber)}
+.result-btn.active-be{background:rgba(232,194,104,.1);border-color:rgba(232,194,104,.3);color:var(--amber)}
 
 /* PERFORMANCES PAGE */
 #perfPage{display:none;min-height:100vh;background:var(--bg)}
@@ -928,10 +928,10 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .perf-content{max-width:960px;margin:0 auto;padding:32px 24px 80px}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:28px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
-.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.stat-val{font-family:'Anton','Arial Narrow',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.03em;line-height:1}
 .stat-lbl{font-size:10px;font-weight:500;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-top:6px}
 .perf-section{margin-bottom:28px}
-.perf-section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.perf-section-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 /* Session grid */
 .session-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media(max-width:600px){.session-grid{grid-template-columns:1fr}}
@@ -954,16 +954,16 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* ── SIDE MENU ── */
 .side-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
 .side-menu-overlay.open{opacity:1;pointer-events:all}
-.side-menu{position:fixed;top:0;left:0;bottom:0;width:280px;background:#0E0E1A;border-right:1px solid var(--border);z-index:201;transform:translateX(-100%);transition:transform .35s cubic-bezier(.2,0,.1,1);display:flex;flex-direction:column}
+.side-menu{position:fixed;top:0;left:0;bottom:0;width:280px;background:#0B0E13;border-right:1px solid var(--border);z-index:201;transform:translateX(-100%);transition:transform .35s cubic-bezier(.2,0,.1,1);display:flex;flex-direction:column}
 .side-menu.open{transform:translateX(0)}
 .side-menu-header{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.side-menu-brand{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:var(--text)}
+.side-menu-brand{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:800;color:var(--text)}
 .side-menu-brand span{color:var(--v2)}
 .side-menu-close{background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1;padding:4px;border-radius:6px;transition:all .2s}
 .side-menu-close:hover{color:var(--text);background:rgba(255,255,255,.06)}
 .side-menu-nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
-.side-nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:600}
-.side-nav-item:hover{background:rgba(0,149,255,.1);color:var(--v2)}
+.side-nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;color:var(--text2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600}
+.side-nav-item:hover{background:rgba(127,184,232,.1);color:var(--v2)}
 .side-nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
 .side-nav-divider{height:1px;background:var(--border);margin:8px 0}
 .side-menu-footer{padding:16px 12px;border-top:1px solid var(--border)}
@@ -971,16 +971,16 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* ── CUSTOM CONFIRM MODAL ── */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px)}
 .confirm-overlay.show{opacity:1;pointer-events:all}
-.confirm-box{background:#0E0E1A;border:1px solid rgba(248,113,113,.25);border-radius:20px;padding:32px 28px;width:min(360px,90vw);text-align:center;transform:scale(.95);transition:transform .25s;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+.confirm-box{background:#0B0E13;border:1px solid rgba(240,100,122,.25);border-radius:20px;padding:32px 28px;width:min(360px,90vw);text-align:center;transform:scale(.95);transition:transform .25s;box-shadow:0 24px 60px rgba(0,0,0,.7)}
 .confirm-overlay.show .confirm-box{transform:scale(1)}
 .confirm-icon{font-size:36px;margin-bottom:14px}
-.confirm-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
+.confirm-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
 .confirm-sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px}
 .confirm-btns{display:flex;gap:10px;justify-content:center}
-.confirm-cancel{flex:1;padding:11px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-cancel{flex:1;padding:11px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .confirm-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
-.confirm-ok{flex:1;padding:11px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);border-radius:12px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
-.confirm-ok:hover{background:rgba(248,113,113,.25);border-color:rgba(248,113,113,.6)}
+.confirm-ok{flex:1;padding:11px;background:rgba(240,100,122,.15);border:1px solid rgba(240,100,122,.4);border-radius:12px;color:#F0647A;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-ok:hover{background:rgba(240,100,122,.25);border-color:rgba(240,100,122,.6)}
 @media print {
   .topbar,.back-btn,.analyzer-tabs,#iaFeedbackBtn,.history-page-header { display: none !important; }
   #perfPage { display: block !important; }
@@ -1065,41 +1065,41 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst1">Trade</div>
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field" style="position:relative">
-          <label class="lbl" style="color:#93D0FF" id="lbl-pair">Paire / Actif</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-pair">Paire / Actif</label>
           <input type="text" id="pair" placeholder="XAUUSD, BTC, NAS100…" autocomplete="off"
             oninput="onPairInput(this.value)" onfocus="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,200)">
           
-          <div id="livePriceBar" style="display:none;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text2);align-items:center;gap:10px">
+          <div id="livePriceBar" style="display:none;background:rgba(74,222,156,0.06);border:1px solid rgba(74,222,156,0.2);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text2);align-items:center;gap:10px">
             <span style="font-size:9px;color:var(--text3);letter-spacing:.1em">PRIX LIVE</span>
-            <span id="livePriceVal" style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:var(--text)">—</span>
+            <span id="livePriceVal" style="font-family:'Anton','Arial Narrow',sans-serif;font-size:16px;font-weight:800;color:var(--text)">—</span>
             <span id="livePriceChange" style="font-size:10px;padding:2px 8px;border-radius:20px;margin-left:auto">—</span>
           </div>
         </div>
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-dir">Direction</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-dir">Direction</label>
           <div class="dir-group">
             <button class="dir-btn long" id="btnL" onclick="setDir('LONG')">LONG</button>
             <button class="dir-btn short" id="btnS" onclick="setDir('SHORT')">SHORT</button>
           </div>
         </div>
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-tf">Timeframe</label>
-          <select id="tf"><option>M1</option><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-tf">Timeframe</label>
+          <select id="tf"><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
         </div>
       </div>
 
       <div class="form-section-title" id="fst2">Niveaux</div>
       <div class="form-grid three" style="margin-bottom:12px">
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-entry">Entrée</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-entry">Entrée</label>
           <input type="number" id="entry" placeholder="2320.50" step="any" autocomplete="off">
         </div>
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-tp">Take Profit</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-tp">Take Profit</label>
           <input type="number" id="tp" placeholder="2345.00" step="any" autocomplete="off">
         </div>
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-sl">Stop Loss</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-sl">Stop Loss</label>
           <input type="number" id="sl" placeholder="2308.00" step="any" autocomplete="off">
         </div>
       </div>
@@ -1107,16 +1107,16 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="form-section-title" id="fst3">Contexte</div>
       <div class="form-grid" style="margin-bottom:12px">
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-bias">Biais marché</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-bias">Biais marché</label>
           <select id="bias"><option value="bullish" id="ob">Haussier</option><option value="bearish" id="obr">Baissier</option><option value="neutral" id="on">Neutre</option></select>
         </div>
         <div class="field">
-          <label class="lbl" style="color:#93D0FF" id="lbl-sess">Session</label>
+          <label class="lbl" style="color:#BFDCF5" id="lbl-sess">Session</label>
           <select id="sess"><option>London</option><option selected>New York</option><option>Asian</option><option>Overlap</option></select>
         </div>
       </div>
       <div class="field" style="margin-bottom:20px">
-        <label class="lbl" style="color:#93D0FF" id="lbl-conf">Confluences & Notes</label>
+        <label class="lbl" style="color:#BFDCF5" id="lbl-conf">Confluences & Notes</label>
         <textarea id="conf" placeholder="Rejet résistance H4, DXY haussier, divergence RSI…"></textarea>
       </div>
       <div class="form-section-title" id="fst4">Graphiques HTF → LTF</div>
@@ -1125,7 +1125,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <div style="font-size:9px;letter-spacing:.15em;color:var(--text3);margin-bottom:6px;text-transform:uppercase">HTF · D1/H4</div>
           <div class="upload-zone" style="padding:14px;text-align:center;position:relative;min-height:80px" onclick="trigUplTF('htf')">
             <input type="file" id="fileHTF" accept="image/*" onchange="onFileTF(this,'htf')" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
-            <div id="uicoHTF" style="margin-bottom:4px;color:var(--text3);display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></div>
+            <div id="uicoHTF" style="font-size:20px;margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
             <div id="previewHTF" style="display:none;position:relative"><img id="prevHTF" style="width:100%;height:55px;object-fit:cover;border-radius:6px;display:block"><button onclick="rmTF(event,'htf')" style="position:absolute;top:3px;right:3px;background:rgba(8,8,15,.85);border:1px solid var(--border);color:var(--text2);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer">✕</button></div>
             <div style="font-size:10px;color:var(--text3)" id="lblHTF">Ajouter</div>
           </div>
@@ -1134,7 +1134,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <div style="font-size:9px;letter-spacing:.15em;color:var(--text3);margin-bottom:6px;text-transform:uppercase">ITF · H1/M30</div>
           <div class="upload-zone" style="padding:14px;text-align:center;position:relative;min-height:80px" onclick="trigUplTF('itf')">
             <input type="file" id="fileITF" accept="image/*" onchange="onFileTF(this,'itf')" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
-            <div id="uicoITF" style="margin-bottom:4px;color:var(--text3);display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="12"/><line x1="12" y1="20" x2="12" y2="5"/><line x1="18" y1="20" x2="18" y2="14"/></svg></div>
+            <div id="uicoITF" style="font-size:20px;margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
             <div id="previewITF" style="display:none;position:relative"><img id="prevITF" style="width:100%;height:55px;object-fit:cover;border-radius:6px;display:block"><button onclick="rmTF(event,'itf')" style="position:absolute;top:3px;right:3px;background:rgba(8,8,15,.85);border:1px solid var(--border);color:var(--text2);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer">✕</button></div>
             <div style="font-size:10px;color:var(--text3)" id="lblITF">Ajouter</div>
           </div>
@@ -1143,7 +1143,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <div style="font-size:9px;letter-spacing:.15em;color:var(--text3);margin-bottom:6px;text-transform:uppercase">LTF · M15/M5</div>
           <div class="upload-zone" style="padding:14px;text-align:center;position:relative;min-height:80px" onclick="trigUplTF('ltf')">
             <input type="file" id="fileLTF" accept="image/*" onchange="onFileTF(this,'ltf')" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
-            <div id="uicoLTF" style="margin-bottom:4px;color:var(--text3);display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div id="uicoLTF" style="font-size:20px;margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
             <div id="previewLTF" style="display:none;position:relative"><img id="prevLTF" style="width:100%;height:55px;object-fit:cover;border-radius:6px;display:block"><button onclick="rmTF(event,'ltf')" style="position:absolute;top:3px;right:3px;background:rgba(8,8,15,.85);border:1px solid var(--border);color:var(--text2);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer">✕</button></div>
             <div style="font-size:10px;color:var(--text3)" id="lblLTF">Ajouter</div>
           </div>
@@ -1192,7 +1192,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <div class="result-hero">
             <div class="score-ring">
               <svg width="88" height="88" viewBox="0 0 88 88">
-                <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(0,149,255,0.1)" stroke-width="5"/>
+                <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(127,184,232,0.1)" stroke-width="5"/>
                 <circle cx="44" cy="44" r="36" fill="none" stroke="var(--v2)" stroke-width="5"
                   stroke-dasharray="226" id="scoreArc" stroke-dashoffset="226" stroke-linecap="round"
                   style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .4s"/>
@@ -1243,8 +1243,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         </div>
         <div class="fb-card">
           <div class="fb-head">
-            <div class="fb-dot" style="background:#60A5FA"></div>
-            <span class="fb-title" id="fc-advice" style="color:#60A5FA">Recommandations</span>
+            <div class="fb-dot" style="background:#7FB8E8"></div>
+            <span class="fb-title" id="fc-advice" style="color:#7FB8E8">Recommandations</span>
           </div>
           <div class="fb-body" id="adviceText">—</div>
         </div>
@@ -1252,22 +1252,22 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div id="quickOutcome" style="margin-top:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px">
         <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>
         <div style="display:flex;gap:8px">
-          <button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l'ai pris</button>
-          <button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l'ai passé</button>
+          <button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(74,222,156,.1);border:1px solid rgba(74,222,156,.3);border-radius:8px;color:#4ADE9C;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l'ai pris</button>
+          <button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.2);border-radius:8px;color:#F0647A;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l'ai passé</button>
         </div>
         <div id="quickResultBtns" style="display:none;margin-top:8px">
           <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Résultat :</div>
           <div style="display:flex;gap:8px">
-            <button onclick="quickSetResult('win')" style="flex:1;padding:8px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🏆 Win</button>
-            <button onclick="quickSetResult('loss')" style="flex:1;padding:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">❌ Loss</button>
-            <button onclick="quickSetResult('be')" style="flex:1;padding:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;color:#FBBF24;font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➖ BE</button>
+            <button onclick="quickSetResult('win')" style="flex:1;padding:8px;background:rgba(74,222,156,.1);border:1px solid rgba(74,222,156,.3);border-radius:8px;color:#4ADE9C;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Win</button>
+            <button onclick="quickSetResult('loss')" style="flex:1;padding:8px;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.2);border-radius:8px;color:#F0647A;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Loss</button>
+            <button onclick="quickSetResult('be')" style="flex:1;padding:8px;background:rgba(232,194,104,.08);border:1px solid rgba(232,194,104,.2);border-radius:8px;color:#E8C268;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg> BE</button>
           </div>
         </div>
       </div>
       <div class="actions">
-        <button class="act-btn" onclick="showForm()" id="act-new">Nouvelle analyse</button>
-        <button class="act-btn accent" onclick="window.location.href='./tarifs.html'" id="act-pro">Passer Premium</button>
-        <button class="act-btn" onclick="deleteLastAnalysis()" id="act-del" style="display:none;border-color:rgba(248,113,113,.3);color:#F87171">Supprimer</button>
+        <button class="act-btn" onclick="showForm()" id="act-new">↩ Nouvelle analyse</button>
+        <button class="act-btn accent" onclick="window.location.href='./tarifs.html'" id="act-pro">★ Passer PRO</button>
+        <button class="act-btn" onclick="deleteLastAnalysis()" id="act-del" style="display:none;border-color:rgba(240,100,122,.3);color:#F0647A"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
       </div>
     </div>
 
@@ -1415,7 +1415,7 @@ FORMAT DE RÉPONSE — JSON UNIQUEMENT, sans markdown :
   "score": <1.0-10.0>,
   "scoreLabel": <3-4 mots percutants ex "OTE VALIDE - STRUCTURE ALIGNÉE">,
   "scoreSub": <diagnostic précis en 1 phrase avec la terminologie de la stratégie identifiée>,
-  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️"|"🔄"|"🏹","label":<zone/concept précis max 35 chars>}],
+  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"block"|"liquidity"|"target"|"chart"|"warn"|"flip"|"zone","label":<zone/concept précis max 35 chars>}],
   "scenarios": [{"type":"bull"|"bear"|"alt","name":<nom du scénario>,"probability":<ex "70%">,"description":<ce que la structure doit confirmer avec niveaux précis>}],
   "macro": <analyse macro 2-3 phrases : DXY, corrélations, catalyseurs, session actuelle>,
   "forces": <3-4 forces de STRUCTURE avec la terminologie adaptée à la stratégie, séparées par \n, emoji pertinent au début de chaque ligne>,
@@ -1521,7 +1521,7 @@ JSON ONLY, no markdown:
   "score": <1.0-10.0>,
   "scoreLabel": <3-4 punchy words e.g. "VALID OTE - ALIGNED STRUCTURE">,
   "scoreSub": <precise diagnosis in 1 sentence using the identified strategy's terminology>,
-  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"📦"|"⚡"|"💧"|"🎯"|"📊"|"⚠️"|"🔄"|"🏹","label":<precise zone/concept max 35 chars>}],
+  "annotations": [{"x":<0-100>,"y":<0-100>,"type":"bull"|"bear"|"info"|"warn","icon":"block"|"liquidity"|"target"|"chart"|"warn"|"flip"|"zone","label":<precise zone/concept max 35 chars>}],
   "scenarios": [{"type":"bull"|"bear"|"alt","name":<scenario name>,"probability":<e.g. "70%">,"description":<what structure must confirm with precise levels>}],
   "macro": <macro analysis 2-3 sentences: DXY, correlations, catalysts, current session>,
   "forces": <3-4 STRUCTURE strengths using terminology adapted to the strategy, separated by \n, relevant emoji at start>,
@@ -1772,12 +1772,12 @@ function render(r,rrv,tf,pair){
   // Niveau badge
   const nb=document.getElementById('niveau-badge');
   const niveauMap={
-    'DÉBUTANT':   {label:'DÉBUTANT',   color:'#FBBF24', bg:'rgba(251,191,36,0.1)',  border:'rgba(251,191,36,0.4)'},
-    'INTERMÉDIAIRE':{label:'INTERMÉDIAIRE',color:'var(--v2)',bg:'rgba(0,149,255,0.1)',border:'rgba(0,149,255,0.4)'},
-    'AVANCÉ':     {label:'AVANCÉ',     color:'var(--green)',bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.4)'},
-    'BEGINNER':   {label:'BEGINNER',   color:'#FBBF24', bg:'rgba(251,191,36,0.1)',  border:'rgba(251,191,36,0.4)'},
-    'INTERMEDIATE':{label:'INTERMEDIATE',color:'var(--v2)',bg:'rgba(0,149,255,0.1)',border:'rgba(0,149,255,0.4)'},
-    'ADVANCED':   {label:'ADVANCED',   color:'var(--green)',bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.4)'},
+    'DÉBUTANT':   {label:'DÉBUTANT',   color:'#E8C268', bg:'rgba(232,194,104,0.1)',  border:'rgba(232,194,104,0.4)'},
+    'INTERMÉDIAIRE':{label:'INTERMÉDIAIRE',color:'var(--v2)',bg:'rgba(127,184,232,0.1)',border:'rgba(127,184,232,0.4)'},
+    'AVANCÉ':     {label:'AVANCÉ',     color:'var(--green)',bg:'rgba(74,222,156,0.1)',border:'rgba(74,222,156,0.4)'},
+    'BEGINNER':   {label:'BEGINNER',   color:'#E8C268', bg:'rgba(232,194,104,0.1)',  border:'rgba(232,194,104,0.4)'},
+    'INTERMEDIATE':{label:'INTERMEDIATE',color:'var(--v2)',bg:'rgba(127,184,232,0.1)',border:'rgba(127,184,232,0.4)'},
+    'ADVANCED':   {label:'ADVANCED',   color:'var(--green)',bg:'rgba(74,222,156,0.1)',border:'rgba(74,222,156,0.4)'},
   };
   const nv=niveauMap[r.niveau];
   if(nv){
@@ -1808,9 +1808,9 @@ function render(r,rrv,tf,pair){
       // Generate basic annotations from trade data
       const entryPct = 50; // middle of chart
       annsToRender = [
-        {x:70, y:45, type:'info', icon:'📍', label:'Zone d\'entrée : '+document.getElementById('entry').value},
-        {x:70, y:25, type:'bull', icon:'🎯', label:'TP : '+document.getElementById('tp').value},
-        {x:70, y:65, type:'bear', icon:'🛡', label:'SL : '+document.getElementById('sl').value}
+        {x:70, y:45, type:'info', icon:'entry', label:'Zone d\'entrée : '+document.getElementById('entry').value},
+        {x:70, y:25, type:'bull', icon:'target', label:'TP : '+document.getElementById('tp').value},
+        {x:70, y:65, type:'bear', icon:'shield', label:'SL : '+document.getElementById('sl').value}
       ];
     }
     renderAnnotatedCanvas(imgData, annsToRender);
@@ -1819,7 +1819,7 @@ function render(r,rrv,tf,pair){
   }
 
   function fmtBlock(s){
-    if(!s) return '<span style="color:#5A5570">—</span>';
+    if(!s) return '<span style="color:#3A414C">—</span>';
     var raw = s
       .replace(/\\n/g, '__NL__')
       .replace(/\n/g, '__NL__')
@@ -1829,7 +1829,7 @@ function render(r,rrv,tf,pair){
     var parts = raw.split('__NL__')
       .map(function(l){ return l.trim(); })
       .filter(function(l){ return l.length > 2 && l.toUpperCase() !== 'SPLIT'; });
-    if(!parts.length) return '<span style="color:#5A5570">—</span>';
+    if(!parts.length) return '<span style="color:#3A414C">—</span>';
     return '<div style="display:flex;flex-direction:column;gap:0">' +
       parts.map(function(l, i){
         var cp = l.codePointAt(0)||0;
@@ -1840,7 +1840,7 @@ function render(r,rrv,tf,pair){
         return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;' +
           (last?'':'border-bottom:1px solid rgba(255,255,255,0.06);') + '">' +
           '<span style="flex-shrink:0;min-width:20px;font-size:14px;color:var(--v2);font-weight:700;line-height:1.5;text-align:center">' + icon + '</span>' +
-          '<span style="font-size:13px;font-weight:300;color:#F0EEFF;line-height:1.65;flex:1">' + text + '</span>' +
+          '<span style="font-size:13px;font-weight:300;color:#EEF2F7;line-height:1.65;flex:1">' + text + '</span>' +
           '</div>';
       }).join('') +
     '</div>';
@@ -1868,15 +1868,15 @@ function render(r,rrv,tf,pair){
   if(qo){
     qo.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">As-tu pris ce trade ?</div>' +
       '<div style="display:flex;gap:8px">' +
-      '<button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l\'ai pris</button>' +
-      '<button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l\'ai passé</button>' +
+      '<button onclick="quickSetOutcome(true)" style="flex:1;padding:9px;background:rgba(74,222,156,.1);border:1px solid rgba(74,222,156,.3);border-radius:8px;color:#4ADE9C;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ Oui, je l\'ai pris</button>' +
+      '<button onclick="quickSetOutcome(false)" style="flex:1;padding:9px;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.2);border-radius:8px;color:#F0647A;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer">✕ Non, je l\'ai passé</button>' +
       '</div>' +
       '<div id="quickResultBtns" style="display:none;margin-top:8px">' +
       '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Résultat :</div>' +
       '<div style="display:flex;gap:8px">' +
-      '<button onclick="quickSetResult(\'win\')" style="flex:1;padding:8px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34D399;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🏆 Win</button>' +
-      '<button onclick="quickSetResult(\'loss\')" style="flex:1;padding:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#F87171;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">❌ Loss</button>' +
-      '<button onclick="quickSetResult(\'be\')" style="flex:1;padding:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;color:#FBBF24;font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➖ BE</button>' +
+      '<button onclick="quickSetResult(\'win\')" style="flex:1;padding:8px;background:rgba(74,222,156,.1);border:1px solid rgba(74,222,156,.3);border-radius:8px;color:#4ADE9C;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Win</button>' +
+      '<button onclick="quickSetResult(\'loss\')" style="flex:1;padding:8px;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.2);border-radius:8px;color:#F0647A;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Loss</button>' +
+      '<button onclick="quickSetResult(\'be\')" style="flex:1;padding:8px;background:rgba(232,194,104,.08);border:1px solid rgba(232,194,104,.2);border-radius:8px;color:#E8C268;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg> BE</button>' +
       '</div></div>';
   }
   showResult();
@@ -1957,7 +1957,7 @@ async function saveRR(i, btnEl){
   item.rr_realized = rr;
   historyData[i] = item;
   var btn = btnEl || (typeof event !== 'undefined' && event.target);
-  if(btn){ btn.textContent='✓'; btn.style.background='rgba(52,211,153,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
+  if(btn){ btn.textContent='✓'; btn.style.background='rgba(74,222,156,0.3)'; btn.style.borderColor='var(--green)'; btn.style.color='var(--green)'; }
   setTimeout(function(){ if(btn){ btn.textContent='Sauver'; btn.style.background='var(--v)'; btn.style.borderColor=''; btn.style.color='white'; } }, 1500);
   if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:rr,tradeNotes:item.trade_notes})});}catch(e){}}
 }
@@ -1971,7 +1971,7 @@ async function saveNotes(i, btnEl){
   historyData[i] = item;
   var btn = btnEl || (typeof event !== 'undefined' && event.target);
   if(btn){ btn.textContent='✓ Sauvegardé'; btn.style.color='var(--green)'; }
-  setTimeout(function(){ if(btn){ btn.textContent='💾 Sauvegarder les notes'; btn.style.color='var(--text2)'; } }, 1500);
+  setTimeout(function(){ if(btn){ btn.textContent='Sauvegarder les notes'; btn.style.color='var(--text2)'; } }, 1500);
   if(authToken){try{await fetch('/api/outcomes',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({analysisId:item.id,tradeTaken:item.trade_taken,tradeResult:item.trade_result,rrRealized:item.rr_realized,tradeNotes:notes})});}catch(e){}}
 }
 
@@ -2134,13 +2134,13 @@ function renderPerf(d){
   var stats = [
     {val: d.totalAnalyses||0, lbl:'Analyses', col:'var(--v2)'},
     {val: d.totalTaken||0, lbl:'Trades pris', col:'var(--green)'},
-    {val: (d.winRate!==null?d.winRate+'%':'—'), lbl:'Win Rate', col:d.winRate>=50?'var(--green)':'#F87171'},
+    {val: (d.winRate!==null?d.winRate+'%':'—'), lbl:'Win Rate', col:d.winRate>=50?'var(--green)':'#F0647A'},
     {val: (d.avgRR!==null?d.avgRR+'R':'—'), lbl:'RR Moyen', col:'var(--v2)'},
-    {val: (d.weeklyRR>0?'+':'')+d.weeklyRR+'R', lbl:'RR Semaine', col:parseFloat(d.weeklyRR)>=0?'var(--green)':'#F87171'},
+    {val: (d.weeklyRR>0?'+':'')+d.weeklyRR+'R', lbl:'RR Semaine', col:parseFloat(d.weeklyRR)>=0?'var(--green)':'#F0647A'},
     {val: d.avgScore||'—', lbl:'Score Moyen', col:'var(--v2)'},
-    {val: d.expectancy !== undefined ? (parseFloat(d.expectancy)>=0?'+':'')+d.expectancy+'R' : '—', lbl:'Expectancy', col: d.expectancy && parseFloat(d.expectancy)>=0 ? 'var(--green)' : '#F87171'},
+    {val: d.expectancy !== undefined ? (parseFloat(d.expectancy)>=0?'+':'')+d.expectancy+'R' : '—', lbl:'Expectancy', col: d.expectancy && parseFloat(d.expectancy)>=0 ? 'var(--green)' : '#F0647A'},
     {val: d.sharpe !== 'N/A' && d.sharpe !== undefined ? d.sharpe : '—', lbl:'Sharpe Ratio', col:'var(--v2)'},
-    {val: d.currentStreak ? (d.streakType==='win'?'🟢':'🔴')+' '+d.currentStreak : '—', lbl:'Série actuelle', col: d.streakType==='win'?'var(--green)':'#F87171'},
+    {val: d.currentStreak ? '<span style="color:'+(d.streakType==='win'?'#4ADE9C':'#F0647A')+';font-size:.7em;vertical-align:middle">●</span> '+d.currentStreak : '—', lbl:'Série actuelle', col: d.streakType==='win'?'var(--green)':'#F0647A'},
   ];
   document.getElementById('statGrid').innerHTML = stats.map(function(s){
     return '<div class="stat-card"><div class="stat-val" style="color:'+s.col+'">'+s.val+'</div><div class="stat-lbl">'+s.lbl+'</div></div>';
@@ -2155,11 +2155,11 @@ function renderPerf(d){
     document.getElementById('winRateBar').innerHTML =
       '<div style="width:'+wPct+'%;background:var(--green)"></div>'+
       '<div style="width:'+bPct+'%;background:var(--amber)"></div>'+
-      '<div style="width:'+lPct+'%;background:#F87171"></div>';
+      '<div style="width:'+lPct+'%;background:#F0647A"></div>';
     document.getElementById('winRateLegend').innerHTML =
       '<span style="color:var(--green)">✓ Win: '+(d.wins||0)+'</span>'+
       '<span style="color:var(--amber)">= BE: '+(d.be||0)+'</span>'+
-      '<span style="color:#F87171">✗ Loss: '+(d.losses||0)+'</span>'+
+      '<span style="color:#F0647A">✗ Loss: '+(d.losses||0)+'</span>'+
       '<span style="margin-left:auto">Total fermés: '+total+'</span>';
   } else {
     document.getElementById('winRateBar').innerHTML='<div style="width:100%;background:rgba(255,255,255,.06)"></div>';
@@ -2180,7 +2180,7 @@ function renderPerf(d){
     ctx.clearRect(0,0,W,H);
     // Draw line
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(0,149,255,0.8)';
+    ctx.strokeStyle = 'rgba(127,184,232,0.8)';
     ctx.lineWidth = 2;
     ctx.lineJoin = 'round';
     pts.forEach(function(p,i){
@@ -2191,14 +2191,14 @@ function renderPerf(d){
     ctx.stroke();
     // Draw fill
     ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
-    ctx.fillStyle = 'rgba(0,149,255,0.08)';
+    ctx.fillStyle = 'rgba(127,184,232,0.08)';
     ctx.fill();
     // Draw dots
     pts.forEach(function(p,i){
       var x = (i/(pts.length-1))*W;
       var y = H - ((p.score-minS)/range)*(H-20) - 10;
       ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2);
-      ctx.fillStyle = p.score>=7?'var(--green)':p.score>=5?'var(--v2)':'#F87171';
+      ctx.fillStyle = p.score>=7?'var(--green)':p.score>=5?'var(--v2)':'#F0647A';
       ctx.fill();
     });
   }
@@ -2215,8 +2215,8 @@ function renderPerf(d){
         '<span style="font-weight:600;color:var(--text)">'+pair+'</span>'+
         '<span style="color:var(--text3)">'+ps.total+' trades</span>'+
         '<span style="color:var(--green)">'+ps.wins+' W</span>'+
-        '<span style="color:#F87171">'+ps.losses+' L</span>'+
-        (wr!==null?'<span style="color:'+(wr>=50?'var(--green)':'#F87171')+'">'+wr+'%</span>':'<span style="color:var(--text3)">—</span>')+
+        '<span style="color:#F0647A">'+ps.losses+' L</span>'+
+        (wr!==null?'<span style="color:'+(wr>=50?'var(--green)':'#F0647A')+'">'+wr+'%</span>':'<span style="color:var(--text3)">—</span>')+
       '</div>';
     }).join('');
   } else {
@@ -2243,8 +2243,8 @@ function renderPerf(d){
       ecCtx.setLineDash([4,4]); ecCtx.moveTo(0, zeroY); ecCtx.lineTo(EW, zeroY); ecCtx.stroke();
       ecCtx.setLineDash([]);
       var grad = ecCtx.createLinearGradient(0, 0, 0, EH);
-      grad.addColorStop(0, 'rgba(52,211,153,0.25)'); grad.addColorStop(1, 'rgba(52,211,153,0)');
-      ecCtx.beginPath(); ecCtx.strokeStyle = '#34D399'; ecCtx.lineWidth = 2; ecCtx.lineJoin = 'round';
+      grad.addColorStop(0, 'rgba(74,222,156,0.25)'); grad.addColorStop(1, 'rgba(74,222,156,0)');
+      ecCtx.beginPath(); ecCtx.strokeStyle = '#4ADE9C'; ecCtx.lineWidth = 2; ecCtx.lineJoin = 'round';
       ec.forEach(function(p, i){
         var x = (i/(ec.length-1))*EW;
         var y = EH - pad - ((p.value - minV)/range)*(EH - pad*2);
@@ -2255,7 +2255,7 @@ function renderPerf(d){
       ecCtx.fillStyle = grad; ecCtx.fill();
       var lastVal = ec[ec.length-1].value;
       var lx = EW, ly = EH - pad - ((lastVal - minV)/range)*(EH - pad*2);
-      ecCtx.fillStyle = lastVal >= 0 ? '#34D399' : '#F87171';
+      ecCtx.fillStyle = lastVal >= 0 ? '#4ADE9C' : '#F0647A';
       ecCtx.font = 'bold 12px sans-serif'; ecCtx.textAlign = 'right';
       ecCtx.fillText((lastVal >= 0 ? '+' : '') + lastVal + 'R', lx - 4, ly - 6);
     }
@@ -2272,10 +2272,10 @@ function renderPerf(d){
     el.querySelector('.sess-total').textContent = s.total + ' trades';
     var wrEl = el.querySelector('.sess-wr');
     wrEl.textContent = s.winRate !== null ? s.winRate + '%' : '—';
-    wrEl.style.color = s.winRate !== null ? (s.winRate >= 50 ? 'var(--green)' : '#F87171') : 'var(--text3)';
+    wrEl.style.color = s.winRate !== null ? (s.winRate >= 50 ? 'var(--green)' : '#F0647A') : 'var(--text3)';
     var rrEl = el.querySelector('.sess-rr');
     rrEl.textContent = s.avgRR !== null ? (s.avgRR >= 0 ? '+' : '') + s.avgRR + 'R' : '—';
-    rrEl.style.color = s.avgRR !== null ? (s.avgRR >= 0 ? 'var(--green)' : '#F87171') : 'var(--text3)';
+    rrEl.style.color = s.avgRR !== null ? (s.avgRR >= 0 ? 'var(--green)' : '#F0647A') : 'var(--text3)';
   });
 
   // === BREAKDOWN MENSUEL ===
@@ -2290,7 +2290,7 @@ function renderPerf(d){
       var rows = md.map(function(m, i){
         var y = i * (barH + gap);
         var barW = Math.round((Math.abs(m.rr) / maxAbs) * barMaxW);
-        var color = m.rr >= 0 ? '#34D399' : '#F87171';
+        var color = m.rr >= 0 ? '#4ADE9C' : '#F0647A';
         var valStr = (m.rr >= 0 ? '+' : '') + m.rr + 'R';
         var parts = m.month.split('-');
         var lbl = months_fr[parseInt(parts[1],10)-1] + ' ' + parts[0].slice(2);
@@ -2315,7 +2315,7 @@ function renderPerf(d){
       dowEl.innerHTML = '<div style="display:flex;gap:8px;align-items:flex-end;height:80px">' +
         d.dayStats.map(function(day){
           var h = day.wr !== null ? Math.max(8, day.wr * 0.7) : 0;
-          var col = day.wr === null ? 'rgba(255,255,255,.08)' : day.wr >= 50 ? 'rgba(52,211,153,.7)' : 'rgba(248,113,113,.7)';
+          var col = day.wr === null ? 'rgba(255,255,255,.08)' : day.wr >= 50 ? 'rgba(74,222,156,.7)' : 'rgba(240,100,122,.7)';
           return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">' +
             '<div style="font-size:10px;color:var(--text3);font-weight:600">'+(day.wr!==null?day.wr+'%':'')+'</div>' +
             '<div style="width:100%;height:'+h+'px;background:'+col+';border-radius:4px 4px 0 0"></div>' +
@@ -2332,7 +2332,7 @@ function renderPerf(d){
 async function requestIAFeedback(){
   if(!authToken) return;
   var btn = document.getElementById('iaFeedbackBtn');
-  if(btn){ btn.textContent = '⏳ Génération en cours…'; btn.disabled = true; }
+  if(btn){ btn.textContent = 'Génération en cours…'; btn.disabled = true; }
   try{
     var now = new Date();
     var sevenDaysAgo = new Date(now.getTime() - 7*24*60*60*1000);
@@ -2345,7 +2345,7 @@ async function requestIAFeedback(){
     var weekTrades = allTrades.filter(function(a){ return new Date(a.created_at) >= sevenDaysAgo; });
     if(weekTrades.length < 3){
       document.getElementById('iaFeedbackContent').innerHTML = '<p style="color:var(--text3);font-size:13px;text-align:center;padding:10px 0">Il te faut au moins 3 analyses cette semaine pour générer le rapport.</p>';
-      if(btn){ btn.textContent = '📊 Générer le rapport de la semaine'; btn.disabled = false; }
+      if(btn){ btn.textContent = 'Générer le rapport de la semaine'; btn.disabled = false; }
       return;
     }
     var tradesTaken = weekTrades.filter(function(t){ return t.trade_taken===true||t.trade_taken===1; });
@@ -2469,29 +2469,29 @@ async function requestIAFeedback(){
     container.innerHTML=renderReport(txt,weekTrades.length,tradesTaken.length,winRate2,avgRR2);
     var regenDiv=document.createElement('div');
     regenDiv.style.cssText='text-align:center;margin-top:18px';
-    regenDiv.innerHTML='<button id="iaFeedbackBtn" onclick="requestIAFeedback()" style="padding:9px 22px;background:transparent;border:1px solid rgba(0,149,255,.4);border-radius:50px;color:var(--v);font-family:\'Bricolage Grotesque\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">🔄 Régénérer le rapport</button>';
+    regenDiv.innerHTML='<button id="iaFeedbackBtn" onclick="requestIAFeedback()" style="padding:9px 22px;background:transparent;border:1px solid rgba(127,184,232,.4);border-radius:50px;color:var(--v);font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Régénérer le rapport</button>';
     container.appendChild(regenDiv);
   }catch(e){
     console.error('IA Feedback error:',e);
-    document.getElementById('iaFeedbackContent').innerHTML='<p style="color:#F87171;text-align:center">Erreur lors de la génération. Réessaie dans quelques instants.</p>';
-    if(btn){ btn.textContent='📊 Générer le rapport de la semaine'; btn.disabled=false; }
+    document.getElementById('iaFeedbackContent').innerHTML='<p style="color:#F0647A;text-align:center">Erreur lors de la génération. Réessaie dans quelques instants.</p>';
+    if(btn){ btn.textContent='Générer le rapport de la semaine'; btn.disabled=false; }
   }
 }
 
 function renderReport(text, totalTrades, tradesTaken, winRate, avgRR){
   var html='';
   html+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">';
-  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--v)">'+totalTrades+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Analyses</div></div>';
-  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--v)">'+tradesTaken+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Trades pris</div></div>';
-  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:'+(winRate>=50?'#4ADE80':'#F87171')+'">'+winRate+'%</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Win rate</div></div>';
-  html+='<div style="flex:1;min-width:80px;background:rgba(0,149,255,.08);border:1px solid rgba(0,149,255,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:'+(avgRR!=='N/A'&&parseFloat(avgRR)>=1?'#4ADE80':'#F87171')+'">'+avgRR+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">RR moyen</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--v)">'+totalTrades+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Analyses</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--v)">'+tradesTaken+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Trades pris</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:'+(winRate>=50?'#4ADE9C':'#F0647A')+'">'+winRate+'%</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Win rate</div></div>';
+  html+='<div style="flex:1;min-width:80px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:800;color:'+(avgRR!=='N/A'&&parseFloat(avgRR)>=1?'#4ADE9C':'#F0647A')+'">'+avgRR+'</div><div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px">RR moyen</div></div>';
   html+='</div>';
   var sectionMeta={
-    'résumé de la semaine':{icon:'📋',bg:'rgba(0,149,255,.1)',border:'rgba(0,149,255,.25)',col:'#60B4FF'},
-    'points forts':{icon:'✅',bg:'rgba(74,222,128,.08)',border:'rgba(74,222,128,.3)',col:'#4ADE80'},
-    "axes d'amélioration":{icon:'⚠️',bg:'rgba(251,191,36,.08)',border:'rgba(251,191,36,.3)',col:'#FBbf24'},
-    '3 actions concrètes pour la semaine prochaine':{icon:'🎯',bg:'rgba(167,139,250,.1)',border:'rgba(167,139,250,.3)',col:'#A78BFA'},
-    'actions concrètes':{icon:'🎯',bg:'rgba(167,139,250,.1)',border:'rgba(167,139,250,.3)',col:'#A78BFA'}
+    'résumé de la semaine':{icon:'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M9 2h6a1 1 0 0 1 1 1v1H8V3a1 1 0 0 1 1-1Z"/><rect x="4" y="4" width="16" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>',bg:'rgba(127,184,232,.1)',border:'rgba(127,184,232,.25)',col:'#7FB8E8'},
+    'points forts':{icon:'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',bg:'rgba(74,222,156,.08)',border:'rgba(74,222,156,.3)',col:'#4ADE9C'},
+    "axes d'amélioration":{icon:'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',bg:'rgba(232,194,104,.08)',border:'rgba(232,194,104,.3)',col:'#E8C268'},
+    '3 actions concrètes pour la semaine prochaine':{icon:'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',bg:'rgba(127,184,232,.1)',border:'rgba(127,184,232,.3)',col:'#7FB8E8'},
+    'actions concrètes':{icon:'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',bg:'rgba(127,184,232,.1)',border:'rgba(127,184,232,.3)',col:'#7FB8E8'}
   };
   var parts=text.split(/^##\s+/m);
   if(parts[0].trim()) html+='<div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">'+escapeHtml(parts[0].trim())+'</div>';
@@ -2503,7 +2503,7 @@ function renderReport(text, totalTrades, tradesTaken, winRate, avgRR){
     var titleKey=title.toLowerCase().replace(/[^a-zàâäéèêëîïôùûü' ]/gi,'').trim();
     var meta=null;
     Object.keys(sectionMeta).forEach(function(k){ if(titleKey.indexOf(k)>-1||k.indexOf(titleKey)>-1) meta=sectionMeta[k]; });
-    if(!meta) meta={icon:'📌',bg:'rgba(255,255,255,.04)',border:'rgba(255,255,255,.1)',col:'var(--v)'};
+    if(!meta) meta={icon:'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>',bg:'rgba(255,255,255,.04)',border:'rgba(255,255,255,.1)',col:'var(--v)'};
     var bodyLines=body.split('\n'), bodyHtml='', inList=false;
     bodyLines.forEach(function(line){
       var t=line.trim();
@@ -2636,17 +2636,17 @@ function _saveLocalHistory(){
     // Vérification immédiate
     var verify = localStorage.getItem('lt_history');
     if(verify){
-      console.log('[LT] ✅ localStorage OK — ' + toStore.length + ' analyses sauvegardées');
+      console.log('[LT] localStorage OK — ' + toStore.length + ' analyses sauvegardées');
     } else {
-      console.error('[LT] ❌ localStorage setItem a réussi mais getItem retourne null !');
+      console.error('[LT] localStorage setItem a réussi mais getItem retourne null !');
     }
     try{ sessionStorage.setItem('lt_history_bak', json); }catch(e2){}
   }catch(e){
-    console.error('[LT] ❌ localStorage ERREUR:', e.message, '— fallback sessionStorage');
+    console.error('[LT] localStorage ERREUR:', e.message, '— fallback sessionStorage');
     try{
       var ts2 = historyData.slice(0,10).map(function(h){ var c=Object.assign({},h); c.img_data=null; return c; });
       sessionStorage.setItem('lt_history_bak', JSON.stringify(ts2));
-    }catch(e2){ console.error('[LT] ❌ sessionStorage AUSSI échoue:', e2.message); }
+    }catch(e2){ console.error('[LT] sessionStorage AUSSI échoue:', e2.message); }
   }
 }
 try{ var _di=localStorage.getItem('lt_deleted'); if(_di){ JSON.parse(_di).forEach(function(id){ _deletedIds.add(String(id)); }); } }catch(e){}
@@ -2842,14 +2842,14 @@ function openHDetail(i){
   function sec(title,text,c){if(!text)return '';var parts=text.replace(/\\n/g,'\n').split(/\n|\/{2}/).filter(function(l){return l.trim().length>2;});
     return '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">'+
     '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:'+c+';margin-bottom:10px;text-transform:uppercase">'+title+'</div>'+
-    parts.map(function(p){return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:#D4D0F0;line-height:1.6">'+p.trim()+'</div>';}).join('')+'</div>';}
+    parts.map(function(p){return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:#C3CAD4;line-height:1.6">'+p.trim()+'</div>';}).join('')+'</div>';}
   var content='<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)">'+
-    '<div style="font-family:Bricolage Grotesque,sans-serif;font-size:36px;font-weight:800;color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:12px;color:var(--text3)">/10</span></div>'+
-    '<div><div style="font-family:Bricolage Grotesque,sans-serif;font-size:18px;font-weight:700">'+(item.score_label||'')+'</div>'+
+    '<div style="font-family:Anton,Arial Narrow,sans-serif;font-size:36px;font-weight:800;color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:12px;color:var(--text3)">/10</span></div>'+
+    '<div><div style="font-family:Inter,system-ui,-apple-system,sans-serif;font-size:18px;font-weight:700">'+(item.score_label||'')+'</div>'+
     '<div style="font-size:12px;color:var(--text2);margin-top:3px">'+(item.pair||'')+' · '+(item.direction||'')+' · '+(item.tf||'')+' · '+ds+'</div></div></div>'+
     (item.img_data?'<img src="'+item.img_data+'" style="width:100%;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">':'')+
-    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#60A5FA')+
-    (item.macro?'<div style="background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
+    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#7FB8E8')+
+    (item.macro?'<div style="background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
   // Add outcome section
   content += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">' +
     '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--text3);margin-bottom:10px">SUIVI DU TRADE</div>' +
@@ -2870,13 +2870,13 @@ function openHDetail(i){
         '<button onclick="saveRR('+i+',this)" style="padding:6px 14px;background:var(--v);border:none;border-radius:8px;color:white;font-size:11px;font-weight:600;cursor:pointer">Sauver</button>' +
       '</div>' +
       '<textarea id="tradeNotes" placeholder="Notes post-trade…" style="width:100%;margin-top:8px;height:60px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:12px;resize:none;outline:none;font-family:Inter,sans-serif">'+(item.trade_notes||'')+'</textarea>' +
-      '<button onclick="saveNotes('+i+',this)" style="margin-top:6px;padding:7px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:11px;cursor:pointer">💾 Sauvegarder les notes</button>' +
+      '<button onclick="saveNotes('+i+',this)" style="margin-top:6px;padding:7px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:11px;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Sauvegarder les notes</button>' +
     '</div>' : '') +
   '</div>';
 
   // Add delete button at bottom
   content += '<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);text-align:center">' +
-    '<button onclick="deleteAnalysis('+i+')" style="padding:8px 20px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:8px;color:#F87171;font-size:12px;font-family:Inter,sans-serif;cursor:pointer">🗑 Supprimer cette analyse</button>' +
+    '<button onclick="deleteAnalysis('+i+')" style="padding:8px 20px;background:rgba(240,100,122,.1);border:1px solid rgba(240,100,122,.3);border-radius:8px;color:#F0647A;font-size:12px;font-family:Inter,sans-serif;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Supprimer cette analyse</button>' +
   '</div>';
   document.getElementById('hdetailContent').innerHTML=content;
   document.getElementById('hdetailOverlay').classList.add('show');
@@ -2904,23 +2904,23 @@ function toggleTheme(){
   var isLight = document.body.classList.toggle('lt-light');
   localStorage.setItem('lt_theme', isLight ? 'light' : 'dark');
   var btn = document.getElementById('themeToggle');
-  if(btn) btn.textContent = isLight ? '☀️' : '🌙';
+  if(btn) btn.innerHTML = isLight ? '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>';
 }
 // Restore theme on load
 (function(){
   if(localStorage.getItem('lt_theme')==='light'){
     document.body.classList.add('lt-light');
     var btn = document.getElementById('themeToggle');
-    if(btn) btn.textContent = '☀️';
+    if(btn) btn.innerHTML = '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   }
 })();
 
 var onboardStep = 0;
 var onboardSteps = [
-  { icon: '📊', title: 'Analyse ton setup', desc: 'Remplis les infos de ton trade (paire, direction, TF, entrée/TP/SL), ajoute ton graphique et lance l\'analyse IA.' },
-  { icon: '📋', title: 'Consulte l\'historique', desc: 'Toutes tes analyses sont sauvegardées. Accède à l\'onglet "Historique" pour les revoir.' },
-  { icon: '🎯', title: 'Suis tes résultats', desc: 'Après chaque trade, note si tu l\'as pris et le résultat. L\'IA analyse tes stats chaque semaine.' },
-  { icon: '📈', title: 'Améliore-toi', desc: 'Dans "Perfs", consulte ton win rate, RR moyen, expectancy, Sharpe et les patterns de tes trades.' },
+  { icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', title: 'Analyse ton setup', desc: 'Remplis les infos de ton trade (paire, direction, TF, entrée/TP/SL), ajoute ton graphique et lance l\'analyse IA.' },
+  { icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6a1 1 0 0 1 1 1v1H8V3a1 1 0 0 1 1-1Z"/><rect x="4" y="4" width="16" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>', title: 'Consulte l\'historique', desc: 'Toutes tes analyses sont sauvegardées. Accède à l\'onglet "Historique" pour les revoir.' },
+  { icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', title: 'Suis tes résultats', desc: 'Après chaque trade, note si tu l\'as pris et le résultat. L\'IA analyse tes stats chaque semaine.' },
+  { icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>', title: 'Améliore-toi', desc: 'Dans "Perfs", consulte ton win rate, RR moyen, expectancy, Sharpe et les patterns de tes trades.' },
 ];
 function renderOnboardStep(){
   var s = onboardSteps[onboardStep];
@@ -2929,12 +2929,12 @@ function renderOnboardStep(){
   var nextBtn = document.getElementById('onboardNextBtn');
   if(!stepsEl||!dotsEl||!nextBtn) return;
   stepsEl.innerHTML = '<div style="font-size:36px;margin-bottom:12px">'+s.icon+'</div>'+
-    '<div style="font-family:\'Bricolage Grotesque\',sans-serif;font-size:17px;font-weight:700;color:#F0EEFF;margin-bottom:8px">'+s.title+'</div>'+
-    '<div style="color:#9B96B8;font-size:13px;line-height:1.7">'+s.desc+'</div>';
+    '<div style="font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:17px;font-weight:700;color:#EEF2F7;margin-bottom:8px">'+s.title+'</div>'+
+    '<div style="color:#7E8794;font-size:13px;line-height:1.7">'+s.desc+'</div>';
   dotsEl.innerHTML = onboardSteps.map(function(_,i){
-    return '<div style="width:'+(i===onboardStep?16:6)+'px;height:6px;border-radius:3px;background:'+(i===onboardStep?'#38B6FF':'rgba(255,255,255,.15)')+';transition:all .3s"></div>';
+    return '<div style="width:'+(i===onboardStep?16:6)+'px;height:6px;border-radius:3px;background:'+(i===onboardStep?'#BFDCF5':'rgba(255,255,255,.15)')+';transition:all .3s"></div>';
   }).join('');
-  nextBtn.textContent = onboardStep === onboardSteps.length-1 ? 'C\'est parti ! 🚀' : 'Suivant →';
+  nextBtn.textContent = onboardStep === onboardSteps.length-1 ? 'C\'est parti !' : 'Suivant →';
 }
 function nextOnboardStep(){
   if(onboardStep < onboardSteps.length-1){ onboardStep++; renderOnboardStep(); }
@@ -3178,11 +3178,11 @@ function showLivePrice(price, change){
   if(change !== null && change !== undefined){
     var c = parseFloat(change);
     chEl.textContent = (c>=0?'+':'')+c.toFixed(2)+'%';
-    chEl.style.background = c>=0?'rgba(52,211,153,0.12)':'rgba(248,113,113,0.12)';
-    chEl.style.color = c>=0?'var(--green)':'#F87171';
+    chEl.style.background = c>=0?'rgba(74,222,156,0.12)':'rgba(240,100,122,0.12)';
+    chEl.style.color = c>=0?'var(--green)':'#F0647A';
   } else {
     chEl.textContent = 'live';
-    chEl.style.background = 'rgba(52,211,153,0.08)';
+    chEl.style.background = 'rgba(74,222,156,0.08)';
     chEl.style.color = 'var(--green)';
   }
 }
@@ -3241,7 +3241,7 @@ function showSuggestions(val){
   var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,6);
   if(!matches.length){ box.style.display='none'; return; }
   box.innerHTML = matches.map(function(p){
-    return '<div onclick="selectPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(0,149,255,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+p+'</div>';
+    return '<div onclick="selectPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:background .15s;border-bottom:1px solid rgba(255,255,255,.06)" onmouseover="this.style.background=\'rgba(127,184,232,.12)\';this.style.color=\'var(--text)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text2)\'">'+p+'</div>';
   }).join('');
   var rect = inp.getBoundingClientRect();
   box.style.top = (rect.bottom + 4) + 'px';
@@ -3352,7 +3352,7 @@ function quickSetResult(result){
   historyData[0].trade_result = result;
   _saveLocalHistory();
   var qo = document.getElementById('quickOutcome');
-  var emoji = result==='win'?'🏆':result==='loss'?'❌':'➖';
+  var emoji = result==='win'?'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>':result==='loss'?'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>':'<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
   if(qo) qo.innerHTML='<div style="text-align:center;font-size:13px;padding:4px">'+emoji+' Résultat enregistré — <span style="color:var(--text3)">visible dans l\'historique</span></div>';
 }
 </script>
@@ -3393,7 +3393,7 @@ function quickSetResult(result){
   <header class="perf-header">
     <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
     <button class="back-btn" onclick="closePerf()">← Retour</button>
-    <button onclick="window.print()" style="padding:7px 16px;background:rgba(0,149,255,.12);border:1px solid rgba(0,149,255,.3);border-radius:50px;color:var(--v2);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;cursor:pointer">📄 Exporter PDF</button>
+    <button onclick="window.print()" style="padding:7px 16px;background:rgba(127,184,232,.12);border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Exporter PDF</button>
   </header>
   <nav class="analyzer-tabs">
     <button class="analyzer-tab" onclick="closePerf('hist');openHistory()">
@@ -3414,7 +3414,7 @@ function quickSetResult(result){
 
       <!-- SCORE PROGRESSION -->
       <div class="perf-section">
-        <div class="perf-section-title">📈 Progression du score (10 dernières analyses)</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Progression du score (10 dernières analyses)</div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
           <canvas id="scoreChart" height="80"></canvas>
         </div>
@@ -3422,7 +3422,7 @@ function quickSetResult(result){
 
       <!-- WIN RATE BAR -->
       <div class="perf-section">
-        <div class="perf-section-title">🎯 Résultats des trades pris</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Résultats des trades pris</div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
           <div id="winRateBar" style="display:flex;height:20px;border-radius:50px;overflow:hidden;margin-bottom:12px"></div>
           <div id="winRateLegend" style="display:flex;gap:16px;font-size:11px;color:var(--text2)"></div>
@@ -3431,7 +3431,7 @@ function quickSetResult(result){
 
       <!-- PAIR STATS -->
       <div class="perf-section">
-        <div class="perf-section-title">💱 Stats par paire</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Stats par paire</div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px">
           <div id="pairStatsContent"></div>
         </div>
@@ -3439,11 +3439,11 @@ function quickSetResult(result){
 
       <!-- EQUITY CURVE -->
       <div class="perf-section">
-        <div class="perf-section-title">📉 Courbe d'equity (RR cumulé)</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg> Courbe d'equity (RR cumulé)</div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
           <canvas id="equityChart" height="120"></canvas>
           <div style="display:flex;align-items:center;gap:24px;margin-top:12px;font-size:12px;color:var(--text3)">
-            <span>Drawdown max : <strong id="maxDrawdownVal" style="color:#F87171">—</strong></span>
+            <span>Drawdown max : <strong id="maxDrawdownVal" style="color:#F0647A">—</strong></span>
             <span style="margin-left:auto;opacity:.5">Chaque point = 1 trade fermé</span>
           </div>
         </div>
@@ -3451,7 +3451,7 @@ function quickSetResult(result){
 
       <!-- SESSION STATS -->
       <div class="perf-section">
-        <div class="perf-section-title">🕐 Stats par session</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Stats par session</div>
         <div class="session-grid">
           <div class="session-card" id="session-asia">
             <div class="sess-name">Asia</div>
@@ -3485,7 +3485,7 @@ function quickSetResult(result){
 
       <!-- MONTHLY BREAKDOWN -->
       <div class="perf-section">
-        <div class="perf-section-title">📅 Breakdown mensuel (RR cumulé)</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Breakdown mensuel (RR cumulé)</div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
           <div id="monthlyBarsContent"></div>
         </div>
@@ -3493,20 +3493,20 @@ function quickSetResult(result){
 
       <!-- DAY OF WEEK -->
       <div class="perf-section" id="dayOfWeekSection">
-        <div class="perf-section-title">📅 Win rate par jour de la semaine</div>
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Win rate par jour de la semaine</div>
         <div id="dayOfWeekChart" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px"></div>
       </div>
 
       <!-- IA RAPPORT HEBDOMADAIRE -->
       <div class="perf-section">
-        <div class="perf-section-title">🧠 Rapport IA hebdomadaire</div>
-        <div style="background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2);border-radius:14px;padding:20px">
+        <div class="perf-section-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> Rapport IA hebdomadaire</div>
+        <div style="background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:14px;padding:20px">
           <div id="iaFeedback">
             <div id="iaFeedbackContent" style="font-size:13px;color:var(--text2);line-height:1.7">
               <div style="text-align:center;padding:10px 0">
                 <div style="font-size:13px;color:var(--text3);margin-bottom:16px">Génère ton bilan de la semaine : trades pris/refusés, win rate, RR, points forts et axes d'amélioration.</div>
-                <button id="iaFeedbackBtn" onclick="requestIAFeedback()" style="padding:11px 26px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(0,149,255,.3)">
-                  📊 Générer le rapport de la semaine
+                <button id="iaFeedbackBtn" onclick="requestIAFeedback()" style="padding:11px 26px;background:var(--v);border:none;border-radius:50px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(127,184,232,.3)">
+                  Générer le rapport de la semaine
                 </button>
               </div>
             </div>
@@ -3555,7 +3555,7 @@ function quickSetResult(result){
 <!-- HISTORY PANEL -->
 <div class="history-panel" id="historyPanel">
   <div class="history-header">
-    <span class="history-title">📋 Historique</span>
+    <span class="history-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M9 2h6a1 1 0 0 1 1 1v1H8V3a1 1 0 0 1 1-1Z"/><rect x="4" y="4" width="16" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg> Historique</span>
     <button class="history-close" onclick="closeHistory()">✕</button>
   </div>
   <div class="history-list" id="historyList">
@@ -3572,7 +3572,7 @@ function quickSetResult(result){
 </div>
 
 <div style="position:fixed;bottom:20px;right:20px;z-index:300">
-    <a href="https://t.me/leterminalfx" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(8,8,15,0.9);border:1px solid rgba(0,149,255,0.3);border-radius:50px;padding:10px 20px;text-decoration:none;color:var(--text2);font-size:14px;font-weight:600;backdrop-filter:blur(12px);transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.4)" onmouseover="this.style.borderColor='rgba(0,149,255,0.6)';this.style.color='var(--v2)'" onmouseout="this.style.borderColor='rgba(0,149,255,0.3)';this.style.color='var(--text2)'">
+    <a href="https://t.me/leterminalfx" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(8,8,15,0.9);border:1px solid rgba(127,184,232,0.3);border-radius:50px;padding:10px 20px;text-decoration:none;color:var(--text2);font-size:14px;font-weight:600;backdrop-filter:blur(12px);transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.4)" onmouseover="this.style.borderColor='rgba(127,184,232,0.6)';this.style.color='var(--v2)'" onmouseout="this.style.borderColor='rgba(127,184,232,0.3)';this.style.color='var(--text2)'">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.56-.46.7-.93.44l-2.58-1.9-1.24 1.2c-.14.14-.26.26-.52.26l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.38 14.4 4.84 13.6c-.56-.18-.57-.56.12-.82l9.92-3.82c.46-.17.87.1.76.84z" fill="currentColor"/></svg>
       Rejoindre le Telegram
     </a>
@@ -3587,33 +3587,33 @@ function quickSetResult(result){
   </div>
   <nav class="side-menu-nav">
     <a class="side-nav-item" href="./index.html" style="text-decoration:none">
-      <span class="nav-icon">🏠</span> Dashboard
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg></span> Dashboard
     </a>
     <div class="side-nav-divider"></div>
     <a class="side-nav-item" href="./journal.html" style="text-decoration:none">
-      <span class="nav-icon">📒</span> Journal de Trading
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg></span> Journal de Trading
     </a>
     <a class="side-nav-item" href="./calendrier.html" style="text-decoration:none;opacity:.5">
-      <span class="nav-icon">📅</span> Calendrier Éco <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> Calendrier Éco <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
     </a>
-    <a class="side-nav-item" href="./app.html" style="text-decoration:none;background:rgba(0,149,255,.1);color:var(--v2)">
-      <span class="nav-icon">⚡</span> Setup Analyzer
+    <a class="side-nav-item" href="./app.html" style="text-decoration:none;background:rgba(127,184,232,.1);color:var(--v2)">
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Setup Analyzer
     </a>
     <a class="side-nav-item" href="./bubble.html" style="text-decoration:none;opacity:.5">
-      <span class="nav-icon">🫧</span> Bubble Map <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="9" cy="13" r="6"/><circle cx="18" cy="7" r="3"/><circle cx="17.5" cy="17.5" r="2"/></svg></span> Bubble Map <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
     </a>
     <a class="side-nav-item" href="./calculateur.html" style="text-decoration:none;opacity:.5">
-      <span class="nav-icon">🧮</span> Calculateur de Pips <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="18"/><line x1="8" y1="18" x2="12" y2="18"/></svg></span> Calculateur de Pips <span style="font-size:9px;color:var(--text3);margin-left:auto">Bientôt</span>
     </a>
   </nav>
   <div class="side-menu-footer">
     <button class="side-nav-item" id="sideLoginBtn" onclick="closeSideMenu();openAuth()" style="display:none;color:var(--v2)">
-      <span class="nav-icon">👤</span> Connexion / Créer un compte
+      <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Connexion / Créer un compte
     </button>
-    <div id="sideUserInfo" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(0,149,255,.06);border:1px solid rgba(0,149,255,.2)">
+    <div id="sideUserInfo" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2)">
       <div style="font-size:11px;color:var(--text3);margin-bottom:4px">CONNECTÉ</div>
       <div id="sideUserEmail" style="font-size:13px;font-weight:600;color:var(--text2)"></div>
-      <button onclick="doLogout()" style="margin-top:8px;font-size:11px;color:#F87171;background:transparent;border:none;cursor:pointer;padding:0;font-family:Inter,sans-serif">Se déconnecter</button>
+      <button onclick="doLogout()" style="margin-top:8px;font-size:11px;color:#F0647A;background:transparent;border:none;cursor:pointer;padding:0;font-family:Inter,sans-serif">Se déconnecter</button>
     </div>
   </div>
 </div>
@@ -3622,7 +3622,7 @@ function quickSetResult(result){
 <!-- CUSTOM CONFIRM MODAL -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
-    <div class="confirm-icon">🗑</div>
+    <div class="confirm-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
     <div class="confirm-title">Supprimer l'analyse ?</div>
     <div class="confirm-sub">Cette action est irréversible.<br>L'analyse sera définitivement supprimée.</div>
     <div class="confirm-btns">
@@ -3631,7 +3631,7 @@ function quickSetResult(result){
     </div>
   </div>
 </div>
-<div id="pairSuggestions" style="display:none;position:fixed;background:#13131f;border:1px solid rgba(0,149,255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
+<div id="pairSuggestions" style="display:none;position:fixed;background:#10141B;border:1px solid rgba(127,184,232,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>
@@ -3644,15 +3644,15 @@ function quickSetResult(result){
 </script>
 
 <div id="onboardingOverlay" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(8,8,15,.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
-  <div style="background:#13131F;border:1px solid rgba(0,149,255,.3);border-radius:24px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 60px rgba(0,149,255,.15)">
-    <div style="font-size:40px;margin-bottom:16px">👋</div>
-    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#F0EEFF;margin-bottom:8px">Bienvenue sur Le Terminal</div>
-    <div style="color:#9B96B8;font-size:14px;line-height:1.7;margin-bottom:24px">Ton hub de trading ICT/SMC. Voici comment démarrer :</div>
+  <div style="background:#10141B;border:1px solid rgba(127,184,232,.3);border-radius:24px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 60px rgba(127,184,232,.15)">
+    <div style="font-size:40px;margin-bottom:16px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4L12 3Z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z"/></svg></div>
+    <div style="font-family:'Anton','Arial Narrow',sans-serif;font-size:22px;font-weight:800;color:#EEF2F7;margin-bottom:8px">Bienvenue sur Le Terminal</div>
+    <div style="color:#7E8794;font-size:14px;line-height:1.7;margin-bottom:24px">Ton hub de trading ICT/SMC. Voici comment démarrer :</div>
     <div id="onboardSteps"></div>
     <div style="display:flex;justify-content:center;gap:6px;margin:20px 0" id="onboardDots"></div>
     <div style="display:flex;gap:10px">
-      <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#5A5570;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;cursor:pointer">Passer</button>
-      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#0095FF,#38B6FF);border:none;border-radius:10px;color:white;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
+      <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#3A414C;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;cursor:pointer">Passer</button>
+      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#7FB8E8,#BFDCF5);border:none;border-radius:10px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
     </div>
   </div>
 </div>
