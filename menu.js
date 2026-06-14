@@ -100,10 +100,11 @@
     .lt-nav-item.pro-locked { opacity: .55; cursor: pointer; }
     .lt-nav-item.pro-locked:hover { background: rgba(255,180,0,.08); color: #FFB300; }
     .lt-nav-pro-badge {
-      margin-left: auto; font-size: 9px; font-weight: 700;
-      letter-spacing: .08em; color: #FFB300;
+      margin-left: auto; flex-shrink: 0; white-space: nowrap; line-height: 1.5;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; color: #FFB300;
       background: rgba(255,180,0,.1); border: 1px solid rgba(255,180,0,.25);
-      border-radius: 50px; padding: 2px 7px;
+      border-radius: 50px; padding: 3px 8px;
     }
     .lt-subnav-item.pro-locked { opacity: .55; cursor: pointer; }
     .lt-subnav-item.pro-locked:hover { color: #FFB300; }
