@@ -1,0 +1,124 @@
+<!-- @dsCard group="Marketing" viewport="1440x900" name="Homepage — Le Terminal" subtitle="Cinematic hub trading IA : hero, outils, stratégies, méthode" -->
+<!-- @startingPoint section="Marketing" subtitle="Cinematic luxury homepage — hub trading IA, 5 outils, stratégies, méthode" viewport="1440x900" -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Terminal — Hub trading propulsé par l'IA</title>
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../shared/chrome.css">
+<link rel="stylesheet" href="page.css">
+<link rel="stylesheet" href="pricing.css">
+<link rel="stylesheet" href="showcase.css">
+<link rel="stylesheet" href="markets.css">
+<link rel="stylesheet" href="levelups.css">
+<link rel="stylesheet" href="screens.css">
+</head>
+<body>
+  <template id="__bundler_thumbnail" data-bg-color="#07090C">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#07090C"/>
+      <radialGradient id="halo" cx="50%" cy="0%" r="70%">
+        <stop offset="0%" stop-color="#7FB8E8" stop-opacity="0.5"/>
+        <stop offset="60%" stop-color="#7FB8E8" stop-opacity="0"/>
+      </radialGradient>
+      <rect width="1200" height="800" fill="url(#halo)"/>
+      <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FBFCFE"/>
+        <stop offset="50%" stop-color="#9AA2AE"/>
+        <stop offset="100%" stop-color="#6E7682"/>
+      </linearGradient>
+      <text x="600" y="380" text-anchor="middle" font-family="Arial Narrow, sans-serif" font-weight="700" font-size="170" letter-spacing="4" fill="url(#metal)">LE</text>
+      <text x="600" y="540" text-anchor="middle" font-family="Arial Narrow, sans-serif" font-weight="700" font-size="170" letter-spacing="4" fill="url(#metal)">TERMINAL</text>
+      <circle cx="600" cy="620" r="6" fill="#7FB8E8"/>
+    </svg>
+  </template>
+  <a id="top"></a>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Button, Badge } = window.LeTerminalDesignSystem_028ecb;
+    window.Button = Button; window.Badge = Badge;
+  </script>
+  <script type="text/babel" src="Intro.jsx"></script>
+  <script type="text/babel" src="../shared/Chrome.jsx"></script>
+  <script type="text/babel" src="Hero.jsx"></script>
+  <script type="text/babel" src="Cockpit.jsx"></script>
+  <script type="text/babel" src="LevelUps.jsx"></script>
+  <script type="text/babel" src="Screens.jsx"></script>
+  <script type="text/babel" src="Tools.jsx"></script>
+  <script type="text/babel" src="Markets.jsx"></script>
+  <script type="text/babel" src="Showcase.jsx"></script>
+  <script type="text/babel" src="Strategies.jsx"></script>
+  <script type="text/babel" src="Method.jsx"></script>
+  <script type="text/babel" src="Pricing.jsx"></script>
+  <script type="text/babel">
+    function Page() {
+      React.useEffect(() => {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('is-in'); });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('[data-reveal],[data-stagger]').forEach((el) => io.observe(el));
+
+        // Scroll dynamics: progress hairline + hero parallax + generic [data-parallax]
+        const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const plx = [...document.querySelectorAll('[data-parallax]')].map((el) => ({ el, s: parseFloat(el.getAttribute('data-parallax')) || 0.15 }));
+        let raf = 0;
+        const onScroll = () => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            const h = document.documentElement;
+            const fill = document.querySelector('.lt-progress__fill');
+            if (fill) fill.style.width = ((h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight)) * 100).toFixed(2) + '%';
+            if (reduced) return;
+            const inner = document.querySelector('.lt-hero__inner');
+            if (inner) {
+              const y = Math.min(h.scrollTop, 800);
+              inner.style.transform = 'translateY(' + (y * 0.3).toFixed(1) + 'px)';
+              inner.style.opacity = String(Math.max(0.05, 1 - y / 650).toFixed(3));
+            }
+            const vh = h.clientHeight;
+            for (const p of plx) {
+              const r = p.el.getBoundingClientRect();
+              const mid = r.top + r.height / 2 - vh / 2;
+              p.el.style.transform = 'translate3d(0,' + (-mid * p.s).toFixed(1) + 'px,0)';
+            }
+          });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => { io.disconnect(); window.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf); };
+      }, []);
+      return (
+        <React.Fragment>
+          <IntroSequence />
+          <div className="lt-progress" aria-hidden="true"><span className="lt-progress__fill" /></div>
+          <GlobalHeader />
+          <SideDock active="home" />
+          <Hero />
+          <ToolsSection />
+          <LiveCockpit />
+          <StatsSection />
+          <MarketsSection />
+          <LevelUpsSection />
+          <ShowcaseSection />
+          <ScreensSection />
+          <VerdictBand />
+          <StrategiesSection />
+          <MethodSection />
+          <PricingBand />
+          <CommunityBand />
+          <Footer />
+        </React.Fragment>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+  </script>
+</body>
+</html>
