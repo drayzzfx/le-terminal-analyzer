@@ -3410,7 +3410,7 @@ function quickSetResult(result){
   <header class="history-page-header">
     <div style="display:flex;align-items:center;gap:10px">
       <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-      <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
+      <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
     </div>
     <button class="back-btn" onclick="closeHistoryPage()">← Retour</button>
   </header>
@@ -3438,7 +3438,7 @@ function quickSetResult(result){
 <!-- PERFORMANCES PAGE -->
 <div id="perfPage">
   <header class="perf-header">
-    <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
+    <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
     <button class="back-btn" onclick="closePerf()">← Retour</button>
     <button onclick="window.print()" style="padding:7px 16px;background:rgba(127,184,232,.12);border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Exporter PDF</button>
   </header>
@@ -3682,11 +3682,22 @@ function quickSetResult(result){
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>
-// Ouvre le bon panneau si on arrive via un lien ancré depuis le menu
+// Ouvre le bon panneau via lien ancré — au chargement ET au changement de hash
+// (clic dans la sidebar alors qu'on est déjà sur app.html, sans rechargement)
 (function() {
-  var h = window.location.hash;
-  if (h === '#historique') { window.addEventListener('load', function(){ openHistory(); }); }
-  else if (h === '#perfs')  { window.addEventListener('load', function(){ openPerf();    }); }
+  function applyHash(){
+    var h = window.location.hash;
+    if (h === '#historique') {
+      try { if(typeof closePerf==='function') closePerf('hist'); } catch(e){}
+      if(typeof openHistory==='function') openHistory();
+    } else if (h === '#perfs')  {
+      try { if(typeof closeHistoryPage==='function') closeHistoryPage('perfs'); } catch(e){}
+      if(typeof openPerf==='function') openPerf();
+    }
+  }
+  if (document.readyState === 'complete') applyHash();
+  else window.addEventListener('load', applyHash);
+  window.addEventListener('hashchange', applyHash);
 })();
 </script>
 
