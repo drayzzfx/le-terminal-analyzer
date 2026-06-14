@@ -62,6 +62,7 @@
 .pr-table__row:last-child { border-bottom: none; }
 .pr-table__row--head { background: var(--bg-void); font-family: var(--font-display); text-transform: uppercase; font-size: 1rem; letter-spacing: 0.04em; color: var(--text-title); padding: 16px 22px; }
 .pr-table__row--head .pr-table__pro { color: var(--accent-bright); }
+.pr-table__row--head > span:not(:first-child) { text-align: center; }
 .pr-table__group { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); padding: 14px 22px 10px; border-bottom: 1px solid var(--border-subtle); background: rgba(127,184,232,0.04); }
 .pr-table__feat { font-size: 14px; color: var(--text-body); }
 .pr-table__cell { text-align: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-body); font-variant-numeric: tabular-nums; }
