@@ -10,15 +10,43 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./design-system.css">
-<link rel="stylesheet" href="./home.css">
+<link rel="stylesheet" href="./home/chrome.css">
+<link rel="stylesheet" href="./home/page.css">
+<link rel="stylesheet" href="./home/markets.css">
+<link rel="stylesheet" href="./home/levelups.css">
+<link rel="stylesheet" href="./home/screens.css">
+<link rel="stylesheet" href="./home/showcase.css">
+<link rel="stylesheet" href="./home/pricing.css">
 </head>
 <body>
 <a id="top"></a>
-
-<!-- Progress hairline -->
+<!-- IntroSequence (page-order #0, from marketing/Intro.jsx → IntroSequence)
+     Cinematic boot overlay. BASE state is invisible + non-blocking (see chrome
+     /page.css .lt-intro { opacity:0; visibility:hidden; pointer-events:none }).
+     It is only shown when initIntro() adds .is-playing on a VISIBLE tab, once
+     per session (sessionStorage 'lt_intro_seen'). Reduced-motion / hidden tab /
+     already-seen → never shown (and the node is removed). The progress hairline
+     that lived as a sibling in the React page is included here too. -->
 <div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
 
-<!-- ░░░ CHROME : top nav ░░░ -->
+<div class="lt-intro" aria-hidden="true">
+  <div class="lt-intro__grid"></div>
+  <div class="lt-intro__halo"></div>
+  <div class="lt-intro__scan"></div>
+  <div class="lt-intro__core">
+    <div class="lt-intro__wordmark">
+      <span class="lt-intro__metal">Le Terminal</span>
+      <span class="lt-intro__sheen"></span>
+    </div>
+    <div class="lt-intro__readout">
+      <span class="lt-intro__tag">Initialisation du terminal</span>
+      <span class="lt-intro__bar"><span class="lt-intro__fill"></span></span>
+    </div>
+  </div>
+  <div class="lt-intro__shutter lt-intro__shutter--top"></div>
+  <div class="lt-intro__shutter lt-intro__shutter--bot"></div>
+</div>
+<!-- ░░░ CHROME : top nav (fonctionnel — hooks menu.js : ltDrop, ltLangPill, loginBtn, ltUserBar) ░░░ -->
 <div class="lt-chrome" id="ltChrome">
   <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
@@ -50,19 +78,52 @@
     </div>
   </header>
 </div>
-
-<!-- ░░░ SIDE DOCK ░░░ -->
+<!-- SideDock (page-order #1 chrome, from shared/Chrome.jsx → SideDock active="home")
+     Fixed left dock on desktop → bottom tab-bar on mobile (≤760px, pure CSS).
+     "Accueil" is the active item (is-active) for the homepage.
+     No JS required; purely navigational + CSS hover tooltips.
+     Glyphs are the inline SVGs from DockGlyph (stroke-width 1.6, fill:none). -->
 <nav class="lt-dock" aria-label="Pages">
-  <a class="lt-dock__item is-active" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
-  <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
-  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
-  <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
-  <a class="lt-dock__item" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
-  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+  <a class="lt-dock__item is-active" href="./index.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg>
+    <span class="lt-dock__lbl">Accueil</span>
+    <span class="lt-dock__tip">Accueil</span>
+  </a>
+  <a class="lt-dock__item" href="./journal.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg>
+    <span class="lt-dock__lbl">Journal</span>
+    <span class="lt-dock__tip">Journal de Trading</span>
+  </a>
+  <a class="lt-dock__item" href="./calendrier.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg>
+    <span class="lt-dock__lbl">Éco</span>
+    <span class="lt-dock__tip">Calendrier Éco</span>
+  </a>
+  <a class="lt-dock__item" href="./app.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg>
+    <span class="lt-dock__lbl">Analyzer</span>
+    <span class="lt-dock__tip">Setup Analyzer</span>
+  </a>
+  <a class="lt-dock__item" href="./bubble.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg>
+    <span class="lt-dock__lbl">Bubble</span>
+    <span class="lt-dock__tip">Bubble Map</span>
+  </a>
+  <a class="lt-dock__item" href="./calculateur.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
+    <span class="lt-dock__lbl">Pips</span>
+    <span class="lt-dock__tip">Calculateur de Pips</span>
+  </a>
 </nav>
-
-<!-- ░░░ HERO ░░░ -->
-<section class="lt-hero" id="ltHero" style="--mx:50%;--my:0%;--px:0;--py:0">
+<!-- Hero (page-order #2, from marketing/Hero.jsx → Hero)
+     Cinematic runway hero. Entrance is CSS-driven (.lt-anim in page.css) so the
+     end-state IS the base style (content always visible). JS (initHero) adds:
+       · mouse-follow spotlight + 3D parallax (sets --mx/--my/--px/--py) — desktop
+       · dust particles canvas (≤50) — desktop, off for reduced-motion/mobile
+     CTA buttons use DS button classes (provided by the design-system bundle/CSS).
+     "Voir les outils" → #tools (in-page anchor to the Tools section).
+     edgeLights: 5 <i> per runway edge (resolved from [0..4].map). -->
+<section class="lt-hero" style="--mx:50%;--my:0%;--px:0;--py:0;">
   <div class="lt-aurora"></div>
   <div class="lt-runway" aria-hidden="true">
     <div class="lt-runway__horizon"></div>
@@ -71,103 +132,532 @@
     <div class="lt-runway__edge lt-runway__edge--r"><i></i><i></i><i></i><i></i><i></i></div>
   </div>
   <div class="lt-hero__spotlight"></div>
-  <canvas class="lt-hero__dust" id="ltDust"></canvas>
+  <canvas class="lt-hero__dust"></canvas>
+  <div class="lt-streaks" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="lt-hero__grain"></div>
 
   <div class="lt-hero__inner">
-    <div class="lt-hero__eyebrow lt-anim lt-anim--1"><span class="lt-dot"></span> Plateforme active · Mis à jour quotidiennement</div>
+    <div class="lt-hero__eyebrow lt-anim lt-anim--1">
+      <span class="lt-dot"></span> Plateforme active · Mis à jour quotidiennement
+    </div>
+
     <div class="lt-hero__titlewrap">
       <h1 class="lt-hero__title">
         <span class="lt-metal lt-anim lt-anim--2">Le</span>
         <span class="lt-metal lt-anim lt-anim--3">Terminal</span>
       </h1>
     </div>
-    <p class="lt-hero__subhead lt-anim lt-anim--4">Ton hub trading, <span class="lt-accent-text">propulsé par l'IA.</span></p>
-    <p class="lt-hero__lede lt-anim lt-anim--5">Analyse tes setups en quelques secondes, tiens ton journal, consulte le calendrier éco et maîtrise ta gestion du risque. Tout au même endroit.</p>
+
+    <p class="lt-hero__subhead lt-anim lt-anim--4">
+      Ton hub trading, <span class="lt-accent-text">propulsé par l'IA.</span>
+    </p>
+
+    <p class="lt-hero__lede lt-anim lt-anim--5">
+      Analyse tes setups en quelques secondes, tiens ton journal, consulte le
+      calendrier éco et maîtrise ta gestion du risque. Tout au même endroit.
+    </p>
+
     <div class="lt-hero__cta lt-anim lt-anim--6">
-      <a class="lt-btn lt-btn--primary lt-btn--lg" href="#tools">Voir les outils <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <a class="lt-btn lt-btn--ghost lt-btn--lg" href="./app.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg> Voir la démo</a>
+      <a class="lt-btn lt-btn--primary lt-btn--lg" href="#tools">
+        Voir les outils
+        <span class="lt-btn__icon lt-btn__icon--right" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+      <a class="lt-btn lt-btn--ghost lt-btn--lg" href="#tools">
+        <span class="lt-btn__icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        </span>
+        Voir la démo
+      </a>
     </div>
+
     <div class="lt-hero__chips lt-anim lt-anim--7">
-      <div class="lt-chip"><span class="lt-chip__ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M16.5 13.5v6M13.5 16.5h6"/></svg></span><span class="lt-chip__txt"><span class="lt-chip__label">5 outils intégrés</span><span class="lt-chip__sub">Un seul cockpit</span></span></div>
-      <div class="lt-chip"><span class="lt-chip__ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg></span><span class="lt-chip__txt"><span class="lt-chip__label">Propulsé par l'IA</span><span class="lt-chip__sub">Analyse &amp; coaching</span></span></div>
-      <div class="lt-chip"><span class="lt-chip__ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg></span><span class="lt-chip__txt"><span class="lt-chip__label">Tous les marchés</span><span class="lt-chip__sub">Forex · crypto · indices</span></span></div>
-      <div class="lt-chip"><span class="lt-chip__ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.7-3 2.9-4.5 5.5-4.5S13.8 16 14.5 19"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.7c2.2.2 3.9 1.5 4.5 3.8"/></svg></span><span class="lt-chip__txt"><span class="lt-chip__label">Communauté privée</span><span class="lt-chip__sub">Traders actifs 24/7</span></span></div>
+      <div class="lt-chip">
+        <span class="lt-chip__ic">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M16.5 13.5v6M13.5 16.5h6"/></svg>
+        </span>
+        <span class="lt-chip__txt">
+          <span class="lt-chip__label">5 outils intégrés</span>
+          <span class="lt-chip__sub">Un seul cockpit</span>
+        </span>
+      </div>
+      <div class="lt-chip">
+        <span class="lt-chip__ic">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>
+        </span>
+        <span class="lt-chip__txt">
+          <span class="lt-chip__label">Propulsé par l'IA</span>
+          <span class="lt-chip__sub">Analyse &amp; coaching</span>
+        </span>
+      </div>
+      <div class="lt-chip">
+        <span class="lt-chip__ic">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
+        </span>
+        <span class="lt-chip__txt">
+          <span class="lt-chip__label">Tous les marchés</span>
+          <span class="lt-chip__sub">Forex · crypto · indices</span>
+        </span>
+      </div>
+      <div class="lt-chip">
+        <span class="lt-chip__ic">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.7-3 2.9-4.5 5.5-4.5S13.8 16 14.5 19"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.7c2.2.2 3.9 1.5 4.5 3.8"/></svg>
+        </span>
+        <span class="lt-chip__txt">
+          <span class="lt-chip__label">Communauté privée</span>
+          <span class="lt-chip__sub">Traders actifs 24/7</span>
+        </span>
+      </div>
     </div>
   </div>
 
   <div class="lt-hero__vignette"></div>
-  <a class="lt-hero__scroll" href="#tools" aria-label="Défiler"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
+  <a class="lt-hero__scroll" href="#tools" aria-label="Défiler">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </a>
 </section>
-
-<!-- ░░░ LIVE TICKER ░░░ -->
-<div class="lt-live" id="ltLive" aria-label="Prix en direct">
-  <span class="lt-live__badge"><span class="lt-dot"></span> LIVE</span>
-  <div class="lt-live__viewport"><div class="lt-live__rail" id="ltRail"></div></div>
-</div>
-
-<!-- ░░░ COCKPIT — board ░░░ -->
+<!-- ToolsSection — "Tableau des départs" (les 5 outils). Static partial.
+     Interactivity: initBoardSparklines() (CSS-driven sweep + sparklines already
+     animate via page.css; JS only honors prefers-reduced-motion / no extra hook needed).
+     Badge rendered as inline-styled <span> reproducing the DS Badge component. -->
 <section class="lt-board" id="tools" data-reveal>
   <div class="lt-board__head">
     <div class="lt-board__headleft">
       <span class="lt-eyebrow"><span class="lt-dot"></span> Arsenal complet</span>
-      <h2 class="lt-board__title">Les outils<br>du cockpit</h2>
+      <h2 class="lt-board__title">Les outils<br/>du cockpit</h2>
     </div>
     <p class="lt-board__lede">Cinq outils, un seul abonnement. Chaque instrument est conçu pour un aspect précis de ton trading — ensemble, ils forment un écosystème complet.</p>
   </div>
-  <div class="lt-board__legend" aria-hidden="true"><span>N°</span><span>Outil</span><span>Description</span><span>Statut</span><span></span></div>
+
+  <div class="lt-board__legend" aria-hidden="true">
+    <span>N°</span><span>Outil</span><span>Description</span><span>Statut</span><span></span>
+  </div>
+
   <div class="lt-board__rows">
+    <span class="lt-board__sweep" aria-hidden="true"></span>
+
+    <!-- 01 — Setup Analyzer (featured) -->
     <a class="lt-board__row is-featured" href="./app.html" style="--d:0s">
       <span class="lt-board__num">01</span>
-      <span class="lt-board__name">Setup Analyzer<span class="lt-board__tags"><span>Score /100</span><span>Annotations IA</span><span>Rapport PDF</span></span></span>
+      <span class="lt-board__name">
+        <span class="lt-board__nametxt" data-text="Setup Analyzer">Setup Analyzer</span>
+        <span class="lt-board__tags">
+          <span>Score /100</span><span>Annotations IA</span><span>Rapport PDF</span>
+        </span>
+      </span>
       <span class="lt-board__desc">Score IA de ton setup, toutes stratégies. Feedback instantané et annotations directement sur ton graphique.</span>
-      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
-      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="lt-board__status">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--bull);background:var(--bull-glow);border:1px solid rgba(74,222,156,0.4);border-radius:var(--r-sm);padding:4px 9px;line-height:1">
+          <span style="width:6px;height:6px;border-radius:999px;background:var(--bull);box-shadow:0 0 8px var(--bull)"></span>En ligne
+        </span>
+      </span>
+      <span class="lt-board__go">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+      <svg class="lt-board__spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true">
+        <path class="lt-board__spark-base" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.4"/>
+        <path class="lt-board__spark-run" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.8"/>
+      </svg>
     </a>
+
+    <!-- 02 — Journal de Trading (accent / Nouveau) -->
     <a class="lt-board__row" href="./journal.html" style="--d:0.09s">
       <span class="lt-board__num">02</span>
-      <span class="lt-board__name">Journal de Trading<span class="lt-board__tags"><span>Calendrier</span><span>P&amp;L · Win Rate</span><span>IA Coach</span></span></span>
+      <span class="lt-board__name">
+        <span class="lt-board__nametxt" data-text="Journal de Trading">Journal de Trading</span>
+        <span class="lt-board__tags">
+          <span>Calendrier</span><span>P&amp;L · Win Rate</span><span>IA Coach</span>
+        </span>
+      </span>
       <span class="lt-board__desc">Calendrier de tes trades, suivi du P&amp;L, screenshots et analyse IA de tes patterns de performance.</span>
-      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="accent"><span class="lt-tag-badge__dot"></span>Nouveau</span></span>
-      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="lt-board__status">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent-bright);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:var(--r-sm);padding:4px 9px;line-height:1">
+          <span style="width:6px;height:6px;border-radius:999px;background:var(--accent-bright);box-shadow:0 0 8px var(--accent-bright)"></span>Nouveau
+        </span>
+      </span>
+      <span class="lt-board__go">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+      <svg class="lt-board__spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true">
+        <path class="lt-board__spark-base" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+        <path class="lt-board__spark-run" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--accent)" stroke-width="1.8"/>
+      </svg>
     </a>
+
+    <!-- 03 — Calendrier Éco -->
     <a class="lt-board__row" href="./calendrier.html" style="--d:0.18s">
       <span class="lt-board__num">03</span>
-      <span class="lt-board__name">Calendrier Éco<span class="lt-board__tags"><span>NFP · CPI · FOMC</span><span>Multi-régions</span></span></span>
+      <span class="lt-board__name">
+        <span class="lt-board__nametxt" data-text="Calendrier Éco">Calendrier Éco</span>
+        <span class="lt-board__tags">
+          <span>NFP · CPI · FOMC</span><span>Multi-régions</span>
+        </span>
+      </span>
       <span class="lt-board__desc">Tous les événements macro clés — NFP, CPI, FOMC — par région et impact attendu.</span>
-      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
-      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="lt-board__status">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--bull);background:var(--bull-glow);border:1px solid rgba(74,222,156,0.4);border-radius:var(--r-sm);padding:4px 9px;line-height:1">
+          <span style="width:6px;height:6px;border-radius:999px;background:var(--bull);box-shadow:0 0 8px var(--bull)"></span>En ligne
+        </span>
+      </span>
+      <span class="lt-board__go">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+      <svg class="lt-board__spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true">
+        <path class="lt-board__spark-base" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.4"/>
+        <path class="lt-board__spark-run" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.8"/>
+      </svg>
     </a>
+
+    <!-- 04 — Bubble Map -->
     <a class="lt-board__row" href="./bubble.html" style="--d:0.27s">
       <span class="lt-board__num">04</span>
-      <span class="lt-board__name">Bubble Map<span class="lt-board__tags"><span>Flux capitaux</span><span>Live</span></span></span>
+      <span class="lt-board__name">
+        <span class="lt-board__nametxt" data-text="Bubble Map">Bubble Map</span>
+        <span class="lt-board__tags">
+          <span>Flux capitaux</span><span>Live</span>
+        </span>
+      </span>
       <span class="lt-board__desc">Les flux de capitaux entre actifs en temps réel — crypto, forex, indices, matières premières.</span>
-      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
-      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="lt-board__status">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--bull);background:var(--bull-glow);border:1px solid rgba(74,222,156,0.4);border-radius:var(--r-sm);padding:4px 9px;line-height:1">
+          <span style="width:6px;height:6px;border-radius:999px;background:var(--bull);box-shadow:0 0 8px var(--bull)"></span>En ligne
+        </span>
+      </span>
+      <span class="lt-board__go">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+      <svg class="lt-board__spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true">
+        <path class="lt-board__spark-base" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.4"/>
+        <path class="lt-board__spark-run" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.8"/>
+      </svg>
     </a>
+
+    <!-- 05 — Calculateur de Pips -->
     <a class="lt-board__row" href="./calculateur.html" style="--d:0.36s">
       <span class="lt-board__num">05</span>
-      <span class="lt-board__name">Calculateur de Pips<span class="lt-board__tags"><span>Position size</span><span>Long / Short</span></span></span>
+      <span class="lt-board__name">
+        <span class="lt-board__nametxt" data-text="Calculateur de Pips">Calculateur de Pips</span>
+        <span class="lt-board__tags">
+          <span>Position size</span><span>Long / Short</span>
+        </span>
+      </span>
       <span class="lt-board__desc">Taille de position, valeur du pip, risque en devise et R:R optimal, validés automatiquement.</span>
-      <span class="lt-board__status"><span class="lt-tag-badge" data-tone="bull"><span class="lt-tag-badge__dot"></span>En ligne</span></span>
-      <span class="lt-board__go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="lt-board__status">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--bull);background:var(--bull-glow);border:1px solid rgba(74,222,156,0.4);border-radius:var(--r-sm);padding:4px 9px;line-height:1">
+          <span style="width:6px;height:6px;border-radius:999px;background:var(--bull);box-shadow:0 0 8px var(--bull)"></span>En ligne
+        </span>
+      </span>
+      <span class="lt-board__go">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+      <svg class="lt-board__spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true">
+        <path class="lt-board__spark-base" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.4"/>
+        <path class="lt-board__spark-run" d="M0,28 L60,28 70,12 82,32 92,22 110,22 120,30 150,16 170,24 220,20" fill="none" stroke="var(--bull)" stroke-width="1.8"/>
+      </svg>
     </a>
   </div>
+
   <div class="lt-board__foot">
     <span class="lt-board__footnote">Un seul abonnement. Cinq outils. Zéro friction.</span>
-    <a class="lt-btn lt-btn--secondary" href="./tarifs.html">Comparer les offres <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="lt-btn lt-btn--secondary lt-btn--md" href="./tarifs.html">
+      Comparer les offres
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
   </div>
 </section>
+<!-- LiveCockpit (page-order #4, from marketing/Cockpit.jsx → LiveCockpit)
+     Floating product mock under the hero. initCockpit() handles:
+       · reveal: own IntersectionObserver adds .is-in to .lt-ck-stage + the SVG
+         paths/dot (equity curve draws itself, area fades, dot pops) when 30% in
+         view. Reduced-motion / hidden tab → .is-in applied immediately.
+       · mouse parallax/tilt: sets --rx (≈9° base) / --ry on .lt-ck-stage (desktop)
+       · live watchlist: every 1.7s ticks one random price + flashes its row
+       · CountUp KPIs: animate from 0 to target on reveal (P&L 4280, WR 63, IA 87)
+     KPI values render as their FINAL formatted text so reduced-motion / no-JS
+     still shows real numbers (matches CountUp's reduced-motion branch).
+     Watchlist prices/sparkline grid lines resolved from the JS arrays. -->
+<section class="lt-ck-wrap" data-reveal>
+  <div class="lt-ck-glow"></div>
+  <div class="lt-ck-stage">
+    <div class="lt-ck">
+      <!-- window bar -->
+      <div class="lt-ck__bar">
+        <span class="lt-ck__dots"><i style="background:#F0647A"></i><i style="background:#E8C268"></i><i style="background:#4ADE9C"></i></span>
+        <span class="lt-ck__addr">le-terminal.app / cockpit</span>
+        <span class="lt-ck__live"><span class="lt-dot"></span> Live</span>
+      </div>
 
-<!-- ░░░ STATS STRIP ░░░ -->
-<section class="lt-statstrip" data-reveal>
-  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">5</span><span class="lt-statstrip__l">Outils actifs</span></div>
-  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">Propriétaire</span><span class="lt-statstrip__l">Moteur d'analyse IA</span></div>
-  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">∞</span><span class="lt-statstrip__l">Stratégies supportées</span></div>
-  <div class="lt-statstrip__cell"><span class="lt-statstrip__v">24/7</span><span class="lt-statstrip__l">Disponible</span></div>
+      <div class="lt-ck__body">
+        <!-- main panel : KPIs + equity curve -->
+        <div class="lt-ck__main">
+          <div class="lt-ck__kpis">
+            <div class="lt-ck__kpi">
+              <span class="lt-ck__kpi-l">P&amp;L du jour</span>
+              <span class="lt-ck__kpi-v lt-up"><span data-countup="4280" data-prefix="+" data-suffix="&nbsp;€" data-decimals="0">+4 280&nbsp;€</span></span>
+            </div>
+            <div class="lt-ck__kpi">
+              <span class="lt-ck__kpi-l">Win rate</span>
+              <span class="lt-ck__kpi-v"><span data-countup="63" data-suffix="&nbsp;%" data-decimals="0">63&nbsp;%</span></span>
+            </div>
+            <div class="lt-ck__kpi">
+              <span class="lt-ck__kpi-l">Score IA moyen</span>
+              <span class="lt-ck__kpi-v lt-acc"><span data-countup="87" data-suffix="/100" data-decimals="0">87/100</span></span>
+            </div>
+          </div>
+
+          <div class="lt-ck__chart">
+            <svg viewBox="0 0 520 200" preserveAspectRatio="none" class="lt-ck__svg">
+              <defs>
+                <linearGradient id="ckFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="rgba(127,184,232,0.32)"></stop>
+                  <stop offset="1" stop-color="rgba(127,184,232,0)"></stop>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="40" x2="520" y2="40" stroke="rgba(58,65,76,0.3)"></line>
+              <line x1="0" y1="80" x2="520" y2="80" stroke="rgba(58,65,76,0.3)"></line>
+              <line x1="0" y1="120" x2="520" y2="120" stroke="rgba(58,65,76,0.3)"></line>
+              <line x1="0" y1="160" x2="520" y2="160" stroke="rgba(58,65,76,0.3)"></line>
+              <path class="lt-ck__area" d="M0,168 C70,158 100,130 150,128 C200,126 230,150 280,120 C330,92 350,70 400,60 C450,50 485,30 520,22 L520,200 L0,200 Z" fill="url(#ckFill)"></path>
+              <path class="lt-ck__line" d="M0,168 C70,158 100,130 150,128 C200,126 230,150 280,120 C330,92 350,70 400,60 C450,50 485,30 520,22" fill="none" stroke="var(--accent)" stroke-width="2.5"></path>
+              <circle class="lt-ck__dot" cx="520" cy="22" r="4.5" fill="var(--accent-bright)"></circle>
+            </svg>
+            <div class="lt-ck__signal">
+              <span class="lt-ck__sig-pulse"></span>
+              <b>LONG · BTC/USD</b>
+              <span class="lt-ck__sig-go">GO</span>
+              <span class="lt-ck__sig-sep">Score IA 87 · R:R 1:2.6</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- watchlist -->
+        <aside class="lt-ck__watch">
+          <span class="lt-ck__watch-h">Watchlist</span>
+          <div class="lt-ck__row" data-ck-base="68412.5" data-ck-dec="2">
+            <span class="lt-ck__sym">BTC/USD</span>
+            <span class="lt-ck__px">68 412,50</span>
+            <span class="lt-ck__delta lt-up">▲ +2.18%</span>
+          </div>
+          <div class="lt-ck__row" data-ck-base="1.0847" data-ck-dec="4">
+            <span class="lt-ck__sym">EUR/USD</span>
+            <span class="lt-ck__px">1,0847</span>
+            <span class="lt-ck__delta lt-down">▼ −0.42%</span>
+          </div>
+          <div class="lt-ck__row" data-ck-base="19847.0" data-ck-dec="1">
+            <span class="lt-ck__sym">US100</span>
+            <span class="lt-ck__px">19 847,0</span>
+            <span class="lt-ck__delta lt-up">▲ +1.04%</span>
+          </div>
+          <div class="lt-ck__row" data-ck-base="2384.6" data-ck-dec="1">
+            <span class="lt-ck__sym">GOLD</span>
+            <span class="lt-ck__px">2 384,6</span>
+            <span class="lt-ck__delta lt-up">▲ +0.31%</span>
+          </div>
+          <div class="lt-ck__spark">
+            <span style="height:10px;animation-delay:0s"></span>
+            <span style="height:16px;animation-delay:0.08s"></span>
+            <span style="height:12px;animation-delay:0.16s"></span>
+            <span style="height:20px;animation-delay:0.24s"></span>
+            <span style="height:17px;animation-delay:0.32s"></span>
+            <span style="height:24px;animation-delay:0.4s"></span>
+            <span style="height:19px;animation-delay:0.48s"></span>
+            <span style="height:27px;animation-delay:0.56s"></span>
+            <span style="height:22px;animation-delay:0.64s"></span>
+            <span style="height:30px;animation-delay:0.72s"></span>
+            <span style="height:26px;animation-delay:0.8s"></span>
+            <span style="height:34px;animation-delay:0.88s"></span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
 </section>
+<!-- StatsSection — stats strip (cascade via data-stagger). Static partial.
+     Interactivity: initStatsCounters() animates the numeric cells ("5") on reveal;
+     non-numeric values ("Propriétaire", "∞", "24/7") are left verbatim. -->
+<section class="lt-statstrip" data-reveal data-stagger>
+  <div class="lt-statstrip__cell">
+    <span class="lt-statstrip__v" data-count-to="5">5</span>
+    <span class="lt-statstrip__l">Outils actifs</span>
+  </div>
+  <div class="lt-statstrip__cell">
+    <span class="lt-statstrip__v">Propriétaire</span>
+    <span class="lt-statstrip__l">Moteur d'analyse IA</span>
+  </div>
+  <div class="lt-statstrip__cell">
+    <span class="lt-statstrip__v">∞</span>
+    <span class="lt-statstrip__l">Stratégies supportées</span>
+  </div>
+  <div class="lt-statstrip__cell">
+    <span class="lt-statstrip__v">24/7</span>
+    <span class="lt-statstrip__l">Disponible</span>
+  </div>
+</section>
+<!-- MarketsSection — "Tous les marchés" dual-rail marquee over a particle field.
+     Interactivity:
+       initMarketsParticles()  -> canvas .lt-mk__field drifting particles
+       (the two rails scroll infinitely via CSS keyframes lt-mk-left / lt-mk-right
+        in markets.css; pause-on-hover is pure CSS — no JS hook needed)
+     Each rail's track lists ROW1/ROW2 TWICE (-50% loop). Up sparkline pts:
+       "0,14 8,11 16,12 24,7 32,8 40,3 48,2" / down: "0,3 8,6 16,5 24,9 32,8 40,12 48,13" -->
+<section class="lt-mk" data-reveal>
+  <canvas class="lt-mk__field" aria-hidden="true"></canvas>
 
-<!-- ░░░ SHOWCASE — visite guidée ░░░ -->
+  <div class="lt-mk__head">
+    <span class="lt-eyebrow"><span class="lt-dot"></span> Couverture mondiale</span>
+    <h2 class="lt-mk__title">Tous les marchés,<br/><span class="lt-metal">un seul terminal.</span></h2>
+    <p class="lt-mk__lede">Forex, crypto, indices, actions et matières premières — suivis, analysés et reliés à tes outils. Le marché entier, sous un même toit.</p>
+  </div>
+
+  <div class="lt-mk__rails">
+    <!-- RAIL 1 — drifts left ; ROW1 listed twice -->
+    <div class="lt-mk__rail">
+      <div class="lt-mk__track lt-mk__track--l">
+        <!-- pass 1 -->
+        <div class="lt-mk__tile lt-mk__tile--crypto"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">BTC/USD</span><span class="lt-mk__px">68 412</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 2.18%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--crypto"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">ETH/USD</span><span class="lt-mk__px">3 642</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 1.04%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--crypto"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">SOL/USD</span><span class="lt-mk__px">168.8</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.24%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--fx"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">EUR/USD</span><span class="lt-mk__px">1.0847</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.42%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--fx"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">GBP/USD</span><span class="lt-mk__px">1.2751</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.13%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--fx"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">USD/JPY</span><span class="lt-mk__px">157.21</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.36%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--comm"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">GOLD</span><span class="lt-mk__px">2 384</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.31%</span></div>
+        <!-- pass 2 (duplicate for seamless loop) -->
+        <div class="lt-mk__tile lt-mk__tile--crypto"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">BTC/USD</span><span class="lt-mk__px">68 412</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 2.18%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--crypto"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">ETH/USD</span><span class="lt-mk__px">3 642</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 1.04%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--crypto"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">SOL/USD</span><span class="lt-mk__px">168.8</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.24%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--fx"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">EUR/USD</span><span class="lt-mk__px">1.0847</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.42%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--fx"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">GBP/USD</span><span class="lt-mk__px">1.2751</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.13%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--fx"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">USD/JPY</span><span class="lt-mk__px">157.21</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.36%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--comm"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">GOLD</span><span class="lt-mk__px">2 384</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.31%</span></div>
+      </div>
+    </div>
+
+    <!-- RAIL 2 — drifts right ; ROW2 listed twice -->
+    <div class="lt-mk__rail">
+      <div class="lt-mk__track lt-mk__track--r">
+        <!-- pass 1 -->
+        <div class="lt-mk__tile lt-mk__tile--idx"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">US100</span><span class="lt-mk__px">19 847</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 1.04%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--idx"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">US500</span><span class="lt-mk__px">5 487</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.58%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--idx"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">GER40</span><span class="lt-mk__px">18 412</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.22%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--comm"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">WTI</span><span class="lt-mk__px">78.42</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 1.12%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--eq"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">AAPL</span><span class="lt-mk__px">214.1</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.07%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--eq"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">NVDA</span><span class="lt-mk__px">1 204</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 3.77%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--eq"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">TSLA</span><span class="lt-mk__px">178.1</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.15%</span></div>
+        <!-- pass 2 (duplicate for seamless loop) -->
+        <div class="lt-mk__tile lt-mk__tile--idx"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">US100</span><span class="lt-mk__px">19 847</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 1.04%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--idx"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">US500</span><span class="lt-mk__px">5 487</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.58%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--idx"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">GER40</span><span class="lt-mk__px">18 412</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.22%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--comm"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">WTI</span><span class="lt-mk__px">78.42</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 1.12%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--eq"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">AAPL</span><span class="lt-mk__px">214.1</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 0.07%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--eq"><span class="lt-mk__dot" data-up="1"></span><span class="lt-mk__sym">NVDA</span><span class="lt-mk__px">1 204</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,14 8,11 16,12 24,7 32,8 40,3 48,2" stroke="var(--bull)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-up">▲ 3.77%</span></div>
+        <div class="lt-mk__tile lt-mk__tile--eq"><span class="lt-mk__dot" data-up="0"></span><span class="lt-mk__sym">TSLA</span><span class="lt-mk__px">178.1</span><svg class="lt-mk__spark" viewBox="0 0 48 16" fill="none" preserveAspectRatio="none"><polyline points="0,3 8,6 16,5 24,9 32,8 40,12 48,13" stroke="var(--bear)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lt-mk__d lt-down">▼ 0.15%</span></div>
+      </div>
+    </div>
+
+    <div class="lt-mk__fade lt-mk__fade--l"></div>
+    <div class="lt-mk__fade lt-mk__fade--r"></div>
+  </div>
+</section>
+<!-- LevelUpsSection — "Tout ce qui change la donne" bento.
+     Interactivity:
+       initLevelUpReveal()  -> adds .is-in to .lu__grid on viewport entry (cascade)
+       initLevelUpCounters() -> count-up on .lu__big (30 s) and .lu__n tiles
+       (mini-visuals ripple/orbit/cal/shield animate via CSS in levelups.css)
+     data-parallax kept on .lu__glow. -->
+<section class="lu">
+  <div class="lu__glow" data-parallax="0.06"></div>
+  <div class="lu__head" data-reveal>
+    <span class="lt-eyebrow"><span class="lt-dot"></span> Le level up</span>
+    <h2 class="lu__title">Tout ce qui<br/><span class="lt-metal">change la donne.</span></h2>
+    <p class="lu__lede">Moins de bruit, plus de décision. Voilà ce que le cockpit apporte concrètement à ton trading.</p>
+  </div>
+
+  <div class="lu__grid">
+    <!-- hero stat — big (count-up to 30) -->
+    <article class="lu__cell lu__cell--hero">
+      <span class="lu__kicker">Analyse de setup</span>
+      <span class="lu__big"><span data-count-to="30" data-count-suffix=" s">30 s</span></span>
+      <span class="lu__sub">Un verdict IA — score, annotations et niveaux — le temps d'un café.</span>
+      <div class="lu__scan"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </article>
+
+    <!-- 3 numeric tiles -->
+    <article class="lu__cell lu__cell--num">
+      <span class="lu__n"><span data-count-to="87" data-count-suffix="/100">87/100</span></span>
+      <span class="lu__nl">Score IA moyen des setups validés</span>
+    </article>
+    <article class="lu__cell lu__cell--num">
+      <span class="lu__n"><span data-count-to="5">5</span></span>
+      <span class="lu__nl">Outils dans un seul abonnement</span>
+    </article>
+    <article class="lu__cell lu__cell--num">
+      <span class="lu__n">24/7</span>
+      <span class="lu__nl">Marchés suivis sans interruption</span>
+    </article>
+
+    <!-- feature card : ripple -->
+    <article class="lu__cell lu__cell--feat">
+      <div class="lu-viz lu-viz--ripple"><span></span><span></span><span></span><span></span></div>
+      <div><h3>Sans le bruit</h3><p>Des signaux nets, classés et scorés. Fini le scroll infini de Twitter.</p></div>
+    </article>
+
+    <!-- feature card : orbit -->
+    <article class="lu__cell lu__cell--feat">
+      <div class="lu-viz lu-viz--orbit">
+        <span class="lu-orbit__core"></span>
+        <span class="lu-orbit__ring lu-orbit__ring--1"><i></i></span>
+        <span class="lu-orbit__ring lu-orbit__ring--2"><i></i></span>
+      </div>
+      <div><h3>Tous les marchés</h3><p>Forex, crypto, indices et matières premières — au même endroit.</p></div>
+    </article>
+
+    <!-- feature card : calendar pulse -->
+    <article class="lu__cell lu__cell--feat">
+      <div class="lu-viz lu-viz--cal">
+        <span style="animation-delay:0s"></span>
+        <span style="animation-delay:0.04s"></span>
+        <span style="animation-delay:0.08s"></span>
+        <span style="animation-delay:0.12s"></span>
+        <span class="is-up" style="animation-delay:0.16s"></span>
+        <span style="animation-delay:0.2s"></span>
+        <span class="is-down" style="animation-delay:0.24s"></span>
+        <span style="animation-delay:0.28s"></span>
+        <span style="animation-delay:0.32s"></span>
+        <span class="is-up" style="animation-delay:0.36s"></span>
+        <span class="is-up" style="animation-delay:0.4s"></span>
+        <span style="animation-delay:0.44s"></span>
+        <span style="animation-delay:0.48s"></span>
+        <span style="animation-delay:0.52s"></span>
+        <span class="is-up" style="animation-delay:0.56s"></span>
+        <span style="animation-delay:0.6s"></span>
+        <span style="animation-delay:0.64s"></span>
+        <span class="is-down" style="animation-delay:0.68s"></span>
+        <span style="animation-delay:0.72s"></span>
+        <span style="animation-delay:0.76s"></span>
+        <span style="animation-delay:0.8s"></span>
+        <span class="is-up" style="animation-delay:0.84s"></span>
+        <span class="is-up" style="animation-delay:0.88s"></span>
+        <span style="animation-delay:0.92s"></span>
+        <span style="animation-delay:0.96s"></span>
+        <span style="animation-delay:1s"></span>
+        <span class="is-up" style="animation-delay:1.04s"></span>
+        <span style="animation-delay:1.08s"></span>
+      </div>
+      <div><h3>Journal automatique</h3><p>Chaque trade enregistré, ton P&amp;L et tes patterns analysés.</p></div>
+    </article>
+
+    <!-- feature card : shield -->
+    <article class="lu__cell lu__cell--feat">
+      <div class="lu-viz lu-viz--shield">
+        <svg viewBox="0 0 48 48" fill="none"><path d="M24 4 40 11v11c0 10-7 16-16 19-9-3-16-9-16-19V11z" stroke="var(--accent)" stroke-width="1.5"/><path class="lu-shield__check" d="m17 24 5 5 9-9" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div><h3>100% privé</h3><p>Tes données et tes setups restent les tiens. Accès sur invitation.</p></div>
+    </article>
+  </div>
+</section>
+<!-- ShowcaseSection — "À quoi sert chaque outil" : 5 rangées alternées texte/visuel custom -->
+<!-- Source: marketing/Showcase.jsx + showcase.css. Links retargeted to ./app.html etc. -->
 <section class="shx" id="showcase">
   <div class="shx__head" data-reveal>
     <span class="lt-eyebrow"><span class="lt-dot"></span> Visite guidée</span>
@@ -176,77 +666,158 @@
   </div>
   <div class="shx__rows">
 
+    <!-- T-01 — Setup Analyzer (not flipped) -->
     <article class="shx-row" data-reveal>
       <div class="shx-row__txt">
         <span class="shx-row__n">T-01</span>
         <h3 class="shx-row__title">Setup Analyzer</h3>
         <p class="shx-row__lede">Upload ton graphique, l'IA fait le reste.</p>
         <p class="shx-row__desc">Le moteur scanne ta capture comme un mentor : structure de marché, zones clés, confluences propres à TA stratégie. En retour : un score /100, des annotations directement sur le chart et un verdict net — GO, ATTENDRE ou NO-GO.</p>
-        <ul class="shx-row__points"><li>Verdict en ~30 secondes</li><li>Annotations sur ton graphique</li><li>Adapté ICT · SMC · Price Action</li></ul>
-        <a class="shx-row__link" href="./app.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <ul class="shx-row__points">
+          <li>Verdict en ~30 secondes</li>
+          <li>Annotations sur ton graphique</li>
+          <li>Adapté ICT · SMC · Price Action</li>
+        </ul>
+        <a class="shx-row__link" href="./app.html">Ouvrir l'outil
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
       <div class="shx-row__viz">
         <div class="shx-viz shx-viz--analyzer">
           <div class="shx-chart">
-            <span class="shx-candle is-up" style="height:34%;margin-top:18%"></span><span class="shx-candle is-down" style="height:28%;margin-top:24%"></span><span class="shx-candle is-up" style="height:40%;margin-top:12%"></span><span class="shx-candle is-down" style="height:22%;margin-top:30%"></span><span class="shx-candle is-up" style="height:46%;margin-top:10%"></span><span class="shx-candle is-up" style="height:38%;margin-top:20%"></span><span class="shx-candle is-down" style="height:26%;margin-top:26%"></span><span class="shx-candle is-up" style="height:50%;margin-top:8%"></span><span class="shx-candle is-up" style="height:42%;margin-top:16%"></span><span class="shx-candle is-down" style="height:30%;margin-top:22%"></span><span class="shx-candle is-up" style="height:54%;margin-top:6%"></span>
+            <span class="shx-candle is-up" style="height:34%;margin-top:18%"></span>
+            <span class="shx-candle is-down" style="height:28%;margin-top:24%"></span>
+            <span class="shx-candle is-up" style="height:40%;margin-top:12%"></span>
+            <span class="shx-candle is-down" style="height:22%;margin-top:30%"></span>
+            <span class="shx-candle is-up" style="height:46%;margin-top:10%"></span>
+            <span class="shx-candle is-up" style="height:38%;margin-top:20%"></span>
+            <span class="shx-candle is-down" style="height:26%;margin-top:26%"></span>
+            <span class="shx-candle is-up" style="height:50%;margin-top:8%"></span>
+            <span class="shx-candle is-up" style="height:42%;margin-top:16%"></span>
+            <span class="shx-candle is-down" style="height:30%;margin-top:22%"></span>
+            <span class="shx-candle is-up" style="height:54%;margin-top:6%"></span>
             <span class="shx-zone"></span>
             <span class="shx-annot">Order Block H4</span>
           </div>
           <div class="shx-score">
-            <svg viewBox="0 0 80 80" class="shx-ring"><circle cx="40" cy="40" r="34" class="shx-ring__bg"></circle><circle cx="40" cy="40" r="34" class="shx-ring__val"></circle></svg>
-            <span class="shx-score__n">87</span><span class="shx-score__cap">/100</span><span class="shx-score__go">GO</span>
+            <svg viewBox="0 0 80 80" class="shx-ring">
+              <circle cx="40" cy="40" r="34" class="shx-ring__bg"></circle>
+              <circle cx="40" cy="40" r="34" class="shx-ring__val"></circle>
+            </svg>
+            <span class="shx-score__n">87</span>
+            <span class="shx-score__cap">/100</span>
+            <span class="shx-score__go">GO</span>
           </div>
         </div>
       </div>
     </article>
 
+    <!-- T-02 — Journal de Trading (flipped) -->
     <article class="shx-row is-flip" data-reveal>
       <div class="shx-row__txt">
         <span class="shx-row__n">T-02</span>
         <h3 class="shx-row__title">Journal de Trading</h3>
-        <p class="shx-row__lede">Ton mois entier, en un coup d'œil.</p>
+        <p class="shx-row__lede">Ton mois entier, en un coup d’œil.</p>
         <p class="shx-row__desc">Chaque trade enregistré nourrit ton calendrier P&amp;L, ta courbe d'équité et tes statistiques. L'IA Coach repère les patterns que tu ne vois pas : les sessions où tu perds, les setups qui paient, les jours à éviter.</p>
-        <ul class="shx-row__points"><li>Calendrier P&amp;L vert / rouge</li><li>IA Coach sur tes patterns</li><li>Win rate, R moyen, drawdown</li></ul>
-        <a class="shx-row__link" href="./journal.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <ul class="shx-row__points">
+          <li>Calendrier P&amp;L vert / rouge</li>
+          <li>IA Coach sur tes patterns</li>
+          <li>Win rate, R moyen, drawdown</li>
+        </ul>
+        <a class="shx-row__link" href="./journal.html">Ouvrir l'outil
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
       <div class="shx-row__viz">
         <div class="shx-viz shx-viz--journal">
-          <div class="shx-jr__head"><span class="shx-jr__month">Juin 2026</span><span class="shx-jr__pnl">+1 840 €</span></div>
-          <div class="shx-jr__grid">
-            <span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-down"></span><span class="shx-jr__cell is-up"></span><span class="shx-jr__cell"></span><span class="shx-jr__cell is-up"></span>
+          <div class="shx-jr__head">
+            <span class="shx-jr__month">Juin 2026</span>
+            <span class="shx-jr__pnl">+1 840 €</span>
           </div>
-          <div class="shx-jr__foot"><span>Win rate <b>63 %</b></span><span>14 trades</span></div>
+          <div class="shx-jr__grid">
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell is-down"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell is-down"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell is-down"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell is-down"></span>
+            <span class="shx-jr__cell is-up"></span>
+            <span class="shx-jr__cell"></span>
+            <span class="shx-jr__cell is-up"></span>
+          </div>
+          <div class="shx-jr__foot">
+            <span>Win rate <b>63 %</b></span>
+            <span>14 trades</span>
+          </div>
         </div>
       </div>
     </article>
 
+    <!-- T-03 — Calendrier Éco (not flipped) -->
     <article class="shx-row" data-reveal>
       <div class="shx-row__txt">
         <span class="shx-row__n">T-03</span>
         <h3 class="shx-row__title">Calendrier Éco</h3>
         <p class="shx-row__lede">Ne te fais plus surprendre par une annonce.</p>
         <p class="shx-row__desc">NFP, CPI, FOMC, BCE — tous les événements macro classés par jour, devise et niveau d'impact, à l'heure de Paris. En PRO, une alerte te prévient avant chaque annonce à fort impact pour ajuster ton exposition.</p>
-        <ul class="shx-row__points"><li>Impact visualisé ● ● ●</li><li>Filtres par devise</li><li>Alertes avant les annonces (PRO)</li></ul>
-        <a class="shx-row__link" href="./calendrier.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <ul class="shx-row__points">
+          <li>Impact visualisé ● ● ●</li>
+          <li>Filtres par devise</li>
+          <li>Alertes avant les annonces (PRO)</li>
+        </ul>
+        <a class="shx-row__link" href="./calendrier.html">Ouvrir l'outil
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
       <div class="shx-row__viz">
         <div class="shx-viz shx-viz--eco">
-          <div class="shx-eco__row"><span class="shx-eco__t">14:30</span><span class="shx-eco__cur">USD</span><span class="shx-eco__ev">CPI a/a</span><span class="shx-eco__imp"><i></i><i></i><i></i></span></div>
-          <div class="shx-eco__row is-hot"><span class="shx-eco__t">20:00</span><span class="shx-eco__cur">USD</span><span class="shx-eco__ev">Décision FOMC</span><span class="shx-eco__imp"><i></i><i></i><i></i></span></div>
-          <div class="shx-eco__row"><span class="shx-eco__t">14:15</span><span class="shx-eco__cur shx-eco__cur--eur">EUR</span><span class="shx-eco__ev">Taux BCE</span><span class="shx-eco__imp"><i></i><i></i><i class="off"></i></span></div>
+          <div class="shx-eco__row">
+            <span class="shx-eco__t">14:30</span><span class="shx-eco__cur">USD</span>
+            <span class="shx-eco__ev">CPI a/a</span>
+            <span class="shx-eco__imp"><i></i><i></i><i></i></span>
+          </div>
+          <div class="shx-eco__row is-hot">
+            <span class="shx-eco__t">20:00</span><span class="shx-eco__cur">USD</span>
+            <span class="shx-eco__ev">Décision FOMC</span>
+            <span class="shx-eco__imp"><i></i><i></i><i></i></span>
+          </div>
+          <div class="shx-eco__row">
+            <span class="shx-eco__t">14:15</span><span class="shx-eco__cur shx-eco__cur--eur">EUR</span>
+            <span class="shx-eco__ev">Taux BCE</span>
+            <span class="shx-eco__imp"><i></i><i></i><i class="off"></i></span>
+          </div>
           <span class="shx-eco__alert"><span class="lt-dot"></span> Alerte 30 min avant</span>
         </div>
       </div>
     </article>
 
+    <!-- T-04 — Bubble Map (flipped) -->
     <article class="shx-row is-flip" data-reveal>
       <div class="shx-row__txt">
         <span class="shx-row__n">T-04</span>
         <h3 class="shx-row__title">Bubble Map</h3>
-        <p class="shx-row__lede">Vois où va l'argent, en direct.</p>
+        <p class="shx-row__lede">Vois où va l’argent, en direct.</p>
         <p class="shx-row__desc">Chaque actif est une bulle : sa taille suit le volume des flux, sa couleur la direction des dernières 24 h. En un regard tu vois si le capital fuit le risque ou le recherche — crypto, forex, indices et matières premières.</p>
-        <ul class="shx-row__points"><li>Physique temps réel</li><li>Filtres par classe d'actifs</li><li>Rotation des capitaux visible</li></ul>
-        <a class="shx-row__link" href="./bubble.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <ul class="shx-row__points">
+          <li>Physique temps réel</li>
+          <li>Filtres par classe d’actifs</li>
+          <li>Rotation des capitaux visible</li>
+        </ul>
+        <a class="shx-row__link" href="./bubble.html">Ouvrir l'outil
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
       <div class="shx-row__viz">
         <div class="shx-viz shx-viz--bubble">
@@ -259,14 +830,21 @@
       </div>
     </article>
 
+    <!-- T-05 — Calculateur de Pips (not flipped) -->
     <article class="shx-row" data-reveal>
       <div class="shx-row__txt">
         <span class="shx-row__n">T-05</span>
         <h3 class="shx-row__title">Calculateur de Pips</h3>
         <p class="shx-row__lede">La bonne taille de position, à chaque fois.</p>
         <p class="shx-row__desc">Capital, pourcentage de risque, stop loss : le calculateur te donne instantanément la taille de lot exacte, la valeur du pip et ton R:R. Fini les positions surdimensionnées qui ruinent un mois de discipline.</p>
-        <ul class="shx-row__points"><li>Lot exact en un clic</li><li>Valeur du pip par paire</li><li>R:R validé avant l'entrée</li></ul>
-        <a class="shx-row__link" href="./calculateur.html">Ouvrir l'outil <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <ul class="shx-row__points">
+          <li>Lot exact en un clic</li>
+          <li>Valeur du pip par paire</li>
+          <li>R:R validé avant l’entrée</li>
+        </ul>
+        <a class="shx-row__link" href="./calculateur.html">Ouvrir l'outil
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
       <div class="shx-row__viz">
         <div class="shx-viz shx-viz--calc">
@@ -274,17 +852,96 @@
           <div class="shx-calc__row"><span>Risque</span><b>1 %</b></div>
           <div class="shx-calc__row"><span>Stop loss</span><b>25 pips</b></div>
           <div class="shx-calc__sep"></div>
-          <div class="shx-calc__out"><span class="shx-calc__lbl">Taille de position</span><span class="shx-calc__val">0.40 lot</span><span class="shx-calc__rr">R:R 1:2.5 · risque 100 €</span></div>
+          <div class="shx-calc__out">
+            <span class="shx-calc__lbl">Taille de position</span>
+            <span class="shx-calc__val">0.40 lot</span>
+            <span class="shx-calc__rr">R:R 1:2.5 · risque 100 €</span>
+          </div>
         </div>
       </div>
     </article>
 
   </div>
 </section>
+<!-- ScreensSection — "Tes outils, au même endroit" : floating 3D tool panels.
+     Interactivity:
+       initScreensReveal()    -> adds .is-in to .lt-scr__stage on viewport entry (fly-in from depth)
+       initScreensParallax()  -> mouse tilt sets --mrx/--mry on .lt-scr__stage (desktop, >=760px, motion ok)
+     Panel float loops + resting 3D transforms are CSS (screens.css). -->
+<section class="lt-scr">
+  <div class="lt-scr__head" data-reveal>
+    <span class="lt-eyebrow"><span class="lt-dot"></span> Un seul cockpit</span>
+    <h2 class="lt-scr__title">Tes outils,<br/><span class="lt-metal">au même endroit.</span></h2>
+    <p class="lt-scr__lede">Analyse, journal et flux de marché tournent ensemble — passe de l'un à l'autre sans jamais quitter le terminal.</p>
+  </div>
 
-<!-- ░░░ VERDICT BAND — le marché ne dort jamais ░░░ -->
+  <div class="lt-scr__stage">
+    <div class="lt-scr__glow"></div>
+
+    <!-- LEFT — Journal -->
+    <div class="lt-scr__panel lt-scr__panel--l">
+      <div class="lt-scr__bar"><i></i><i></i><i></i><span>Journal</span></div>
+      <div class="lt-scr__pbody">
+        <div class="lt-scr__cal">
+          <span></span>
+          <span></span>
+          <span class="up"></span>
+          <span></span>
+          <span></span>
+          <span class="up"></span>
+          <span class="up"></span>
+          <span></span>
+          <span class="down"></span>
+          <span></span>
+          <span></span>
+          <span class="up"></span>
+          <span></span>
+          <span></span>
+          <span class="up"></span>
+          <span></span>
+          <span class="down"></span>
+          <span></span>
+          <span class="up"></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="lt-scr__pnl">P&amp;L <b>+1 840 €</b></div>
+      </div>
+    </div>
+
+    <!-- CENTER — Analyzer (front) -->
+    <div class="lt-scr__panel lt-scr__panel--c">
+      <div class="lt-scr__bar"><i></i><i></i><i></i><span>Setup Analyzer</span><em>87/100</em></div>
+      <div class="lt-scr__pbody">
+        <svg class="lt-scr__chart" viewBox="0 0 260 110" preserveAspectRatio="none">
+          <defs><linearGradient id="scrFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(127,184,232,0.3)"/><stop offset="1" stop-color="rgba(127,184,232,0)"/></linearGradient></defs>
+          <line x1="0" y1="28" x2="260" y2="28" stroke="rgba(58,65,76,0.3)"/>
+          <line x1="0" y1="56" x2="260" y2="56" stroke="rgba(58,65,76,0.3)"/>
+          <line x1="0" y1="84" x2="260" y2="84" stroke="rgba(58,65,76,0.3)"/>
+          <path d="M0,86 C40,80 60,64 95,66 C130,68 145,40 185,34 C220,29 240,16 260,12 L260,110 L0,110 Z" fill="url(#scrFill)"/>
+          <path d="M0,86 C40,80 60,64 95,66 C130,68 145,40 185,34 C220,29 240,16 260,12" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <rect x="92" y="40" width="46" height="26" fill="none" stroke="rgba(127,184,232,0.5)" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="lt-scr__verdict"><span class="lt-scr__go">GO</span> Order Block H4 · R:R 1:2.6</div>
+      </div>
+    </div>
+
+    <!-- RIGHT — Bubble Map -->
+    <div class="lt-scr__panel lt-scr__panel--r">
+      <div class="lt-scr__bar"><i></i><i></i><i></i><span>Bubble Map</span></div>
+      <div class="lt-scr__pbody lt-scr__bubbles">
+        <span class="up" style="width:42px;height:42px;left:8%;top:14%">BTC</span>
+        <span class="up" style="width:30px;height:30px;left:52%;top:8%">SOL</span>
+        <span class="down" style="width:34px;height:34px;left:60%;top:46%">EUR</span>
+        <span class="up" style="width:26px;height:26px;left:24%;top:52%">NQ</span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- VerdictBand — bande graphe live (canvas). Source: marketing/Tools.jsx (LiveChartBand) + page.css .lt-chartband -->
+<!-- JS: initVerdictBand(root) draws the animated simulated flux; honors prefers-reduced-motion -->
 <section class="lt-chartband" data-reveal>
-  <canvas class="lt-chartband__canvas" id="ltChartband"></canvas>
+  <canvas class="lt-chartband__canvas"></canvas>
   <div class="lt-chartband__overlay">
     <span class="lt-eyebrow"><span class="lt-dot"></span> En continu</span>
     <h2 class="lt-chartband__title"><span class="lt-metal">Le marché ne dort jamais.</span></h2>
@@ -292,14 +949,17 @@
   </div>
   <span class="lt-chartband__tag">FLUX SIMULÉ · TEMPS RÉEL</span>
 </section>
-
-<!-- ░░░ STRATEGIES ░░░ -->
+<!-- StrategiesSection — "Toutes les stratégies, un seul outil." -->
+<!-- Source: marketing/Strategies.jsx + page.css (.lt-strat / .lt-feature). Inline SVG icons verbatim. -->
 <section class="lt-strat" id="strategies" data-reveal>
   <div class="lt-strat__grid">
     <div class="lt-strat__intro">
       <span class="lt-eyebrow"><span class="lt-dot"></span> Compatibilité universelle</span>
       <h2 class="lt-strat__title">Toutes les stratégies,<br>un seul outil.</h2>
-      <p class="lt-strat__lede">Le Terminal adapte son analyse à ta méthode. L'IA détecte les confluences qui correspondent à ta façon de trader — pas à un modèle générique.</p>
+      <p class="lt-strat__lede">
+        Le Terminal adapte son analyse à ta méthode. L'IA détecte les confluences
+        qui correspondent à ta façon de trader — pas à un modèle générique.
+      </p>
       <ul class="lt-strat__index">
         <li><span class="lt-strat__idxnum">01</span><span class="lt-strat__idxname">ICT / Inner Circle Trader</span></li>
         <li><span class="lt-strat__idxnum">02</span><span class="lt-strat__idxname">Smart Money Concepts</span></li>
@@ -312,15 +972,39 @@
       </ul>
     </div>
     <div class="lt-strat__features">
-      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/><path d="M11 7h4a2 2 0 0 1 2 2v4"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">Order Blocks &amp; FVG</h4><p class="lt-feature__desc">Détection automatique des zones clés, Fair Value Gaps et liquidity pools sur ton graphique.</p></div></div>
-      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 3 3 4-6 3 4 3-3"/><circle cx="8" cy="12" r="1"/><circle cx="11" cy="15" r="1"/><circle cx="15" cy="9" r="1"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">BOS / CHoCH / Structure</h4><p class="lt-feature__desc">Analyse de la structure de marché du HTF vers le LTF, confirmation des changements de caractère.</p></div></div>
-      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">Killzones &amp; Sessions</h4><p class="lt-feature__desc">Prise en compte automatique des sessions London, NY, Asia et des killzones à haute probabilité.</p></div></div>
-      <div class="lt-feature"><span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span><div class="lt-feature__body"><h4 class="lt-feature__title">Verdict GO / ATTENDRE / NO-GO</h4><p class="lt-feature__desc">Verdict net et sans ambiguïté avec niveau de confiance, cibles et conseils actionnables.</p></div></div>
+      <div class="lt-feature">
+        <span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/><path d="M11 7h4a2 2 0 0 1 2 2v4"/></svg></span>
+        <div class="lt-feature__body">
+          <h4 class="lt-feature__title">Order Blocks &amp; FVG</h4>
+          <p class="lt-feature__desc">Détection automatique des zones clés, Fair Value Gaps et liquidity pools sur ton graphique.</p>
+        </div>
+      </div>
+      <div class="lt-feature">
+        <span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 3 3 4-6 3 4 3-3"/><circle cx="8" cy="12" r="1"/><circle cx="11" cy="15" r="1"/><circle cx="15" cy="9" r="1"/></svg></span>
+        <div class="lt-feature__body">
+          <h4 class="lt-feature__title">BOS / CHoCH / Structure</h4>
+          <p class="lt-feature__desc">Analyse de la structure de marché du HTF vers le LTF, confirmation des changements de caractère.</p>
+        </div>
+      </div>
+      <div class="lt-feature">
+        <span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <div class="lt-feature__body">
+          <h4 class="lt-feature__title">Killzones &amp; Sessions</h4>
+          <p class="lt-feature__desc">Prise en compte automatique des sessions London, NY, Asia et des killzones à haute probabilité.</p>
+        </div>
+      </div>
+      <div class="lt-feature">
+        <span class="lt-feature__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+        <div class="lt-feature__body">
+          <h4 class="lt-feature__title">Verdict GO / ATTENDRE / NO-GO</h4>
+          <p class="lt-feature__desc">Verdict net et sans ambiguïté avec niveau de confiance, cibles et conseils actionnables.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
-
-<!-- ░░░ MÉTHODE — plan de vol ░░░ -->
+<!-- MethodSection — "La méthode" : 4 étapes (plan de vol). Source: marketing/Method.jsx + page.css .lt-flight -->
+<!-- Each step carries inline style --d for the staggered reveal; the route plane animates via CSS (reduced-motion safe). -->
 <section class="lt-flight" id="method" data-reveal>
   <div class="lt-flight__head">
     <span class="lt-eyebrow"><span class="lt-dot"></span> Comment ça marche</span>
@@ -329,21 +1013,108 @@
   </div>
   <div class="lt-flight__route-line" aria-hidden="true"><span class="lt-flight__plane"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21.5 15.5 13.5 11V4.5a1.5 1.5 0 0 0-3 0V11l-8 4.5V18l8-2.5V20l-2 1.5V23l3.5-1 3.5 1v-1.5L13.5 20v-4.5l8 2.5z"/></svg></span></div>
   <div class="lt-flight__steps">
-    <div class="lt-flight__step" style="--d:0s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">UPLOAD</span><h4 class="lt-flight__steptitle">Upload ton chart</h4><p class="lt-flight__stepdesc">Capture d'écran depuis TradingView ou ta plateforme. Glisse-dépose ou colle directement.</p></div>
-    <div class="lt-flight__step" style="--d:0.12s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">SCAN</span><h4 class="lt-flight__steptitle">L'IA analyse</h4><p class="lt-flight__stepdesc">Le moteur IA propriétaire scanne la structure, les zones clés, le contexte macro et tes confluences.</p></div>
-    <div class="lt-flight__step" style="--d:0.24s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">SCORE</span><h4 class="lt-flight__steptitle">Score &amp; feedback</h4><p class="lt-flight__stepdesc">Score /100, forces, faiblesses, niveaux de prix précis et verdict GO / ATTENDRE / NO-GO.</p></div>
-    <div class="lt-flight__step" style="--d:0.36s"><span class="lt-flight__node" aria-hidden="true"></span><span class="lt-flight__code">SUIVI</span><h4 class="lt-flight__steptitle">Sauvegarde &amp; suivi</h4><p class="lt-flight__stepdesc">Chaque analyse est archivée. Enregistre le résultat et analyse tes stats dans le journal.</p></div>
+    <div class="lt-flight__step" style="--d:0s">
+      <span class="lt-flight__node" aria-hidden="true"></span>
+      <span class="lt-flight__code">UPLOAD</span>
+      <h4 class="lt-flight__steptitle">Upload ton chart</h4>
+      <p class="lt-flight__stepdesc">Capture d'écran depuis TradingView ou ta plateforme. Glisse-dépose ou colle directement.</p>
+    </div>
+    <div class="lt-flight__step" style="--d:0.12s">
+      <span class="lt-flight__node" aria-hidden="true"></span>
+      <span class="lt-flight__code">SCAN</span>
+      <h4 class="lt-flight__steptitle">L'IA analyse</h4>
+      <p class="lt-flight__stepdesc">Le moteur IA propriétaire scanne la structure, les zones clés, le contexte macro et tes confluences.</p>
+    </div>
+    <div class="lt-flight__step" style="--d:0.24s">
+      <span class="lt-flight__node" aria-hidden="true"></span>
+      <span class="lt-flight__code">SCORE</span>
+      <h4 class="lt-flight__steptitle">Score &amp; feedback</h4>
+      <p class="lt-flight__stepdesc">Score /100, forces, faiblesses, niveaux de prix précis et verdict GO / ATTENDRE / NO-GO.</p>
+    </div>
+    <div class="lt-flight__step" style="--d:0.36s">
+      <span class="lt-flight__node" aria-hidden="true"></span>
+      <span class="lt-flight__code">SUIVI</span>
+      <h4 class="lt-flight__steptitle">Sauvegarde &amp; suivi</h4>
+      <p class="lt-flight__stepdesc">Chaque analyse est archivée. Enregistre le résultat et analyse tes stats dans le journal.</p>
+    </div>
   </div>
 </section>
+<!-- PricingBand — bande tarifs compacte (gratuit + PRO). Source: marketing/Pricing.jsx (PricingBand + PlanCard) + pricing.css -->
+<!-- Compact band: annual=true. Free shows first 5 feats; PRO shows first 5 feats + flag + annual save note + 14-day note. -->
+<!-- CTA buttons reproduce the design-system Button (primary/secondary, size lg) via inline styles; hover wired by initPricingButtons(). -->
+<section class="pr-band" id="pricing" data-reveal>
+  <div class="pr-band__head">
+    <span class="lt-eyebrow"><span class="lt-dot"></span> Tarifs</span>
+    <h2 class="pr-band__title">Choisis ton plan</h2>
+    <p class="pr-band__lede">Commence gratuitement. Passe en PRO quand tu veux toute la puissance.</p>
+  </div>
+  <div class="pr-grid pr-grid--band">
 
-<!-- ░░░ COMMUNAUTÉ — carte d'embarquement ░░░ -->
+    <!-- Plan Découverte (gratuit) — annuel, compact -->
+    <div class="pr-card">
+      <div class="pr-card__head">
+        <span class="pr-card__name">Découverte</span>
+        <span class="pr-card__tag">Pour commencer</span>
+      </div>
+      <div class="pr-card__price">
+        <span class="pr-card__amount">0 €</span>
+        <span class="pr-card__per">/ mois</span>
+      </div>
+      <ul class="pr-card__feats">
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 analyses Setup Analyzer / mois</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal limité à 20 trades / mois</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calendrier économique complet</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calculateur de pips</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bubble Map en temps réel</li>
+      </ul>
+      <div class="pr-card__cta">
+        <button type="button" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Créer un compte</button>
+      </div>
+    </div>
+
+    <!-- Plan PRO — annuel, compact -->
+    <div class="pr-card is-pro">
+      <span class="pr-card__flag">Recommandé</span>
+      <div class="pr-card__head">
+        <span class="pr-card__name">PRO</span>
+        <span class="pr-card__tag">Tous les outils, sans limite</span>
+      </div>
+      <div class="pr-card__price">
+        <span class="pr-card__amount">19 €</span>
+        <span class="pr-card__per">/ mois · facturé 228 € / an</span>
+      </div>
+      <span class="pr-card__save">Économise 34 % par rapport au mensuel</span>
+      <ul class="pr-card__feats">
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Alertes macro (NFP · CPI · FOMC)</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Jusqu'à 5 comptes de trading</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
+      </ul>
+      <div class="pr-card__cta">
+        <button type="button" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en PRO</button>
+      </div>
+      <span class="pr-card__note">Garantie 14 jours satisfait ou remboursé</span>
+    </div>
+
+  </div>
+  <div class="pr-band__more">
+    <a class="pr-band__link" href="./tarifs.html">Voir le détail des plans
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+<!-- CommunityBand — "Rejoins la communauté" (carte d'embarquement Telegram). Source: marketing/Method.jsx + page.css .lt-pass -->
+<!-- CTA reproduces the design-system Button primary (size lg, iconRight arrow); hover wired by initPricingButtons(). -->
 <section class="lt-pass" id="community" data-reveal>
   <div class="lt-pass__card">
     <div class="lt-pass__main">
       <span class="lt-pass__label">Accès privé</span>
       <h2 class="lt-pass__title">Rejoins la communauté</h2>
       <p class="lt-pass__lede">Analyses quotidiennes, setups en live et entraide entre traders, sur Telegram.</p>
-      <div class="lt-pass__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" href="https://t.me/leterminalfx" target="_blank" rel="noopener">Rejoindre le canal <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+      <div class="lt-pass__cta">
+        <button type="button" class="lt-btn" data-variant="primary" data-size="lg" style="font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Rejoindre le canal<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
     </div>
     <div class="lt-pass__stub">
       <div class="lt-pass__row"><span>Canal</span><b>Telegram</b></div>
@@ -355,23 +1126,37 @@
     </div>
   </div>
 </section>
-
-<!-- ░░░ FOOTER ░░░ -->
+<!-- Footer — marque + nav + mentions légales. Source: marketing/Method.jsx (Footer) + page.css .lt-footer -->
+<!-- Nav anchors retargeted to on-page sections (#tools/#strategies/#method/#community); Tarifs -> ./tarifs.html. -->
+<!-- Legal links added per spec: ./legal.html#mentions, #confidentialite, #cgv. -->
 <footer class="lt-footer">
   <div class="lt-footer__top">
-    <div class="lt-footer__brand"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></div>
+    <div class="lt-footer__brand">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
     <nav class="lt-footer__links">
-      <a href="#tools">Outils</a><a href="#strategies">Stratégies</a><a href="./tarifs.html">Tarifs</a><a href="#method">Méthode</a><a href="#community">Communauté</a><a href="./legal.html#mentions">Mentions légales</a><a href="./legal.html#confidentialite">Confidentialité</a><a href="./legal.html#cgv">CGV</a>
+      <a href="#tools">Outils</a>
+      <a href="#strategies">Stratégies</a>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="#method">Méthode</a>
+      <a href="#community">Communauté</a>
     </nav>
   </div>
   <div class="lt-footer__bottom">
     <span class="lt-footer__copy">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
     <span class="lt-footer__note">Outils éducatifs. Le trading comporte des risques de perte en capital.</span>
   </div>
+  <div class="lt-footer__bottom">
+    <nav class="lt-footer__links">
+      <a href="./legal.html#mentions">Mentions légales</a>
+      <a href="./legal.html#confidentialite">Confidentialité</a>
+      <a href="./legal.html#cgv">CGV</a>
+    </nav>
+  </div>
 </footer>
-
 <script>
-// ── OAuth callback : si on atterrit ici avec un token (Google), on le capte et on file vers l'app ──
+// ── OAuth callback : capture token Google → reste sur la page, hydrate l'UI ──
 (function(){
   var hash = window.location.hash;
   if (hash && hash.indexOf('access_token=') !== -1) {
@@ -379,9 +1164,7 @@
     var accessToken = params.get('access_token');
     if (accessToken) {
       localStorage.setItem('ta_token', accessToken);
-      // Nettoie le token de l'URL et reste sur la page principale
       history.replaceState(null, '', window.location.pathname + window.location.search);
-      // Récupère l'email + statut pro puis met à jour l'UI (sans rediriger)
       fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'user', token:accessToken})})
         .then(function(r){return r.json();}).then(function(d){
           if(d.email) localStorage.setItem('ta_email', d.email);
@@ -393,13 +1176,13 @@
     }
   }
 })();
+// ── Chrome global : barre de progression + état nav + dropdown Outils + pill langue + parallax hero ──
 (function(){
   'use strict';
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ── Scroll : progress hairline + chrome state ──
   var fill = document.querySelector('.lt-progress__fill');
   var chrome = document.getElementById('ltChrome');
+  var heroInner = document.querySelector('.lt-hero__inner');
   var rafScroll = 0;
   function onScroll(){
     if(rafScroll) return;
@@ -408,33 +1191,24 @@
       var h = document.documentElement;
       if(fill) fill.style.width = ((h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight)) * 100).toFixed(2) + '%';
       if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY > 24);
+      if(heroInner && !reduced){
+        var y = Math.min(h.scrollTop, 800);
+        heroInner.style.transform = 'translateY(' + (y*0.3).toFixed(1) + 'px)';
+        heroInner.style.opacity = String(Math.max(0.05, 1 - y/650).toFixed(3));
+      }
     });
   }
   window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
-
-  // ── Reveal on scroll ──
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
-    }, {threshold:0.12});
-    document.querySelectorAll('[data-reveal]').forEach(function(el){ io.observe(el); });
-  } else {
-    document.querySelectorAll('[data-reveal]').forEach(function(el){ el.classList.add('is-in'); });
-  }
-
-  // ── Nav dropdown (Outils) ──
   var drop = document.getElementById('ltDrop');
   if(drop){
     var menu = drop.querySelector('.lt-nav__menu');
     var trig = drop.querySelector('.lt-nav__droptrigger');
     var caret = drop.querySelector('.lt-nav__caret');
-    function setOpen(o){ if(menu) menu.classList.toggle('is-open', o); if(caret) caret.classList.toggle('is-open', o); if(trig) trig.setAttribute('aria-expanded', o); }
+    var setOpen = function(o){ if(menu) menu.classList.toggle('is-open', o); if(caret) caret.classList.toggle('is-open', o); if(trig) trig.setAttribute('aria-expanded', o); };
     drop.addEventListener('mouseenter', function(){ setOpen(true); });
     drop.addEventListener('mouseleave', function(){ setOpen(false); });
     if(trig) trig.addEventListener('click', function(){ setOpen(!(menu && menu.classList.contains('is-open'))); });
   }
-
-  // ── Language pill (FR/EN) ──
   var pill = document.getElementById('ltLangPill');
   if(pill){
     try { pill.textContent = (localStorage.getItem('lt_lang') === 'en') ? 'EN' : 'FR'; } catch(e){}
@@ -445,95 +1219,9 @@
       pill.textContent = next.toUpperCase();
     });
   }
-
-  // ── Live ticker ──
-  (function(){
-    var rail = document.getElementById('ltRail'); if(!rail) return;
-    var seed = [
-      {s:'BTC/USD',p:67841.2},{s:'ETH/USD',p:3514.8},{s:'SOL/USD',p:168.42},{s:'EUR/USD',p:1.0847},
-      {s:'GBP/USD',p:1.2724},{s:'XAU/USD',p:2384.6},{s:'WTI',p:78.42},{s:'US500',p:5487.0},
-      {s:'US100',p:19420.5},{s:'NVDA',p:1204.9},{s:'AAPL',p:214.09},{s:'TSLA',p:178.34}
-    ];
-    var base = seed.map(function(x){ return x.p; });
-    function fmt(p){ return p>=1000 ? p.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1}) : p.toLocaleString('fr-FR',{minimumFractionDigits:p<10?4:2,maximumFractionDigits:p<10?4:2}); }
-    function build(){
-      var two = seed.concat(seed), html = '';
-      two.forEach(function(r,i){
-        var b = base[i % seed.length];
-        var d = ((r.p - b) / b) * 100, up = d >= 0;
-        html += '<span class="lt-live__item"><span class="lt-live__sym">'+r.s+'</span>'
-             +  '<span class="lt-live__px '+(r._dir>0?'is-up':r._dir<0?'is-down':'')+'">'+fmt(r.p)+'</span>'
-             +  '<span class="lt-live__dl" style="color:'+(up?'var(--bull)':'var(--bear)')+'">'+(up?'▲':'▼')+' '+Math.abs(d).toFixed(2)+'%</span></span>';
-      });
-      rail.innerHTML = html;
-    }
-    build();
-    if(!reduced){
-      setInterval(function(){
-        seed.forEach(function(r){
-          var vol = r.p>1000 ? r.p*0.0006 : r.p>50 ? r.p*0.0009 : r.p*0.0012;
-          var np = r.p + (Math.random()-0.5)*vol*2;
-          r._dir = np>=r.p ? 1 : -1; r.p = np;
-        });
-        build();
-      }, 1500);
-    }
-  })();
-
-  // ── Hero : mouse parallax + dust ──
-  (function(){
-    var stage = document.getElementById('ltHero');
-    if(!stage || reduced || window.innerWidth < 760) return;
-    var raf=0, tx=0, ty=0;
-    function apply(){ stage.style.setProperty('--px', tx.toFixed(3)); stage.style.setProperty('--py', ty.toFixed(3)); raf=0; }
-    stage.addEventListener('mousemove', function(e){
-      var r = stage.getBoundingClientRect();
-      var nx = (e.clientX-r.left)/r.width, ny = (e.clientY-r.top)/r.height;
-      stage.style.setProperty('--mx', nx*100+'%'); stage.style.setProperty('--my', ny*100+'%');
-      tx = nx-0.5; ty = ny-0.5; if(!raf) raf = requestAnimationFrame(apply);
-    });
-    stage.addEventListener('mouseleave', function(){ tx=0; ty=0; if(!raf) raf = requestAnimationFrame(apply); });
-
-    var canvas = document.getElementById('ltDust'); if(!canvas) return;
-    var ctx = canvas.getContext('2d'), dpr = Math.min(window.devicePixelRatio||1,2), w,h;
-    function resize(){ w=canvas.offsetWidth; h=canvas.offsetHeight; canvas.width=w*dpr; canvas.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
-    resize(); window.addEventListener('resize', resize);
-    var dust = Array.from({length:50}, function(){ return {x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.4+0.3,vy:Math.random()*0.25+0.05,vx:(Math.random()-0.5)*0.15,a:Math.random()*0.4+0.1}; });
-    (function draw(){
-      ctx.clearRect(0,0,w,h);
-      for(var i=0;i<dust.length;i++){ var p=dust[i]; p.y+=p.vy; p.x+=p.vx; if(p.y>h){p.y=-5;p.x=Math.random()*w;}
-        var beam = 1 - Math.min(1, Math.abs(p.x-w/2)/(w*0.4))*(p.y/h);
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(191,220,245,'+(p.a*beam*0.6)+')'; ctx.fill(); }
-      requestAnimationFrame(draw);
-    })();
-  })();
-
-  // ── Chartband : live line ──
-  (function(){
-    var c = document.getElementById('ltChartband'); if(!c) return;
-    var ctx = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio||1,2), w,h;
-    function resize(){ w=c.offsetWidth; h=c.offsetHeight; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
-    resize(); window.addEventListener('resize', resize);
-    var N=180, data=[], v=0.5, i;
-    for(i=0;i<N;i++){ v+=(Math.random()-0.5)*0.055; v=Math.max(0.14,Math.min(0.86,v)); data.push(v); }
-    var t=0;
-    (function draw(){
-      t++;
-      if(t%4===0){ v+=(Math.random()-0.49)*0.05; v=Math.max(0.14,Math.min(0.86,v)); data.push(v); data.shift(); }
-      ctx.clearRect(0,0,w,h);
-      ctx.strokeStyle='rgba(127,184,232,0.07)'; ctx.lineWidth=1;
-      for(var y=1;y<4;y++){ ctx.beginPath(); ctx.moveTo(0,h*y/4); ctx.lineTo(w,h*y/4); ctx.stroke(); }
-      var px=function(i){return (i/(N-1))*w;}, py=function(val){return h*(1-val)*0.86 + h*0.07;};
-      ctx.beginPath(); data.forEach(function(d,i){ if(i) ctx.lineTo(px(i),py(d)); else ctx.moveTo(px(i),py(d)); });
-      ctx.strokeStyle='rgba(127,184,232,0.9)'; ctx.lineWidth=1.6; ctx.shadowColor='rgba(127,184,232,0.45)'; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0;
-      ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
-      var g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'rgba(127,184,232,0.13)'); g.addColorStop(1,'rgba(127,184,232,0)'); ctx.fillStyle=g; ctx.fill();
-      var lx=px(N-1), ly=py(data[N-1]); ctx.beginPath(); ctx.arc(lx-2,ly,3,0,Math.PI*2); ctx.fillStyle='#BFDCF5'; ctx.shadowColor='rgba(127,184,232,0.8)'; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
-      if(!reduced) requestAnimationFrame(draw);
-    })();
-  })();
 })();
 </script>
+<script src="./home-anim.js"></script>
 <script src="./menu.js"></script>
 </body>
 </html>
