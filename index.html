@@ -1046,53 +1046,76 @@
   <div class="pr-band__head">
     <span class="lt-eyebrow"><span class="lt-dot"></span> Tarifs</span>
     <h2 class="pr-band__title">Choisis ton plan</h2>
-    <p class="pr-band__lede">Commence gratuitement. Passe en PRO quand tu veux toute la puissance.</p>
+    <p class="pr-band__lede">Commence gratuitement avec 5 tokens. Passe en Premium quand tu veux toute la puissance.</p>
   </div>
   <div class="pr-grid pr-grid--band">
 
-    <!-- Plan Découverte (gratuit) — annuel, compact -->
+    <!-- Plan Gratuit (tokens) -->
     <div class="pr-card">
       <div class="pr-card__head">
-        <span class="pr-card__name">Découverte</span>
-        <span class="pr-card__tag">Pour commencer</span>
+        <span class="pr-card__name">GRATUIT</span>
+        <span class="pr-card__tag">Pour découvrir</span>
       </div>
       <div class="pr-card__price">
         <span class="pr-card__amount">0 €</span>
-        <span class="pr-card__per">/ mois</span>
+        <span class="pr-card__per">/ pour toujours</span>
       </div>
+      <span class="pr-card__save pr-card__save--mute">5 tokens offerts à l'inscription</span>
       <ul class="pr-card__feats">
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 analyses Setup Analyzer / mois</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal limité à 20 trades / mois</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calendrier économique complet</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calculateur de pips</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bubble Map en temps réel</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 1 token = 1 analyse de setup</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 1 token = 1 analyse d'annonce éco</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 1 token = 5 trades dans le journal</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 2 tokens = analyse de performance</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Calendrier éco &amp; calculateur de pips</li>
       </ul>
       <div class="pr-card__cta">
-        <button type="button" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Créer un compte</button>
+        <button type="button" onclick="location.href='./app.html'" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Créer un compte</button>
       </div>
     </div>
 
-    <!-- Plan PRO — annuel, compact -->
+    <!-- Plan Mensuel -->
+    <div class="pr-card">
+      <div class="pr-card__head">
+        <span class="pr-card__name">MENSUEL</span>
+        <span class="pr-card__tag">Flexible, sans engagement</span>
+      </div>
+      <div class="pr-card__price">
+        <span class="pr-card__amount">29,99 €</span>
+        <span class="pr-card__per">/ mois</span>
+      </div>
+      <ul class="pr-card__feats">
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Alertes macro (NFP · CPI · FOMC)</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Jusqu'à 5 comptes de trading</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
+      </ul>
+      <div class="pr-card__cta">
+        <button type="button" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Choisir le mensuel</button>
+      </div>
+    </div>
+
+    <!-- Plan Annuel (recommandé) -->
     <div class="pr-card is-pro">
       <span class="pr-card__flag">Recommandé</span>
       <div class="pr-card__head">
-        <span class="pr-card__name">PRO</span>
-        <span class="pr-card__tag">Tous les outils, sans limite</span>
+        <span class="pr-card__name">ANNUEL</span>
+        <span class="pr-card__tag">Le meilleur prix · −33 %</span>
       </div>
       <div class="pr-card__price">
-        <span class="pr-card__amount">19 €</span>
-        <span class="pr-card__per">/ mois · facturé 228 € / an</span>
+        <span class="pr-card__amount">19,99 €</span>
+        <span class="pr-card__per">/ mois · facturé 239,88 € / an</span>
       </div>
-      <span class="pr-card__save">Économise 34 % par rapport au mensuel</span>
+      <span class="pr-card__save">Économise 33 % par rapport au mensuel</span>
       <ul class="pr-card__feats">
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Analyses Setup Analyzer illimitées</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Journal illimité + IA Coach</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Alertes macro (NFP · CPI · FOMC)</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Jusqu'à 5 comptes de trading</li>
-        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tout le plan Mensuel inclus</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Communauté privée Telegram</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Accès anticipé aux nouveaux outils</li>
+        <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 2 mois offerts vs mensuel</li>
       </ul>
       <div class="pr-card__cta">
-        <button type="button" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en PRO</button>
+        <button type="button" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en Premium</button>
       </div>
       <span class="pr-card__note">Garantie 14 jours satisfait ou remboursé</span>
     </div>
