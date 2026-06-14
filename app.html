@@ -1022,7 +1022,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
         <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
         <div id="ltUserBar"></div>
-        <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès PRO</a>
+        <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
       </div>
     </header>
   </div>
@@ -1313,15 +1313,15 @@ const T={
     resTag:'RÉSULTAT D\'ANALYSE', mDirLbl:'Direction', mPairLbl:'Actif',
     crtLbl:'Graphique soumis',
     fcForces:'Points Forts', fcWeak:'Points Faibles', fcAdvice:'Recommandations',
-    actNew:'↩ Nouvelle analyse', actPro:'★ Passer PRO',
-    pwTitle:'Limite atteinte', pwSub:'Tu as utilisé tes 3 analyses gratuites.<br>Passe à PRO pour des analyses illimitées.',
+    actNew:'Nouvelle analyse', actPro:'Passer Premium',
+    pwTitle:'Limite atteinte', pwSub:'Tu as utilisé tes 3 analyses gratuites.<br>Passe à Premium pour des analyses illimitées.',
     pmName:'Mensuel', pyName:'Annuel', pyTop:'★ MEILLEURE OFFRE',
     pmPer:'/ mois', pyPer:'/ mois · 99€/an',
     pf1:'Analyses illimitées',pf2:'Upload graphique',pf3:'Historique 30j',
     pf4:'Analyses illimitées',pf5:'Upload graphique',pf6:'Historique complet',pf7:'Accès prioritaire',
     payTxt:'Continuer vers le paiement', payNote:'Paiement sécurisé Stripe · Annulation à tout moment',
     demoLnk:'Continuer en mode démo',
-    usageChip:'{n} essai gratuit', proBadge:'PRO · Illimité',
+    usageChip:'{n} essai gratuit', proBadge:'Premium · Illimité',
     alertFill:'Remplis tous les champs et sélectionne une direction.',
     waitLabel:'⏸ ATTENDRE',
     sys:`Tu es un analyste de marché d'élite absolue, expert en TOUTES les méthodologies de trading : ICT/SMC (Inner Circle Trader, Smart Money Concepts), Price Action, Wyckoff, Elliott Wave, Supply & Demand, Harmoniques, VSA, et toutes les approches de structure de marché. Tu t'adaptes au setup présenté quelle que soit la stratégie utilisée.
@@ -1444,15 +1444,15 @@ Réponds en français.`
     resTag:'ANALYSIS RESULT', mDirLbl:'Direction', mPairLbl:'Asset',
     crtLbl:'Submitted chart',
     fcForces:'Strengths', fcWeak:'Weaknesses', fcAdvice:'Recommendations',
-    actNew:'↩ New analysis', actPro:'★ Go PRO',
-    pwTitle:'Limit reached', pwSub:'You\'ve used your 3 free analyses.<br>Go PRO for unlimited analyses.',
+    actNew:'New analysis', actPro:'Go Premium',
+    pwTitle:'Limit reached', pwSub:'You\'ve used your 3 free analyses.<br>Go Premium for unlimited analyses.',
     pmName:'Monthly', pyName:'Annual', pyTop:'★ BEST VALUE',
     pmPer:'/ month', pyPer:'/ month · €99/year',
     pf1:'Unlimited analyses',pf2:'Chart upload',pf3:'30-day history',
     pf4:'Unlimited analyses',pf5:'Chart upload',pf6:'Full history',pf7:'Priority access',
     payTxt:'Continue to payment', payNote:'Secure payment via Stripe · Cancel anytime',
     demoLnk:'Continue in demo mode',
-    usageChip:'{n} free trial', proBadge:'PRO · Unlimited',
+    usageChip:'{n} free trial', proBadge:'Premium · Unlimited',
     alertFill:'Fill in all required fields and select a direction.',
     waitLabel:'⏸ WAIT',
     sys:`You are an absolute elite market analyst, expert in ALL trading methodologies: ICT/SMC (Inner Circle Trader, Smart Money Concepts), Price Action, Wyckoff, Elliott Wave, Supply & Demand, Harmonics, VSA, and all market structure approaches. You adapt to the presented setup regardless of the strategy used.
@@ -3200,11 +3200,31 @@ window.onPairInput = onPairInput;
 
 // ── AUTOCOMPLETE PAIRS ──
 var ALL_PAIRS = [
-  'XAUUSD','XAGUSD','EURUSD','GBPUSD','USDJPY','AUDUSD','USDCAD','NZDUSD','USDCHF',
-  'EURGBP','EURJPY','GBPJPY','CADJPY','CHFJPY','EURCHF','EURAUD','GBPAUD',
-  'NAS100','US30','SP500','DAX','UK100','CAC40','AU200','JP225',
+  // Métaux
+  'XAUUSD','XAGUSD','XPTUSD','XPDUSD',
+  // Forex — majeures
+  'EURUSD','GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD',
+  // Forex — crosses EUR
+  'EURGBP','EURJPY','EURCHF','EURCAD','EURAUD','EURNZD',
+  // Forex — crosses GBP
+  'GBPJPY','GBPCHF','GBPCAD','GBPAUD','GBPNZD',
+  // Forex — crosses AUD / NZD
+  'AUDJPY','AUDCHF','AUDCAD','AUDNZD','NZDJPY','NZDCHF','NZDCAD',
+  // Forex — crosses CAD / CHF
+  'CADJPY','CADCHF','CHFJPY',
+  // Forex — exotiques
+  'USDMXN','USDZAR','USDTRY','USDSGD','USDHKD','USDNOK','USDSEK','USDDKK',
+  'USDPLN','USDHUF','USDCZK','USDCNH','USDTHB','USDINR','USDILS',
+  'EURTRY','EURPLN','EURSEK','EURNOK','EURHUF','EURCZK','EURZAR',
+  'GBPSEK','GBPNOK','ZARJPY','TRYJPY','NOKJPY','SEKJPY','SGDJPY',
+  // Indices
+  'NAS100','US30','SP500','US500','DAX','GER40','UK100','CAC40','FR40','EU50',
+  'AU200','JP225','HK50','ES35','IT40','SWI20','NETH25',
+  // Crypto
   'BTCUSD','ETHUSD','SOLUSD','XRPUSD','BNBUSD','ADAUSD','DOTUSD','AVAXUSD',
-  'USOIL','UKOIL','NATGAS','COPPER','PLATINUM','PALLADIUM'
+  'DOGEUSD','LINKUSD','LTCUSD','MATICUSD','TRXUSD','BCHUSD','XLMUSD','NEARUSD',
+  // Matières premières
+  'USOIL','UKOIL','BRENT','NATGAS','COPPER','PLATINUM','PALLADIUM'
 ];
 
 function onPairInput(val){

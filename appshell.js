@@ -43,7 +43,7 @@
     dot:        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/></svg>'
   };
   var CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-  var PRO = '<span class="side__pro-tag">PRO</span>';
+  var PRO = '<span class="side__pro-tag">PREMIUM</span>';
 
   var NAV = [
     { key: 'dashboard', label: 'Dashboard', href: './index.html', icon: I.dashboard },
@@ -88,11 +88,11 @@
       var tag = p.pro ? PRO : '';
       if (p.children && p.children.length) {
         return '<div class="side__group" data-key="' + p.key + '">'
-          + '<div class="side__row"><a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span>' + p.label + tag + '</a>'
+          + '<div class="side__row"><a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span><span class="side__lbl">' + p.label + '</span>' + tag + '</a>'
           + '<button class="side__caret" type="button" aria-label="Déplier" data-toggle="1">' + CARET + '</button></div>'
           + subTree(p.children, false) + '</div>';
       }
-      return '<a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span>' + p.label + tag + '</a>';
+      return '<a class="side__item' + active + '" href="' + p.href + '"><span class="side__ic">' + p.icon + '</span><span class="side__lbl">' + p.label + '</span>' + tag + '</a>';
     }).join('');
   }
 
@@ -109,8 +109,8 @@
         + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#7E8794);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
         + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
     }
-    return '<div class="side__pro" id="sideFooter"><h4>Accès PRO</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
-      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer PRO</button></div>';
+    return '<div class="side__pro" id="sideFooter"><h4>Accès Premium</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
+      + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer Premium</button></div>';
   }
 
   function buildSideInner() {
@@ -164,7 +164,9 @@
       + '.side, .side__label, .side__item, .side__subitem, .side__pro, .side__pro *{font-family:var(--font-text,"Inter",system-ui,sans-serif);line-height:1.2}'
       + '.side__item, .side__subitem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
       + '.side__item > *, .side__subitem > *{min-width:0}'
-      + '.side__pro-tag{margin-left:auto;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.08em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:2px 7px}'
+      + '.side__ic{flex-shrink:0;display:inline-flex;align-items:center}'
+      + '.side__lbl{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+      + '.side__pro-tag{margin-left:auto;flex-shrink:0;white-space:nowrap;line-height:1.5;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:3px 8px}'
       + '.side{overflow-y:auto}'
       // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
       // intégré dans .app, on le fait se comporter comme .main (pleine largeur,

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Terminal — Mentions légales, Confidentialité & CGV</title>
+<meta name="description" content="Mentions légales, politique de confidentialité (RGPD) et conditions générales de vente de Le Terminal.">
+<meta name="robots" content="index, follow">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./home.css">
+<style>
+  .lg-wrap{max-width:880px;margin:0 auto;padding:120px 22px 80px}
+  .lg-hero{margin-bottom:32px}
+  .lg-hero h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:800;color:var(--text-title,#F0EEFF);margin:0 0 8px}
+  .lg-hero p{color:var(--text-muted,#9B96B8);font-size:14px;margin:0}
+  .lg-tabs{position:sticky;top:64px;z-index:50;display:flex;flex-wrap:wrap;gap:8px;padding:14px 0;background:linear-gradient(180deg,var(--bg-void,#07090C) 70%,transparent);margin-bottom:24px}
+  .lg-tabs a{padding:9px 16px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#C3CAD4;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
+  .lg-tabs a:hover{border-color:rgba(56,182,255,.45);color:#fff}
+  .lg-section{padding:28px 0;border-top:1px solid rgba(255,255,255,.08);scroll-margin-top:140px}
+  .lg-section h2{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;color:var(--text-title,#F0EEFF);margin:0 0 6px}
+  .lg-section h3{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:#EAF4FF;margin:24px 0 8px}
+  .lg-section p,.lg-section li{color:#C3CAD4;font-size:14.5px;line-height:1.75}
+  .lg-section ul{margin:8px 0 8px 0;padding-left:20px}
+  .lg-section li{margin-bottom:6px}
+  .lg-section a{color:#38B6FF;text-decoration:underline}
+  .lg-section strong{color:#EAF4FF}
+  .lg-updated{font-size:12px;color:#7E8794;margin-top:4px}
+  .lg-fill{background:rgba(232,194,104,.10);border:1px dashed rgba(232,194,104,.45);color:#E8C268;padding:1px 6px;border-radius:5px;font-size:13px;font-family:var(--font-mono,monospace)}
+  .lg-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  .lg-table th,.lg-table td{text-align:left;padding:10px 12px;border:1px solid rgba(255,255,255,.1);color:#C3CAD4;vertical-align:top}
+  .lg-table th{background:rgba(255,255,255,.04);color:#EAF4FF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700}
+  .lg-note{background:rgba(56,182,255,.06);border:1px solid rgba(56,182,255,.2);border-radius:12px;padding:14px 16px;margin:16px 0;font-size:13.5px;color:#BFDCF5}
+</style>
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" style="display:none">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<main class="lg-wrap">
+  <div class="lg-hero">
+    <h1>Informations légales</h1>
+    <p>Mentions légales, politique de confidentialité et conditions générales de vente de Le Terminal.</p>
+    <p class="lg-updated">Dernière mise à jour : 14 juin 2026</p>
+  </div>
+
+  <nav class="lg-tabs">
+    <a href="#mentions">Mentions légales</a>
+    <a href="#confidentialite">Confidentialité (RGPD)</a>
+    <a href="#cookies">Cookies</a>
+    <a href="#cgv">CGV</a>
+  </nav>
+
+  <!-- ══════════ MENTIONS LÉGALES ══════════ -->
+  <section class="lg-section" id="mentions">
+    <h2>1. Mentions légales</h2>
+
+    <h3>Éditeur du site</h3>
+    <p>
+      Le site <strong>Le Terminal</strong> (ci-après « le Site ») est édité et exploité par Le Terminal.
+      Pour toute demande, tu peux nous contacter via la
+      <a href="./index.html#community">communauté</a> du Site.
+    </p>
+
+    <h3>Hébergement</h3>
+    <p>
+      Le Site est hébergé par <strong>Vercel Inc.</strong><br>
+      340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis — <a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a>
+    </p>
+    <p>
+      La base de données et le service d'authentification sont fournis par <strong>Supabase</strong>
+      (Supabase, Inc.), avec hébergement des données dans l'Union européenne — région
+      <strong>Francfort, Allemagne (eu-central-1)</strong>.
+    </p>
+
+    <h3>Propriété intellectuelle</h3>
+    <p>
+      L'ensemble des éléments du Site (marque, logo, textes, interfaces, code, graphismes, structure)
+      est protégé par le droit de la propriété intellectuelle et reste la propriété exclusive de
+      l'éditeur, sauf mention contraire. Toute reproduction, représentation, modification ou
+      exploitation, totale ou partielle, sans autorisation écrite préalable, est interdite.
+    </p>
+
+    <h3>Avertissement sur les risques</h3>
+    <p>
+      Le Terminal est un <strong>outil d'aide à la décision et d'éducation</strong>. Il ne fournit
+      <strong>aucun conseil en investissement</strong> personnalisé au sens de la réglementation financière.
+      Le trading sur les marchés (Forex, indices, crypto-actifs, matières premières, actions) comporte un
+      <strong>risque élevé de perte en capital</strong>. Les performances passées ne préjugent pas des
+      performances futures. L'utilisateur reste seul responsable de ses décisions.
+    </p>
+  </section>
+
+  <!-- ══════════ CONFIDENTIALITÉ ══════════ -->
+  <section class="lg-section" id="confidentialite">
+    <h2>2. Politique de confidentialité (RGPD)</h2>
+    <p>
+      Cette politique décrit comment Le Terminal collecte, utilise et protège tes données
+      personnelles, conformément au Règlement Général sur la Protection des Données
+      (Règlement UE 2016/679 « RGPD ») et à la loi « Informatique et Libertés ».
+    </p>
+    <div class="lg-note">
+      <strong>Stockage de tes données personnelles.</strong> En utilisant Le Terminal, tes données
+      personnelles (compte, e-mail, contenus, journal) sont <strong>collectées et stockées</strong>.
+      Elles sont hébergées dans l'<strong>Union européenne</strong>, sur les serveurs de notre
+      prestataire <strong>Supabase</strong>, situés à <strong>Francfort, Allemagne (région eu-central-1)</strong>.
+      Certains traitements complémentaires (hébergement du site, analyse IA, paiement) font appel à des
+      prestataires pouvant être situés hors UE — le détail figure dans le tableau ci-dessous.
+    </div>
+
+    <h3>Responsable du traitement</h3>
+    <p>
+      Le responsable du traitement est l'éditeur du Site (voir section 1). Pour toute question
+      relative à tes données, tu peux nous contacter via la
+      <a href="./index.html#community">communauté</a> du Site.
+    </p>
+
+    <h3>Données collectées</h3>
+    <ul>
+      <li><strong>Compte :</strong> adresse e-mail, mot de passe (stocké de façon chiffrée/hachée, jamais en clair), identifiant utilisateur.</li>
+      <li><strong>Connexion via Google :</strong> adresse e-mail et identifiant du compte Google (si tu choisis ce mode de connexion).</li>
+      <li><strong>Contenus que tu crées :</strong> captures d'écran de graphiques envoyées pour analyse, résultats d'analyses, journal de trades, notes et statistiques de performance.</li>
+      <li><strong>Préférences :</strong> langue, choix de consentement aux cookies, statut d'abonnement.</li>
+      <li><strong>Données techniques :</strong> données de connexion strictement nécessaires au fonctionnement et à la sécurité du service.</li>
+    </ul>
+
+    <h3>Finalités et bases légales</h3>
+    <ul>
+      <li>Fournir et gérer ton compte et l'accès aux outils — <em>exécution du contrat</em>.</li>
+      <li>Réaliser les analyses IA que tu demandes — <em>exécution du contrat</em>.</li>
+      <li>Gérer les abonnements et paiements — <em>exécution du contrat / obligation légale</em>.</li>
+      <li>Assurer la sécurité et prévenir la fraude — <em>intérêt légitime</em>.</li>
+      <li>Mesure d'audience et amélioration du service — <em>consentement</em> (via la bannière cookies).</li>
+    </ul>
+
+    <h3>Où sont stockées et traitées tes données (sous-traitants)</h3>
+    <p>Le Terminal s'appuie sur des prestataires (sous-traitants au sens du RGPD) pour fonctionner :</p>
+    <table class="lg-table">
+      <thead><tr><th>Prestataire</th><th>Rôle</th><th>Localisation des données</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Supabase</strong></td><td>Base de données, comptes &amp; authentification (e-mail, contenus, journal)</td><td>Union européenne — Francfort, Allemagne (eu-central-1)</td></tr>
+        <tr><td><strong>Vercel</strong></td><td>Hébergement du site et des fonctions serveur</td><td>États-Unis / réseau mondial (edge)</td></tr>
+        <tr><td><strong>Anthropic (Claude)</strong></td><td>Traitement IA des images de graphiques et des requêtes d'analyse</td><td>États-Unis</td></tr>
+        <tr><td><strong>Whop</strong></td><td>Gestion des abonnements et des paiements</td><td>États-Unis</td></tr>
+        <tr><td><strong>Google</strong> (optionnel)</td><td>Connexion « Se connecter avec Google »</td><td>Union européenne / États-Unis</td></tr>
+        <tr><td><strong>Telegram</strong> (optionnel)</td><td>Communauté privée (si tu la rejoins)</td><td>International</td></tr>
+      </tbody>
+    </table>
+    <div class="lg-note">
+      <strong>Transferts hors Union européenne.</strong> Certains prestataires sont situés aux États-Unis.
+      Ces transferts sont encadrés par des garanties appropriées (clauses contractuelles types de la
+      Commission européenne et/ou certification DPF — Data Privacy Framework).
+    </div>
+    <p>
+      <strong>Paiement :</strong> tes données bancaires (numéro de carte, etc.) ne sont
+      <strong>jamais</strong> collectées ni stockées par Le Terminal. Elles sont traitées directement
+      par le prestataire de paiement (Whop et ses partenaires) via une connexion sécurisée.
+    </p>
+
+    <h3>Durée de conservation</h3>
+    <ul>
+      <li>Données de compte : pendant toute la durée d'utilisation, puis supprimées dans un délai raisonnable après la fermeture du compte.</li>
+      <li>Données de facturation : conservées le temps requis par les obligations légales et comptables (jusqu'à 10 ans).</li>
+      <li>Données de consentement aux cookies : 6 à 13 mois.</li>
+    </ul>
+
+    <h3>Tes droits</h3>
+    <p>
+      Conformément au RGPD, tu disposes des droits d'<strong>accès</strong>, de <strong>rectification</strong>,
+      d'<strong>effacement</strong>, de <strong>limitation</strong>, d'<strong>opposition</strong> et de
+      <strong>portabilité</strong> de tes données, ainsi que du droit de définir des directives relatives à
+      leur sort après ton décès. Tu peux exercer ces droits en nous contactant via la
+      <a href="./index.html#community">communauté</a> du Site.
+    </p>
+    <p>
+      Tu peux également introduire une réclamation auprès de la <strong>CNIL</strong>
+      (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>) si tu estimes que tes
+      droits ne sont pas respectés.
+    </p>
+
+    <h3>Sécurité</h3>
+    <p>
+      Le Terminal met en œuvre des mesures techniques et organisationnelles appropriées (chiffrement des
+      mots de passe, connexions sécurisées HTTPS, contrôle d'accès) pour protéger tes données contre tout
+      accès, perte ou divulgation non autorisés.
+    </p>
+  </section>
+
+  <!-- ══════════ COOKIES ══════════ -->
+  <section class="lg-section" id="cookies">
+    <h2>3. Politique de cookies</h2>
+    <p>
+      Le Terminal utilise des cookies et technologies de stockage local (localStorage) pour fonctionner
+      et, avec ton accord, mesurer son audience.
+    </p>
+    <ul>
+      <li><strong>Strictement nécessaires</strong> (toujours actifs) : maintien de ta session de connexion (jeton d'authentification), mémorisation de la langue et de ton choix de consentement. Ils ne nécessitent pas de consentement.</li>
+      <li><strong>Mesure d'audience / non essentiels</strong> : déposés uniquement après ton consentement via la bannière affichée à ta première visite.</li>
+    </ul>
+    <p>
+      Tu peux à tout moment modifier ton choix en effaçant les données du site dans ton navigateur :
+      la bannière de consentement réapparaîtra alors à la visite suivante.
+    </p>
+  </section>
+
+  <!-- ══════════ CGV ══════════ -->
+  <section class="lg-section" id="cgv">
+    <h2>4. Conditions Générales de Vente (CGV)</h2>
+
+    <h3>Article 1 — Objet</h3>
+    <p>
+      Les présentes CGV régissent la vente des abonnements à l'offre Premium de Le Terminal, conclus
+      entre l'éditeur (le « Vendeur », voir section 1) et tout client (le « Client »).
+    </p>
+
+    <h3>Article 2 — Services proposés</h3>
+    <p>
+      Le Terminal propose un accès à une suite d'outils numériques pour traders : analyse de setups par IA,
+      journal de trading, calendrier économique, calculateur de pips et cartographie des flux. L'offre
+      Premium débloque l'accès illimité à ces outils.
+    </p>
+
+    <h3>Article 3 — Prix et facturation</h3>
+    <ul>
+      <li><strong>Premium Mensuel :</strong> 29,99 € TTC par mois.</li>
+      <li><strong>Premium Annuel :</strong> 19,99 € TTC par mois, facturé 239,88 € TTC en une fois pour 12 mois.</li>
+    </ul>
+    <p>
+      Les prix sont indiqués en euros, toutes taxes comprises. Le Vendeur se réserve le droit de modifier
+      ses prix à tout moment, les abonnements en cours restant facturés au tarif souscrit jusqu'à leur
+      renouvellement.
+    </p>
+
+    <h3>Article 4 — Commande et paiement</h3>
+    <p>
+      La souscription s'effectue en ligne via notre partenaire de paiement <strong>Whop</strong>. Le
+      paiement est exigible immédiatement à la commande. Les moyens acceptés incluent la carte bancaire et
+      les solutions proposées par Whop. L'accès Premium est activé dès confirmation du paiement.
+    </p>
+
+    <h3>Article 5 — Reconduction et résiliation</h3>
+    <p>
+      Les abonnements sont à reconduction automatique (mensuelle ou annuelle selon l'offre choisie). Le
+      Client peut résilier à tout moment depuis son espace ou son compte Whop. La résiliation prend effet à
+      la fin de la période déjà payée : l'accès Premium est conservé jusqu'à cette date, puis l'abonnement
+      n'est plus renouvelé.
+    </p>
+
+    <h3>Article 6 — Droit de rétractation et garantie</h3>
+    <p>
+      Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation de 14 jours peut
+      ne pas s'appliquer aux contenus numériques fournis immédiatement avec ton accord exprès. Toutefois, et
+      à titre commercial, Le Terminal offre une <strong>garantie « satisfait ou remboursé » de 14 jours</strong> :
+      en cas d'insatisfaction, contacte-nous dans les 14 jours suivant ton paiement pour obtenir un
+      remboursement intégral.
+    </p>
+
+    <h3>Article 7 — Responsabilité</h3>
+    <p>
+      Le Terminal est un outil d'aide à la décision et d'éducation. Il ne constitue pas un conseil en
+      investissement et ne garantit aucun résultat. Le Client est seul responsable de ses décisions de
+      trading et des pertes éventuelles. Le Vendeur ne saurait être tenu responsable des interruptions de
+      service indépendantes de sa volonté ni des décisions prises sur la base des informations fournies.
+    </p>
+
+    <h3>Article 8 — Données personnelles</h3>
+    <p>
+      Le traitement des données du Client est décrit dans la <a href="#confidentialite">politique de
+      confidentialité</a> ci-dessus.
+    </p>
+
+    <h3>Article 9 — Droit applicable et litiges</h3>
+    <p>
+      Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera
+      recherchée en priorité. Conformément au Code de la consommation, le Client peut recourir gratuitement
+      à un <strong>médiateur de la consommation</strong>.
+      À défaut d'accord, les tribunaux français sont compétents. Le Client peut aussi utiliser la plateforme
+      européenne de règlement en ligne des litiges : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.
+    </p>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="lt-footer">
+  <div class="lt-footer__top">
+    <div class="lt-footer__brand"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></div>
+    <nav class="lt-footer__links"><a href="./index.html#tools">Outils</a><a href="./tarifs.html">Tarifs</a><a href="./legal.html#mentions">Mentions légales</a><a href="./legal.html#confidentialite">Confidentialité</a><a href="./legal.html#cgv">CGV</a></nav>
+  </div>
+  <div class="lt-footer__bottom">
+    <span class="lt-footer__copy">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    <span class="lt-footer__note">Outils éducatifs. Le trading comporte des risques de perte en capital.</span>
+  </div>
+</footer>
+
+<script src="./menu.js"></script>
+</body>
+</html>

@@ -103,7 +103,7 @@
       margin-left: auto; font-size: 9px; font-weight: 700;
       letter-spacing: .08em; color: #E8C268;
       background: rgba(255,180,0,.1); border: 1px solid rgba(255,180,0,.25);
-      border-radius: 50px; padding: 2px 7px;
+      border-radius: 50px; padding: 3px 8px;
     }
     .lt-subnav-item.pro-locked { opacity: .55; cursor: pointer; }
     .lt-subnav-item.pro-locked:hover { color: #E8C268; }
@@ -324,17 +324,20 @@
   document.body.appendChild(container);
 
   // ── FUNCTIONS ──
+  // Menu latéral désactivé : la navigation + déconnexion passent par la barre
+  // latérale « Outils » (appshell.js). Le bouton FR/EN bascule juste la langue.
   window.ltOpenMenu = function() {
-    var menu = document.getElementById('ltSideMenu');
-    if(menu.classList.contains('open')) {
-      ltCloseMenu();
-    } else {
-      menu.classList.add('open');
-      document.body.classList.add('lt-menu-open');
-    }
+    var cur = (localStorage.getItem('lt_lang') === 'en') ? 'en' : 'fr';
+    var next = cur === 'en' ? 'fr' : 'en';
+    ltSetLang(next);
+    // Met à jour le libellé des pastilles FR/EN dans les topbars
+    Array.prototype.forEach.call(document.querySelectorAll('.lt-nav__pill'), function(p){
+      if(p.id !== 'langToggle') p.textContent = next.toUpperCase();
+    });
   };
   window.ltCloseMenu = function() {
-    document.getElementById('ltSideMenu').classList.remove('open');
+    var m = document.getElementById('ltSideMenu');
+    if(m) m.classList.remove('open');
     document.body.classList.remove('lt-menu-open');
   };
 
@@ -382,11 +385,34 @@
     if(!token || !email) { bar.innerHTML = ''; return; }
     var initial = email.charAt(0).toUpperCase();
     var username = email.split('@')[0];
-    // Style unifié (maquette) : chip avatar + nom, sans badge ★PRO ni bouton rouge.
-    // La déconnexion reste accessible via le menu (pastille FR → « Se déconnecter »).
+    var caret = '<span class="lt-ub-caret"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>';
+    // Chip rectangulaire (même DA que les boutons) + menu déroulant avec déconnexion
     bar.innerHTML =
-      '<div class="lt-ub-chip" style="cursor:pointer" title="' + email + (isPro ? ' · PRO' : '') + '" onclick="window.ltOpenMenu&&ltOpenMenu()">' +
-      '<div class="lt-ub-avatar">' + initial + '</div><span class="lt-ub-name">' + username + '</span></div>';
+      '<div class="lt-ub-chip" id="ltUbChip" title="' + email + (isPro ? ' · Premium' : '') + '">' +
+        '<div class="lt-ub-avatar">' + initial + '</div>' +
+        '<span class="lt-ub-name">' + username + '</span>' + caret +
+      '</div>' +
+      '<div class="lt-ub-menu" id="ltUbMenu">' +
+        '<div class="lt-ub-menu__mail">' + email + (isPro ? ' · Premium' : '') + '</div>' +
+        '<button type="button" class="lt-ub-logout" onclick="ltGlobalLogout()">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
+          'Se déconnecter</button>' +
+      '</div>';
+
+    var chip = document.getElementById('ltUbChip');
+    var menu = document.getElementById('ltUbMenu');
+    if(chip && menu) {
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        menu.classList.toggle('show');
+        chip.classList.toggle('open');
+      });
+      // Ferme le menu si on clique ailleurs
+      document.addEventListener('click', function(){
+        menu.classList.remove('show');
+        chip.classList.remove('open');
+      });
+    }
   }
 
   function _ltClearAllAccountData() {
@@ -782,10 +808,10 @@
         'will-change:transform;',
       '}',
       '#lt-cur-ring {',
-        'position:fixed;top:0;left:0;z-index:99998;pointer-events:none;',
-        'width:20px;height:20px;border-radius:50%;',
-        'border:1px solid rgba(56,182,255,.5);',
-        'box-shadow:0 0 5px 1px rgba(56,182,255,.15);',
+        'position:fixed;top:0;left:0;z-index:2147483646;pointer-events:none;',
+        'width:22px;height:22px;border-radius:50%;',
+        'border:1.5px solid rgba(255,255,255,.75);',
+        'box-shadow:0 0 7px 1px rgba(255,255,255,.3),inset 0 0 4px rgba(255,255,255,.15);',
         'transform:translate(-50%,-50%);',
         'transition:width .25s,height .25s,border-color .25s;',
         'will-change:transform;',
@@ -851,12 +877,18 @@
     function enterIframe(){ document.body.classList.add('lt-in-iframe'); }
     function leaveIframe(){ document.body.classList.remove('lt-in-iframe'); }
 
+    // On masque le curseur custom UNIQUEMENT quand le pointeur quitte réellement
+    // la fenêtre/le document (ex: entre dans un iframe TradingView) — jamais sur
+    // simple immobilité. Détection via mouseleave document + blur de la fenêtre
+    // (un iframe qui prend le focus déclenche un blur du parent).
     document.addEventListener('mouseleave', enterIframe);
     document.addEventListener('mouseenter', leaveIframe);
-    // Fallback polling : si pas de mousemove pendant 200ms → dans un iframe
-    var lastMove = Date.now();
-    document.addEventListener('mousemove', function(){ lastMove = Date.now(); leaveIframe(); });
-    setInterval(function(){ if(Date.now() - lastMove > 200) enterIframe(); }, 100);
+    document.addEventListener('mousemove', leaveIframe);
+    window.addEventListener('blur', function(){
+      // Si le focus part vers un iframe de la page → on masque le curseur custom.
+      if(document.activeElement && document.activeElement.tagName === 'IFRAME') enterIframe();
+    });
+    window.addEventListener('focus', leaveIframe);
 
     // Perf : la boucle rAF ne tourne que pendant le mouvement — quand l'anneau
     // a rattrapé le point, elle s'arrête (zéro travail souris immobile).
@@ -870,6 +902,63 @@
       if(looping) requestAnimationFrame(loop);
     }
     wakeLoop();
+  })();
+
+  // ── BANNIÈRE COOKIES (toutes les pages, conformité RGPD) ──
+  (function(){
+    var KEY = 'lt_cookie_consent';
+    var existing;
+    try { existing = localStorage.getItem(KEY); } catch(e) { existing = null; }
+    if (existing === 'accepted' || existing === 'refused') return; // choix déjà fait
+
+    function inject(){
+      if (document.getElementById('ltCookieBar')) return;
+      var st = document.createElement('style');
+      st.textContent = [
+        '#ltCookieBar{position:fixed;left:0;right:0;bottom:0;z-index:100000;display:flex;justify-content:center;padding:16px;pointer-events:none;animation:ltCookieUp .4s ease}',
+        '@keyframes ltCookieUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}',
+        '#ltCookieBox{pointer-events:auto;max-width:680px;width:100%;background:rgba(16,20,27,.97);backdrop-filter:blur(18px);border:1px solid rgba(56,182,255,.25);border-radius:16px;padding:20px 22px;box-shadow:0 24px 60px rgba(0,0,0,.6);display:flex;flex-wrap:wrap;align-items:center;gap:16px}',
+        '#ltCookieBox .ltck-txt{flex:1;min-width:220px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;line-height:1.6;color:#C3CAD4}',
+        '#ltCookieBox .ltck-txt b{color:#F0EEFF;font-family:\'Bricolage Grotesque\',sans-serif;display:block;font-size:14px;margin-bottom:4px}',
+        '#ltCookieBox .ltck-txt a{color:#38B6FF;text-decoration:underline}',
+        '#ltCookieBox .ltck-actions{display:flex;gap:10px;flex-shrink:0}',
+        '.ltck-btn{padding:10px 20px;border-radius:50px;font-family:\'Bricolage Grotesque\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .2s;white-space:nowrap}',
+        '.ltck-refuse{background:transparent;border-color:rgba(255,255,255,.18);color:#C3CAD4}',
+        '.ltck-refuse:hover{border-color:rgba(255,255,255,.4);color:#fff}',
+        '.ltck-accept{background:linear-gradient(135deg,#0095ff,#0070cc);color:#fff}',
+        '.ltck-accept:hover{opacity:.9}',
+        '@media(max-width:560px){#ltCookieBox{flex-direction:column;align-items:stretch}#ltCookieBox .ltck-actions{justify-content:stretch}.ltck-btn{flex:1;text-align:center}}'
+      ].join('');
+      document.head.appendChild(st);
+
+      var bar = document.createElement('div');
+      bar.id = 'ltCookieBar';
+      bar.innerHTML =
+        '<div id="ltCookieBox">'
+        + '<div class="ltck-txt"><b>🍪 Nous utilisons des cookies</b>'
+        + 'Le Terminal utilise des cookies pour assurer le bon fonctionnement du site (connexion, préférences) et mesurer son audience. '
+        + 'Tu peux accepter ou refuser les cookies non essentiels. '
+        + '<a href="./legal.html#cookies" style="color:#38B6FF;text-decoration:underline">En savoir plus</a></div>'
+        + '<div class="ltck-actions">'
+        + '<button type="button" class="ltck-btn ltck-refuse" id="ltCookieRefuse">Refuser</button>'
+        + '<button type="button" class="ltck-btn ltck-accept" id="ltCookieAccept">Accepter</button>'
+        + '</div></div>';
+      document.body.appendChild(bar);
+
+      function choose(val){
+        try { localStorage.setItem(KEY, val); } catch(e) {}
+        bar.style.animation = 'ltCookieUp .3s ease reverse forwards';
+        setTimeout(function(){ if(bar.parentNode) bar.parentNode.removeChild(bar); }, 300);
+      }
+      document.getElementById('ltCookieAccept').addEventListener('click', function(){ choose('accepted'); });
+      document.getElementById('ltCookieRefuse').addEventListener('click', function(){ choose('refused'); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', inject);
+    } else {
+      inject();
+    }
   })();
 
 })();
