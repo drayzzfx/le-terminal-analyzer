@@ -294,9 +294,11 @@ body {
 .lang-btn.on { background: var(--v); color: white; }
 
 /* MAIN LAYOUT */
-.main { padding: 0 28px 40px; display:flex; flex-direction:column; align-items:stretch; }
+.main { padding: 0 28px 40px; display:flex; flex-direction:column; align-items:stretch; width:100%; }
+/* La page analyzer doit remplir toute la largeur dispo (override du cap 1200px du DS) */
+.main > .content, #app .content { max-width:none !important; width:100% !important; padding:32px 8px !important; }
 /* Form — intégré au design (panneau, labels mono, bouton accent) */
-#formView{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:36px 40px 40px;width:100%;box-sizing:border-box}
+#formView{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:36px 44px 44px;width:100%;box-sizing:border-box}
 #formView .form-section-title:first-child{margin-top:0}
 .form-section-title{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--accent,#7FB8E8)!important;letter-spacing:.14em!important}
 .lbl{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--text-muted,#7E8794)!important;font-size:10px!important;letter-spacing:.12em!important;text-transform:uppercase!important}
