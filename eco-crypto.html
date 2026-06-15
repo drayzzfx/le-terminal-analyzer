@@ -184,10 +184,10 @@
     'Positif':  { cls: 'pr-badge--up',      fr: 'Positif', en: 'Positive' },
     'Négatif':  { cls: 'pr-badge--down',    fr: 'Négatif', en: 'Negative' },
     'Neutre':   { cls: 'pr-badge--neutral', fr: 'Neutre',  en: 'Neutral'  },
-    'Risk-on':  { cls: 'pr-badge--up',      fr: 'Positif', en: 'Positive' },
-    'Risk-off': { cls: 'pr-badge--down',    fr: 'Négatif', en: 'Negative' },
-    'Hawkish':  { cls: 'pr-badge--up',      fr: 'Positif', en: 'Positive' },
-    'Dovish':   { cls: 'pr-badge--down',    fr: 'Négatif', en: 'Negative' }
+    'Risk-on':  { cls: 'pr-badge--up',      fr: 'Confiance', en: 'Confidence' },
+    'Risk-off': { cls: 'pr-badge--down',    fr: 'Prudence', en: 'Caution' },
+    'Hawkish':  { cls: 'pr-badge--up',      fr: 'Restrictif', en: 'Tightening' },
+    'Dovish':   { cls: 'pr-badge--down',    fr: 'Accommodant', en: 'Easing' }
   };
   function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
   function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }

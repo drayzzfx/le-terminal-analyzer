@@ -367,10 +367,10 @@
     'Neutre':  { fr:'Neutre',  en:'Neutral',  cls:'dot--flat', badge:'bias--flat' },
   };
   // Rétrocompat
-  SENT_CFG['Risk-on']  = SENT_CFG['Positif'];
-  SENT_CFG['Risk-off'] = SENT_CFG['Négatif'];
-  SENT_CFG['Hawkish']  = SENT_CFG['Positif'];
-  SENT_CFG['Dovish']   = SENT_CFG['Négatif'];
+  SENT_CFG['Risk-on']  = { fr:'Confiance',   en:'Confidence', cls:'dot--pos', badge:'bias--up'   };
+  SENT_CFG['Risk-off'] = { fr:'Prudence',    en:'Caution',    cls:'dot--neg', badge:'bias--down' };
+  SENT_CFG['Hawkish']  = { fr:'Restrictif',  en:'Tightening', cls:'dot--pos', badge:'bias--up'   };
+  SENT_CFG['Dovish']   = { fr:'Accommodant', en:'Easing',     cls:'dot--neg', badge:'bias--down' };
 
   function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
   function esc(s)    { return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
