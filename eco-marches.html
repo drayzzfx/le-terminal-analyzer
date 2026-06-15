@@ -119,6 +119,14 @@
     </div>
   </section>
 
+  <section class="pr-sel" id="prPrevSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Markets">Marchés</span> · <span id="prPrevCount" data-en="archive">archive</span></span>
+      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
+    </div>
+    <div class="pr-sel__grid" id="prPrevGrid"></div>
+  </section>
+
   <section class="pr-mission">
     <div>
       <div class="pr-head">
@@ -180,10 +188,12 @@
     renderEdition(featured);
     var hotSet=selectTop(items).filter(function(i){return i!==featured;});
     var rest=items.filter(function(i){return i!==featured;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
-    var nHot=hotSet.length;
-    if(grid)grid.innerHTML=rest.length>0?rest.map(function(it){return buildArt(it,hotSet.indexOf(it)!==-1);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
+    var nHot=hotSet.length;var recent=rest.slice(0,9),older=rest.slice(9);
+    if(grid)grid.innerHTML=recent.length>0?recent.map(function(it){return buildArt(it,hotSet.indexOf(it)!==-1);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
     var sub=document.getElementById('prSelCount');
-    if(sub){var n=rest.length;sub.textContent=getLang()==='en'?n+' article'+(n>1?'s':'')+' · '+nHot+' high-impact':n+' annonce'+(n>1?'s':'')+' · '+nHot+' à fort impact';sub.removeAttribute('data-en');}
+    if(sub){var n=recent.length;sub.textContent=getLang()==='en'?n+' article'+(n>1?'s':'')+' · '+nHot+' high-impact':n+' annonce'+(n>1?'s':'')+' · '+nHot+' à fort impact';sub.removeAttribute('data-en');}
+    var prevSec=document.getElementById('prPrevSec'),prevGrid=document.getElementById('prPrevGrid'),prevCnt=document.getElementById('prPrevCount');
+    if(prevSec&&prevGrid){if(older.length>0){prevSec.style.display='';prevGrid.innerHTML=older.map(function(it){return buildArt(it,false);}).join('');if(prevCnt){prevCnt.textContent=getLang()==='en'?older.length+' archived':older.length+' archivée'+(older.length>1?'s':'');prevCnt.removeAttribute('data-en');}}else{prevSec.style.display='none';}}
   }
   window.ecoReloadNews=loadZone;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadZone);else loadZone();
