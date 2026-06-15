@@ -735,12 +735,23 @@
     }
   };
 
+  // Système « data-en » universel (inline) : le FR reste dans le HTML, l'anglais
+  // dans l'attribut data-en. Fonctionne sur TOUTE page incluant menu.js. Sur les
+  // pages éco, eco.js gère déjà data-en → on évite le doublon via le garde.
+  function ltApplyDataEn(en) {
+    document.querySelectorAll('[data-en]').forEach(function(el) {
+      if (el.getAttribute('data-fr') === null) el.setAttribute('data-fr', el.innerHTML);
+      el.innerHTML = en ? el.getAttribute('data-en') : el.getAttribute('data-fr');
+    });
+  }
+
   function ltApplyI18n(l) {
     var t = LT_TRANSLATIONS[l] || LT_TRANSLATIONS['fr'];
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       var key = el.getAttribute('data-i18n');
       if(t[key] !== undefined) el.textContent = t[key];
     });
+    if (typeof window.ecoApplyLang !== 'function') ltApplyDataEn(l === 'en');
     // Boutons login/logout dans topbar (sans data-i18n)
     var lb = document.getElementById('loginBtn');
     var lo = document.getElementById('logoutBtn');
