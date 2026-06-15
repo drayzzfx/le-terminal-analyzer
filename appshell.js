@@ -26,6 +26,7 @@
     'eco-flash.html':        { crumb: 'Calendrier Éco · Flash Info',    key: 'calendrier' },
     'eco-calendrier.html':   { crumb: 'Calendrier Éco · Calendrier',    key: 'calendrier' },
     'eco-crypto.html':       { crumb: 'Calendrier Éco · Crypto',        key: 'calendrier' },
+    'eco-archive.html':      { crumb: 'Calendrier Éco · Archive',       key: 'calendrier' },
     'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
   };
   var cfg = PAGES[path];
@@ -63,7 +64,8 @@
       ] },
       { label: 'Flash Info', href: './eco-flash.html', icon: I.flash },
       { label: 'Calendrier éco', href: './eco-calendrier.html', icon: I.calendrier },
-      { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto }
+      { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto },
+      { label: 'Archive', href: './eco-archive.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M9.5 12h5"/></svg>' }
     ] },
     { key: 'analyzer', label: 'Setup Analyzer', href: './app.html', icon: I.analyzer, pro: true, children: [
       { label: 'Historique', href: './app.html#historique', icon: I.hist },
