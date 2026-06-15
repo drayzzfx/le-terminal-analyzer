@@ -1019,7 +1019,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <a href="./index.html#community">Communauté</a>
       </nav>
       <div class="lt-nav__actions">
-        <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
+        <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
         <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
         <div id="ltUserBar"></div>
         <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
@@ -2745,24 +2745,27 @@ function buildHistoryGrid(){
   if(!Array.isArray(historyData)) historyData=[];
   var grid = document.getElementById('historyGrid');
   if(!grid) return;
-  if(!historyData.length){
-    grid.innerHTML='<div class="history-empty-page"><div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Aucune analyse encore<br>Lance ta première analyse !</div>';
-    return;
-  }
-  var rows = historyData.map(function(item,idx){
+  // Garde l'index d'origine (openHDetail lit historyData[idx]) en sautant les supprimées.
+  var rows = [];
+  historyData.forEach(function(item,idx){
+    if(_deletedIds instanceof Set && _deletedIds.has(String(item && item.id))) return;
     var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
     var vL=item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
     var sc=parseFloat(item.score)||0;
     var col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
     var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
-    return '<div class="history-card" onclick="openHDetail('+idx+')">'+
+    rows.push('<div class="history-card" onclick="openHDetail('+idx+')">'+
       '<div class="hc-top"><span class="hc-pair">'+(item.pair||'—')+' · '+(item.direction||'')+'</span>'+
       '<span class="hc-verdict '+vC+'">'+vL+'</span></div>'+
       '<div class="hc-score" style="color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:14px;color:var(--text3)">/10</span></div>'+
       '<div class="hc-label">'+(item.score_label||'')+'</div>'+
       '<div class="hc-meta">'+(item.tf||'')+(item.tf&&item.direction?' · ':'')+ds+'</div>'+
-    '</div>';
+    '</div>');
   });
+  if(!rows.length){
+    grid.innerHTML='<div class="history-empty-page"><div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Aucune analyse encore<br>Lance ta première analyse !</div>';
+    return;
+  }
   // Write new content
   grid.innerHTML = rows.join('');
 }
@@ -3438,7 +3441,10 @@ function quickSetResult(result){
 <!-- PERFORMANCES PAGE -->
 <div id="perfPage">
   <header class="perf-header">
-    <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
+      <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
+    </div>
     <button class="back-btn" onclick="closePerf()">← Retour</button>
     <button onclick="window.print()" style="padding:7px 16px;background:rgba(127,184,232,.12);border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Exporter PDF</button>
   </header>

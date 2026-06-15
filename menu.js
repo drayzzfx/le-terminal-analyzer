@@ -331,16 +331,22 @@
   document.body.appendChild(container);
 
   // ── FUNCTIONS ──
-  // Menu latéral désactivé : la navigation + déconnexion passent par la barre
-  // latérale « Outils » (appshell.js). Le bouton FR/EN bascule juste la langue.
-  window.ltOpenMenu = function() {
+  // Le bouton FR/EN bascule la langue (pastilles .lt-nav__pill).
+  window.ltToggleLang = function() {
     var cur = (localStorage.getItem('lt_lang') === 'en') ? 'en' : 'fr';
     var next = cur === 'en' ? 'fr' : 'en';
     ltSetLang(next);
-    // Met à jour le libellé des pastilles FR/EN dans les topbars
     Array.prototype.forEach.call(document.querySelectorAll('.lt-nav__pill'), function(p){
       if(p.id !== 'langToggle') p.textContent = next.toUpperCase();
     });
+  };
+  // Le menu latéral (drawer « Le Terminal Hub ») s'ouvre via le bouton ☰ —
+  // utile notamment sur les vues Historique/Perfs qui recouvrent la barre latérale.
+  window.ltOpenMenu = function() {
+    var menu = document.getElementById('ltSideMenu');
+    if(!menu) { return; }
+    if(menu.classList.contains('open')) { ltCloseMenu(); }
+    else { menu.classList.add('open'); document.body.classList.add('lt-menu-open'); }
   };
   window.ltCloseMenu = function() {
     var m = document.getElementById('ltSideMenu');
