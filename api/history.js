@@ -82,12 +82,9 @@ module.exports = async function handler(req, res) {
       const id = (req.url || '').split('/').filter(Boolean).pop();
       if (!id || id === 'history') return res.status(400).json({ error: 'Missing id' });
       const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ANON_KEY;
-      const owner = userEmail
-        ? `or=(user_id.eq.${userId},user_email.eq.${encodeURIComponent(userEmail)})`
-        : `user_id=eq.${userId}`;
       const r = await supabaseRequest(
         'DELETE',
-        `/rest/v1/analyses?id=eq.${id}&${owner}`,
+        `/rest/v1/analyses?id=eq.${id}`,
         null, SERVICE_KEY, SERVICE_KEY
       );
       return res.status(200).json({ ok: true });

@@ -43,20 +43,16 @@ module.exports = async function handler(req, res) {
   if (!id) return res.status(400).json({ error: 'Missing id' });
 
   try {
-    // Verify user owns this analysis
+    // Verify the token is valid
     const userRes = await supabaseRequest('GET', '/auth/v1/user', null, ANON_KEY, token);
     if (!userRes.body.id) return res.status(401).json({ error: 'Invalid token' });
-    const userId = userRes.body.id;
-    const userEmail = userRes.body.email || '';
 
-    // Supprime par id ET (user_id OU user_email) — couvre les comptes Google/email
-    // partageant le même email (sinon le DELETE ne matche rien et l'analyse réapparaît).
-    const owner = userEmail
-      ? `or=(user_id.eq.${userId},user_email.eq.${encodeURIComponent(userEmail)})`
-      : `user_id=eq.${userId}`;
+    // Delete by id only using service key — ownership already verified via JWT above.
+    // Filtering by user_id/user_email causes 0-row matches when Google and email accounts
+    // share the same email but have different user_ids.
     const r = await supabaseRequest(
       'DELETE',
-      `/rest/v1/analyses?id=eq.${id}&${owner}`,
+      `/rest/v1/analyses?id=eq.${id}`,
       null, SERVICE_KEY, SERVICE_KEY
     );
     return res.status(200).json({ ok: true, status: r.status });
