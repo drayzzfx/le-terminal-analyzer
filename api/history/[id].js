@@ -47,10 +47,16 @@ module.exports = async function handler(req, res) {
     const userRes = await supabaseRequest('GET', '/auth/v1/user', null, ANON_KEY, token);
     if (!userRes.body.id) return res.status(401).json({ error: 'Invalid token' });
     const userId = userRes.body.id;
+    const userEmail = userRes.body.email || '';
 
+    // Supprime par id ET (user_id OU user_email) — couvre les comptes Google/email
+    // partageant le même email (sinon le DELETE ne matche rien et l'analyse réapparaît).
+    const owner = userEmail
+      ? `or=(user_id.eq.${userId},user_email.eq.${encodeURIComponent(userEmail)})`
+      : `user_id=eq.${userId}`;
     const r = await supabaseRequest(
       'DELETE',
-      `/rest/v1/analyses?id=eq.${id}&user_id=eq.${userId}`,
+      `/rest/v1/analyses?id=eq.${id}&${owner}`,
       null, SERVICE_KEY, SERVICE_KEY
     );
     return res.status(200).json({ ok: true, status: r.status });
