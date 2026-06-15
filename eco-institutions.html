@@ -170,16 +170,17 @@
   }
   function buildArt(item,hot){var l=getLang(),url=articleUrl(item);var flag=hot?'<span class="pr-art__flag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'+(l==='en'?'High impact':'Fort impact')+'</span>':'';return '<article class="pr-art'+(hot?'':' pr-art--blue')+'"><div class="pr-art__top"><span class="pr-art__cat js-term">Institutions</span>'+flag+'<span class="pr-art__src">'+esc(item.source||'')+'</span><span class="pr-art__time" title="'+esc(relTime(item.published_at))+'">'+fmt(item.published_at)+'</span></div><h3 class="pr-art__title">'+esc(getTitle(item))+'</h3><p class="pr-art__excerpt">'+esc(getSummary(item))+'</p><a class="pr-art__link" href="'+url+'">'+(l==='en'?'Read summary':'Lire le résumé')+' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></article>';  }
   function selectTop(items){var P={'Positif':3,'Négatif':3,'Risk-on':3,'Risk-off':3,'Hawkish':3,'Dovish':3,'Neutre':0};return items.filter(function(i){return (P[i.sentiment]||0)>=3;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});}
+  var ZKW=['fmi','imf','ocde','banque centrale','taux','politique monétaire','budget','dette','réserve','régulation'],UKW=['taux','inflation','cpi','pib','gdp','emploi','chômage','récession','crise','guerre','défaut','fomc','nfp','banque centrale','bce','fed','powell','lagarde','sanction'];
+  function impactScore(it){var sc=0,strong={'Positif':1,'Négatif':1,'Risk-on':1,'Risk-off':1,'Hawkish':1,'Dovish':1};if(strong[it.sentiment])sc+=45;var txt=((it.title||'')+' '+(it.summary||'')).toLowerCase();UKW.forEach(function(k){if(txt.indexOf(k)>-1)sc+=9;});ZKW.forEach(function(k){if(txt.indexOf(k)>-1)sc+=7;});var src=(it.source||'').toLowerCase();['reuters','bloomberg','financial times','wsj','les echos','banque','central'].forEach(function(b){if(src.indexOf(b)>-1)sc+=10;});var ageH=(Date.now()-new Date(it.published_at).getTime())/3600000;if(!isNaN(ageH))sc+=Math.max(0,36-ageH);return sc;}
   async function loadZone(){
     var grid=document.getElementById('prSelGrid');var items=[];
     try{var resp=await fetch('/api/news?zone=institutions&limit=60');if(resp.ok){var data=await resp.json();items=data.items||[];}}catch(e){}
     if(items.length===0){if(grid)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce disponible pour l\'instant.</div>';return;}
-    var top=selectTop(items);
-    var byDate=items.slice().sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
-    var pool=top.length>=1?top.concat(byDate.filter(function(i){return top.indexOf(i)===-1;})):byDate;
-    renderEdition(pool[0]);
-    var hotSet=top.filter(function(i){return i!==pool[0];});
-    var rest=pool.slice(1);var nHot=hotSet.length;
+    var featured=items.slice().sort(function(a,b){return impactScore(b)-impactScore(a);})[0];
+    renderEdition(featured);
+    var hotSet=selectTop(items).filter(function(i){return i!==featured;});
+    var rest=items.filter(function(i){return i!==featured;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
+    var nHot=hotSet.length;
     if(grid)grid.innerHTML=rest.length>0?rest.map(function(it){return buildArt(it,hotSet.indexOf(it)!==-1);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
     var sub=document.getElementById('prSelCount');
     if(sub){var n=rest.length;sub.textContent=getLang()==='en'?n+' article'+(n>1?'s':'')+' · '+nHot+' high-impact':n+' annonce'+(n>1?'s':'')+' · '+nHot+' à fort impact';sub.removeAttribute('data-en');}
