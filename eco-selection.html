@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
 </head>
 <body class="eco-page eco-sel">
 <div class="glow" aria-hidden="true"></div>
@@ -223,32 +224,15 @@
   }
 
   // ── Archive item (liste compacte — même style que les autres pages) ──────
+  function isToday(iso){try{var ff=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris'});return ff.format(new Date(iso))===ff.format(new Date());}catch(e){return true;}}
   function buildArchiveItem(item, idx) {
     var l = getLang();
-    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
-    var bias = l === 'en' ? sent.en : sent.fr;
-    var biasHtml = sent.cls
-      ? '<span class="bias ' + sent.cls + '" style="font-size:10px;padding:2px 8px">' + bias + '</span>'
-      : '';
-    var url   = articleUrl(item);
+    var url = articleUrl(item);
     var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var src   = (item.source || '').replace(/</g,'&lt;');
-    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : 'Éco';
+    var src = (item.source || '').replace(/</g,'&lt;');
     var d = new Date(item.published_at);
-    var now = new Date();
-    var isToday = d.toDateString() === now.toDateString();
-    var dateStr = isToday
-      ? 'Aujourd\'hui ' + fmt(item.published_at)
-      : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' · ' + fmt(item.published_at);
-
-    return '<a class="eco-arch-item" href="' + url + '" style="--i:' + idx + '">'
-      + '<div class="eco-arch-item__meta">'
-      + '<span class="eco-arch-item__time">' + dateStr + '</span>'
-      + '<span class="eco-arch-item__src">' + zone + ' · ' + src + '</span>'
-      + biasHtml
-      + '</div>'
-      + '<p class="eco-arch-item__title">' + title + '</p>'
-      + '</a>';
+    var dateStr = d.toLocaleDateString(l==='en'?'en-GB':'fr-FR',{day:'2-digit',month:'short'}) + ' · ' + fmt(item.published_at);
+    return '<a class="pr-prevrow" href="' + url + '"><span class="pr-prevrow__time">' + dateStr + '</span><span class="pr-prevrow__src">' + src + '</span><span class="pr-prevrow__title">' + title + '</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
   }
 
   // ── Construction d'une carte ─────────────────────────────────────────────
@@ -317,10 +301,7 @@
     var FORTYEIGHT_H = 48 * 3600 * 1000;
     var now = Date.now();
     var recent  = allItems.filter(function(i) { return (now - new Date(i.published_at).getTime()) < FOUR_H; });
-    var archive = allItems.filter(function(i) {
-      var age = now - new Date(i.published_at).getTime();
-      return age >= FOUR_H && age < FORTYEIGHT_H;
-    });
+    var archive = allItems.filter(function(i) { return isToday(i.published_at); });
 
     // Score + déduplique les deux groupes séparément
     function sortAndDedupe(items, limit) {
@@ -334,7 +315,7 @@
       return (now - new Date(i.published_at).getTime()) < FORTYEIGHT_H;
     }), 9);
 
-    var archiveTop = sortAndDedupe(archive, 30);
+    var archiveTop = sortAndDedupe(archive, 30).filter(function(i){ return pool.indexOf(i) === -1; });
 
     // ── Section principale (top picks) ───────────────────────────────────
     if (grid) {
@@ -360,10 +341,10 @@
       var archSub    = archHeader ? archHeader.querySelector('.block__sub') : null;
 
       // Crée ou réutilise la liste
-      var archList = archSec.querySelector('.eco-archives__list');
+      var archList = archSec.querySelector('.pr-prevlist');
       if (!archList) {
         archList = document.createElement('div');
-        archList.className = 'eco-archives__list';
+        archList.className = 'pr-prevlist';
         archSec.appendChild(archList);
         var oldEmpty = archSec.querySelector('.eco-empty');
         if (oldEmpty) oldEmpty.remove();
@@ -374,7 +355,7 @@
         var l2 = getLang();
         var na = archiveTop.length;
         archSub.textContent = na > 0
-          ? (l2 === 'en' ? na + ' announcement' + (na > 1 ? 's' : '') + ' · last 48h' : na + ' annonce' + (na > 1 ? 's' : '') + ' · dernières 48h')
+          ? (l2 === 'en' ? na + ' announcement' + (na > 1 ? 's' : '') + ' · today' : na + ' annonce' + (na > 1 ? 's' : '') + ' · du jour')
           : (l2 === 'en' ? 'No archives yet' : 'Aucune archive pour l\'instant');
         archSub.removeAttribute('data-en');
       }
@@ -382,7 +363,7 @@
       if (archiveTop.length > 0) {
         archList.innerHTML = archiveTop.map(function(item, i) { return buildArchiveItem(item, i); }).join('');
       } else {
-        archList.innerHTML = '<p style="font-size:13px;color:var(--text3);padding:20px 0">Les annonces publiées il y a plus de 4 heures apparaîtront ici automatiquement.</p>';
+        archList.innerHTML = '<p style="font-size:13px;color:var(--text-muted);padding:20px 0">Les autres annonces du jour apparaîtront ici.</p>';
       }
     }
   }
