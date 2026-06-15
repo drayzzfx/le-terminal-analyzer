@@ -1238,8 +1238,9 @@
     pill.style.cursor = 'pointer';
     pill.addEventListener('click', function(){
       var next = (pill.textContent === 'FR') ? 'en' : 'fr';
-      try { localStorage.setItem('lt_lang', next); localStorage.setItem('lte_lang', next); } catch(e){}
       pill.textContent = next.toUpperCase();
+      if (window.ltSetLang) { ltSetLang(next); }
+      else { try { localStorage.setItem('lt_lang', next); localStorage.setItem('lte_lang', next); } catch(e){} }
     });
   }
 })();
