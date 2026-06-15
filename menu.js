@@ -326,9 +326,15 @@
     </div>
   `;
 
-  var container = document.createElement('div');
-  container.innerHTML = menuHTML;
-  document.body.appendChild(container);
+  // L'ancien drawer « Le Terminal Hub » ne doit JAMAIS s'afficher sur les pages
+  // dotées de la nouvelle barre latérale (appshell.js). On ne l'injecte que sur
+  // les pages sans appshell (ex. index.html, legal.html) pour préserver leur nav.
+  var _hasAppshell = !!document.querySelector('script[src*="appshell.js"]');
+  if (!_hasAppshell) {
+    var container = document.createElement('div');
+    container.innerHTML = menuHTML;
+    document.body.appendChild(container);
+  }
 
   // ── FUNCTIONS ──
   // Le bouton FR/EN bascule la langue (pastilles .lt-nav__pill).
