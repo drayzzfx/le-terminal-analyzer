@@ -294,9 +294,9 @@ body {
 .lang-btn.on { background: var(--v); color: white; }
 
 /* MAIN LAYOUT */
-.main { padding: 0; }
+.main { padding: 0; display:flex; flex-direction:column; align-items:center; }
 /* Form — intégré au design (panneau, labels mono, bouton accent) */
-#formView{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:24px 24px 28px}
+#formView{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:36px 40px 40px;width:100%;max-width:1100px;box-sizing:border-box}
 #formView .form-section-title:first-child{margin-top:0}
 .form-section-title{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--accent,#7FB8E8)!important;letter-spacing:.14em!important}
 .lbl{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;color:var(--text-muted,#7E8794)!important;font-size:10px!important;letter-spacing:.12em!important;text-transform:uppercase!important}
@@ -492,6 +492,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .loading-view {
   display: none;
   min-height: 60vh;
+  width:100%; max-width:1100px; box-sizing:border-box;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -528,7 +529,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
 
 /* ── RESULT ── */
-.result-view { display: none; }
+.result-view { display: none; width:100%; max-width:1100px; box-sizing:border-box; }
 .result-view.show { display: block; }
 
 /* Score hero */
@@ -839,6 +840,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   background: var(--bg);
 }
 #historyPage.show { display: block; }
+/* Intégré dans la grille AppShell → s'affiche à droite de la barre OUTILS */
+.app > #historyPage, .app > #perfPage { grid-column: 2; grid-row: 1; min-height: calc(100vh - var(--chrome-h, 102px)); }
 
 .history-page-header, .perf-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -847,6 +850,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 50;
+}
+/* Barre OUTILS visible sur desktop → bouton menu redondant : masqué.
+   Conservé sur mobile (≤880px) où la barre latérale est cachée. */
+.history-page-header .lt-hamburger, .perf-header .lt-hamburger { display: none; }
+@media (max-width: 880px) {
+  .history-page-header .lt-hamburger, .perf-header .lt-hamburger { display: inline-flex; }
 }
 
 .history-page-title {
@@ -1019,7 +1028,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <a href="./index.html#community">Communauté</a>
       </nav>
       <div class="lt-nav__actions">
-        <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltOpenMenu&&ltOpenMenu()">FR</span>
+        <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
         <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
         <div id="ltUserBar"></div>
         <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
@@ -1150,6 +1159,9 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         </div>
       </div>
 
+      <div id="tokenChip" style="display:none;text-align:center;margin-bottom:10px;font-size:12px;color:var(--text2)">
+        <span id="tokenChipTxt"></span>
+      </div>
       <button class="analyze-btn" id="submitBtn" onclick="analyze()">
         <span id="btn-txt">Analyser mon setup</span>
       </button>
@@ -1666,6 +1678,8 @@ async function analyze(){
   // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){window.location.href="./index.html";return}
+  // Système de tokens : 1 token par analyse (Premium = illimité)
+  if(!(await spendToken('analyze'))) return;
 
   const rrv=calcRR();
   const steps=c().steps; let si=0;
@@ -1977,20 +1991,21 @@ async function saveNotes(i, btnEl){
 
 // ── PERFORMANCES PAGE ──
 function openPerf(){
-  document.getElementById('app').style.display='none';
+  _hideAnalyzerMain(true);
+  var hp=document.getElementById('historyPage'); if(hp) hp.classList.remove('show');
   document.getElementById('perfPage').classList.add('show');
   loadPerf();
 }
 function closePerf(goTo){
   document.getElementById('perfPage').classList.remove('show');
-  if(!goTo) document.getElementById('app').style.display='block';
+  if(!goTo) _hideAnalyzerMain(false);
 }
 
 async function loadPerf(){
   document.getElementById('perfLoading').style.display='block';
   document.getElementById('perfContent').style.display='none';
   // Try to refresh from API if connected
-  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d)&&d.length){var _aIds=new Set(d.map(function(h){return String(h.id);}));var _loc=historyData.filter(function(h){return !_aIds.has(String(h.id));});historyData=_loc.concat(d);historyData.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});}}catch(e){}}
+  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d)&&d.length){var _aIds=new Set(d.map(function(h){return String(h.id);}));var _loc=historyData.filter(function(h){return !_aIds.has(String(h.id));});historyData=_loc.concat(d).filter(function(h){return !(_deletedIds instanceof Set) || !_deletedIds.has(String(h.id));});historyData.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});}}catch(e){}}
   // Build stats from local historyData
   var all = historyData;
   if(!all.length){ document.getElementById('perfLoading').textContent='Aucune analyse encore. Lance ta première analyse !'; return; }
@@ -2576,7 +2591,7 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      if(!isPro){window.location.href='./index.html?paywall=1';return;}
+      await refreshTokens();
       updateUserUI();loadHistory();
     } else {
       // API says invalid - but keep session alive if network error might be the cause
@@ -2591,6 +2606,48 @@ async function checkSession(){
   }catch(e){
     // Network error - keep session from localStorage, user stays logged in
     updateUserUI();
+  }
+}
+
+var userTokens = null;
+function renderTokenChip(){
+  var chip=document.getElementById('tokenChip');
+  var txt=document.getElementById('tokenChipTxt');
+  if(!chip||!txt) return;
+  if(isPro){ chip.style.display='block'; txt.innerHTML='<strong style="color:var(--v2)">Premium</strong> · analyses illimitées'; return; }
+  if(userTokens==null){ chip.style.display='none'; return; }
+  chip.style.display='block';
+  txt.innerHTML='Il te reste <strong style="color:'+(userTokens>0?'var(--v2)':'#F87171')+'">'+userTokens+' token'+(userTokens>1?'s':'')+'</strong> · 1 token = 1 analyse';
+}
+async function refreshTokens(){
+  if(!authToken) return;
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
+    var d=await res.json();
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(d.is_pro) isPro=true;
+  }catch(e){}
+  renderTokenChip();
+}
+// Dépense des tokens pour une action ; renvoie true si autorisé. Premium = toujours true.
+async function spendToken(reason){
+  if(isPro) return true;
+  if(!authToken){ window.location.href='./index.html'; return false; }
+  try{
+    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
+    var d=await res.json();
+    if(d.unlimited){ isPro=true; renderTokenChip(); return true; }
+    if(typeof d.tokens==='number') userTokens=d.tokens;
+    renderTokenChip();
+    if(d.ok) return true;
+    showNoTokens();
+    return false;
+  }catch(e){ return true; } // en cas d'erreur réseau on ne bloque pas
+}
+function showNoTokens(){
+  renderTokenChip();
+  if(confirm('Tu n\'as plus de tokens. Passe en Premium pour des analyses illimitées ?')){
+    window.location.href='./tarifs.html';
   }
 }
 
@@ -2671,14 +2728,17 @@ document.addEventListener('DOMContentLoaded', function(){
   _updateHistoryBadge();
 });
 
+function _analyzerMainEl(){ return document.querySelector('#app .main') || document.getElementById('app'); }
+function _hideAnalyzerMain(hide){ var m=_analyzerMainEl(); if(m) m.style.display = hide ? 'none' : ''; }
 function openHistory(){
-    document.getElementById('app').style.display='none';
+    _hideAnalyzerMain(true);
+    var pp=document.getElementById('perfPage'); if(pp) pp.classList.remove('show');
     document.getElementById('historyPage').classList.add('show');
     renderHistoryGrid();
   }
 function closeHistory(){
     document.getElementById('historyPage').classList.remove('show');
-    document.getElementById('app').style.display='block';
+    _hideAnalyzerMain(false);
   }
 function closeHDetail(){document.getElementById('hdetailOverlay').classList.remove('show');}
 var _pendingDeleteIdx = -1;
@@ -2698,24 +2758,27 @@ function buildHistoryGrid(){
   if(!Array.isArray(historyData)) historyData=[];
   var grid = document.getElementById('historyGrid');
   if(!grid) return;
-  if(!historyData.length){
-    grid.innerHTML='<div class="history-empty-page"><div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Aucune analyse encore<br>Lance ta première analyse !</div>';
-    return;
-  }
-  var rows = historyData.map(function(item,idx){
+  // Garde l'index d'origine (openHDetail lit historyData[idx]) en sautant les supprimées.
+  var rows = [];
+  historyData.forEach(function(item,idx){
+    if(_deletedIds instanceof Set && _deletedIds.has(String(item && item.id))) return;
     var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
     var vL=item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
     var sc=parseFloat(item.score)||0;
     var col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
     var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
-    return '<div class="history-card" onclick="openHDetail('+idx+')">'+
+    rows.push('<div class="history-card" onclick="openHDetail('+idx+')">'+
       '<div class="hc-top"><span class="hc-pair">'+(item.pair||'—')+' · '+(item.direction||'')+'</span>'+
       '<span class="hc-verdict '+vC+'">'+vL+'</span></div>'+
       '<div class="hc-score" style="color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:14px;color:var(--text3)">/10</span></div>'+
       '<div class="hc-label">'+(item.score_label||'')+'</div>'+
       '<div class="hc-meta">'+(item.tf||'')+(item.tf&&item.direction?' · ':'')+ds+'</div>'+
-    '</div>';
+    '</div>');
   });
+  if(!rows.length){
+    grid.innerHTML='<div class="history-empty-page"><div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Aucune analyse encore<br>Lance ta première analyse !</div>';
+    return;
+  }
   // Write new content
   grid.innerHTML = rows.join('');
 }
@@ -2744,12 +2807,13 @@ async function confirmOk(){
   _saveLocalHistory();
 
   // 4. Naviguer vers historique
-  document.getElementById('app').style.display='none';
+  _hideAnalyzerMain(true);
   var perfPage=document.getElementById('perfPage'); if(perfPage) perfPage.classList.remove('show');
   var histPage = document.getElementById('historyPage');
   histPage.classList.add('show');
   // Reconstruire le contenu de la page historique depuis zéro
   buildHistoryGrid();
+  _updateHistoryBadge();
 
   // 5. API DELETE (ne pas attendre, ne pas appeler loadHistory après)
   if(authToken && item.id){
@@ -3297,7 +3361,7 @@ window.openHistory = openHistory;
 window.closeHistory = closeHistory;
 function closeHistoryPage(goTo){
   document.getElementById('historyPage').classList.remove('show');
-  if(!goTo) document.getElementById('app').style.display='block';
+  if(!goTo) _hideAnalyzerMain(false);
 }
 window.closeHistoryPage = closeHistoryPage;
 window.closeHDetail = closeHDetail;
@@ -3363,7 +3427,7 @@ function quickSetResult(result){
   <header class="history-page-header">
     <div style="display:flex;align-items:center;gap:10px">
       <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-      <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
+      <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
     </div>
     <button class="back-btn" onclick="closeHistoryPage()">← Retour</button>
   </header>
@@ -3391,7 +3455,10 @@ function quickSetResult(result){
 <!-- PERFORMANCES PAGE -->
 <div id="perfPage">
   <header class="perf-header">
-    <a href="./index.html" class="history-page-title" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px"><img src="./logo.jpg.webp" alt="logo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid rgba(56,182,255,.3)">Le Terminal <span>Analyzer</span></a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
+      <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
+    </div>
     <button class="back-btn" onclick="closePerf()">← Retour</button>
     <button onclick="window.print()" style="padding:7px 16px;background:rgba(127,184,232,.12);border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Exporter PDF</button>
   </header>
@@ -3635,11 +3702,38 @@ function quickSetResult(result){
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>
-// Ouvre le bon panneau si on arrive via un lien ancré depuis le menu
+// Intègre Historique/Perfs dans la grille AppShell (à droite de la barre OUTILS)
+// pour que la barre latérale reste visible sur ces vues.
+(function integratePages(){
+  function run(){
+    var appWrap = document.querySelector('#app > .app') || document.querySelector('.app');
+    var hp = document.getElementById('historyPage');
+    var pp = document.getElementById('perfPage');
+    if(appWrap && hp && pp && hp.parentElement !== appWrap){
+      appWrap.appendChild(hp);
+      appWrap.appendChild(pp);
+    }
+  }
+  if(document.readyState !== 'loading') run();
+  else window.addEventListener('DOMContentLoaded', run);
+})();
+
+// Ouvre le bon panneau via lien ancré — au chargement ET au changement de hash
+// (clic dans la sidebar alors qu'on est déjà sur app.html, sans rechargement)
 (function() {
-  var h = window.location.hash;
-  if (h === '#historique') { window.addEventListener('load', function(){ openHistory(); }); }
-  else if (h === '#perfs')  { window.addEventListener('load', function(){ openPerf();    }); }
+  function applyHash(){
+    var h = window.location.hash;
+    if (h === '#historique') {
+      try { if(typeof closePerf==='function') closePerf('hist'); } catch(e){}
+      if(typeof openHistory==='function') openHistory();
+    } else if (h === '#perfs')  {
+      try { if(typeof closeHistoryPage==='function') closeHistoryPage('perfs'); } catch(e){}
+      if(typeof openPerf==='function') openPerf();
+    }
+  }
+  if (document.readyState === 'complete') applyHash();
+  else window.addEventListener('load', applyHash);
+  window.addEventListener('hashchange', applyHash);
 })();
 </script>
 

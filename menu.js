@@ -163,6 +163,7 @@
     .lt-ub-menu { position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px; background: rgba(16,20,27,.98); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; box-shadow: 0 24px 60px rgba(0,0,0,.6); padding: 8px; z-index: 100001; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all .18s ease; }
     .lt-ub-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
     .lt-ub-menu__mail { padding: 8px 10px 10px; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; color: #7E8794; word-break: break-all; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 6px; }
+    .lt-ub-menu__badge { display: block; margin-top: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #7FB8E8; }
     .lt-ub-logout { width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: none; border-radius: 6px; color: #F0647A; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; }
     .lt-ub-logout:hover { background: rgba(240,100,122,.12); }
 
@@ -330,16 +331,22 @@
   document.body.appendChild(container);
 
   // ── FUNCTIONS ──
-  // Menu latéral désactivé : la navigation + déconnexion passent par la barre
-  // latérale « Outils » (appshell.js). Le bouton FR/EN bascule juste la langue.
-  window.ltOpenMenu = function() {
+  // Le bouton FR/EN bascule la langue (pastilles .lt-nav__pill).
+  window.ltToggleLang = function() {
     var cur = (localStorage.getItem('lt_lang') === 'en') ? 'en' : 'fr';
     var next = cur === 'en' ? 'fr' : 'en';
     ltSetLang(next);
-    // Met à jour le libellé des pastilles FR/EN dans les topbars
     Array.prototype.forEach.call(document.querySelectorAll('.lt-nav__pill'), function(p){
       if(p.id !== 'langToggle') p.textContent = next.toUpperCase();
     });
+  };
+  // Le menu latéral (drawer « Le Terminal Hub ») s'ouvre via le bouton ☰ —
+  // utile notamment sur les vues Historique/Perfs qui recouvrent la barre latérale.
+  window.ltOpenMenu = function() {
+    var menu = document.getElementById('ltSideMenu');
+    if(!menu) { return; }
+    if(menu.classList.contains('open')) { ltCloseMenu(); }
+    else { menu.classList.add('open'); document.body.classList.add('lt-menu-open'); }
   };
   window.ltCloseMenu = function() {
     var m = document.getElementById('ltSideMenu');
@@ -399,7 +406,7 @@
         '<span class="lt-ub-name">' + username + '</span>' + caret +
       '</div>' +
       '<div class="lt-ub-menu" id="ltUbMenu">' +
-        '<div class="lt-ub-menu__mail">' + email + (isPro ? ' · Premium' : '') + '</div>' +
+        '<div class="lt-ub-menu__mail">' + email + (isPro ? '<span class="lt-ub-menu__badge">Premium</span>' : '') + '</div>' +
         '<button type="button" class="lt-ub-logout" onclick="ltGlobalLogout()">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
           'Se déconnecter</button>' +
@@ -816,34 +823,29 @@
     var cs = document.createElement('style');
     cs.textContent = [
       '* { cursor: none !important; }',
+      // mix-blend-mode:difference → le curseur s'inverse par rapport au fond,
+      // donc toujours parfaitement visible (sombre, clair, image, graphique…).
       '#lt-cur-dot {',
-        'position:fixed;top:0;left:0;z-index:99999;pointer-events:none;',
-        'width:4px;height:4px;border-radius:50%;',
-        'background:#BFDCF5;',
-        'box-shadow:0 0 4px 1px #BFDCF5,0 0 9px 2px rgba(127,184,232,.45);',
-        // Perf : déplacement via transform (composité GPU) — left/top forcerait un layout par frame
+        'position:fixed;top:0;left:0;z-index:2147483647;pointer-events:none;',
+        'width:9px;height:9px;border-radius:50%;',
+        'background:#ffffff;mix-blend-mode:difference;',
         'transform:translate(-50%,-50%);',
-        'transition:width .2s,height .2s,background .2s;',
+        'transition:width .15s,height .15s;',
         'will-change:transform;',
       '}',
       '#lt-cur-ring {',
         'position:fixed;top:0;left:0;z-index:2147483646;pointer-events:none;',
-        'width:22px;height:22px;border-radius:50%;',
-        'border:1.5px solid rgba(255,255,255,.75);',
-        'box-shadow:0 0 7px 1px rgba(255,255,255,.3),inset 0 0 4px rgba(255,255,255,.15);',
+        'width:26px;height:26px;border-radius:50%;',
+        'border:2px solid #ffffff;mix-blend-mode:difference;',
         'transform:translate(-50%,-50%);',
         'transition:width .25s,height .25s,border-color .25s;',
         'will-change:transform;',
       '}',
       'body.lt-cur-hover #lt-cur-dot {',
-        'width:6px;height:6px;',
-        'background:#7FB8E8;',
-        'box-shadow:0 0 7px 2px #7FB8E8,0 0 14px 4px rgba(127,184,232,.4);',
+        'width:12px;height:12px;',
       '}',
       'body.lt-cur-hover #lt-cur-ring {',
-        'width:28px;height:28px;',
-        'border-color:rgba(127,184,232,.55);',
-        'box-shadow:0 0 8px 1px rgba(127,184,232,.2);',
+        'width:36px;height:36px;border-width:2.5px;',
       '}',
       '@media (pointer:coarse){#lt-cur-dot,#lt-cur-ring{display:none!important}*{cursor:auto!important}}'
     ].join('');

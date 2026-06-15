@@ -1,6 +1,40 @@
 // appshell.js — AppShell du design (barre latérale « Outils » hiérarchique + fil
 // d'ariane) appliqué à toutes les pages outils. La barre latérale reprend le STYLE
 // du design actuel (.side__item) avec l'arborescence complète (sous-menus dépliables).
+
+/* ─── CURSEUR CUSTOM SIMPLE NÉON ──────────────────────────────────────────── */
+(function () {
+  if (window._ltCursorInit) return;
+  window._ltCursorInit = true;
+
+  var style = document.createElement('style');
+  style.textContent =
+    '*, *::before, *::after { cursor: none !important; }' +
+    '#lt-c {' +
+    '  position: fixed; top: 0; left: 0; z-index: 999999;' +
+    '  width: 10px; height: 10px; border-radius: 50%;' +
+    '  background: #7FB8E8;' +
+    '  box-shadow: 0 0 8px 2px #7FB8E8, 0 0 18px 4px rgba(127,184,232,.5);' +
+    '  pointer-events: none; transform: translate(-50%,-50%);' +
+    '  transition: opacity .2s, width .15s, height .15s, box-shadow .15s;' +
+    '}' +
+    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #7FB8E8, 0 0 28px 8px rgba(127,184,232,.5); }' +
+    '#lt-c.off { opacity: 0; }';
+  document.head.appendChild(style);
+
+  var el = document.createElement('div'); el.id = 'lt-c';
+  document.body ? document.body.appendChild(el) : document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(el); });
+
+  document.addEventListener('mousemove', function (e) {
+    el.style.left = e.clientX + 'px';
+    el.style.top  = e.clientY + 'px';
+    el.classList.toggle('h', !!e.target.closest('a,button,[role="button"],[onclick]'));
+  });
+  document.addEventListener('mouseleave', function () { el.classList.add('off'); });
+  document.addEventListener('mouseenter', function () { el.classList.remove('off'); });
+})();
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 (function () {
   'use strict';
 
@@ -167,7 +201,11 @@
       + '.side__ic{flex-shrink:0;display:inline-flex;align-items:center}'
       + '.side__lbl{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
       + '.side__pro-tag{margin-left:auto;flex-shrink:0;white-space:nowrap;line-height:1.5;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:3px 8px}'
-      + '.side{overflow-y:auto}'
+      + '.side{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}'
+      + '.side::-webkit-scrollbar{width:8px}'
+      + '.side::-webkit-scrollbar-track{background:transparent}'
+      + '.side::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}'
+      + '.side::-webkit-scrollbar-thumb:hover{background:rgba(127,184,232,.5);background-clip:padding-box}'
       // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
       // intégré dans .app, on le fait se comporter comme .main (pleine largeur,
       // aligné à gauche) pour que le fil d'ariane (.top) couvre toute la largeur
@@ -239,6 +277,24 @@
       if (c0) c0.classList.add('is-open');
       if (s0) s0.classList.add('is-open');
     }
+    // Déplie toute la chaîne jusqu'à la page active + surligne l'item courant,
+    // pour que le menu reste ouvert après navigation (ex: Calendrier ▸ Présentation ▸ Amériques)
+    var navLinks = sideEl.querySelectorAll('a.side__item, a.side__subitem');
+    Array.prototype.forEach.call(navLinks, function (a) {
+      var href = (a.getAttribute('href') || '').split('#')[0].split('/').pop().toLowerCase();
+      if (href && href === path) {
+        a.classList.add('is-active');
+        var el = a.parentElement;
+        while (el && el !== sideEl) {
+          if (el.classList && el.classList.contains('side__sub')) {
+            el.classList.add('is-open');
+            var row = el.previousElementSibling;
+            if (row) { var car = row.querySelector('.side__caret'); if (car) car.classList.add('is-open'); }
+          }
+          el = el.parentElement;
+        }
+      }
+    });
     // toggles
     sideEl.addEventListener('click', function (e) {
       var btn = e.target.closest('.side__caret');
