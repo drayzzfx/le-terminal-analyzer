@@ -176,6 +176,14 @@
   </section>
 
   <!-- MISSION -->
+  <section class="pr-sel" id="prPrevSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Economy">Éco</span> · <span id="prPrevCount" data-en="archive">archive</span></span>
+      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
+    </div>
+    <div class="pr-prevlist" id="prPrevList"></div>
+  </section>
+
   <section class="pr-mission">
     <div>
       <div class="pr-head">
@@ -297,6 +305,9 @@
     var une = document.getElementById('prHeroUne'); if (une) une.href = url;
   }
 
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleDateString(en?'en-GB':'fr-FR',{day:'2-digit',month:'short'})+' · '+d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function isToday(iso){try{var ff=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris'});return ff.format(new Date(iso))===ff.format(new Date());}catch(e){return true;}}
+  function buildPrevRow(item){var url=articleUrl(item);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(item.published_at)+'</span><span class="pr-prevrow__src">'+esc(item.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(item))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
   function buildArt(item) {
     var l = getLang(), url = articleUrl(item);
     return '<article class="pr-art">'
@@ -352,6 +363,13 @@
         ? n + ' article' + (n > 1 ? 's' : '') + ' · auto-selected'
         : n + ' annonce' + (n > 1 ? 's' : '') + ' · sélection automatique';
       sub.removeAttribute('data-en');
+    }
+    var shown = [pool[0]].concat(selItems);
+    var older = items.slice().sort(function (a, b) { return new Date(b.published_at) - new Date(a.published_at); }).filter(function (i) { return shown.indexOf(i) === -1; }).filter(isToday);
+    var prevSec = document.getElementById('prPrevSec'), prevList = document.getElementById('prPrevList'), prevCnt = document.getElementById('prPrevCount');
+    if (prevSec && prevList) {
+      if (older.length > 0) { prevSec.style.display = ''; prevList.innerHTML = older.map(buildPrevRow).join(''); if (prevCnt) { prevCnt.textContent = getLang() === 'en' ? older.length + ' archived' : older.length + ' archivée' + (older.length > 1 ? 's' : ''); prevCnt.removeAttribute('data-en'); } }
+      else { prevSec.style.display = 'none'; }
     }
   }
 
