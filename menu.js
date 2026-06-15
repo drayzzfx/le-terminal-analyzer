@@ -804,6 +804,32 @@
   // Re-sync when localStorage changes (cross-tab)
   window.addEventListener('storage', ltSyncUser);
 
+  // ── CURSEUR POINT DORÉ NÉON (toutes les pages) ──
+  (function(){
+    if(window.matchMedia('(pointer:coarse)').matches) return;
+    if(window._ltCursorInit) return;
+    window._ltCursorInit = true;
+    ['lt-cursor-dot','lt-cursor-ring','lt-c','lt-ch','lt-cur-dot','lt-cur-ring'].forEach(function(id){
+      var el=document.getElementById(id); if(el) el.remove();
+    });
+    var s=document.createElement('style');
+    s.textContent=
+      'html,body,*{cursor:none!important}'+
+      '#lt-p{position:fixed;z-index:2147483647;pointer-events:none;'+
+      'width:9px;height:9px;border-radius:50%;'+
+      'background:#E8C268;'+
+      'box-shadow:0 0 7px 2px rgba(232,194,104,.7),0 0 16px 4px rgba(232,194,104,.35);'+
+      'transform:translate(-50%,-50%);transition:opacity .2s;}'+
+      '#lt-p.off{opacity:0}';
+    document.head.appendChild(s);
+    var el=document.createElement('div'); el.id='lt-p';
+    function mount(){ document.body.appendChild(el); }
+    document.body ? mount() : document.addEventListener('DOMContentLoaded',mount);
+    document.addEventListener('mousemove',function(e){ el.style.left=e.clientX+'px'; el.style.top=e.clientY+'px'; });
+    document.addEventListener('mouseleave',function(){ el.classList.add('off'); });
+    document.addEventListener('mouseenter',function(){ el.classList.remove('off'); });
+  })();
+
   // ── BANNIÈRE COOKIES (toutes les pages, conformité RGPD) ──
   (function(){
     var KEY = 'lt_cookie_consent';
