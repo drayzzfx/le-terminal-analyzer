@@ -839,6 +839,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   background: var(--bg);
 }
 #historyPage.show { display: block; }
+/* Intégré dans la grille AppShell → s'affiche à droite de la barre OUTILS */
+.app > #historyPage, .app > #perfPage { grid-column: 2; grid-row: 1; min-height: calc(100vh - var(--chrome-h, 102px)); }
 
 .history-page-header, .perf-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -1982,13 +1984,14 @@ async function saveNotes(i, btnEl){
 
 // ── PERFORMANCES PAGE ──
 function openPerf(){
-  document.getElementById('app').style.display='none';
+  _hideAnalyzerMain(true);
+  var hp=document.getElementById('historyPage'); if(hp) hp.classList.remove('show');
   document.getElementById('perfPage').classList.add('show');
   loadPerf();
 }
 function closePerf(goTo){
   document.getElementById('perfPage').classList.remove('show');
-  if(!goTo) document.getElementById('app').style.display='block';
+  if(!goTo) _hideAnalyzerMain(false);
 }
 
 async function loadPerf(){
@@ -2718,14 +2721,17 @@ document.addEventListener('DOMContentLoaded', function(){
   _updateHistoryBadge();
 });
 
+function _analyzerMainEl(){ return document.querySelector('#app .main') || document.getElementById('app'); }
+function _hideAnalyzerMain(hide){ var m=_analyzerMainEl(); if(m) m.style.display = hide ? 'none' : ''; }
 function openHistory(){
-    document.getElementById('app').style.display='none';
+    _hideAnalyzerMain(true);
+    var pp=document.getElementById('perfPage'); if(pp) pp.classList.remove('show');
     document.getElementById('historyPage').classList.add('show');
     renderHistoryGrid();
   }
 function closeHistory(){
     document.getElementById('historyPage').classList.remove('show');
-    document.getElementById('app').style.display='block';
+    _hideAnalyzerMain(false);
   }
 function closeHDetail(){document.getElementById('hdetailOverlay').classList.remove('show');}
 var _pendingDeleteIdx = -1;
@@ -2794,12 +2800,13 @@ async function confirmOk(){
   _saveLocalHistory();
 
   // 4. Naviguer vers historique
-  document.getElementById('app').style.display='none';
+  _hideAnalyzerMain(true);
   var perfPage=document.getElementById('perfPage'); if(perfPage) perfPage.classList.remove('show');
   var histPage = document.getElementById('historyPage');
   histPage.classList.add('show');
   // Reconstruire le contenu de la page historique depuis zéro
   buildHistoryGrid();
+  _updateHistoryBadge();
 
   // 5. API DELETE (ne pas attendre, ne pas appeler loadHistory après)
   if(authToken && item.id){
@@ -3347,7 +3354,7 @@ window.openHistory = openHistory;
 window.closeHistory = closeHistory;
 function closeHistoryPage(goTo){
   document.getElementById('historyPage').classList.remove('show');
-  if(!goTo) document.getElementById('app').style.display='block';
+  if(!goTo) _hideAnalyzerMain(false);
 }
 window.closeHistoryPage = closeHistoryPage;
 window.closeHDetail = closeHDetail;
@@ -3688,6 +3695,22 @@ function quickSetResult(result){
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>
+// Intègre Historique/Perfs dans la grille AppShell (à droite de la barre OUTILS)
+// pour que la barre latérale reste visible sur ces vues.
+(function integratePages(){
+  function run(){
+    var appWrap = document.querySelector('#app > .app') || document.querySelector('.app');
+    var hp = document.getElementById('historyPage');
+    var pp = document.getElementById('perfPage');
+    if(appWrap && hp && pp && hp.parentElement !== appWrap){
+      appWrap.appendChild(hp);
+      appWrap.appendChild(pp);
+    }
+  }
+  if(document.readyState !== 'loading') run();
+  else window.addEventListener('DOMContentLoaded', run);
+})();
+
 // Ouvre le bon panneau via lien ancré — au chargement ET au changement de hash
 // (clic dans la sidebar alors qu'on est déjà sur app.html, sans rechargement)
 (function() {
