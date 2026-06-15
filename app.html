@@ -2775,6 +2775,14 @@ function deleteLastAnalysis(){
 function closeConfirm(){
   document.getElementById('confirmOverlay').classList.remove('show');
   _pendingDeleteIdx = -1;
+  _bulkPending = false;
+  _restoreConfirmText();
+}
+function _restoreConfirmText(){
+  var box=document.getElementById('confirmOverlay'); if(!box) return;
+  var t=box.querySelector('.confirm-title'); var s=box.querySelector('.confirm-sub');
+  if(t) t.textContent="Supprimer l'analyse ?";
+  if(s) s.innerHTML="Cette action est irréversible.<br>L'analyse sera définitivement supprimée.";
 }
 function buildHistoryGrid(){
   if(!Array.isArray(historyData)) historyData=[];
@@ -2846,9 +2854,21 @@ function _updateSelCount(){
   var del = document.getElementById('histBulkDel');
   if(del) del.disabled = (n===0);
 }
+var _bulkPending = false;
 function bulkDeleteSelected(){
   if(!_selectedIds.size) return;
-  if(!confirm('Supprimer les ' + _selectedIds.size + ' analyse' + (_selectedIds.size>1?'s':'') + ' sélectionnée' + (_selectedIds.size>1?'s':'') + ' ?')) return;
+  // Ouvre la modale stylée du site (au lieu du confirm() natif)
+  _bulkPending = true;
+  var box = document.getElementById('confirmOverlay');
+  var t = box.querySelector('.confirm-title');
+  var s = box.querySelector('.confirm-sub');
+  var n = _selectedIds.size;
+  if(t) t.textContent = 'Supprimer ' + n + ' analyse' + (n>1?'s':'') + ' ?';
+  if(s) s.innerHTML = 'Cette action est irréversible.<br>' + (n>1?'Les analyses seront définitivement supprimées.':"L'analyse sera définitivement supprimée.");
+  box.classList.add('show');
+}
+function _doBulkDelete(){
+  if(!_selectedIds.size) return;
   if(!(_deletedIds instanceof Set)) _deletedIds = new Set();
   var ids = Array.from(_selectedIds);
   ids.forEach(function(id){
@@ -2870,6 +2890,14 @@ window.histSelectAll = histSelectAll;
 window.bulkDeleteSelected = bulkDeleteSelected;
 
 async function confirmOk(){
+  // Suppression groupée (sélection multiple)
+  if(_bulkPending){
+    document.getElementById('confirmOverlay').classList.remove('show');
+    _bulkPending = false;
+    _restoreConfirmText();
+    _doBulkDelete();
+    return;
+  }
   var i = _pendingDeleteIdx;
   if(i < 0) return;
   var item = historyData[i];
