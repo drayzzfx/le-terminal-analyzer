@@ -309,7 +309,7 @@ footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-i
       <li>Feedback adapté à ton niveau</li>
       <li>Accès prioritaire aux nouvelles features</li>
     </ul>
-    <a href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" class="pricing-cta"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> S'abonner maintenant</a>
+    <a href="javascript:void(0)" onclick="window.ltOpenCheckout&&ltOpenCheckout('annual')" class="pricing-cta"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> S'abonner maintenant</a>
     <div class="pricing-note">Paiement sécurisé via Whop · Annulation à tout moment</div>
   </div>
 </section>
@@ -393,5 +393,6 @@ async function fetchPrices(){
 fetchPrices();
 setInterval(fetchPrices, 30000);
 </script>
+<script src="./checkout.js"></script>
 </body>
 </html>
