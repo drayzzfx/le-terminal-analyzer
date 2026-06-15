@@ -69,36 +69,36 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     </a>
     <nav class="lt-nav__links">
       <div class="lt-nav__drop">
-        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <button class="lt-nav__droptrigger"><span data-en="Tools">Outils</span> <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="lt-nav__menu">
-          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
-          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
-          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Trading Journal">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Economic Calendar">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Pip Calculator">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
         </div>
       </div>
-      <a href="./tarifs.html">Tarifs</a>
-      <a href="./index.html#method">Méthode</a>
-      <a href="./index.html#community">Communauté</a>
+      <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
+      <a href="./index.html#method" data-en="Method">Méthode</a>
+      <a href="./index.html#community" data-en="Community">Communauté</a>
     </nav>
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
-      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())" data-en="Sign in">Connexion</button>
       <div id="ltUserBar"></div>
-      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'">Accès Premium</button>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'" data-en="Premium Access">Accès Premium</button>
     </div>
   </header>
 </div>
 
 <!-- ============ LEFT DOCK ============ -->
 <nav class="lt-dock" aria-label="Pages">
-  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
-  <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
-  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
+  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl" data-en="Home">Accueil</span><span class="lt-dock__tip" data-en="Home">Accueil</span></a>
+  <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl" data-en="Journal">Journal</span><span class="lt-dock__tip" data-en="Trading Journal">Journal de Trading</span></a>
+  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl" data-en="Eco">Éco</span><span class="lt-dock__tip" data-en="Economic Calendar">Calendrier Éco</span></a>
   <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
   <a class="lt-dock__item is-active" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
-  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip" data-en="Pip Calculator">Calculateur de Pips</span></a>
 </nav>
 
 <div class="main">
@@ -106,15 +106,15 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 
   <!-- PAGE HEAD -->
   <div class="page-head" style="margin-bottom:4px">
-    <span class="eyebrow"><span class="lt-dot"></span> Flux de capitaux</span>
+    <span class="eyebrow"><span class="lt-dot"></span> <span data-en="Capital flows">Flux de capitaux</span></span>
     <h1>Bubble Map</h1>
-    <p>Les principales cryptomonnaies en direct. Taille = capitalisation, couleur = variation sur 24 h. Survole une bulle pour le détail.</p>
+    <p data-en="The top cryptocurrencies, live. Size = market cap, color = 24h change. Hover a bubble for details.">Les principales cryptomonnaies en direct. Taille = capitalisation, couleur = variation sur 24 h. Survole une bulle pour le détail.</p>
   </div>
 
   <!-- BASCULE DE VUE (segmented control) -->
   <div class="bm-bar">
     <div class="view-toggle">
-      <button class="vt-btn on" id="vtBub" onclick="setView('bubbles')">Bulles</button>
+      <button class="vt-btn on" id="vtBub" onclick="setView('bubbles')" data-en="Bubbles">Bulles</button>
       <button class="vt-btn" id="vtMap" onclick="setView('map')">Heatmap</button>
     </div>
   </div>
@@ -123,17 +123,17 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   <div id="bubbleWrap">
     <div class="bm-bar" id="bmBar">
       <div class="bm-filters" id="bmFilters">
-        <button class="bm-filter is-on" data-cat="all">Tous</button>
+        <button class="bm-filter is-on" data-cat="all" data-en="All">Tous</button>
         <button class="bm-filter" data-cat="crypto">Crypto</button>
         <button class="bm-filter" data-cat="forex">Forex</button>
         <button class="bm-filter" data-cat="indices">Indices</button>
-        <button class="bm-filter" data-cat="matieres">Mat. premières</button>
+        <button class="bm-filter" data-cat="matieres" data-en="Commodities">Mat. premières</button>
       </div>
       <div class="bm-legend" id="bmLegend"></div>
     </div>
     <div class="bm-stage panel">
       <canvas class="bm-canvas" id="bmCanvas"></canvas>
-      <span class="bm-tag">CRYPTO · FOREX · INDICES · MATIÈRES · MAJ 60 S</span>
+      <span class="bm-tag" data-en="CRYPTO · FOREX · INDICES · COMMODITIES · 60S REFRESH">CRYPTO · FOREX · INDICES · MATIÈRES · MAJ 60 S</span>
     </div>
   </div>
 
@@ -150,7 +150,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
       </button>
       <button class="eco-tab" onclick="setMkt('stocks',this)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Actions US
+        <span data-en="US Stocks">Actions US</span>
       </button>
       <button class="eco-tab" onclick="setMkt('etf',this)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
@@ -169,12 +169,12 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
       </div>
     </div>
     <div class="foot">
-      <div class="leg"><div class="ldc" style="background:#4ADE9C"></div>Forte hausse</div>
-      <div class="leg"><div class="ldc" style="background:#4ADE9C"></div>Hausse</div>
-      <div class="leg"><div class="ldc" style="background:var(--text-muted)"></div>Neutre</div>
-      <div class="leg"><div class="ldc" style="background:#F0647A"></div>Baisse</div>
-      <div class="leg"><div class="ldc" style="background:#F0647A"></div>Forte baisse</div>
-      <div class="src">Données via <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
+      <div class="leg"><div class="ldc" style="background:#4ADE9C"></div><span data-en="Strong gain">Forte hausse</span></div>
+      <div class="leg"><div class="ldc" style="background:#4ADE9C"></div><span data-en="Gain">Hausse</span></div>
+      <div class="leg"><div class="ldc" style="background:var(--text-muted)"></div><span data-en="Neutral">Neutre</span></div>
+      <div class="leg"><div class="ldc" style="background:#F0647A"></div><span data-en="Loss">Baisse</span></div>
+      <div class="leg"><div class="ldc" style="background:#F0647A"></div><span data-en="Strong loss">Forte baisse</span></div>
+      <div class="src"><span data-en="Data via">Données via</span> <a href="https://www.tradingview.com" target="_blank">TradingView</a></div>
     </div>
   </div>
 
