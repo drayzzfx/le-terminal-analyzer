@@ -778,6 +778,8 @@
     }
     // ── Recharge les cartes dynamiques éco si présentes ──
     if (typeof window.ecoReloadNews === 'function') window.ecoReloadNews();
+    // ── Re-localise le calendrier éco (titres FR/EN) si présent ──
+    if (typeof window.ecoCalRelang === 'function') window.ecoCalRelang();
   };
 
   var _currentLang = localStorage.getItem('lt_lang') || 'fr';

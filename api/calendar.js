@@ -91,8 +91,31 @@ module.exports = async function handler(req, res) {
   }
   try {
     const events = parse(xml);
+    // Traduction FR des titres (dédupliqués) — le flux ForexFactory est en anglais.
+    // Chaque événement reçoit title_fr ; title reste l'original anglais.
+    try {
+      const uniq = Array.from(new Set(events.map((e) => e.title)));
+      const pairs = await Promise.all(uniq.map((t) => translateFR(t).then((fr) => [t, fr]).catch(() => [t, null])));
+      const map = {};
+      pairs.forEach((p) => { map[p[0]] = p[1] || p[0]; });
+      events.forEach((e) => { e.title_fr = map[e.title] || e.title; });
+    } catch (e) { events.forEach((ev) => { ev.title_fr = ev.title_fr || ev.title; }); }
     res.status(200).json({ ok: true, count: events.length, events });
   } catch (e) {
     res.status(500).json({ ok: false, error: String((e && e.message) || e), events: [] });
   }
 };
+
+// Traduction EN→FR via Google Translate (gratuit, sans clé) — repli sur l'anglais.
+function translateFR(text) {
+  return new Promise((resolve) => {
+    const path = '/translate_a/single?client=gtx&sl=en&tl=fr&dt=t&q=' + encodeURIComponent(text);
+    const req = https.request({ hostname: 'translate.googleapis.com', path, method: 'GET', headers: { 'User-Agent': 'Mozilla/5.0' }, timeout: 7000 }, (r) => {
+      let d = ''; r.on('data', (c) => (d += c));
+      r.on('end', () => { try { resolve(JSON.parse(d)[0].map((s) => s[0]).join('')); } catch (e) { resolve(null); } });
+    });
+    req.on('error', () => resolve(null));
+    req.on('timeout', () => { req.destroy(); resolve(null); });
+    req.end();
+  });
+}
