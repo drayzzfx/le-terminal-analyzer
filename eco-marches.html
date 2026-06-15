@@ -172,6 +172,7 @@
   function relTime(iso){try{var m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return "À l'instant";if(m<60)return 'Il y a '+m+' min';var h=Math.floor(m/60);if(h<24)return 'Il y a '+h+'h';return 'Il y a '+Math.floor(h/24)+'j';}catch(e){return '';}}
   function articleUrl(item){if(!item.id)return item.url||'#';var u='/eco-article.html?id='+encodeURIComponent(item.id);if(item.url)u+='&src='+encodeURIComponent(item.url);return u;}
   function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleDateString(en?'en-GB':'fr-FR',{day:'2-digit',month:'short'})+' · '+d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function isToday(iso){try{var tz='Europe/Paris',f=new Intl.DateTimeFormat('en-CA',{timeZone:tz});return f.format(new Date(iso))===f.format(new Date());}catch(e){return true;}}
   function buildPrevRow(item){var url=articleUrl(item);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(item.published_at)+'</span><span class="pr-prevrow__src">'+esc(item.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(item))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
   function getTitle(item){var l=getLang();return (l==='en'&&item.title_en?item.title_en:item.title)||'';}
   function getSummary(item){var l=getLang();return (l==='en'&&item.summary_en?item.summary_en:item.summary)||'';}
@@ -198,7 +199,7 @@
     renderEdition(featured);
     var top3=sorted.slice(1,4);
     var restByDate=items.filter(function(i){return i!==featured&&top3.indexOf(i)===-1;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
-    var recent=restByDate.slice(0,6),older=restByDate.slice(6);
+    var recent=restByDate.slice(0,6),older=restByDate.slice(6).filter(isToday);
     var topSec=document.getElementById('prTopSec'),topGrid=document.getElementById('prTopGrid');
     if(topSec&&topGrid){if(top3.length>0){topSec.style.display='';topGrid.innerHTML=top3.map(function(it){return buildArt(it,true);}).join('');}else{topSec.style.display='none';}}
     if(grid)grid.innerHTML=recent.length>0?recent.map(function(it){return buildArt(it,false);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
