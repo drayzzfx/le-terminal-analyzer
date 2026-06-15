@@ -326,9 +326,15 @@
     </div>
   `;
 
-  var container = document.createElement('div');
-  container.innerHTML = menuHTML;
-  document.body.appendChild(container);
+  // L'ancien drawer « Le Terminal Hub » ne doit JAMAIS s'afficher sur les pages
+  // dotées de la nouvelle barre latérale (appshell.js). On ne l'injecte que sur
+  // les pages sans appshell (ex. index.html, legal.html) pour préserver leur nav.
+  var _hasAppshell = !!document.querySelector('script[src*="appshell.js"]');
+  if (!_hasAppshell) {
+    var container = document.createElement('div');
+    container.innerHTML = menuHTML;
+    document.body.appendChild(container);
+  }
 
   // ── FUNCTIONS ──
   // Le bouton FR/EN bascule la langue (pastilles .lt-nav__pill).
@@ -735,12 +741,23 @@
     }
   };
 
+  // Système « data-en » universel (inline) : le FR reste dans le HTML, l'anglais
+  // dans l'attribut data-en. Fonctionne sur TOUTE page incluant menu.js. Sur les
+  // pages éco, eco.js gère déjà data-en → on évite le doublon via le garde.
+  function ltApplyDataEn(en) {
+    document.querySelectorAll('[data-en]').forEach(function(el) {
+      if (el.getAttribute('data-fr') === null) el.setAttribute('data-fr', el.innerHTML);
+      el.innerHTML = en ? el.getAttribute('data-en') : el.getAttribute('data-fr');
+    });
+  }
+
   function ltApplyI18n(l) {
     var t = LT_TRANSLATIONS[l] || LT_TRANSLATIONS['fr'];
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       var key = el.getAttribute('data-i18n');
       if(t[key] !== undefined) el.textContent = t[key];
     });
+    if (typeof window.ecoApplyLang !== 'function') ltApplyDataEn(l === 'en');
     // Boutons login/logout dans topbar (sans data-i18n)
     var lb = document.getElementById('loginBtn');
     var lo = document.getElementById('logoutBtn');

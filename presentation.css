@@ -70,6 +70,14 @@
 .pr-art__excerpt { font-size: 0.86rem; line-height: 1.55; color: var(--text-muted); margin: 0; flex: 1; }
 .pr-art__link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; align-self: stretch; margin-top: 6px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #07090C; background: var(--neutral); border: 1px solid var(--neutral); border-radius: var(--r-sm); padding: 11px 16px; box-shadow: 0 0 0 1px var(--neutral-glow), 0 6px 20px var(--neutral-glow); transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), gap var(--dur-fast) var(--ease-out); }
 .pr-art__link:hover { background: #F0D48A; border-color: #F0D48A; transform: translateY(-1px); box-shadow: 0 0 0 1px var(--neutral-glow), 0 10px 28px var(--neutral-glow); gap: 11px; }
+/* Variante bleue : annonces standards (le reste, hors sélection à fort impact qui reste en or) */
+.pr-art--blue { background: linear-gradient(160deg, var(--accent-glow-soft), var(--bg-elevated) 60%); }
+.pr-art--blue:hover { border-color: var(--accent); box-shadow: 0 18px 48px rgba(0,0,0,0.5), 0 0 28px var(--accent-glow); }
+.pr-art--blue .pr-art__cat { color: var(--accent); }
+.pr-art--blue .pr-art__link { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 6px 20px var(--accent-glow); }
+.pr-art--blue .pr-art__link:hover { background: var(--accent-bright); border-color: var(--accent-bright); box-shadow: 0 0 0 1px var(--accent-glow), 0 10px 28px var(--accent-glow); }
+/* Pastille « fort impact » sur les cartes or de la sélection */
+.pr-art__flag { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--neutral); border: 1px solid var(--neutral-glow); border-radius: var(--r-sm); padding: 3px 7px; }
 
 /* ---------------- MISSION ---------------- */
 .pr-mission { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: start; }

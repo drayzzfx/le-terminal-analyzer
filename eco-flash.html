@@ -5,15 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Le Terminal — Flash Info</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
 <style>
-/* Flash Info — annonces Financial Juice « rouges » (fort impact) surlignées */
-.wire__item--alert .wire__card { border-left: 3px solid var(--red, #F0647A); background: linear-gradient(90deg, rgba(240,100,122,0.08), transparent 60%); }
-.wire__item--alert .wire__card:hover { border-color: var(--red, #F0647A); }
-.wire__dot--alert { background: #F0647A !important; box-shadow: 0 0 8px rgba(240,100,122,0.6); }
+.pr-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-sm);border:1px solid}
+.pr-badge--accent{color:var(--accent);background:var(--accent-glow-soft);border-color:var(--accent-glow)}
+.pr-badge--down{color:var(--bear);background:rgba(240,100,122,.12);border-color:rgba(240,100,122,.4)}
+.pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor;box-shadow:none}
+.pr-skel{position:relative;overflow:hidden;background:var(--bg-elevated);border-radius:6px}
+.pr-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(127,184,232,.08),transparent);animation:prShimmer 1.4s ease infinite}
+@keyframes prShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+/* Édition « à la une » Flash → accent rouge (breaking) */
+.pr-flash .pr-edition{border-color:rgba(240,100,122,.3)}
+.pr-flash .pr-edition__kicker{background:var(--bear);color:#07090C}
+/* Fil en direct — items Financial Juice surlignés rouge */
+.wire__item--alert .wire__card{border-left:3px solid var(--red,#F0647A);background:linear-gradient(90deg,rgba(240,100,122,.08),transparent 60%)}
+.wire__item--alert .wire__card:hover{border-color:var(--red,#F0647A)}
+.wire__dot--alert{background:#F0647A !important;box-shadow:0 0 8px rgba(240,100,122,.6)}
 </style>
 </head>
 <body class="eco-page">
@@ -40,78 +50,131 @@
       <a href="./index.html#community">Communauté</a>
     </nav>
     <div class="lt-nav__actions">
-      <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <span class="lt-nav__pill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
       <div id="ltUserBar"></div>
-      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'">Accès Premium</button>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
     </div>
   </header>
 </div>
-<!-- PRICETAPE (TradingView ticker) -->
-<div class="pricetape">
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-    {
-      "symbols": [
-        {"proName": "FOREXCOM:FRA40", "title": "CAC 40"},
-        {"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
-        {"proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100"},
-        {"proName": "FX_IDC:EURUSD", "title": "EUR/USD"},
-        {"proName": "FX_IDC:USDJPY", "title": "USD/JPY"},
-        {"proName": "TVC:GOLD", "title": "Or"},
-        {"proName": "TVC:UKOIL", "title": "Brent"},
-        {"proName": "TVC:USOIL", "title": "WTI"},
-        {"proName": "BITSTAMP:BTCUSD", "title": "Bitcoin"},
-        {"proName": "BITSTAMP:ETHUSD", "title": "Ethereum"}
-      ],
-      "showSymbolLogo": true,
-      "isTransparent": true,
-      "displayMode": "adaptive",
-      "colorTheme": "dark",
-      "locale": "fr"
-    }
-    </script>
-  </div>
-</div>
+
 <main class="wrap">
-<section class="pagehead pagehead--live" aria-label="Flash Info">
-  <p class="pagehead__eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 16.2a6 6 0 0 0 0-8.4M5 5a9.5 9.5 0 0 0 0 14M19 19a9.5 9.5 0 0 0 0-14"/></svg> <span class="fi-livedot"></span> <span data-en="Live newswire · Market-moving">Fil en direct · Ce qui fait bouger les marchés</span></p>
-  <h1 class="pagehead__title">Flash Info</h1>
-  <p class="pagehead__lead" data-en="Breaking, market-moving headlines from live-specialized sources, each with an instant summary and a market read. Newest first.">
-    Les annonces susceptibles de faire bouger les marchés, issues de sources
-    spécialisées dans le direct — chacune avec un résumé instantané et une
-    lecture marché. Les plus récentes d'abord.
-  </p>
-</section>
+<div class="pr pr-flash">
 
-<div id="flash-status" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--text3)">
-  <span class="fi-livedot" style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse-dot 2s infinite"></span>
-  <span id="flash-status-txt">Chargement du fil…</span>
+  <!-- HERO -->
+  <section class="pr-hero">
+    <div class="pr-hero__halo" aria-hidden="true"></div>
+    <div class="pr-hero__txt">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Live newswire · Market-moving">Fil en direct · Ce qui fait bouger les marchés</span></span>
+      <h1 class="pr-hero__title" data-en="The wire that<br><span class=&quot;pr-metal&quot;>moves markets.</span>">Le fil qui<br><span class="pr-metal">fait réagir les marchés.</span></h1>
+      <p class="pr-hero__lede" data-en="<b>Flash Info</b> surfaces, minute by minute, the breaking headlines likely to move markets — sourced from Financial Juice, translated into French, newest first."><b>Flash Info</b> remonte, minute par minute, les annonces de dernière minute susceptibles de faire bouger les marchés — issues de Financial Juice, traduites en français, les plus récentes d'abord.</p>
+      <div class="pr-chips">
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> <span data-en="Real time">Temps réel</span></span>
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg> <span data-en="Central banks · Macro">Banques centrales · Macro</span></span>
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> <span data-en="Breaking">Breaking</span></span>
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg> <span data-en="Credited source">Source créditée</span></span>
+      </div>
+      <div class="pr-hero__cta">
+        <a class="lt-btn lt-btn--primary" id="prHeroUne" href="#wire"><span data-en="Read the headline">Lire l'à la une</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a class="lt-btn lt-btn--secondary" href="./calendrier.html" data-en="Economic calendar">Calendrier éco</a>
+      </div>
+    </div>
+    <div class="pr-chart" aria-hidden="true">
+      <svg class="pr-chart__svg" viewBox="0 0 480 200" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="prFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="rgba(127,184,232,0.35)"/>
+            <stop offset="1" stop-color="rgba(127,184,232,0)"/>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="40" x2="480" y2="40" stroke="rgba(58,65,76,0.35)" stroke-width="1"/>
+        <line x1="0" y1="80" x2="480" y2="80" stroke="rgba(58,65,76,0.35)" stroke-width="1"/>
+        <line x1="0" y1="120" x2="480" y2="120" stroke="rgba(58,65,76,0.35)" stroke-width="1"/>
+        <line x1="0" y1="160" x2="480" y2="160" stroke="rgba(58,65,76,0.35)" stroke-width="1"/>
+        <path d="M0,150 C60,140 90,120 140,118 C190,116 210,96 260,86 C310,76 330,52 380,46 C420,41 450,30 480,24 L480,200 L0,200 Z" fill="url(#prFill)"/>
+        <path d="M0,150 C60,140 90,120 140,118 C190,116 210,96 260,86 C310,76 330,52 380,46 C420,41 450,30 480,24" fill="none" stroke="var(--accent)" stroke-width="2.5" style="filter:drop-shadow(0 0 6px var(--accent-glow))"/>
+        <rect x="132" y="100" width="7" height="30" rx="1" fill="rgba(74,222,156,0.85)"/>
+        <rect x="252" y="74" width="7" height="26" rx="1" fill="rgba(240,100,122,0.8)"/>
+        <rect x="372" y="40" width="7" height="24" rx="1" fill="rgba(74,222,156,0.85)"/>
+        <rect x="446" y="22" width="7" height="20" rx="1" fill="rgba(74,222,156,0.85)"/>
+        <circle cx="480" cy="24" r="4" fill="var(--accent-bright)"/>
+      </svg>
+      <div class="pr-chart__tags">
+        <span class="pr-chart__tag is-up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Marchés</span>
+        <span class="pr-chart__tag">EUR · USD</span>
+        <span class="pr-chart__tag is-live"><span class="lt-dot"></span> Live</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- À LA UNE — meilleure annonce Flash (dynamique /api/flash-juice) -->
+  <section class="pr-edition" id="edition">
+    <div class="pr-edition__bar">
+      <span class="pr-edition__dots"><i style="background:#F0647A"></i><i style="background:#E8C268"></i><i style="background:#4ADE9C"></i></span>
+      <span class="pr-edition__name">Flash · <span data-en="Live">Direct</span></span>
+      <span class="pr-edition__live"><span class="pr-badge pr-badge--down"><span class="lt-dot"></span> Live</span></span>
+    </div>
+    <div class="pr-edition__body">
+      <div>
+        <div class="pr-edition__meta">
+          <span class="pr-edition__kicker" data-en="Top story">À la une</span>
+          <span class="pr-edition__src">Financial Juice</span>
+          <span class="pr-badge pr-badge--down" id="prEdBias">Flash</span>
+          <span class="pr-edition__time" id="prEdTime"></span>
+        </div>
+        <h2 class="pr-edition__title" id="prEdTitle">
+          <span class="pr-skel" style="display:block;height:1.1em;width:80%"></span>
+          <span class="pr-skel" style="display:block;height:1.1em;width:55%;margin-top:10px"></span>
+        </h2>
+        <p class="pr-edition__excerpt" id="prEdExcerpt" style="display:none"></p>
+      </div>
+      <a class="lt-btn lt-btn--primary" id="prEdBtn" href="#" target="_blank" rel="noopener nofollow"><span data-en="Read the source">Lire la source</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </section>
+
+  <!-- LE FIL EN DIRECT (reste, dynamique) -->
+  <section id="wire">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> Financial Juice · <span id="flash-status-txt" data-en="live feed">fil en direct</span></span>
+      <h2 class="pr-head__title" data-en="The live wire">Le fil en direct</h2>
+    </div>
+    <ol class="wire" id="flash-wire" aria-label="Fil en direct">
+      <li class="wire__item wire__item--skel" style="--i:0" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div></div></li>
+      <li class="wire__item wire__item--skel" style="--i:1" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div></div></li>
+      <li class="wire__item wire__item--skel" style="--i:2" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div></div></li>
+    </ol>
+  </section>
+
+  <!-- POURQUOI CETTE PAGE -->
+  <section class="pr-mission">
+    <div>
+      <div class="pr-head">
+        <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Our coverage">Notre couverture</span></span>
+        <h2 class="pr-head__title" data-en="Why this page">Pourquoi cette page</h2>
+      </div>
+      <div class="pr-mission__prose">
+        <p class="pr-lead" data-en="Flash Info is the Terminal's live wire: minute by minute, it surfaces the breaking headlines likely to move markets — central-bank decisions, macro prints, statements that make indices react.">Le Flash Info est le fil en direct du Terminal : minute par minute, il remonte les annonces de dernière minute susceptibles de faire bouger les marchés — décisions de banques centrales, chiffres macro, déclarations qui font réagir les indices.</p>
+        <p data-en="Headlines come from <b>Financial Juice</b>, a source specialized in the live newswire, are translated into French and dated to the minute — the most relevant one is featured at the top.">Les annonces proviennent de <b>Financial Juice</b>, une source spécialisée dans le direct, sont traduites en français et datées à la minute — la plus pertinente est mise en avant en « à la une ».</p>
+        <p data-en="Why a separate Flash wire? Because not everything is read at the same pace: an inflation print or a single sentence from a central banker can move a market in seconds. Flash favours immediacy — raw, dated information, to react fast.">Pourquoi un fil Flash séparé ? Parce que tout ne se lit pas au même rythme : une statistique d'inflation ou une phrase d'un banquier central peut déplacer un marché en quelques secondes. Le Flash privilégie l'immédiateté — l'information brute, datée, pour réagir vite.</p>
+      </div>
+    </div>
+    <div class="pr-benefits">
+      <div class="pr-benefit">
+        <span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        <div><h4 data-en="The breaking news up top">Le breaking en haut</h4><p data-en="The most relevant headline is featured as the front-page story.">L'annonce la plus pertinente est mise en avant en « à la une ».</p></div>
+      </div>
+      <div class="pr-benefit">
+        <span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <div><h4 data-en="Live, to the minute">En direct, à la minute</h4><p data-en="The wire refreshes continuously, newest first, each headline timestamped.">Le fil se rafraîchit en continu, du plus récent au plus ancien, chaque annonce horodatée.</p></div>
+      </div>
+      <div class="pr-benefit">
+        <span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div><h4 data-en="Translated &amp; credited">Traduit &amp; crédité</h4><p data-en="Headlines are translated into French; each one links back to its Financial Juice source.">Les annonces sont traduites en français ; chacune mène à sa source Financial Juice.</p></div>
+      </div>
+    </div>
+  </section>
+
 </div>
-<ol class="wire" id="flash-wire" aria-label="Fil en direct">
-  <li class="wire__item wire__item--skel" style="--i:0" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med" style="margin-top:6px"></div></div></li>
-  <li class="wire__item wire__item--skel" style="--i:1" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med" style="margin-top:6px"></div></div></li>
-  <li class="wire__item wire__item--skel" style="--i:2" aria-hidden="true"><div class="wire__rail"><span class="wire__time" style="opacity:.3">--:--</span><span class="wire__dot"></span></div><div class="wire__card" style="flex:1"><div class="card__skel-line card__skel-line--short" style="margin-bottom:10px"></div><div class="card__skel-line"></div><div class="card__skel-line card__skel-line--med" style="margin-top:6px"></div></div></li>
-</ol>
-
-<section class="prose" aria-label="Pourquoi cette page">
-  <span class="prose__kicker" data-en="Our coverage">Notre couverture</span>
-  <h2 class="prose__h" data-en="Why this page">Pourquoi cette page</h2>
-  <p data-en="Flash Info is the Terminal&#39;s live wire: it surfaces, minute by minute, the announcements likely to move markets, from live-specialized sources (macro figures, central banks, statements that make stock markets react).">Le Flash Info est le fil en direct du Terminal : il remonte, minute par minute, les annonces susceptibles de faire bouger les marchés, issues de sources spécialisées dans le direct (chiffres macro, banques centrales, déclarations qui font réagir les Bourses).</p>
-  <p data-en="The most recent dispatches appear right at the top, each timestamped, with an instant summary and a market read — leaning risk-on, neutral or risk-off — and a link to the source. Further down, the « Earlier announcements » area will keep the wire of past hours and days, to reconstruct how a session unfolded.">Les dépêches les plus récentes apparaissent tout en haut, chacune horodatée, avec un résumé instantané et une lecture marché — plutôt favorable, neutre ou défavorable au risque — et un lien vers la source. Plus bas, l'espace « Annonces précédentes » conservera le fil des heures et des jours passés, pour reconstituer le déroulé d'une séance.</p>
-  <p data-en="Why a separate Flash wire? Because not everything is read at the same pace: an inflation print or a single sentence from a central banker can move a market in seconds. Where the other pages take a step back, Flash favours immediacy — raw information, dated to the minute, to react fast and understand what is stirring markets right now.">Pourquoi un fil Flash séparé ? Parce que tout ne se lit pas au même rythme : une statistique d'inflation ou une phrase d'un banquier central peut déplacer un marché en quelques secondes. Là où les autres pages prennent du recul, le Flash privilégie l'immédiateté — l'information brute, datée à la minute, pour réagir vite et comprendre ce qui agite les marchés à l'instant.</p>
-</section>
-
-<section class="block eco-archives" aria-label="Annonces précédentes">
-  <header class="block__head">
-    <h2 class="block__title" data-en='<span class="block__dot">●</span> Earlier announcements'><span class="block__dot">●</span> Annonces précédentes</h2>
-    <span class="block__sub" data-en="Coming soon">Bientôt disponibles</span>
-  </header>
-  <div class="eco-empty" data-en="Older announcements will be archived here as new editions are published. Come back soon.">
-    Les annonces plus anciennes seront archivées ici au fil des prochaines éditions. Revenez bientôt.
-  </div>
-</section>
 </main>
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
@@ -120,177 +183,72 @@
 <script>
 (function () {
   'use strict';
-
-  // Zone flash uniquement — filtre 50pts marché appliqué à l'ingestion
-  var ALL_ZONES = ['flash'];
-  var FOUR_H    = 4  * 3600 * 1000;
-  var FORTYEIGHT_H = 48 * 3600 * 1000;
-
-  var SENTIMENT_MAP = {
-    'Positif':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
-    'Négatif':  { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
-    'Neutre':   { cls: 'bias--flat', fr: 'Neutre',   en: 'Neutral'  },
-    'Risk-on':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
-    'Risk-off': { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
-    'Hawkish':  { cls: 'bias--up',   fr: 'Positif',  en: 'Positive' },
-    'Dovish':   { cls: 'bias--down', fr: 'Négatif',  en: 'Negative' },
-  };
-
   function getLang() { return localStorage.getItem('lt_lang') || 'fr'; }
-
-  function fmt(iso) {
-    try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); }
-    catch(e) { return '--:--'; }
-  }
-
+  function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function fmt(iso) { try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } }
   function relTime(iso) {
     try {
       var m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-      if (m < 1)  return 'À l\'instant';
+      if (m < 1) return 'À l\'instant';
       if (m < 60) return 'Il y a ' + m + ' min';
       var h = Math.floor(m / 60);
       if (h < 24) return 'Il y a ' + h + 'h';
       return 'Il y a ' + Math.floor(h / 24) + 'j';
-    } catch(e) { return ''; }
+    } catch (e) { return ''; }
+  }
+  function getTitle(item) { var l = getLang(); return (l === 'en' && item.title_en ? item.title_en : item.title) || ''; }
+
+  function renderEdition(item) {
+    var l = getLang(), url = item.url || '#';
+    var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+    set('prEdTime', fmt(item.published_at));
+    var bias = document.getElementById('prEdBias'); if (bias) bias.textContent = l === 'en' ? 'Breaking' : 'Flash';
+    var t = document.getElementById('prEdTitle'); if (t) t.textContent = getTitle(item);
+    var btn = document.getElementById('prEdBtn'); if (btn) btn.href = url;
+    var une = document.getElementById('prHeroUne'); if (une) { une.href = url; une.target = '_blank'; une.rel = 'noopener nofollow'; }
   }
 
-  function articleUrl(item) {
-    // Tweets ZeroHedge → lien direct X
-    if (item.source && item.source.indexOf('ZeroHedge') !== -1 && item.url && item.url.indexOf('x.com') !== -1) {
-      return item.url;
-    }
-    if (!item.id) return item.url || '#';
-    var u = '/eco-article.html?id=' + encodeURIComponent(item.id);
-    if (item.url) u += '&src=' + encodeURIComponent(item.url);
-    return u;
-  }
-
-  function isZeroHedge(item) {
-    return item.source && item.source.indexOf('ZeroHedge') !== -1;
-  }
-
-  function getTitle(item) {
-    var l = getLang();
-    return (l === 'en' && item.title_en ? item.title_en : item.title) || '';
-  }
-
-  function getSummary(item) {
-    var l = getLang();
-    return (l === 'en' && item.summary_en ? item.summary_en : item.summary) || '';
-  }
-
-  // ── Wire item (fil live) ─────────────────────────────────────────────────
   function buildWireItem(item, idx) {
-    var l    = getLang();
-    var sent = item.sentiment ? (SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre']) : null;
-    var isZH = isZeroHedge(item);
-    var ext  = item.source === 'Financial Juice' || isZH || /^https?:/i.test(item.url || '');
-    var url  = ext ? (item.url || '#') : articleUrl(item);
-    var title   = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var summary = getSummary(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var src     = (item.source || '').replace(/</g,'&lt;');
-    var bias    = sent ? (l === 'en' ? sent.en : sent.fr) : '';
-    var isBreaking = item.importance === 'high' || /^(BREAKING|FLASH|JUST IN|ALERT)/i.test(item.title_en || item.title || '');
-
-    var liveLabel = isBreaking ? (l === 'en' ? 'BREAKING' : 'FLASH') : (isZH ? '𝕏' : (l === 'en' ? 'LIVE' : 'DIRECT'));
-    var liveStyle = isBreaking
-      ? ' style="background:rgba(240,100,122,.15);color:#F0647A;border:1px solid rgba(240,100,122,.35)"'
-      : (isZH ? ' style="background:rgba(127,184,232,.12);color:#7FB8E8;border:1px solid rgba(127,184,232,.25)"' : '');
-
-    var targetAttr = ext ? ' target="_blank" rel="noopener nofollow"' : '';
-
-    return '<li class="wire__item' + (isBreaking ? ' wire__item--alert' : '') + '" style="--i:' + idx + '">'
-      + '<div class="wire__rail">'
-      + '<span class="wire__time" title="' + relTime(item.published_at) + '">' + fmt(item.published_at) + '</span>'
-      + '<span class="wire__dot' + (isBreaking ? ' wire__dot--alert' : '') + '"></span>'
-      + '</div>'
-      + '<a class="wire__card" href="' + url + '"' + targetAttr + '>'
-      + '<p class="wire__kicker">'
-      + '<span class="wire__live"' + liveStyle + '>' + liveLabel + '</span>'
-      + '<span class="wire__src">' + src + '</span>'
-      + (bias ? '<span class="bias ' + sent.cls + ' wire__bias">' + bias + '</span>' : '')
-      + '</p>'
+    var l = getLang(), url = item.url || '#';
+    var title = esc(getTitle(item));
+    return '<li class="wire__item wire__item--alert" style="--i:' + idx + '">'
+      + '<div class="wire__rail"><span class="wire__time" title="' + esc(relTime(item.published_at)) + '">' + fmt(item.published_at) + '</span><span class="wire__dot wire__dot--alert"></span></div>'
+      + '<a class="wire__card" href="' + url + '" target="_blank" rel="noopener nofollow">'
+      + '<p class="wire__kicker"><span class="wire__live" style="background:rgba(240,100,122,.15);color:#F0647A;border:1px solid rgba(240,100,122,.35)">' + (l === 'en' ? 'BREAKING' : 'FLASH') + '</span><span class="wire__src">Financial Juice</span></p>'
       + '<h3 class="wire__title">' + title + '</h3>'
-      + (summary ? '<p class="wire__sum">' + summary + '</p>' : '')
-      + '<span class="wire__more">' + (l === 'en' ? 'Read ' : 'Lire ') + '<span aria-hidden="true">→</span></span>'
-      + '</a>'
-      + '</li>';
+      + '<span class="wire__more">' + (l === 'en' ? 'Read source ' : 'Lire la source ') + '<span aria-hidden="true">→</span></span>'
+      + '</a></li>';
   }
 
-  // ── Archive item ─────────────────────────────────────────────────────────
-  function buildArchiveItem(item, idx) {
-    var l    = getLang();
-    var sent = SENTIMENT_MAP[item.sentiment] || SENTIMENT_MAP['Neutre'];
-    var bias = l === 'en' ? sent.en : sent.fr;
-    var url  = articleUrl(item);
-    var title = getTitle(item).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    var src   = (item.source || '').replace(/</g,'&lt;');
-    var zone  = item.zone ? item.zone.charAt(0).toUpperCase() + item.zone.slice(1) : '';
-    var d = new Date(item.published_at), now = new Date();
-    var isToday = d.toDateString() === now.toDateString();
-    var dateStr = isToday
-      ? 'Aujourd\'hui ' + fmt(item.published_at)
-      : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' · ' + fmt(item.published_at);
-    var targetAttr = isZeroHedge(item) ? ' target="_blank" rel="noopener nofollow"' : '';
-
-    return '<a class="eco-arch-item" href="' + url + '"' + targetAttr + ' style="--i:' + idx + '">'
-      + '<div class="eco-arch-item__meta">'
-      + '<span class="eco-arch-item__time">' + dateStr + '</span>'
-      + '<span class="eco-arch-item__src">' + (zone && zone !== 'Flash' ? zone + ' · ' : '') + src + '</span>'
-      + (sent.cls ? '<span class="bias ' + sent.cls + '" style="font-size:10px;padding:2px 8px">' + bias + '</span>' : '')
-      + '</div>'
-      + '<p class="eco-arch-item__title">' + title + '</p>'
-      + '</a>';
-  }
-
-  // ── Déduplication par titre ───────────────────────────────────────────────
-  function normalize(s) { return (s||'').toLowerCase().replace(/[^a-z0-9\s]/g,'').trim(); }
-  function dedupe(items) {
-    var seen = [], out = [];
-    items.forEach(function(item) {
-      var n = normalize(getTitle(item)).slice(0, 40);
-      if (n && seen.indexOf(n) === -1) { seen.push(n); out.push(item); }
-    });
-    return out;
-  }
-
-  // ── Chargement ────────────────────────────────────────────────────────────
   async function loadFlash() {
-    var wire     = document.getElementById('flash-wire');
+    var wire = document.getElementById('flash-wire');
     var statusEl = document.getElementById('flash-status-txt');
-
-    // Source : flux Financial Juice (annonces fort impact, traduites en FR)
     var items = [];
-    try {
-      var r = await fetch('/api/flash-juice');
-      if (r.ok) { var d = await r.json(); items = (d.items || []); }
-    } catch (e) {}
+    try { var r = await fetch('/api/flash-juice'); if (r.ok) { var d = await r.json(); items = d.items || []; } } catch (e) {}
+    items.sort(function (a, b) { return new Date(b.published_at) - new Date(a.published_at); });
 
-    items.sort(function(a, b) { return new Date(b.published_at) - new Date(a.published_at); });
-    var wireItems = items.slice(0, 40);
+    if (!items.length) {
+      if (wire) wire.innerHTML = '<li style="padding:40px 16px;text-align:center;color:var(--text3);font-size:13px;list-style:none">'
+        + (getLang() === 'en' ? 'No high-impact headlines right now.' : 'Aucune annonce à fort impact pour l\'instant.') + '</li>';
+      return;
+    }
 
+    renderEdition(items[0]);
+    var rest = items.slice(1, 40);
     if (wire) {
-      wire.innerHTML = wireItems.length > 0
-        ? wireItems.map(function(item, i) { return buildWireItem(item, i); }).join('')
-        : '<li style="padding:48px 16px;text-align:center;color:var(--text3);font-size:13px;list-style:none">'
-          + (getLang() === 'en' ? 'No high-impact headlines right now.' : 'Aucune annonce à fort impact pour l\'instant.') + '</li>';
+      wire.innerHTML = rest.length
+        ? rest.map(buildWireItem).join('')
+        : '<li style="padding:32px 16px;text-align:center;color:var(--text3);font-size:13px;list-style:none">' + (getLang() === 'en' ? 'Only one headline for now — more incoming.' : 'Une seule annonce pour l\'instant — d\'autres arrivent.') + '</li>';
     }
-
     if (statusEl) {
-      var n = wireItems.length, l = getLang();
-      statusEl.textContent = n > 0
-        ? (n + (l === 'en' ? ' headline' : ' annonce') + (n > 1 ? 's' : '') + ' · Financial Juice · ' + (l === 'en' ? 'updated ' : 'mis à jour ') + relTime(new Date().toISOString()))
-        : (l === 'en' ? 'Live monitoring — Financial Juice' : 'Surveillance active — Financial Juice');
+      var n = items.length, l = getLang();
+      statusEl.textContent = n + (l === 'en' ? ' headline' : ' annonce') + (n > 1 ? 's' : '') + ' · ' + (l === 'en' ? 'live feed' : 'fil en direct');
+      statusEl.removeAttribute('data-en');
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadFlash);
-  } else {
-    loadFlash();
-  }
-
-  // Refresh toutes les 90 secondes (fil live)
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadFlash);
+  else loadFlash();
   setInterval(loadFlash, 90 * 1000);
   window.ecoReloadFlash = loadFlash;
 })();
