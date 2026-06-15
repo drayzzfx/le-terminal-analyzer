@@ -61,6 +61,9 @@
     'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
   };
   var cfg = PAGES[path];
+  // Repli : toute page éco non listée (eco-*.html) reçoit quand même l'AppShell,
+  // rattachée à la branche Calendrier — la barre latérale ne disparaît jamais.
+  if (!cfg && /^eco-/.test(path)) cfg = { crumb: 'Calendrier Éco', key: 'calendrier' };
   if (!cfg) return;
 
   var I = {
