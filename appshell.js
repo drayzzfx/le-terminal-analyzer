@@ -11,9 +11,10 @@
     var old = document.getElementById(id); if (old) old.remove();
   });
 
+  var BLANK = "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/>\")" ;
   var style = document.createElement('style');
   style.textContent =
-    'html, body, * { cursor: none !important; }' +
+    'html, body, * { cursor: ' + BLANK + ' 0 0, none !important; }' +
     '#lt-ch {' +
     '  position: fixed; z-index: 2147483647;' +
     '  pointer-events: none;' +
