@@ -36,9 +36,9 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   const zone  = req.query?.zone  || 'europe';
-  const limit = Math.min(parseInt(req.query?.limit || '15'), 50);
+  const limit = Math.min(parseInt(req.query?.limit || '15'), 60);
 
-  const VALID_ZONES = ['europe','ameriques','asie','institutions','marches','crypto'];
+  const VALID_ZONES = ['europe','ameriques','asie','institutions','marches','crypto','international'];
   if (!VALID_ZONES.includes(zone)) {
     return res.status(400).json({ error: 'Zone invalide', valid: VALID_ZONES });
   }
