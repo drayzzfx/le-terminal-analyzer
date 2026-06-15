@@ -107,6 +107,14 @@
     </div>
   </section>
 
+  <section class="pr-sel" id="prTopSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="The selection">La sélection</span> · <span id="prTopCount" data-en="3 high-impact">3 à fort impact</span></span>
+      <h2 class="pr-head__title" data-en="The 3 to watch">Les 3 à suivre</h2>
+    </div>
+    <div class="pr-sel__grid" id="prTopGrid"></div>
+  </section>
+
   <section class="pr-sel">
     <div class="pr-head">
       <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Institutions">Institutions</span> · <span id="prSelCount" data-en="auto-selection">sélection automatique</span></span>
@@ -117,14 +125,6 @@
       <article class="pr-art"><div class="pr-art__top"><span class="pr-skel" style="width:30px;height:10px"></span></div><div class="pr-skel" style="height:1em;width:90%"></div><div class="pr-skel" style="height:.8em;width:70%;margin-top:8px"></div></article>
       <article class="pr-art"><div class="pr-art__top"><span class="pr-skel" style="width:30px;height:10px"></span></div><div class="pr-skel" style="height:1em;width:90%"></div><div class="pr-skel" style="height:.8em;width:70%;margin-top:8px"></div></article>
     </div>
-  </section>
-
-  <section class="pr-sel" id="prPrevSec" style="display:none">
-    <div class="pr-head">
-      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Institutions">Institutions</span> · <span id="prPrevCount" data-en="archive">archive</span></span>
-      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
-    </div>
-    <div class="pr-sel__grid" id="prPrevGrid"></div>
   </section>
 
   <section class="pr-mission">
@@ -145,6 +145,14 @@
     </div>
   </section>
 
+  <section class="pr-sel" id="prPrevSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Institutions">Institutions</span> · <span id="prPrevCount" data-en="archive">archive</span></span>
+      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
+    </div>
+    <div class="pr-prevlist" id="prPrevList"></div>
+  </section>
+
 </div>
 </main>
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
@@ -163,6 +171,8 @@
   function fmt(iso){try{return new Date(iso).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
   function relTime(iso){try{var m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return "À l'instant";if(m<60)return 'Il y a '+m+' min';var h=Math.floor(m/60);if(h<24)return 'Il y a '+h+'h';return 'Il y a '+Math.floor(h/24)+'j';}catch(e){return '';}}
   function articleUrl(item){if(!item.id)return item.url||'#';var u='/eco-article.html?id='+encodeURIComponent(item.id);if(item.url)u+='&src='+encodeURIComponent(item.url);return u;}
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleDateString(en?'en-GB':'fr-FR',{day:'2-digit',month:'short'})+' · '+d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function buildPrevRow(item){var url=articleUrl(item);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(item.published_at)+'</span><span class="pr-prevrow__src">'+esc(item.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(item))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
   function getTitle(item){var l=getLang();return (l==='en'&&item.title_en?item.title_en:item.title)||'';}
   function getSummary(item){var l=getLang();return (l==='en'&&item.summary_en?item.summary_en:item.summary)||'';}
   function getSentiment(item){return SENTIMENT_MAP[item.sentiment]||SENTIMENT_MAP['Neutre'];}
@@ -184,16 +194,18 @@
     var grid=document.getElementById('prSelGrid');var items=[];
     try{var resp=await fetch('/api/news?zone=institutions&limit=60');if(resp.ok){var data=await resp.json();items=data.items||[];}}catch(e){}
     if(items.length===0){if(grid)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce disponible pour l\'instant.</div>';return;}
-    var featured=items.slice().sort(function(a,b){return impactScore(b)-impactScore(a);})[0];
+    var sorted=items.slice().sort(function(a,b){return impactScore(b)-impactScore(a);});var featured=sorted[0];
     renderEdition(featured);
-    var hotSet=selectTop(items).filter(function(i){return i!==featured;});
-    var rest=items.filter(function(i){return i!==featured;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
-    var nHot=hotSet.length;var recent=rest.slice(0,9),older=rest.slice(9);
-    if(grid)grid.innerHTML=recent.length>0?recent.map(function(it){return buildArt(it,hotSet.indexOf(it)!==-1);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
+    var top3=sorted.slice(1,4);
+    var restByDate=items.filter(function(i){return i!==featured&&top3.indexOf(i)===-1;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
+    var recent=restByDate.slice(0,6),older=restByDate.slice(6);
+    var topSec=document.getElementById('prTopSec'),topGrid=document.getElementById('prTopGrid');
+    if(topSec&&topGrid){if(top3.length>0){topSec.style.display='';topGrid.innerHTML=top3.map(function(it){return buildArt(it,true);}).join('');}else{topSec.style.display='none';}}
+    if(grid)grid.innerHTML=recent.length>0?recent.map(function(it){return buildArt(it,false);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
     var sub=document.getElementById('prSelCount');
-    if(sub){var n=recent.length;sub.textContent=getLang()==='en'?n+' article'+(n>1?'s':'')+' · '+nHot+' high-impact':n+' annonce'+(n>1?'s':'')+' · '+nHot+' à fort impact';sub.removeAttribute('data-en');}
-    var prevSec=document.getElementById('prPrevSec'),prevGrid=document.getElementById('prPrevGrid'),prevCnt=document.getElementById('prPrevCount');
-    if(prevSec&&prevGrid){if(older.length>0){prevSec.style.display='';prevGrid.innerHTML=older.map(function(it){return buildArt(it,false);}).join('');if(prevCnt){prevCnt.textContent=getLang()==='en'?older.length+' archived':older.length+' archivée'+(older.length>1?'s':'');prevCnt.removeAttribute('data-en');}}else{prevSec.style.display='none';}}
+    if(sub){var n=recent.length;sub.textContent=getLang()==='en'?n+' article'+(n>1?'s':''):n+' annonce'+(n>1?'s':'');sub.removeAttribute('data-en');}
+    var prevSec=document.getElementById('prPrevSec'),prevList=document.getElementById('prPrevList'),prevCnt=document.getElementById('prPrevCount');
+    if(prevSec&&prevList){if(older.length>0){prevSec.style.display='';prevList.innerHTML=older.map(buildPrevRow).join('');if(prevCnt){prevCnt.textContent=getLang()==='en'?older.length+' archived':older.length+' archivée'+(older.length>1?'s':'');prevCnt.removeAttribute('data-en');}}else{prevSec.style.display='none';}}
   }
   window.ecoReloadNews=loadZone;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadZone);else loadZone();
