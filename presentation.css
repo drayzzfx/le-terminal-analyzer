@@ -78,6 +78,17 @@
 .pr-art--blue .pr-art__link:hover { background: var(--accent-bright); border-color: var(--accent-bright); box-shadow: 0 0 0 1px var(--accent-glow), 0 10px 28px var(--accent-glow); }
 /* Pastille « fort impact » sur les cartes or de la sélection */
 .pr-art__flag { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--neutral); border: 1px solid var(--neutral-glow); border-radius: var(--r-sm); padding: 3px 7px; }
+/* « Annonces précédentes » — liste compacte en fin de page */
+.pr-prevlist { display: flex; flex-direction: column; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); overflow: hidden; }
+.pr-prevrow { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-top: 1px solid var(--border-subtle); text-decoration: none; transition: background var(--dur-fast) var(--ease-out); }
+.pr-prevrow:first-child { border-top: none; }
+.pr-prevrow:hover { background: var(--bg-elevated); }
+.pr-prevrow__time { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); white-space: nowrap; min-width: 104px; font-variant-numeric: tabular-nums; }
+.pr-prevrow__src { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+.pr-prevrow__title { flex: 1; min-width: 0; font-size: 0.92rem; color: var(--text-title); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pr-prevrow__arrow { color: var(--text-muted); flex-shrink: 0; }
+.pr-prevrow:hover .pr-prevrow__arrow { color: var(--accent); }
+@media (max-width: 640px) { .pr-prevrow__src { display: none; } .pr-prevrow__title { white-space: normal; } }
 
 /* ---------------- MISSION ---------------- */
 .pr-mission { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: start; }
