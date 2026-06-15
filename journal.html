@@ -739,14 +739,14 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
     <!-- STEP 2b: CSV Import -->
     <div id="brokerStep2CSV" style="display:none">
-      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
-      <div class="modal-title">Import CSV</div>
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
+      <div class="modal-title" data-en="CSV import">Import CSV</div>
       <div class="modal-sub">Topstep · FTMO · MyFundedFX · MT4/MT5 Statement</div>
 
       <div style="margin-bottom:12px">
-        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--v3);text-transform:uppercase;margin-bottom:8px">Format</div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--v3);text-transform:uppercase;margin-bottom:8px" data-en="Format">Format</div>
         <div class="csv-platforms">
-          <button class="csv-platform-btn on" id="csvFmtBtn_auto" onclick="selectCsvFormat('auto')">Auto-détect</button>
+          <button class="csv-platform-btn on" id="csvFmtBtn_auto" onclick="selectCsvFormat('auto')" data-en="Auto-detect">Auto-détect</button>
           <button class="csv-platform-btn" id="csvFmtBtn_topstep" onclick="selectCsvFormat('topstep')">Topstep</button>
           <button class="csv-platform-btn" id="csvFmtBtn_ftmo" onclick="selectCsvFormat('ftmo')">FTMO</button>
           <button class="csv-platform-btn" id="csvFmtBtn_mt4" onclick="selectCsvFormat('mt4')">MT4 Statement</button>
@@ -756,15 +756,15 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="csv-drop" id="csvDrop">
         <input type="file" accept=".csv,.txt" onchange="onCsvFile(event)" id="csvFileInput">
         <div class="csv-drop-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-        <div class="csv-drop-txt">Glisse ton fichier CSV ici</div>
-        <div class="csv-drop-sub">ou clique pour sélectionner</div>
+        <div class="csv-drop-txt" data-en="Drag your CSV file here">Glisse ton fichier CSV ici</div>
+        <div class="csv-drop-sub" data-en="or click to select">ou clique pour sélectionner</div>
       </div>
 
       <div id="csvPreviewArea" style="display:none">
         <div class="csv-preview" id="csvPreviewTable"></div>
         <div class="broker-error" id="csvError"></div>
         <button class="submit-btn" id="csvImportBtn" onclick="importCsvTrades()">
-          <span id="csvImportTxt">Importer les trades</span>
+          <span id="csvImportTxt" data-en="Import trades">Importer les trades</span>
         </button>
       </div>
       <div class="broker-error" id="csvParseError"></div>
@@ -777,20 +777,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuth()">✕</button>
-    <div style="font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;margin-bottom:20px">Connexion</div>
+    <div style="font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;margin-bottom:20px" data-en="Log in">Connexion</div>
     <div class="auth-tabs">
-      <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Connexion</button>
-      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
+      <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')" data-en="Log in">Connexion</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')" data-en="Sign up">Créer un compte</button>
     </div>
     <div class="auth-field">
       <label>EMAIL</label>
       <input type="email" id="authEmail" placeholder="ton@email.com">
     </div>
     <div class="auth-field">
-      <label>MOT DE PASSE</label>
+      <label data-en="PASSWORD">MOT DE PASSE</label>
       <input type="password" id="authPassword" placeholder="••••••••">
     </div>
-    <button class="auth-submit" onclick="doAuth()"><span id="authTxt">Se connecter</span></button>
+    <button class="auth-submit" onclick="doAuth()"><span id="authTxt" data-en="Log in">Se connecter</span></button>
     <div class="auth-error" id="authError"></div>
   </div>
 </div>
