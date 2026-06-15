@@ -850,6 +850,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 50;
 }
+/* Barre OUTILS visible sur desktop → bouton menu redondant : masqué.
+   Conservé sur mobile (≤880px) où la barre latérale est cachée. */
+.history-page-header .lt-hamburger, .perf-header .lt-hamburger { display: none; }
+@media (max-width: 880px) {
+  .history-page-header .lt-hamburger, .perf-header .lt-hamburger { display: inline-flex; }
+}
 
 .history-page-title {
   font-family: 'Anton', 'Arial Narrow', sans-serif;
@@ -1998,7 +2004,7 @@ async function loadPerf(){
   document.getElementById('perfLoading').style.display='block';
   document.getElementById('perfContent').style.display='none';
   // Try to refresh from API if connected
-  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d)&&d.length){var _aIds=new Set(d.map(function(h){return String(h.id);}));var _loc=historyData.filter(function(h){return !_aIds.has(String(h.id));});historyData=_loc.concat(d);historyData.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});}}catch(e){}}
+  if(authToken){try{var res=await fetch('/api/history',{headers:{'Authorization':'Bearer '+authToken}});var d=await res.json();if(Array.isArray(d)&&d.length){var _aIds=new Set(d.map(function(h){return String(h.id);}));var _loc=historyData.filter(function(h){return !_aIds.has(String(h.id));});historyData=_loc.concat(d).filter(function(h){return !(_deletedIds instanceof Set) || !_deletedIds.has(String(h.id));});historyData.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});}}catch(e){}}
   // Build stats from local historyData
   var all = historyData;
   if(!all.length){ document.getElementById('perfLoading').textContent='Aucune analyse encore. Lance ta première analyse !'; return; }
