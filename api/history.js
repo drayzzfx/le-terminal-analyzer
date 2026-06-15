@@ -32,7 +32,7 @@ function supabaseRequest(method, path, body, anonKey, authToken) {
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -75,6 +75,19 @@ module.exports = async function handler(req, res) {
         created_at: new Date().toISOString()
       }, ANON_KEY, token);
       return res.status(200).json(r.body);
+    }
+
+    if (req.method === 'DELETE') {
+      // Extrait l'ID depuis l'URL : /api/history/UUID
+      const id = (req.url || '').split('/').filter(Boolean).pop();
+      if (!id || id === 'history') return res.status(400).json({ error: 'Missing id' });
+      const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ANON_KEY;
+      const r = await supabaseRequest(
+        'DELETE',
+        `/rest/v1/analyses?id=eq.${id}&user_id=eq.${userId}`,
+        null, SERVICE_KEY, SERVICE_KEY
+      );
+      return res.status(200).json({ ok: true });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
