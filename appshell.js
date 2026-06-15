@@ -2,7 +2,7 @@
 // d'ariane) appliqué à toutes les pages outils. La barre latérale reprend le STYLE
 // du design actuel (.side__item) avec l'arborescence complète (sous-menus dépliables).
 
-/* ─── CURSEUR CUSTOM SIMPLE NÉON ──────────────────────────────────────────── */
+/* ─── CROSSHAIR NÉON BLANC ────────────────────────────────────────────────── */
 (function () {
   if (window._ltCursorInit) return;
   window._ltCursorInit = true;
@@ -12,13 +12,18 @@
     '*, *::before, *::after { cursor: none !important; }' +
     '#lt-c {' +
     '  position: fixed; top: 0; left: 0; z-index: 999999;' +
-    '  width: 10px; height: 10px; border-radius: 50%;' +
-    '  background: #7FB8E8;' +
-    '  box-shadow: 0 0 8px 2px #7FB8E8, 0 0 18px 4px rgba(127,184,232,.5);' +
-    '  pointer-events: none; transform: translate(-50%,-50%);' +
-    '  transition: opacity .2s, width .15s, height .15s, box-shadow .15s;' +
+    '  pointer-events: none;' +
+    '  transform: translate(-50%,-50%);' +
+    '  width: 28px; height: 28px;' +
+    '  transition: opacity .2s;' +
     '}' +
-    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #7FB8E8, 0 0 28px 8px rgba(127,184,232,.5); }' +
+    '#lt-c::before, #lt-c::after {' +
+    '  content: ""; position: absolute; background: #fff;' +
+    '  box-shadow: 0 0 6px 1px rgba(255,255,255,.8), 0 0 14px 3px rgba(255,255,255,.4);' +
+    '  border-radius: 1px;' +
+    '}' +
+    '#lt-c::before { left: 50%; top: 0; transform: translateX(-50%); width: 1.5px; height: 100%; }' +
+    '#lt-c::after  { top: 50%; left: 0; transform: translateY(-50%); height: 1.5px; width: 100%; }' +
     '#lt-c.off { opacity: 0; }';
   document.head.appendChild(style);
 
@@ -28,7 +33,6 @@
   document.addEventListener('mousemove', function (e) {
     el.style.left = e.clientX + 'px';
     el.style.top  = e.clientY + 'px';
-    el.classList.toggle('h', !!e.target.closest('a,button,[role="button"],[onclick]'));
   });
   document.addEventListener('mouseleave', function () { el.classList.add('off'); });
   document.addEventListener('mouseenter', function () { el.classList.remove('off'); });
