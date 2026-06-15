@@ -78,9 +78,11 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'DELETE') {
-      // Extrait l'ID depuis l'URL : /api/history/UUID
-      const id = (req.url || '').split('/').filter(Boolean).pop();
-      if (!id || id === 'history') return res.status(400).json({ error: 'Missing id' });
+      // Lit l'ID depuis ?id=UUID (client envoie /api/history?id=UUID)
+      const rawUrl = req.url || '';
+      const qIdx = rawUrl.indexOf('?');
+      const id = qIdx >= 0 ? new URLSearchParams(rawUrl.slice(qIdx)).get('id') : null;
+      if (!id) return res.status(400).json({ error: 'Missing id' });
       const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ANON_KEY;
       const r = await supabaseRequest(
         'DELETE',
