@@ -147,6 +147,14 @@
   </section>
 
   <!-- POURQUOI CETTE PAGE -->
+  <section class="pr-sel" id="prPrevSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Flash">Flash</span> · <span id="prPrevCount" data-en="earlier today">plus tôt aujourd'hui</span></span>
+      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
+    </div>
+    <div class="pr-prevlist" id="prPrevList"></div>
+  </section>
+
   <section class="pr-mission">
     <div>
       <div class="pr-head">
@@ -199,6 +207,9 @@
   }
   function getTitle(item) { var l = getLang(); return (l === 'en' && item.title_en ? item.title_en : item.title) || ''; }
 
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleDateString(en?'en-GB':'fr-FR',{day:'2-digit',month:'short'})+' · '+d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function isToday(iso){try{var f=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris'});return f.format(new Date(iso))===f.format(new Date());}catch(e){return true;}}
+  function buildPrevRow(item){var url=item.url||'#';return '<a class="pr-prevrow" href="'+url+'" target="_blank" rel="noopener nofollow"><span class="pr-prevrow__time">'+fmtD(item.published_at)+'</span><span class="pr-prevrow__src">Financial Juice</span><span class="pr-prevrow__title">'+esc(getTitle(item))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
   function renderEdition(item) {
     var l = getLang(), url = item.url || '#';
     var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
@@ -235,11 +246,18 @@
     }
 
     renderEdition(items[0]);
-    var rest = items.slice(1, 40);
+    var recent = items.slice(1, 13);
     if (wire) {
-      wire.innerHTML = rest.length
-        ? rest.map(buildWireItem).join('')
+      wire.innerHTML = recent.length
+        ? recent.map(buildWireItem).join('')
         : '<li style="padding:32px 16px;text-align:center;color:var(--text3);font-size:13px;list-style:none">' + (getLang() === 'en' ? 'Only one headline for now — more incoming.' : 'Une seule annonce pour l\'instant — d\'autres arrivent.') + '</li>';
+    }
+    // « Annonces précédentes » = le reste des annonces du jour, retiré du fil principal
+    var older = items.slice(13).filter(isToday);
+    var prevSec = document.getElementById('prPrevSec'), prevList = document.getElementById('prPrevList'), prevCnt = document.getElementById('prPrevCount');
+    if (prevSec && prevList) {
+      if (older.length) { prevSec.style.display = ''; prevList.innerHTML = older.map(buildPrevRow).join(''); if (prevCnt) { prevCnt.textContent = getLang() === 'en' ? older.length + ' earlier today' : older.length + ' plus tôt aujourd’hui'; prevCnt.removeAttribute('data-en'); } }
+      else { prevSec.style.display = 'none'; }
     }
     if (statusEl) {
       var n = items.length, l = getLang();
