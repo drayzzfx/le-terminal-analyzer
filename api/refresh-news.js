@@ -266,9 +266,9 @@ module.exports = async function handler(req, res) {
 
           const ins = await insertNewsItem({
             guid: item.guid,
-            // title = version française (affichée par défaut) ; title_en = original anglais (mode EN)
+            // title = version française (traduite à l'ingestion), stockée dans la
+            // colonne existante. Pas de colonne supplémentaire → aucune migration.
             title: title_fr || item.title,
-            title_en: title_en || item.title,
             summary:    summary    || item.desc.replace(/<[^>]+>/g,'').slice(0,200),
             summary_en: summary_en || '',
             source: source.name,

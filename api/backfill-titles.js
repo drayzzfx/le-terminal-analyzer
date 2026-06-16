@@ -87,10 +87,10 @@ module.exports = async function handler(req, res) {
 
   const limit = Math.min(parseInt((req.query && req.query.limit) || '40', 10), 60);
 
-  // Lignes dont le titre anglais n'est pas encore renseigné.
-  const r = await sbReq('GET', `/rest/v1/news_items?title_en=is.null&order=published_at.desc&select=id,title&limit=${limit}`);
+  // Lignes les plus récentes : on retraduit le titre en place (colonne title).
+  const r = await sbReq('GET', `/rest/v1/news_items?order=published_at.desc&select=id,title&limit=${limit}`);
   const rows = Array.isArray(r.body) ? r.body : [];
-  if (rows.length === 0) return res.status(200).json({ ok: true, remaining: 0, patched: 0, message: 'Rien à traiter.' });
+  if (rows.length === 0) return res.status(200).json({ ok: true, patched: 0, message: 'Rien à traiter.' });
 
   const tr = await translateTitles(rows.map(x => x.title || ''));
   if (!tr) return res.status(502).json({ ok: false, error: 'Traduction indisponible' });
@@ -100,14 +100,10 @@ module.exports = async function handler(req, res) {
     const row = rows[i];
     const t = tr[i] || {};
     const fr = (t.fr || '').trim() || row.title;
-    const en = (t.en || '').trim() || row.title;
-    const up = await sbReq('PATCH', `/rest/v1/news_items?id=eq.${row.id}`, { title: fr, title_en: en });
+    if (fr === row.title) continue; // déjà en français → on ne touche pas
+    const up = await sbReq('PATCH', `/rest/v1/news_items?id=eq.${row.id}`, { title: fr });
     if (up.status < 400) patched++;
   }
 
-  // Combien reste-t-il ?
-  const left = await sbReq('GET', '/rest/v1/news_items?title_en=is.null&select=id&limit=1000');
-  const remaining = Array.isArray(left.body) ? left.body.length : null;
-
-  return res.status(200).json({ ok: true, patched, processed: rows.length, remaining });
+  return res.status(200).json({ ok: true, patched, processed: rows.length });
 };
