@@ -233,15 +233,15 @@
   background: linear-gradient(135deg, rgba(127,184,232,0.06), rgba(74,222,156,0.04));
   border: 1px solid rgba(127,184,232,0.18); border-radius: 16px;
   padding: 22px 28px;
-  font-family: var(--display);
-  font-size: 17px; font-weight: 700; line-height: 1.4;
+  font-family: var(--font-text, 'Inter', system-ui, sans-serif);
+  font-size: 17px; font-weight: 600; line-height: 1.5;
   color: var(--text); text-align: center;
   position: relative; overflow: hidden;
 }
 .art-conclusion::before {
   content: '"'; position: absolute; top: -10px; left: 16px;
-  font-size: 80px; color: rgba(127,184,232,0.08);
-  font-family: Georgia, serif; line-height: 1;
+  font-size: 80px; color: rgba(127,184,232,0.10);
+  font-family: var(--font-display, 'Anton'), sans-serif; line-height: 1;
 }
 
 /* ── Source CTA ─────────────────────────────────── */
@@ -632,7 +632,7 @@
     root.innerHTML = '<div class="art-loading">'
       + '<div class="art-spinner"></div>'
       + '<p>'+(l==='en'?'Generating analysis…':'Génération de l\'analyse…')+'<br>'
-      + '<small>'+(l==='en'?'Claude is reading the article for you.':'Claude analyse l\'article pour vous.')+'</small></p>'
+      + '<small>'+(l==='en'?'Le Terminal is analysing the article for you.':'Le Terminal analyse l\'article pour toi.')+'</small></p>'
       + '</div>';
   }
 
