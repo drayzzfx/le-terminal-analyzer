@@ -41,29 +41,37 @@ function parisDayBounds(dayStr) {
 async function claudeReport(zoneLabel, dayStr, items) {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
   if (!ANTHROPIC_API_KEY) return null;
-  const lines = items.slice(0, 80).map((it, i) =>
-    `${i + 1}. [${it.sentiment || 'Neutre'}] ${it.title}${it.summary ? ' — ' + it.summary : ''}`
+  const lines = items.slice(0, 120).map((it, i) =>
+    `${i + 1}. [${it.sentiment || 'Neutre'}] (${it.source || '?'}) ${it.title}${it.summary ? ' — ' + it.summary : ''}`
   ).join('\n');
 
-  const system = `Tu es l'éditorialiste macro en chef de « Le Terminal ». Tu rédiges un rapport de journée approfondi pour une zone, destiné à des traders exigeants. Dense, factuel, structuré, sans bla-bla ni remplissage. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr":"...","en":"...","bias":"Positif|Négatif|Neutre"}.`;
+  const system = `Tu es l'éditorialiste macro en chef de « Le Terminal ». Tu rédiges le rapport de journée d'une zone : approfondi et exigeant, mais clair et accessible à TOUT LECTEUR (pas seulement aux pros). Tu expliques simplement les termes techniques quand tu les emploies. Dense et concret, jamais creux. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr":"...","en":"...","bias":"Positif|Négatif|Neutre"}.`;
   const user = `Zone : ${zoneLabel}. Journée du ${dayStr}.
-Voici TOUTES les annonces de la journée pour cette zone :
+Voici TOUTES les annonces de la journée pour cette zone (utilise-les TOUTES dans ton analyse, relie-les entre elles) :
 ${lines}
 
-Rédige un RAPPORT COMPLET ET APPROFONDI de cette journée pour cette zone — beaucoup plus détaillé qu'une simple synthèse. Structure ta réponse avec des sections, chacune introduite par une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
+Rédige un RAPPORT COMPLET, DÉTAILLÉ ET APPROFONDI de cette journée pour cette zone. Pas une synthèse expéditive : développe chaque section sur plusieurs phrases. Structure ta réponse avec des sections, chacune introduite par une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
 ## Vue d'ensemble
 ## Les faits marquants
-## Analyse par thème
+## Décryptage
 ## Chiffres & niveaux clés
-## Orientation & à surveiller
+## Impact sur les marchés
+## Ce qu'il faut surveiller
+## À retenir
 
-Consignes : relie les annonces entre elles plutôt que de les lister ; cite les chiffres, noms propres et niveaux quand ils figurent dans les annonces ; explique les implications concrètes pour les actifs de la zone ; sois précis et nuancé. Si la matière est pauvre, reste honnête et plus bref plutôt que de meubler.
+Consignes :
+- Prends en compte TOUTES les annonces ci-dessus ; relie-les, dégage les tendances, ne te limite pas aux plus visibles.
+- Explique le POURQUOI et les implications concrètes (sur les actions, taux, devises, matières premières de la zone), pas seulement le QUOI.
+- Reste compréhensible par tous : quand tu emploies un terme technique (ex. « spread », « hawkish », « PMI »), explique-le en quelques mots.
+- Cite les chiffres, niveaux et noms propres présents dans les annonces.
+- « ## À retenir » = 3 à 5 puces commençant par « - », chacune une idée clé courte.
+- Si la matière est vraiment pauvre, reste honnête et plus bref plutôt que de meubler.
 
-Fournis : "fr" = le rapport en français (avec les sections « ## »), "en" = sa traduction anglaise (mêmes sections, titres traduits), "bias" = l'orientation marché globale de la zone ce jour ("Positif", "Négatif" ou "Neutre"). Réponds uniquement par le JSON.`;
+Fournis : "fr" = le rapport en français (avec les sections « ## » et les puces « - »), "en" = sa traduction anglaise (même structure), "bias" = l'orientation marché globale de la zone ce jour ("Positif", "Négatif" ou "Neutre"). Réponds uniquement par le JSON.`;
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1800,
+    max_tokens: 4000,
     system,
     messages: [{ role: 'user', content: user }]
   });
