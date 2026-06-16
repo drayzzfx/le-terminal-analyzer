@@ -62,7 +62,8 @@ module.exports = async function handler(req, res) {
         Object.assign({ id: userId, email: userEmail }, fields), SERVICE_KEY, SERVICE_KEY);
       if (r.status >= 400) {
         const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, fields, SERVICE_KEY, SERVICE_KEY);
-        return res.status(u.status >= 400 ? 500 : 200).json(Array.isArray(u.body) ? u.body[0] : (u.body || {}));
+        if (u.status >= 400) return res.status(500).json({ error: 'save_failed', detail: u.body });
+        return res.status(200).json(Array.isArray(u.body) ? u.body[0] : (u.body || {}));
       }
       return res.status(200).json(Array.isArray(r.body) ? r.body[0] : {});
     }
