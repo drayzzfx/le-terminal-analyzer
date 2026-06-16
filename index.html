@@ -507,13 +507,13 @@
   </div>
   <div class="lt-proof__grid">
     <div class="lt-proof__card lt-proof__card--rating">
-      <span class="lt-proof__score">4,8<span style="font-size:20px;color:var(--text-muted)">/5</span></span>
+      <span class="lt-proof__score"><span data-count="4.8" data-dec="1">4,8</span><span style="font-size:20px;color:var(--text-muted)">/5</span></span>
       <span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span>
       <span class="lt-proof__rsub" data-en="on 60+ verified reviews">sur 60+ avis vérifiés</span>
     </div>
-    <div class="lt-proof__card"><span class="lt-proof__num">180+</span><span class="lt-proof__lbl" data-en="active traders on the terminal">traders actifs sur le terminal</span></div>
-    <div class="lt-proof__card"><span class="lt-proof__num">96 %</span><span class="lt-proof__lbl" data-en="would recommend Le Terminal">recommandent Le Terminal</span></div>
-    <div class="lt-proof__card"><span class="lt-proof__num">60+</span><span class="lt-proof__lbl" data-en="reviews collected">avis collectés</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num" data-count="180" data-suf="+">180+</span><span class="lt-proof__lbl" data-en="active traders on the terminal">traders actifs sur le terminal</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num" data-count="96" data-suf=" %">96 %</span><span class="lt-proof__lbl" data-en="would recommend Le Terminal">recommandent Le Terminal</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num" data-count="60" data-suf="+">60+</span><span class="lt-proof__lbl" data-en="reviews collected">avis collectés</span></div>
   </div>
   <div class="lt-proof__quotes">
     <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="The Setup Analyzer made me far more disciplined. A clear score on every trade — no more blind entries.">Le Setup Analyzer m'a fait gagner en discipline. Un score clair sur chaque trade, je ne rentre plus à l'aveugle.</p><div class="lt-proof__who"><span class="lt-proof__ava">T</span><span><span class="lt-proof__name">Thomas R.</span><br><span class="lt-proof__role" data-en="Day trader · Forex">Day trader · Forex</span></span></div></article>
@@ -1280,5 +1280,21 @@
 <script src="./menu.js"></script>
 <script src="./checkout.js"></script>
 <script src="./cursor.js"></script>
+<script>
+(function(){
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var els=document.querySelectorAll(".lt-proof [data-count]");
+  if(!els.length||!("IntersectionObserver" in window))return;
+  function run(el){
+    var to=parseFloat(el.getAttribute("data-count")),dec=parseInt(el.getAttribute("data-dec")||"0",10),suf=el.getAttribute("data-suf")||"";
+    var dur=1100,t0=null;
+    function fmt(v){return v.toFixed(dec).replace(".",",")+suf;}
+    function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=fmt(to*e);if(k<1)requestAnimationFrame(step);else el.textContent=fmt(to);}
+    requestAnimationFrame(step);
+  }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run(e.target);io.unobserve(e.target);}});},{threshold:0.4});
+  els.forEach(function(el){io.observe(el);});
+})();
+</script>
 </body>
 </html>
