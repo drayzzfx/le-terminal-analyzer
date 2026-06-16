@@ -70,7 +70,7 @@
 <div class="pr">
 
   <section class="pr-sel" style="padding-top:8px">
-    <a class="ad-back" href="./eco-archive.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-en="Back to the archive">Retour à l'archive</span></a>
+    <a class="lt-btn lt-btn--ghost lt-btn--sm" href="./eco-archive.html" style="margin-bottom:18px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-en="Back to the archive">Retour à l'archive</span></a>
     <div class="pr-head">
       <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Archive · In-depth report">Archive · Rapport approfondi</span> · <span id="adDate">—</span></span>
       <div class="ad-head">
@@ -94,6 +94,10 @@
       <h2 class="pr-head__title" data-en="Everything that was published">Tout ce qui a été publié</h2>
     </div>
     <div class="pr-prevlist" id="adList"></div>
+  </section>
+
+  <section class="pr-sel" style="text-align:center;padding-top:8px">
+    <a class="lt-btn lt-btn--secondary lt-btn--sm" href="./eco-archive.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-en="Back to the archive">Retour à l'archive</span></a>
   </section>
 
 </div>
@@ -192,7 +196,7 @@
       if(r.ok){DATA=await r.json();}
     }catch(e){}
     if(!DATA){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Report unavailable.">Rapport indisponible pour le moment.</div>';return;}
-    if(DATA.item_count===0){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="No announcement was recorded that day for this zone.">Aucune annonce enregistrée ce jour-là pour cette zone.</div>';return;}
+    if(!DATA.report_fr && (!DATA.items || DATA.items.length===0)){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="No announcement was recorded that day for this zone.">Aucune annonce enregistrée ce jour-là pour cette zone.</div>';return;}
     render();
   }
   window.ecoReloadNews=render; // re-localise au changement de langue

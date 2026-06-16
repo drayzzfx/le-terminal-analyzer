@@ -38,7 +38,7 @@
 .arc-close{display:flex;width:fit-content;margin:0 0 14px auto;align-items:center;gap:7px;font-family:var(--font-text);font-size:12px;font-weight:600;color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-sm);padding:8px 13px;cursor:pointer;transition:border-color .2s,color .2s}
 .arc-close:hover{border-color:var(--accent);color:var(--text-title)}
 /* ── Calendrier mensuel ── */
-.arc-cal{border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:var(--bg-elevated);padding:18px}
+.arc-cal{border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:var(--bg-elevated);padding:16px;max-width:520px}
 .arc-cal__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .arc-cal__month{font-family:var(--font-text);font-weight:700;font-size:1.05rem;color:var(--text-title);text-transform:capitalize}
 .arc-cal__nav{display:flex;gap:8px}
@@ -47,11 +47,15 @@
 .arc-navbtn:disabled{opacity:.3;cursor:not-allowed}
 .arc-cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .arc-wd{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);text-align:center;padding:4px 0}
-.arc-cell{position:relative;aspect-ratio:1/1;border:1px solid transparent;border-radius:var(--r-sm);background:transparent;color:var(--text-muted);font-family:var(--font-mono);font-size:13px;display:flex;align-items:flex-start;justify-content:flex-end;padding:7px 8px;transition:border-color .15s,background .15s}
-.arc-cell.has-data{cursor:pointer;background:var(--bg-base);border-color:var(--border-subtle);color:var(--text-title)}
-.arc-cell.has-data:hover{border-color:var(--accent);background:var(--accent-glow-soft)}
+.arc-cell{position:relative;min-height:38px;border:1px solid transparent;border-radius:var(--r-sm);background:transparent;color:rgba(127,184,232,0.28);font-family:var(--font-mono);font-size:12px;display:flex;align-items:flex-start;justify-content:flex-end;padding:6px 7px;transition:border-color .15s,background .15s}
+.arc-cell.has-data{cursor:pointer;background:rgba(127,184,232,0.12);border-color:var(--accent-glow);color:var(--text-title);font-weight:600}
+.arc-cell.has-data:hover{border-color:var(--accent);background:rgba(127,184,232,0.20)}
 .arc-cell.is-today{box-shadow:inset 0 0 0 1px var(--accent-glow)}
-.arc-cell__dot{position:absolute;left:8px;bottom:7px;width:6px;height:6px;border-radius:999px;background:var(--accent)}
+.arc-cell__dot{position:absolute;left:7px;bottom:6px;width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
+.arc-legend{display:flex;gap:18px;margin-top:14px;font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--text-muted)}
+.arc-legend span{display:inline-flex;align-items:center;gap:6px}
+.arc-legend__sw{width:12px;height:12px;border-radius:3px;background:rgba(127,184,232,0.14);border:1px solid var(--accent-glow)}
+.arc-legend__sw--off{background:transparent;border-color:var(--border-subtle)}
 /* ── Pop-up sélection de zone ── */
 .arc-pop{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(7,9,12,.72);backdrop-filter:blur(4px)}
 .arc-pop.is-open{display:flex}
@@ -145,6 +149,10 @@
       </div>
       <div class="arc-cal__grid" id="arcWeekdays"></div>
       <div class="arc-cal__grid" id="arcGridCal" style="margin-top:6px"><div class="arc-msg" style="grid-column:1/-1" data-en="Loading…">Chargement…</div></div>
+      <div class="arc-legend">
+        <span><span class="arc-legend__sw"></span> <span data-en="Day with announcements">Jour avec annonces</span></span>
+        <span><span class="arc-legend__sw arc-legend__sw--off"></span> <span data-en="No data">Sans annonce</span></span>
+      </div>
     </div>
   </section>
 

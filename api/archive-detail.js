@@ -63,7 +63,7 @@ Fournis : "fr" = le rapport en français (avec les sections « ## »), "en" = sa
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',
-    max_tokens: 2600,
+    max_tokens: 1800,
     system,
     messages: [{ role: 'user', content: user }]
   });
@@ -102,28 +102,38 @@ module.exports = async function handler(req, res) {
 
   try {
     const { startISO, endISO } = parisDayBounds(day);
-    const path = `/rest/v1/news_items?zone=eq.${zone}`
+    const itemsPath = `/rest/v1/news_items?zone=eq.${zone}`
       + `&published_at=gte.${encodeURIComponent(startISO)}`
       + `&published_at=lt.${encodeURIComponent(endISO)}`
       + `&order=published_at.asc&select=id,title,title_en,summary,summary_en,source,url,published_at,sentiment&limit=200`;
-    const r = await sbReq(path);
-    const items = Array.isArray(r.body) ? r.body : [];
+    // Le bilan figé (daily_summaries) persiste même quand news_items est purgé.
+    const sumPath = `/rest/v1/daily_summaries?day=eq.${encodeURIComponent(day)}&zone=eq.${zone}`
+      + `&select=summary,summary_en,item_count,top_sentiment&limit=1`;
 
-    if (items.length === 0) {
+    const [ri, rs] = await Promise.all([sbReq(itemsPath), sbReq(sumPath)]);
+    const items = Array.isArray(ri.body) ? ri.body : [];
+    const sumRow = Array.isArray(rs.body) && rs.body[0] ? rs.body[0] : null;
+
+    // Rien du tout (ni annonces, ni bilan) → message « aucune annonce ».
+    if (items.length === 0 && !sumRow) {
       res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=300');
       return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count: 0, report_fr: '', report_en: '', bias: 'Neutre', items: [] });
     }
 
-    const rep = await claudeReport(ZONE_LABEL[zone], day, items);
+    // Rapport approfondi si on a encore les annonces ; sinon repli sur le bilan figé.
+    let rep = null;
+    if (items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
+
+    const report_fr = (rep && rep.fr) || (sumRow && sumRow.summary) || '';
+    const report_en = (rep && rep.en) || (sumRow && sumRow.summary_en) || '';
+    const bias = (rep && rep.bias) || (sumRow && sumRow.top_sentiment) || 'Neutre';
+    const item_count = items.length || (sumRow && sumRow.item_count) || 0;
+
     // Journée figée → cache CDN long (24 h) une fois généré.
     res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=604800');
     return res.status(200).json({
       ok: true, day, zone, label: ZONE_LABEL[zone],
-      item_count: items.length,
-      report_fr: (rep && rep.fr) || '',
-      report_en: (rep && rep.en) || '',
-      bias: (rep && rep.bias) || 'Neutre',
-      items
+      item_count, report_fr, report_en, bias, items
     });
   } catch (e) {
     return res.status(500).json({ error: 'archive-detail error', detail: String(e).slice(0, 200) });

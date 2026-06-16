@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "functions": {
+    "api/archive-detail.js": { "maxDuration": 60 },
+    "api/archive-generate.js": { "maxDuration": 120 }
+  },
   "routes": [
     { "src": "/.*\\.(html|js|css)$", "headers": { "cache-control": "public, max-age=0, must-revalidate" }, "continue": true },
     { "src": "/api/(.*)", "dest": "/api/$1" },
