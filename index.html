@@ -1296,5 +1296,33 @@
   els.forEach(function(el){io.observe(el);});
 })();
 </script>
+<style>.lt-mk__px{transition:color .3s ease}.lt-mk__px.is-flash{color:var(--accent-bright)}</style>
+<script>
+(function(){
+  if(!document.querySelector('.lt-mk')) return;
+  function fmt(n, dec){ var s = Number(n).toFixed(dec); var p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' '); return p.join('.'); }
+  function apply(map){
+    document.querySelectorAll('.lt-mk__tile').forEach(function(tile){
+      var symEl = tile.querySelector('.lt-mk__sym'); if(!symEl) return;
+      var q = map[symEl.textContent.trim()]; if(!q) return;
+      var up = q.change >= 0;
+      var pxEl = tile.querySelector('.lt-mk__px');
+      if(pxEl){ var nv = fmt(q.price, q.dec); if(pxEl.textContent.trim() !== nv){ pxEl.textContent = nv; pxEl.classList.remove('is-flash'); void pxEl.offsetWidth; pxEl.classList.add('is-flash'); setTimeout(function(){ pxEl.classList.remove('is-flash'); }, 600); } }
+      var dEl = tile.querySelector('.lt-mk__d');
+      if(dEl){ dEl.textContent = (up ? '\u25B2 ' : '\u25BC ') + Math.abs(q.change).toFixed(2) + '%'; dEl.className = 'lt-mk__d ' + (up ? 'lt-up' : 'lt-down'); }
+      var dot = tile.querySelector('.lt-mk__dot'); if(dot) dot.setAttribute('data-up', up ? '1' : '0');
+      var spark = tile.querySelector('.lt-mk__spark polyline'); if(spark) spark.setAttribute('stroke', up ? 'var(--bull)' : 'var(--bear)');
+    });
+  }
+  function tick(){
+    if(document.hidden) return;
+    fetch('/api/ticker').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if(!d || !d.items) return; var map = {}; d.items.forEach(function(it){ map[it.sym] = it; }); apply(map);
+    }).catch(function(){});
+  }
+  tick();
+  setInterval(tick, 15000);
+})();
+</script>
 </body>
 </html>
