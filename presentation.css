@@ -22,10 +22,11 @@
 .pr-hero__stat b { font-family: var(--font-mono); font-size: 28px; font-weight: 700; color: var(--text-title); font-variant-numeric: tabular-nums; line-height: 1; }
 .pr-hero__stat span { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
 
-/* hero chart */
-.pr-chart { position: relative; z-index: 2; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: linear-gradient(180deg, rgba(16,20,27,0.7), rgba(7,9,12,0.7)); padding: 18px; min-height: 280px; display: flex; flex-direction: column; }
-.pr-chart__svg { width: 100%; flex: 1; display: block; }
-.pr-chart__tags { display: flex; gap: 8px; margin-top: 12px; }
+/* hero chart — panneau « widget terminal » */
+.pr-chart { position: relative; z-index: 2; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: linear-gradient(168deg, rgba(22,27,36,0.9), rgba(9,12,17,0.94)); padding: 16px 16px 0; min-height: 320px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 26px 64px rgba(0,0,0,0.5), inset 0 1px 0 rgba(127,184,232,0.08); }
+.pr-chart::before { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 80% at 80% 0%, rgba(127,184,232,0.10), transparent 60%); pointer-events: none; }
+.pr-chart__svg { width: 100%; flex: 1; display: block; position: relative; z-index: 1; }
+.pr-chart__tags { display: flex; gap: 8px; padding: 12px 2px 16px; position: relative; z-index: 1; }
 .pr-chart__tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; padding: 5px 10px; border-radius: var(--r-sm); border: 1px solid var(--border-subtle); color: var(--text-muted); }
 .pr-chart__tag.is-up { color: var(--bull); border-color: rgba(74,222,156,0.4); }
 .pr-chart__tag.is-live { color: var(--accent-bright); border-color: var(--accent-glow); }
