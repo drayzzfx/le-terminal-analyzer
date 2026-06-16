@@ -35,9 +35,9 @@ const SOURCES = {
     { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed' },
   ],
   international: [
-    { name: 'Le Monde International', url: 'https://www.lemonde.fr/international/rss_full.xml' },
-    { name: 'Financial Juice',       url: 'https://www.financialjuice.com/feed.ashx?xy=rss' },
-    { name: 'ING Think',             url: 'https://think.ing.com/rss/' },
+    { name: 'Le Monde International',  url: 'https://www.lemonde.fr/international/rss_full.xml' },
+    { name: 'The Guardian — Monde',    url: 'https://www.theguardian.com/world/rss' },
+    { name: 'The Guardian — Business', url: 'https://www.theguardian.com/uk/business/rss' },
   ],
   crypto: [
     { name: 'Cointelegraph',        url: 'https://cointelegraph.com/rss' },
