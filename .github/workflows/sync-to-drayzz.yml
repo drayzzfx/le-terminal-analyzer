@@ -1,0 +1,42 @@
+name: Sync vers le dépôt de déploiement (drayzz)
+
+# But : à chaque commit sur `main` de CE dépôt (pobsteta), recopier l'état
+# sur le dépôt qui est déployé par Vercel (drayzz/le-terminal-analyzer),
+# pour ne plus avoir à reporter/merger les changements à la main.
+#
+# INACTIF tant que le secret DRAYZZ_PUSH_TOKEN n'est pas configuré
+# (le job se termine alors sans rien faire — donc aucun risque).
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}   # permet aussi un déclenchement manuel depuis l'onglet Actions
+
+concurrency:
+  group: sync-drayzz
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (historique complet)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pousser main vers le dépôt de déploiement
+        env:
+          TOKEN: ${{ secrets.DRAYZZ_PUSH_TOKEN }}
+          # Dépôt cible. Surchargé par la variable DRAYZZ_REPO si elle existe,
+          # sinon valeur par défaut ci-dessous (à corriger si le nom diffère).
+          REPO_OVERRIDE: ${{ vars.DRAYZZ_REPO }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "DRAYZZ_PUSH_TOKEN absent — synchro désactivée."
+            echo "Ajoute le secret (Settings → Secrets and variables → Actions) pour activer."
+            exit 0
+          fi
+          REPO="${REPO_OVERRIDE:-drayzz/le-terminal-analyzer}"
+          echo "Synchronisation de main vers ${REPO} ..."
+          git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
