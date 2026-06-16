@@ -35,6 +35,10 @@
 .arc-card--empty .arc-card__ic{color:var(--text-muted)}
 .arc-card--empty .arc-card__text{color:var(--text-muted);font-style:italic}
 .arc-msg{grid-column:1/-1;text-align:center;padding:40px 24px;color:var(--text-muted);font-size:13px}
+#bilan{position:relative}
+.arc-close{position:absolute;top:0;right:0;display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12px;font-weight:600;color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-sm);padding:8px 13px;cursor:pointer;transition:border-color .2s,color .2s}
+.arc-close:hover{border-color:var(--accent);color:var(--text-title)}
+@media(max-width:620px){.arc-close{position:static;margin-bottom:14px}}
 </style>
 </head>
 <body class="eco-page">
@@ -113,6 +117,7 @@
   </section>
 
   <section class="pr-sel" id="bilan">
+    <button class="arc-close" id="arcClose" type="button" onclick="window.__arcClose&&__arcClose()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> <span data-en="Close">Fermer</span></button>
     <div class="pr-head">
       <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Daily wrap">Bilan du jour</span> · <span id="arcDayLabel">—</span></span>
       <h2 class="pr-head__title" data-en="The day's wrap, section by section">Le bilan du jour, section par section</h2>
@@ -192,6 +197,7 @@
 
   async function loadDay(iso){
     current=iso;
+    var bsec=document.getElementById('bilan'); if(bsec) bsec.style.display='';
     var lbl=document.getElementById('arcDayLabel'); if(lbl){lbl.textContent=dayLabel(iso);lbl.removeAttribute('data-en');}
     Array.prototype.forEach.call(document.querySelectorAll('.arc-day'),function(b){b.classList.toggle('is-active',b.getAttribute('data-day')===iso);});
     var grid=document.getElementById('arcGrid');
@@ -223,6 +229,7 @@
   }
 
   window.__arcLoad=loadDay;
+  window.__arcClose=function(){var b=document.getElementById('bilan');if(b)b.style.display='none';current=null;Array.prototype.forEach.call(document.querySelectorAll('.arc-day'),function(x){x.classList.remove('is-active');});};
   // Re-localise au changement de langue
   window.ecoReloadNews=function(){renderDays(); if(current)loadDay(current);};
 
