@@ -63,6 +63,43 @@ function translateFR(text) {
   });
 }
 
+// Filtre IA : ne garde que les titres réellement « market-moving » (équivalent des
+// headlines rouges de Financial Juice). 1 seul appel Claude pour toute la liste.
+// Renvoie un Set d'indices à garder, ou null si IA indisponible (repli mots-clés).
+function aiKeep(items) {
+  const KEY = process.env.ANTHROPIC_API_KEY;
+  if (!KEY || !items.length) return Promise.resolve(null);
+  const list = items.map((it, i) => i + '. ' + it.title).join('\n');
+  const prompt = `Tu es un trader institutionnel senior. Voici des titres d'actualité (Financial Juice), numérotés.
+
+${list}
+
+Garde UNIQUEMENT les titres à FORT IMPACT marché — ceux qui peuvent faire bouger immédiatement un indice, une devise ou une matière première (décisions/sentiers de taux des banques centrales, déclarations fortes de banquiers centraux, données macro qui surprennent : CPI/PCE/NFP/PIB/PMI/emploi, géopolitique majeure : guerre/escalade/sanctions/tarifs/OPEP, défaut souverain, intervention de change, gros titres de marché type accord/embargo). EXCLUS le bruit : donnée mineure ou attendue, opinion/analyse, redite, sujet sans impact direct, agenda à venir.
+
+Réponds UNIQUEMENT par un JSON strict : {"keep":[<indices à garder>]}.`;
+  const payload = JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 400, messages: [{ role: 'user', content: prompt }] });
+  return new Promise((resolve) => {
+    const req = https.request({
+      hostname: 'api.anthropic.com', path: '/v1/messages', method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload), 'x-api-key': KEY, 'anthropic-version': '2023-06-01' }
+    }, (r) => {
+      let d = ''; r.on('data', (c) => (d += c));
+      r.on('end', () => {
+        try {
+          const body = JSON.parse(d);
+          const txt = body.content && body.content[0] && body.content[0].text;
+          const m = txt && txt.match(/\{[\s\S]*\}/);
+          const arr = m ? JSON.parse(m[0]).keep : null;
+          resolve(Array.isArray(arr) ? new Set(arr.map(Number)) : null);
+        } catch (e) { resolve(null); }
+      });
+    });
+    req.on('error', () => resolve(null));
+    req.on('timeout', () => { req.destroy(); resolve(null); });
+    req.write(payload); req.end();
+  });
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
@@ -71,7 +108,12 @@ module.exports = async function handler(req, res) {
   try {
     const xml = await httpGet('www.financialjuice.com', '/feed.ashx?xy=rss');
     let items = parseRss(xml);
-    if (!showAll) items = items.filter((it) => HOT.test(it.title) || HOT.test(it.category));
+    if (!showAll) {
+      const cand = items.slice(0, 45);
+      const keep = await aiKeep(cand);
+      if (keep) items = cand.filter((_, i) => keep.has(i));
+      else items = items.filter((it) => HOT.test(it.title) || HOT.test(it.category)); // repli mots-clés si IA indisponible
+    }
     items = items.slice(0, 40);
     const fr = await Promise.all(items.map((it) => translateFR(it.title).catch(() => null)));
     const out = items.map((it, i) => ({
