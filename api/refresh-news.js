@@ -14,7 +14,7 @@ const SOURCES = {
   ameriques: [
     { name: 'CNBC Economy',         url: 'https://www.cnbc.com/id/20910258/device/rss/rss.html' },
     { name: 'MarketWatch',          url: 'https://feeds.marketwatch.com/marketwatch/topstories/' },
-    { name: 'AP Business',          url: 'https://feeds.apnews.com/rss/apf-business' },
+    { name: 'Yahoo Finance',        url: 'https://finance.yahoo.com/news/rssindex' },
   ],
   asie: [
     { name: 'SCMP Business',        url: 'https://www.scmp.com/rss/91/feed' },
