@@ -74,7 +74,13 @@ function aiKeep(items) {
 
 ${list}
 
-Garde UNIQUEMENT les titres à FORT IMPACT marché — ceux qui peuvent faire bouger immédiatement un indice, une devise ou une matière première (décisions/sentiers de taux des banques centrales, déclarations fortes de banquiers centraux, données macro qui surprennent : CPI/PCE/NFP/PIB/PMI/emploi, géopolitique majeure : guerre/escalade/sanctions/tarifs/OPEP, défaut souverain, intervention de change, gros titres de marché type accord/embargo). EXCLUS le bruit : donnée mineure ou attendue, opinion/analyse, redite, sujet sans impact direct, agenda à venir.
+Garde UNIQUEMENT les titres à FORT IMPACT marché — ceux qui peuvent faire réagir immédiatement un indice, une devise ou une matière première :
+- Banques centrales : décision ou sentier de taux, intervention, déclaration forte d'un banquier central (Powell, Lagarde, BoJ, BoE...).
+- Toute DONNÉE économique au format « Actual ... (Forecast ..., Previous ...) » dont le réalisé s'écarte nettement du consensus (surprise), QUEL QUE SOIT l'indicateur : CPI, PCE, NFP, PIB, PMI, emploi/chômage, ventes au détail, mises en chantier (Housing Starts), permis de construire, balance commerciale, indices de prix, confiance, etc.
+- DÉCLARATIONS de dirigeants ou personnalités politiques à portée marché/géopolitique (Trump, présidents, Premiers ministres, ministres des Finances, officiels, porte-paroles).
+- GÉOPOLITIQUE / diplomatie majeure : guerre, escalade militaire, frappes, otages, sanctions, tarifs douaniers, OPEP, accord / mémorandum (MoU) / cessez-le-feu, négociations (ex. nucléaire Iran).
+- Défaut souverain, dégradation de note, gros titre de marché (embargo, accord commercial, faillite majeure).
+EXCLUS le bruit : donnée mineure SANS écart notable au consensus, opinion/analyse, redite d'une info déjà connue, simple agenda à venir, sujet sans impact direct sur les marchés.
 
 Réponds UNIQUEMENT par un JSON strict : {"keep":[<indices à garder>]}.`;
   const payload = JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 400, messages: [{ role: 'user', content: prompt }] });
