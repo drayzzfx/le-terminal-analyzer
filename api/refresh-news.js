@@ -148,7 +148,7 @@ async function logFeedError(source, url, error) {
 // Pour la zone "flash" : champ supplémentaire market_moving (50+ pts SP500/DAX/Nasdaq)
 async function getSummaryAndSentiment(title, desc, zone) {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) return { summary: '', summary_en: '', sentiment: 'Neutre', market_moving: true, important: true };
+  if (!ANTHROPIC_API_KEY) return { title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', market_moving: true, important: true };
 
   const isFlash = zone === 'flash';
   const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 400);
@@ -167,11 +167,15 @@ Zone : ${zone}
 
 Réponds UNIQUEMENT en JSON strict, sans markdown :
 {
+  "title_fr": "<le titre traduit en FRANÇAIS naturel, fidèle et concis — pas de traduction mot-à-mot, garde les noms propres/tickers/sigles tels quels>",
+  "title_en": "<the headline in ENGLISH>",
   "summary_fr": "<résumé factuel 1-2 phrases en FRANÇAIS>",
   "summary_en": "<same 1-2 sentences in ENGLISH>",
   "sentiment": "<Positif|Négatif|Neutre>",
   "important": <true|false>${flashField}
 }
+
+Règle titre : "title_fr" DOIT être en français correct, même si le titre d'origine est en anglais. Si le titre est déjà en français, recopie-le tel quel. "title_en" = la version anglaise du même titre.
 
 Règles sentiment :
 - Positif : données meilleures qu'attendu, hausse marchés, accord commercial, croissance, emploi fort
@@ -209,16 +213,18 @@ Règle "important" : true UNIQUEMENT si l'annonce est vraiment significative pou
           let sentiment = parsed.sentiment || 'Neutre';
           if (!['Positif','Négatif','Neutre'].includes(sentiment)) sentiment = 'Neutre';
           resolve({
+            title_fr:     parsed.title_fr || '',
+            title_en:     parsed.title_en || '',
             summary:      parsed.summary_fr || parsed.summary || '',
             summary_en:   parsed.summary_en || '',
             sentiment,
             market_moving: parsed.market_moving !== false, // true par défaut pour zones non-flash
             important: parsed.important !== false, // true par défaut si non précisé
           });
-        } catch(e) { resolve({ summary: '', summary_en: '', sentiment: 'Neutre', important: true }); }
+        } catch(e) { resolve({ title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', important: true }); }
       });
     });
-    req.on('error', () => resolve({ summary: '', summary_en: '', sentiment: 'Neutre', important: true }));
+    req.on('error', () => resolve({ title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', important: true }));
     req.write(payload);
     req.end();
   });
@@ -253,14 +259,16 @@ module.exports = async function handler(req, res) {
             if (age > 48 * 3600 * 1000) { stats.skipped++; continue; }
           }
 
-          const { summary, summary_en, sentiment, market_moving, important } = await getSummaryAndSentiment(item.title, item.desc, zone);
+          const { title_fr, title_en, summary, summary_en, sentiment, market_moving, important } = await getSummaryAndSentiment(item.title, item.desc, zone);
 
           // Filtre qualité : flash = market-moving 50+ pts ; autres zones = seulement les annonces significatives
           if (zone === 'flash' ? !market_moving : !important) { stats.skipped++; continue; }
 
           await insertNewsItem({
             guid: item.guid,
-            title: item.title,
+            // title = version française (affichée par défaut) ; title_en = original anglais (mode EN)
+            title: title_fr || item.title,
+            title_en: title_en || item.title,
             summary:    summary    || item.desc.replace(/<[^>]+>/g,'').slice(0,200),
             summary_en: summary_en || '',
             source: source.name,
