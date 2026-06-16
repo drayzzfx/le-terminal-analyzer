@@ -37,6 +37,38 @@
 .arc-msg{grid-column:1/-1;text-align:center;padding:40px 24px;color:var(--text-muted);font-size:13px}
 .arc-close{display:flex;width:fit-content;margin:0 0 14px auto;align-items:center;gap:7px;font-family:var(--font-text);font-size:12px;font-weight:600;color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-sm);padding:8px 13px;cursor:pointer;transition:border-color .2s,color .2s}
 .arc-close:hover{border-color:var(--accent);color:var(--text-title)}
+/* ── Calendrier mensuel ── */
+.arc-cal{border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:var(--bg-elevated);padding:18px}
+.arc-cal__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.arc-cal__month{font-family:var(--font-text);font-weight:700;font-size:1.05rem;color:var(--text-title);text-transform:capitalize}
+.arc-cal__nav{display:flex;gap:8px}
+.arc-navbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid var(--border-subtle);border-radius:var(--r-sm);background:var(--bg-base);color:var(--text-muted);cursor:pointer;transition:border-color .2s,color .2s}
+.arc-navbtn:hover{border-color:var(--accent);color:var(--text-title)}
+.arc-navbtn:disabled{opacity:.3;cursor:not-allowed}
+.arc-cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.arc-wd{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);text-align:center;padding:4px 0}
+.arc-cell{position:relative;aspect-ratio:1/1;border:1px solid transparent;border-radius:var(--r-sm);background:transparent;color:var(--text-muted);font-family:var(--font-mono);font-size:13px;display:flex;align-items:flex-start;justify-content:flex-end;padding:7px 8px;transition:border-color .15s,background .15s}
+.arc-cell.has-data{cursor:pointer;background:var(--bg-base);border-color:var(--border-subtle);color:var(--text-title)}
+.arc-cell.has-data:hover{border-color:var(--accent);background:var(--accent-glow-soft)}
+.arc-cell.is-today{box-shadow:inset 0 0 0 1px var(--accent-glow)}
+.arc-cell__dot{position:absolute;left:8px;bottom:7px;width:6px;height:6px;border-radius:999px;background:var(--accent)}
+/* ── Pop-up sélection de zone ── */
+.arc-pop{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(7,9,12,.72);backdrop-filter:blur(4px)}
+.arc-pop.is-open{display:flex}
+.arc-pop__card{width:100%;max-width:560px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.arc-pop__head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.arc-pop__title{font-family:var(--font-text);font-weight:700;font-size:1.05rem;color:var(--text-title);text-transform:capitalize}
+.arc-pop__x{margin-left:auto;width:32px;height:32px;border:1px solid var(--border-subtle);border-radius:var(--r-sm);background:var(--bg-base);color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.arc-pop__x:hover{border-color:var(--accent);color:var(--text-title)}
+.arc-pop__sub{font-size:12.5px;color:var(--text-muted);margin:6px 0 16px}
+.arc-pop__zones{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.arc-zone{display:flex;align-items:center;gap:11px;text-align:left;padding:12px 13px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-base);color:var(--text-title);cursor:pointer;text-decoration:none;transition:border-color .2s,transform .2s}
+.arc-zone:hover{border-color:var(--accent);transform:translateY(-2px)}
+.arc-zone__ic{color:var(--accent);display:inline-flex;flex-shrink:0}
+.arc-zone__name{font-family:var(--font-text);font-weight:600;font-size:.95rem;line-height:1.2}
+.arc-zone__cnt{display:block;font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-top:2px}
+.arc-zone.is-off{opacity:.4;cursor:not-allowed;pointer-events:none}
+@media(max-width:520px){.arc-pop__zones{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="eco-page">
@@ -98,24 +130,35 @@
     </div>
   </section>
 
-  <section class="pr-sel">
+  <section class="pr-sel" id="bilan">
     <div class="pr-head">
-      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Archive">Archive</span> · <span id="arcDaysCount" data-en="recent days">jours récents</span></span>
-      <h2 class="pr-head__title" data-en="Recent days">Derniers jours</h2>
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Archive">Archive</span> · <span id="arcDaysCount" data-en="pick a day">choisis un jour</span></span>
+      <h2 class="pr-head__title" data-en="Pick a day, then a section">Choisis un jour, puis une section</h2>
     </div>
-    <div class="arc-days" id="arcDays">
-      <span class="arc-msg" data-en="Loading…">Chargement…</span>
+    <div class="arc-cal" id="arcCal">
+      <div class="arc-cal__head">
+        <span class="arc-cal__month" id="arcMonth">—</span>
+        <div class="arc-cal__nav">
+          <button class="arc-navbtn" id="arcPrev" type="button" aria-label="Mois précédent"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="arc-navbtn" id="arcNext" type="button" aria-label="Mois suivant"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+      <div class="arc-cal__grid" id="arcWeekdays"></div>
+      <div class="arc-cal__grid" id="arcGridCal" style="margin-top:6px"><div class="arc-msg" style="grid-column:1/-1" data-en="Loading…">Chargement…</div></div>
     </div>
   </section>
 
-  <section class="pr-sel" id="bilan">
-    <button class="arc-close" id="arcClose" type="button" onclick="window.__arcClose&&__arcClose()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> <span data-en="Close">Fermer</span></button>
-    <div class="pr-head">
-      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Daily wrap">Bilan du jour</span> · <span id="arcDayLabel">—</span></span>
-      <h2 class="pr-head__title" data-en="The day's wrap, section by section">Le bilan du jour, section par section</h2>
+  <!-- Pop-up : choix de la section pour le jour sélectionné -->
+  <div class="arc-pop" id="arcPop" aria-hidden="true">
+    <div class="arc-pop__card" role="dialog" aria-modal="true">
+      <div class="arc-pop__head">
+        <span class="arc-pop__title" id="arcPopDate">—</span>
+        <button class="arc-pop__x" id="arcPopX" type="button" aria-label="Fermer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <p class="arc-pop__sub" data-en="Choose a section to read the in-depth report for that day.">Choisis une section pour lire le rapport approfondi de cette journée.</p>
+      <div class="arc-pop__zones" id="arcPopZones"></div>
     </div>
-    <div class="arc-grid" id="arcGrid"></div>
-  </section>
+  </div>
 
   <section class="pr-mission">
     <div>
@@ -171,68 +214,87 @@
     try{var d=new Date(iso+'T12:00:00'),l=getLang()==='en'?'en-GB':'fr-FR';return {wd:d.toLocaleDateString(l,{weekday:'short'}),dm:d.toLocaleDateString(l,{day:'2-digit',month:'short'})};}catch(e){return {wd:'',dm:iso};}
   }
 
-  var DAYS=[], current=null;
+  var AVAIL = {};            // iso -> {items, zones}
+  var view = new Date(); view.setDate(1);   // mois affiché
 
-  function buildArcCard(zone, row){
-    var l=getLang(), title=l==='en'?zone.en:zone.fr;
-    if(!row){
-      return '<article class="arc-card arc-card--empty"><div class="arc-card__head"><span class="arc-card__ic">'+svg(zone.ic)+'</span><span class="arc-card__zone">'+title+'</span></div>'
-        +'<p class="arc-card__text">'+(l==='en'?'No notable announcement that day.':'Aucune annonce notable ce jour-là.')+'</p></article>';
+  function pad(n){return (n<10?'0':'')+n;}
+  function iso(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d);}
+  function todayParisISO(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris'}).format(new Date());}catch(e){var n=new Date();return iso(n.getFullYear(),n.getMonth(),n.getDate());}}
+
+  function renderWeekdays(){
+    var wd=document.getElementById('arcWeekdays'); if(!wd)return;
+    var fr=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], en=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    wd.innerHTML=(getLang()==='en'?en:fr).map(function(d){return '<div class="arc-wd">'+d+'</div>';}).join('');
+  }
+
+  function renderCal(){
+    renderWeekdays();
+    var grid=document.getElementById('arcGridCal'); if(!grid)return;
+    var y=view.getFullYear(), m=view.getMonth(), l=getLang();
+    var ml=document.getElementById('arcMonth');
+    if(ml)ml.textContent=view.toLocaleDateString(l==='en'?'en-GB':'fr-FR',{month:'long',year:'numeric'});
+    var first=new Date(y,m,1), lead=(first.getDay()+6)%7;          // lundi=0
+    var ndays=new Date(y,m+1,0).getDate(), today=todayParisISO(), cells='';
+    for(var i=0;i<lead;i++)cells+='<div class="arc-cell is-empty"></div>';
+    for(var d=1;d<=ndays;d++){
+      var id=iso(y,m,d), info=AVAIL[id];
+      if(info){
+        cells+='<button class="arc-cell has-data'+(id===today?' is-today':'')+'" type="button" data-day="'+id+'" title="'+(info.items||0)+' '+(l==='en'?'items':'annonces')+'">'+d+'<span class="arc-cell__dot"></span></button>';
+      } else {
+        cells+='<div class="arc-cell'+(id===today?' is-today':'')+'">'+d+'</div>';
+      }
     }
-    var s=row.top_sentiment&&SENT[row.top_sentiment]?SENT[row.top_sentiment]:null;
-    var badge=s?'<span class="pr-badge '+s.cls+'">'+(l==='en'?s.en:s.fr)+'</span>':'';
-    var cnt=(row.item_count||0)+' '+(l==='en'?'item'+(row.item_count>1?'s':''):'annonce'+(row.item_count>1?'s':''));
-    var txt=(l==='en'&&row.summary_en?row.summary_en:row.summary)||'';
-    var paras=txt.split(/\n+/).map(function(p){return p.trim();}).filter(Boolean)
-      .map(function(p){return '<p class="arc-card__text">'+esc(p)+'</p>';}).join('');
-    return '<article class="arc-card"><div class="arc-card__head"><span class="arc-card__ic">'+svg(zone.ic)+'</span><span class="arc-card__zone">'+title+'</span>'+badge+'<span class="arc-card__count">'+cnt+'</span></div>'
-      +paras+'</article>';
+    grid.innerHTML=cells;
+    Array.prototype.forEach.call(grid.querySelectorAll('.arc-cell.has-data'),function(b){
+      b.addEventListener('click',function(){openPop(b.getAttribute('data-day'));});
+    });
+    var now=new Date(), nb=document.getElementById('arcNext');
+    if(nb)nb.disabled=(y>now.getFullYear()||(y===now.getFullYear()&&m>=now.getMonth()));
+    var cnt=document.getElementById('arcDaysCount'), total=Object.keys(AVAIL).length;
+    if(cnt){cnt.textContent=l==='en'?total+' day'+(total>1?'s':'')+' archived':total+' jour'+(total>1?'s':'')+' archivé'+(total>1?'s':'');cnt.removeAttribute('data-en');}
   }
 
-  async function loadDay(iso){
-    current=iso;
-    var bsec=document.getElementById('bilan'); if(bsec) bsec.style.display='';
-    var lbl=document.getElementById('arcDayLabel'); if(lbl){lbl.textContent=dayLabel(iso);lbl.removeAttribute('data-en');}
-    Array.prototype.forEach.call(document.querySelectorAll('.arc-day'),function(b){b.classList.toggle('is-active',b.getAttribute('data-day')===iso);});
-    var grid=document.getElementById('arcGrid');
-    if(grid)grid.innerHTML='<div class="arc-msg" data-en="Loading…">Chargement…</div>';
-    var byZone={};
-    try{
-      var r=await fetch('/api/archive?day='+encodeURIComponent(iso));
-      if(r.ok){var d=await r.json();(d.items||[]).forEach(function(it){byZone[it.zone]=it;});}
-    }catch(e){}
-    if(grid)grid.innerHTML=ZONES.map(function(z){return buildArcCard(z, byZone[z.key]);}).join('');
+  function openPop(id){
+    var pop=document.getElementById('arcPop'); if(!pop)return;
+    var l=getLang();
+    var t=document.getElementById('arcPopDate'); if(t)t.textContent=dayLabel(id);
+    var zwrap=document.getElementById('arcPopZones');
+    if(zwrap)zwrap.innerHTML='<div class="arc-msg" style="grid-column:1/-1" data-en="Loading…">Chargement…</div>';
+    pop.classList.add('is-open'); pop.setAttribute('aria-hidden','false');
+    fetch('/api/archive?day='+encodeURIComponent(id)).then(function(r){return r.ok?r.json():{items:[]};}).then(function(dd){
+      var byZone={}; (dd.items||[]).forEach(function(it){byZone[it.zone]=it;});
+      zwrap.innerHTML=ZONES.map(function(z){
+        var row=byZone[z.key], name=l==='en'?z.en:z.fr;
+        if(row){
+          var n=row.item_count||0, sub=n+' '+(l==='en'?'item'+(n>1?'s':''):'annonce'+(n>1?'s':''));
+          return '<a class="arc-zone" href="./eco-archive-detail.html?day='+encodeURIComponent(id)+'&zone='+z.key+'"><span class="arc-zone__ic">'+svg(z.ic)+'</span><span><span class="arc-zone__name">'+name+'</span><span class="arc-zone__cnt">'+sub+'</span></span></a>';
+        }
+        return '<span class="arc-zone is-off"><span class="arc-zone__ic">'+svg(z.ic)+'</span><span><span class="arc-zone__name">'+name+'</span><span class="arc-zone__cnt">'+(l==='en'?'no data':'pas de données')+'</span></span></span>';
+      }).join('');
+    }).catch(function(){zwrap.innerHTML='<div class="arc-msg" style="grid-column:1/-1">—</div>';});
+  }
+  function closePop(){var pop=document.getElementById('arcPop');if(pop){pop.classList.remove('is-open');pop.setAttribute('aria-hidden','true');}}
+
+  function wire(){
+    var prev=document.getElementById('arcPrev'), next=document.getElementById('arcNext');
+    if(prev)prev.addEventListener('click',function(){view.setMonth(view.getMonth()-1);renderCal();});
+    if(next)next.addEventListener('click',function(){if(!next.disabled){view.setMonth(view.getMonth()+1);renderCal();}});
+    var x=document.getElementById('arcPopX'); if(x)x.addEventListener('click',closePop);
+    var pop=document.getElementById('arcPop'); if(pop)pop.addEventListener('click',function(e){if(e.target===pop)closePop();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')closePop();});
   }
 
-  function renderDays(){
-    var wrap=document.getElementById('arcDays'); if(!wrap)return;
-    if(DAYS.length===0){
-      wrap.innerHTML='<div class="arc-msg" data-en="The first daily wrap will be available this evening.">Le premier bilan quotidien sera disponible ce soir.</div>';
-      var g=document.getElementById('arcGrid'); if(g)g.innerHTML='';
-      var lbl=document.getElementById('arcDayLabel'); if(lbl)lbl.textContent='—';
-      return;
-    }
-    var cnt=document.getElementById('arcDaysCount');
-    if(cnt){cnt.textContent=getLang()==='en'?DAYS.length+' day'+(DAYS.length>1?'s':''):DAYS.length+' jour'+(DAYS.length>1?'s':'');cnt.removeAttribute('data-en');}
-    wrap.innerHTML=DAYS.map(function(d){
-      var sh=dayShort(d.day);
-      var sub=(d.items||0)+' '+(getLang()==='en'?'items':'annonces');
-      return '<button class="arc-day" type="button" data-day="'+d.day+'" onclick="window.__arcLoad&&__arcLoad(\''+d.day+'\')"><b>'+sh.wd+' '+sh.dm+'</b><span>'+sub+'</span></button>';
-    }).join('');
-    loadDay(DAYS[0].day);
-  }
-
-  window.__arcLoad=loadDay;
-  window.__arcClose=function(){var b=document.getElementById('bilan');if(b)b.style.display='none';current=null;Array.prototype.forEach.call(document.querySelectorAll('.arc-day'),function(x){x.classList.remove('is-active');});};
-  // Re-localise au changement de langue
-  window.ecoReloadNews=function(){renderDays(); if(current)loadDay(current);};
+  window.ecoReloadNews=function(){renderCal();}; // re-localise au changement de langue
 
   async function init(){
+    wire();
     try{
       var r=await fetch('/api/archive');
-      if(r.ok){var d=await r.json();DAYS=d.days||[];}
+      if(r.ok){var d=await r.json();(d.days||[]).forEach(function(x){AVAIL[x.day]={items:x.items,zones:x.zones};});}
     }catch(e){}
-    renderDays();
+    var keys=Object.keys(AVAIL).sort();
+    if(keys.length){var last=keys[keys.length-1];view=new Date(last+'T12:00:00');view.setDate(1);}
+    renderCal();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

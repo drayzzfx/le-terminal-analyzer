@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Archive · Détail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.pr-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-sm);border:1px solid}
+.pr-badge--accent{color:var(--accent);background:var(--accent-glow-soft);border-color:var(--accent-glow)}
+.pr-badge--neutral{color:var(--neutral);background:rgba(232,194,104,.1);border-color:rgba(232,194,104,.35)}
+.pr-badge--up{color:var(--bull);background:rgba(74,222,156,.1);border-color:rgba(74,222,156,.35)}
+.pr-badge--down{color:var(--bear);background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.35)}
+.pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor;box-shadow:none}
+.ad-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12.5px;font-weight:600;color:var(--text-muted);text-decoration:none;margin-bottom:18px;transition:color .2s}
+.ad-back:hover{color:var(--accent)}
+.ad-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.ad-ic{color:var(--accent);display:inline-flex;flex-shrink:0}
+.ad-report{display:flex;flex-direction:column;gap:8px;max-width:820px}
+.ad-sec{padding:20px 0;border-top:1px solid var(--border-subtle)}
+.ad-sec:first-child{border-top:none;padding-top:6px}
+.ad-h{font-family:var(--font-text);font-weight:700;font-size:1.06rem;color:var(--text-title);margin:0 0 10px;letter-spacing:.01em}
+.ad-h::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:9px;vertical-align:middle}
+.ad-p{font-size:.95rem;line-height:1.65;color:var(--text-body);margin:0 0 10px}
+.ad-ul{margin:0 0 10px;padding-left:18px}
+.ad-ul li{font-size:.95rem;line-height:1.6;color:var(--text-body);margin-bottom:5px}
+.ad-msg{padding:40px 24px;text-align:center;color:var(--text-muted);font-size:13px}
+.ad-skel{height:1em;border-radius:6px;background:linear-gradient(90deg,var(--bg-elevated),rgba(127,184,232,.07),var(--bg-elevated));background-size:200% 100%;animation:adsh 1.4s ease infinite}
+@keyframes adsh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr">
+
+  <section class="pr-sel" style="padding-top:8px">
+    <a class="ad-back" href="./eco-archive.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-en="Back to the archive">Retour à l'archive</span></a>
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Archive · In-depth report">Archive · Rapport approfondi</span> · <span id="adDate">—</span></span>
+      <div class="ad-head">
+        <span class="ad-ic" id="adIcon"></span>
+        <h2 class="pr-head__title" id="adTitle" style="margin:0">—</h2>
+        <span class="pr-badge pr-badge--neutral" id="adBias" style="display:none"></span>
+        <span class="pr-badge pr-badge--accent" id="adCount" style="display:none"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="pr-sel" style="padding-top:0">
+    <div class="ad-report" id="adReport">
+      <div class="ad-sec"><div class="ad-skel" style="width:40%;height:1.1em;margin-bottom:14px"></div><div class="ad-skel" style="width:96%;margin-bottom:8px"></div><div class="ad-skel" style="width:90%;margin-bottom:8px"></div><div class="ad-skel" style="width:70%"></div></div>
+    </div>
+  </section>
+
+  <section class="pr-sel" id="adListSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="The day's announcements">Les annonces du jour</span> · <span id="adListCount">—</span></span>
+      <h2 class="pr-head__title" data-en="Everything that was published">Tout ce qui a été publié</h2>
+    </div>
+    <div class="pr-prevlist" id="adList"></div>
+  </section>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function () {
+  'use strict';
+  var ZONES = {
+    europe:{fr:'Europe',en:'Europe',ic:'<path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/><circle cx="12" cy="12" r="9"/>'},
+    ameriques:{fr:'Amériques',en:'Americas',ic:'<circle cx="12" cy="12" r="9"/><path d="M8 4.5C6 7 6 9 8.5 10.5S12 13 11 16s-3 3-3 4"/>'},
+    asie:{fr:'Asie',en:'Asia',ic:'<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/>'},
+    marches:{fr:'Marchés',en:'Markets',ic:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>'},
+    institutions:{fr:'Institutions',en:'Institutions',ic:'<path d="M3.5 9.5 12 4l8.5 5.5"/><path d="M5.5 10v8M9.5 10v8M14.5 10v8M18.5 10v8"/><path d="M3 20.5h18"/>'},
+    international:{fr:'International',en:'International',ic:'<circle cx="12" cy="12" r="9"/><path d="M3 9h18M3 15h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/>'},
+    crypto:{fr:'Crypto',en:'Crypto',ic:'<circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17"/>'},
+    flash:{fr:'Flash Info',en:'Flash Info',ic:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'}
+  };
+  var SENT = {
+    'Positif':{cls:'pr-badge--up',fr:'Positif',en:'Positive'},'Négatif':{cls:'pr-badge--down',fr:'Négatif',en:'Negative'},'Neutre':{cls:'pr-badge--neutral',fr:'Neutre',en:'Neutral'},
+    'Risk-on':{cls:'pr-badge--up',fr:'Confiance',en:'Confidence'},'Risk-off':{cls:'pr-badge--down',fr:'Prudence',en:'Caution'},'Hawkish':{cls:'pr-badge--up',fr:'Restrictif',en:'Tightening'},'Dovish':{cls:'pr-badge--down',fr:'Accommodant',en:'Easing'}
+  };
+  function getLang(){return localStorage.getItem('lt_lang')||'fr';}
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function qp(k){try{return new URLSearchParams(location.search).get(k);}catch(e){return null;}}
+  function svg(inner){return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>';}
+  function dayLabel(iso){try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString(getLang()==='en'?'en-GB':'fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}catch(e){return iso;}}
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function getTitle(it){var l=getLang();return (l==='en'&&it.title_en?it.title_en:it.title)||'';}
+  function articleUrl(it){if(!it.id)return it.url||'#';var u='/eco-article.html?id='+encodeURIComponent(it.id);if(it.url)u+='&src='+encodeURIComponent(it.url);return u;}
+
+  var DAY=qp('day'), ZONE=qp('zone'), DATA=null;
+
+  // Transforme un rapport texte (sections « ## ») en HTML structuré.
+  function renderReport(txt){
+    if(!txt){return '<div class="ad-msg" data-en="No in-depth report for this day.">Pas de rapport approfondi pour ce jour.</div>';}
+    var lines=txt.split(/\n/), html='', open=false, inUl=false;
+    function closeUl(){if(inUl){html+='</ul>';inUl=false;}}
+    lines.forEach(function(raw){
+      var line=raw.trim();
+      if(!line)return;
+      if(line.indexOf('## ')===0){
+        closeUl(); if(open)html+='</div>'; open=true;
+        html+='<div class="ad-sec"><h3 class="ad-h">'+esc(line.slice(3).trim())+'</h3>';
+      } else if(line.indexOf('- ')===0 || line.indexOf('• ')===0){
+        if(!open){html+='<div class="ad-sec">';open=true;}
+        if(!inUl){html+='<ul class="ad-ul">';inUl=true;}
+        html+='<li>'+esc(line.slice(2).trim())+'</li>';
+      } else {
+        closeUl();
+        if(!open){html+='<div class="ad-sec">';open=true;}
+        html+='<p class="ad-p">'+esc(line)+'</p>';
+      }
+    });
+    closeUl(); if(open)html+='</div>';
+    return html||'<div class="ad-msg">—</div>';
+  }
+
+  function buildRow(it){var url=articleUrl(it);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(it.published_at)+'</span><span class="pr-prevrow__src">'+esc(it.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(it))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
+
+  function render(){
+    var l=getLang(), z=ZONES[ZONE];
+    document.title='Le Terminal — '+(z?(l==='en'?z.en:z.fr):'Archive')+' · '+(DAY||'');
+    var dEl=document.getElementById('adDate'); if(dEl){dEl.textContent=dayLabel(DAY);dEl.removeAttribute('data-en');}
+    var icEl=document.getElementById('adIcon'); if(icEl)icEl.innerHTML=z?svg(z.ic):'';
+    var tEl=document.getElementById('adTitle'); if(tEl)tEl.textContent=z?(l==='en'?z.en:z.fr):'—';
+
+    if(!DATA){return;}
+    var rep=(l==='en'&&DATA.report_en?DATA.report_en:DATA.report_fr)||'';
+    document.getElementById('adReport').innerHTML=renderReport(rep);
+
+    var bias=document.getElementById('adBias');
+    if(bias&&DATA.bias&&SENT[DATA.bias]){bias.style.display='';bias.className='pr-badge '+SENT[DATA.bias].cls;bias.textContent=l==='en'?SENT[DATA.bias].en:SENT[DATA.bias].fr;}
+    var cnt=document.getElementById('adCount');
+    if(cnt){var n=DATA.item_count||0;cnt.style.display='';cnt.textContent=n+' '+(l==='en'?'item'+(n>1?'s':''):'annonce'+(n>1?'s':''));}
+
+    var listSec=document.getElementById('adListSec'), list=document.getElementById('adList'), lc=document.getElementById('adListCount');
+    if((DATA.items||[]).length>0){
+      listSec.style.display='';
+      list.innerHTML=DATA.items.slice().sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);}).map(buildRow).join('');
+      if(lc){lc.textContent=DATA.items.length+' '+(l==='en'?'items':'annonces');lc.removeAttribute('data-en');}
+    } else { listSec.style.display='none'; }
+  }
+
+  async function init(){
+    if(!DAY||!ZONE||!ZONES[ZONE]){
+      document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Invalid link.">Lien invalide.</div>';
+      return;
+    }
+    render(); // en-tête + skeleton
+    try{
+      var r=await fetch('/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE));
+      if(r.ok){DATA=await r.json();}
+    }catch(e){}
+    if(!DATA){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Report unavailable.">Rapport indisponible pour le moment.</div>';return;}
+    if(DATA.item_count===0){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="No announcement was recorded that day for this zone.">Aucune annonce enregistrée ce jour-là pour cette zone.</div>';return;}
+    render();
+  }
+  window.ecoReloadNews=render; // re-localise au changement de langue
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>
