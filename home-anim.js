@@ -671,7 +671,7 @@
       var rest = {
         background: btn.style.background,
         color: btn.style.color,
-        borderColor: btn.style.borderColor || 'transparent',
+        borderColor: btn.style.borderColor || (variant === 'secondary' ? 'var(--border)' : variant === 'ghost' ? 'var(--border-subtle)' : 'transparent'),
         transform: 'none'
       };
       btn.addEventListener('mouseenter', function () {
