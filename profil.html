@@ -200,14 +200,19 @@
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
         body: JSON.stringify(body)
       });
-      if(!r.ok) throw new Error('HTTP ' + r.status);
+      if(!r.ok){
+        var ej = await r.json().catch(function(){ return {}; });
+        var d = ej && ej.detail;
+        var msg = d ? (d.message || (typeof d === 'string' ? d : JSON.stringify(d))) : ('HTTP ' + r.status);
+        throw new Error(msg);
+      }
       // Reflète le pseudo + avatar dans le chip du compte (toutes les pages)
       if(body.pseudo) localStorage.setItem('lt_pseudo', body.pseudo); else localStorage.removeItem('lt_pseudo');
       if(body.avatar_url) localStorage.setItem('lt_avatar', body.avatar_url); else localStorage.removeItem('lt_avatar');
       if(window.ltRenderUserBar) window.ltRenderUserBar();
       setStatus(getLang()==='en' ? 'Profile saved.' : 'Profil enregistré.', 'ok');
     } catch(e){
-      setStatus(getLang()==='en' ? 'Save failed. Try again.' : 'Échec de l\'enregistrement. Réessaie.', 'err');
+      setStatus((getLang()==='en' ? 'Save failed: ' : 'Échec : ') + (e.message || ''), 'err');
     } finally {
       btn.disabled = false;
     }
