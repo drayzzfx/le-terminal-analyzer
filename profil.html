@@ -175,6 +175,7 @@
   async function loadProfile(){
     try {
       var r = await fetch('/api/profile', { headers: { 'Authorization': 'Bearer ' + TOKEN } });
+      if(r.status === 401){ setStatus(getLang()==='en' ? 'Session expired — please sign in again to edit your profile.' : 'Session expirée — reconnecte-toi pour modifier ton profil.', 'err'); return; }
       if(!r.ok) return;
       var p = await r.json();
       if(p.first_name) $('pfFirst').value = p.first_name;
@@ -200,6 +201,7 @@
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
         body: JSON.stringify(body)
       });
+      if(r.status === 401){ throw new Error('SESSION_EXPIRED'); }
       if(!r.ok){
         var ej = await r.json().catch(function(){ return {}; });
         var d = ej && ej.detail;
@@ -212,7 +214,12 @@
       if(window.ltRenderUserBar) window.ltRenderUserBar();
       setStatus(getLang()==='en' ? 'Profile saved.' : 'Profil enregistré.', 'ok');
     } catch(e){
-      setStatus((getLang()==='en' ? 'Save failed: ' : 'Échec : ') + (e.message || ''), 'err');
+      if(e.message === 'SESSION_EXPIRED'){
+        setStatus(getLang()==='en' ? 'Session expired — please sign in again.' : 'Session expirée — reconnecte-toi.', 'err');
+        if(window.ltOpenLogin) ltOpenLogin();
+      } else {
+        setStatus((getLang()==='en' ? 'Save failed: ' : 'Échec : ') + (e.message || ''), 'err');
+      }
     } finally {
       btn.disabled = false;
     }
