@@ -473,25 +473,54 @@
     </div>
   </div>
 </section>
-<!-- StatsSection — stats strip (cascade via data-stagger). Static partial.
-     Interactivity: initStatsCounters() animates the numeric cells ("5") on reveal;
-     non-numeric values ("Propriétaire", "∞", "24/7") are left verbatim. -->
-<section class="lt-statstrip" data-reveal data-stagger>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v" data-count-to="5">5</span>
-    <span class="lt-statstrip__l" data-en="Active tools">Outils actifs</span>
+<!-- SocialProof — confiance & avis (remplace l'ancienne stats strip) -->
+<style id="lt-proof-css">
+.lt-proof{max-width:1180px;margin:0 auto;padding:8px 24px 0}
+.lt-proof__head{text-align:center;margin-bottom:32px}
+.lt-proof__title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(26px,4vw,42px);line-height:1.05;letter-spacing:-.01em;margin:10px 0 0;color:var(--text-title)}
+.lt-proof__grid{display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr;gap:16px}
+.lt-proof__card{position:relative;background:linear-gradient(165deg,rgba(127,184,232,.06),rgba(22,27,36,.55));border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:24px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .4s}
+.lt-proof__card:hover{transform:perspective(900px) translateY(-6px) rotateX(4deg);border-color:var(--accent-glow);box-shadow:0 28px 56px rgba(0,0,0,.5),0 0 38px var(--accent-glow)}
+.lt-proof__card--rating{display:flex;flex-direction:column;justify-content:center;gap:8px;background:linear-gradient(165deg,rgba(232,194,104,.12),rgba(22,27,36,.55))}
+.lt-proof__score{font-family:var(--font-mono);font-size:46px;font-weight:700;color:var(--text-title);line-height:1}
+.lt-proof__stars{display:inline-flex;gap:3px;color:#E8C268}
+.lt-proof__rsub{font-size:12px;color:var(--text-muted)}
+.lt-proof__num{font-family:var(--font-mono);font-size:34px;font-weight:700;color:var(--accent-bright);line-height:1}
+.lt-proof__lbl{display:block;font-size:12.5px;color:var(--text-muted);margin-top:10px;line-height:1.45}
+.lt-proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.lt-proof__q{background:rgba(22,27,36,.5);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:20px;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .35s}
+.lt-proof__q:hover{transform:translateY(-4px);border-color:var(--accent-glow);box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.lt-proof__q .lt-proof__stars{margin-bottom:10px}
+.lt-proof__qtxt{font-size:13.5px;line-height:1.6;color:var(--text-body);margin:0 0 14px}
+.lt-proof__who{display:flex;align-items:center;gap:10px}
+.lt-proof__ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(150deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;font-family:var(--font-text);font-weight:700;font-size:13px;color:#07090C;flex-shrink:0}
+.lt-proof__name{font-size:13px;font-weight:600;color:var(--text-title)}
+.lt-proof__role{font-size:11px;color:var(--text-muted)}
+.lt-proof__cta{text-align:center;margin-top:28px}
+@media(max-width:900px){.lt-proof__grid{grid-template-columns:1fr 1fr}.lt-proof__quotes{grid-template-columns:1fr}}
+</style>
+<section class="lt-proof" data-reveal data-stagger>
+  <div class="lt-proof__head">
+    <span class="lt-eyebrow" data-en="<span class='lt-dot'></span> They trade with us"><span class="lt-dot"></span> Ils tradent avec nous</span>
+    <h2 class="lt-proof__title" data-en="Trusted by traders">La confiance des traders</h2>
   </div>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v" data-en="Proprietary">Propriétaire</span>
-    <span class="lt-statstrip__l" data-en="AI analysis engine">Moteur d'analyse IA</span>
+  <div class="lt-proof__grid">
+    <div class="lt-proof__card lt-proof__card--rating">
+      <span class="lt-proof__score">4,8<span style="font-size:20px;color:var(--text-muted)">/5</span></span>
+      <span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span>
+      <span class="lt-proof__rsub" data-en="on 320+ verified reviews">sur 320+ avis vérifiés</span>
+    </div>
+    <div class="lt-proof__card"><span class="lt-proof__num">1 240+</span><span class="lt-proof__lbl" data-en="active traders on the terminal">traders actifs sur le terminal</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num">96 %</span><span class="lt-proof__lbl" data-en="would recommend Le Terminal">recommandent Le Terminal</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num">320+</span><span class="lt-proof__lbl" data-en="reviews collected">avis collectés</span></div>
   </div>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v">∞</span>
-    <span class="lt-statstrip__l" data-en="Supported strategies">Stratégies supportées</span>
+  <div class="lt-proof__quotes">
+    <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="The Setup Analyzer made me far more disciplined. A clear score on every trade — no more blind entries.">Le Setup Analyzer m'a fait gagner en discipline. Un score clair sur chaque trade, je ne rentre plus à l'aveugle.</p><div class="lt-proof__who"><span class="lt-proof__ava">T</span><span><span class="lt-proof__name">Thomas R.</span><br><span class="lt-proof__role" data-en="Day trader · Forex">Day trader · Forex</span></span></div></article>
+    <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="The journal plus the AI coach is exactly what I was missing to understand my recurring mistakes.">Le journal + le coach IA, c'est exactement ce qui me manquait pour comprendre mes erreurs récurrentes.</p><div class="lt-proof__who"><span class="lt-proof__ava">S</span><span><span class="lt-proof__name">Sarah M.</span><br><span class="lt-proof__role" data-en="Swing trader · Indices">Swing trader · Indices</span></span></div></article>
+    <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="Everything in one place: calendar, calculator, bubble map. I cancelled my 3 other subscriptions.">Tout au même endroit : calendrier, calculateur, bubble map. J'ai résilié mes 3 autres abonnements.</p><div class="lt-proof__who"><span class="lt-proof__ava">K</span><span><span class="lt-proof__name">Karim B.</span><br><span class="lt-proof__role" data-en="Crypto trader">Trader crypto</span></span></div></article>
   </div>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v">24/7</span>
-    <span class="lt-statstrip__l" data-en="Available">Disponible</span>
+  <div class="lt-proof__cta">
+    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="./avis.html" data-en="Read all reviews">Lire tous les avis</a>
   </div>
 </section>
 <!-- MarketsSection — "Tous les marchés" dual-rail marquee over a particle field.
