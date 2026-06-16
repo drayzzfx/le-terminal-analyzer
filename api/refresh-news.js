@@ -264,7 +264,7 @@ module.exports = async function handler(req, res) {
           // Filtre qualité : flash = market-moving 50+ pts ; autres zones = seulement les annonces significatives
           if (zone === 'flash' ? !market_moving : !important) { stats.skipped++; continue; }
 
-          await insertNewsItem({
+          const ins = await insertNewsItem({
             guid: item.guid,
             // title = version française (affichée par défaut) ; title_en = original anglais (mode EN)
             title: title_fr || item.title,
@@ -277,7 +277,13 @@ module.exports = async function handler(req, res) {
             zone,
             sentiment,
           });
-          stats.inserted++;
+          // On ne compte « inséré » que si Supabase a vraiment accepté la ligne.
+          if (ins && ins.status >= 400) {
+            stats.skipped++;
+            stats.errors.push(`insert ${zone}/${source.name}: ${ins.status} ${JSON.stringify(ins.body).slice(0, 160)}`);
+          } else {
+            stats.inserted++;
+          }
 
           await new Promise(r => setTimeout(r, 300));
         }
