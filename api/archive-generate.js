@@ -118,7 +118,8 @@ module.exports = async function handler(req, res) {
 
   const out = { day, zones: {} };
 
-  for (const zone of ZONES) {
+  // Les 8 zones sont traitées EN PARALLÈLE (sinon 8 appels Claude en série → timeout).
+  await Promise.all(ZONES.map(async (zone) => {
     try {
       const path = `/rest/v1/news_items?zone=eq.${zone}`
         + `&published_at=gte.${encodeURIComponent(startISO)}`
@@ -126,10 +127,10 @@ module.exports = async function handler(req, res) {
         + `&order=published_at.desc&select=title,summary,sentiment,source,published_at&limit=80`;
       const r = await sbReq('GET', path);
       const items = Array.isArray(r.body) ? r.body : [];
-      if (items.length === 0) { out.zones[zone] = 'skip (0)'; continue; }
+      if (items.length === 0) { out.zones[zone] = 'skip (0)'; return; }
 
       const synth = await claudeSummary(ZONE_LABEL[zone], day, items);
-      if (!synth || !synth.fr) { out.zones[zone] = 'no-synth'; continue; }
+      if (!synth || !synth.fr) { out.zones[zone] = 'no-synth'; return; }
 
       const row = {
         day,
@@ -140,11 +141,11 @@ module.exports = async function handler(req, res) {
         top_sentiment: dominantSentiment(items)
       };
       const up = await sbReq('POST', '/rest/v1/daily_summaries?on_conflict=day,zone', row);
-      out.zones[zone] = up.status >= 400 ? ('err ' + up.status) : ('ok (' + items.length + ')');
+      out.zones[zone] = up.status >= 400 ? ('err ' + up.status + ' ' + JSON.stringify(up.body).slice(0, 120)) : ('ok (' + items.length + ')');
     } catch (e) {
-      out.zones[zone] = 'exception';
+      out.zones[zone] = 'exception: ' + (e && e.message ? e.message : String(e)).slice(0, 120);
     }
-  }
+  }));
 
   return res.status(200).json(out);
 };
