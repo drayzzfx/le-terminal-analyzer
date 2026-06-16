@@ -297,6 +297,9 @@
       if (r.status === 'fulfilled') allItems = allItems.concat(r.value);
     });
 
+    // Jour courant uniquement — l'historique vit dans Archives
+    allItems = allItems.filter(function(i) { return isToday(i.published_at); });
+
     // Sépare en : récent (< 4h) et archives (4h–48h)
     var FOUR_H = 4 * 3600 * 1000;
     var FORTYEIGHT_H = 48 * 3600 * 1000;

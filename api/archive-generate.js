@@ -66,16 +66,23 @@ async function claudeSummary(zoneLabel, dayStr, items) {
     `${i + 1}. [${it.sentiment || 'Neutre'}] ${it.title}${it.summary ? ' — ' + it.summary : ''}`
   ).join('\n');
 
-  const system = `Tu es l'éditorialiste macro de « Le Terminal ». Tu écris un bilan de fin de journée, factuel, dense et sans bla-bla, pour des traders. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr": "...", "en": "...", "bias": "Positif|Négatif|Neutre"}.`;
+  const system = `Tu es l'éditorialiste macro de « Le Terminal ». Tu écris le bilan de fin de journée d'une zone, pour des traders. Factuel, dense, sans bla-bla ni remplissage. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr": "...", "en": "...", "bias": "Positif|Négatif|Neutre"}.`;
   const user = `Zone : ${zoneLabel}. Journée du ${dayStr}.
 Voici les annonces de la journée :
 ${lines}
 
-Rédige une SYNTHÈSE de la journée pour cette zone : 2 à 4 phrases, ce qu'il faut retenir et l'orientation générale (haussier / baissier / prudence). Va à l'essentiel, relie les annonces entre elles plutôt que de les lister. Fournis : "fr" (synthèse FR), "en" (sa traduction anglaise) et "bias" = l'orientation marché globale de la zone ce jour — "Positif" (plutôt haussier / risk-on), "Négatif" (plutôt baissier / risk-off) ou "Neutre" (mitigé / sans direction nette), d'après le SENS des annonces et pas leur étiquette. Réponds uniquement par le JSON.`;
+Rédige une ANALYSE DÉTAILLÉE de la journée pour cette zone — pas un simple résumé. Vise 3 paragraphes courts séparés par un saut de ligne (\\n) :
+1. Ce qu'il s'est passé : les faits marquants de la journée, reliés entre eux (ne liste pas, raconte le fil).
+2. Les moteurs : pourquoi ça a bougé, les chiffres / décisions / déclarations clés, et ce qu'ils impliquent pour les actifs de la zone.
+3. L'orientation et la suite : le biais général (haussier / baissier / prudence) et les points à surveiller.
+
+Sois précis et concret : cite les chiffres et noms quand ils sont dans les annonces, mets en perspective. Tu peux écrire 8 à 14 phrases au total. Si la journée est pauvre, reste honnête et plus bref plutôt que de meubler.
+
+Fournis : "fr" (l'analyse en français, avec les sauts de ligne \\n entre paragraphes), "en" (sa traduction anglaise, même structure) et "bias" = l'orientation marché globale de la zone ce jour — "Positif" (plutôt haussier / risk-on), "Négatif" (plutôt baissier / risk-off) ou "Neutre" (mitigé / sans direction nette), d'après le SENS des annonces et pas leur étiquette. Réponds uniquement par le JSON.`;
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',
-    max_tokens: 700,
+    max_tokens: 1800,
     system,
     messages: [{ role: 'user', content: user }]
   });

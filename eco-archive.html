@@ -135,7 +135,7 @@
       </div>
     </div>
     <div class="pr-benefits">
-      <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3.5"/></svg></span><div><h4 data-en="AI synthesis">Synthèse IA</h4><p data-en="A few sentences per zone — the gist and the lean, not a list.">Quelques phrases par zone — l'essentiel et l'orientation, pas une liste.</p></div></div>
+      <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3.5"/></svg></span><div><h4 data-en="In-depth AI analysis">Analyse IA détaillée</h4><p data-en="A developed analysis per zone — the day's thread, the drivers and the lean, not a list.">Une analyse développée par zone — le fil de la journée, les moteurs et l'orientation, pas une liste.</p></div></div>
       <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h4 data-en="One wrap per evening">Un bilan par soir</h4><p data-en="Generated at the end of each day (Paris time) and frozen.">Généré en fin de journée (heure de Paris) puis figé.</p></div></div>
       <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-4 3 2 4-6"/></svg></span><div><h4 data-en="Catch up fast">Rattrape vite</h4><p data-en="Browse the recent days to recover what you missed.">Parcours les derniers jours pour rattraper ce que tu as manqué.</p></div></div>
     </div>
@@ -189,8 +189,10 @@
     var badge=s?'<span class="pr-badge '+s.cls+'">'+(l==='en'?s.en:s.fr)+'</span>':'';
     var cnt=(row.item_count||0)+' '+(l==='en'?'item'+(row.item_count>1?'s':''):'annonce'+(row.item_count>1?'s':''));
     var txt=(l==='en'&&row.summary_en?row.summary_en:row.summary)||'';
+    var paras=txt.split(/\n+/).map(function(p){return p.trim();}).filter(Boolean)
+      .map(function(p){return '<p class="arc-card__text">'+esc(p)+'</p>';}).join('');
     return '<article class="arc-card"><div class="arc-card__head"><span class="arc-card__ic">'+svg(zone.ic)+'</span><span class="arc-card__zone">'+title+'</span>'+badge+'<span class="arc-card__count">'+cnt+'</span></div>'
-      +'<p class="arc-card__text">'+esc(txt)+'</p></article>';
+      +paras+'</article>';
   }
 
   async function loadDay(iso){

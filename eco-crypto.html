@@ -254,6 +254,8 @@
       var resp = await fetch('/api/news?zone=crypto&limit=30');
       if (resp.ok) { var data = await resp.json(); items = data.items || []; }
     } catch (e) {}
+    // Jour courant uniquement — l'historique vit dans Archives
+    items = items.filter(function (i) { try { var f = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }); return f.format(new Date(i.published_at)) === f.format(new Date()); } catch (e) { return true; } });
     if (items.length === 0) {
       if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce crypto disponible pour l\'instant.</div>';
       return;

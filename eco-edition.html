@@ -331,6 +331,8 @@
         if (data.items && data.items.length > 0) { items = data.items; break; }
       } catch (e) { continue; }
     }
+    // Jour courant uniquement — l'historique vit dans Archives
+    items = items.filter(function (i) { try { var f = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }); return f.format(new Date(i.published_at)) === f.format(new Date()); } catch (e) { return true; } });
     if (items.length === 0) {
       if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce disponible pour l\'instant.</div>';
       return;

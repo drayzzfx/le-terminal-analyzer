@@ -195,6 +195,7 @@
   async function loadZone(){
     var grid=document.getElementById('prSelGrid');var items=[];
     try{var resp=await fetch('/api/news?zone=ameriques&limit=60');if(resp.ok){var data=await resp.json();items=data.items||[];}}catch(e){}
+    items=items.filter(function(i){return isToday(i.published_at);}); // jour courant uniquement — l'historique vit dans Archives
     if(items.length===0){if(grid)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce disponible pour l\'instant.</div>';return;}
     var sorted=items.slice().sort(function(a,b){return impactScore(b)-impactScore(a);});var featured=sorted[0];
     renderEdition(featured);
