@@ -1091,7 +1091,7 @@
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
       </ul>
       <div class="pr-card__cta">
-        <button type="button" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Choisir le mensuel</button>
+        <button type="button" onclick="ltOpenCheckout('monthly')" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Choisir le mensuel</button>
       </div>
     </div>
 
@@ -1115,7 +1115,7 @@
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 2 mois offerts vs mensuel</li>
       </ul>
       <div class="pr-card__cta">
-        <button type="button" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en Premium</button>
+        <button type="button" onclick="ltOpenCheckout('annual')" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en Premium</button>
       </div>
       <span class="pr-card__note" data-en="14-day money-back guarantee">Garantie 14 jours satisfait ou remboursé</span>
     </div>
@@ -1247,6 +1247,7 @@
 </script>
 <script src="./home-anim.js"></script>
 <script src="./menu.js"></script>
+<script src="./checkout.js"></script>
 <script src="./cursor.js"></script>
 </body>
 </html>

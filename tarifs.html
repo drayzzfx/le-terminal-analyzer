@@ -42,7 +42,7 @@
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" style="display:none" data-en="Log in">Connexion</button>
-      <a class="lt-btn lt-btn--primary lt-btn--sm" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener" data-en="Premium Access">Accès Premium</a>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="javascript:void(0)" onclick="window.ltOpenCheckout&&ltOpenCheckout('annual')" data-en="Premium Access">Accès Premium</a>
     </div>
   </header>
 </div>
@@ -97,7 +97,7 @@
         <li data-en="<svg class='pr-check' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='var(--bull)' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg> Private Telegram community"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Communauté privée Telegram</li>
         <li data-en="<svg class='pr-check' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='var(--bull)' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg> Priority support"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
       </ul>
-      <div class="pr-card__cta"><a class="lt-btn lt-btn--secondary lt-btn--lg" style="width:100%" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener" data-en="Choose monthly">Choisir le mensuel</a></div>
+      <div class="pr-card__cta"><a class="lt-btn lt-btn--secondary lt-btn--lg" style="width:100%" href="javascript:void(0)" onclick="window.ltOpenCheckout&&ltOpenCheckout('monthly')" data-en="Choose monthly">Choisir le mensuel</a></div>
       <span class="pr-card__note" data-en="Cancel anytime">Annulable à tout moment</span>
     </div>
     <!-- Annuel -->
@@ -116,7 +116,7 @@
         <li data-en="<svg class='pr-check' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='var(--accent)' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg> Priority support"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Support prioritaire</li>
         <li data-en="<svg class='pr-check' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='var(--accent)' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg> Early access to new tools"><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Accès anticipé aux nouveaux outils</li>
       </ul>
-      <div class="pr-card__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" style="width:100%" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener" data-en="Go Premium">Passer en Premium</a></div>
+      <div class="pr-card__cta"><a class="lt-btn lt-btn--primary lt-btn--lg" style="width:100%" href="javascript:void(0)" onclick="window.ltOpenCheckout&&ltOpenCheckout('annual')" data-en="Go Premium">Passer en Premium</a></div>
       <span class="pr-card__note" data-en="14-day money-back guarantee">Garantie 14 jours satisfait ou remboursé</span>
     </div>
   </div>
@@ -180,7 +180,7 @@
   <p class="pr-final__lede" data-en="Create your free account in 30 seconds. No commitment.">Crée ton compte gratuit en 30 secondes. Aucun engagement.</p>
   <div class="pr-final__cta">
     <a class="lt-btn lt-btn--primary lt-btn--lg" href="./app.html" data-en="Create a free account">Créer un compte gratuit</a>
-    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="https://whop.com/terminal-analyzer/terminal-analyzer-pro" target="_blank" rel="noopener" data-en="Go Premium">Passer en Premium</a>
+    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="javascript:void(0)" onclick="window.ltOpenCheckout&&ltOpenCheckout('annual')" data-en="Go Premium">Passer en Premium</a>
   </div>
 </section>
 
@@ -232,5 +232,6 @@
 </script>
 <script src="./menu.js"></script>
 <script src="./cursor.js"></script>
+<script src="./checkout.js"></script>
 </body>
 </html>
