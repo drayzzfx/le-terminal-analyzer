@@ -32,7 +32,7 @@ const SOURCES = {
     { name: 'Investing.com',        url: 'https://www.investing.com/rss/news.rss' },
     { name: 'FXStreet',             url: 'https://www.fxstreet.com/rss/news' },
     { name: 'Financial Juice',      url: 'https://www.financialjuice.com/feed.ashx?xy=rss' },
-    { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed/news' },
+    { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed' },
   ],
   international: [
     { name: 'Le Monde International', url: 'https://www.lemonde.fr/international/rss_full.xml' },
@@ -47,7 +47,7 @@ const SOURCES = {
   ],
   flash: [
     { name: 'Financial Juice',      url: 'https://www.financialjuice.com/feed.ashx?xy=rss' },
-    { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed/news' },
+    { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed' },
     { name: 'ZeroHedge',            url: 'https://feeds.feedburner.com/zerohedge/feed' },
   ],
 };
