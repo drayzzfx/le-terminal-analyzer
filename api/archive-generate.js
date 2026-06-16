@@ -66,12 +66,12 @@ async function claudeSummary(zoneLabel, dayStr, items) {
     `${i + 1}. [${it.sentiment || 'Neutre'}] ${it.title}${it.summary ? ' — ' + it.summary : ''}`
   ).join('\n');
 
-  const system = `Tu es l'éditorialiste macro de « Le Terminal ». Tu écris un bilan de fin de journée, factuel, dense et sans bla-bla, pour des traders. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr": "...", "en": "..."}.`;
+  const system = `Tu es l'éditorialiste macro de « Le Terminal ». Tu écris un bilan de fin de journée, factuel, dense et sans bla-bla, pour des traders. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr": "...", "en": "...", "bias": "Positif|Négatif|Neutre"}.`;
   const user = `Zone : ${zoneLabel}. Journée du ${dayStr}.
 Voici les annonces de la journée :
 ${lines}
 
-Rédige une SYNTHÈSE de la journée pour cette zone : 2 à 4 phrases, ce qu'il faut retenir et l'orientation générale (haussier / baissier / prudence). Va à l'essentiel, relie les annonces entre elles plutôt que de les lister. Fournis la version française ("fr") et sa traduction anglaise ("en"). Réponds uniquement par le JSON.`;
+Rédige une SYNTHÈSE de la journée pour cette zone : 2 à 4 phrases, ce qu'il faut retenir et l'orientation générale (haussier / baissier / prudence). Va à l'essentiel, relie les annonces entre elles plutôt que de les lister. Fournis : "fr" (synthèse FR), "en" (sa traduction anglaise) et "bias" = l'orientation marché globale de la zone ce jour — "Positif" (plutôt haussier / risk-on), "Négatif" (plutôt baissier / risk-off) ou "Neutre" (mitigé / sans direction nette), d'après le SENS des annonces et pas leur étiquette. Réponds uniquement par le JSON.`;
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',
@@ -138,7 +138,7 @@ module.exports = async function handler(req, res) {
         summary: synth.fr,
         summary_en: synth.en || null,
         item_count: items.length,
-        top_sentiment: dominantSentiment(items)
+        top_sentiment: (synth.bias && ['Positif','Négatif','Neutre'].indexOf(synth.bias) !== -1) ? synth.bias : dominantSentiment(items)
       };
       const up = await sbReq('POST', '/rest/v1/daily_summaries?on_conflict=day,zone', row);
       out.zones[zone] = up.status >= 400 ? ('err ' + up.status + ' ' + JSON.stringify(up.body).slice(0, 120)) : ('ok (' + items.length + ')');
