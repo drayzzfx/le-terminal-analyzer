@@ -283,6 +283,28 @@
 .art-skel-line--title { height: 28px; width: 80%; margin: 16px 0 20px; }
 .art-skel-line--short { width: 45%; }
 .art-skel-line--med   { width: 70%; }
+
+/* ── Alignement design system « Cinematic Luxury » (rayons nets) ── */
+.art-back { border-radius: var(--r-sm,4px); }
+.art-hero { border-radius: var(--r-lg,10px); }
+.art-hero__zone, .art-hero__source, .art-hero__time { border-radius: var(--r-sm,4px); }
+.art-metrics { border-radius: 0 0 var(--r-lg,10px) var(--r-lg,10px); }
+.art-section { border-radius: var(--r-lg,10px); }
+.art-skel, .art-skel-line--h { border-radius: var(--r-lg,10px); }
+/* Bouton « source » : pleine largeur + style primaire plat (DS) */
+.art-source-cta { display: block; padding: 18px 0 4px; }
+.art-source-cta .btn {
+  display: flex; width: 100%; box-sizing: border-box; align-items: center; justify-content: center; gap: 10px;
+  background: var(--accent,#7FB8E8); background-image: none; color: #07090C;
+  border: 1px solid transparent; border-radius: var(--r-sm,4px);
+  padding: 15px 20px; font-family: var(--font-text,'Inter'),sans-serif; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em; font-size: 13px;
+  box-shadow: 0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)), 0 8px 28px var(--accent-glow,rgba(127,184,232,.35));
+}
+.art-source-cta .btn:hover {
+  background: var(--accent-bright,#BFDCF5); transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)), 0 12px 32px var(--accent-glow,rgba(127,184,232,.35));
+}
 </style>
 </head>
 <body class="eco-page">
