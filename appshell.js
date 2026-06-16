@@ -58,6 +58,7 @@
     'eco-calendrier.html':   { crumb: 'Calendrier Éco · Calendrier',    key: 'calendrier' },
     'eco-crypto.html':       { crumb: 'Calendrier Éco · Crypto',        key: 'calendrier' },
     'eco-archive.html':      { crumb: 'Calendrier Éco · Archive',       key: 'calendrier' },
+    'profil.html':           { crumb: 'Mon profil',                     key: 'profil' },
     'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
   };
   var cfg = PAGES[path];

@@ -47,23 +47,22 @@ module.exports = async function handler(req, res) {
     const userEmail = userRes.body.email || '';
 
     if (req.method === 'GET') {
-      const r = await supabaseRequest('GET', `/rest/v1/user_profiles?id=eq.${userId}&select=trial_start,is_pro`, null, SERVICE_KEY, SERVICE_KEY);
+      const r = await supabaseRequest('GET', `/rest/v1/user_profiles?id=eq.${userId}&select=*`, null, SERVICE_KEY, SERVICE_KEY);
       const profile = Array.isArray(r.body) ? r.body[0] : null;
-      return res.status(200).json(profile || {});
+      return res.status(200).json(Object.assign({ email: userEmail }, profile || {}));
     }
 
     if (req.method === 'PATCH') {
-      const { trial_start } = req.body || {};
-      // Upsert profile with trial_start
-      const r = await supabaseRequest('POST', '/rest/v1/user_profiles', {
-        id: userId,
-        email: userEmail,
-        trial_start: trial_start || null
-      }, SERVICE_KEY, SERVICE_KEY);
-      // If upsert failed, try update
+      const b = req.body || {};
+      const allowed = ['first_name', 'last_name', 'pseudo', 'avatar_url', 'trial_start'];
+      const fields = {};
+      allowed.forEach(k => { if (b[k] !== undefined) fields[k] = b[k]; });
+      // Tente l'insertion (nouveau profil), sinon mise à jour
+      const r = await supabaseRequest('POST', '/rest/v1/user_profiles',
+        Object.assign({ id: userId, email: userEmail }, fields), SERVICE_KEY, SERVICE_KEY);
       if (r.status >= 400) {
-        const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, { trial_start }, SERVICE_KEY, SERVICE_KEY);
-        return res.status(200).json(Array.isArray(u.body) ? u.body[0] : {});
+        const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, fields, SERVICE_KEY, SERVICE_KEY);
+        return res.status(u.status >= 400 ? 500 : 200).json(Array.isArray(u.body) ? u.body[0] : (u.body || {}));
       }
       return res.status(200).json(Array.isArray(r.body) ? r.body[0] : {});
     }
