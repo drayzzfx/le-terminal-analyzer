@@ -13,6 +13,18 @@
     fallbackUrl: 'https://whop.com/terminal-analyzer/terminal-analyzer-pro'
   };
 
+  // Récupère automatiquement les plan IDs depuis l'API (clé Whop côté serveur)
+  (function fetchPlans(){
+    try {
+      fetch('/api/whop-plans').then(function(r){ return r.json(); }).then(function(d){
+        if(d && d.ok && d.plans){
+          if(d.plans.monthly) LT_WHOP.plans.monthly = d.plans.monthly;
+          if(d.plans.annual)  LT_WHOP.plans.annual  = d.plans.annual;
+        }
+      }).catch(function(){});
+    } catch(e){}
+  })();
+
   var _loaded = false;
   function _loadWhop(){
     if(_loaded) return;
