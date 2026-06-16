@@ -16,6 +16,13 @@
 .pr-badge--up{color:var(--bull);background:rgba(74,222,156,.1);border-color:rgba(74,222,156,.35)}
 .pr-badge--down{color:var(--bear);background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.35)}
 .pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor;box-shadow:none}
+/* Sélection « 3 à suivre » — accent vert propre à la page Crypto */
+.pr-art--green{background:linear-gradient(160deg,var(--bull-glow),var(--bg-elevated) 60%)}
+.pr-art--green:hover{border-color:var(--bull);box-shadow:0 18px 48px rgba(0,0,0,.5),0 0 28px var(--bull-glow)}
+.pr-art--green .pr-art__cat{color:var(--bull)}
+.pr-art--green .pr-art__flag{color:var(--bull);border-color:var(--bull-glow)}
+.pr-art--green .pr-art__link{background:var(--bull);border-color:var(--bull);color:var(--bg-base);box-shadow:0 0 0 1px var(--bull-glow),0 6px 20px var(--bull-glow)}
+.pr-art--green .pr-art__link:hover{filter:brightness(1.08)}
 .pr-skel{position:relative;overflow:hidden;background:var(--bg-elevated);border-radius:6px}
 .pr-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(127,184,232,.08),transparent);animation:prShimmer 1.4s ease infinite}
 @keyframes prShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
@@ -130,6 +137,15 @@
     </div>
   </section>
 
+  <!-- LES 3 À SUIVRE — sélection à fort impact (accent vert) -->
+  <section class="pr-sel" id="prTopSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="The selection">La sélection</span> · <span id="prTopCount" data-en="3 high-impact">3 à fort impact</span></span>
+      <h2 class="pr-head__title" data-en="The 3 to watch">Les 3 à suivre</h2>
+    </div>
+    <div class="pr-sel__grid" id="prTopGrid"></div>
+  </section>
+
   <!-- LE RESTE DE L'ACTU CRYPTO (dynamique) -->
   <section class="pr-sel">
     <div class="pr-head">
@@ -169,6 +185,15 @@
         <div><h4 data-en="Credited sources">Sources créditées</h4><p data-en="Every announcement links back to the original article. You read the real source.">Chaque annonce mène à l'article d'origine. Tu lis la vraie source.</p></div>
       </div>
     </div>
+  </section>
+
+  <!-- ANNONCES PRÉCÉDENTES — annonces du jour sorties de la sélection -->
+  <section class="pr-sel" id="prPrevSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Crypto">Crypto</span> · <span id="prPrevCount" data-en="archive">archive</span></span>
+      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
+    </div>
+    <div class="pr-prevlist" id="prPrevList"></div>
   </section>
 
 </div>
@@ -226,14 +251,18 @@
     var une = document.getElementById('prHeroUne'); if (une) une.href = url;
   }
 
-  function buildArt(item) {
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleDateString(en?'en-GB':'fr-FR',{day:'2-digit',month:'short'})+' · '+d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function isToday(iso){try{var f=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris'});return f.format(new Date(iso))===f.format(new Date());}catch(e){return true;}}
+  function buildPrevRow(item){var url=articleUrl(item);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(item.published_at)+'</span><span class="pr-prevrow__src">'+esc(item.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(item))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
+
+  // hot = true → carte « 3 à suivre » (accent vert) ; sinon carte « ce qui bouge » (bleue)
+  function buildArt(item, hot) {
     var l = getLang(), url = articleUrl(item);
-    return '<article class="pr-art">'
-      + '<div class="pr-art__top">'
-      + '<span class="pr-art__cat js-term">Crypto</span>'
+    var flag = hot ? '<span class="pr-art__flag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' + (l === 'en' ? 'High impact' : 'Fort impact') + '</span>' : '';
+    return '<article class="pr-art ' + (hot ? 'pr-art--green' : 'pr-art--blue') + '">'
+      + '<div class="pr-art__top"><span class="pr-art__cat js-term">Crypto</span>' + flag
       + '<span class="pr-art__src">' + esc(item.source || '') + '</span>'
-      + '<span class="pr-art__time" title="' + esc(relTime(item.published_at)) + '">' + fmt(item.published_at) + '</span>'
-      + '</div>'
+      + '<span class="pr-art__time" title="' + esc(relTime(item.published_at)) + '">' + fmt(item.published_at) + '</span></div>'
       + '<h3 class="pr-art__title">' + esc(getTitle(item)) + '</h3>'
       + '<p class="pr-art__excerpt">' + esc(getSummary(item)) + '</p>'
       + '<a class="pr-art__link" href="' + url + '">' + (l === 'en' ? 'Read summary' : 'Lire le résumé')
@@ -241,46 +270,33 @@
       + '</article>';
   }
 
-  function selectTop(items) {
-    var PRIORITY = { 'Positif':3,'Négatif':3,'Risk-on':3,'Risk-off':3,'Hawkish':3,'Dovish':3,'Neutre':0 };
-    return items.filter(function (i) { return (PRIORITY[i.sentiment] || 0) >= 3; })
-      .sort(function (a, b) { return new Date(b.published_at) - new Date(a.published_at); });
-  }
+  var ZKW = ['bitcoin','btc','ethereum','eth','solana','sol','etf','binance','coinbase','ripple','xrp','stablecoin','halving'];
+  var UKW = ['etf','régulation','regulation','sec','piratage','hack','faillite','liquidation','halving','adoption','approbation','interdiction','record','krach','rallye'];
+  function impactScore(it){var sc=0,strong={'Positif':1,'Négatif':1,'Risk-on':1,'Risk-off':1,'Hawkish':1,'Dovish':1};if(strong[it.sentiment])sc+=45;var txt=((it.title||'')+' '+(it.summary||'')).toLowerCase();UKW.forEach(function(k){if(txt.indexOf(k)>-1)sc+=9;});ZKW.forEach(function(k){if(txt.indexOf(k)>-1)sc+=7;});var src=(it.source||'').toLowerCase();['coindesk','cointelegraph','the block','decrypt','bloomberg','reuters'].forEach(function(b){if(src.indexOf(b)>-1)sc+=10;});var ageH=(Date.now()-new Date(it.published_at).getTime())/3600000;if(!isNaN(ageH))sc+=Math.max(0,36-ageH);return sc;}
 
   async function loadCrypto() {
-    var grid = document.getElementById('prSelGrid');
-    var items = [];
-    try {
-      var resp = await fetch('/api/news?zone=crypto&limit=30');
-      if (resp.ok) { var data = await resp.json(); items = data.items || []; }
-    } catch (e) {}
-    // Jour courant uniquement — l'historique vit dans Archives
-    items = items.filter(function (i) { try { var f = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }); return f.format(new Date(i.published_at)) === f.format(new Date()); } catch (e) { return true; } });
+    var grid = document.getElementById('prSelGrid'); var items = [];
+    try { var resp = await fetch('/api/news?zone=crypto&limit=60'); if (resp.ok) { var data = await resp.json(); items = data.items || []; } } catch (e) {}
+    items = items.filter(function (i) { return isToday(i.published_at); }); // jour courant uniquement — l'historique vit dans Archives
     if (items.length === 0) {
       if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce crypto disponible pour l\'instant.</div>';
       return;
     }
-    var top = selectTop(items);
-    var rest = items.slice().sort(function (a, b) { return new Date(b.published_at) - new Date(a.published_at); });
-    var pool = top.length >= 1 ? top.concat(rest.filter(function (i) { return top.indexOf(i) === -1; })) : rest;
-
-    renderEdition(pool[0]);
-
-    var selItems = pool.slice(1, 7);
-    if (grid) {
-      grid.innerHTML = selItems.length > 0
-        ? selItems.map(buildArt).join('')
-        : '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
-    }
+    var sorted = items.slice().sort(function (a, b) { return impactScore(b) - impactScore(a); });
+    var featured = sorted[0];
+    renderEdition(featured);
+    var top3 = sorted.slice(1, 4);
+    var restByDate = items.filter(function (i) { return i !== featured && top3.indexOf(i) === -1; }).sort(function (a, b) { return new Date(b.published_at) - new Date(a.published_at); });
+    var recent = restByDate.slice(0, 6), older = restByDate.slice(6).filter(isToday);
+    var topSec = document.getElementById('prTopSec'), topGrid = document.getElementById('prTopGrid');
+    if (topSec && topGrid) { if (top3.length > 0) { topSec.style.display = ''; topGrid.innerHTML = top3.map(function (it) { return buildArt(it, true); }).join(''); } else { topSec.style.display = 'none'; } }
+    if (grid) grid.innerHTML = recent.length > 0 ? recent.map(function (it) { return buildArt(it, false); }).join('') : '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
     var sub = document.getElementById('prSelCount');
-    if (sub) {
-      var n = selItems.length;
-      sub.textContent = getLang() === 'en'
-        ? n + ' article' + (n > 1 ? 's' : '') + ' · auto-selected'
-        : n + ' annonce' + (n > 1 ? 's' : '') + ' · sélection automatique';
-      sub.removeAttribute('data-en');
-    }
+    if (sub) { var n = recent.length; sub.textContent = getLang() === 'en' ? n + ' article' + (n > 1 ? 's' : '') : n + ' annonce' + (n > 1 ? 's' : ''); sub.removeAttribute('data-en'); }
+    var prevSec = document.getElementById('prPrevSec'), prevList = document.getElementById('prPrevList'), prevCnt = document.getElementById('prPrevCount');
+    if (prevSec && prevList) { if (older.length > 0) { prevSec.style.display = ''; prevList.innerHTML = older.map(buildPrevRow).join(''); if (prevCnt) { prevCnt.textContent = getLang() === 'en' ? older.length + ' archived' : older.length + ' archivée' + (older.length > 1 ? 's' : ''); prevCnt.removeAttribute('data-en'); } } else { prevSec.style.display = 'none'; } }
   }
+  window.ecoReloadNews = loadCrypto;
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadCrypto);
   else loadCrypto();
