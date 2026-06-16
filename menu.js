@@ -835,6 +835,9 @@
 
   // ── CURSEUR PERSONNALISÉ (toutes les pages) ──
   (function(){
+    // Désactivé : un seul curseur optimisé (#lt-c, transform + rAF, dans cursor.js / appshell.js)
+    // gère désormais tout le site. L'ancien curseur mix-blend-mode (lourd au repaint) est retiré.
+    return;
     if(window.matchMedia('(pointer: coarse)').matches) return; // mobile : skip
 
     // CSS
