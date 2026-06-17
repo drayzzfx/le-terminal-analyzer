@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Patrimoine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.pr-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-sm);border:1px solid}
+.pr-badge--accent{color:var(--accent);background:var(--accent-glow-soft);border-color:var(--accent-glow)}
+.pr-badge--up{color:var(--bull);background:rgba(74,222,156,.1);border-color:rgba(74,222,156,.35)}
+.pr-badge--down{color:var(--bear);background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.35)}
+.pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor}
+/* ── Cartes ── */
+.pt-grid{display:grid;gap:20px}
+.pt-card{position:relative;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.86),rgba(11,14,19,.94));box-shadow:0 18px 44px rgba(0,0,0,.4),inset 0 1px 0 rgba(127,184,232,.06);padding:24px}
+.pt-card__hd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.pt-eyebrow{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+/* ── Connexion compte ── */
+.pt-connect{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pt-connect__ic{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);flex-shrink:0}
+.pt-connect__main{flex:1;min-width:180px}
+.pt-connect__t{font-family:var(--font-text);font-weight:700;font-size:1.05rem;color:var(--text-title)}
+.pt-connect__s{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:3px;display:flex;align-items:center;gap:7px}
+.pt-sync-dot{width:7px;height:7px;border-radius:999px;background:var(--bull);box-shadow:0 0 8px var(--bull);animation:ptpulse 2s ease-in-out infinite}
+@keyframes ptpulse{0%,100%{opacity:.4}50%{opacity:1}}
+.pt-plats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.pt-plat{display:inline-flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-surface);color:var(--text-body);font-family:var(--font-text);font-size:13.5px;font-weight:600;cursor:pointer;transition:border-color .2s,transform .2s}
+.pt-plat:hover{border-color:var(--accent);transform:translateY(-2px)}
+.pt-plat__logo{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;font-weight:700;color:#07090c}
+/* ── Vue d'ensemble ── */
+.pt-overview{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+@media(max-width:880px){.pt-overview{grid-template-columns:1fr}.pt-connect__main{min-width:120px}}
+.pt-total{font-family:var(--font-mono);font-weight:600;font-size:clamp(2.2rem,5vw,3rem);color:var(--text-title);letter-spacing:.01em;line-height:1}
+.pt-pl{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap}
+.pt-pl b{font-family:var(--font-mono);font-size:1.1rem;font-weight:600}
+.pt-pl .up{color:var(--bull)}.pt-pl .down{color:var(--bear)}
+.pt-periods{display:flex;gap:6px}
+.pt-period{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.04em;padding:6px 12px;border-radius:var(--r-pill);border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
+.pt-period.on{color:var(--accent-bright);border-color:var(--accent-glow);background:var(--accent-glow-soft)}
+.pt-chart{width:100%;height:200px;display:block;margin-top:10px}
+/* ── Donut ── */
+.pt-alloc{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.pt-donut{position:relative;width:160px;height:160px;flex-shrink:0}
+.pt-donut__c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pt-donut__c b{font-family:var(--font-mono);font-size:1.2rem;color:var(--text-title)}
+.pt-donut__c span{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.pt-legend{flex:1;min-width:200px;display:flex;flex-direction:column;gap:11px}
+.pt-leg{display:grid;grid-template-columns:12px 1fr auto;gap:10px;align-items:center;font-family:var(--font-text);font-size:13.5px;color:var(--text-body)}
+.pt-leg__sw{width:12px;height:12px;border-radius:3px}
+.pt-leg__v{font-family:var(--font-mono);font-weight:600;color:var(--text-title)}
+/* ── Plans ── */
+.pt-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:880px){.pt-plans{grid-template-columns:1fr}}
+.pt-plan{position:relative;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.86),rgba(11,14,19,.94));padding:24px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.pt-plan:hover{transform:translateY(-4px);border-color:var(--accent-glow);box-shadow:0 24px 56px rgba(0,0,0,.5)}
+.pt-plan--feature{border-color:var(--accent-glow);box-shadow:0 0 0 1px var(--accent-glow),0 24px 56px rgba(0,0,0,.45)}
+.pt-plan__top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pt-plan__name{font-family:var(--font-display);text-transform:uppercase;font-size:1.5rem;letter-spacing:.02em;color:var(--text-title)}
+.pt-risk{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.pt-risk__dots{display:inline-flex;gap:3px}
+.pt-risk__dots i{width:7px;height:7px;border-radius:999px;background:var(--border)}
+.pt-risk--low i:nth-child(1){background:var(--bull)}
+.pt-risk--mid i:nth-child(1),.pt-risk--mid i:nth-child(2){background:var(--neutral)}
+.pt-risk--high i{background:var(--bear)}
+.pt-plan__obj{font-family:var(--font-mono);font-size:1.5rem;font-weight:600;color:var(--text-title)}
+.pt-plan__obj small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);font-weight:700;margin-bottom:4px}
+.pt-plan__meta{font-family:var(--font-text);font-size:13px;color:var(--text-muted)}
+.pt-plan__compo{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.pt-compo{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;font-family:var(--font-text);font-size:12.5px;color:var(--text-body)}
+.pt-compo__bar{grid-column:1/-1;height:5px;border-radius:999px;background:rgba(127,184,232,.12);overflow:hidden}
+.pt-compo__bar i{display:block;height:100%;border-radius:999px}
+.pt-plan__btn{margin-top:auto}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Résultats vérifiés</span></a>
+          <a class="lt-nav__menuitem" href="./patrimoine.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine · Découvrir</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">La présentation</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr">
+
+  <section class="pr-head" style="margin-bottom:24px">
+    <span class="pr-eyebrow"><span class="lt-dot"></span> Patrimoine · Long terme</span>
+    <h1 class="pr-head__title">Ton portefeuille, <span class="pr-metal">posé.</span></h1>
+  </section>
+
+  <!-- Connexion de compte + Vue d'ensemble -->
+  <div class="pt-grid" style="grid-template-columns:1fr;margin-bottom:20px">
+    <div class="pt-card" id="ptConnectCard">
+      <div class="pt-connect">
+        <span class="pt-connect__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M16 15h2"/></svg></span>
+        <div class="pt-connect__main">
+          <div class="pt-connect__t" id="ptConnTitle">Connecte ton compte d'investissement</div>
+          <div class="pt-connect__s" id="ptConnSub">Trade Republic · Boursorama · Degiro · Bourse Direct</div>
+        </div>
+        <button class="lt-btn lt-btn--primary lt-btn--sm" id="ptConnBtn">Connecter un compte</button>
+      </div>
+      <div class="pt-plats" id="ptPlats" style="display:none">
+        <button class="pt-plat" data-plat="Trade Republic" data-i="TR" data-c="#4ADE9C"><span class="pt-plat__logo" style="background:#4ADE9C">TR</span> Trade Republic</button>
+        <button class="pt-plat" data-plat="Boursorama" data-i="BO" data-c="#7FB8E8"><span class="pt-plat__logo" style="background:#7FB8E8">BO</span> Boursorama</button>
+        <button class="pt-plat" data-plat="Degiro" data-i="DG" data-c="#E8C268"><span class="pt-plat__logo" style="background:#E8C268">DG</span> Degiro</button>
+        <button class="pt-plat" data-plat="Bourse Direct" data-i="BD" data-c="#BFDCF5"><span class="pt-plat__logo" style="background:#BFDCF5">BD</span> Bourse Direct</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-overview" style="margin-bottom:20px">
+    <!-- Évolution -->
+    <div class="pt-card">
+      <div class="pt-card__hd">
+        <div>
+          <div class="pt-eyebrow">Valeur totale</div>
+          <div class="pt-total" id="ptTotal">0,00 €</div>
+          <div class="pt-pl">
+            <b class="up" id="ptPlEur">+0 €</b>
+            <span class="pr-badge pr-badge--up" id="ptPlPct"><span class="lt-dot"></span> +0,0 %</span>
+            <span class="pt-eyebrow" id="ptPlLbl">depuis l'origine</span>
+          </div>
+        </div>
+        <div class="pt-periods" id="ptPeriods">
+          <button class="pt-period" data-p="1M">1M</button>
+          <button class="pt-period" data-p="6M">6M</button>
+          <button class="pt-period on" data-p="1A">1A</button>
+          <button class="pt-period" data-p="Max">Max</button>
+        </div>
+      </div>
+      <svg class="pt-chart" id="ptChart" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+    </div>
+    <!-- Répartition -->
+    <div class="pt-card">
+      <div class="pt-card__hd"><div class="pt-eyebrow">Répartition des actifs</div></div>
+      <div class="pt-alloc">
+        <div class="pt-donut">
+          <svg width="160" height="160" viewBox="0 0 42 42" id="ptDonut"></svg>
+          <div class="pt-donut__c"><b id="ptDonutTotal">100%</b><span>Alloué</span></div>
+        </div>
+        <div class="pt-legend" id="ptLegend"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plans -->
+  <section class="pr-head" style="margin:36px 0 18px">
+    <span class="pr-eyebrow"><span class="lt-dot"></span> Stratégies</span>
+    <h2 class="pr-head__title">Trois plans, trois ambitions</h2>
+  </section>
+  <div class="pt-plans" id="ptPlans"></div>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function(){
+  'use strict';
+  var nf=new Intl.NumberFormat('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  var nf0=new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0});
+
+  // ── Données de démonstration (réalistes, cohérentes) ──
+  var TOTAL=68412.50, INVESTED=59172.20;            // PV = +9 240,30 € (+15,6%)
+  var SERIES={
+    '1M':[64980,64210,65540,66120,65780,66890,67340,67010,67980,68412],
+    '6M':[58110,59880,57640,60120,61730,60040,62880,64510,63220,65990,67120,68412],
+    '1A':[51240,53110,49980,54620,56870,55230,58940,57110,61320,63880,62040,66110,64980,67320,68412],
+    'Max':[28010,31240,29870,34110,38920,36540,41880,45230,43110,48990,52340,49870,55620,58940,61230,64980,68412]
+  };
+  var ALLOC=[
+    {k:'Actions',     v:42, c:'var(--accent)'},
+    {k:'ETF',         v:31, c:'var(--accent-bright)'},
+    {k:'Obligations', v:14, c:'var(--neutral)'},
+    {k:'Liquidités',  v:8,  c:'var(--text-muted)'},
+    {k:'Crypto',      v:5,  c:'var(--bull)'}
+  ];
+  var PLANS=[
+    {name:'Prudent', cls:'low', risk:'Faible', obj:'+3 à 5 % / an', horizon:'3 ans +', feature:false,
+     compo:[['ETF monde',55,'var(--accent)'],['Obligations',35,'var(--neutral)'],['Liquidités',10,'var(--text-muted)']],
+     desc:'Préservation du capital, volatilité minimale.'},
+    {name:'Équilibré', cls:'mid', risk:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', feature:true,
+     compo:[['Actions',60,'var(--accent)'],['Obligations',35,'var(--neutral)'],['Liquidités',5,'var(--text-muted)']],
+     desc:'Le bon compromis croissance / sérénité.'},
+    {name:'Dynamique', cls:'high', risk:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', feature:false,
+     compo:[['Actions croissance',75,'var(--accent)'],['Tech',15,'var(--accent-bright)'],['Crypto',10,'var(--bull)']],
+     desc:'Forte volatilité, potentiel maximal.'}
+  ];
+
+  // ── Compteur animé ──
+  function animate(el,to,fmt,dur){
+    var start=null,from=0;
+    function step(ts){ if(!start)start=ts; var p=Math.min((ts-start)/dur,1); var e=1-Math.pow(1-p,3);
+      el.textContent=fmt(from+(to-from)*e); if(p<1)requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+
+  // ── Graphe d'évolution ──
+  function drawChart(period){
+    var d=SERIES[period]||SERIES['1A'], W=600,H=200,pad=8;
+    var min=Math.min.apply(null,d),max=Math.max.apply(null,d),rng=(max-min)||1;
+    var pts=d.map(function(v,i){return [pad+i*(W-2*pad)/(d.length-1), H-pad-((v-min)/rng)*(H-2*pad)];});
+    var line='M'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' L');
+    var area=line+' L'+pts[pts.length-1][0].toFixed(1)+','+H+' L'+pts[0][0].toFixed(1)+','+H+' Z';
+    var up=d[d.length-1]>=d[0], col=up?'var(--bull)':'var(--bear)', fill=up?'rgba(74,222,156,':'rgba(240,100,122,';
+    document.getElementById('ptChart').innerHTML=
+      '<defs><linearGradient id="ptg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+fill+'0.28)"/><stop offset="1" stop-color="'+fill+'0)"/></linearGradient></defs>'
+      +'<line x1="0" y1="60" x2="600" y2="60" stroke="rgba(58,65,76,.25)" stroke-width="1"/>'
+      +'<line x1="0" y1="130" x2="600" y2="130" stroke="rgba(58,65,76,.25)" stroke-width="1"/>'
+      +'<path d="'+area+'" fill="url(#ptg)"/>'
+      +'<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.4" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px '+fill+'0.5))"/>'
+      +'<circle cx="'+pts[pts.length-1][0].toFixed(1)+'" cy="'+pts[pts.length-1][1].toFixed(1)+'" r="3.5" fill="var(--accent-bright)"/>';
+  }
+
+  // ── Donut ──
+  function drawDonut(){
+    var C=2*Math.PI*15.915, off=0, svg='';
+    ALLOC.forEach(function(a){
+      var len=a.v/100*C;
+      svg+='<circle cx="21" cy="21" r="15.915" fill="none" stroke="'+a.c+'" stroke-width="5" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 21 21)"/>';
+      off+=len;
+    });
+    document.getElementById('ptDonut').innerHTML='<circle cx="21" cy="21" r="15.915" fill="none" stroke="rgba(127,184,232,.10)" stroke-width="5"/>'+svg;
+    document.getElementById('ptLegend').innerHTML=ALLOC.map(function(a){
+      return '<div class="pt-leg"><span class="pt-leg__sw" style="background:'+a.c+'"></span><span>'+a.k+'</span><span class="pt-leg__v">'+a.v+' %</span></div>';
+    }).join('');
+  }
+
+  // ── Plans ──
+  function drawPlans(){
+    document.getElementById('ptPlans').innerHTML=PLANS.map(function(p){
+      var dots='<span class="pt-risk__dots"><i></i><i></i><i></i></span>';
+      var compo=p.compo.map(function(c){return '<div class="pt-compo"><span>'+c[0]+'</span><span style="font-family:var(--font-mono);color:var(--text-title)">'+c[1]+'%</span><span class="pt-compo__bar"><i style="width:'+c[1]+'%;background:'+c[2]+'"></i></span></div>';}).join('');
+      return '<article class="pt-plan'+(p.feature?' pt-plan--feature':'')+'">'
+        +'<div class="pt-plan__top"><span class="pt-plan__name">'+p.name+'</span>'
+        +'<span class="pt-risk pt-risk--'+p.cls+'">'+dots+' '+p.risk+'</span></div>'
+        +'<div class="pt-plan__obj"><small>Objectif annualisé</small>'+p.obj+'</div>'
+        +'<div class="pt-plan__meta">Horizon recommandé · '+p.horizon+'</div>'
+        +'<div class="pt-plan__meta" style="color:var(--text-body)">'+p.desc+'</div>'
+        +'<div class="pt-plan__compo">'+compo+'</div>'
+        +'<a class="lt-btn '+(p.feature?'lt-btn--primary':'lt-btn--secondary')+' pt-plan__btn" href="#">Choisir ce plan</a>'
+        +'</article>';
+    }).join('');
+  }
+
+  // ── Connexion compte (maquette de flux) ──
+  function wireConnect(){
+    var btn=document.getElementById('ptConnBtn'), plats=document.getElementById('ptPlats');
+    btn.addEventListener('click',function(){ plats.style.display=plats.style.display==='none'?'flex':'none'; });
+    plats.addEventListener('click',function(e){
+      var b=e.target.closest('.pt-plat'); if(!b)return;
+      var name=b.getAttribute('data-plat'), ini=b.getAttribute('data-i'), c=b.getAttribute('data-c');
+      document.getElementById('ptConnTitle').innerHTML='<span style="display:inline-flex;align-items:center;gap:9px"><span class="pt-plat__logo" style="background:'+c+'">'+ini+'</span> '+name+' · <span style="color:var(--bull)">Connecté</span></span>';
+      document.getElementById('ptConnSub').innerHTML='<span class="pt-sync-dot"></span> Synchronisé il y a 4 min · 1 compte · '+nf0.format(TOTAL)+' €';
+      plats.style.display='none';
+      btn.textContent='Gérer'; btn.classList.remove('lt-btn--primary'); btn.classList.add('lt-btn--ghost');
+    });
+  }
+
+  function init(){
+    animate(document.getElementById('ptTotal'),TOTAL,function(v){return nf.format(v)+' €';},900);
+    var pl=TOTAL-INVESTED, plpct=pl/INVESTED*100;
+    animate(document.getElementById('ptPlEur'),pl,function(v){return '+'+nf0.format(v)+' €';},900);
+    document.getElementById('ptPlPct').innerHTML='<span class="lt-dot"></span> +'+plpct.toFixed(1).replace('.',',')+' %';
+    drawChart('1A'); drawDonut(); drawPlans(); wireConnect();
+    document.getElementById('ptPeriods').addEventListener('click',function(e){
+      var b=e.target.closest('.pt-period'); if(!b)return;
+      Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
+      drawChart(b.getAttribute('data-p'));
+      document.getElementById('ptPlLbl').textContent={'1M':'sur 1 mois','6M':'sur 6 mois','1A':'sur 1 an','Max':'depuis l\'origine'}[b.getAttribute('data-p')];
+    });
+  }
+  window.ecoReloadNews=function(){};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>

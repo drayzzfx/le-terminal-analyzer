@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Patrimoine · Présentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.pp{position:relative;overflow:hidden}
+/* lueurs parallaxe */
+.pp-aura{position:fixed;inset:0;z-index:0;pointer-events:none}
+.pp-aura b{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;will-change:transform}
+.pp-aura b:nth-child(1){width:520px;height:520px;left:-8%;top:6%;background:radial-gradient(circle,var(--accent-glow),transparent 70%)}
+.pp-aura b:nth-child(2){width:460px;height:460px;right:-6%;top:32%;background:radial-gradient(circle,var(--bull-glow),transparent 70%)}
+.pp-aura b:nth-child(3){width:600px;height:600px;left:20%;bottom:-12%;background:radial-gradient(circle,rgba(127,184,232,.14),transparent 70%)}
+.pp-wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px}
+/* hero */
+.pp-hero{min-height:86vh;display:flex;flex-direction:column;justify-content:center;padding:90px 0 60px;text-align:center}
+.pp-eyebrow{display:inline-flex;align-items:center;gap:8px;align-self:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-glow);background:var(--accent-glow-soft);border-radius:999px;padding:7px 15px;margin-bottom:26px}
+.pp-eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.pp-h1{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(2.8rem,8vw,6rem);line-height:.96;letter-spacing:.01em;color:var(--text-title);margin:0 0 24px}
+.pp-h1 .pr-metal{background:var(--metal-gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pp-lede{max-width:680px;margin:0 auto 34px;font-family:var(--font-text);font-size:clamp(1rem,2vw,1.2rem);line-height:1.7;color:var(--text-body)}
+.pp-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* mock card flottante */
+.pp-mock{margin:54px auto 0;max-width:560px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.9),rgba(9,12,17,.95));box-shadow:0 40px 90px rgba(0,0,0,.6),inset 0 1px 0 rgba(127,184,232,.1);padding:22px;will-change:transform}
+.pp-mock__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pp-mock__lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.pp-mock__val{font-family:var(--font-mono);font-weight:600;font-size:2rem;color:var(--text-title)}
+.pp-mock__pl{font-family:var(--font-mono);font-size:.95rem;color:var(--bull);margin-top:4px}
+.pp-spark{width:100%;height:84px;display:block;margin-top:8px}
+/* stats */
+.pp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:46px 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);margin:30px 0 70px}
+@media(max-width:680px){.pp-stats{grid-template-columns:1fr;gap:30px}}
+.pp-stat{text-align:center}
+.pp-stat b{display:block;font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);color:var(--text-title);line-height:1}
+.pp-stat span{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+/* sections features */
+.pp-feat{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;margin:0 0 96px}
+.pp-feat:nth-child(even) .pp-feat__txt{order:2}
+@media(max-width:820px){.pp-feat{grid-template-columns:1fr;gap:28px}.pp-feat:nth-child(even) .pp-feat__txt{order:0}}
+.pp-feat__ic{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);margin-bottom:18px}
+.pp-feat__t{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.6rem,3.5vw,2.4rem);line-height:1.05;color:var(--text-title);margin:0 0 14px}
+.pp-feat__p{font-family:var(--font-text);font-size:1.02rem;line-height:1.7;color:var(--text-body)}
+.pp-visual{border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.8),rgba(9,12,17,.92));box-shadow:0 26px 60px rgba(0,0,0,.45);padding:24px;min-height:220px;display:flex;align-items:center;justify-content:center}
+/* CTA final */
+.pp-final{text-align:center;padding:90px 0 110px}
+.pp-final h2{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(2rem,5vw,3.4rem);color:var(--text-title);margin:0 0 18px}
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+.reveal.is-in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}.reveal[data-d="2"]{transition-delay:.16s}.reveal[data-d="3"]{transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .pp-aura b{display:none}
+  .pp-mock{transform:none!important}
+}
+</style>
+</head>
+<body class="eco-page">
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Résultats vérifiés</span></a>
+          <a class="lt-nav__menuitem" href="./patrimoine.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine · Découvrir</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">La présentation</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<div class="pp">
+<div class="pp-aura" id="ppAura"><b></b><b></b><b></b></div>
+
+<div class="pp-wrap">
+
+  <!-- HERO -->
+  <section class="pp-hero">
+    <span class="pp-eyebrow reveal is-in"><span class="lt-dot"></span> Patrimoine · Long terme</span>
+    <h1 class="pp-h1 reveal is-in" data-d="1">Fais travailler<br><span class="pr-metal">ton capital.</span></h1>
+    <p class="pp-lede reveal is-in" data-d="2">Connecte ton compte, vois tout ton patrimoine sur un seul écran, et choisis un plan d'investissement aligné sur ton ambition. Clair, froid, précis — comme une salle des marchés privée.</p>
+    <div class="pp-cta reveal is-in" data-d="3">
+      <a class="lt-btn lt-btn--primary lt-btn--lg" href="./patrimoine.html">Ouvrir mon portefeuille <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="lt-btn lt-btn--secondary lt-btn--lg" href="#features">Découvrir</a>
+    </div>
+
+    <!-- mock card flottante (parallaxe) -->
+    <div class="pp-mock" id="ppMock">
+      <div class="pp-mock__top">
+        <div><div class="pp-mock__lbl">Valeur totale</div><div class="pp-mock__val" data-count="68412" data-suffix=" €" data-dec="0">0 €</div><div class="pp-mock__pl" data-count="15.6" data-prefix="+" data-suffix=" % · +9 240 €" data-dec="1">+0 %</div></div>
+        <span class="pp-eyebrow" style="margin:0;border-color:rgba(74,222,156,.35);color:var(--bull);background:rgba(74,222,156,.1)"><span class="lt-dot" style="background:var(--bull);box-shadow:0 0 8px var(--bull)"></span> Synchronisé</span>
+      </div>
+      <svg class="pp-spark" viewBox="0 0 560 84" preserveAspectRatio="none">
+        <defs><linearGradient id="ppg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(74,222,156,.3)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient></defs>
+        <path d="M0,64 C70,58 110,40 170,46 C230,52 270,22 330,30 C390,38 420,16 470,12 C510,9 540,6 560,4 L560,84 L0,84 Z" fill="url(#ppg)"/>
+        <path d="M0,64 C70,58 110,40 170,46 C230,52 270,22 330,30 C390,38 420,16 470,12 C510,9 540,6 560,4" fill="none" stroke="var(--bull)" stroke-width="2.4" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px rgba(74,222,156,.5))"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- STATS animées -->
+  <section class="pp-stats">
+    <div class="pp-stat reveal"><b data-count="100" data-suffix=" %" data-dec="0">0</b><span>de ton patrimoine, agrégé</span></div>
+    <div class="pp-stat reveal" data-d="1"><b data-count="3" data-dec="0">0</b><span>plans selon ton risque</span></div>
+    <div class="pp-stat reveal" data-d="2"><b data-count="4" data-suffix=" min" data-dec="0">0</b><span>de délai de synchro</span></div>
+  </section>
+
+  <!-- FEATURES -->
+  <div id="features">
+    <section class="pp-feat reveal">
+      <div class="pp-feat__txt">
+        <span class="pp-feat__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/></svg></span>
+        <h2 class="pp-feat__t">Connecte, et oublie</h2>
+        <p class="pp-feat__p">Relie Trade Republic, Boursorama, Degiro… En quelques secondes, ton portefeuille se synchronise. Plus de tableur, plus de calcul manuel : tout est à jour, tout le temps.</p>
+      </div>
+      <div class="pp-visual">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+          <span class="lt-btn lt-btn--secondary lt-btn--sm" style="pointer-events:none">● Trade Republic</span>
+          <span class="lt-btn lt-btn--secondary lt-btn--sm" style="pointer-events:none">● Boursorama</span>
+          <span class="lt-btn lt-btn--secondary lt-btn--sm" style="pointer-events:none">● Degiro</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="pp-feat reveal">
+      <div class="pp-feat__txt">
+        <span class="pp-feat__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-4 3 2 4-6"/></svg></span>
+        <h2 class="pp-feat__t">Tout, d'un coup d'œil</h2>
+        <p class="pp-feat__p">Valeur totale, plus-value, évolution sur 1 mois à plusieurs années, répartition par classe d'actifs. Une lecture immédiate de là où tu en es — sans bruit.</p>
+      </div>
+      <div class="pp-visual">
+        <svg width="100%" height="150" viewBox="0 0 400 150" preserveAspectRatio="none">
+          <defs><linearGradient id="ppf2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(127,184,232,.3)"/><stop offset="1" stop-color="rgba(127,184,232,0)"/></linearGradient></defs>
+          <path d="M0,120 C60,110 90,80 140,86 C190,92 220,50 270,58 C320,66 350,30 400,22 L400,150 L0,150 Z" fill="url(#ppf2)"/>
+          <path d="M0,120 C60,110 90,80 140,86 C190,92 220,50 270,58 C320,66 350,30 400,22" fill="none" stroke="var(--accent)" stroke-width="2.4" vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="pp-feat reveal">
+      <div class="pp-feat__txt">
+        <span class="pp-feat__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10h-10z"/><path d="M12 2v10h10A10 10 0 0 0 12 2z"/></svg></span>
+        <h2 class="pp-feat__t">Trois plans, ton risque</h2>
+        <p class="pp-feat__p">Prudent, Équilibré, Dynamique : un objectif de gain croissant, une composition claire, un horizon recommandé. Tu choisis l'ambition, on t'aligne la stratégie.</p>
+      </div>
+      <div class="pp-visual">
+        <div style="display:flex;gap:10px;width:100%">
+          <div style="flex:1;text-align:center"><div style="font-family:var(--font-mono);color:var(--bull);font-size:1.1rem">+4%</div><div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase">Prudent</div></div>
+          <div style="flex:1;text-align:center"><div style="font-family:var(--font-mono);color:var(--neutral);font-size:1.3rem">+7%</div><div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase">Équilibré</div></div>
+          <div style="flex:1;text-align:center"><div style="font-family:var(--font-mono);color:var(--bear);font-size:1.5rem">+12%</div><div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase">Dynamique</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CTA FINAL -->
+  <section class="pp-final reveal">
+    <h2>Prêt à voir <span class="pr-metal">grand</span> ?</h2>
+    <p class="pp-lede" style="margin-bottom:30px">Ouvre ton portefeuille long terme et choisis ton plan en moins d'une minute.</p>
+    <a class="lt-btn lt-btn--primary lt-btn--lg" href="./patrimoine.html">Ouvrir mon portefeuille <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </section>
+
+</div>
+</div>
+
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function(){
+  'use strict';
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal au scroll
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target);
+      e.target.querySelectorAll('[data-count]').forEach(countUp);
+    }});
+  },{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(function(el){ if(el.classList.contains('is-in')){el.querySelectorAll&&el.querySelectorAll('[data-count]').forEach(countUp);} else io.observe(el); });
+
+  // Compteurs animés
+  function countUp(el){
+    if(el.dataset.done)return; el.dataset.done='1';
+    var to=parseFloat(el.dataset.count), dec=parseInt(el.dataset.dec||'0',10);
+    var pre=el.dataset.prefix||'', suf=el.dataset.suffix||'';
+    var nf=new Intl.NumberFormat('fr-FR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+    if(reduce){el.textContent=pre+nf.format(to)+suf;return;}
+    var start=null,dur=1100;
+    function step(ts){ if(!start)start=ts; var p=Math.min((ts-start)/dur,1),e=1-Math.pow(1-p,3);
+      el.textContent=pre+nf.format(to*e)+suf; if(p<1)requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+
+  // Parallaxe (souris + scroll) sur les lueurs et la carte mock
+  if(!reduce){
+    var aura=document.getElementById('ppAura'), mock=document.getElementById('ppMock'), bs=aura?aura.children:[];
+    var mx=0,my=0;
+    window.addEventListener('mousemove',function(e){ mx=(e.clientX/window.innerWidth-.5); my=(e.clientY/window.innerHeight-.5); apply(); },{passive:true});
+    window.addEventListener('scroll',function(){ apply(); },{passive:true});
+    function apply(){
+      var sy=window.scrollY||0;
+      if(bs[0])bs[0].style.transform='translate('+(mx*30)+'px,'+(my*20+sy*.06)+'px)';
+      if(bs[1])bs[1].style.transform='translate('+(mx*-26)+'px,'+(my*18-sy*.04)+'px)';
+      if(bs[2])bs[2].style.transform='translate('+(mx*18)+'px,'+(my*-14+sy*.03)+'px)';
+      if(mock)mock.style.transform='perspective(1200px) rotateX('+(my*4)+'deg) rotateY('+(mx*-6)+'deg)';
+    }
+    apply();
+  }
+  window.ecoReloadNews=function(){};
+})();
+</script>
+</body>
+</html>
