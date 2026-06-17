@@ -99,6 +99,46 @@ Fournis : "fr" = le rapport en français (avec les sections « ## » et les puce
   try { const m = txt.match(/\{[\s\S]*\}/); return m ? JSON.parse(m[0]) : null; } catch (e) { return null; }
 }
 
+// Développe un bilan court déjà rédigé en rapport structuré et aéré, SANS
+// inventer de faits (utilisé quand les annonces brutes ont été purgées).
+async function claudeExpand(zoneLabel, dayStr, summaryText) {
+  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+  if (!ANTHROPIC_API_KEY || !summaryText) return null;
+
+  const system = `Tu es l'éditorialiste macro en chef de « Le Terminal ». Tu développes un bilan déjà rédigé en un rapport clair, structuré et pédagogique, accessible à tout lecteur (tu expliques simplement les termes techniques). Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr":"...","en":"...","bias":"Positif|Négatif|Neutre"}.`;
+  const user = `Zone : ${zoneLabel}. Journée du ${dayStr}.
+Voici le bilan synthétique déjà rédigé pour cette zone ce jour-là :
+"""
+${summaryText}
+"""
+
+Développe ce bilan en un RAPPORT structuré, détaillé et AÉRÉ. Structure ta réponse avec des sections, chacune introduite par une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
+## Vue d'ensemble
+## Les faits marquants
+## Décryptage
+## Chiffres & niveaux clés
+## Impact sur les marchés
+## Ce qu'il faut surveiller
+## À retenir
+
+IMPORTANT : appuie-toi UNIQUEMENT sur le contenu du bilan ci-dessus. Tu peux expliquer, contextualiser, clarifier les termes techniques et développer le raisonnement, mais n'invente AUCUN chiffre, niveau, nom ou fait qui n'y figure pas. « ## À retenir » = 3 à 5 puces commençant par « - ».
+
+Fournis : "fr" = le rapport en français (avec « ## » et puces « - »), "en" = sa traduction anglaise (même structure), "bias" = "Positif", "Négatif" ou "Neutre". Réponds uniquement par le JSON.`;
+
+  const payload = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 3000, system, messages: [{ role: 'user', content: user }] });
+  const result = await new Promise((resolve) => {
+    const r = https.request({
+      hostname: 'api.anthropic.com', path: '/v1/messages', method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload), 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' }
+    }, (res) => { let d = ''; res.on('data', c => d += c); res.on('end', () => { try { resolve(JSON.parse(d)); } catch (e) { resolve(null); } }); });
+    r.on('error', () => resolve(null));
+    r.write(payload); r.end();
+  });
+  const txt = result && result.content && result.content[0] && result.content[0].text;
+  if (!txt) return null;
+  try { const m = txt.match(/\{[\s\S]*\}/); return m ? JSON.parse(m[0]) : null; } catch (e) { return null; }
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -133,10 +173,14 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count: 0, report_fr: '', report_en: '', bias: 'Neutre', items: [] });
     }
 
-    // Priorité : rapport long déjà stocké → sinon génération à la volée (si annonces) → sinon résumé court.
+    // Priorité : rapport long déjà stocké → sinon génération à la volée depuis
+    // les annonces (si encore présentes) → sinon on développe le bilan court stocké.
     const stored = repRow && repRow.report;
     let rep = null;
-    if (!stored && items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
+    if (!stored) {
+      if (items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
+      else if (sumRow && sumRow.summary) rep = await claudeExpand(ZONE_LABEL[zone], day, sumRow.summary);
+    }
 
     const report_fr = (repRow && repRow.report) || (rep && rep.fr) || (sumRow && sumRow.summary) || '';
     const report_en = (repRow && repRow.report_en) || (rep && rep.en) || (sumRow && sumRow.summary_en) || '';
