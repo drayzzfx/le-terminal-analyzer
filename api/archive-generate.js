@@ -62,27 +62,35 @@ function dominantSentiment(items) {
 
 async function claudeSummary(zoneLabel, dayStr, items) {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  const lines = items.slice(0, 60).map((it, i) =>
-    `${i + 1}. [${it.sentiment || 'Neutre'}] ${it.title}${it.summary ? ' — ' + it.summary : ''}`
+  const lines = items.slice(0, 120).map((it, i) =>
+    `${i + 1}. [${it.sentiment || 'Neutre'}] (${it.source || '?'}) ${it.title}${it.summary ? ' — ' + it.summary : ''}`
   ).join('\n');
 
-  const system = `Tu es l'éditorialiste macro de « Le Terminal ». Tu écris le bilan de fin de journée d'une zone, pour des traders. Factuel, dense, sans bla-bla ni remplissage. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"fr": "...", "en": "...", "bias": "Positif|Négatif|Neutre"}.`;
+  const system = `Tu es l'éditorialiste macro en chef de « Le Terminal ». Tu produis le bilan de fin de journée d'une zone : à la fois un résumé court (pour une carte) ET un rapport long, détaillé et pédagogique (pour une page dédiée). Approfondi mais clair et accessible à tout lecteur : tu expliques simplement les termes techniques. Factuel, dense, jamais creux. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide.`;
   const user = `Zone : ${zoneLabel}. Journée du ${dayStr}.
-Voici les annonces de la journée :
+Voici TOUTES les annonces de la journée pour cette zone (utilise-les TOUTES, relie-les entre elles) :
 ${lines}
 
-Rédige une ANALYSE DÉTAILLÉE de la journée pour cette zone — pas un simple résumé. Vise 3 paragraphes courts séparés par un saut de ligne (\\n) :
-1. Ce qu'il s'est passé : les faits marquants de la journée, reliés entre eux (ne liste pas, raconte le fil).
-2. Les moteurs : pourquoi ça a bougé, les chiffres / décisions / déclarations clés, et ce qu'ils impliquent pour les actifs de la zone.
-3. L'orientation et la suite : le biais général (haussier / baissier / prudence) et les points à surveiller.
+Produis DEUX livrables :
 
-Sois précis et concret : cite les chiffres et noms quand ils sont dans les annonces, mets en perspective. Tu peux écrire 8 à 14 phrases au total. Si la journée est pauvre, reste honnête et plus bref plutôt que de meubler.
+1) Un RÉSUMÉ COURT (champ "fr") : 2 à 3 phrases, l'essentiel et l'orientation du jour, pour une carte.
 
-Fournis : "fr" (l'analyse en français, avec les sauts de ligne \\n entre paragraphes), "en" (sa traduction anglaise, même structure) et "bias" = l'orientation marché globale de la zone ce jour — "Positif" (plutôt haussier / risk-on), "Négatif" (plutôt baissier / risk-off) ou "Neutre" (mitigé / sans direction nette), d'après le SENS des annonces et pas leur étiquette. Réponds uniquement par le JSON.`;
+2) Un RAPPORT LONG, DÉTAILLÉ ET AÉRÉ (champ "report_fr") : développe vraiment, plusieurs paragraphes. Structure-le avec des sections, chacune sur une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
+## Vue d'ensemble
+## Les faits marquants
+## Décryptage
+## Chiffres & niveaux clés
+## Impact sur les marchés
+## Ce qu'il faut surveiller
+## À retenir
+Consignes pour le rapport : prends en compte TOUTES les annonces ; explique le POURQUOI et les implications concrètes (actions, taux, devises, matières premières) ; reste compréhensible (explique les termes techniques en quelques mots) ; cite chiffres, niveaux et noms propres ; « ## À retenir » = 3 à 5 puces commençant par « - ». Si la matière est pauvre, reste honnête et plus bref plutôt que de meubler.
+
+Réponds UNIQUEMENT par ce JSON :
+{"fr":"<résumé court FR>","en":"<short summary EN>","report_fr":"<rapport long FR avec ## et puces ->","report_en":"<long report EN, même structure>","bias":"Positif|Négatif|Neutre"}`;
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1800,
+    max_tokens: 4500,
     system,
     messages: [{ role: 'user', content: user }]
   });
@@ -144,6 +152,8 @@ module.exports = async function handler(req, res) {
         zone,
         summary: synth.fr,
         summary_en: synth.en || null,
+        report: synth.report_fr || null,
+        report_en: synth.report_en || null,
         item_count: items.length,
         top_sentiment: (synth.bias && ['Positif','Négatif','Neutre'].indexOf(synth.bias) !== -1) ? synth.bias : dominantSentiment(items)
       };

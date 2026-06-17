@@ -117,10 +117,15 @@ module.exports = async function handler(req, res) {
     // Le bilan figé (daily_summaries) persiste même quand news_items est purgé.
     const sumPath = `/rest/v1/daily_summaries?day=eq.${encodeURIComponent(day)}&zone=eq.${zone}`
       + `&select=summary,summary_en,item_count,top_sentiment&limit=1`;
+    // Rapport long stocké (colonnes report/report_en) — requête séparée pour
+    // rester compatible si la migration n'a pas encore été appliquée.
+    const repPath = `/rest/v1/daily_summaries?day=eq.${encodeURIComponent(day)}&zone=eq.${zone}`
+      + `&select=report,report_en&limit=1`;
 
-    const [ri, rs] = await Promise.all([sbReq(itemsPath), sbReq(sumPath)]);
+    const [ri, rs, rr] = await Promise.all([sbReq(itemsPath), sbReq(sumPath), sbReq(repPath)]);
     const items = Array.isArray(ri.body) ? ri.body : [];
     const sumRow = Array.isArray(rs.body) && rs.body[0] ? rs.body[0] : null;
+    const repRow = Array.isArray(rr.body) && rr.body[0] ? rr.body[0] : null; // null si colonnes absentes
 
     // Rien du tout (ni annonces, ni bilan) → message « aucune annonce ».
     if (items.length === 0 && !sumRow) {
@@ -128,12 +133,13 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count: 0, report_fr: '', report_en: '', bias: 'Neutre', items: [] });
     }
 
-    // Rapport approfondi si on a encore les annonces ; sinon repli sur le bilan figé.
+    // Priorité : rapport long déjà stocké → sinon génération à la volée (si annonces) → sinon résumé court.
+    const stored = repRow && repRow.report;
     let rep = null;
-    if (items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
+    if (!stored && items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
 
-    const report_fr = (rep && rep.fr) || (sumRow && sumRow.summary) || '';
-    const report_en = (rep && rep.en) || (sumRow && sumRow.summary_en) || '';
+    const report_fr = (repRow && repRow.report) || (rep && rep.fr) || (sumRow && sumRow.summary) || '';
+    const report_en = (repRow && repRow.report_en) || (rep && rep.en) || (sumRow && sumRow.summary_en) || '';
     const bias = (rep && rep.bias) || (sumRow && sumRow.top_sentiment) || 'Neutre';
     const item_count = items.length || (sumRow && sumRow.item_count) || 0;
 
