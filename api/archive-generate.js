@@ -71,18 +71,15 @@ async function claudeSummary(zoneLabel, dayStr, items) {
 Voici TOUTES les annonces de la journée pour cette zone (utilise-les TOUTES, relie-les entre elles) :
 ${lines}
 
-Rédige un RAPPORT LONG, DÉTAILLÉ ET AÉRÉ (champ "report"). Développe vraiment, plusieurs paragraphes par section. Structure-le avec des sections, chacune sur une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
+Rédige un RAPPORT DÉTAILLÉ ET AÉRÉ (champ "report") en EXACTEMENT 4 sections titrées. Chaque section = une ligne « ## » suivie d'un titre court, puis un paragraphe développé (3 à 5 phrases). Utilise EXACTEMENT ces 4 sections, dans cet ordre :
 ## Vue d'ensemble
-## Les faits marquants
-## Décryptage
-## Chiffres & niveaux clés
+## Les points clés
 ## Impact sur les marchés
-## Ce qu'il faut surveiller
 ## À retenir
 
-Consignes : prends en compte TOUTES les annonces ; explique le POURQUOI et les implications concrètes (actions, taux, devises, matières premières) ; reste compréhensible (explique les termes techniques en quelques mots) ; cite chiffres, niveaux et noms propres ; « ## À retenir » = 3 à 5 puces commençant par « - ». Si la matière est pauvre, reste honnête et plus bref plutôt que de meubler.
+Consignes : prends en compte TOUTES les annonces ; explique le POURQUOI et les implications concrètes (actions, taux, devises, matières premières) ; reste compréhensible (explique les termes techniques en quelques mots) ; cite chiffres, niveaux et noms propres. « ## À retenir » = 3 à 4 puces commençant par « - ». Si la matière est pauvre, reste honnête et plus bref.
 
-Réponds UNIQUEMENT par ce JSON : {"report":"<le rapport FR avec les sections ## et les puces ->","bias":"Positif|Négatif|Neutre"}`;
+Réponds UNIQUEMENT par ce JSON : {"report":"<le rapport FR avec les 4 sections ## et les puces ->","bias":"Positif|Négatif|Neutre"}`;
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',

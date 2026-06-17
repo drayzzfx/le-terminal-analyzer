@@ -188,11 +188,25 @@
       closeUl(); if(open)html+='</div>';
       return html||'<div class="ad-msg">—</div>';
     }
-    // Cas 2 : texte brut (bilan d'un seul bloc) → on l'aère en paragraphes
+    // Cas 2 : texte brut (bilan d'un bloc) → 3-4 sections TITRÉES
     var blocks=txt.split(/\n{1,}/).map(function(b){return b.trim();}).filter(Boolean);
     var paras=[];
-    blocks.forEach(function(b){ if(b.length>240){paras=paras.concat(paragraphize(b));}else{paras.push(b);} });
-    return '<div class="ad-sec">'+paras.map(function(p){return '<p class="ad-p">'+esc(p)+'</p>';}).join('')+'</div>';
+    blocks.forEach(function(b){ if(b.length>200){paras=paras.concat(paragraphize(b));}else{paras.push(b);} });
+    if(paras.length===0)return '<div class="ad-msg">—</div>';
+    var l=getLang();
+    var nSec=Math.min(4,paras.length);
+    var pool=l==='en'?['Overview','Key points','Drivers']:["Vue d'ensemble","Les points clés","Les moteurs"];
+    var last=l==='en'?'Takeaway':'À retenir';
+    var heads=[];
+    if(nSec===1){heads=[pool[0]];}
+    else{for(var i=0;i<nSec-1;i++)heads.push(pool[Math.min(i,pool.length-1)]);heads.push(last);}
+    var html='';
+    for(var s=0;s<nSec;s++){
+      var a=Math.floor(s*paras.length/nSec), b2=Math.floor((s+1)*paras.length/nSec);
+      var body=paras.slice(a,b2).map(function(p){return '<p class="ad-p">'+esc(p)+'</p>';}).join('');
+      html+='<div class="ad-sec"><h3 class="ad-h">'+esc(heads[s])+'</h3>'+body+'</div>';
+    }
+    return html;
   }
 
   function buildRow(it){var url=articleUrl(it);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(it.published_at)+'</span><span class="pr-prevrow__src">'+esc(it.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(it))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
