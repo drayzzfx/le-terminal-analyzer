@@ -1,0 +1,30 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Spacing Scale" subtitle="4px base — sp-1 through sp-9" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-base); font-family: var(--font-mono); padding: 20px 28px; }
+  .row { display: flex; align-items: flex-end; gap: 18px; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .bar { background: var(--accent); width: 100%; border-radius: 2px; box-shadow: 0 0 16px var(--accent-glow); }
+  .wrap { width: 40px; display: flex; align-items: flex-end; height: 80px; }
+  .lbl { font-size: 11px; color: var(--text-body); }
+  .px { font-size: 10px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="wrap"><div class="bar" style="height:4px"></div></div><span class="lbl">1</span><span class="px">4</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:8px"></div></div><span class="lbl">2</span><span class="px">8</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:12px"></div></div><span class="lbl">3</span><span class="px">12</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:16px"></div></div><span class="lbl">4</span><span class="px">16</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:24px"></div></div><span class="lbl">5</span><span class="px">24</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:32px"></div></div><span class="lbl">6</span><span class="px">32</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:48px"></div></div><span class="lbl">7</span><span class="px">48</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:64px"></div></div><span class="lbl">8</span><span class="px">64</span></div>
+    <div class="item"><div class="wrap"><div class="bar" style="height:80px"></div></div><span class="lbl">9</span><span class="px">96</span></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* Le Terminal — "Tous les marchés" marquee over a particle field.
+   Inspired by the reference reels (carousel of glowing tiles over a galaxy),
+   restyled in the glacial cinematic brand. */
+
+.lt-mk { position: relative; z-index: 2; overflow: hidden; padding: var(--sp-9) 0; isolation: isolate; }
+.lt-mk__field { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.lt-mk::before { /* cold central glow */
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(60% 70% at 50% 42%, rgba(127,184,232,0.10), transparent 70%);
+}
+
+.lt-mk__head { max-width: var(--container); margin: 0 auto var(--sp-7); padding: 0 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.lt-mk__title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.16; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
+.lt-mk__lede { max-width: 54ch; color: var(--text-body); font-size: 1.05rem; line-height: 1.6; margin: 0; }
+
+.lt-mk__rails { position: relative; display: flex; flex-direction: column; gap: 18px; }
+.lt-mk__rail { overflow: visible; }
+/* the section (.lt-mk) clips horizontally + edge fades mask the ends;
+   the rail stays overflow-visible so a tile's hover lift + glow is never cut off. */
+.lt-mk__track { display: flex; gap: 16px; width: max-content; will-change: transform; }
+.lt-mk__track--l { animation: lt-mk-left 42s linear infinite; }
+.lt-mk__track--r { animation: lt-mk-right 50s linear infinite; }
+.lt-mk__rail:hover .lt-mk__track { animation-play-state: paused; }
+@keyframes lt-mk-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes lt-mk-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .lt-mk__track--l, .lt-mk__track--r { animation: none; } }
+
+/* edge fades */
+.lt-mk__fade { position: absolute; top: 0; bottom: 0; width: 160px; pointer-events: none; z-index: 3; }
+.lt-mk__fade--l { left: 0; background: linear-gradient(90deg, var(--bg-base), transparent); }
+.lt-mk__fade--r { right: 0; background: linear-gradient(270deg, var(--bg-base), transparent); }
+
+/* tiles */
+.lt-mk__tile {
+  display: flex; align-items: center; gap: 11px;
+  padding: 13px 20px; border-radius: var(--r-pill);
+  border: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, rgba(22,27,36,0.92), rgba(11,14,19,0.92));
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.04);
+  white-space: nowrap; flex-shrink: 0;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.lt-mk__tile:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 16px 40px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow); transform: translateY(-2px); }
+.lt-mk__dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
+.lt-mk__dot[data-up="1"] { background: var(--bull); box-shadow: 0 0 8px var(--bull); }
+.lt-mk__dot[data-up="0"] { background: var(--bear); box-shadow: 0 0 8px var(--bear); }
+.lt-mk__sym { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text-title); letter-spacing: 0.03em; }
+.lt-mk__px { font-family: var(--font-mono); font-size: 13px; color: var(--text-body); font-variant-numeric: tabular-nums; }
+.lt-mk__spark { width: 48px; height: 16px; flex-shrink: 0; }
+.lt-mk__d { font-family: var(--font-mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.lt-mk__d.lt-up { color: var(--bull); }
+.lt-mk__d.lt-down { color: var(--bear); }
+
+@media (max-width: 760px) {
+  .lt-mk__head { padding: 0 20px; }
+  .lt-mk__fade { width: 60px; }
+  .lt-mk__tile { padding: 11px 16px; gap: 9px; }
+}

@@ -1,0 +1,34 @@
+<!-- @dsCard group="Components" viewport="700x200" name="Market Stats" subtitle="Tickers and KPIs with directional deltas" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-base); font-family: var(--font-text); padding: 28px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .cell { border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--bg-elevated); padding: 18px; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Stat } = window.LeTerminalDesignSystem_028ecb;
+    function Demo() {
+      return (
+        <div className="grid">
+          <div className="cell"><Stat label="BTC/USD" value="68 412.50" delta="+2.18%" direction="up" /></div>
+          <div className="cell"><Stat label="EUR/USD" value="1.0847" delta="−0.42%" direction="down" /></div>
+          <div className="cell"><Stat label="AAPL" value="214.09" delta="0.00%" direction="neutral" /></div>
+          <div className="cell"><Stat label="P&L jour" value="+4 280 €" delta="+1.9%" direction="up" /></div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Terminal — Mentions légales, Confidentialité & CGV</title>
+<meta name="description" content="Mentions légales, politique de confidentialité (RGPD) et conditions générales de vente de Le Terminal.">
+<meta name="robots" content="index, follow">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./logo.jpg.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./home.css">
+<style>
+  .lg-wrap{max-width:880px;margin:0 auto;padding:120px 22px 80px}
+  .lg-hero{margin-bottom:32px}
+  .lg-hero h1{font-family:'Anton','Arial Narrow',sans-serif;text-transform:uppercase;font-size:clamp(28px,5vw,42px);font-weight:800;color:var(--text-title,#F2F4F7);margin:0 0 8px}
+  .lg-hero p{color:var(--text-muted,#7E8794);font-size:14px;margin:0}
+  .lg-tabs{position:sticky;top:64px;z-index:50;display:flex;flex-wrap:wrap;gap:8px;padding:14px 0;background:linear-gradient(180deg,var(--bg-void,#07090C) 70%,transparent);margin-bottom:24px}
+  .lg-tabs a{padding:9px 16px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#C3CAD4;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
+  .lg-tabs a:hover{border-color:rgba(127,184,232,.45);color:#fff}
+  .lg-section{padding:28px 0;border-top:1px solid rgba(255,255,255,.08);scroll-margin-top:140px}
+  .lg-section h2{font-family:'Anton','Arial Narrow',sans-serif;text-transform:uppercase;font-size:24px;font-weight:800;color:var(--text-title,#F2F4F7);margin:0 0 6px}
+  .lg-section h3{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;font-weight:700;color:#EAF4FF;margin:24px 0 8px}
+  .lg-section p,.lg-section li{color:#C3CAD4;font-size:14.5px;line-height:1.75}
+  .lg-section ul{margin:8px 0 8px 0;padding-left:20px}
+  .lg-section li{margin-bottom:6px}
+  .lg-section a{color:#BFDCF5;text-decoration:underline}
+  .lg-section strong{color:#EAF4FF}
+  .lg-updated{font-size:12px;color:#7E8794;margin-top:4px}
+  .lg-fill{background:rgba(232,194,104,.10);border:1px dashed rgba(232,194,104,.45);color:#E8C268;padding:1px 6px;border-radius:5px;font-size:13px;font-family:var(--font-mono,monospace)}
+  .lg-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  .lg-table th,.lg-table td{text-align:left;padding:10px 12px;border:1px solid rgba(255,255,255,.1);color:#C3CAD4;vertical-align:top}
+  .lg-table th{background:rgba(255,255,255,.04);color:#EAF4FF;font-family:'Inter',system-ui,-apple-system,sans-serif;font-weight:700}
+  .lg-note{background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:12px;padding:14px 16px;margin:16px 0;font-size:13.5px;color:#BFDCF5}
+</style>
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
+      <a href="./index.html#method" data-en="Method">Méthode</a>
+      <a href="./index.html#community" data-en="Community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" style="display:none" data-en="Log in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html" data-en="Premium Access">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<main class="lg-wrap">
+  <div class="lg-hero">
+    <h1 data-en="Legal information">Informations légales</h1>
+    <p data-en="Legal notice, privacy policy and terms and conditions of sale of Le Terminal.">Mentions légales, politique de confidentialité et conditions générales de vente de Le Terminal.</p>
+    <p class="lg-updated" data-en="Last updated: 14 June 2026">Dernière mise à jour : 14 juin 2026</p>
+  </div>
+
+  <nav class="lg-tabs">
+    <a href="#mentions" data-en="Legal notice">Mentions légales</a>
+    <a href="#confidentialite" data-en="Privacy (GDPR)">Confidentialité (RGPD)</a>
+    <a href="#cookies" data-en="Cookies">Cookies</a>
+    <a href="#cgv" data-en="Terms of Sale">CGV</a>
+  </nav>
+
+  <!-- ══════════ MENTIONS LÉGALES ══════════ -->
+  <section class="lg-section" id="mentions">
+    <h2 data-en="1. Legal notice">1. Mentions légales</h2>
+
+    <h3 data-en="Site publisher">Éditeur du site</h3>
+    <p data-en="The <strong>Le Terminal</strong> website (hereinafter &quot;the Site&quot;) is published and operated by Le Terminal. For any request, you can contact us via the Site's <a href='./index.html#community'>community</a>.">
+      Le site <strong>Le Terminal</strong> (ci-après « le Site ») est édité et exploité par Le Terminal.
+      Pour toute demande, tu peux nous contacter via la
+      <a href="./index.html#community">communauté</a> du Site.
+    </p>
+
+    <h3 data-en="Hosting">Hébergement</h3>
+    <p data-en="The Site is hosted by <strong>Vercel Inc.</strong><br>340 S Lemon Ave #4133, Walnut, CA 91789, United States — <a href='https://vercel.com' target='_blank' rel='noopener'>vercel.com</a>">
+      Le Site est hébergé par <strong>Vercel Inc.</strong><br>
+      340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis — <a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a>
+    </p>
+    <p data-en="The database and authentication service are provided by <strong>Supabase</strong> (Supabase, Inc.), with data hosted in the European Union — <strong>Frankfurt, Germany (eu-central-1)</strong> region.">
+      La base de données et le service d'authentification sont fournis par <strong>Supabase</strong>
+      (Supabase, Inc.), avec hébergement des données dans l'Union européenne — région
+      <strong>Francfort, Allemagne (eu-central-1)</strong>.
+    </p>
+
+    <h3 data-en="Intellectual property">Propriété intellectuelle</h3>
+    <p data-en="All elements of the Site (brand, logo, texts, interfaces, code, graphics, structure) are protected by intellectual property law and remain the exclusive property of the publisher, unless otherwise stated. Any reproduction, representation, modification or exploitation, in whole or in part, without prior written authorisation, is prohibited.">
+      L'ensemble des éléments du Site (marque, logo, textes, interfaces, code, graphismes, structure)
+      est protégé par le droit de la propriété intellectuelle et reste la propriété exclusive de
+      l'éditeur, sauf mention contraire. Toute reproduction, représentation, modification ou
+      exploitation, totale ou partielle, sans autorisation écrite préalable, est interdite.
+    </p>
+
+    <h3 data-en="Risk warning">Avertissement sur les risques</h3>
+    <p data-en="Le Terminal is a <strong>decision-support and educational tool</strong>. It provides <strong>no personalised investment advice</strong> within the meaning of financial regulations. Trading on the markets (Forex, indices, crypto-assets, commodities, stocks) carries a <strong>high risk of capital loss</strong>. Past performance is no guarantee of future performance. The user remains solely responsible for their decisions.">
+      Le Terminal est un <strong>outil d'aide à la décision et d'éducation</strong>. Il ne fournit
+      <strong>aucun conseil en investissement</strong> personnalisé au sens de la réglementation financière.
+      Le trading sur les marchés (Forex, indices, crypto-actifs, matières premières, actions) comporte un
+      <strong>risque élevé de perte en capital</strong>. Les performances passées ne préjugent pas des
+      performances futures. L'utilisateur reste seul responsable de ses décisions.
+    </p>
+  </section>
+
+  <!-- ══════════ CONFIDENTIALITÉ ══════════ -->
+  <section class="lg-section" id="confidentialite">
+    <h2 data-en="2. Privacy policy (GDPR)">2. Politique de confidentialité (RGPD)</h2>
+    <p data-en="This policy describes how Le Terminal collects, uses and protects your personal data, in accordance with the General Data Protection Regulation (EU Regulation 2016/679 &quot;GDPR&quot;) and the French &quot;Informatique et Libertés&quot; Act.">
+      Cette politique décrit comment Le Terminal collecte, utilise et protège tes données
+      personnelles, conformément au Règlement Général sur la Protection des Données
+      (Règlement UE 2016/679 « RGPD ») et à la loi « Informatique et Libertés ».
+    </p>
+    <div class="lg-note" data-en="<strong>Storage of your personal data.</strong> By using Le Terminal, your personal data (account, e-mail, content, journal) is <strong>collected and stored</strong>. It is hosted in the <strong>European Union</strong>, on the servers of our provider <strong>Supabase</strong>, located in <strong>Frankfurt, Germany (eu-central-1 region)</strong>. Certain additional processing operations (site hosting, AI analysis, payment) rely on providers that may be located outside the EU — details are given in the table below.">
+      <strong>Stockage de tes données personnelles.</strong> En utilisant Le Terminal, tes données
+      personnelles (compte, e-mail, contenus, journal) sont <strong>collectées et stockées</strong>.
+      Elles sont hébergées dans l'<strong>Union européenne</strong>, sur les serveurs de notre
+      prestataire <strong>Supabase</strong>, situés à <strong>Francfort, Allemagne (région eu-central-1)</strong>.
+      Certains traitements complémentaires (hébergement du site, analyse IA, paiement) font appel à des
+      prestataires pouvant être situés hors UE — le détail figure dans le tableau ci-dessous.
+    </div>
+
+    <h3 data-en="Data controller">Responsable du traitement</h3>
+    <p data-en="The data controller is the publisher of the Site (see section 1). For any question relating to your data, you can contact us via the Site's <a href='./index.html#community'>community</a>.">
+      Le responsable du traitement est l'éditeur du Site (voir section 1). Pour toute question
+      relative à tes données, tu peux nous contacter via la
+      <a href="./index.html#community">communauté</a> du Site.
+    </p>
+
+    <h3 data-en="Data collected">Données collectées</h3>
+    <ul>
+      <li data-en="<strong>Account:</strong> e-mail address, password (stored in encrypted/hashed form, never in clear text), user identifier."><strong>Compte :</strong> adresse e-mail, mot de passe (stocké de façon chiffrée/hachée, jamais en clair), identifiant utilisateur.</li>
+      <li data-en="<strong>Sign-in via Google:</strong> e-mail address and Google account identifier (if you choose this sign-in method)."><strong>Connexion via Google :</strong> adresse e-mail et identifiant du compte Google (si tu choisis ce mode de connexion).</li>
+      <li data-en="<strong>Content you create:</strong> chart screenshots submitted for analysis, analysis results, trade journal, notes and performance statistics."><strong>Contenus que tu crées :</strong> captures d'écran de graphiques envoyées pour analyse, résultats d'analyses, journal de trades, notes et statistiques de performance.</li>
+      <li data-en="<strong>Preferences:</strong> language, cookie consent choices, subscription status."><strong>Préférences :</strong> langue, choix de consentement aux cookies, statut d'abonnement.</li>
+      <li data-en="<strong>Technical data:</strong> connection data strictly necessary for the operation and security of the service."><strong>Données techniques :</strong> données de connexion strictement nécessaires au fonctionnement et à la sécurité du service.</li>
+    </ul>
+
+    <h3 data-en="Purposes and legal bases">Finalités et bases légales</h3>
+    <ul>
+      <li data-en="Provide and manage your account and access to the tools — <em>performance of the contract</em>.">Fournir et gérer ton compte et l'accès aux outils — <em>exécution du contrat</em>.</li>
+      <li data-en="Carry out the AI analyses you request — <em>performance of the contract</em>.">Réaliser les analyses IA que tu demandes — <em>exécution du contrat</em>.</li>
+      <li data-en="Manage subscriptions and payments — <em>performance of the contract / legal obligation</em>.">Gérer les abonnements et paiements — <em>exécution du contrat / obligation légale</em>.</li>
+      <li data-en="Ensure security and prevent fraud — <em>legitimate interest</em>.">Assurer la sécurité et prévenir la fraude — <em>intérêt légitime</em>.</li>
+      <li data-en="Audience measurement and service improvement — <em>consent</em> (via the cookie banner).">Mesure d'audience et amélioration du service — <em>consentement</em> (via la bannière cookies).</li>
+    </ul>
+
+    <h3 data-en="Where your data is stored and processed (processors)">Où sont stockées et traitées tes données (sous-traitants)</h3>
+    <p data-en="Le Terminal relies on providers (processors within the meaning of the GDPR) to operate:">Le Terminal s'appuie sur des prestataires (sous-traitants au sens du RGPD) pour fonctionner :</p>
+    <table class="lg-table">
+      <thead><tr><th data-en="Provider">Prestataire</th><th data-en="Role">Rôle</th><th data-en="Data location">Localisation des données</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Supabase</strong></td><td data-en="Database, accounts &amp; authentication (e-mail, content, journal)">Base de données, comptes &amp; authentification (e-mail, contenus, journal)</td><td data-en="European Union — Frankfurt, Germany (eu-central-1)">Union européenne — Francfort, Allemagne (eu-central-1)</td></tr>
+        <tr><td><strong>Vercel</strong></td><td data-en="Hosting of the site and server functions">Hébergement du site et des fonctions serveur</td><td data-en="United States / global network (edge)">États-Unis / réseau mondial (edge)</td></tr>
+        <tr><td><strong>Anthropic (Claude)</strong></td><td data-en="AI processing of chart images and analysis requests">Traitement IA des images de graphiques et des requêtes d'analyse</td><td data-en="United States">États-Unis</td></tr>
+        <tr><td><strong>Whop</strong></td><td data-en="Subscription and payment management">Gestion des abonnements et des paiements</td><td data-en="United States">États-Unis</td></tr>
+        <tr><td><strong>Google</strong> <span data-en="(optional)">(optionnel)</span></td><td data-en="&quot;Sign in with Google&quot; login">Connexion « Se connecter avec Google »</td><td data-en="European Union / United States">Union européenne / États-Unis</td></tr>
+        <tr><td><strong>Telegram</strong> <span data-en="(optional)">(optionnel)</span></td><td data-en="Private community (if you join it)">Communauté privée (si tu la rejoins)</td><td data-en="International">International</td></tr>
+      </tbody>
+    </table>
+    <div class="lg-note" data-en="<strong>Transfers outside the European Union.</strong> Some providers are located in the United States. These transfers are governed by appropriate safeguards (standard contractual clauses of the European Commission and/or DPF certification — Data Privacy Framework).">
+      <strong>Transferts hors Union européenne.</strong> Certains prestataires sont situés aux États-Unis.
+      Ces transferts sont encadrés par des garanties appropriées (clauses contractuelles types de la
+      Commission européenne et/ou certification DPF — Data Privacy Framework).
+    </div>
+    <p data-en="<strong>Payment:</strong> your banking data (card number, etc.) is <strong>never</strong> collected or stored by Le Terminal. It is processed directly by the payment provider (Whop and its partners) via a secure connection.">
+      <strong>Paiement :</strong> tes données bancaires (numéro de carte, etc.) ne sont
+      <strong>jamais</strong> collectées ni stockées par Le Terminal. Elles sont traitées directement
+      par le prestataire de paiement (Whop et ses partenaires) via une connexion sécurisée.
+    </p>
+
+    <h3 data-en="Retention period">Durée de conservation</h3>
+    <ul>
+      <li data-en="Account data: throughout the period of use, then deleted within a reasonable time after the account is closed.">Données de compte : pendant toute la durée d'utilisation, puis supprimées dans un délai raisonnable après la fermeture du compte.</li>
+      <li data-en="Billing data: kept for the time required by legal and accounting obligations (up to 10 years).">Données de facturation : conservées le temps requis par les obligations légales et comptables (jusqu'à 10 ans).</li>
+      <li data-en="Cookie consent data: 6 to 13 months.">Données de consentement aux cookies : 6 à 13 mois.</li>
+    </ul>
+
+    <h3 data-en="Your rights">Tes droits</h3>
+    <p data-en="In accordance with the GDPR, you have the rights of <strong>access</strong>, <strong>rectification</strong>, <strong>erasure</strong>, <strong>restriction</strong>, <strong>objection</strong> and <strong>portability</strong> of your data, as well as the right to set directives regarding their fate after your death. You can exercise these rights by contacting us via the Site's <a href='./index.html#community'>community</a>.">
+      Conformément au RGPD, tu disposes des droits d'<strong>accès</strong>, de <strong>rectification</strong>,
+      d'<strong>effacement</strong>, de <strong>limitation</strong>, d'<strong>opposition</strong> et de
+      <strong>portabilité</strong> de tes données, ainsi que du droit de définir des directives relatives à
+      leur sort après ton décès. Tu peux exercer ces droits en nous contactant via la
+      <a href="./index.html#community">communauté</a> du Site.
+    </p>
+    <p data-en="You may also lodge a complaint with the <strong>CNIL</strong> (<a href='https://www.cnil.fr' target='_blank' rel='noopener'>www.cnil.fr</a>) if you consider that your rights are not being respected.">
+      Tu peux également introduire une réclamation auprès de la <strong>CNIL</strong>
+      (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>) si tu estimes que tes
+      droits ne sont pas respectés.
+    </p>
+
+    <h3 data-en="Security">Sécurité</h3>
+    <p data-en="Le Terminal implements appropriate technical and organisational measures (password encryption, secure HTTPS connections, access control) to protect your data against any unauthorised access, loss or disclosure.">
+      Le Terminal met en œuvre des mesures techniques et organisationnelles appropriées (chiffrement des
+      mots de passe, connexions sécurisées HTTPS, contrôle d'accès) pour protéger tes données contre tout
+      accès, perte ou divulgation non autorisés.
+    </p>
+  </section>
+
+  <!-- ══════════ COOKIES ══════════ -->
+  <section class="lg-section" id="cookies">
+    <h2 data-en="3. Cookie policy">3. Politique de cookies</h2>
+    <p data-en="Le Terminal uses cookies and local storage technologies (localStorage) to operate and, with your consent, to measure its audience.">
+      Le Terminal utilise des cookies et technologies de stockage local (localStorage) pour fonctionner
+      et, avec ton accord, mesurer son audience.
+    </p>
+    <ul>
+      <li data-en="<strong>Strictly necessary</strong> (always active): maintaining your login session (authentication token), remembering the language and your consent choice. They do not require consent."><strong>Strictement nécessaires</strong> (toujours actifs) : maintien de ta session de connexion (jeton d'authentification), mémorisation de la langue et de ton choix de consentement. Ils ne nécessitent pas de consentement.</li>
+      <li data-en="<strong>Audience measurement / non-essential</strong>: placed only after your consent via the banner displayed on your first visit."><strong>Mesure d'audience / non essentiels</strong> : déposés uniquement après ton consentement via la bannière affichée à ta première visite.</li>
+    </ul>
+    <p data-en="You can change your choice at any time by clearing the site's data in your browser: the consent banner will then reappear on your next visit.">
+      Tu peux à tout moment modifier ton choix en effaçant les données du site dans ton navigateur :
+      la bannière de consentement réapparaîtra alors à la visite suivante.
+    </p>
+  </section>
+
+  <!-- ══════════ CGV ══════════ -->
+  <section class="lg-section" id="cgv">
+    <h2 data-en="4. Terms and Conditions of Sale">4. Conditions Générales de Vente (CGV)</h2>
+
+    <h3 data-en="Article 1 — Purpose">Article 1 — Objet</h3>
+    <p data-en="These Terms of Sale govern the sale of subscriptions to Le Terminal's Premium offer, entered into between the publisher (the &quot;Seller&quot;, see section 1) and any customer (the &quot;Customer&quot;).">
+      Les présentes CGV régissent la vente des abonnements à l'offre Premium de Le Terminal, conclus
+      entre l'éditeur (le « Vendeur », voir section 1) et tout client (le « Client »).
+    </p>
+
+    <h3 data-en="Article 2 — Services offered">Article 2 — Services proposés</h3>
+    <p data-en="Le Terminal offers access to a suite of digital tools for traders: AI setup analysis, trading journal, economic calendar, pip calculator and flow mapping. The Premium offer unlocks unlimited access to these tools.">
+      Le Terminal propose un accès à une suite d'outils numériques pour traders : analyse de setups par IA,
+      journal de trading, calendrier économique, calculateur de pips et cartographie des flux. L'offre
+      Premium débloque l'accès illimité à ces outils.
+    </p>
+
+    <h3 data-en="Article 3 — Pricing and billing">Article 3 — Prix et facturation</h3>
+    <ul>
+      <li data-en="<strong>Premium Monthly:</strong> €29.99 incl. VAT per month."><strong>Premium Mensuel :</strong> 29,99 € TTC par mois.</li>
+      <li data-en="<strong>Premium Annual:</strong> €19.99 incl. VAT per month, billed €239.88 incl. VAT in one payment for 12 months."><strong>Premium Annuel :</strong> 19,99 € TTC par mois, facturé 239,88 € TTC en une fois pour 12 mois.</li>
+    </ul>
+    <p data-en="Prices are stated in euros, all taxes included. The Seller reserves the right to change its prices at any time, with ongoing subscriptions continuing to be billed at the rate subscribed until their renewal.">
+      Les prix sont indiqués en euros, toutes taxes comprises. Le Vendeur se réserve le droit de modifier
+      ses prix à tout moment, les abonnements en cours restant facturés au tarif souscrit jusqu'à leur
+      renouvellement.
+    </p>
+
+    <h3 data-en="Article 4 — Order and payment">Article 4 — Commande et paiement</h3>
+    <p data-en="Subscription is carried out online via our payment partner <strong>Whop</strong>. Payment is due immediately upon order. Accepted means include bank card and the solutions offered by Whop. Premium access is activated as soon as payment is confirmed.">
+      La souscription s'effectue en ligne via notre partenaire de paiement <strong>Whop</strong>. Le
+      paiement est exigible immédiatement à la commande. Les moyens acceptés incluent la carte bancaire et
+      les solutions proposées par Whop. L'accès Premium est activé dès confirmation du paiement.
+    </p>
+
+    <h3 data-en="Article 5 — Renewal and cancellation">Article 5 — Reconduction et résiliation</h3>
+    <p data-en="Subscriptions renew automatically (monthly or annually depending on the offer chosen). The Customer can cancel at any time from their account area or their Whop account. Cancellation takes effect at the end of the period already paid: Premium access is retained until that date, after which the subscription is no longer renewed.">
+      Les abonnements sont à reconduction automatique (mensuelle ou annuelle selon l'offre choisie). Le
+      Client peut résilier à tout moment depuis son espace ou son compte Whop. La résiliation prend effet à
+      la fin de la période déjà payée : l'accès Premium est conservé jusqu'à cette date, puis l'abonnement
+      n'est plus renouvelé.
+    </p>
+
+    <h3 data-en="Article 6 — Right of withdrawal and guarantee">Article 6 — Droit de rétractation et garantie</h3>
+    <p data-en="In accordance with article L221-28 of the French Consumer Code, the 14-day right of withdrawal may not apply to digital content supplied immediately with your express consent. However, as a commercial gesture, Le Terminal offers a <strong>14-day &quot;satisfied or refunded&quot; guarantee</strong>: if you are dissatisfied, contact us within 14 days of your payment to obtain a full refund.">
+      Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation de 14 jours peut
+      ne pas s'appliquer aux contenus numériques fournis immédiatement avec ton accord exprès. Toutefois, et
+      à titre commercial, Le Terminal offre une <strong>garantie « satisfait ou remboursé » de 14 jours</strong> :
+      en cas d'insatisfaction, contacte-nous dans les 14 jours suivant ton paiement pour obtenir un
+      remboursement intégral.
+    </p>
+
+    <h3 data-en="Article 7 — Liability">Article 7 — Responsabilité</h3>
+    <p data-en="Le Terminal is a decision-support and educational tool. It does not constitute investment advice and guarantees no results. The Customer is solely responsible for their trading decisions and any losses. The Seller cannot be held liable for service interruptions beyond its control or for decisions made on the basis of the information provided.">
+      Le Terminal est un outil d'aide à la décision et d'éducation. Il ne constitue pas un conseil en
+      investissement et ne garantit aucun résultat. Le Client est seul responsable de ses décisions de
+      trading et des pertes éventuelles. Le Vendeur ne saurait être tenu responsable des interruptions de
+      service indépendantes de sa volonté ni des décisions prises sur la base des informations fournies.
+    </p>
+
+    <h3 data-en="Article 8 — Personal data">Article 8 — Données personnelles</h3>
+    <p data-en="The processing of the Customer's data is described in the <a href='#confidentialite'>privacy policy</a> above.">
+      Le traitement des données du Client est décrit dans la <a href="#confidentialite">politique de
+      confidentialité</a> ci-dessus.
+    </p>
+
+    <h3 data-en="Article 9 — Governing law and disputes">Article 9 — Droit applicable et litiges</h3>
+    <p data-en="These Terms of Sale are governed by French law. In the event of a dispute, an amicable solution will be sought as a priority. In accordance with the French Consumer Code, the Customer may use a <strong>consumer mediator</strong> free of charge. Failing agreement, the French courts shall have jurisdiction. The Customer may also use the European online dispute resolution platform: <a href='https://ec.europa.eu/consumers/odr' target='_blank' rel='noopener'>ec.europa.eu/consumers/odr</a>.">
+      Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera
+      recherchée en priorité. Conformément au Code de la consommation, le Client peut recourir gratuitement
+      à un <strong>médiateur de la consommation</strong>.
+      À défaut d'accord, les tribunaux français sont compétents. Le Client peut aussi utiliser la plateforme
+      européenne de règlement en ligne des litiges : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.
+    </p>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="lt-footer">
+  <div class="lt-footer__top">
+    <div class="lt-footer__brand"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></div>
+    <nav class="lt-footer__links"><a href="./index.html#tools" data-en="Tools">Outils</a><a href="./tarifs.html" data-en="Pricing">Tarifs</a><a href="./legal.html#mentions" data-en="Legal notice">Mentions légales</a><a href="./legal.html#confidentialite" data-en="Privacy">Confidentialité</a><a href="./legal.html#cgv" data-en="Terms of Sale">CGV</a></nav>
+  </div>
+  <div class="lt-footer__bottom">
+    <span class="lt-footer__copy" data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    <span class="lt-footer__note" data-en="Educational tools. Trading involves risks of capital loss.">Outils éducatifs. Le trading comporte des risques de perte en capital.</span>
+  </div>
+</footer>
+
+<script src="./menu.js"></script>
+</body>
+</html>
