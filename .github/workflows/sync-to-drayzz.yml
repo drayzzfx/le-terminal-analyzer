@@ -40,4 +40,5 @@ jobs:
           fi
           REPO="${REPO_OVERRIDE:-drayzzfx/le-terminal-analyzer}"
           echo "Synchronisation de main vers ${REPO} ..."
-          git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
+          # Miroir de déploiement : pobsteta = source de vérité → on aligne (force).
+          git push --force "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
