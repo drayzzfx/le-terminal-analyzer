@@ -18,21 +18,33 @@
 .pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor;box-shadow:none}
 .ad-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12.5px;font-weight:600;color:var(--text-muted);text-decoration:none;margin-bottom:18px;transition:color .2s}
 .ad-back:hover{color:var(--accent)}
-.ad-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
-.ad-ic{color:var(--accent);display:inline-flex;flex-shrink:0}
-.ad-report{counter-reset:adsec;max-width:840px}
-.ad-sec{padding:24px 0;border-top:1px solid var(--border-subtle)}
-.ad-sec:first-child{border-top:none;padding-top:8px}
-.ad-h{counter-increment:adsec;display:flex;align-items:center;gap:12px;font-family:var(--font-text);font-weight:700;font-size:1.14rem;color:var(--text-title);margin:0 0 14px;letter-spacing:.01em}
+/* ── Document « rapport » ── */
+.ad-doc{position:relative;max-width:900px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.85),rgba(9,12,17,.94));box-shadow:0 26px 64px rgba(0,0,0,.45),inset 0 1px 0 rgba(127,184,232,.08);overflow:hidden}
+.ad-doc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-bright))}
+.ad-doc.b-up::before{background:linear-gradient(90deg,#2fae7a,var(--bull))}
+.ad-doc.b-down::before{background:linear-gradient(90deg,#c14a5e,var(--bear))}
+.ad-doc.b-flat::before{background:linear-gradient(90deg,#caa84e,var(--neutral))}
+.ad-cover{position:relative;display:flex;align-items:center;gap:16px;padding:24px 30px;border-bottom:1px solid var(--border-subtle)}
+.ad-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 120% at 90% 0%,rgba(127,184,232,.10),transparent 60%);pointer-events:none}
+.ad-cover__ic{width:48px;height:48px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);flex-shrink:0}
+.ad-cover__ic svg{width:24px;height:24px}
+.ad-cover__main{min-width:0}
+.ad-cover__title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.04;letter-spacing:.01em;color:var(--text-title);margin:0}
+.ad-cover__meta{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.ad-cover__count{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--text-muted)}
+.ad-report{counter-reset:adsec;padding:6px 30px 30px}
+.ad-sec{padding:22px 0;border-top:1px solid var(--border-subtle)}
+.ad-sec:first-child{border-top:none;padding-top:18px}
+.ad-h{counter-increment:adsec;display:flex;align-items:center;gap:12px;font-family:var(--font-text);font-weight:700;font-size:1.12rem;color:var(--text-title);margin:0 0 14px;letter-spacing:.01em}
 .ad-h::before{content:counter(adsec,decimal-leading-zero);font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:var(--r-sm);padding:5px 9px;letter-spacing:.05em}
 .ad-p{font-family:var(--font-text);font-size:.97rem;line-height:1.74;color:var(--text-body);margin:0 0 12px}
-.ad-sec:first-child .ad-p{font-size:1.04rem;line-height:1.72;color:var(--text-title)}
+.ad-sec:first-child .ad-p:first-child{font-size:1.06rem;line-height:1.7;color:var(--text-title)}
 .ad-ul{list-style:none;margin:4px 0 8px;padding:0}
 .ad-ul li{position:relative;padding-left:22px;font-family:var(--font-text);font-size:.97rem;line-height:1.6;color:var(--text-body);margin-bottom:9px}
 .ad-ul li::before{content:"";position:absolute;left:5px;top:9px;width:6px;height:6px;border-radius:2px;background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
 .ad-msg{padding:40px 24px;text-align:center;color:var(--text-muted);font-size:13px}
 .ad-skel{height:1em;border-radius:6px;background:linear-gradient(90deg,var(--bg-elevated),rgba(127,184,232,.07),var(--bg-elevated));background-size:200% 100%;animation:adsh 1.4s ease infinite}
-.ad-deep{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--accent);margin-bottom:16px}
+.ad-deep{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--accent);padding:14px 30px 0}
 .ad-deep .lt-dot{width:7px;height:7px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:adpulse 1.2s ease-in-out infinite}
 @keyframes adpulse{0%,100%{opacity:.35}50%{opacity:1}}
 @keyframes adsh{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -75,22 +87,23 @@
 <div class="pr">
 
   <section class="pr-sel" style="padding-top:8px">
-    <div class="pr-head">
-      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Archive · In-depth report">Archive · Rapport approfondi</span> · <span id="adDate">—</span></span>
-      <div class="ad-head">
-        <span class="ad-ic" id="adIcon"></span>
-        <h2 class="pr-head__title" id="adTitle" style="margin:0">—</h2>
-        <span class="pr-badge pr-badge--neutral" id="adBias" style="display:none"></span>
-        <span class="pr-badge pr-badge--accent" id="adCount" style="display:none"></span>
+    <span class="pr-eyebrow" style="display:inline-flex;margin-bottom:18px"><span class="lt-dot"></span> <span data-en="Archive · In-depth report">Archive · Rapport approfondi</span> · <span id="adDate">—</span></span>
+    <article class="ad-doc" id="adDoc">
+      <header class="ad-cover">
+        <span class="ad-cover__ic" id="adIcon"></span>
+        <div class="ad-cover__main">
+          <h2 class="ad-cover__title" id="adTitle">—</h2>
+          <div class="ad-cover__meta">
+            <span class="pr-badge pr-badge--neutral" id="adBias" style="display:none"></span>
+            <span class="ad-cover__count" id="adCount" style="display:none"></span>
+          </div>
+        </div>
+      </header>
+      <div id="adDeep" class="ad-deep" style="display:none"><span class="lt-dot"></span> <span data-en="Generating the in-depth report…">Génération du rapport approfondi…</span></div>
+      <div class="ad-report" id="adReport">
+        <div class="ad-sec"><div class="ad-skel" style="width:40%;height:1.1em;margin-bottom:14px"></div><div class="ad-skel" style="width:96%;margin-bottom:8px"></div><div class="ad-skel" style="width:90%;margin-bottom:8px"></div><div class="ad-skel" style="width:70%"></div></div>
       </div>
-    </div>
-  </section>
-
-  <section class="pr-sel" style="padding-top:0">
-    <div id="adDeep" class="ad-deep" style="display:none"><span class="lt-dot"></span> <span data-en="Generating the in-depth report…">Génération du rapport approfondi…</span></div>
-    <div class="ad-report" id="adReport">
-      <div class="ad-sec"><div class="ad-skel" style="width:40%;height:1.1em;margin-bottom:14px"></div><div class="ad-skel" style="width:96%;margin-bottom:8px"></div><div class="ad-skel" style="width:90%;margin-bottom:8px"></div><div class="ad-skel" style="width:70%"></div></div>
-    </div>
+    </article>
   </section>
 
   <section class="pr-sel" id="adListSec" style="display:none">
@@ -197,6 +210,8 @@
 
     var bias=document.getElementById('adBias');
     if(bias&&DATA.bias&&SENT[DATA.bias]){bias.style.display='';bias.className='pr-badge '+SENT[DATA.bias].cls;bias.textContent=l==='en'?SENT[DATA.bias].en:SENT[DATA.bias].fr;}
+    var doc=document.getElementById('adDoc');
+    if(doc){var bc={'pr-badge--up':'b-up','pr-badge--down':'b-down','pr-badge--neutral':'b-flat'};doc.className='ad-doc'+(DATA.bias&&SENT[DATA.bias]?' '+(bc[SENT[DATA.bias].cls]||''):'');}
     var cnt=document.getElementById('adCount');
     if(cnt){var n=DATA.item_count||0;cnt.style.display='';cnt.textContent=n+' '+(l==='en'?'item'+(n>1?'s':''):'annonce'+(n>1?'s':''));}
 
