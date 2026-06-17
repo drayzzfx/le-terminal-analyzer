@@ -39,14 +39,8 @@ jobs:
             exit 0
           fi
           REPO="${REPO_OVERRIDE:-drayzzfx/le-terminal-analyzer}"
-          echo "Synchronisation (miroir, sans workflows) de main vers ${REPO} ..."
-          git config user.email "ci@le-terminal.app"
-          git config user.name  "Le Terminal CI"
-          # Le PAT n'a pas le scope « workflow », et le dépôt de déploiement n'a
-          # pas besoin de .github/workflows. On pousse donc un instantané du
-          # contenu SANS les workflows (commit orphelin → un seul commit).
-          rm -rf .github/workflows
-          git checkout --orphan _mirror
-          git add -A
-          git commit -q -m "Déploiement — miroir de pobsteta/main (sans workflows)"
-          git push --force "https://x-access-token:${TOKEN}@github.com/${REPO}.git" _mirror:main
+          echo "Synchro NON DESTRUCTIVE vers ${REPO} (jamais de --force)."
+          echo "Si l'historique a divergé, le push est REFUSÉ — on n'écrase JAMAIS ${REPO}."
+          # Push simple : ajoute les commits si fast-forward possible, sinon échoue
+          # proprement sans toucher au main existant du dépôt de déploiement.
+          git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
