@@ -37,6 +37,6 @@ jobs:
             echo "Ajoute le secret (Settings → Secrets and variables → Actions) pour activer."
             exit 0
           fi
-          REPO="${REPO_OVERRIDE:-drayzz/le-terminal-analyzer}"
+          REPO="${REPO_OVERRIDE:-drayzzfx/le-terminal-analyzer}"
           echo "Synchronisation de main vers ${REPO} ..."
           git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
