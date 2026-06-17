@@ -35,6 +35,11 @@
 .gen__share button{width:42px;height:42px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-elevated);color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s}
 .gen__share button:hover{border-color:var(--accent);color:var(--text-title)}
 .gen__share svg{width:17px;height:17px}
+.gen__bgs{display:flex;gap:8px;flex-wrap:wrap}
+.gen__bg{width:56px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border-subtle);overflow:hidden;cursor:pointer;background-size:cover;background-position:center;transition:border-color .2s,box-shadow .2s}
+.gen__bg:hover{border-color:var(--accent)}
+.gen__bg.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
+.gen__bg--none{background:linear-gradient(150deg,#11161f,#07090c)}
 
 /* ── Carte de trade (preview + export) ── */
 .tc{position:relative;aspect-ratio:4/5;border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden;background:#0a0d12;box-shadow:0 30px 70px rgba(0,0,0,.55)}
@@ -162,6 +167,7 @@
         <div class="fld"><label data-en="Exit">Sortie</label><input id="gExit" type="number" value="68412"></div>
       </div>
       <div class="fld"><label data-en="Handle">Pseudo</label><input id="gHandle" value="@max_scalp"></div>
+      <div class="fld"><label data-en="Background">Fond / ambiance</label><div class="gen__bgs" id="gBgs"></div></div>
       <div class="gen__actions">
         <button class="lt-btn lt-btn--primary" id="gGen" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg> <span data-en="Download the image">Générer l'image</span></button>
         <div class="gen__share">
@@ -219,19 +225,14 @@
 <script>
 (function(){
   'use strict';
-  // Fond « jet privé » : on tente d'abord ta vraie photo (assets/trade-jet.jpg),
-  // sinon on retombe sur l'illustration vectorielle (assets/trade-jet.svg).
-  var JET_CANDIDATES = ['./assets/trade-jet.jpg', './assets/trade-jet.svg'];
-  var JET_SRC = JET_CANDIDATES[1];
-  function resolveJet(cb){
-    var i=0;
-    (function tryNext(){
-      if(i>=JET_CANDIDATES.length){cb(null);return;}
-      var src=JET_CANDIDATES[i++], im=new Image(); im.crossOrigin='anonymous';
-      im.onload=function(){JET_SRC=src;cb(src,im);};
-      im.onerror=tryNext; im.src=src;
-    })();
-  }
+  // Fonds disponibles pour la carte. Pour en ajouter : dépose l'image dans
+  // assets/ et ajoute une entrée { id, label, src } ci-dessous.
+  var BACKGROUNDS = [
+    { id:'jet',  label:'Jet',          src:'./assets/trade-jet.jpg' },
+    { id:'illu', label:'Illustration', src:'./assets/trade-jet.svg' },
+    { id:'none', label:'Sobre',        src:null }
+  ];
+  var currentBg = BACKGROUNDS[0].src;
 
   var SHARES = [
     { h:'@max_scalp',   pair:'BTC/USD', side:'long',  pct:318, amount:12720, mins:2,   likes:248 },
@@ -278,8 +279,23 @@
     document.getElementById('tcHandle').textContent=document.getElementById('gHandle').value||'@trader';
     var d=new Date(); document.getElementById('tcMeta').textContent='le-terminal.app · '+d.toLocaleDateString(l==='en'?'en-GB':'fr-FR',{day:'numeric',month:'long',year:'numeric'});
   }
-  // Active le fond jet (photo réelle prioritaire, sinon illustration vectorielle)
-  resolveJet(function(src){ if(src) document.getElementById('tcBg').style.backgroundImage='url('+src+')'; });
+  // Sélecteur de fond
+  function applyBg(){var el=document.getElementById('tcBg');if(el)el.style.backgroundImage=currentBg?('url('+currentBg+')'):'none';}
+  function renderBgs(){
+    var w=document.getElementById('gBgs'); if(!w)return;
+    w.innerHTML=BACKGROUNDS.map(function(b){
+      var on=(b.src===currentBg)?' on':'';
+      var st=b.src?('background-image:url('+b.src+')'):'';
+      return '<button type="button" class="gen__bg'+(b.src?'':' gen__bg--none')+on+'" data-src="'+(b.src||'')+'" title="'+b.label+'" style="'+st+'"></button>';
+    }).join('');
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest && e.target.closest('.gen__bg'); if(!b)return;
+    var s=b.getAttribute('data-src'); currentBg=s||null;
+    Array.prototype.forEach.call(b.parentNode.children,function(x){x.classList.toggle('on',x===b);});
+    applyBg();
+  });
+  applyBg();
 
   document.getElementById('gSide').addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b)return; side=b.getAttribute('data-side');
@@ -319,8 +335,9 @@
       var url=cv.toDataURL('image/png');
       var a=document.createElement('a');a.href=url;a.download='le-terminal-trade.png';a.click();
     }
+    if(!currentBg){draw(null);return;}
     var img=new Image(); img.crossOrigin='anonymous';
-    img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=JET_SRC;
+    img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=currentBg;
   }
   document.getElementById('gGen').addEventListener('click',exportImage);
   function shareText(){var c=compute();return (document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';}
@@ -356,7 +373,7 @@
     renderGrid();
   });
 
-  function init(){ renderPreview(); renderGrid(); }
+  function init(){ renderBgs(); renderPreview(); renderGrid(); }
   window.ecoReloadNews=init;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
