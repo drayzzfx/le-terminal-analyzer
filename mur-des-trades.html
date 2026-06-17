@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Mur des Trades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.mt-head{max-width:760px;margin:8px 0 34px}
+.mt-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.mt-eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.mt-title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.02;letter-spacing:.01em;color:var(--text-title);margin:0 0 16px}
+.mt-title .pr-metal{background:linear-gradient(180deg,#fff,#9fb0c4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mt-lead{font-family:var(--font-text);font-size:1.02rem;line-height:1.7;color:var(--text-muted)}
+.mt-disclaim{margin-top:14px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;color:var(--text-muted);opacity:.8}
+/* Grille */
+.mt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px}
+.mt-card{position:relative;overflow:hidden;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(165deg,rgba(22,27,36,.92),rgba(7,9,12,.96));padding:22px 22px 18px;box-shadow:0 22px 54px rgba(0,0,0,.5),inset 0 1px 0 rgba(191,220,245,.06)}
+.mt-card__glow{position:absolute;inset:0;background:radial-gradient(62% 70% at 22% 112%,rgba(74,222,156,.22),transparent 60%);pointer-events:none}
+.mt-card--loss .mt-card__glow{background:radial-gradient(62% 70% at 22% 112%,rgba(240,100,122,.20),transparent 60%)}
+.mt-card>*{position:relative}
+.mt-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:auto}
+.mt-brand{display:inline-flex;align-items:center;gap:9px;color:var(--text-title)}
+.mt-brand__mark{width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow)}
+.mt-brand__mark svg{width:15px;height:15px}
+.mt-brand__txt{display:flex;flex-direction:column;line-height:1.1}
+.mt-brand__txt b{font-family:var(--font-display);font-size:.92rem;letter-spacing:.04em;text-transform:uppercase}
+.mt-brand__txt small{font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+.mt-verif{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-glow);background:var(--accent-glow-soft);border-radius:999px;padding:4px 9px}
+.mt-verif svg{width:12px;height:12px}
+.mt-pair{display:flex;align-items:center;gap:12px;margin:26px 0 6px}
+.mt-pair b{font-family:var(--font-display);text-transform:uppercase;font-size:1.5rem;letter-spacing:.02em;color:var(--text-title)}
+.mt-side{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1px solid}
+.mt-side--long{color:var(--bull);border-color:rgba(74,222,156,.4);background:rgba(74,222,156,.1)}
+.mt-side--short{color:var(--bear);border-color:rgba(240,100,122,.4);background:rgba(240,100,122,.1)}
+.mt-side .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor}
+.mt-pct{font-family:var(--font-display);font-size:clamp(2.8rem,7vw,3.8rem);line-height:.95;letter-spacing:.005em;color:var(--bull);text-shadow:0 0 28px rgba(74,222,156,.4);margin:2px 0}
+.mt-card--loss .mt-pct{color:var(--bear);text-shadow:0 0 28px rgba(240,100,122,.35)}
+.mt-amt{font-family:var(--font-mono);font-size:1.35rem;font-weight:700;color:var(--text-title)}
+.mt-cap{font-family:var(--font-text);font-size:12.5px;color:var(--text-muted);margin-top:4px}
+.mt-sep{height:1px;background:var(--border-subtle);margin:16px 0}
+.mt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mt-stats>div{display:flex;flex-direction:column;gap:4px}
+.mt-stats small{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.mt-stats b{font-family:var(--font-mono);font-size:1.05rem;font-weight:600;color:var(--text-title)}
+.mt-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mt-handle{font-family:var(--font-text);font-weight:700;font-size:14px;color:var(--accent-bright)}
+.mt-meta{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--text-muted)}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Résultats vérifiés</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr">
+
+  <section class="mt-head">
+    <span class="mt-eyebrow"><span class="lt-dot"></span> <span data-en="Community · Proof">Communauté · Preuves</span></span>
+    <h1 class="mt-title" data-en="The trade<br><span class='pr-metal'>wall.</span>">Le mur<br><span class="pr-metal">des trades.</span></h1>
+    <p class="mt-lead" data-en="The results shared by the community — entry, exit, risk/reward and net gain. Cards generated by Le Terminal, verified, ready to share.">Les résultats partagés par la communauté — entrée, sortie, risque/rendement et gain net. Des cartes générées par Le Terminal, vérifiées, prêtes à partager.</p>
+    <p class="mt-disclaim" data-en="Illustrative results. Past performance does not guarantee future results. Trading involves a risk of capital loss.">Résultats illustratifs. Les performances passées ne préjugent pas des performances futures. Le trading comporte un risque de perte en capital.</p>
+  </section>
+
+  <section class="mt-grid" id="mtGrid"></section>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function(){
+  'use strict';
+  // Données illustratives — à brancher plus tard sur les trades réels.
+  var TRADES = [
+    { pair:'BTC/USD', side:'long', pct:318, amount:12740, capital:4000, entry:'62 410', exit:'68 412', rr:'1 : 5.2', handle:'@max_scalp', date:'17 juin 2026' },
+    { pair:'NAS100',  side:'long', pct:142, amount:5680,  capital:4000, entry:'19 240', exit:'19 905', rr:'1 : 3.4', handle:'@julien_fx', date:'16 juin 2026' },
+    { pair:'EUR/USD', side:'short',pct:96,  amount:2304,  capital:2400, entry:'1.0921', exit:'1.0814', rr:'1 : 2.8', handle:'@lea.trades', date:'16 juin 2026' },
+    { pair:'ETH/USD', side:'long', pct:74,  amount:1850,  capital:2500, entry:'3 410',  exit:'3 612',  rr:'1 : 2.1', handle:'@cryptoraph', date:'15 juin 2026' },
+    { pair:'XAU/USD', side:'short',pct:58,  amount:1740,  capital:3000, entry:'2 358',  exit:'2 311',  rr:'1 : 1.9', handle:'@gold_anna', date:'14 juin 2026' },
+    { pair:'GER40',   side:'long', pct:-42, amount:-840,  capital:2000, entry:'18 470', exit:'18 310', rr:'1 : 1.5', handle:'@sam_dax', date:'13 juin 2026' }
+  ];
+  function getLang(){return localStorage.getItem('lt_lang')||'fr';}
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function nb(n){return Math.abs(n).toLocaleString('fr-FR');}
+  function card(t){
+    var win=t.amount>=0, l=getLang();
+    var sideCls=t.side==='long'?'mt-side--long':'mt-side--short';
+    var sideTxt=t.side==='long'?'Long':'Short';
+    var pct=(t.pct>=0?'+':'−')+Math.abs(t.pct)+'%';
+    var amt=(t.amount>=0?'+':'−')+nb(t.amount)+' €';
+    return '<article class="mt-card'+(win?'':' mt-card--loss')+'">'
+      +'<div class="mt-card__glow"></div>'
+      +'<div class="mt-top">'
+        +'<span class="mt-brand"><span class="mt-brand__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>'
+        +'<span class="mt-brand__txt"><b>Le Terminal</b><small>'+(l==='en'?'Trade result':'Résultat de trade')+'</small></span></span>'
+        +'<span class="mt-verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'+(l==='en'?'Verified':'Vérifié')+'</span>'
+      +'</div>'
+      +'<div class="mt-pair"><b>'+esc(t.pair)+'</b><span class="mt-side '+sideCls+'"><span class="lt-dot"></span> '+sideTxt+'</span></div>'
+      +'<div class="mt-pct">'+pct+'</div>'
+      +'<div class="mt-amt">'+amt+'</div>'
+      +'<div class="mt-cap">'+(l==='en'?'Capital risked · ':'Capital engagé · ')+nb(t.capital)+' €</div>'
+      +'<div class="mt-sep"></div>'
+      +'<div class="mt-stats">'
+        +'<div><small>'+(l==='en'?'Entry':'Entrée')+'</small><b>'+esc(t.entry)+'</b></div>'
+        +'<div><small>'+(l==='en'?'Exit':'Sortie')+'</small><b>'+esc(t.exit)+'</b></div>'
+        +'<div><small>R:R</small><b>'+esc(t.rr)+'</b></div>'
+      +'</div>'
+      +'<div class="mt-sep"></div>'
+      +'<div class="mt-foot"><span class="mt-handle">'+esc(t.handle)+'</span><span class="mt-meta">le-terminal.app · '+esc(t.date)+'</span></div>'
+    +'</article>';
+  }
+  function render(){var g=document.getElementById('mtGrid');if(g)g.innerHTML=TRADES.map(card).join('');}
+  window.ecoReloadNews=render;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
+})();
+</script>
+</body>
+</html>
