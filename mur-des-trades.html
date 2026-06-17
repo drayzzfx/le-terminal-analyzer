@@ -219,8 +219,19 @@
 <script>
 (function(){
   'use strict';
-  // Fond « jet privé » : dépose le fichier ici pour l'activer (sinon dégradé luxe).
-  var JET_SRC = './assets/trade-jet.jpg';
+  // Fond « jet privé » : on tente d'abord ta vraie photo (assets/trade-jet.jpg),
+  // sinon on retombe sur l'illustration vectorielle (assets/trade-jet.svg).
+  var JET_CANDIDATES = ['./assets/trade-jet.jpg', './assets/trade-jet.svg'];
+  var JET_SRC = JET_CANDIDATES[1];
+  function resolveJet(cb){
+    var i=0;
+    (function tryNext(){
+      if(i>=JET_CANDIDATES.length){cb(null);return;}
+      var src=JET_CANDIDATES[i++], im=new Image(); im.crossOrigin='anonymous';
+      im.onload=function(){JET_SRC=src;cb(src,im);};
+      im.onerror=tryNext; im.src=src;
+    })();
+  }
 
   var SHARES = [
     { h:'@max_scalp',   pair:'BTC/USD', side:'long',  pct:318, amount:12720, mins:2,   likes:248 },
@@ -267,8 +278,8 @@
     document.getElementById('tcHandle').textContent=document.getElementById('gHandle').value||'@trader';
     var d=new Date(); document.getElementById('tcMeta').textContent='le-terminal.app · '+d.toLocaleDateString(l==='en'?'en-GB':'fr-FR',{day:'numeric',month:'long',year:'numeric'});
   }
-  // Active le fond jet s'il existe
-  (function(){var img=new Image();img.onload=function(){document.getElementById('tcBg').style.backgroundImage='url('+JET_SRC+')';};img.src=JET_SRC;})();
+  // Active le fond jet (photo réelle prioritaire, sinon illustration vectorielle)
+  resolveJet(function(src){ if(src) document.getElementById('tcBg').style.backgroundImage='url('+src+')'; });
 
   document.getElementById('gSide').addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b)return; side=b.getAttribute('data-side');
