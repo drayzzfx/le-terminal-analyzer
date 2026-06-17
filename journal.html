@@ -268,6 +268,25 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
 /* PLATFORM PICKER */
 .platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.pf-firms-label{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--text3);margin:4px 0 8px}
+.pf-firms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.pf-firm{padding:7px 13px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.25);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.pf-firm:hover{background:rgba(127,184,232,.18);border-color:rgba(127,184,232,.5)}
+.pf-firms-or{text-align:center;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:0 0 14px}
+.pf-combo{position:relative;margin-bottom:14px}
+.pf-combo__input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.pf-combo__input:focus{border-color:rgba(127,184,232,.5)}
+.pf-combo__list{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:240px;overflow-y:auto;background:#10141B;border:1px solid rgba(127,184,232,.25);border-radius:10px;box-shadow:0 18px 50px rgba(0,0,0,.6);z-index:20;display:none;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}
+.pf-combo__list.show{display:block}
+.pf-combo__list::-webkit-scrollbar{width:7px}
+.pf-combo__list::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+.pf-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 13px;cursor:pointer;transition:background .12s;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;color:var(--text2)}
+.pf-opt:hover,.pf-opt.active{background:rgba(127,184,232,.1);color:var(--text)}
+.pf-opt__plat{font-family:var(--font-mono,monospace);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:50px;padding:2px 8px;flex-shrink:0}
+.pf-opt__none{padding:12px 13px;color:var(--text3);font-size:12.5px}
+.pf-opt--soon{opacity:.45;cursor:not-allowed}
+.pf-opt--soon:hover{background:transparent;color:var(--text2)}
+.pf-opt__plat--soon{color:var(--accent,#7FB8E8);background:rgba(127,184,232,.10);border-color:rgba(127,184,232,.3)}
 .platform-card{padding:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
 .platform-card:hover{border-color:rgba(127,184,232,.4);background:rgba(127,184,232,.06)}
 .platform-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
@@ -474,15 +493,34 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <span class="jr-panel__title" data-en="Equity curve">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
-      <div class="jr-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
-          <span class="jr-panel__title" style="margin:0" data-en="AI Coach">IA Coach</span>
-          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
+
+      <!-- BROKER BANNER (colonne droite, sous la courbe) -->
+      <div class="broker-banner disconnected" id="brokerBanner">
+        <div class="broker-banner-left">
+          <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
+          <div class="broker-banner-text">
+            <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connecte ton compte de trading</div>
+            <div class="broker-banner-sub" id="brokerSub" data-en="Topstep · FTMO · TradeLocker · DXtrade · CSV">Topstep · FTMO · TradeLocker · DXtrade · CSV</div>
+          </div>
         </div>
-        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-          <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
+        <div class="broker-banner-actions" id="brokerActions">
+          <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="openBrokerModal()" data-en="Connect">Connecter</button>
         </div>
       </div>
+
+      <!-- ADD TRADE (colonne droite) -->
+      <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
+    </div>
+  </div>
+
+  <!-- IA COACH — pleine largeur, en dessous du journal -->
+  <div class="jr-panel" id="globalIaPanel" style="margin-bottom:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
+      <span class="jr-panel__title" style="margin:0" data-en="AI Coach — Performance analysis">IA Coach — Analyse de performance</span>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
+    </div>
+    <div id="globalIaContent" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
     </div>
   </div>
 
@@ -492,22 +530,6 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div class="jr-tbl" id="jrRecent"><div class="jr-empty" data-en="No trades recorded yet.">Aucun trade enregistré pour l'instant.</div></div>
   </div>
 
-  <!-- BROKER BANNER -->
-  <div class="broker-banner disconnected" id="brokerBanner">
-    <div class="broker-banner-left">
-      <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
-      <div class="broker-banner-text">
-        <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connecte ton compte de trading</div>
-        <div class="broker-banner-sub" id="brokerSub" data-en="MT4 · MT5 · Topstep · FTMO · CSV import">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
-      </div>
-    </div>
-    <div class="broker-banner-actions" id="brokerActions">
-      <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="openBrokerModal()" data-en="Connect">Connecter</button>
-    </div>
-  </div>
-
-  <!-- ADD TRADE -->
-  <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
 
 </div>
 </div>
@@ -642,11 +664,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div id="brokerStep1">
       <div class="modal-title" data-en="Connect an account">Connecter un compte</div>
       <div class="modal-sub" data-en="Choose your trading platform">Choisis ta plateforme de trading</div>
+
+      <!-- Prop firms — menu déroulant recherchable, connexion directe (sync auto), sans CSV -->
+      <div class="pf-firms-label" data-en="Your prop firm? Search &amp; connect (auto-sync):">Ta prop firm ? Cherche et connecte (sync auto) :</div>
+      <div class="pf-combo" id="pfCombo">
+        <input type="text" class="pf-combo__input" id="pfSearch" placeholder="Rechercher ta prop firm…" autocomplete="off">
+        <div class="pf-combo__list" id="pfDropdown"></div>
+      </div>
+      <div class="pf-firms-or" data-en="— or choose a platform —">— ou choisis une plateforme —</div>
+
       <div class="platform-grid">
         <div class="platform-card" onclick="showBrokerStep2('metaapi')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
           <div class="platform-card-name">MT4 / MT5</div>
-          <div class="platform-card-sub" data-en="Via MetaApi<br>Automatic sync">Via MetaApi<br>Sync automatique</div>
+          <div class="platform-card-sub" data-en="Advanced · requires MetaApi">Avancé · requiert MetaApi</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('csv')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
@@ -677,23 +708,77 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <button class="mt-btn" id="mtBtn5" onclick="selectMtType('mt5')">MT5</button>
       </div>
 
-      <div class="broker-steps">
-        <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
-        <b>2.</b> Ajoute ton compte <span id="mtTypeLabel">MT4</span> (broker + login + password)<br>
-        <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+      <div class="broker-steps" data-en="Enter the credentials of your prop-firm / broker account (the same ones you use to log into MT4/MT5). The connection and sync are automatic.">
+        Entre les identifiants de ton compte prop firm / broker (les mêmes que pour te connecter à MT4/MT5). La connexion et la synchro sont automatiques.
       </div>
 
-      <div class="broker-field">
-        <label>Auth Token MetaApi</label>
-        <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+      <!-- Mode simple : identifiants du compte -->
+      <div id="mtSimple">
+        <div class="broker-field">
+          <label data-en="Account login (number)">Login du compte (numéro)</label>
+          <input type="text" id="mtLoginInput" placeholder="ex. 51234567" autocomplete="off">
+        </div>
+        <div class="broker-field">
+          <label data-en="Investor / account password">Mot de passe (investisseur ou maître)</label>
+          <input type="password" id="mtPassInput" placeholder="••••••••" autocomplete="off">
+        </div>
+        <div class="broker-field">
+          <label data-en="Server (shown in your platform)">Serveur (affiché dans ta plateforme)</label>
+          <input type="text" id="mtServerInput" placeholder="ex. FTMO-Server, FundingPips-Live…" autocomplete="off">
+        </div>
+        <p class="pf-hint" style="margin:0 0 12px" data-en="Tip: an investor (read-only) password is enough to sync your history.">Astuce : un mot de passe « investisseur » (lecture seule) suffit pour synchroniser ton historique.</p>
       </div>
-      <div class="broker-field">
-        <label>Account ID</label>
-        <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-      </div>
+
+      <!-- Mode avancé : token MetaApi (repli) -->
+      <details id="mtAdvanced" style="margin-bottom:14px">
+        <summary style="cursor:pointer;font-size:12px;color:var(--text3);margin-bottom:10px" data-en="Advanced: connect with my own MetaApi token">Avancé : connecter avec mon propre token MetaApi</summary>
+        <div class="broker-field">
+          <label>Auth Token MetaApi</label>
+          <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+        </div>
+        <div class="broker-field">
+          <label>Account ID</label>
+          <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        </div>
+      </details>
+
       <div class="broker-error" id="brokerError"></div>
       <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
         <span id="brokerSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2px: ProjectX (futures: Topstep, Tradeify, Lucid…) -->
+    <div id="brokerStep2PX" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
+      <div class="modal-title" data-en="Futures account (ProjectX)">Compte futures (ProjectX)</div>
+      <div class="modal-sub" data-en="Topstep · Tradeify · Lucid · other ProjectX firms">Topstep · Tradeify · Lucid · autres firms ProjectX</div>
+      <div class="broker-steps" data-en="1. In your prop firm dashboard → API / API Key section, generate a key.<br>2. Enter your username and the key below. Sync is automatic.">
+        <b>1.</b> Dans le dashboard de ta prop firm → section <b>API / API Key</b>, génère une clé.<br>
+        <b>2.</b> Entre ton identifiant et la clé ci-dessous. La synchro est automatique.
+      </div>
+      <div class="broker-field">
+        <label data-en="Prop firm">Prop firm</label>
+        <select class="broker-field" id="pxFirmSelect" onchange="pxOnFirmChange()" style="padding:11px 14px">
+          <option value="api.topstepx.com">Topstep (TopstepX)</option>
+          <option value="" data-en="Other (enter API URL)">Autre (saisir l'URL API)</option>
+        </select>
+      </div>
+      <div class="broker-field" id="pxBaseField" style="display:none">
+        <label data-en="Your firm's API URL">URL API de ta firm</label>
+        <input type="text" id="pxBaseInput" placeholder="api.xxxxx.com" autocomplete="off">
+      </div>
+      <div class="broker-field">
+        <label data-en="Username">Identifiant (username)</label>
+        <input type="text" id="pxUserInput" placeholder="ton_username" autocomplete="off">
+      </div>
+      <div class="broker-field">
+        <label data-en="API key">Clé API</label>
+        <input type="password" id="pxKeyInput" placeholder="••••••••" autocomplete="off">
+      </div>
+      <div class="broker-error" id="pxError"></div>
+      <button class="submit-btn" id="pxSaveBtn" onclick="savePXConnection()">
+        <span id="pxSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
       </button>
     </div>
 
@@ -1710,17 +1795,106 @@ var parsedCsvTrades = [];
 function openBrokerModal() {
   showBrokerStep1();
   document.getElementById('brokerModal').classList.add('show');
+  var s = document.getElementById('pfSearch'); if(s) s.value='';
+  pfSetup();
 }
 function closeBrokerModal() { document.getElementById('brokerModal').classList.remove('show'); }
 
 function showBrokerStep1() {
-  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX'].forEach(function(id) {
+  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX','brokerStep2PX'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = id === 'brokerStep1' ? '' : 'none';
   });
 }
-function showBrokerStep2(type) {
+function pxOnFirmChange(){
+  var sel = document.getElementById('pxFirmSelect');
+  var f = document.getElementById('pxBaseField');
+  if(f) f.style.display = (sel && sel.value) ? 'none' : '';
+}
+
+// ── Liste des prop firms (recherche) → plateforme de connexion ──
+// platform: dxtrade | tradelocker | metaapi | projectx | csv ; base (projectx) = URL API
+var PROP_FIRMS = [
+  // Forex / CFD
+  { n:'FTMO', p:'dxtrade' }, { n:'FundedNext', p:'dxtrade' }, { n:'FundingPips', p:'tradelocker' },
+  { n:'The5ers', p:'tradelocker' }, { n:'E8 Markets', p:'tradelocker' }, { n:'MyFundedFX', p:'tradelocker' },
+  { n:'Alpha Capital Group', p:'tradelocker' }, { n:'FundingTraders', p:'dxtrade' }, { n:'FunderPro', p:'dxtrade' },
+  { n:'Goat Funded Trader', p:'tradelocker' }, { n:'Instant Funding', p:'tradelocker' }, { n:'Blueberry Funded', p:'tradelocker' },
+  { n:'City Traders Imperium', p:'metaapi' }, { n:'Audacity Capital', p:'metaapi' }, { n:'Lark Funding', p:'tradelocker' },
+  { n:'Quantec Capital', p:'tradelocker' }, { n:'Maven Trading', p:'tradelocker' }, { n:'Aqua Funded', p:'tradelocker' },
+  { n:'PipFarm', p:'dxtrade' }, { n:'Hola Prime', p:'tradelocker' }, { n:'FundedFirm', p:'tradelocker' },
+  { n:'Brightfunded', p:'tradelocker' }, { n:'The Trading Pit', p:'dxtrade' }, { n:'5%ers High Stakes', p:'tradelocker' },
+  { n:'Funded Trading Plus', p:'metaapi' }, { n:'OFP Funding', p:'metaapi' }, { n:'Nordic Funder', p:'tradelocker' },
+  // Futures (ProjectX) — base connue : Topstep ; sinon saisie URL
+  { n:'Topstep', p:'projectx', b:'api.topstepx.com' },
+  { n:'Tradeify', p:'projectx', b:'' }, { n:'Lucid Trading', p:'projectx', b:'' },
+  { n:'MyFundedFutures', p:'projectx', b:'' }, { n:'Alpha Futures', p:'projectx', b:'' },
+  { n:'Bulenox', p:'projectx', b:'' }, { n:'Blusky', p:'projectx', b:'' },
+  { n:'TakeProfit Trader', p:'projectx', b:'' }, { n:'Legends Trading', p:'projectx', b:'' },
+  { n:'The Futures Desk', p:'projectx', b:'' }, { n:'Goat Futures', p:'projectx', b:'' },
+  // Futures sur Rithmic/Tradovate → non supporté en direct (import CSV)
+  { n:'Apex Trader Funding', p:'csv' }, { n:'Tradovate', p:'csv' }, { n:'NinjaTrader', p:'csv' }
+];
+var PLAT_LABEL = { dxtrade:'DXtrade', tradelocker:'TradeLocker', metaapi:'MT4/MT5', projectx:'ProjectX', csv:'CSV' };
+var _pfActive = -1;
+function pfRender(filter){
+  var list = document.getElementById('pfDropdown'); if(!list) return;
+  var q = (filter||'').toLowerCase().trim();
+  var rows = PROP_FIRMS.filter(function(f){ return !q || f.n.toLowerCase().indexOf(q)>-1; })
+    .sort(function(a,b){ return a.n.localeCompare(b.n); });
+  _pfActive = -1;
+  if(!rows.length){ list.innerHTML = '<div class="pf-opt__none">Aucune firm — utilise « choisir une plateforme » ci-dessous.</div>'; return; }
+  list.innerHTML = rows.map(function(f){
+    var arg = f.p==='projectx' ? (f.b||'') : '';
+    if(f.p==='metaapi'){ // MT4/MT5 → bientôt (nécessitera MetaApi)
+      return '<div class="pf-opt pf-opt--soon" aria-disabled="true">'
+        + '<span>'+f.n+'</span><span class="pf-opt__plat pf-opt__plat--soon">MT5 · SOON</span></div>';
+    }
+    return '<div class="pf-opt" data-plat="'+f.p+'" data-arg="'+arg+'">'
+      + '<span>'+f.n+'</span><span class="pf-opt__plat">'+(PLAT_LABEL[f.p]||f.p)+'</span></div>';
+  }).join('');
+}
+function pfSetup(){
+  var input = document.getElementById('pfSearch');
+  var list = document.getElementById('pfDropdown');
+  if(!input || !list || input._pfBound) return;
+  input._pfBound = true;
+  function open(){ pfRender(input.value); list.classList.add('show'); }
+  input.addEventListener('focus', open);
+  input.addEventListener('input', open);
+  list.addEventListener('mousedown', function(e){
+    var opt = e.target.closest('.pf-opt'); if(!opt) return;
+    e.preventDefault();
+    if(opt.classList.contains('pf-opt--soon')) return; // MT5 bientôt → non cliquable
+    var plat = opt.getAttribute('data-plat'), arg = opt.getAttribute('data-arg');
+    list.classList.remove('show'); input.blur();
+    if(plat==='csv'){ showBrokerStep2('csv'); }
+    else if(plat==='projectx'){ showBrokerStep2('projectx', arg); }
+    else { showBrokerStep2(plat); }
+  });
+  document.addEventListener('click', function(e){ if(!e.target.closest('#pfCombo')) list.classList.remove('show'); });
+}
+function showBrokerStep2(type, firm) {
   document.getElementById('brokerStep1').style.display = 'none';
+  if (type === 'projectx') {
+    document.getElementById('brokerStep2PX').style.display = '';
+    var sel = document.getElementById('pxFirmSelect');
+    ['pxUserInput','pxKeyInput'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+    var bi = document.getElementById('pxBaseInput'); if(bi) bi.value='';
+    // firm peut être 'topstep' (clé) ou directement une base 'api.xxx.com'
+    var MAP = { topstep:'api.topstepx.com' };
+    var base = firm ? (MAP[firm] || firm) : '';
+    if(sel){
+      var matchOpt = base && [].some.call(sel.options, function(o){ return o.value===base; });
+      sel.value = matchOpt ? base : '';
+      pxOnFirmChange();
+      if(!matchOpt && base && bi) bi.value = base;
+    }
+    document.getElementById('pxError').textContent='';
+    document.getElementById('pxSaveTxt').textContent='Connecter et synchroniser';
+    document.getElementById('pxSaveBtn').disabled=false;
+    return;
+  }
   if (type === 'metaapi') {
     document.getElementById('brokerStep2MetaApi').style.display = '';
     document.getElementById('brokerTokenInput').value = '';
@@ -1771,18 +1945,25 @@ function selectCsvFormat(f) {
 async function saveBrokerConnection() {
   var token = document.getElementById('brokerTokenInput').value.trim();
   var accountId = document.getElementById('brokerAccountInput').value.trim();
+  var login = (document.getElementById('mtLoginInput')||{}).value ? document.getElementById('mtLoginInput').value.trim() : '';
+  var pass = (document.getElementById('mtPassInput')||{}).value ? document.getElementById('mtPassInput').value.trim() : '';
+  var server = (document.getElementById('mtServerInput')||{}).value ? document.getElementById('mtServerInput').value.trim() : '';
   var errEl = document.getElementById('brokerError');
   errEl.textContent = '';
-  if (!token || !accountId) { errEl.textContent = 'Remplis les deux champs'; return; }
+  var useSimple = login && pass && server;
+  if (!useSimple && (!token || !accountId)) { errEl.textContent = 'Entre login + mot de passe + serveur (ou utilise le mode avancé)'; return; }
   if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
   var btn = document.getElementById('brokerSaveBtn');
   btn.disabled = true;
-  document.getElementById('brokerSaveTxt').textContent = 'Vérification…';
+  document.getElementById('brokerSaveTxt').textContent = 'Connexion…';
   try {
+    var payload = useSimple
+      ? { login: login, password: pass, server: server, platform: selectedMtType }
+      : { metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType };
     var res = await fetch('/api/broker-connect', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
-      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType })
+      body: JSON.stringify(payload)
     });
     var data = await res.json();
     if (!res.ok) {
@@ -1799,6 +1980,35 @@ async function saveBrokerConnection() {
     errEl.textContent = 'Erreur réseau';
     btn.disabled = false;
     document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+// ── ProjectX (futures) connection ──
+async function savePXConnection() {
+  var sel = document.getElementById('pxFirmSelect');
+  var base = (sel && sel.value) ? sel.value : (document.getElementById('pxBaseInput').value || '').trim();
+  var user = (document.getElementById('pxUserInput').value || '').trim();
+  var key = (document.getElementById('pxKeyInput').value || '').trim();
+  var errEl = document.getElementById('pxError');
+  errEl.textContent = '';
+  if (!base || !user || !key) { errEl.textContent = 'Firm + identifiant + clé API requis'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('pxSaveBtn');
+  btn.disabled = true; document.getElementById('pxSaveTxt').textContent = 'Connexion…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'projectx', pxBase: base, pxUsername: user, pxApiKey: key })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('pxSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true; window._brokerPlatform = 'projectx';
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'projectx', accountName: data.accountName });
+    syncBroker('projectx');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('pxSaveTxt').textContent = 'Connecter et synchroniser';
   }
 }
 
@@ -1868,6 +2078,7 @@ async function syncBroker(platformOverride) {
   var endpoint = '/api/sync-broker';
   if (platform === 'tradelocker') endpoint = '/api/sync-tradelocker';
   else if (platform === 'dxtrade') endpoint = '/api/sync-dxtrade';
+  else if (platform === 'projectx') endpoint = '/api/sync-projectx';
   try {
     var res = await fetch(endpoint, {
       method: 'POST',

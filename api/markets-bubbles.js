@@ -9,7 +9,7 @@ const STABLES = new Set(['usdt','usdc','dai','usds','fdusd','tusd','usde','busd'
 // Forex / indices / commodities — Yahoo symbol + relative weight w (≈ market
 // prominence, in 1e11 units so it's comparable to crypto caps/1e11) + decimals.
 const NONCRYPTO = [
-  // Forex (majors + 2 crosses)
+  // Forex — majors
   { name: 'EUR/USD', cat: 'forex', y: 'EURUSD=X', w: 6.5, dec: 4 },
   { name: 'USD/JPY', cat: 'forex', y: 'JPY=X',    w: 4.8, dec: 2 },
   { name: 'GBP/USD', cat: 'forex', y: 'GBPUSD=X', w: 3.4, dec: 4 },
@@ -17,22 +17,52 @@ const NONCRYPTO = [
   { name: 'USD/CAD', cat: 'forex', y: 'CAD=X',    w: 1.8, dec: 4 },
   { name: 'USD/CHF', cat: 'forex', y: 'CHF=X',    w: 1.6, dec: 4 },
   { name: 'NZD/USD', cat: 'forex', y: 'NZDUSD=X', w: 1.1, dec: 4 },
+  // Forex — crosses
   { name: 'EUR/JPY', cat: 'forex', y: 'EURJPY=X', w: 1.6, dec: 2 },
+  { name: 'EUR/GBP', cat: 'forex', y: 'EURGBP=X', w: 1.5, dec: 4 },
+  { name: 'EUR/CHF', cat: 'forex', y: 'EURCHF=X', w: 1.2, dec: 4 },
+  { name: 'EUR/AUD', cat: 'forex', y: 'EURAUD=X', w: 1.0, dec: 4 },
+  { name: 'GBP/JPY', cat: 'forex', y: 'GBPJPY=X', w: 1.4, dec: 2 },
+  { name: 'GBP/CHF', cat: 'forex', y: 'GBPCHF=X', w: 0.9, dec: 4 },
+  { name: 'AUD/JPY', cat: 'forex', y: 'AUDJPY=X', w: 1.0, dec: 2 },
+  { name: 'CAD/JPY', cat: 'forex', y: 'CADJPY=X', w: 0.9, dec: 2 },
+  { name: 'CHF/JPY', cat: 'forex', y: 'CHFJPY=X', w: 0.9, dec: 2 },
+  { name: 'NZD/JPY', cat: 'forex', y: 'NZDJPY=X', w: 0.8, dec: 2 },
+  // Forex — exotiques
+  { name: 'USD/MXN', cat: 'forex', y: 'MXN=X', w: 1.2, dec: 4 },
+  { name: 'USD/ZAR', cat: 'forex', y: 'ZAR=X', w: 1.0, dec: 4 },
+  { name: 'USD/SEK', cat: 'forex', y: 'SEK=X', w: 0.9, dec: 4 },
+  { name: 'USD/NOK', cat: 'forex', y: 'NOK=X', w: 0.9, dec: 4 },
+  { name: 'USD/SGD', cat: 'forex', y: 'SGD=X', w: 0.9, dec: 4 },
+  { name: 'USD/TRY', cat: 'forex', y: 'TRY=X', w: 1.0, dec: 4 },
   // Indices
   { name: 'S&P 500',   cat: 'indices', y: '^GSPC',   w: 6.0, dec: 0 },
   { name: 'Nasdaq 100',cat: 'indices', y: '^NDX',    w: 5.0, dec: 0 },
   { name: 'Dow Jones', cat: 'indices', y: '^DJI',    w: 4.0, dec: 0 },
+  { name: 'Russell 2000', cat: 'indices', y: '^RUT', w: 2.4, dec: 0 },
   { name: 'DAX',       cat: 'indices', y: '^GDAXI',  w: 2.6, dec: 0 },
   { name: 'CAC 40',    cat: 'indices', y: '^FCHI',   w: 2.1, dec: 0 },
   { name: 'FTSE 100',  cat: 'indices', y: '^FTSE',   w: 2.2, dec: 0 },
+  { name: 'Euro Stoxx 50', cat: 'indices', y: '^STOXX50E', w: 2.3, dec: 0 },
+  { name: 'IBEX 35',   cat: 'indices', y: '^IBEX',   w: 1.6, dec: 0 },
+  { name: 'SMI',       cat: 'indices', y: '^SSMI',   w: 1.7, dec: 0 },
+  { name: 'AEX',       cat: 'indices', y: '^AEX',    w: 1.5, dec: 0 },
   { name: 'Nikkei',    cat: 'indices', y: '^N225',   w: 2.5, dec: 0 },
+  { name: 'Hang Seng', cat: 'indices', y: '^HSI',    w: 2.2, dec: 0 },
+  { name: 'ASX 200',   cat: 'indices', y: '^AXJO',   w: 1.8, dec: 0 },
+  { name: 'TSX',       cat: 'indices', y: '^GSPTSE', w: 1.9, dec: 0 },
   // Matières premières
   { name: 'Or',        cat: 'matieres', y: 'GC=F', w: 4.2, dec: 1 },
   { name: 'Argent',    cat: 'matieres', y: 'SI=F', w: 1.6, dec: 2 },
+  { name: 'Platine',   cat: 'matieres', y: 'PL=F', w: 1.2, dec: 1 },
+  { name: 'Palladium', cat: 'matieres', y: 'PA=F', w: 1.1, dec: 1 },
   { name: 'Pétrole WTI', cat: 'matieres', y: 'CL=F', w: 3.0, dec: 2 },
   { name: 'Brent',     cat: 'matieres', y: 'BZ=F', w: 3.0, dec: 2 },
   { name: 'Gaz nat.',  cat: 'matieres', y: 'NG=F', w: 1.3, dec: 2 },
   { name: 'Cuivre',    cat: 'matieres', y: 'HG=F', w: 1.5, dec: 3 },
+  { name: 'Blé',       cat: 'matieres', y: 'ZW=F', w: 1.0, dec: 2 },
+  { name: 'Maïs',      cat: 'matieres', y: 'ZC=F', w: 1.0, dec: 2 },
+  { name: 'Café',      cat: 'matieres', y: 'KC=F', w: 0.9, dec: 2 },
 ];
 
 function fetchJson(hostname, path) {
@@ -75,14 +105,14 @@ module.exports = async function handler(req, res) {
 
   const assets = [];
   const results = await Promise.all([
-    fetchJson('api.coingecko.com', '/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=24&page=1&price_change_percentage=24h').catch(() => []),
+    fetchJson('api.coingecko.com', '/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=60&page=1&price_change_percentage=24h').catch(() => []),
     ...NONCRYPTO.map((a) => fetchYahoo(a.y)),
   ]);
 
   const cg = results[0];
   (Array.isArray(cg) ? cg : [])
     .filter((c) => c && c.symbol && !STABLES.has(String(c.symbol).toLowerCase()) && c.market_cap)
-    .slice(0, 16)
+    .slice(0, 40)
     .forEach((c) => assets.push({
       name: String(c.symbol).toUpperCase(), cat: 'crypto',
       change: +(c.price_change_percentage_24h || 0).toFixed(2),

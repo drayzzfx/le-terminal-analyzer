@@ -45,30 +45,25 @@ function supabaseReq(method, path, body, key) {
 }
 
 async function dxLogin(domain, login, password) {
-  // DXtrade uses domain-specific auth endpoint
-  const r = await httpsReq('POST', domain, '/dxsca-web/accounts', {},
-    { login, password, domain });
-  if (r.status === 200 && r.body.sessionToken) return r.body.sessionToken;
-  // Fallback: try /api/auth
-  const r2 = await httpsReq('POST', domain, '/api/auth/login', {},
-    { username: login, password });
-  if (r2.status === 200 && (r2.body.token || r2.body.accessToken || r2.body.sessionToken)) {
-    return r2.body.token || r2.body.accessToken || r2.body.sessionToken;
-  }
-  throw new Error('Auth DXtrade échouée — vérifie le domaine, login et mot de passe');
+  // DXsca (Devexperts) : login via /dxsca-web/login {username, domain, password}
+  const tenant = login.indexOf('@') > -1 ? login.split('@')[1] : 'default';
+  const userOnly = login.indexOf('@') > -1 ? login.split('@')[0] : login;
+  const r = await httpsReq('POST', domain, '/dxsca-web/login', {},
+    { username: userOnly, domain: tenant, password });
+  if (r.status === 200 && r.body && r.body.sessionToken) return r.body.sessionToken;
+  throw new Error('Auth DXtrade échouée — vérifie l\'URL, le login et le mot de passe');
 }
 
 async function dxGetPositions(domain, sessionToken, since) {
-  const sinceParam = since ? `&from=${new Date(since).toISOString()}` : '';
-  const r = await httpsReq('GET', domain,
-    `/dxsca-web/positions?status=CLOSED${sinceParam}`,
-    { 'Authorization': `Bearer ${sessionToken}`, 'DXAPI-SESSION': sessionToken });
+  // DXsca utilise l'en-tête Authorization: DXAPI <sessionToken>
+  const auth = { 'Authorization': `DXAPI ${sessionToken}` };
+  const r = await httpsReq('GET', domain, '/dxsca-web/positions', auth);
   if (Array.isArray(r.body)) return r.body;
-  if (r.body?.positions) return r.body.positions;
-  // try alternate endpoint
-  const r2 = await httpsReq('GET', domain, '/dxsca-web/accounts/0/positions/history',
-    { 'Authorization': `Bearer ${sessionToken}` });
+  if (r.body && r.body.positions) return r.body.positions;
+  // Fallback : historique des ordres
+  const r2 = await httpsReq('GET', domain, '/dxsca-web/orders/history', auth);
   if (Array.isArray(r2.body)) return r2.body;
+  if (r2.body && r2.body.orders) return r2.body.orders;
   return [];
 }
 

@@ -22,8 +22,8 @@ module.exports = async function handler(req, res) {
     }
 
     const payload = JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
+      model: 'claude-opus-4-8',
+      max_tokens: 6000,
       system,
       messages
     });

@@ -142,16 +142,24 @@
   }
 
   function buildFooter() {
-    var isPro = false, loggedIn = false, email = '';
+    var isPro = false, loggedIn = false, email = '', pseudo = '', avatar = '';
     try {
       isPro = localStorage.getItem('lt_pro') === '1';
       loggedIn = !!localStorage.getItem('ta_token');
       email = localStorage.getItem('ta_email') || '';
+      pseudo = localStorage.getItem('lt_pseudo') || '';
+      avatar = localStorage.getItem('lt_avatar') || '';
     } catch(e) {}
-    // Connecté (et a fortiori PRO) → on remplace la pub PRO par email + déconnexion
     if (loggedIn && isPro) {
+      var displayName = pseudo || (email ? email.split('@')[0] : 'Mon compte');
+      var initial = (displayName.charAt(0) || '?').toUpperCase();
+      var av = avatar
+        ? '<img src="' + avatar + '" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'
+        : '<span style="width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0095FF,#38B6FF);color:#fff;font-family:var(--font-display,\'Anton\',sans-serif);font-size:15px">' + initial + '</span>';
       return '<div class="side__pro side__account" id="sideFooter">'
-        + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#7E8794);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
+        + '<div class="side__acct">' + av
+        + '<div class="side__acct-txt"><span class="side__acct-name">' + displayName + '</span>'
+        + (email ? '<span class="side__acct-mail">' + email + '</span>' : '') + '</div></div>'
         + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
     }
     return '<div class="side__pro" id="sideFooter"><h4>Accès Premium</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
@@ -204,6 +212,10 @@
       + '.side__subitem:hover .side__ic{color:var(--accent)}'
       + '.side__sub--deep{margin-left:12px}'
       + '.side__subitem--deep{font-size:12.5px;padding:6px 10px}'
+      + '.side__acct{display:flex;align-items:center;gap:10px;margin-bottom:12px;min-width:0}'
+      + '.side__acct-txt{display:flex;flex-direction:column;min-width:0}'
+      + '.side__acct-name{font-family:var(--font-display,"Anton",sans-serif);text-transform:uppercase;letter-spacing:.02em;font-size:14px;color:var(--text-title,#F2F4F7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+      + '.side__acct-mail{font-family:var(--font-text,"Inter",sans-serif);font-size:11px;color:var(--text-muted,#7E8794);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
       // Force la police/interligne du design dans la barre latérale (eco.css impose
       // sinon sa propre police plus large → libellés sur 2 lignes sur les pages éco)
       + '.side, .side__label, .side__item, .side__subitem, .side__pro, .side__pro *{font-family:var(--font-text,"Inter",system-ui,sans-serif);line-height:1.2}'
