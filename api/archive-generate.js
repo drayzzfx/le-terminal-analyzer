@@ -66,16 +66,12 @@ async function claudeSummary(zoneLabel, dayStr, items) {
     `${i + 1}. [${it.sentiment || 'Neutre'}] (${it.source || '?'}) ${it.title}${it.summary ? ' — ' + it.summary : ''}`
   ).join('\n');
 
-  const system = `Tu es l'éditorialiste macro en chef de « Le Terminal ». Tu produis le bilan de fin de journée d'une zone : à la fois un résumé court (pour une carte) ET un rapport long, détaillé et pédagogique (pour une page dédiée). Approfondi mais clair et accessible à tout lecteur : tu expliques simplement les termes techniques. Factuel, dense, jamais creux. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide.`;
+  const system = `Tu es l'éditorialiste macro en chef de « Le Terminal ». Tu rédiges le bilan de fin de journée d'une zone : un rapport long, détaillé et pédagogique. Approfondi mais clair et accessible à tout lecteur : tu expliques simplement les termes techniques. Factuel, dense, jamais creux. Ton direct, en français, tu tutoies le lecteur. Pas d'emoji. Tu réponds UNIQUEMENT par un objet JSON valide : {"report":"...","bias":"Positif|Négatif|Neutre"}.`;
   const user = `Zone : ${zoneLabel}. Journée du ${dayStr}.
 Voici TOUTES les annonces de la journée pour cette zone (utilise-les TOUTES, relie-les entre elles) :
 ${lines}
 
-Produis DEUX livrables :
-
-1) Un RÉSUMÉ COURT (champ "fr") : 2 à 3 phrases, l'essentiel et l'orientation du jour, pour une carte.
-
-2) Un RAPPORT LONG, DÉTAILLÉ ET AÉRÉ (champ "report_fr") : développe vraiment, plusieurs paragraphes. Structure-le avec des sections, chacune sur une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
+Rédige un RAPPORT LONG, DÉTAILLÉ ET AÉRÉ (champ "report"). Développe vraiment, plusieurs paragraphes par section. Structure-le avec des sections, chacune sur une ligne « ## » suivie d'un titre court, puis un ou plusieurs paragraphes. Utilise EXACTEMENT ces sections, dans cet ordre :
 ## Vue d'ensemble
 ## Les faits marquants
 ## Décryptage
@@ -83,14 +79,14 @@ Produis DEUX livrables :
 ## Impact sur les marchés
 ## Ce qu'il faut surveiller
 ## À retenir
-Consignes pour le rapport : prends en compte TOUTES les annonces ; explique le POURQUOI et les implications concrètes (actions, taux, devises, matières premières) ; reste compréhensible (explique les termes techniques en quelques mots) ; cite chiffres, niveaux et noms propres ; « ## À retenir » = 3 à 5 puces commençant par « - ». Si la matière est pauvre, reste honnête et plus bref plutôt que de meubler.
 
-Réponds UNIQUEMENT par ce JSON :
-{"fr":"<résumé court FR>","en":"<short summary EN>","report_fr":"<rapport long FR avec ## et puces ->","report_en":"<long report EN, même structure>","bias":"Positif|Négatif|Neutre"}`;
+Consignes : prends en compte TOUTES les annonces ; explique le POURQUOI et les implications concrètes (actions, taux, devises, matières premières) ; reste compréhensible (explique les termes techniques en quelques mots) ; cite chiffres, niveaux et noms propres ; « ## À retenir » = 3 à 5 puces commençant par « - ». Si la matière est pauvre, reste honnête et plus bref plutôt que de meubler.
+
+Réponds UNIQUEMENT par ce JSON : {"report":"<le rapport FR avec les sections ## et les puces ->","bias":"Positif|Négatif|Neutre"}`;
 
   const payload = JSON.stringify({
     model: 'claude-sonnet-4-6',
-    max_tokens: 4500,
+    max_tokens: 3200,
     system,
     messages: [{ role: 'user', content: user }]
   });
@@ -145,15 +141,15 @@ module.exports = async function handler(req, res) {
       if (items.length === 0) { out.zones[zone] = 'skip (0)'; return; }
 
       const synth = await claudeSummary(ZONE_LABEL[zone], day, items);
-      if (!synth || (!synth.report_fr && !synth.fr)) { out.zones[zone] = 'no-synth'; return; }
+      if (!synth || !synth.report) { out.zones[zone] = 'no-synth'; return; }
 
-      // On stocke le RAPPORT LONG (sections « ## ») directement dans summary :
-      // pas de nouvelle colonne, et la page de détail l'affiche en entier.
+      // Rapport long (sections « ## ») stocké directement dans summary :
+      // pas de nouvelle colonne, la page de détail l'affiche tel quel, instantanément.
       const row = {
         day,
         zone,
-        summary: synth.report_fr || synth.fr,
-        summary_en: synth.report_en || synth.en || null,
+        summary: synth.report,
+        summary_en: synth.report, // repli : l'EN affiche le rapport FR (site FR-first)
         item_count: items.length,
         top_sentiment: (synth.bias && ['Positif','Négatif','Neutre'].indexOf(synth.bias) !== -1) ? synth.bias : dominantSentiment(items)
       };
