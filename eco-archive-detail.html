@@ -32,6 +32,9 @@
 .ad-ul li::before{content:"";position:absolute;left:5px;top:9px;width:6px;height:6px;border-radius:2px;background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
 .ad-msg{padding:40px 24px;text-align:center;color:var(--text-muted);font-size:13px}
 .ad-skel{height:1em;border-radius:6px;background:linear-gradient(90deg,var(--bg-elevated),rgba(127,184,232,.07),var(--bg-elevated));background-size:200% 100%;animation:adsh 1.4s ease infinite}
+.ad-deep{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--accent);margin-bottom:16px}
+.ad-deep .lt-dot{width:7px;height:7px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:adpulse 1.2s ease-in-out infinite}
+@keyframes adpulse{0%,100%{opacity:.35}50%{opacity:1}}
 @keyframes adsh{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 </head>
@@ -84,6 +87,7 @@
   </section>
 
   <section class="pr-sel" style="padding-top:0">
+    <div id="adDeep" class="ad-deep" style="display:none"><span class="lt-dot"></span> <span data-en="Generating the in-depth report…">Génération du rapport approfondi…</span></div>
     <div class="ad-report" id="adReport">
       <div class="ad-sec"><div class="ad-skel" style="width:40%;height:1.1em;margin-bottom:14px"></div><div class="ad-skel" style="width:96%;margin-bottom:8px"></div><div class="ad-skel" style="width:90%;margin-bottom:8px"></div><div class="ad-skel" style="width:70%"></div></div>
     </div>
@@ -186,19 +190,31 @@
     } else { listSec.style.display='none'; }
   }
 
+  function showDeep(on){var el=document.getElementById('adDeep');if(el)el.style.display=on?'':'none';}
+
   async function init(){
     if(!DAY||!ZONE||!ZONES[ZONE]){
       document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Invalid link.">Lien invalide.</div>';
       return;
     }
     render(); // en-tête + skeleton
-    try{
-      var r=await fetch('/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE));
-      if(r.ok){DATA=await r.json();}
-    }catch(e){}
+    var base='/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE);
+    // 1) Réponse rapide — affichage immédiat (jamais de page vide).
+    try{ var r=await fetch(base); if(r.ok){DATA=await r.json();} }catch(e){}
     if(!DATA){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Report unavailable.">Rapport indisponible pour le moment.</div>';return;}
     if(!DATA.report_fr && (!DATA.items || DATA.items.length===0)){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="No announcement was recorded that day for this zone.">Aucune annonce enregistrée ce jour-là pour cette zone.</div>';return;}
     render();
+    // 2) Rapport approfondi en arrière-plan — remplace le résumé quand prêt.
+    if(DATA.deepenable && !DATA.deep){
+      showDeep(true);
+      try{
+        var r2=await fetch(base+'&deep=1');
+        if(r2.ok){var d2=await r2.json();
+          if(d2 && d2.report_fr){DATA.report_fr=d2.report_fr;DATA.report_en=d2.report_en||DATA.report_en;DATA.bias=d2.bias||DATA.bias;DATA.deep=true;render();}
+        }
+      }catch(e){}
+      showDeep(false);
+    }
   }
   window.ecoReloadNews=render; // re-localise au changement de langue
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();

@@ -146,6 +146,7 @@ module.exports = async function handler(req, res) {
 
   const day = req.query && req.query.day;
   const zone = req.query && req.query.zone;
+  const deep = req.query && req.query.deep === '1';
   if (!day || !zone || !ZONE_LABEL[zone]) return res.status(400).json({ error: 'Paramètres day + zone requis', zones: Object.keys(ZONE_LABEL) });
 
   try {
@@ -154,7 +155,6 @@ module.exports = async function handler(req, res) {
       + `&published_at=gte.${encodeURIComponent(startISO)}`
       + `&published_at=lt.${encodeURIComponent(endISO)}`
       + `&order=published_at.asc&select=id,title,title_en,summary,summary_en,source,url,published_at,sentiment&limit=200`;
-    // Le bilan figé (daily_summaries) persiste même quand news_items est purgé.
     const sumPath = `/rest/v1/daily_summaries?day=eq.${encodeURIComponent(day)}&zone=eq.${zone}`
       + `&select=summary,summary_en,item_count,top_sentiment&limit=1`;
     // Rapport long stocké (colonnes report/report_en) — requête séparée pour
@@ -166,32 +166,44 @@ module.exports = async function handler(req, res) {
     const items = Array.isArray(ri.body) ? ri.body : [];
     const sumRow = Array.isArray(rs.body) && rs.body[0] ? rs.body[0] : null;
     const repRow = Array.isArray(rr.body) && rr.body[0] ? rr.body[0] : null; // null si colonnes absentes
+    const stored = repRow && repRow.report;
 
     // Rien du tout (ni annonces, ni bilan) → message « aucune annonce ».
-    if (items.length === 0 && !sumRow) {
+    if (items.length === 0 && !sumRow && !stored) {
       res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=300');
       return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count: 0, report_fr: '', report_en: '', bias: 'Neutre', items: [] });
     }
 
-    // Priorité : rapport long déjà stocké → sinon génération à la volée depuis
-    // les annonces (si encore présentes) → sinon on développe le bilan court stocké.
-    const stored = repRow && repRow.report;
+    const bias = (sumRow && sumRow.top_sentiment) || 'Neutre';
+    const item_count = items.length || (sumRow && sumRow.item_count) || 0;
+
+    // ── Réponse RAPIDE (par défaut) : on ne bloque JAMAIS sur Claude.
+    // On renvoie le rapport déjà stocké, sinon le résumé court, immédiatement.
+    if (!deep) {
+      const fast_fr = stored || (sumRow && sumRow.summary) || '';
+      const fast_en = (repRow && repRow.report_en) || (sumRow && sumRow.summary_en) || '';
+      // deepenable = un rapport approfondi peut encore être produit à la demande
+      const deepenable = !stored && (items.length > 0 || !!(sumRow && sumRow.summary));
+      res.setHeader('Cache-Control', stored ? 's-maxage=86400, stale-while-revalidate=604800' : 's-maxage=120, stale-while-revalidate=300');
+      return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count, report_fr: fast_fr, report_en: fast_en, bias, deepenable, deep: !!stored, items });
+    }
+
+    // ── Réponse APPROFONDIE (?deep=1) : génération via Claude, mise en cache CDN.
     let rep = null;
     if (!stored) {
       if (items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
       else if (sumRow && sumRow.summary) rep = await claudeExpand(ZONE_LABEL[zone], day, sumRow.summary);
     }
-
-    const report_fr = (repRow && repRow.report) || (rep && rep.fr) || (sumRow && sumRow.summary) || '';
+    const report_fr = stored || (rep && rep.fr) || (sumRow && sumRow.summary) || '';
     const report_en = (repRow && repRow.report_en) || (rep && rep.en) || (sumRow && sumRow.summary_en) || '';
-    const bias = (rep && rep.bias) || (sumRow && sumRow.top_sentiment) || 'Neutre';
-    const item_count = items.length || (sumRow && sumRow.item_count) || 0;
+    const dbias = (rep && rep.bias) || bias;
 
-    // Journée figée → cache CDN long (24 h) une fois généré.
-    res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=604800');
+    // Si la génération a réussi (rep) ou qu'un rapport est stocké → cache long ;
+    // sinon (repli résumé) cache court pour réessayer plus tard.
+    res.setHeader('Cache-Control', (stored || rep) ? 's-maxage=86400, stale-while-revalidate=604800' : 's-maxage=120, stale-while-revalidate=300');
     return res.status(200).json({
       ok: true, day, zone, label: ZONE_LABEL[zone],
-      item_count, report_fr, report_en, bias, items
+      item_count, report_fr, report_en, bias: dbias, deep: true, items
     });
   } catch (e) {
     return res.status(500).json({ error: 'archive-detail error', detail: String(e).slice(0, 200) });
