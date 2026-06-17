@@ -145,15 +145,15 @@ module.exports = async function handler(req, res) {
       if (items.length === 0) { out.zones[zone] = 'skip (0)'; return; }
 
       const synth = await claudeSummary(ZONE_LABEL[zone], day, items);
-      if (!synth || !synth.fr) { out.zones[zone] = 'no-synth'; return; }
+      if (!synth || (!synth.report_fr && !synth.fr)) { out.zones[zone] = 'no-synth'; return; }
 
+      // On stocke le RAPPORT LONG (sections « ## ») directement dans summary :
+      // pas de nouvelle colonne, et la page de détail l'affiche en entier.
       const row = {
         day,
         zone,
-        summary: synth.fr,
-        summary_en: synth.en || null,
-        report: synth.report_fr || null,
-        report_en: synth.report_en || null,
+        summary: synth.report_fr || synth.fr,
+        summary_en: synth.report_en || synth.en || null,
         item_count: items.length,
         top_sentiment: (synth.bias && ['Positif','Négatif','Neutre'].indexOf(synth.bias) !== -1) ? synth.bias : dominantSentiment(items)
       };

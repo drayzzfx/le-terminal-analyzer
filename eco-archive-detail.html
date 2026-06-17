@@ -140,28 +140,46 @@
   var DAY=qp('day'), ZONE=qp('zone'), DATA=null;
 
   // Transforme un rapport texte (sections « ## ») en HTML structuré.
+  // Découpe un long bloc de texte en paragraphes lisibles (~2 phrases).
+  function paragraphize(text){
+    var sents=text.replace(/\s+/g,' ').match(/[^.!?]+[.!?]+["»)\]]?(?:\s|$)/g);
+    if(!sents||sents.length<2)return [text.trim()];
+    var out=[],buf=[];
+    sents.forEach(function(s){buf.push(s.trim());if(buf.length>=2){out.push(buf.join(' '));buf=[];}});
+    if(buf.length)out.push(buf.join(' '));
+    return out;
+  }
   function renderReport(txt){
     if(!txt){return '<div class="ad-msg" data-en="No in-depth report for this day.">Pas de rapport approfondi pour ce jour.</div>';}
-    var lines=txt.split(/\n/), html='', open=false, inUl=false;
-    function closeUl(){if(inUl){html+='</ul>';inUl=false;}}
-    lines.forEach(function(raw){
-      var line=raw.trim();
-      if(!line)return;
-      if(line.indexOf('## ')===0){
-        closeUl(); if(open)html+='</div>'; open=true;
-        html+='<div class="ad-sec"><h3 class="ad-h">'+esc(line.slice(3).trim())+'</h3>';
-      } else if(line.indexOf('- ')===0 || line.indexOf('• ')===0){
-        if(!open){html+='<div class="ad-sec">';open=true;}
-        if(!inUl){html+='<ul class="ad-ul">';inUl=true;}
-        html+='<li>'+esc(line.slice(2).trim())+'</li>';
-      } else {
-        closeUl();
-        if(!open){html+='<div class="ad-sec">';open=true;}
-        html+='<p class="ad-p">'+esc(line)+'</p>';
-      }
-    });
-    closeUl(); if(open)html+='</div>';
-    return html||'<div class="ad-msg">—</div>';
+    txt=txt.trim();
+    // Cas 1 : rapport structuré (sections « ## »)
+    if(txt.indexOf('## ')!==-1){
+      var lines=txt.split(/\n/), html='', open=false, inUl=false;
+      function closeUl(){if(inUl){html+='</ul>';inUl=false;}}
+      lines.forEach(function(raw){
+        var line=raw.trim();
+        if(!line)return;
+        if(line.indexOf('## ')===0){
+          closeUl(); if(open)html+='</div>'; open=true;
+          html+='<div class="ad-sec"><h3 class="ad-h">'+esc(line.slice(3).trim())+'</h3>';
+        } else if(line.indexOf('- ')===0 || line.indexOf('• ')===0){
+          if(!open){html+='<div class="ad-sec">';open=true;}
+          if(!inUl){html+='<ul class="ad-ul">';inUl=true;}
+          html+='<li>'+esc(line.slice(2).trim())+'</li>';
+        } else {
+          closeUl();
+          if(!open){html+='<div class="ad-sec">';open=true;}
+          html+='<p class="ad-p">'+esc(line)+'</p>';
+        }
+      });
+      closeUl(); if(open)html+='</div>';
+      return html||'<div class="ad-msg">—</div>';
+    }
+    // Cas 2 : texte brut (bilan d'un seul bloc) → on l'aère en paragraphes
+    var blocks=txt.split(/\n{1,}/).map(function(b){return b.trim();}).filter(Boolean);
+    var paras=[];
+    blocks.forEach(function(b){ if(b.length>240){paras=paras.concat(paragraphize(b));}else{paras.push(b);} });
+    return '<div class="ad-sec">'+paras.map(function(p){return '<p class="ad-p">'+esc(p)+'</p>';}).join('')+'</div>';
   }
 
   function buildRow(it){var url=articleUrl(it);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(it.published_at)+'</span><span class="pr-prevrow__src">'+esc(it.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(it))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
@@ -190,31 +208,16 @@
     } else { listSec.style.display='none'; }
   }
 
-  function showDeep(on){var el=document.getElementById('adDeep');if(el)el.style.display=on?'':'none';}
-
   async function init(){
     if(!DAY||!ZONE||!ZONES[ZONE]){
       document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Invalid link.">Lien invalide.</div>';
       return;
     }
     render(); // en-tête + skeleton
-    var base='/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE);
-    // 1) Réponse rapide — affichage immédiat (jamais de page vide).
-    try{ var r=await fetch(base); if(r.ok){DATA=await r.json();} }catch(e){}
+    try{ var r=await fetch('/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE)); if(r.ok){DATA=await r.json();} }catch(e){}
     if(!DATA){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Report unavailable.">Rapport indisponible pour le moment.</div>';return;}
     if(!DATA.report_fr && (!DATA.items || DATA.items.length===0)){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="No announcement was recorded that day for this zone.">Aucune annonce enregistrée ce jour-là pour cette zone.</div>';return;}
     render();
-    // 2) Rapport approfondi en arrière-plan — remplace le résumé quand prêt.
-    if(DATA.deepenable && !DATA.deep){
-      showDeep(true);
-      try{
-        var r2=await fetch(base+'&deep=1');
-        if(r2.ok){var d2=await r2.json();
-          if(d2 && d2.report_fr){DATA.report_fr=d2.report_fr;DATA.report_en=d2.report_en||DATA.report_en;DATA.bias=d2.bias||DATA.bias;DATA.deep=true;render();}
-        }
-      }catch(e){}
-      showDeep(false);
-    }
   }
   window.ecoReloadNews=render; // re-localise au changement de langue
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();

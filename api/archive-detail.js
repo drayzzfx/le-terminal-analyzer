@@ -177,34 +177,13 @@ module.exports = async function handler(req, res) {
     const bias = (sumRow && sumRow.top_sentiment) || 'Neutre';
     const item_count = items.length || (sumRow && sumRow.item_count) || 0;
 
-    // ── Réponse RAPIDE (par défaut) : on ne bloque JAMAIS sur Claude.
-    // On renvoie le rapport déjà stocké, sinon le résumé court, immédiatement.
-    if (!deep) {
-      const fast_fr = stored || (sumRow && sumRow.summary) || '';
-      const fast_en = (repRow && repRow.report_en) || (sumRow && sumRow.summary_en) || '';
-      // deepenable = un rapport approfondi peut encore être produit à la demande
-      const deepenable = !stored && (items.length > 0 || !!(sumRow && sumRow.summary));
-      res.setHeader('Cache-Control', stored ? 's-maxage=86400, stale-while-revalidate=604800' : 's-maxage=120, stale-while-revalidate=300');
-      return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count, report_fr: fast_fr, report_en: fast_en, bias, deepenable, deep: !!stored, items });
-    }
-
-    // ── Réponse APPROFONDIE (?deep=1) : génération via Claude, mise en cache CDN.
-    let rep = null;
-    if (!stored) {
-      if (items.length > 0) rep = await claudeReport(ZONE_LABEL[zone], day, items);
-      else if (sumRow && sumRow.summary) rep = await claudeExpand(ZONE_LABEL[zone], day, sumRow.summary);
-    }
-    const report_fr = stored || (rep && rep.fr) || (sumRow && sumRow.summary) || '';
-    const report_en = (repRow && repRow.report_en) || (rep && rep.en) || (sumRow && sumRow.summary_en) || '';
-    const dbias = (rep && rep.bias) || bias;
-
-    // Si la génération a réussi (rep) ou qu'un rapport est stocké → cache long ;
-    // sinon (repli résumé) cache court pour réessayer plus tard.
-    res.setHeader('Cache-Control', (stored || rep) ? 's-maxage=86400, stale-while-revalidate=604800' : 's-maxage=120, stale-while-revalidate=300');
-    return res.status(200).json({
-      ok: true, day, zone, label: ZONE_LABEL[zone],
-      item_count, report_fr, report_en, bias: dbias, deep: true, items
-    });
+    // Réponse immédiate : rapport long stocké, sinon le bilan stocké. AUCUN appel
+    // Claude au chargement (c'était la cause des pages vides / délais dépassés).
+    // La longueur vient désormais de la génération (stockée), pas de l'affichage.
+    const report_fr = stored || (sumRow && sumRow.summary) || '';
+    const report_en = (repRow && repRow.report_en) || (sumRow && sumRow.summary_en) || '';
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+    return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count, report_fr, report_en, bias, items });
   } catch (e) {
     return res.status(500).json({ error: 'archive-detail error', detail: String(e).slice(0, 200) });
   }
