@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false   # sinon le token github-actions[bot] écrase le PAT au push
 
       - name: Pousser main vers le dépôt de déploiement
         env:
