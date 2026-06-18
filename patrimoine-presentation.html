@@ -16,8 +16,9 @@
 .pm { display: block; padding-top: 0; overflow-x: clip; position: relative; z-index: 1; min-width: 0; }
 /* Le contenu Présentation s'affiche en pleine largeur de la zone (à droite de la barre latérale) */
 body.eco-page .app > main.wrap > .pm { max-width: none !important; width: auto !important; margin: 0 !important; }
-/* Coller le hero sous le fil d'Ariane : annuler le padding-top « standalone » (eco.css) */
-body.eco-page .wrap { padding-top: 0 !important; }
+/* Coller le hero sous le fil d'Ariane : annuler le gap flex (40px) que l'appshell
+   met entre la barre (.top) et le contenu (.pm) — c'est lui qui crée le vide. */
+body.eco-page .app > main.wrap { gap: 0 !important; }
 
 .pm-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); }
 .pm-eyebrow .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
