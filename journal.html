@@ -1834,16 +1834,40 @@ function updateUserUI() {
 var isProJ = false;
 var userTokens = null;
 function jnlNoTokens(){
-  if(confirm("Tu n'as plus de tokens. Passe en Premium pour un accès illimité ?")) window.location.href='./tarifs.html';
+  var ov = document.getElementById('paywallOverlay');
+  if(ov){ ov.style.display='flex'; return; }
+  var el = document.createElement('div');
+  el.id = 'paywallOverlay';
+  el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(7,9,12,.92);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:20px';
+  el.innerHTML = '<div style="max-width:440px;width:100%;background:#10141B;border:1px solid rgba(127,184,232,.2);border-radius:16px;padding:36px 32px;text-align:center;position:relative">' +
+    '<button onclick="document.getElementById(\'paywallOverlay\').style.display=\'none\'" style="position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:#5A7A9A;font-size:18px;line-height:1">✕</button>' +
+    '<div style="width:52px;height:52px;border-radius:12px;background:rgba(127,184,232,.1);border:1px solid rgba(127,184,232,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">' +
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7FB8E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>' +
+    '</div>' +
+    '<p style="font-family:Anton,sans-serif;font-size:24px;color:#F2F4F7;letter-spacing:.04em;margin:0 0 10px;text-transform:uppercase">TOKENS ÉPUISÉS</p>' +
+    '<p style="font-family:Inter,sans-serif;font-size:14px;color:#8BA0B8;line-height:1.6;margin:0 0 28px">Tu as utilisé tes 5 tokens offerts.<br>Passe en Premium pour des analyses et un journal illimités.</p>' +
+    '<a href="./tarifs.html" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:#7FB8E8;color:#07090C;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:.03em">Voir les offres Premium →</a>' +
+  '</div>';
+  document.body.appendChild(el);
 }
 async function refreshTokens(){
   if(!authToken) return;
   try{
     var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
     var d=await res.json();
-    if(typeof d.tokens==='number') userTokens=d.tokens;
-    if(d.is_pro) isProJ=true;
+    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, d.is_pro||d.unlimited); }
+    if(d.is_pro||d.unlimited) isProJ=true;
   }catch(e){}
+}
+function updateTokenBadge(n, isPro){
+  var b=document.getElementById('ltTokenBadge');
+  if(!b) return;
+  if(isPro){ b.style.display='none'; return; }
+  b.className='lt-ub-tokens'+(n<=1?' lt-ub-tokens--low':'');
+  b.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> '+n+' token'+(n>1?'s':'');
+  b.style.display='inline-flex';
+  b.style.cursor='pointer';
+  b.onclick=function(){ if(n<=0) jnlNoTokens(); else window.location.href='./tarifs.html'; };
 }
 async function spendToken(reason){
   if(isProJ) return true;
@@ -1852,7 +1876,7 @@ async function spendToken(reason){
     var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
     var d=await res.json();
     if(d.unlimited){ isProJ=true; return true; }
-    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, false); }
     if(d.ok) return true;
     jnlNoTokens(); return false;
   }catch(e){ return true; }
@@ -1864,7 +1888,7 @@ async function journalTradeToken(){
     var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'journal_trade'})});
     var d=await res.json();
     if(d.unlimited){ isProJ=true; return true; }
-    if(typeof d.tokens==='number') userTokens=d.tokens;
+    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, false); }
     if(d.ok) return true;
     jnlNoTokens(); return false;
   }catch(e){ return true; }
