@@ -2442,39 +2442,51 @@ async function importMt5Trades() {
   var ok = 0, fail = 0;
   for (var i = 0; i < _mt5ParsedTrades.length; i++) {
     var t = _mt5ParsedTrades[i];
+    // Consume 1 journal_trade token per trade (1 token = 5 trades)
+    if (!(await journalTradeToken())) {
+      document.getElementById('mt5Status').textContent = 'Tokens insuffisants — ' + ok + ' trade' + (ok>1?'s':'') + ' importé' + (ok>1?'s':'') + '.';
+      break;
+    }
+    var tradeDate = t.date || new Date().toISOString().slice(0,10);
+    var tradeDir  = t.direction || 'LONG';
+    var tradeRes  = (t.pnl != null ? (parseFloat(t.pnl) >= 0 ? 'WIN' : 'LOSS') : (t.result || 'WIN'));
+    var body = {
+      date: tradeDate,
+      pair: t.pair || '',
+      direction: tradeDir,
+      session: t.session || 'London',
+      result: tradeRes,
+      pnl: t.pnl || 0,
+      rr: t.rr || null,
+      notes: t.notes ? t.notes + ' · Importé depuis MT5' : 'Importé depuis MT5',
+      img: _mt5ImageData ? ('data:' + _mt5MediaType + ';base64,' + _mt5ImageData) : null
+    };
     try {
-      var body = {
-        date: t.date || new Date().toISOString().slice(0,10),
-        pair: t.pair || '',
-        direction: t.direction || 'LONG',
-        session: t.session || 'London',
-        entryPrice: t.entryPrice || null,
-        exitPrice: t.exitPrice || null,
-        sl: t.sl || null,
-        tp: t.tp || null,
-        lots: t.lots || null,
-        result: t.pnl >= 0 ? 'WIN' : 'LOSS',
-        pnl: t.pnl || 0,
-        rr: t.rr || null,
-        notes: 'Importé depuis MT5'
-      };
       var r = await fetch('/api/journal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
         body: JSON.stringify(body)
       });
-      if (r.ok) ok++; else fail++;
+      if (r.ok) {
+        var created = await r.json();
+        var newId = (Array.isArray(created) ? created[0] : created);
+        newId = (newId && newId.id) || Date.now().toString() + i;
+        // Add to local trades array immediately so calendar/stats update
+        trades.push({ id: newId, date: tradeDate, pair: body.pair, dir: tradeDir, result: tradeRes, pnl: parseFloat(body.pnl)||0, rr: body.rr, session: body.session, notes: body.notes, img: body.img, created_at: new Date().toISOString() });
+        ok++;
+      } else { fail++; }
     } catch(e) { fail++; }
   }
+  if (ok) { trades.sort(function(a,b){ return (b.date||'') > (a.date||'') ? 1 : -1; }); persist(); renderStats(); renderCalendar(); }
   var st = document.getElementById('mt5Status');
   st.style.display = 'block';
-  if (fail === 0) {
+  if (fail === 0 && ok > 0) {
     st.style.background = 'rgba(74,222,156,.06)';
     st.style.border = '1px solid rgba(74,222,156,.2)';
     st.style.color = 'var(--green)';
     st.textContent = ok + ' trade' + (ok > 1 ? 's' : '') + ' importé' + (ok > 1 ? 's' : '') + ' avec succès';
-    setTimeout(function() { closeMt5Modal(); loadFromServer(); }, 1200);
-  } else {
+    setTimeout(function() { closeMt5Modal(); }, 1200);
+  } else if (ok > 0) {
     st.style.background = 'rgba(232,194,104,.06)';
     st.style.border = '1px solid rgba(232,194,104,.2)';
     st.style.color = 'var(--amber)';
