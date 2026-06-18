@@ -325,6 +325,10 @@
         <div class="lt-user-info" id="ltUserInfo">
           <div class="lt-user-label">CONNECTÉ</div>
           <div class="lt-user-email" id="ltUserEmail">—</div>
+          <a href="./profil.html" style="display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:4px;border-radius:6px;color:#F2F4F7;text-decoration:none;font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Mon profil
+          </a>
           <button class="lt-logout-btn" onclick="ltLogout()">Se déconnecter</button>
         </div>
         <a class="lt-nav-item" id="ltLoginItem" href="#" onclick="ltOpenLogin();return false;">
