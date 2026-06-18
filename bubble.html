@@ -391,10 +391,18 @@ var bmHidden=(function(){try{return new Set(JSON.parse(localStorage.getItem('bm_
 function bmSaveHidden(){try{localStorage.setItem('bm_hidden',JSON.stringify(Array.from(bmHidden)));}catch(e){}}
 var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
 
+function bmActiveCount(){
+  if(!bmBubbles.length) return 60;
+  if(bmCat==='all') return bmBubbles.length;
+  return bmBubbles.filter(function(b){return b.cat===bmCat;}).length||1;
+}
 function bmRadius(w){
-  var n=bmBubbles.length||60;
-  var scale= n<=20 ? 3.0 : n<=35 ? 3.0 : n<=55 ? 1.1 : 0.73;
+  var n=bmActiveCount();
+  var scale= n<=12 ? 3.2 : n<=25 ? 2.8 : n<=40 ? 2.0 : n<=55 ? 1.1 : 0.73;
   return (22 + Math.sqrt((w||0.5)/bmMaxW)*58)*scale;
+}
+function bmRecomputeRadii(){
+  bmBubbles.forEach(function(b){ b.r=bmRadius(b.w); });
 }
 function bmMd(v){ return (v/1e9).toLocaleString('fr-FR',{maximumFractionDigits:0}); }
 
@@ -582,6 +590,7 @@ function initBubbles(){
     var b=e.target.closest('.bm-filter'); if(!b) return;
     bmCat=b.getAttribute('data-cat');
     f.querySelectorAll('.bm-filter').forEach(function(x){ x.classList.toggle('is-on',x===b); });
+    bmRecomputeRadii();
     if(bmReduced) bmSettle();
     bmUpdatePerf();
   });
