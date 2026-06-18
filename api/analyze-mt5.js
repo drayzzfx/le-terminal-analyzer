@@ -3,7 +3,7 @@ const https = require('https');
 function claudeRequest(base64Image, mediaType) {
   const API_KEY = process.env.ANTHROPIC_API_KEY;
   const payload = JSON.stringify({
-    model: 'claude-opus-4-5',
+    model: 'claude-sonnet-4-6',
     max_tokens: 2048,
     messages: [{
       role: 'user',
