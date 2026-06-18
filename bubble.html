@@ -391,7 +391,11 @@ var bmHidden=(function(){try{return new Set(JSON.parse(localStorage.getItem('bm_
 function bmSaveHidden(){try{localStorage.setItem('bm_hidden',JSON.stringify(Array.from(bmHidden)));}catch(e){}}
 var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
 
-function bmRadius(w){ return 22 + Math.sqrt((w||0.5)/bmMaxW)*58; }
+function bmRadius(w){
+  var n=bmBubbles.length||60;
+  var scale= n<=20 ? 1 : n<=35 ? 0.82 : n<=55 ? 0.66 : 0.54;
+  return (22 + Math.sqrt((w||0.5)/bmMaxW)*58)*scale;
+}
 function bmMd(v){ return (v/1e9).toLocaleString('fr-FR',{maximumFractionDigits:0}); }
 
 function bmUpdateLegend(){
@@ -407,6 +411,8 @@ function bmApplyAssets(assets){
   var ws=assets.map(function(a){return a.w||0.5;}); ws.push(0.5);
   bmMaxW=Math.max.apply(null,ws);
   var byS={},i; for(i=0;i<bmBubbles.length;i++) byS[bmBubbles[i].s]=bmBubbles[i];
+  // set length first so bmRadius scale factor is correct
+  bmBubbles=assets.map(function(a){return {s:a.name};});
   bmBubbles=assets.map(function(a){
     var ex=byS[a.name], r=bmRadius(a.w);
     if(ex){ ex.d=a.change; ex.cat=a.cat; ex.w=a.w; ex.cap=a.cap; ex.price=a.price; ex.r=r; return ex; }
