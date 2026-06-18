@@ -440,6 +440,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .broker-banner{background:var(--bg-elevated,rgba(255,255,255,.02))!important;border:1px solid var(--border-subtle,rgba(255,255,255,.08))!important;border-radius:var(--r-lg,16px)!important}
   .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border:1px solid transparent!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;transition:all .15s!important}
   .add-trade-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)}
+  .import-mt5-btn{width:100%;padding:11px 14px;background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:10px;color:var(--v2,#7FB8E8);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:.03em;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+  .import-mt5-btn:hover{background:rgba(127,184,232,.12);border-color:rgba(127,184,232,.4)}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -458,13 +460,14 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <span class="jr-panel__title">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
-      <div class="jr-panel">
+      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.6;pointer-events:none;user-select:none">
+        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:2">Bientôt</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
           <span class="jr-panel__title" style="margin:0">IA Coach</span>
-          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()">Analyser</button>
+          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" disabled style="opacity:.5;cursor:not-allowed">Analyser</button>
         </div>
-        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-          <span style="color:var(--text3);font-size:13px">Lance une analyse pour voir tes patterns.</span>
+        <div style="margin-top:10px">
+          <span style="color:var(--text3);font-size:12px">Analyse automatique de tes patterns de trading.</span>
         </div>
       </div>
     </div>
@@ -492,6 +495,10 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
   <!-- ADD TRADE -->
   <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
+  <button class="import-mt5-btn" onclick="openMt5Modal()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Importer depuis MT5
+  </button>
 
 </div>
 </div>
@@ -615,6 +622,38 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <!-- IMAGE LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- MT5 IMPORT MODAL -->
+<div class="modal-overlay" id="mt5Modal">
+  <div class="modal-box" style="max-width:520px">
+    <button class="modal-close" onclick="closeMt5Modal()">✕</button>
+    <div class="modal-title">Importer depuis MT5</div>
+    <div class="modal-sub">Dépose un screenshot de ton historique MT5 — l'IA extrait automatiquement tous les trades</div>
+
+    <div id="mt5DropZone" style="border:2px dashed rgba(127,184,232,.3);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;margin:20px 0;position:relative" onclick="document.getElementById('mt5FileInput').click()" ondragover="event.preventDefault();this.style.borderColor='rgba(127,184,232,.7)'" ondragleave="this.style.borderColor='rgba(127,184,232,.3)'" ondrop="handleMt5Drop(event)">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(127,184,232,.6)" stroke-width="1.5" style="margin:0 auto 10px;display:block"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:4px">Glisse ton screenshot ici</div>
+      <div style="font-size:12px;color:var(--text3)">ou clique pour sélectionner — JPG, PNG, WebP</div>
+      <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="handleMt5File(this.files[0])">
+    </div>
+
+    <div id="mt5Preview" style="display:none;margin-bottom:16px">
+      <img id="mt5PreviewImg" style="width:100%;border-radius:8px;border:1px solid var(--border);max-height:200px;object-fit:contain" alt="">
+    </div>
+
+    <div id="mt5Status" style="display:none;margin-bottom:16px;padding:12px 14px;border-radius:8px;font-size:13px"></div>
+
+    <div id="mt5Results" style="display:none;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Trades détectés</div>
+      <div id="mt5TradeList" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto"></div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button class="submit-btn" id="mt5AnalyzeBtn" onclick="analyzeMt5Screenshot()" style="display:none">Analyser l'image</button>
+      <button class="submit-btn" id="mt5ImportBtn" onclick="importMt5Trades()" style="display:none;background:linear-gradient(135deg,#4ADE9C,#2db87a)">Importer les trades</button>
+    </div>
+  </div>
 </div>
 
 <!-- BROKER MODAL -->
@@ -2084,6 +2123,152 @@ async function importCsvTrades() {
     document.getElementById('csvImportTxt').textContent = 'Réessayer';
     document.getElementById('csvError').textContent = ok + ' importés, ' + fail + ' échoués';
   }
+}
+
+// ── MT5 IMPORT ──────────────────────────────────────────────────────────────
+var _mt5ImageData = null;
+var _mt5ParsedTrades = [];
+
+function openMt5Modal() {
+  _mt5ImageData = null;
+  _mt5ParsedTrades = [];
+  document.getElementById('mt5Preview').style.display = 'none';
+  document.getElementById('mt5Status').style.display = 'none';
+  document.getElementById('mt5Results').style.display = 'none';
+  document.getElementById('mt5AnalyzeBtn').style.display = 'none';
+  document.getElementById('mt5ImportBtn').style.display = 'none';
+  document.getElementById('mt5FileInput').value = '';
+  document.getElementById('mt5DropZone').style.borderColor = 'rgba(127,184,232,.3)';
+  document.getElementById('mt5Modal').classList.add('show');
+}
+function closeMt5Modal() {
+  document.getElementById('mt5Modal').classList.remove('show');
+}
+
+function handleMt5Drop(e) {
+  e.preventDefault();
+  document.getElementById('mt5DropZone').style.borderColor = 'rgba(127,184,232,.3)';
+  var f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) handleMt5File(f);
+}
+
+function handleMt5File(file) {
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    _mt5ImageData = ev.target.result; // base64 data URL
+    document.getElementById('mt5PreviewImg').src = _mt5ImageData;
+    document.getElementById('mt5Preview').style.display = 'block';
+    document.getElementById('mt5Results').style.display = 'none';
+    document.getElementById('mt5Status').style.display = 'none';
+    document.getElementById('mt5ImportBtn').style.display = 'none';
+    document.getElementById('mt5AnalyzeBtn').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzeMt5Screenshot() {
+  if (!_mt5ImageData) return;
+  var btn = document.getElementById('mt5AnalyzeBtn');
+  btn.disabled = true; btn.textContent = 'Analyse en cours…';
+  var st = document.getElementById('mt5Status');
+  st.style.display = 'block';
+  st.style.background = 'rgba(127,184,232,.06)';
+  st.style.border = '1px solid rgba(127,184,232,.2)';
+  st.style.color = 'var(--text2)';
+  st.textContent = 'Analyse de l\'image par l\'IA…';
+
+  try {
+    var base64 = _mt5ImageData.replace(/^data:image\/\w+;base64,/, '');
+    var res = await fetch('/api/analyze-mt5', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('ta_token') || '') },
+      body: JSON.stringify({ imgData: base64 })
+    });
+    var data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Erreur serveur');
+    _mt5ParsedTrades = Array.isArray(data.trades) ? data.trades : [];
+    if (!_mt5ParsedTrades.length) throw new Error('Aucun trade détecté sur l\'image');
+
+    renderMt5Trades();
+    st.style.background = 'rgba(74,222,156,.06)';
+    st.style.border = '1px solid rgba(74,222,156,.2)';
+    st.style.color = 'var(--green)';
+    st.textContent = _mt5ParsedTrades.length + ' trade' + (_mt5ParsedTrades.length > 1 ? 's' : '') + ' détecté' + (_mt5ParsedTrades.length > 1 ? 's' : '');
+    document.getElementById('mt5ImportBtn').style.display = 'block';
+  } catch(err) {
+    st.style.background = 'rgba(240,100,122,.06)';
+    st.style.border = '1px solid rgba(240,100,122,.2)';
+    st.style.color = 'var(--red)';
+    st.textContent = err.message;
+  }
+  btn.disabled = false; btn.textContent = 'Relancer l\'analyse';
+}
+
+function renderMt5Trades() {
+  var list = document.getElementById('mt5TradeList');
+  list.innerHTML = '';
+  _mt5ParsedTrades.forEach(function(t, i) {
+    var pnlColor = (t.pnl > 0) ? 'var(--green)' : (t.pnl < 0 ? 'var(--red)' : 'var(--amber)');
+    var pnlSign = t.pnl > 0 ? '+' : '';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06)';
+    row.innerHTML = '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:' + (t.direction==='LONG'?'rgba(74,222,156,.12)':'rgba(240,100,122,.12)') + ';color:' + (t.direction==='LONG'?'var(--green)':'var(--red)') + '">' + (t.direction||'?') + '</span>'
+      + '<span style="font-size:13px;font-weight:600;color:var(--text2)">' + (t.pair||'—') + '<span style="font-size:11px;color:var(--text3);margin-left:6px">' + (t.date||'') + ' ' + (t.time||'') + '</span></span>'
+      + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:700;color:' + pnlColor + '">' + pnlSign + (t.pnl!=null?t.pnl.toFixed(2)+'€':'—') + '</span>'
+      + '<button onclick="_mt5ParsedTrades.splice('+i+',1);renderMt5Trades()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:0 4px">✕</button>';
+    list.appendChild(row);
+  });
+  document.getElementById('mt5Results').style.display = 'block';
+}
+
+async function importMt5Trades() {
+  if (!_mt5ParsedTrades.length) return;
+  var btn = document.getElementById('mt5ImportBtn');
+  btn.disabled = true; btn.textContent = 'Import en cours…';
+  var token = localStorage.getItem('ta_token') || '';
+  var ok = 0, fail = 0;
+  for (var i = 0; i < _mt5ParsedTrades.length; i++) {
+    var t = _mt5ParsedTrades[i];
+    try {
+      var body = {
+        date: t.date || new Date().toISOString().slice(0,10),
+        pair: t.pair || '',
+        direction: t.direction || 'LONG',
+        session: t.session || 'London',
+        entryPrice: t.entryPrice || null,
+        exitPrice: t.exitPrice || null,
+        sl: t.sl || null,
+        tp: t.tp || null,
+        lots: t.lots || null,
+        result: t.pnl >= 0 ? 'WIN' : 'LOSS',
+        pnl: t.pnl || 0,
+        rr: t.rr || null,
+        notes: 'Importé depuis MT5'
+      };
+      var r = await fetch('/api/journal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(body)
+      });
+      if (r.ok) ok++; else fail++;
+    } catch(e) { fail++; }
+  }
+  var st = document.getElementById('mt5Status');
+  st.style.display = 'block';
+  if (fail === 0) {
+    st.style.background = 'rgba(74,222,156,.06)';
+    st.style.border = '1px solid rgba(74,222,156,.2)';
+    st.style.color = 'var(--green)';
+    st.textContent = ok + ' trade' + (ok > 1 ? 's' : '') + ' importé' + (ok > 1 ? 's' : '') + ' avec succès';
+    setTimeout(function() { closeMt5Modal(); loadFromServer(); }, 1200);
+  } else {
+    st.style.background = 'rgba(232,194,104,.06)';
+    st.style.border = '1px solid rgba(232,194,104,.2)';
+    st.style.color = 'var(--amber)';
+    st.textContent = ok + ' importés, ' + fail + ' échoués';
+  }
+  btn.disabled = false; btn.textContent = 'Importer les trades';
 }
 </script>
 
