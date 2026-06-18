@@ -435,7 +435,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jr-dash .calendar-section{min-width:0}
   .jr-panel{background:var(--surface,rgba(255,255,255,.02));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:16px;padding:18px 20px}
   .jr-panel__title{display:block;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#7E8794);margin-bottom:14px}
-  .jr-eq{width:100%;height:150px;display:block}
+  .jr-eq{width:100%;height:180px;display:block}
   .jr-tbl{display:flex;flex-direction:column}
   .jr-rowh,.jr-row2{display:grid;grid-template-columns:80px 110px 80px 1fr 70px 100px;gap:10px;align-items:center;padding:10px 4px}
   @media(max-width:780px){.jr-rowh,.jr-row2{grid-template-columns:70px 90px 70px 1fr}.jr-rowh span:nth-child(4),.jr-rowh span:nth-child(5),.jr-row2 .jr-hidemob{display:none}}
@@ -493,16 +493,6 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="jr-panel">
         <span class="jr-panel__title" data-en="Equity curve">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
-      </div>
-      <div class="jr-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
-          <span class="jr-panel__title" style="margin:0" data-en="AI Coach">IA Coach</span>
-          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
-        </div>
-        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-          <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
-        </div>
-        <div class="broker-banner-actions" id="brokerActions"></div>
       </div>
     </div>
   </div>
@@ -2505,20 +2495,43 @@ async function importMt5Trades() {
   function jrDrawEquity(){
     var c=document.getElementById('jrEquity'); if(!c) return;
     var ctx=c.getContext('2d'), dpr=Math.min(window.devicePixelRatio||1,2);
-    var w=c.offsetWidth||600, h=c.offsetHeight||150; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=c.offsetWidth||320, h=c.offsetHeight||150; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,w,h);
     var arr=jrTrades().slice().sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
     var series=[0],cum=0; arr.forEach(function(t){ cum+=parseFloat(t.pnl)||0; series.push(cum); });
-    if(series.length<2){ ctx.fillStyle='rgba(138,147,165,.55)'; ctx.font='12px sans-serif'; ctx.fillText('Pas encore assez de trades pour la courbe.',8,h/2); return; }
+    var sym=jrSym();
+    if(series.length<2){
+      ctx.fillStyle='rgba(138,147,165,.45)'; ctx.font='12px Inter,sans-serif';
+      ctx.textAlign='center'; ctx.fillText('Ajoute des trades pour voir la courbe',w/2,h/2); return;
+    }
+    var padL=48, padR=10, padT=18, padB=24;
     var min=Math.min.apply(null,series), max=Math.max.apply(null,series), rng=(max-min)||1;
-    var up=cum>=0, line=up?'rgba(74,222,156,0.9)':'rgba(240,100,122,0.9)', fillA=up?'rgba(74,222,156,0.14)':'rgba(240,100,122,0.14)';
-    ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-    for(var y=1;y<3;y++){ ctx.beginPath(); ctx.moveTo(0,h*y/3); ctx.lineTo(w,h*y/3); ctx.stroke(); }
-    var px=function(i){ return (i/(series.length-1))*w; }, py=function(v){ return h-8-((v-min)/rng)*(h-16); };
-    ctx.beginPath(); series.forEach(function(v,i){ i?ctx.lineTo(px(i),py(v)):ctx.moveTo(px(i),py(v)); });
-    ctx.strokeStyle=line; ctx.lineWidth=2; ctx.stroke();
-    ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
-    var g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,fillA); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fill();
+    var up=cum>=0, lineCol=up?'#4ADE9C':'#F0647A', fillA=up?'rgba(74,222,156,0.12)':'rgba(240,100,122,0.12)';
+    var px=function(i){ return padL+(i/(series.length-1))*(w-padL-padR); };
+    var py=function(v){ return padT+(1-(v-min)/rng)*(h-padT-padB); };
+    // Grid lines + y-labels
+    ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='right'; ctx.fillStyle='rgba(138,147,165,.6)';
+    ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+    var steps=[0,0.5,1];
+    steps.forEach(function(s){
+      var val=min+s*rng, y=py(val);
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+      ctx.fillText((val>=0?'+':'')+Math.round(val)+sym, padL-4, y+3.5);
+    });
+    // Curve
+    ctx.beginPath();
+    series.forEach(function(v,i){ i?ctx.lineTo(px(i),py(v)):ctx.moveTo(px(i),py(v)); });
+    ctx.strokeStyle=lineCol; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+    // Fill
+    ctx.lineTo(px(series.length-1),h-padB); ctx.lineTo(padL,h-padB); ctx.closePath();
+    var g=ctx.createLinearGradient(0,padT,0,h); g.addColorStop(0,fillA); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g; ctx.fill();
+    // Final value dot + label
+    var lx=px(series.length-1), ly=py(cum);
+    ctx.beginPath(); ctx.arc(lx,ly,4,0,2*Math.PI); ctx.fillStyle=lineCol; ctx.fill();
+    ctx.font='bold 11px JetBrains Mono,monospace'; ctx.textAlign='right';
+    ctx.fillStyle=lineCol;
+    ctx.fillText((cum>=0?'+':'')+Math.round(cum)+sym, w-padR, ly-8);
   }
   function jrRenderRecent(){
     var el=document.getElementById('jrRecent'); if(!el) return;
