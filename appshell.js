@@ -2,7 +2,41 @@
 // d'ariane) appliqué à toutes les pages outils. La barre latérale reprend le STYLE
 // du design actuel (.side__item) avec l'arborescence complète (sous-menus dépliables).
 
-/* curseur géré par menu.js (chargé sur toutes les pages) */
+/* ─── CURSEUR CUSTOM SIMPLE NÉON ──────────────────────────────────────────── */
+(function () {
+  if (window._ltCursorInit) return;
+  window._ltCursorInit = true;
+
+  var style = document.createElement('style');
+  style.textContent =
+    '*, *::before, *::after { cursor: none !important; }' +
+    '#lt-c {' +
+    '  position: fixed; top: 0; left: 0; z-index: 999999;' +
+    '  width: 10px; height: 10px; border-radius: 50%;' +
+    '  background: #7FB8E8;' +
+    '  box-shadow: 0 0 8px 2px #7FB8E8, 0 0 18px 4px rgba(127,184,232,.5);' +
+    '  pointer-events: none; transform: translate(-50%,-50%); will-change: transform;' +
+    '  transition: opacity .2s, width .15s, height .15s, box-shadow .15s;' +
+    '}' +
+    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #7FB8E8, 0 0 28px 8px rgba(127,184,232,.5); }' +
+    '#lt-c.off { opacity: 0; }';
+  document.head.appendChild(style);
+
+  var el = document.createElement('div'); el.id = 'lt-c';
+  document.body ? document.body.appendChild(el) : document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(el); });
+
+  var cx = 0, cy = 0, raf = null, hov = false;
+  function drawCur() { raf = null; el.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) translate(-50%,-50%)'; }
+  document.addEventListener('mousemove', function (e) {
+    cx = e.clientX; cy = e.clientY;
+    var h = !!(e.target.closest && e.target.closest('a,button,[role="button"],[onclick]'));
+    if (h !== hov) { hov = h; el.classList.toggle('h', h); }
+    if (!raf) raf = requestAnimationFrame(drawCur);
+  }, { passive: true });
+  document.addEventListener('mouseleave', function () { el.classList.add('off'); });
+  document.addEventListener('mouseenter', function () { el.classList.remove('off'); });
+})();
+/* ─────────────────────────────────────────────────────────────────────────── */
 
 (function () {
   'use strict';
@@ -14,6 +48,7 @@
     'app.html':         { crumb: 'Setup Analyzer',      key: 'analyzer' },
     'bubble.html':      { crumb: 'Bubble Map',          key: 'bubble' },
     'calculateur.html': { crumb: 'Calculateur de Pips', key: 'calculateur' },
+    'mur-des-trades.html': { crumb: 'Mur des Trades',   key: 'trades' },
     // Pages Éco (anciennes pages d'actus) — rattachées à la branche Calendrier
     'eco-edition.html':      { crumb: 'Calendrier Éco · Présentation', key: 'calendrier' },
     'eco-selection.html':    { crumb: 'Calendrier Éco · La sélection',  key: 'calendrier' },
@@ -26,9 +61,14 @@
     'eco-flash.html':        { crumb: 'Calendrier Éco · Flash Info',    key: 'calendrier' },
     'eco-calendrier.html':   { crumb: 'Calendrier Éco · Calendrier',    key: 'calendrier' },
     'eco-crypto.html':       { crumb: 'Calendrier Éco · Crypto',        key: 'calendrier' },
+    'eco-archive.html':      { crumb: 'Calendrier Éco · Archive',       key: 'calendrier' },
+    'profil.html':           { crumb: 'Mon profil',                     key: 'profil' },
     'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
   };
   var cfg = PAGES[path];
+  // Repli : toute page éco non listée (eco-*.html) reçoit quand même l'AppShell,
+  // rattachée à la branche Calendrier — la barre latérale ne disparaît jamais.
+  if (!cfg && /^eco-/.test(path)) cfg = { crumb: 'Calendrier Éco', key: 'calendrier' };
   if (!cfg) return;
 
   var I = {
@@ -63,13 +103,15 @@
       ] },
       { label: 'Flash Info', href: './eco-flash.html', icon: I.flash },
       { label: 'Calendrier éco', href: './eco-calendrier.html', icon: I.calendrier },
-      { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto }
+      { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto },
+      { label: 'Archive', href: './eco-archive.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M9.5 12h5"/></svg>' }
     ] },
     { key: 'analyzer', label: 'Setup Analyzer', href: './app.html', icon: I.analyzer, pro: true, children: [
       { label: 'Historique', href: './app.html#historique', icon: I.hist },
       { label: 'Perfs', href: './app.html#perfs', icon: I.perf }
     ] },
     { key: 'bubble', label: 'Bubble Map', href: './bubble.html', icon: I.bubble },
+    { key: 'trades', label: 'Mur des Trades', href: './mur-des-trades.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>' },
     { key: 'calculateur', label: 'Calculateur de Pips', href: './calculateur.html', icon: I.calc }
   ];
 
@@ -100,16 +142,24 @@
   }
 
   function buildFooter() {
-    var isPro = false, loggedIn = false, email = '';
+    var isPro = false, loggedIn = false, email = '', pseudo = '', avatar = '';
     try {
       isPro = localStorage.getItem('lt_pro') === '1';
       loggedIn = !!localStorage.getItem('ta_token');
       email = localStorage.getItem('ta_email') || '';
+      pseudo = localStorage.getItem('lt_pseudo') || '';
+      avatar = localStorage.getItem('lt_avatar') || '';
     } catch(e) {}
-    // Connecté (et a fortiori PRO) → on remplace la pub PRO par email + déconnexion
     if (loggedIn && isPro) {
+      var displayName = pseudo || (email ? email.split('@')[0] : 'Mon compte');
+      var initial = (displayName.charAt(0) || '?').toUpperCase();
+      var av = avatar
+        ? '<img src="' + avatar + '" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'
+        : '<span style="width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0095FF,#38B6FF);color:#fff;font-family:var(--font-display,\'Anton\',sans-serif);font-size:15px">' + initial + '</span>';
       return '<div class="side__pro side__account" id="sideFooter">'
-        + (email ? '<p class="side__account-mail" style="font-size:12px;color:var(--text2,#7E8794);word-break:break-all;margin:0 0 10px">' + email + '</p>' : '')
+        + '<div class="side__acct">' + av
+        + '<div class="side__acct-txt"><span class="side__acct-name">' + displayName + '</span>'
+        + (email ? '<span class="side__acct-mail">' + email + '</span>' : '') + '</div></div>'
         + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
     }
     return '<div class="side__pro" id="sideFooter"><h4>Accès Premium</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
@@ -162,6 +212,10 @@
       + '.side__subitem:hover .side__ic{color:var(--accent)}'
       + '.side__sub--deep{margin-left:12px}'
       + '.side__subitem--deep{font-size:12.5px;padding:6px 10px}'
+      + '.side__acct{display:flex;align-items:center;gap:10px;margin-bottom:12px;min-width:0}'
+      + '.side__acct-txt{display:flex;flex-direction:column;min-width:0}'
+      + '.side__acct-name{font-family:var(--font-display,"Anton",sans-serif);text-transform:uppercase;letter-spacing:.02em;font-size:14px;color:var(--text-title,#F2F4F7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+      + '.side__acct-mail{font-family:var(--font-text,"Inter",sans-serif);font-size:11px;color:var(--text-muted,#7E8794);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
       // Force la police/interligne du design dans la barre latérale (eco.css impose
       // sinon sa propre police plus large → libellés sur 2 lignes sur les pages éco)
       + '.side, .side__label, .side__item, .side__subitem, .side__pro, .side__pro *{font-family:var(--font-text,"Inter",system-ui,sans-serif);line-height:1.2}'

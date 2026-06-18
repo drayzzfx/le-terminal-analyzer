@@ -170,6 +170,9 @@
     .lt-ub-menu__badge { display: block; margin-top: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #7FB8E8; }
     .lt-ub-logout { width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: none; border-radius: 6px; color: #F0647A; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; }
     .lt-ub-logout:hover { background: rgba(240,100,122,.12); }
+    .lt-ub-link { width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: none; border-radius: 6px; color: #F2F4F7; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; text-decoration: none; margin-bottom: 4px; }
+    .lt-ub-link:hover { background: rgba(127,184,232,.12); color: #BFDCF5; }
+    .lt-ub-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: block; }
 
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
@@ -408,15 +411,22 @@
     if(!token || !email) { bar.innerHTML = ''; return; }
     var initial = email.charAt(0).toUpperCase();
     var username = email.split('@')[0];
+    var pseudo = localStorage.getItem('lt_pseudo') || '';
+    var avatar = localStorage.getItem('lt_avatar') || '';
+    var displayName = pseudo || username;
+    var avatarInner = avatar ? '<img src="' + avatar + '" alt="">' : initial;
     var caret = '<span class="lt-ub-caret"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>';
-    // Chip rectangulaire (même DA que les boutons) + menu déroulant avec déconnexion
+    // Chip rectangulaire (même DA que les boutons) + menu déroulant avec profil + déconnexion
     bar.innerHTML =
       '<div class="lt-ub-chip" id="ltUbChip" title="' + email + (isPro ? ' · Premium' : '') + '">' +
-        '<div class="lt-ub-avatar">' + initial + '</div>' +
-        '<span class="lt-ub-name">' + username + '</span>' + caret +
+        '<div class="lt-ub-avatar">' + avatarInner + '</div>' +
+        '<span class="lt-ub-name">' + displayName + '</span>' + caret +
       '</div>' +
       '<div class="lt-ub-menu" id="ltUbMenu">' +
         '<div class="lt-ub-menu__mail">' + email + (isPro ? '<span class="lt-ub-menu__badge">Premium</span>' : '') + '</div>' +
+        '<a class="lt-ub-link" href="./profil.html">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+          '<span data-en="My profile">Mon profil</span></a>' +
         '<button type="button" class="lt-ub-logout" onclick="ltGlobalLogout()">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
           'Se déconnecter</button>' +
@@ -838,8 +848,8 @@
       'html,body,*{cursor:none!important}'+
       '#lt-p{position:fixed;z-index:2147483647;pointer-events:none;'+
       'width:9px;height:9px;border-radius:50%;'+
-      'background:#E8C268;'+
-      'box-shadow:0 0 7px 2px rgba(232,194,104,.7),0 0 16px 4px rgba(232,194,104,.35);'+
+      'background:#7FB8E8;'+
+      'box-shadow:0 0 7px 2px rgba(127,184,232,.7),0 0 16px 4px rgba(127,184,232,.35);'+
       'transform:translate(-50%,-50%);transition:opacity .2s;}'+
       '#lt-p.off{opacity:0}';
     document.head.appendChild(s);
