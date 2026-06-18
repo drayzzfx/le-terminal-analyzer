@@ -325,6 +325,10 @@
         <div class="lt-user-info" id="ltUserInfo">
           <div class="lt-user-label">CONNECTÉ</div>
           <div class="lt-user-email" id="ltUserEmail">—</div>
+          <a href="./profil.html" style="display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:4px;border-radius:6px;color:#F2F4F7;text-decoration:none;font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Mon profil
+          </a>
           <button class="lt-logout-btn" onclick="ltLogout()">Se déconnecter</button>
         </div>
         <a class="lt-nav-item" id="ltLoginItem" href="#" onclick="ltOpenLogin();return false;">
@@ -414,6 +418,10 @@
     var token = localStorage.getItem('ta_token') || '';
     var isPro = localStorage.getItem('lt_pro') === '1';
     if(!token || !email) { bar.innerHTML = ''; return; }
+    // Quand connecté : s'assurer que la barre est visible et masquer le bouton loginBtn
+    bar.style.display = 'inline-flex';
+    var lb = document.getElementById('loginBtn');
+    if(lb) lb.style.display = 'none';
     var initial = email.charAt(0).toUpperCase();
     var username = email.split('@')[0];
     var pseudo = localStorage.getItem('lt_pseudo') || '';
@@ -430,9 +438,14 @@
       '</div>' +
       '<div class="lt-ub-menu" id="ltUbMenu">' +
         '<div class="lt-ub-menu__mail">' + email + '</div>' +
-        '<a class="lt-ub-link" href="./profil.html">' +
+        '<div id="ltUbStatusBadge" style="margin:6px 10px 10px;padding:6px 10px;border-radius:6px;font-family:Inter,system-ui,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:6px;' + (isPro ? 'background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.3);color:#E8C268' : 'background:rgba(127,184,232,.07);border:1px solid rgba(127,184,232,.18);color:#7FB8E8') + '">' +
+          (isPro
+            ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Premium'
+            : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> Version gratuite') +
+        '</div>' +
+        '<a class="lt-ub-link" href="./profil.html" style="display:flex;align-items:center;gap:8px;padding:9px 10px;color:#F2F4F7;text-decoration:none;border-radius:6px;font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600;margin-bottom:4px;">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
-          '<span data-en="My profile">Mon profil</span></a>' +
+          '<span>Mon profil</span></a>' +
         '<button type="button" class="lt-ub-logout" onclick="ltGlobalLogout()">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
           'Se déconnecter</button>' +
