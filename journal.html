@@ -280,6 +280,12 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 .pf-combo__list.show{display:block}
 .pf-combo__list::-webkit-scrollbar{width:7px}
 .pf-combo__list::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+/* scrollbars dark theme */
+*::-webkit-scrollbar{width:6px;height:6px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:rgba(127,184,232,.22);border-radius:4px}
+*::-webkit-scrollbar-thumb:hover{background:rgba(127,184,232,.42)}
+*{scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.25) transparent}
 .pf-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 13px;cursor:pointer;transition:background .12s;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;color:var(--text2)}
 .pf-opt:hover,.pf-opt.active{background:rgba(127,184,232,.1);color:var(--text)}
 .pf-opt__plat{font-family:var(--font-mono,monospace);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:50px;padding:2px 8px;flex-shrink:0}
