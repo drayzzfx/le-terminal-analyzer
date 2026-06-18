@@ -481,7 +481,6 @@
             _b2.style.display = 'inline-flex';
           }
         }).catch(function(){});
-      }
     }
   }
 
