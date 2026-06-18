@@ -94,6 +94,14 @@
   var NAV = [
     { key: 'dashboard', label: 'Accueil', href: './index.html', icon: I.dashboard },
     { key: 'journal', label: 'Journal de Trading', href: './journal.html', icon: I.journal, pro: true },
+    { key: 'analyzer', label: 'Setup Analyzer', href: './app.html', icon: I.analyzer, pro: true, children: [
+      { label: 'Historique', href: './app.html#historique', icon: I.hist },
+      { label: 'Perfs', href: './app.html#perfs', icon: I.perf }
+    ] },
+    { key: 'patrimoine', label: 'Patrimoine', href: './patrimoine-presentation.html', pro: true, icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>', children: [
+      { label: 'Présentation', href: './patrimoine-presentation.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>' },
+      { label: 'Portefeuille', href: './patrimoine.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>' }
+    ] },
     { key: 'calendrier', label: 'Calendrier Éco', href: './calendrier.html', icon: I.calendrier, pro: true, children: [
       { label: 'Présentation', href: './eco-edition.html', icon: I.pres, children: [
         { label: 'La sélection', href: './eco-selection.html' },
@@ -109,17 +117,9 @@
       { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto },
       { label: 'Archive', href: './eco-archive.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M9.5 12h5"/></svg>' }
     ] },
-    { key: 'analyzer', label: 'Setup Analyzer', href: './app.html', icon: I.analyzer, pro: true, children: [
-      { label: 'Historique', href: './app.html#historique', icon: I.hist },
-      { label: 'Perfs', href: './app.html#perfs', icon: I.perf }
-    ] },
     { key: 'bubble', label: 'Bubble Map', href: './bubble.html', icon: I.bubble },
-    { key: 'trades', label: 'Mur des Trades', href: './mur-des-trades.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>' },
-    { key: 'patrimoine', label: 'Patrimoine', href: './patrimoine-presentation.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>', children: [
-      { label: 'Présentation', href: './patrimoine-presentation.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>' },
-      { label: 'Portefeuille', href: './patrimoine.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>' }
-    ] },
-    { key: 'calculateur', label: 'Calculateur de Pips', href: './calculateur.html', icon: I.calc }
+    { key: 'calculateur', label: 'Calculateur de Pips', href: './calculateur.html', icon: I.calc },
+    { key: 'trades', label: 'Mur des Trades', href: './mur-des-trades.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>' }
   ];
 
   function subTree(items, deep) {
