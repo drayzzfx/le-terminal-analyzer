@@ -3,125 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le Terminal — Patrimoine · Portefeuille</title>
+<title>Le Terminal — Patrimoine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
 <style>
-/* ============================================================
-   Patrimoine — Portefeuille (repris de Claude Design, habillé
-   avec le design system du site).
-   ============================================================ */
-.pf-page { display: flex; flex-direction: column; gap: 24px; }
-.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); }
-.eyebrow .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: inline-block; }
-.page-head { display: flex; flex-direction: column; gap: 8px; }
-.page-head h1 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 2.6rem); letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
-.page-head p { margin: 0; color: var(--text-body); font-size: 0.98rem; max-width: 70ch; line-height: 1.6; }
-.panel { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 22px; }
-.panel__title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0 0 16px; font-family: var(--font-mono); }
-
-.pf-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 9px; border-radius: var(--r-sm); border: 1px solid; }
-.pf-badge--bull { color: var(--bull); background: var(--bull-glow); border-color: rgba(74,222,156,0.35); }
-.pf-badge .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
-
-/* buttons : on réutilise .lt-btn du design system */
-.lt-btn svg { width: 16px; height: 16px; }
-
-/* ---------- connection module ---------- */
-.pf-conn { display: flex; flex-direction: column; gap: 18px; }
-.pf-conn__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-.pf-conn__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 0.01em; color: var(--text-title); margin: 10px 0 8px; }
-.pf-conn__lede { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--text-body); max-width: 60ch; }
-.pf-brokers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-@media (max-width: 560px) { .pf-brokers { grid-template-columns: 1fr; } }
-.pf-broker { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-surface); cursor: pointer; text-align: left; transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out); }
-.pf-broker:hover { border-color: var(--accent); transform: translateY(-2px); background: var(--accent-glow-soft); }
-.pf-broker__mark { flex-shrink: 0; width: 42px; height: 42px; border-radius: var(--r-sm); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 14px; font-weight: 700; background: var(--bg-void); }
-.pf-broker__name { font-size: 14.5px; font-weight: 600; color: var(--text-title); }
-.pf-broker__tag { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent-glow); border-radius: var(--r-sm); padding: 3px 7px; }
-.pf-broker__go { margin-left: auto; color: var(--text-muted); display: inline-flex; transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
-.pf-broker:hover .pf-broker__go { color: var(--accent); transform: translateX(3px); }
-.pf-brokers__note { grid-column: 1 / -1; display: flex; align-items: center; gap: 9px; margin: 4px 0 0; font-size: 12px; color: var(--text-muted); }
-.pf-brokers__note svg { color: var(--accent); }
-.pf-conn--ok { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-.pf-conn__okleft { display: flex; align-items: center; gap: 16px; }
-.pf-conn__okmeta { display: flex; flex-direction: column; gap: 6px; }
-.pf-conn__okrow { display: flex; align-items: center; gap: 12px; }
-.pf-conn__okrow b { font-size: 1.1rem; color: var(--text-title); }
-.pf-conn__sync { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
-.pf-conn__sync svg { color: var(--bull); }
-.pf-conn__okact { display: flex; gap: 10px; }
-
-/* ---------- overview + chart ---------- */
-.pf-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; align-items: start; }
-@media (max-width: 1040px) { .pf-grid { grid-template-columns: 1fr; } }
-.pf-ov { display: flex; flex-direction: column; gap: 22px; }
-.pf-ov__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-.pf-ov__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
-.pf-ov__total { display: block; font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: clamp(2.4rem, 4vw, 3.4rem); font-weight: 700; color: var(--text-title); line-height: 1.05; margin-top: 6px; }
-.pf-ov__pnl { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-.pf-ov__pnlmain { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.05rem; font-weight: 600; }
-.pf-ov__pnlsub { font-size: 12.5px; color: var(--text-muted); }
-.pf-period { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-void); }
-.pf-period__btn { padding: 7px 16px; border: none; background: transparent; color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; border-radius: var(--r-sm); cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
-.pf-period__btn:hover { color: var(--text-title); }
-.pf-period__btn.is-on { background: var(--accent-glow-soft); color: var(--accent-bright); box-shadow: inset 0 0 0 1px var(--accent-glow); }
-.pf-chart { display: flex; flex-direction: column; gap: 10px; }
-.pf-chart__svg { width: 100%; height: 240px; display: block; }
-.pf-chart__foot { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
-.pf-chart__foot b { color: var(--text-body); font-weight: 600; }
-.pf-ov__sub { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; border-top: 1px solid var(--border-subtle); padding-top: 18px; }
-@media (max-width: 620px) { .pf-ov__sub { grid-template-columns: repeat(2, 1fr); } }
-.pf-substat { display: flex; flex-direction: column; gap: 5px; }
-.pf-substat__k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
-.pf-substat__v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.15rem; font-weight: 600; color: var(--text-title); }
-
-/* ---------- allocation donut ---------- */
-.pf-alloc { display: flex; flex-direction: column; }
-.pf-alloc__body { display: flex; flex-direction: column; gap: 22px; align-items: center; }
-.pf-donut { width: 180px; flex-shrink: 0; }
-.pf-donut svg { width: 100%; height: auto; }
-.pf-donut__big { font-family: var(--font-mono); font-size: 26px; font-weight: 700; fill: var(--text-title); }
-.pf-donut__cap { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; fill: var(--text-muted); }
-.pf-alloc__legend { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-.pf-leg { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 10px; align-items: center; padding-bottom: 11px; border-bottom: 1px solid var(--border-subtle); }
-.pf-leg:last-child { border-bottom: none; padding-bottom: 0; }
-.pf-leg__dot { width: 10px; height: 10px; border-radius: 3px; }
-.pf-leg__k { font-size: 13px; color: var(--text-body); }
-.pf-leg__pct { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; color: var(--text-title); }
-.pf-leg__val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--text-muted); min-width: 64px; text-align: right; }
-
-/* ---------- plans ---------- */
-.pf-plans-head { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-.pf-h2 { font-family: var(--font-display); text-transform: uppercase; font-size: 1.7rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
-.pf-plans-head p { margin: 0; color: var(--text-body); font-size: 0.95rem; }
-.pf-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
-@media (max-width: 940px) { .pf-plans { grid-template-columns: 1fr; } }
-.pf-plan { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 24px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: var(--bg-elevated); box-shadow: var(--shadow-md); transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
-.pf-plan:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 54px rgba(0,0,0,0.5), 0 0 34px var(--accent-glow-soft); }
-.pf-plan.is-featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 0 40px var(--accent-glow-soft); background: radial-gradient(120% 90% at 50% 0%, rgba(127,184,232,0.08), var(--bg-elevated) 60%); }
-.pf-plan__flag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #07090C; background: var(--accent); padding: 4px 14px; border-radius: var(--r-pill); box-shadow: 0 4px 14px var(--accent-glow); }
-.pf-plan__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.pf-plan__name { font-family: var(--font-display); text-transform: uppercase; font-size: 1.5rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
-.pf-plan__risk { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.pf-risk { display: inline-flex; gap: 4px; }
-.pf-risk__dot { width: 8px; height: 8px; border-radius: 999px; background: var(--border); }
-.pf-risk__dot.is-on.lvl1 { background: var(--bull); box-shadow: 0 0 8px var(--bull-glow); }
-.pf-risk__dot.is-on.lvl2 { background: var(--neutral); box-shadow: 0 0 8px var(--neutral-glow); }
-.pf-risk__dot.is-on.lvl3 { background: var(--bear); box-shadow: 0 0 8px var(--bear-glow); }
-.pf-plan__risklabel { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
-.pf-plan__obj { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
-.pf-plan__objval { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.6rem; font-weight: 700; color: var(--accent-bright); }
-.pf-plan__objcap { font-size: 11.5px; color: var(--text-muted); }
-.pf-plan__desc { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--text-body); flex: 1; }
-.pf-plan__mixbar { display: flex; height: 8px; border-radius: 999px; overflow: hidden; gap: 2px; background: var(--bg-void); }
-.pf-plan__mixbar span { display: block; }
-.pf-plan__mix { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.pf-plan__mix li { display: flex; align-items: center; gap: 9px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-body); font-variant-numeric: tabular-nums; }
-.pf-plan__mixdot { width: 9px; height: 9px; border-radius: 2px; }
-@media (prefers-reduced-motion: reduce) { .pf-plan, .pf-broker { transition: none; } }
+.pr-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-sm);border:1px solid}
+.pr-badge--accent{color:var(--accent);background:var(--accent-glow-soft);border-color:var(--accent-glow)}
+.pr-badge--up{color:var(--bull);background:rgba(74,222,156,.1);border-color:rgba(74,222,156,.35)}
+.pr-badge--down{color:var(--bear);background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.35)}
+.pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor}
+/* ── Cartes ── */
+.pt-grid{display:grid;gap:20px}
+.pt-card{position:relative;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.86),rgba(11,14,19,.94));box-shadow:0 18px 44px rgba(0,0,0,.4),inset 0 1px 0 rgba(127,184,232,.06);padding:24px}
+.pt-card__hd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.pt-eyebrow{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+/* ── Connexion compte ── */
+.pt-connect{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pt-connect__ic{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);flex-shrink:0}
+.pt-connect__main{flex:1;min-width:180px}
+.pt-connect__t{font-family:var(--font-text);font-weight:700;font-size:1.05rem;color:var(--text-title)}
+.pt-connect__s{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:3px;display:flex;align-items:center;gap:7px}
+.pt-sync-dot{width:7px;height:7px;border-radius:999px;background:var(--bull);box-shadow:0 0 8px var(--bull);animation:ptpulse 2s ease-in-out infinite}
+@keyframes ptpulse{0%,100%{opacity:.4}50%{opacity:1}}
+.pt-plats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.pt-plat{display:inline-flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-surface);color:var(--text-body);font-family:var(--font-text);font-size:13.5px;font-weight:600;cursor:pointer;transition:border-color .2s,transform .2s}
+.pt-plat:hover{border-color:var(--accent);transform:translateY(-2px)}
+.pt-plat__logo{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;font-weight:700;color:#07090c}
+/* ── Vue d'ensemble ── */
+.pt-overview{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+@media(max-width:880px){.pt-overview{grid-template-columns:1fr}.pt-connect__main{min-width:120px}}
+.pt-total{font-family:var(--font-mono);font-weight:600;font-size:clamp(2.2rem,5vw,3rem);color:var(--text-title);letter-spacing:.01em;line-height:1}
+.pt-pl{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap}
+.pt-pl b{font-family:var(--font-mono);font-size:1.1rem;font-weight:600}
+.pt-pl .up{color:var(--bull)}.pt-pl .down{color:var(--bear)}
+.pt-periods{display:flex;gap:6px}
+.pt-period{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.04em;padding:6px 12px;border-radius:var(--r-pill);border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
+.pt-period.on{color:var(--accent-bright);border-color:var(--accent-glow);background:var(--accent-glow-soft)}
+.pt-chart{width:100%;height:200px;display:block;margin-top:10px}
+/* ── Donut ── */
+.pt-alloc{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.pt-donut{position:relative;width:160px;height:160px;flex-shrink:0}
+.pt-donut__c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pt-donut__c b{font-family:var(--font-mono);font-size:1.2rem;color:var(--text-title)}
+.pt-donut__c span{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.pt-legend{flex:1;min-width:200px;display:flex;flex-direction:column;gap:11px}
+.pt-leg{display:grid;grid-template-columns:12px 1fr auto;gap:10px;align-items:center;font-family:var(--font-text);font-size:13.5px;color:var(--text-body)}
+.pt-leg__sw{width:12px;height:12px;border-radius:3px}
+.pt-leg__v{font-family:var(--font-mono);font-weight:600;color:var(--text-title)}
+/* ── Plans ── */
+.pt-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:880px){.pt-plans{grid-template-columns:1fr}}
+.pt-plan{position:relative;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.86),rgba(11,14,19,.94));padding:24px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.pt-plan:hover{transform:translateY(-4px);border-color:var(--accent-glow);box-shadow:0 24px 56px rgba(0,0,0,.5)}
+.pt-plan--feature{border-color:var(--accent-glow);box-shadow:0 0 0 1px var(--accent-glow),0 24px 56px rgba(0,0,0,.45)}
+.pt-plan__top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pt-plan__name{font-family:var(--font-display);text-transform:uppercase;font-size:1.5rem;letter-spacing:.02em;color:var(--text-title)}
+.pt-risk{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.pt-risk__dots{display:inline-flex;gap:3px}
+.pt-risk__dots i{width:7px;height:7px;border-radius:999px;background:var(--border)}
+.pt-risk--low i:nth-child(1){background:var(--bull)}
+.pt-risk--mid i:nth-child(1),.pt-risk--mid i:nth-child(2){background:var(--neutral)}
+.pt-risk--high i{background:var(--bear)}
+.pt-plan__obj{font-family:var(--font-mono);font-size:1.5rem;font-weight:600;color:var(--text-title)}
+.pt-plan__obj small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);font-weight:700;margin-bottom:4px}
+.pt-plan__meta{font-family:var(--font-text);font-size:13px;color:var(--text-muted)}
+.pt-plan__compo{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.pt-compo{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;font-family:var(--font-text);font-size:12.5px;color:var(--text-body)}
+.pt-compo__bar{grid-column:1/-1;height:5px;border-radius:999px;background:rgba(127,184,232,.12);overflow:hidden}
+.pt-compo__bar i{display:block;height:100%;border-radius:999px}
+.pt-plan__btn{margin-top:auto}
 </style>
 </head>
 <body class="eco-page">
@@ -141,12 +94,11 @@
           <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
           <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Résultats vérifiés</span></a>
-          <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine · Présentation</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Suivi de patrimoine long terme</span></a>
-          <a class="lt-nav__menuitem" href="./patrimoine.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine · Portefeuille</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Connexion · évolution · plans</span></a>
+          <a class="lt-nav__menuitem" href="./patrimoine.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine · Découvrir</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">La présentation</span></a>
           <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
         </div>
       </div>
-      <a href="./patrimoine-presentation.html" data-en="Wealth">Patrimoine</a>
       <a href="./tarifs.html">Tarifs</a>
       <a href="./index.html#method">Méthode</a>
       <a href="./index.html#community">Communauté</a>
@@ -162,73 +114,74 @@
 </div>
 
 <main class="wrap">
-<div class="pf-page">
+<div class="pr">
 
-  <div class="page-head">
-    <span class="eyebrow"><span class="lt-dot"></span> Investissement long terme</span>
-    <h1>Mon Portefeuille</h1>
-    <p>Suis ton patrimoine investi en un coup d'œil — positions synchronisées, performance dans le temps et plans adaptés à ton profil de risque.</p>
-  </div>
+  <section class="pr-head" style="margin-bottom:24px">
+    <span class="pr-eyebrow"><span class="lt-dot"></span> Patrimoine · Long terme</span>
+    <h1 class="pr-head__title">Ton portefeuille, <span class="pr-metal">posé.</span></h1>
+  </section>
 
-  <!-- Connexion -->
-  <div id="pfConn"></div>
-
-  <!-- Reste (visible une fois connecté) -->
-  <div id="pfMain">
-    <div class="pf-grid">
-      <!-- Vue d'ensemble + courbe -->
-      <div class="pf-ov panel">
-        <div class="pf-ov__head">
-          <div class="pf-ov__val">
-            <span class="pf-ov__label">Valeur totale du portefeuille</span>
-            <span class="pf-ov__total" id="pfTotal">0 €</span>
-            <div class="pf-ov__pnl">
-              <span class="pf-ov__pnlmain" style="color:var(--bull)">▲ +10 250 €</span>
-              <span class="pf-badge pf-badge--bull">+27,0 %</span>
-              <span class="pf-ov__pnlsub">depuis l'investissement initial · 38 000 €</span>
-            </div>
-          </div>
-          <div class="pf-period" id="pfPeriod">
-            <button class="pf-period__btn" data-p="1M">1M</button>
-            <button class="pf-period__btn" data-p="6M">6M</button>
-            <button class="pf-period__btn is-on" data-p="1A">1A</button>
-            <button class="pf-period__btn" data-p="Max">Max</button>
-          </div>
+  <!-- Connexion de compte + Vue d'ensemble -->
+  <div class="pt-grid" style="grid-template-columns:1fr;margin-bottom:20px">
+    <div class="pt-card" id="ptConnectCard">
+      <div class="pt-connect">
+        <span class="pt-connect__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M16 15h2"/></svg></span>
+        <div class="pt-connect__main">
+          <div class="pt-connect__t" id="ptConnTitle">Connecte ton compte d'investissement</div>
+          <div class="pt-connect__s" id="ptConnSub">Trade Republic · Boursorama · Degiro · Bourse Direct</div>
         </div>
-        <div class="pf-chart">
-          <svg class="pf-chart__svg" id="pfChart" viewBox="0 0 720 240" preserveAspectRatio="none"></svg>
-          <div class="pf-chart__foot">
-            <span>Évolution sur <b id="pfFootPeriod">1 an</b></span>
-            <span id="pfFootChange" style="color:var(--bull)"></span>
-          </div>
-        </div>
-        <div class="pf-ov__sub">
-          <div class="pf-substat"><span class="pf-substat__k">Investi</span><span class="pf-substat__v">38 000 €</span></div>
-          <div class="pf-substat"><span class="pf-substat__k">Plus-value</span><span class="pf-substat__v" style="color:var(--bull)">+10 250 €</span></div>
-          <div class="pf-substat"><span class="pf-substat__k">Dividendes perçus</span><span class="pf-substat__v" style="color:var(--bull)">+ 642 €</span></div>
-          <div class="pf-substat"><span class="pf-substat__k">Rendement annualisé</span><span class="pf-substat__v" style="color:var(--bull)">+ 11,4 %</span></div>
-        </div>
+        <button class="lt-btn lt-btn--primary lt-btn--sm" id="ptConnBtn">Connecter un compte</button>
       </div>
-
-      <!-- Répartition -->
-      <div class="pf-alloc panel">
-        <h3 class="panel__title">Répartition des actifs</h3>
-        <div class="pf-alloc__body">
-          <div class="pf-donut">
-            <svg viewBox="0 0 140 140" id="pfDonut"></svg>
-          </div>
-          <div class="pf-alloc__legend" id="pfLegend"></div>
-        </div>
+      <div class="pt-plats" id="ptPlats" style="display:none">
+        <button class="pt-plat" data-plat="Trade Republic" data-i="TR" data-c="#4ADE9C"><span class="pt-plat__logo" style="background:#4ADE9C">TR</span> Trade Republic</button>
+        <button class="pt-plat" data-plat="Boursorama" data-i="BO" data-c="#7FB8E8"><span class="pt-plat__logo" style="background:#7FB8E8">BO</span> Boursorama</button>
+        <button class="pt-plat" data-plat="Degiro" data-i="DG" data-c="#E8C268"><span class="pt-plat__logo" style="background:#E8C268">DG</span> Degiro</button>
+        <button class="pt-plat" data-plat="Bourse Direct" data-i="BD" data-c="#BFDCF5"><span class="pt-plat__logo" style="background:#BFDCF5">BD</span> Bourse Direct</button>
       </div>
     </div>
-
-    <div class="pf-plans-head">
-      <span class="eyebrow"><span class="lt-dot"></span> Plans d'investissement</span>
-      <h2 class="pf-h2">Choisis ta trajectoire</h2>
-      <p>Trois allocations clés en main, du plus prudent au plus dynamique. Ajustables à tout moment.</p>
-    </div>
-    <div class="pf-plans" id="pfPlans"></div>
   </div>
+
+  <div class="pt-overview" style="margin-bottom:20px">
+    <!-- Évolution -->
+    <div class="pt-card">
+      <div class="pt-card__hd">
+        <div>
+          <div class="pt-eyebrow">Valeur totale</div>
+          <div class="pt-total" id="ptTotal">0,00 €</div>
+          <div class="pt-pl">
+            <b class="up" id="ptPlEur">+0 €</b>
+            <span class="pr-badge pr-badge--up" id="ptPlPct"><span class="lt-dot"></span> +0,0 %</span>
+            <span class="pt-eyebrow" id="ptPlLbl">depuis l'origine</span>
+          </div>
+        </div>
+        <div class="pt-periods" id="ptPeriods">
+          <button class="pt-period" data-p="1M">1M</button>
+          <button class="pt-period" data-p="6M">6M</button>
+          <button class="pt-period on" data-p="1A">1A</button>
+          <button class="pt-period" data-p="Max">Max</button>
+        </div>
+      </div>
+      <svg class="pt-chart" id="ptChart" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+    </div>
+    <!-- Répartition -->
+    <div class="pt-card">
+      <div class="pt-card__hd"><div class="pt-eyebrow">Répartition des actifs</div></div>
+      <div class="pt-alloc">
+        <div class="pt-donut">
+          <svg width="160" height="160" viewBox="0 0 42 42" id="ptDonut"></svg>
+          <div class="pt-donut__c"><b id="ptDonutTotal">100%</b><span>Alloué</span></div>
+        </div>
+        <div class="pt-legend" id="ptLegend"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plans -->
+  <section class="pr-head" style="margin:36px 0 18px">
+    <span class="pr-eyebrow"><span class="lt-dot"></span> Stratégies</span>
+    <h2 class="pr-head__title">Trois plans, trois ambitions</h2>
+  </section>
+  <div class="pt-plans" id="ptPlans"></div>
 
 </div>
 </main>
@@ -239,185 +192,121 @@
 <script>
 (function(){
   'use strict';
-  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fmtEur0 = function(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; };
-  var TOTAL = 48250, INVESTED = 38000;
+  var nf=new Intl.NumberFormat('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  var nf0=new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0});
 
-  // ── Icônes ──
-  var IC = {
-    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',
-    sync: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 4v4h-4M3 20v-4h4"/></svg>',
-    shield: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 19 6v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
-    arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'
+  // ── Données de démonstration (réalistes, cohérentes) ──
+  var TOTAL=68412.50, INVESTED=59172.20;            // PV = +9 240,30 € (+15,6%)
+  var SERIES={
+    '1M':[64980,64210,65540,66120,65780,66890,67340,67010,67980,68412],
+    '6M':[58110,59880,57640,60120,61730,60040,62880,64510,63220,65990,67120,68412],
+    '1A':[51240,53110,49980,54620,56870,55230,58940,57110,61320,63880,62040,66110,64980,67320,68412],
+    'Max':[28010,31240,29870,34110,38920,36540,41880,45230,43110,48990,52340,49870,55620,58940,61230,64980,68412]
   };
-
-  // ── Connexion (maquette de flux) ──
-  var BROKERS = [
-    { id:'tr', name:'Trade Republic', tag:'Le plus populaire', col:'#F2F4F7' },
-    { id:'bourso', name:'BoursoBank', tag:'', col:'#E8C268' },
-    { id:'degiro', name:'DEGIRO', tag:'', col:'#4ADE9C' },
-    { id:'ibkr', name:'Interactive Brokers', tag:'', col:'#7FB8E8' }
+  var ALLOC=[
+    {k:'Actions',     v:42, c:'var(--accent)'},
+    {k:'ETF',         v:31, c:'var(--accent-bright)'},
+    {k:'Obligations', v:14, c:'var(--neutral)'},
+    {k:'Liquidités',  v:8,  c:'var(--text-muted)'},
+    {k:'Crypto',      v:5,  c:'var(--bull)'}
   ];
-  function initials(name){ return name.split(' ').map(function(w){return w[0];}).slice(0,2).join(''); }
-  var state = { connected:true, broker:BROKERS[0], picking:false };
+  var PLANS=[
+    {name:'Prudent', cls:'low', risk:'Faible', obj:'+3 à 5 % / an', horizon:'3 ans +', feature:false,
+     compo:[['ETF monde',55,'var(--accent)'],['Obligations',35,'var(--neutral)'],['Liquidités',10,'var(--text-muted)']],
+     desc:'Préservation du capital, volatilité minimale.'},
+    {name:'Équilibré', cls:'mid', risk:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', feature:true,
+     compo:[['Actions',60,'var(--accent)'],['Obligations',35,'var(--neutral)'],['Liquidités',5,'var(--text-muted)']],
+     desc:'Le bon compromis croissance / sérénité.'},
+    {name:'Dynamique', cls:'high', risk:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', feature:false,
+     compo:[['Actions croissance',75,'var(--accent)'],['Tech',15,'var(--accent-bright)'],['Crypto',10,'var(--bull)']],
+     desc:'Forte volatilité, potentiel maximal.'}
+  ];
 
-  function renderConn(){
-    var el = document.getElementById('pfConn');
-    if(state.connected){
-      var b = state.broker;
-      el.innerHTML =
-        '<div class="pf-conn pf-conn--ok panel">'
-        + '<div class="pf-conn__okleft">'
-        +   '<span class="pf-broker__mark" style="color:'+b.col+';border-color:'+b.col+'55">'+initials(b.name)+'</span>'
-        +   '<div class="pf-conn__okmeta">'
-        +     '<div class="pf-conn__okrow"><b>'+b.name+'</b><span class="pf-badge pf-badge--bull"><span class="lt-dot"></span>Connecté</span></div>'
-        +     '<span class="pf-conn__sync">'+IC.sync+' Synchronisé il y a 2 min · 14 positions importées</span>'
-        +   '</div>'
-        + '</div>'
-        + '<div class="pf-conn__okact">'
-        +   '<button class="lt-btn lt-btn--ghost lt-btn--sm" data-act="disconnect">Déconnecter</button>'
-        +   '<button class="lt-btn lt-btn--secondary lt-btn--sm" data-act="resync">'+IC.sync+' Resynchroniser</button>'
-        + '</div>'
-        + '</div>';
-    } else {
-      var brokersHtml = '';
-      if(state.picking){
-        brokersHtml = '<div class="pf-brokers">'
-          + BROKERS.map(function(b){
-              return '<button class="pf-broker" data-broker="'+b.id+'">'
-                + '<span class="pf-broker__mark" style="color:'+b.col+';border-color:'+b.col+'55">'+initials(b.name)+'</span>'
-                + '<span class="pf-broker__name">'+b.name+'</span>'
-                + (b.tag ? '<span class="pf-broker__tag">'+b.tag+'</span>' : '')
-                + '<span class="pf-broker__go">'+IC.arrow+'</span></button>';
-            }).join('')
-          + '<p class="pf-brokers__note">'+IC.shield+' Chiffré de bout en bout · Aucun identifiant stocké · Révocable à tout moment</p>'
-          + '</div>';
-      }
-      el.innerHTML =
-        '<div class="pf-conn panel">'
-        + '<div class="pf-conn__head"><div>'
-        +   '<span class="eyebrow"><span class="lt-dot"></span> Connexion sécurisée</span>'
-        +   '<h3 class="pf-conn__title">Connecte ton compte d\'investissement</h3>'
-        +   '<p class="pf-conn__lede">Lie ta plateforme pour synchroniser automatiquement tes positions. Lecture seule — Le Terminal n\'exécute jamais d\'ordre.</p>'
-        +   '</div>'
-        +   (state.picking ? '' : '<button class="lt-btn lt-btn--primary" data-act="pick">'+IC.link+' Connecter un compte</button>')
-        + '</div>'
-        + brokersHtml
-        + '</div>';
-    }
-    document.getElementById('pfMain').style.display = state.connected ? 'block' : 'none';
+  // ── Compteur animé ──
+  function animate(el,to,fmt,dur){
+    var start=null,from=0;
+    function step(ts){ if(!start)start=ts; var p=Math.min((ts-start)/dur,1); var e=1-Math.pow(1-p,3);
+      el.textContent=fmt(from+(to-from)*e); if(p<1)requestAnimationFrame(step); }
+    requestAnimationFrame(step);
   }
 
-  document.getElementById('pfConn').addEventListener('click', function(e){
-    var act = e.target.closest('[data-act]'), bk = e.target.closest('[data-broker]');
-    if(act){
-      var a = act.getAttribute('data-act');
-      if(a==='pick'){ state.picking = true; renderConn(); }
-      else if(a==='disconnect'){ state.connected = false; state.picking = false; renderConn(); }
-      else if(a==='resync'){ /* maquette */ }
-    } else if(bk){
-      var id = bk.getAttribute('data-broker');
-      state.broker = BROKERS.filter(function(b){return b.id===id;})[0];
-      state.connected = true; state.picking = false; renderConn();
-    }
-  });
-
-  // ── Courbe d'évolution ──
-  function seriesFor(period){
-    var cfg = { '1M':[30,46050,0.012], '6M':[26,41200,0.03], '1A':[24,33800,0.05], 'Max':[30,12000,0.08] }[period];
-    var n = cfg[0], start = cfg[1], vol = cfg[2], end = 48250, pts = [], seed = period.length*991;
-    function rnd(){ seed = (seed*1103515245 + 12345) & 0x7fffffff; return (seed/0x7fffffff) - 0.5; }
-    for(var i=0;i<n;i++){ var t=i/(n-1); var base=start+(end-start)*Math.pow(t,0.92); var w=base*vol*rnd()*(1-t*0.5); pts.push(Math.max(8000, base+w)); }
-    pts[pts.length-1]=end; return pts;
-  }
+  // ── Graphe d'évolution ──
   function drawChart(period){
-    var data = seriesFor(period), W=720, H=240, pad=8;
-    var min = Math.min.apply(null,data)*0.985, max = Math.max.apply(null,data)*1.01;
-    var x = function(i){ return pad + (i/(data.length-1))*(W-pad*2); };
-    var y = function(v){ return H-pad - ((v-min)/(max-min))*(H-pad*2); };
-    var line = data.map(function(v,i){ return (i===0?'M':'L')+x(i).toFixed(1)+','+y(v).toFixed(1); }).join(' ');
-    var area = line+' L'+x(data.length-1).toFixed(1)+','+H+' L'+x(0).toFixed(1)+','+H+' Z';
-    var change = ((data[data.length-1]-data[0])/data[0])*100, up = change>=0;
-    var col = up?'var(--bull)':'var(--bear)', fillCol = up?'rgba(74,222,156,':'rgba(240,100,122,';
-    document.getElementById('pfChart').innerHTML =
-      '<defs><linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+fillCol+'0.28)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient></defs>'
-      + '<line x1="0" x2="720" y1="60" y2="60" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="120" y2="120" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="180" y2="180" stroke="rgba(58,65,76,0.25)"/>'
-      + '<path d="'+area+'" fill="url(#pfFill)"/>'
-      + '<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px '+fillCol+'0.4))"/>'
-      + '<circle cx="'+x(data.length-1).toFixed(1)+'" cy="'+y(data[data.length-1]).toFixed(1)+'" r="4.5" fill="'+col+'" stroke="#07090C" stroke-width="2"/>';
-    var lbl = { '1M':'1 mois','6M':'6 mois','1A':'1 an','Max':'tout l’historique' }[period];
-    document.getElementById('pfFootPeriod').textContent = lbl;
-    var fc = document.getElementById('pfFootChange');
-    fc.textContent = (change>=0?'+':'') + change.toFixed(1).replace('.',',') + ' % sur la période';
-    fc.style.color = up?'var(--bull)':'var(--bear)';
+    var d=SERIES[period]||SERIES['1A'], W=600,H=200,pad=8;
+    var min=Math.min.apply(null,d),max=Math.max.apply(null,d),rng=(max-min)||1;
+    var pts=d.map(function(v,i){return [pad+i*(W-2*pad)/(d.length-1), H-pad-((v-min)/rng)*(H-2*pad)];});
+    var line='M'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' L');
+    var area=line+' L'+pts[pts.length-1][0].toFixed(1)+','+H+' L'+pts[0][0].toFixed(1)+','+H+' Z';
+    var up=d[d.length-1]>=d[0], col=up?'var(--bull)':'var(--bear)', fill=up?'rgba(74,222,156,':'rgba(240,100,122,';
+    document.getElementById('ptChart').innerHTML=
+      '<defs><linearGradient id="ptg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+fill+'0.28)"/><stop offset="1" stop-color="'+fill+'0)"/></linearGradient></defs>'
+      +'<line x1="0" y1="60" x2="600" y2="60" stroke="rgba(58,65,76,.25)" stroke-width="1"/>'
+      +'<line x1="0" y1="130" x2="600" y2="130" stroke="rgba(58,65,76,.25)" stroke-width="1"/>'
+      +'<path d="'+area+'" fill="url(#ptg)"/>'
+      +'<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.4" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px '+fill+'0.5))"/>'
+      +'<circle cx="'+pts[pts.length-1][0].toFixed(1)+'" cy="'+pts[pts.length-1][1].toFixed(1)+'" r="3.5" fill="var(--accent-bright)"/>';
   }
-  document.getElementById('pfPeriod').addEventListener('click', function(e){
-    var b = e.target.closest('.pf-period__btn'); if(!b) return;
-    Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle('is-on', x===b); });
-    drawChart(b.getAttribute('data-p'));
-  });
 
-  // ── Donut d'allocation ──
-  var ALLOC = [
-    { k:'ETF monde', pct:42, col:'#7FB8E8' },
-    { k:'Actions', pct:28, col:'#4ADE9C' },
-    { k:'Obligations', pct:14, col:'#E8C268' },
-    { k:'Liquidités', pct:9, col:'#C3CAD4' },
-    { k:'Crypto', pct:7, col:'#F0647A' }
-  ];
+  // ── Donut ──
   function drawDonut(){
-    var R=56, C=2*Math.PI*R, acc=0;
-    var html = '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>';
+    var C=2*Math.PI*15.915, off=0, svg='';
     ALLOC.forEach(function(a){
-      var len = a.pct/100*C;
-      html += '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+a.col+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-acc)+'" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>';
-      acc += len;
+      var len=a.v/100*C;
+      svg+='<circle cx="21" cy="21" r="15.915" fill="none" stroke="'+a.c+'" stroke-width="5" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 21 21)"/>';
+      off+=len;
     });
-    html += '<text x="70" y="64" text-anchor="middle" class="pf-donut__big">5</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classes</text>';
-    document.getElementById('pfDonut').innerHTML = html;
-    document.getElementById('pfLegend').innerHTML = ALLOC.map(function(a){
-      return '<div class="pf-leg"><span class="pf-leg__dot" style="background:'+a.col+'"></span><span class="pf-leg__k">'+a.k+'</span><span class="pf-leg__pct">'+a.pct+' %</span><span class="pf-leg__val">'+fmtEur0(TOTAL*a.pct/100)+'</span></div>';
+    document.getElementById('ptDonut').innerHTML='<circle cx="21" cy="21" r="15.915" fill="none" stroke="rgba(127,184,232,.10)" stroke-width="5"/>'+svg;
+    document.getElementById('ptLegend').innerHTML=ALLOC.map(function(a){
+      return '<div class="pt-leg"><span class="pt-leg__sw" style="background:'+a.c+'"></span><span>'+a.k+'</span><span class="pt-leg__v">'+a.v+' %</span></div>';
     }).join('');
   }
 
   // ── Plans ──
-  var PLANS = [
-    { name:'Prudent', key:'prudent', risk:1, riskLabel:'Faible', obj:'+3 à 5 % / an', horizon:'3 ans +', tone:'bull', desc:'Préservation du capital, volatilité minimale.',
-      mix:[['Obligations',70,'#E8C268'],['ETF monde',25,'#7FB8E8'],['Liquidités',5,'#C3CAD4']] },
-    { name:'Équilibré', key:'equilibre', risk:2, riskLabel:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', tone:'neutral', featured:true, desc:'Le compromis croissance / sécurité le plus choisi.',
-      mix:[['Actions',60,'#4ADE9C'],['Obligations',35,'#E8C268'],['Liquidités',5,'#C3CAD4']] },
-    { name:'Dynamique', key:'dynamique', risk:3, riskLabel:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', tone:'bear', desc:'Forte croissance, forte volatilité. Pour le long terme.',
-      mix:[['Actions croissance',75,'#4ADE9C'],['ETF tech',15,'#7FB8E8'],['Crypto',10,'#F0647A']] }
-  ];
   function drawPlans(){
-    document.getElementById('pfPlans').innerHTML = PLANS.map(function(p){
-      var dots = '<span class="pf-risk">' + [1,2,3].map(function(i){ return '<span class="pf-risk__dot'+(i<=p.risk?' is-on lvl'+p.risk:'')+'"></span>'; }).join('') + '</span>';
-      var bar = '<div class="pf-plan__mixbar">' + p.mix.map(function(m){ return '<span style="width:'+m[1]+'%;background:'+m[2]+'"></span>'; }).join('') + '</div>';
-      var list = '<ul class="pf-plan__mix">' + p.mix.map(function(m){ return '<li><span class="pf-plan__mixdot" style="background:'+m[2]+'"></span>'+m[1]+' % '+m[0]+'</li>'; }).join('') + '</ul>';
-      return '<article class="pf-plan'+(p.featured?' is-featured':'')+'">'
-        + (p.featured?'<span class="pf-plan__flag">Recommandé</span>':'')
-        + '<div class="pf-plan__top"><h3 class="pf-plan__name">'+p.name+'</h3>'
-        +   '<div class="pf-plan__risk">'+dots+'<span class="pf-plan__risklabel">Risque '+p.riskLabel+'</span></div></div>'
-        + '<div class="pf-plan__obj"><span class="pf-plan__objval">'+p.obj+'</span><span class="pf-plan__objcap">Objectif annualisé · Horizon '+p.horizon+'</span></div>'
-        + '<p class="pf-plan__desc">'+p.desc+'</p>'
-        + bar + list
-        + '<a class="lt-btn '+(p.featured?'lt-btn--primary':'lt-btn--secondary')+'" style="width:100%" href="./patrimoine-plan.html?p='+p.key+'">Choisir ce plan</a>'
-        + '</article>';
+    document.getElementById('ptPlans').innerHTML=PLANS.map(function(p){
+      var dots='<span class="pt-risk__dots"><i></i><i></i><i></i></span>';
+      var compo=p.compo.map(function(c){return '<div class="pt-compo"><span>'+c[0]+'</span><span style="font-family:var(--font-mono);color:var(--text-title)">'+c[1]+'%</span><span class="pt-compo__bar"><i style="width:'+c[1]+'%;background:'+c[2]+'"></i></span></div>';}).join('');
+      return '<article class="pt-plan'+(p.feature?' pt-plan--feature':'')+'">'
+        +'<div class="pt-plan__top"><span class="pt-plan__name">'+p.name+'</span>'
+        +'<span class="pt-risk pt-risk--'+p.cls+'">'+dots+' '+p.risk+'</span></div>'
+        +'<div class="pt-plan__obj"><small>Objectif annualisé</small>'+p.obj+'</div>'
+        +'<div class="pt-plan__meta">Horizon recommandé · '+p.horizon+'</div>'
+        +'<div class="pt-plan__meta" style="color:var(--text-body)">'+p.desc+'</div>'
+        +'<div class="pt-plan__compo">'+compo+'</div>'
+        +'<a class="lt-btn '+(p.feature?'lt-btn--primary':'lt-btn--secondary')+' pt-plan__btn" href="#">Choisir ce plan</a>'
+        +'</article>';
     }).join('');
   }
 
-  // ── Compteur du total ──
-  function countTotal(){
-    var el = document.getElementById('pfTotal');
-    if(reduced){ el.textContent = fmtEur0(TOTAL); return; }
-    var t0=null, dur=1200;
-    function tick(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur); el.textContent=fmtEur0(TOTAL*(1-Math.pow(1-k,3))); if(k<1)requestAnimationFrame(tick); }
-    requestAnimationFrame(tick);
+  // ── Connexion compte (maquette de flux) ──
+  function wireConnect(){
+    var btn=document.getElementById('ptConnBtn'), plats=document.getElementById('ptPlats');
+    btn.addEventListener('click',function(){ plats.style.display=plats.style.display==='none'?'flex':'none'; });
+    plats.addEventListener('click',function(e){
+      var b=e.target.closest('.pt-plat'); if(!b)return;
+      var name=b.getAttribute('data-plat'), ini=b.getAttribute('data-i'), c=b.getAttribute('data-c');
+      document.getElementById('ptConnTitle').innerHTML='<span style="display:inline-flex;align-items:center;gap:9px"><span class="pt-plat__logo" style="background:'+c+'">'+ini+'</span> '+name+' · <span style="color:var(--bull)">Connecté</span></span>';
+      document.getElementById('ptConnSub').innerHTML='<span class="pt-sync-dot"></span> Synchronisé il y a 4 min · 1 compte · '+nf0.format(TOTAL)+' €';
+      plats.style.display='none';
+      btn.textContent='Gérer'; btn.classList.remove('lt-btn--primary'); btn.classList.add('lt-btn--ghost');
+    });
   }
 
-  function init(){ renderConn(); drawChart('1A'); drawDonut(); drawPlans(); countTotal(); }
-  window.ecoReloadNews = function(){};
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+  function init(){
+    animate(document.getElementById('ptTotal'),TOTAL,function(v){return nf.format(v)+' €';},900);
+    var pl=TOTAL-INVESTED, plpct=pl/INVESTED*100;
+    animate(document.getElementById('ptPlEur'),pl,function(v){return '+'+nf0.format(v)+' €';},900);
+    document.getElementById('ptPlPct').innerHTML='<span class="lt-dot"></span> +'+plpct.toFixed(1).replace('.',',')+' %';
+    drawChart('1A'); drawDonut(); drawPlans(); wireConnect();
+    document.getElementById('ptPeriods').addEventListener('click',function(e){
+      var b=e.target.closest('.pt-period'); if(!b)return;
+      Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
+      drawChart(b.getAttribute('data-p'));
+      document.getElementById('ptPlLbl').textContent={'1M':'sur 1 mois','6M':'sur 6 mois','1A':'sur 1 an','Max':'depuis l\'origine'}[b.getAttribute('data-p')];
+    });
+  }
+  window.ecoReloadNews=function(){};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 </body>
