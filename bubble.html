@@ -398,7 +398,7 @@ function bmActiveCount(){
 }
 function bmRadius(w){
   var n=bmActiveCount();
-  var scale= bmCat==='crypto' ? 1.7 : n<=12 ? 1.92 : n<=25 ? 1.68 : n<=40 ? 1.2 : n<=55 ? 1.1 : 0.73;
+  var scale= bmCat==='crypto' ? 2.5 : n<=12 ? 1.92 : n<=25 ? 1.68 : n<=40 ? 1.2 : n<=55 ? 1.1 : 0.73;
   return (22 + Math.sqrt((w||0.5)/bmMaxW)*58)*scale;
 }
 function bmRecomputeRadii(){
@@ -591,6 +591,11 @@ function initBubbles(){
     bmCat=b.getAttribute('data-cat');
     f.querySelectorAll('.bm-filter').forEach(function(x){ x.classList.toggle('is-on',x===b); });
     bmRecomputeRadii();
+    // repositionne les bulles actives depuis le centre pour éviter les chevauchements post-resize
+    bmBubbles.forEach(function(bub){
+      var active=(bmCat==='all'||bub.cat===bmCat)&&!bmHidden.has(bub.s);
+      if(active){ bub.x=(bmW||700)*0.2+Math.random()*(bmW||700)*0.6; bub.y=(bmH||440)*0.2+Math.random()*(bmH||440)*0.6; bub.vx=0; bub.vy=0; }
+    });
     if(bmReduced) bmSettle();
     bmUpdatePerf();
   });
