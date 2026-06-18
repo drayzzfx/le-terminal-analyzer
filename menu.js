@@ -434,9 +434,9 @@
       '</div>' +
       '<div class="lt-ub-menu" id="ltUbMenu">' +
         '<div class="lt-ub-menu__mail">' + email + '</div>' +
-        '<a class="lt-ub-link" href="./profil.html">' +
+        '<a class="lt-ub-link" href="./profil.html" style="display:flex;align-items:center;gap:8px;padding:9px 10px;color:#F2F4F7;text-decoration:none;border-radius:6px;font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600;margin-bottom:4px;">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
-          '<span data-en="My profile">Mon profil</span></a>' +
+          '<span>Mon profil</span></a>' +
         '<button type="button" class="lt-ub-logout" onclick="ltGlobalLogout()">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
           'Se déconnecter</button>' +
