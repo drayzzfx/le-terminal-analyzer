@@ -474,7 +474,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jr-dash .calendar-section{min-width:0}
   .jr-panel{background:var(--surface,rgba(255,255,255,.02));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:16px;padding:18px 20px}
   .jr-panel__title{display:block;font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3,#7E8794);margin-bottom:14px}
-  .jr-eq{width:100%;height:150px;display:block}
+  .jr-eq{width:100%;height:180px;display:block}
   .jr-tbl{display:flex;flex-direction:column}
   .jr-rowh,.jr-row2{display:grid;grid-template-columns:80px 110px 80px 1fr 70px 100px;gap:10px;align-items:center;padding:10px 4px}
   @media(max-width:780px){.jr-rowh,.jr-row2{grid-template-columns:70px 90px 70px 1fr}.jr-rowh span:nth-child(4),.jr-rowh span:nth-child(5),.jr-row2 .jr-hidemob{display:none}}
@@ -515,6 +515,17 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .platform-card.soon::after,.broker-banner{border-radius:var(--r-md,6px)!important}
   .broker-connect-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;background-image:none!important}
   .broker-connect-btn:hover{background:var(--accent-bright,#BFDCF5)!important}
+  /* ── Broker soon panel (colonne droite) ── */
+  .broker-soon-panel{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+  .soon-badge{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono','Courier New',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#E8C268;background:rgba(232,194,104,.1);border:1px solid rgba(232,194,104,.25);border-radius:4px;padding:3px 8px;width:fit-content}
+  .soon-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;color:#A8B4C4;letter-spacing:.01em}
+  .soon-sub{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:11.5px;color:#5A6472;line-height:1.5}
+  .broker-soon-btn{width:100%;padding:9px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:6px;color:#3A4452;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:7px;opacity:.5}
+  /* ── import-mt5-btn (ghost accent) ── */
+  .import-mt5-btn{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#A8B4C4;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .import-mt5-btn:hover{background:rgba(127,184,232,.08);border-color:rgba(127,184,232,.28);color:#7FB8E8}
+  /* ── add-trade-btn dans la sidebar ── */
+  .jr-side .add-trade-btn{margin-bottom:0!important}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -529,19 +540,45 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="cal-grid" id="calGrid"></div>
     </div>
     <div class="jr-side">
+      <!-- Courbe d'équité -->
       <div class="jr-panel">
         <span class="jr-panel__title" data-en="Equity curve">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
-      <div class="jr-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
-          <span class="jr-panel__title" style="margin:0" data-en="AI Coach">IA Coach</span>
-          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
+
+      <!-- Boutons d'action -->
+      <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
+      <button class="import-mt5-btn" onclick="openMt5Modal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Importer depuis MT5
+      </button>
+
+      <!-- Broker soon -->
+      <div class="broker-soon-panel">
+        <span class="soon-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Bientôt
+        </span>
+        <div class="soon-title">Connexion compte broker</div>
+        <div class="soon-sub">Sync automatique MT5, FTMO, Topstep, TradeLocker — en développement.</div>
+        <button class="broker-soon-btn" disabled>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg>
+          Connecter un compte
+        </button>
+      </div>
+
+      <!-- Bannière broker (cachée jusqu'à connexion réelle) -->
+      <div class="broker-banner disconnected" id="brokerBanner" style="display:none">
+        <div class="broker-banner-left">
+          <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
+          <div class="broker-banner-text">
+            <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connecte ton compte de trading</div>
+            <div class="broker-banner-sub" id="brokerSub" data-en="MT4 · MT5 · Topstep · FTMO · CSV import">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
+          </div>
         </div>
-        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-          <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
+        <div class="broker-banner-actions" id="brokerActions">
+          <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="openBrokerModal()" data-en="Connect">Connecter</button>
         </div>
-        <div class="broker-banner-actions" id="brokerActions"></div>
       </div>
     </div>
   </div>
@@ -557,30 +594,36 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
   </div>
 
-  <!-- DERNIERS TRADES — pleine largeur, style maquette -->
+  <!-- DERNIERS TRADES — pleine largeur -->
   <div class="jr-panel" style="margin-bottom:18px">
     <span class="jr-panel__title" data-en="Recent trades">Derniers trades</span>
     <div class="jr-tbl" id="jrRecent"><div class="jr-empty" data-en="No trades recorded yet.">Aucun trade enregistré pour l'instant.</div></div>
   </div>
 
-  <!-- BROKER BANNER -->
-  <div class="broker-banner disconnected" id="brokerBanner">
-    <div class="broker-banner-left">
-      <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
-      <div class="broker-banner-text">
-        <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connecte ton compte de trading</div>
-        <div class="broker-banner-sub" id="brokerSub" data-en="MT4 · MT5 · Topstep · FTMO · CSV import">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
-      </div>
+</div>
+</div>
+
+<!-- MT5 IMPORT MODAL -->
+<div class="modal-overlay" id="mt5Modal">
+  <div class="modal-box" style="max-width:560px;width:100%">
+    <button class="modal-close" onclick="closeMt5Modal()">✕</button>
+    <div class="modal-title">Importer depuis MT5</div>
+    <div class="modal-sub">Dépose un screenshot de ton historique MetaTrader 5 — l'IA extrait les trades automatiquement.</div>
+    <div class="upload-zone" id="mt5DropZone" style="margin:20px 0;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;border:2px dashed rgba(127,184,232,.3);border-radius:10px;transition:border-color .2s" onclick="document.getElementById('mt5FileInput').click()" ondrop="handleMt5Drop(event)" ondragover="event.preventDefault();this.style.borderColor='rgba(127,184,232,.6)'" ondragleave="this.style.borderColor='rgba(127,184,232,.3)'">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(127,184,232,.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <span style="font-size:13px;color:var(--text3)">Clique ou glisse ton screenshot MT5 ici</span>
+      <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="mt5FileSelected(event)">
     </div>
-    <div class="broker-banner-actions" id="brokerActions">
-      <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="openBrokerModal()" data-en="Connect">Connecter</button>
+    <div id="mt5Preview" style="display:none;margin-bottom:14px">
+      <img id="mt5PreviewImg" style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.1);max-height:220px;object-fit:contain">
+    </div>
+    <div id="mt5Status" style="display:none;font-size:12.5px;padding:8px 12px;border-radius:6px;margin-bottom:10px"></div>
+    <div id="mt5Results" style="display:none;margin-bottom:14px;max-height:260px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px">
+      <button class="submit-btn" id="mt5AnalyzeBtn" onclick="analyzeMt5Screenshot()" style="display:none;flex:1">Analyser l'image</button>
+      <button class="submit-btn" id="mt5ImportBtn" onclick="importMt5Trades()" style="display:none;flex:1;background:linear-gradient(135deg,#4ADE9C,#2db87a)!important;color:#07090C!important;box-shadow:0 0 0 1px rgba(74,222,156,.3),0 8px 24px rgba(74,222,156,.2)!important">Importer les trades</button>
     </div>
   </div>
-
-  <!-- ADD TRADE -->
-  <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
-
-</div>
 </div>
 
 <!-- ADD / EDIT TRADE MODAL -->
@@ -939,6 +982,7 @@ var currency = 'EUR';
 var curMonth = new Date().getMonth();
 var curYear = new Date().getFullYear();
 var editingId = null;
+var _daySelIds = new Set();
 var pendingDeleteId = null;
 var tradeDir = null;
 var tradeResult = null;
@@ -1119,6 +1163,8 @@ function openDayDetail(dateStr) {
   var pnlColor = pnl>0?'var(--green)':pnl<0?'var(--red)':'var(--amber)';
   var pnlBorder = pnl>0?'rgba(74,222,156,.4)':pnl<0?'rgba(240,100,122,.4)':'rgba(232,194,104,.4)';
 
+  _daySelIds = new Set();
+
   var html = '<div class="day-detail-header">'+
     '<div>'+
       '<div class="day-detail-date">'+dateLabel+'</div>'+
@@ -1134,18 +1180,32 @@ function openDayDetail(dateStr) {
       '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer">+ Ajouter un trade</button>'+
     '</div>';
   } else {
+    // Toolbar multi-sélection
+    if(dayTrades.length > 1) {
+      html += '<div id="daySelToolbar" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">'+
+        '<span id="daySelCount" style="font-size:12px;color:var(--text3)">0 sélectionné</span>'+
+        '<div style="display:flex;gap:8px">'+
+          '<button onclick="daySelectAll()" style="font-size:11px;font-weight:600;color:var(--text2);background:none;border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:4px 10px;cursor:pointer">Tout sélectionner</button>'+
+          '<button id="dayBulkDelBtn" onclick="dayBulkDelete()" style="font-size:11px;font-weight:600;color:#F0647A;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.2);border-radius:4px;padding:4px 10px;cursor:pointer;display:none">Supprimer la sélection</button>'+
+        '</div>'+
+      '</div>';
+    }
+
     // Trade cards
     dayTrades.forEach(function(t) {
-      var resClass = t.result==='win'?'win':t.result==='loss'?'loss':'be';
-      var resLabel = t.result==='win'?'WIN':t.result==='loss'?'LOSS':'BREAK EVEN';
+      var dir = (t.dir||t.direction||'').toUpperCase();
+      var isLong = dir==='LONG'||dir==='BUY';
+      var dirColor = isLong?'var(--green)':'var(--red)';
+      var dirBg = isLong?'rgba(74,222,156,.1)':'rgba(240,100,122,.1)';
+      var dirBorder = isLong?'rgba(74,222,156,.3)':'rgba(240,100,122,.3)';
       var pnlCol = (parseFloat(t.pnl)||0)>=0?'var(--green)':'var(--red)';
-      html += '<div class="trade-card">'+
+      html += '<div class="trade-card" id="tc-'+t.id+'" onclick="dayToggleSel(\''+t.id+'\')" style="cursor:pointer">'+
         '<div class="trade-card-top">'+
-          '<div>'+
+          '<div style="display:flex;align-items:center;gap:8px">'+
+            '<div id="tc-chk-'+t.id+'" style="width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s"></div>'+
             '<span class="trade-pair">'+t.pair+'</span>'+
-            '<span style="font-size:11px;color:'+(t.dir==='LONG'?'var(--green)':'var(--red)')+';margin-left:8px;font-weight:600">'+t.dir+'</span>'+
           '</div>'+
-          '<span class="trade-result-badge '+resClass+'">'+resLabel+'</span>'+
+          '<span style="font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:5px;border:1px solid '+dirBorder+';background:'+dirBg+';color:'+dirColor+'">'+dir+'</span>'+
         '</div>'+
         '<div class="trade-meta">'+
           (t.session?'<span>Session: <b>'+t.session+'</b></span>':'')+
@@ -1154,8 +1214,7 @@ function openDayDetail(dateStr) {
         '</div>'+
         '<div class="trade-pnl" style="color:'+pnlCol+'">'+((parseFloat(t.pnl)||0)>=0?'+':'')+parseFloat(t.pnl||0).toFixed(2)+curSym()+'</div>'+
         (t.notes?'<div class="trade-notes-text">'+t.notes+'</div>':'')+
-        (t.img?'<img class="trade-img" src="'+t.img+'" alt="screenshot" onclick="openLightbox(\''+t.id+'\')">':'')+
-        '<div class="trade-actions">'+
+        '<div class="trade-actions" onclick="event.stopPropagation()">'+
           '<button class="trade-edit-btn" onclick="editTrade(\''+t.id+'\')"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Modifier</button>'+
           '<button class="trade-del-btn" onclick="askDelete(\''+t.id+'\')"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Supprimer</button>'+
         '</div>'+
@@ -1183,6 +1242,45 @@ function openDayDetail(dateStr) {
 
 function closeDayModal() {
   document.getElementById('dayModal').classList.remove('show');
+  _daySelIds = new Set();
+}
+
+function dayToggleSel(id) {
+  if(_daySelIds.has(id)) { _daySelIds.delete(id); } else { _daySelIds.add(id); }
+  var card = document.getElementById('tc-'+id);
+  var chk  = document.getElementById('tc-chk-'+id);
+  if(!card||!chk) return;
+  var sel = _daySelIds.has(id);
+  card.style.borderColor = sel ? 'rgba(127,184,232,.5)' : '';
+  card.style.background  = sel ? 'rgba(127,184,232,.06)' : '';
+  chk.style.background   = sel ? '#7FB8E8' : '';
+  chk.style.borderColor  = sel ? '#7FB8E8' : 'rgba(255,255,255,.2)';
+  chk.innerHTML = sel ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#07090C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+  var cnt = document.getElementById('daySelCount');
+  var btn = document.getElementById('dayBulkDelBtn');
+  if(cnt) cnt.textContent = _daySelIds.size + ' sélectionné' + (_daySelIds.size>1?'s':'');
+  if(btn) btn.style.display = _daySelIds.size > 0 ? 'inline-block' : 'none';
+}
+
+function daySelectAll() {
+  document.querySelectorAll('[id^="tc-"]').forEach(function(el){
+    var id = el.id.replace('tc-','');
+    if(id && !id.startsWith('chk-')) { _daySelIds.add(id); dayToggleSel(id); _daySelIds.add(id); }
+  });
+  // re-run once to sync counts properly
+  var all = Array.from(document.querySelectorAll('[id^="tc-"]')).map(function(e){ return e.id.replace('tc-',''); }).filter(function(id){ return id && !id.startsWith('chk-'); });
+  all.forEach(function(id){ _daySelIds.add(id); var chk=document.getElementById('tc-chk-'+id); var card=document.getElementById('tc-'+id); if(!chk||!card) return; card.style.borderColor='rgba(127,184,232,.5)'; card.style.background='rgba(127,184,232,.06)'; chk.style.background='#7FB8E8'; chk.style.borderColor='#7FB8E8'; chk.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#07090C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'; });
+  var cnt=document.getElementById('daySelCount'); var btn=document.getElementById('dayBulkDelBtn');
+  if(cnt) cnt.textContent=_daySelIds.size+' sélectionné'+(_daySelIds.size>1?'s':'');
+  if(btn) btn.style.display=_daySelIds.size>0?'inline-block':'none';
+}
+
+function dayBulkDelete() {
+  if(!_daySelIds.size) return;
+  var ids = Array.from(_daySelIds);
+  ids.forEach(function(id){ trades = trades.filter(function(t){ return t.id !== id; }); deleteTrade(id); });
+  persist(); renderStats(); renderCalendar();
+  closeDayModal();
 }
 
 // ── TRADE MODAL ──
@@ -2481,39 +2579,51 @@ async function importMt5Trades() {
   var ok = 0, fail = 0;
   for (var i = 0; i < _mt5ParsedTrades.length; i++) {
     var t = _mt5ParsedTrades[i];
+    // Consume 1 journal_trade token per trade (1 token = 5 trades)
+    if (!(await journalTradeToken())) {
+      document.getElementById('mt5Status').textContent = 'Tokens insuffisants — ' + ok + ' trade' + (ok>1?'s':'') + ' importé' + (ok>1?'s':'') + '.';
+      break;
+    }
+    var tradeDate = t.date || new Date().toISOString().slice(0,10);
+    var tradeDir  = t.direction || 'LONG';
+    var tradeRes  = (t.pnl != null ? (parseFloat(t.pnl) >= 0 ? 'WIN' : 'LOSS') : (t.result || 'WIN'));
+    var body = {
+      date: tradeDate,
+      pair: t.pair || '',
+      direction: tradeDir,
+      session: t.session || 'London',
+      result: tradeRes,
+      pnl: t.pnl || 0,
+      rr: t.rr || null,
+      notes: t.notes ? t.notes + ' · Importé depuis MT5' : 'Importé depuis MT5',
+      img: _mt5ImageData ? ('data:' + _mt5MediaType + ';base64,' + _mt5ImageData) : null
+    };
     try {
-      var body = {
-        date: t.date || new Date().toISOString().slice(0,10),
-        pair: t.pair || '',
-        direction: t.direction || 'LONG',
-        session: t.session || 'London',
-        entryPrice: t.entryPrice || null,
-        exitPrice: t.exitPrice || null,
-        sl: t.sl || null,
-        tp: t.tp || null,
-        lots: t.lots || null,
-        result: t.pnl >= 0 ? 'WIN' : 'LOSS',
-        pnl: t.pnl || 0,
-        rr: t.rr || null,
-        notes: 'Importé depuis MT5'
-      };
       var r = await fetch('/api/journal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
         body: JSON.stringify(body)
       });
-      if (r.ok) ok++; else fail++;
+      if (r.ok) {
+        var created = await r.json();
+        var newId = (Array.isArray(created) ? created[0] : created);
+        newId = (newId && newId.id) || Date.now().toString() + i;
+        // Add to local trades array immediately so calendar/stats update
+        trades.push({ id: newId, date: tradeDate, pair: body.pair, dir: tradeDir, result: tradeRes, pnl: parseFloat(body.pnl)||0, rr: body.rr, session: body.session, notes: body.notes, img: body.img, created_at: new Date().toISOString() });
+        ok++;
+      } else { fail++; }
     } catch(e) { fail++; }
   }
+  if (ok) { trades.sort(function(a,b){ return (b.date||'') > (a.date||'') ? 1 : -1; }); persist(); renderStats(); renderCalendar(); }
   var st = document.getElementById('mt5Status');
   st.style.display = 'block';
-  if (fail === 0) {
+  if (fail === 0 && ok > 0) {
     st.style.background = 'rgba(74,222,156,.06)';
     st.style.border = '1px solid rgba(74,222,156,.2)';
     st.style.color = 'var(--green)';
     st.textContent = ok + ' trade' + (ok > 1 ? 's' : '') + ' importé' + (ok > 1 ? 's' : '') + ' avec succès';
-    setTimeout(function() { closeMt5Modal(); loadFromServer(); }, 1200);
-  } else {
+    setTimeout(function() { closeMt5Modal(); }, 1200);
+  } else if (ok > 0) {
     st.style.background = 'rgba(232,194,104,.06)';
     st.style.border = '1px solid rgba(232,194,104,.2)';
     st.style.color = 'var(--amber)';
@@ -2532,20 +2642,43 @@ async function importMt5Trades() {
   function jrDrawEquity(){
     var c=document.getElementById('jrEquity'); if(!c) return;
     var ctx=c.getContext('2d'), dpr=Math.min(window.devicePixelRatio||1,2);
-    var w=c.offsetWidth||600, h=c.offsetHeight||150; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w=c.offsetWidth||320, h=c.offsetHeight||150; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,w,h);
     var arr=jrTrades().slice().sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
     var series=[0],cum=0; arr.forEach(function(t){ cum+=parseFloat(t.pnl)||0; series.push(cum); });
-    if(series.length<2){ ctx.fillStyle='rgba(138,147,165,.55)'; ctx.font='12px sans-serif'; ctx.fillText('Pas encore assez de trades pour la courbe.',8,h/2); return; }
+    var sym=jrSym();
+    if(series.length<2){
+      ctx.fillStyle='rgba(138,147,165,.45)'; ctx.font='12px Inter,sans-serif';
+      ctx.textAlign='center'; ctx.fillText('Ajoute des trades pour voir la courbe',w/2,h/2); return;
+    }
+    var padL=48, padR=10, padT=18, padB=24;
     var min=Math.min.apply(null,series), max=Math.max.apply(null,series), rng=(max-min)||1;
-    var up=cum>=0, line=up?'rgba(74,222,156,0.9)':'rgba(240,100,122,0.9)', fillA=up?'rgba(74,222,156,0.14)':'rgba(240,100,122,0.14)';
-    ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-    for(var y=1;y<3;y++){ ctx.beginPath(); ctx.moveTo(0,h*y/3); ctx.lineTo(w,h*y/3); ctx.stroke(); }
-    var px=function(i){ return (i/(series.length-1))*w; }, py=function(v){ return h-8-((v-min)/rng)*(h-16); };
-    ctx.beginPath(); series.forEach(function(v,i){ i?ctx.lineTo(px(i),py(v)):ctx.moveTo(px(i),py(v)); });
-    ctx.strokeStyle=line; ctx.lineWidth=2; ctx.stroke();
-    ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
-    var g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,fillA); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fill();
+    var up=cum>=0, lineCol=up?'#4ADE9C':'#F0647A', fillA=up?'rgba(74,222,156,0.12)':'rgba(240,100,122,0.12)';
+    var px=function(i){ return padL+(i/(series.length-1))*(w-padL-padR); };
+    var py=function(v){ return padT+(1-(v-min)/rng)*(h-padT-padB); };
+    // Grid lines + y-labels
+    ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='right'; ctx.fillStyle='rgba(138,147,165,.6)';
+    ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+    var steps=[0,0.5,1];
+    steps.forEach(function(s){
+      var val=min+s*rng, y=py(val);
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+      ctx.fillText((val>=0?'+':'')+Math.round(val)+sym, padL-4, y+3.5);
+    });
+    // Curve
+    ctx.beginPath();
+    series.forEach(function(v,i){ i?ctx.lineTo(px(i),py(v)):ctx.moveTo(px(i),py(v)); });
+    ctx.strokeStyle=lineCol; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+    // Fill
+    ctx.lineTo(px(series.length-1),h-padB); ctx.lineTo(padL,h-padB); ctx.closePath();
+    var g=ctx.createLinearGradient(0,padT,0,h); g.addColorStop(0,fillA); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g; ctx.fill();
+    // Final value dot + label
+    var lx=px(series.length-1), ly=py(cum);
+    ctx.beginPath(); ctx.arc(lx,ly,4,0,2*Math.PI); ctx.fillStyle=lineCol; ctx.fill();
+    ctx.font='bold 11px JetBrains Mono,monospace'; ctx.textAlign='right';
+    ctx.fillStyle=lineCol;
+    ctx.fillText((cum>=0?'+':'')+Math.round(cum)+sym, w-padR, ly-8);
   }
   function jrRenderRecent(){
     var el=document.getElementById('jrRecent'); if(!el) return;
