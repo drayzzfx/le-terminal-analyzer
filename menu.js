@@ -414,6 +414,10 @@
     var token = localStorage.getItem('ta_token') || '';
     var isPro = localStorage.getItem('lt_pro') === '1';
     if(!token || !email) { bar.innerHTML = ''; return; }
+    // Quand connecté : s'assurer que la barre est visible et masquer le bouton loginBtn
+    bar.style.display = 'inline-flex';
+    var lb = document.getElementById('loginBtn');
+    if(lb) lb.style.display = 'none';
     var initial = email.charAt(0).toUpperCase();
     var username = email.split('@')[0];
     var pseudo = localStorage.getItem('lt_pseudo') || '';
