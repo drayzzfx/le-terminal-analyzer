@@ -63,12 +63,14 @@
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Verified results">Résultats vérifiés</span></a>
           <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
         </div>
       </div>
       <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
       <a href="#method" data-en="Method">Méthode</a>
       <a href="#community" data-en="Community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
     </nav>
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" id="ltLangPill" title="Langue">FR</span>
@@ -109,15 +111,15 @@
     <span class="lt-dock__lbl">Bubble</span>
     <span class="lt-dock__tip">Bubble Map</span>
   </a>
+  <a class="lt-dock__item" href="./mur-des-trades.html">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>
+    <span class="lt-dock__lbl">Trades</span>
+    <span class="lt-dock__tip">Mur des Trades</span>
+  </a>
   <a class="lt-dock__item" href="./calculateur.html">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
     <span class="lt-dock__lbl">Pips</span>
     <span class="lt-dock__tip">Calculateur de Pips</span>
-  </a>
-  <a class="lt-dock__item" href="./mur-des-trades.html">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="5" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="3" y="10" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="5" rx="1"/><rect x="3" y="17" width="8" height="4" rx="1"/><rect x="13" y="17" width="8" height="4" rx="1"/></svg>
-    <span class="lt-dock__lbl">Mur</span>
-    <span class="lt-dock__tip">Mur des Trades</span>
   </a>
 </nav>
 <!-- Hero (page-order #2, from marketing/Hero.jsx → Hero)
@@ -478,25 +480,54 @@
     </div>
   </div>
 </section>
-<!-- StatsSection — stats strip (cascade via data-stagger). Static partial.
-     Interactivity: initStatsCounters() animates the numeric cells ("5") on reveal;
-     non-numeric values ("Propriétaire", "∞", "24/7") are left verbatim. -->
-<section class="lt-statstrip" data-reveal data-stagger>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v" data-count-to="5">5</span>
-    <span class="lt-statstrip__l" data-en="Active tools">Outils actifs</span>
+<!-- SocialProof — confiance & avis (remplace l'ancienne stats strip) -->
+<style id="lt-proof-css">
+.lt-proof{max-width:1180px;margin:0 auto;padding:8px 24px 0}
+.lt-proof__head{text-align:center;margin-bottom:32px}
+.lt-proof__title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(26px,4vw,42px);line-height:1.05;letter-spacing:-.01em;margin:10px 0 0;color:var(--text-title)}
+.lt-proof__grid{display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr;gap:16px}
+.lt-proof__card{position:relative;background:linear-gradient(165deg,rgba(127,184,232,.06),rgba(22,27,36,.55));border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:24px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .4s}
+.lt-proof__card:hover{transform:perspective(900px) translateY(-6px) rotateX(4deg);border-color:var(--accent-glow);box-shadow:0 28px 56px rgba(0,0,0,.5),0 0 38px var(--accent-glow)}
+.lt-proof__card--rating{display:flex;flex-direction:column;justify-content:center;gap:8px;background:linear-gradient(165deg,rgba(232,194,104,.12),rgba(22,27,36,.55))}
+.lt-proof__score{font-family:var(--font-mono);font-size:46px;font-weight:700;color:var(--text-title);line-height:1}
+.lt-proof__stars{display:inline-flex;gap:3px;color:#E8C268}
+.lt-proof__rsub{font-size:12px;color:var(--text-muted)}
+.lt-proof__num{font-family:var(--font-mono);font-size:34px;font-weight:700;color:var(--accent-bright);line-height:1}
+.lt-proof__lbl{display:block;font-size:12.5px;color:var(--text-muted);margin-top:10px;line-height:1.45}
+.lt-proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.lt-proof__q{background:rgba(22,27,36,.5);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:20px;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .35s}
+.lt-proof__q:hover{transform:translateY(-4px);border-color:var(--accent-glow);box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.lt-proof__q .lt-proof__stars{margin-bottom:10px}
+.lt-proof__qtxt{font-size:13.5px;line-height:1.6;color:var(--text-body);margin:0 0 14px}
+.lt-proof__who{display:flex;align-items:center;gap:10px}
+.lt-proof__ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(150deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;font-family:var(--font-text);font-weight:700;font-size:13px;color:#07090C;flex-shrink:0}
+.lt-proof__name{font-size:13px;font-weight:600;color:var(--text-title)}
+.lt-proof__role{font-size:11px;color:var(--text-muted)}
+.lt-proof__cta{text-align:center;margin-top:28px}
+@media(max-width:900px){.lt-proof__grid{grid-template-columns:1fr 1fr}.lt-proof__quotes{grid-template-columns:1fr}}
+</style>
+<section class="lt-proof" data-reveal data-stagger>
+  <div class="lt-proof__head">
+    <span class="lt-eyebrow" data-en="<span class='lt-dot'></span> They trade with us"><span class="lt-dot"></span> Ils tradent avec nous</span>
+    <h2 class="lt-proof__title" data-en="Trusted by traders">La confiance des traders</h2>
   </div>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v" data-en="Proprietary">Propriétaire</span>
-    <span class="lt-statstrip__l" data-en="AI analysis engine">Moteur d'analyse IA</span>
+  <div class="lt-proof__grid">
+    <div class="lt-proof__card lt-proof__card--rating">
+      <span class="lt-proof__score"><span data-count="4.8" data-dec="1">4,8</span><span style="font-size:20px;color:var(--text-muted)">/5</span></span>
+      <span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span>
+      <span class="lt-proof__rsub" data-en="on 60+ verified reviews">sur 60+ avis vérifiés</span>
+    </div>
+    <div class="lt-proof__card"><span class="lt-proof__num" data-count="180" data-suf="+">180+</span><span class="lt-proof__lbl" data-en="active traders on the terminal">traders actifs sur le terminal</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num" data-count="96" data-suf=" %">96 %</span><span class="lt-proof__lbl" data-en="would recommend Le Terminal">recommandent Le Terminal</span></div>
+    <div class="lt-proof__card"><span class="lt-proof__num" data-count="60" data-suf="+">60+</span><span class="lt-proof__lbl" data-en="reviews collected">avis collectés</span></div>
   </div>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v">∞</span>
-    <span class="lt-statstrip__l" data-en="Supported strategies">Stratégies supportées</span>
+  <div class="lt-proof__quotes">
+    <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="The Setup Analyzer made me far more disciplined. A clear score on every trade — no more blind entries.">Le Setup Analyzer m'a fait gagner en discipline. Un score clair sur chaque trade, je ne rentre plus à l'aveugle.</p><div class="lt-proof__who"><span class="lt-proof__ava">T</span><span><span class="lt-proof__name">Thomas R.</span><br><span class="lt-proof__role" data-en="Day trader · Forex">Day trader · Forex</span></span></div></article>
+    <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="The journal plus the AI coach is exactly what I was missing to understand my recurring mistakes.">Le journal + le coach IA, c'est exactement ce qui me manquait pour comprendre mes erreurs récurrentes.</p><div class="lt-proof__who"><span class="lt-proof__ava">S</span><span><span class="lt-proof__name">Sarah L.</span><br><span class="lt-proof__role" data-en="Swing trader · Indices">Swing trader · Indices</span></span></div></article>
+    <article class="lt-proof__q"><span class="lt-proof__stars"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg></span><p class="lt-proof__qtxt" data-en="Everything in one place: calendar, calculator, bubble map. I cancelled my 3 other subscriptions.">Tout au même endroit : calendrier, calculateur, bubble map. J'ai résilié mes 3 autres abonnements.</p><div class="lt-proof__who"><span class="lt-proof__ava">K</span><span><span class="lt-proof__name">Karim B.</span><br><span class="lt-proof__role" data-en="Crypto trader">Trader crypto</span></span></div></article>
   </div>
-  <div class="lt-statstrip__cell">
-    <span class="lt-statstrip__v">24/7</span>
-    <span class="lt-statstrip__l" data-en="Available">Disponible</span>
+  <div class="lt-proof__cta">
+    <a class="lt-btn lt-btn--ghost lt-btn--lg" href="./avis.html" data-en="Read all reviews">Lire tous les avis</a>
   </div>
 </section>
 <!-- MarketsSection — "Tous les marchés" dual-rail marquee over a particle field.
@@ -1096,7 +1127,7 @@
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--bull)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Exports PDF &amp; CSV</li>
       </ul>
       <div class="pr-card__cta">
-        <button type="button" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Choisir le mensuel</button>
+        <button type="button" onclick="ltOpenCheckout('monthly')" class="lt-btn" data-variant="secondary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--bg-elevated);color:var(--text-title)">Choisir le mensuel</button>
       </div>
     </div>
 
@@ -1120,7 +1151,7 @@
         <li><svg class="pr-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 2 mois offerts vs mensuel</li>
       </ul>
       <div class="pr-card__cta">
-        <button type="button" onclick="window.open('https://whop.com/terminal-analyzer/terminal-analyzer-pro','_blank')" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en Premium</button>
+        <button type="button" onclick="ltOpenCheckout('annual')" class="lt-btn" data-variant="primary" data-size="lg" style="width:100%;font-family:var(--font-text);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out);padding:16px 30px;font-size:16px;gap:10px;background:var(--accent);color:#07090C;box-shadow:0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)">Passer en Premium</button>
       </div>
       <span class="pr-card__note" data-en="14-day money-back guarantee">Garantie 14 jours satisfait ou remboursé</span>
     </div>
@@ -1157,30 +1188,106 @@
 <!-- Footer — marque + nav + mentions légales. Source: marketing/Method.jsx (Footer) + page.css .lt-footer -->
 <!-- Nav anchors retargeted to on-page sections (#tools/#strategies/#method/#community); Tarifs -> ./tarifs.html. -->
 <!-- Legal links added per spec: ./legal.html#mentions, #confidentialite, #cgv. -->
-<footer class="lt-footer">
-  <div class="lt-footer__top">
-    <div class="lt-footer__brand">
+<style>
+/* Footer étendu — structure 4 colonnes (design system) */
+.ltf{border-top:1px solid var(--border-subtle);margin-top:80px;padding:56px 0 40px}
+.ltf__wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.ltf__brand{display:inline-flex;align-items:center;gap:10px;color:var(--text-title);margin-bottom:38px}
+.ltf__cols{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.ltf__h{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin:0 0 18px}
+.ltf__col a{display:block;font-family:var(--font-text);font-size:15px;color:var(--text-body);text-decoration:none;margin-bottom:14px;transition:color var(--dur-fast) var(--ease-out)}
+.ltf__col a:hover{color:var(--accent)}
+.ltf__sep{height:1px;background:var(--border-subtle);margin:38px 0}
+.ltf__mid{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.ltf__social{display:flex;gap:12px}
+.ltf__social a{width:44px;height:44px;border:1px solid var(--border-subtle);border-radius:var(--r-md);display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);transition:border-color var(--dur-fast) var(--ease-out),color var(--dur-fast) var(--ease-out)}
+.ltf__social a:hover{border-color:var(--accent);color:var(--text-title)}
+.ltf__social svg{width:18px;height:18px}
+.ltf__stores{display:flex;gap:12px;flex-wrap:wrap}
+.ltf__store{position:relative;display:inline-flex;align-items:center;gap:11px;padding:10px 18px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-elevated);color:var(--text-title);opacity:.72;cursor:default;user-select:none}
+.ltf__store svg{width:22px;height:22px;flex-shrink:0}
+.ltf__store__t{display:flex;flex-direction:column;line-height:1.18}
+.ltf__store__t small{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.ltf__store__t b{font-family:var(--font-text);font-size:15px;font-weight:700}
+.ltf__soon{position:absolute;top:-9px;right:-9px;font-family:var(--font-mono);font-size:8px;font-weight:700;letter-spacing:.1em;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:999px;padding:2px 7px}
+.ltf__disc{font-family:var(--font-text);font-size:13px;line-height:1.7;color:var(--text-muted);max-width:980px;margin:0 0 24px}
+.ltf__bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--text-muted)}
+@media(max-width:860px){.ltf__cols{grid-template-columns:repeat(2,1fr);gap:30px}.ltf__mid{flex-direction:column;align-items:flex-start}}
+@media(max-width:520px){.ltf__cols{grid-template-columns:1fr}}
+</style>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
       <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </div>
-    <nav class="lt-footer__links">
-      <a href="#tools" data-en="Tools">Outils</a>
-      <a href="#strategies" data-en="Strategies">Stratégies</a>
-      <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
-      <a href="#method" data-en="Method">Méthode</a>
-      <a href="#community" data-en="Community">Communauté</a>
-    </nav>
-  </div>
-  <div class="lt-footer__bottom">
-    <span class="lt-footer__copy" data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
-    <span class="lt-footer__note" data-en="Educational tools. Trading carries a risk of capital loss.">Outils éducatifs. Le trading comporte des risques de perte en capital.</span>
-  </div>
-  <div class="lt-footer__bottom">
-    <nav class="lt-footer__links">
-      <a href="./legal.html#mentions" data-en="Legal notice">Mentions légales</a>
-      <a href="./legal.html#confidentialite" data-en="Privacy">Confidentialité</a>
-      <a href="./legal.html#cgv" data-en="Terms">CGV</a>
-    </nav>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="./app.html">Setup Analyzer</a>
+        <a href="./journal.html" data-en="Trading Journal">Journal de Trading</a>
+        <a href="./calendrier.html" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="./bubble.html">Bubble Map</a>
+        <a href="./mur-des-trades.html" data-en="Trade Wall">Mur des Trades</a>
+        <a href="./calculateur.html" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="./eco-calendrier.html" data-en="Overview">Présentation</a>
+        <a href="./eco-flash.html">Flash Info</a>
+        <a href="./eco-selection.html" data-en="The selection">La sélection</a>
+        <a href="./eco-crypto.html">Crypto</a>
+        <a href="./eco-archive.html" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="#method" data-en="Method">Méthode</a>
+        <a href="#strategies" data-en="Strategies">Stratégies</a>
+        <a href="#community" data-en="Community">Communauté</a>
+        <a href="./avis.html" data-en="Reviews">Avis</a>
+        <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="./legal.html#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="./legal.html#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="./legal.html#cookies" data-en="Cookies">Cookies</a>
+        <a href="./legal.html#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="#" aria-label="X" title="X (bientôt)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.53 3H20.5l-6.49 7.41L21.75 21h-6.02l-4.71-6.16L5.6 21H2.63l6.94-7.93L2.5 3h6.17l4.26 5.63L17.53 3zm-1.06 16h1.66L7.62 4.69H5.84L16.47 19z"/></svg></a>
+        <a href="#" aria-label="Instagram" title="Instagram (bientôt)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="YouTube" title="YouTube (bientôt)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.2v5.6l4.6-2.8z" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="Telegram" title="Telegram (bientôt)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+      <div class="ltf__stores">
+        <span class="ltf__store" role="button" aria-disabled="true">
+          <span class="ltf__soon" data-en="Soon">Bientôt</span>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.9-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.24 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.15-2.52.99-1.45 1.4-2.85 1.42-2.92-.03-.01-2.72-1.04-2.75-4.13zM14.6 4.4c.72-.87 1.2-2.07 1.07-3.27-1.03.04-2.28.69-3.02 1.55-.66.76-1.24 1.99-1.08 3.16 1.15.09 2.32-.58 3.03-1.44z"/></svg>
+          <span class="ltf__store__t"><small data-en="Soon on">Bientôt sur</small><b>App Store</b></span>
+        </span>
+        <span class="ltf__store" role="button" aria-disabled="true">
+          <span class="ltf__soon" data-en="Soon">Bientôt</span>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.4c-.25.2-.4.52-.4.93v17.34c0 .41.15.73.4.93l9.5-9.6-9.5-9.6zM14.2 11.97 5.6 3.3l11.04 6.45-2.44 2.22zM17.86 10.5l2.66 1.56c.86.5.86 1.78 0 2.28l-2.66 1.56-2.7-2.7 2.7-2.7zM5.6 20.64l8.6-8.67 2.44 2.22L5.6 20.64z"/></svg>
+          <span class="ltf__store__t"><small data-en="Soon on">Bientôt sur</small><b>Google Play</b></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+      <span data-en="By invitation · Private trading floor">Accès sur invitation · Salle des marchés privée</span>
+    </div>
   </div>
 </footer>
 <script>
@@ -1243,14 +1350,60 @@
     pill.style.cursor = 'pointer';
     pill.addEventListener('click', function(){
       var next = (pill.textContent === 'FR') ? 'en' : 'fr';
-      try { localStorage.setItem('lt_lang', next); localStorage.setItem('lte_lang', next); } catch(e){}
       pill.textContent = next.toUpperCase();
+      if (window.ltSetLang) { ltSetLang(next); }
+      else { try { localStorage.setItem('lt_lang', next); localStorage.setItem('lte_lang', next); } catch(e){} }
     });
   }
 })();
 </script>
 <script src="./home-anim.js"></script>
 <script src="./menu.js"></script>
+<script src="./checkout.js"></script>
 <script src="./cursor.js"></script>
+<script>
+(function(){
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var els=document.querySelectorAll(".lt-proof [data-count]");
+  if(!els.length||!("IntersectionObserver" in window))return;
+  function run(el){
+    var to=parseFloat(el.getAttribute("data-count")),dec=parseInt(el.getAttribute("data-dec")||"0",10),suf=el.getAttribute("data-suf")||"";
+    var dur=1100,t0=null;
+    function fmt(v){return v.toFixed(dec).replace(".",",")+suf;}
+    function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=fmt(to*e);if(k<1)requestAnimationFrame(step);else el.textContent=fmt(to);}
+    requestAnimationFrame(step);
+  }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run(e.target);io.unobserve(e.target);}});},{threshold:0.4});
+  els.forEach(function(el){io.observe(el);});
+})();
+</script>
+<style>.lt-mk__px{transition:color .3s ease}.lt-mk__px.is-flash{color:var(--accent-bright)}</style>
+<script>
+(function(){
+  if(!document.querySelector('.lt-mk')) return;
+  function fmt(n, dec){ var s = Number(n).toFixed(dec); var p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' '); return p.join('.'); }
+  function apply(map){
+    document.querySelectorAll('.lt-mk__tile').forEach(function(tile){
+      var symEl = tile.querySelector('.lt-mk__sym'); if(!symEl) return;
+      var q = map[symEl.textContent.trim()]; if(!q) return;
+      var up = q.change >= 0;
+      var pxEl = tile.querySelector('.lt-mk__px');
+      if(pxEl){ var nv = fmt(q.price, q.dec); if(pxEl.textContent.trim() !== nv){ pxEl.textContent = nv; pxEl.classList.remove('is-flash'); void pxEl.offsetWidth; pxEl.classList.add('is-flash'); setTimeout(function(){ pxEl.classList.remove('is-flash'); }, 600); } }
+      var dEl = tile.querySelector('.lt-mk__d');
+      if(dEl){ dEl.textContent = (up ? '\u25B2 ' : '\u25BC ') + Math.abs(q.change).toFixed(2) + '%'; dEl.className = 'lt-mk__d ' + (up ? 'lt-up' : 'lt-down'); }
+      var dot = tile.querySelector('.lt-mk__dot'); if(dot) dot.setAttribute('data-up', up ? '1' : '0');
+      var spark = tile.querySelector('.lt-mk__spark polyline'); if(spark) spark.setAttribute('stroke', up ? 'var(--bull)' : 'var(--bear)');
+    });
+  }
+  function tick(){
+    if(document.hidden) return;
+    fetch('/api/ticker').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if(!d || !d.items) return; var map = {}; d.items.forEach(function(it){ map[it.sym] = it; }); apply(map);
+    }).catch(function(){});
+  }
+  tick();
+  setInterval(tick, 15000);
+})();
+</script>
 </body>
 </html>
