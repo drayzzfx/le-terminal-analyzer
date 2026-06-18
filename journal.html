@@ -468,15 +468,15 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
           Importer depuis MT5
         </button>
       </div>
-      <!-- IA Coach — soon -->
-      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none;user-select:none">
-        <div style="position:absolute;inset:0;z-index:10"></div>
-        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:11">Bientôt</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <!-- IA Coach — actif -->
+      <div class="jr-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
           <span class="jr-panel__title" style="margin:0">IA Coach</span>
-          <span class="lt-btn lt-btn--primary lt-btn--sm" style="opacity:.4">Analyser</span>
+          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()">Analyser</button>
         </div>
-        <div style="margin-top:10px"><span style="color:var(--text3);font-size:12px">Analyse automatique de tes patterns de trading.</span></div>
+        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+          <span style="color:var(--text3);font-size:13px">Lance une analyse pour voir tes patterns.</span>
+        </div>
       </div>
       <!-- Connexion broker — soon -->
       <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none;user-select:none">
@@ -485,10 +485,6 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <span class="jr-panel__title">Connexion broker</span>
         <div style="font-size:12px;color:var(--text3);margin-top:6px">MT4 · MT5 · Topstep · FTMO</div>
       </div>
-      <!-- IDs fantômes pour le JS -->
-      <div id="globalIaHeader" style="display:none"></div>
-      <div id="globalIaContent" style="display:none"></div>
-      <button id="globalIaBtn" style="display:none"></button>
     </div>
   </div>
 
