@@ -943,6 +943,7 @@ var currency = 'EUR';
 var curMonth = new Date().getMonth();
 var curYear = new Date().getFullYear();
 var editingId = null;
+var _daySelIds = new Set();
 var pendingDeleteId = null;
 var tradeDir = null;
 var tradeResult = null;
@@ -1123,7 +1124,7 @@ function openDayDetail(dateStr) {
   var pnlColor = pnl>0?'var(--green)':pnl<0?'var(--red)':'var(--amber)';
   var pnlBorder = pnl>0?'rgba(74,222,156,.4)':pnl<0?'rgba(240,100,122,.4)':'rgba(232,194,104,.4)';
 
-  var _daySelIds = new Set();
+  _daySelIds = new Set();
 
   var html = '<div class="day-detail-header">'+
     '<div>'+
@@ -1153,17 +1154,19 @@ function openDayDetail(dateStr) {
 
     // Trade cards
     dayTrades.forEach(function(t) {
-      var resClass = t.result==='win'?'win':t.result==='loss'?'loss':'be';
-      var resLabel = t.result==='win'?'WIN':t.result==='loss'?'LOSS':'BE';
+      var dir = (t.dir||t.direction||'').toUpperCase();
+      var isLong = dir==='LONG'||dir==='BUY';
+      var dirColor = isLong?'var(--green)':'var(--red)';
+      var dirBg = isLong?'rgba(74,222,156,.1)':'rgba(240,100,122,.1)';
+      var dirBorder = isLong?'rgba(74,222,156,.3)':'rgba(240,100,122,.3)';
       var pnlCol = (parseFloat(t.pnl)||0)>=0?'var(--green)':'var(--red)';
       html += '<div class="trade-card" id="tc-'+t.id+'" onclick="dayToggleSel(\''+t.id+'\')" style="cursor:pointer">'+
         '<div class="trade-card-top">'+
           '<div style="display:flex;align-items:center;gap:8px">'+
             '<div id="tc-chk-'+t.id+'" style="width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s"></div>'+
             '<span class="trade-pair">'+t.pair+'</span>'+
-            '<span style="font-size:11px;color:'+(t.dir==='LONG'?'var(--green)':'var(--red)')+';font-weight:600">'+t.dir+'</span>'+
           '</div>'+
-          '<span class="trade-result-badge '+resClass+'">'+resLabel+'</span>'+
+          '<span style="font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:5px;border:1px solid '+dirBorder+';background:'+dirBg+';color:'+dirColor+'">'+dir+'</span>'+
         '</div>'+
         '<div class="trade-meta">'+
           (t.session?'<span>Session: <b>'+t.session+'</b></span>':'')+
