@@ -458,8 +458,15 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .cal-title,.cal-month{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;font-size:12px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--text-muted,#7E8794)!important;font-weight:500!important}
   /* Boutons bas de page — intégrés au design */
   .broker-banner{background:var(--bg-elevated,rgba(255,255,255,.02))!important;border:1px solid var(--border-subtle,rgba(255,255,255,.08))!important;border-radius:var(--r-lg,16px)!important}
-  .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border:1px solid transparent!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;transition:all .15s!important}
-  .add-trade-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)}
+  .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.05em!important;border:1px solid transparent!important;border-radius:var(--r-sm,6px)!important;box-shadow:0 0 0 1px rgba(127,184,232,.3),0 6px 20px rgba(127,184,232,.22)!important;transition:all .15s!important;padding:12px 14px!important;width:100%!important;margin-bottom:8px!important}
+  .add-trade-btn:hover{background:#BFDCF5!important;color:#07090C!important;transform:translateY(-1px)}
+  .import-mt5-btn{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm,6px);color:var(--text2,#A8B4C4);font-family:var(--font-text,'Inter',sans-serif);font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .import-mt5-btn:hover{background:rgba(127,184,232,.08);border-color:rgba(127,184,232,.28);color:var(--accent,#7FB8E8)}
+  .broker-soon-panel{background:rgba(22,27,36,.7);border:1px solid rgba(255,255,255,.06);border-radius:var(--r-sm,6px);padding:14px 16px;margin-top:10px;display:flex;flex-direction:column;gap:6px}
+  .broker-soon-panel .soon-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3,#4A5568);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:2px 8px;width:fit-content}
+  .broker-soon-panel .soon-title{font-size:12.5px;font-weight:600;color:var(--text2,#A8B4C4)}
+  .broker-soon-panel .soon-sub{font-size:11px;color:var(--text3,#4A5568);line-height:1.55}
+  .broker-soon-btn{width:100%;padding:9px 14px;background:transparent;border:1px solid rgba(255,255,255,.07);border-radius:var(--r-sm,6px);color:var(--text3,#4A5568);font-family:var(--font-text,'Inter',sans-serif);font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:6px;opacity:.5}
   /* ── Modales : alignées sur le design system « Cinematic Luxury » (rayons nets, boutons plats, hairline, ombres froides) ── */
   .modal-box,.detail-box,.broker-modal{background:var(--bg-elevated,#161B24)!important;border:1px solid var(--border-subtle,#1C212A)!important;border-radius:var(--r-lg,10px)!important;box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(127,184,232,.06)!important}
   .confirm-box{background:var(--bg-elevated,#161B24)!important;border:1px solid var(--border-subtle,#1C212A)!important;border-radius:var(--r-lg,10px)!important}
@@ -495,20 +502,24 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
 
       <!-- ADD TRADE + IMPORT MT5 buttons -->
-      <button class="add-trade-btn" onclick="openTradeModal()" style="width:100%;margin-bottom:8px" data-en="+ Add a trade">+ Ajouter un trade</button>
+      <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
       <button class="import-mt5-btn" onclick="openMt5Modal()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Importer depuis MT5
       </button>
 
       <!-- BROKER SOON panel -->
-      <div class="broker-soon-panel" style="margin-top:8px">
+      <div class="broker-soon-panel">
         <span class="soon-badge">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Bientôt
         </span>
-        <div class="soon-title">Connexion Broker</div>
-        <div class="soon-sub">Sync automatique avec MetaTrader 5, FTMO, Topstep et TradeLocker — en cours de développement.</div>
+        <div class="soon-title">Connexion compte broker</div>
+        <div class="soon-sub">Sync automatique MT5, FTMO, Topstep, TradeLocker — en développement.</div>
+        <button class="broker-soon-btn" disabled>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/></svg>
+          Connecter un compte
+        </button>
       </div>
 
       <!-- BROKER BANNER (caché) -->
