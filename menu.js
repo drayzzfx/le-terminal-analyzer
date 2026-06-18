@@ -159,7 +159,9 @@
 
     /* ── USER BAR ── */
     #ltUserBar { display: flex; align-items: center; gap: 8px; position: relative; }
-    .lt-ub-pro { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(232,194,104,.12); border: 1px solid rgba(232,194,104,.3); border-radius: 6px; color: #E8C268; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+    .lt-ub-tokens { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; background: rgba(127,184,232,.1); border: 1px solid rgba(127,184,232,.25); border-radius: 6px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; font-weight: 700; color: #7FB8E8; letter-spacing: .04em; white-space: nowrap; }
+    .lt-ub-tokens--low { background: rgba(240,100,122,.1); border-color: rgba(240,100,122,.25); color: #F0647A; }
+    .lt-ub-tokens--pro { background: rgba(232,194,104,.1); border-color: rgba(232,194,104,.25); color: #E8C268; }
     .lt-ub-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); cursor: pointer; transition: all .2s; }
     .lt-ub-chip:hover { border-color: rgba(127,184,232,.45); background: rgba(127,184,232,.08); }
     .lt-ub-avatar { width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg,#7FB8E8,#BFDCF5); display: flex; align-items: center; justify-content: center; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #07090C; flex-shrink: 0; }
@@ -420,6 +422,7 @@
     var caret = '<span class="lt-ub-caret"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>';
     // Chip rectangulaire (même DA que les boutons) + menu déroulant avec profil + déconnexion
     bar.innerHTML =
+      '<span id="ltTokenBadge" style="display:none" class="lt-ub-tokens"></span>' +
       '<div class="lt-ub-chip" id="ltUbChip" title="' + email + (isPro ? ' · Premium' : '') + '">' +
         '<div class="lt-ub-avatar">' + avatarInner + '</div>' +
         '<span class="lt-ub-name">' + displayName + '</span>' + caret +
@@ -449,6 +452,38 @@
       });
     }
   }
+
+  // Charge et affiche le badge tokens dans la nav
+  (function() {
+    var tok = localStorage.getItem('ta_token');
+    if (!tok) return;
+    var pro = localStorage.getItem('lt_pro') === '1';
+    var badge = document.getElementById('ltTokenBadge');
+    if (!badge) return;
+    if (pro) {
+      badge.className = 'lt-ub-tokens lt-ub-tokens--pro';
+      badge.textContent = 'Premium';
+      badge.style.display = 'inline-flex';
+      return;
+    }
+    fetch('/api/tokens', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+      body: JSON.stringify({ action: 'get' })
+    }).then(function(r){ return r.json(); }).then(function(d) {
+      var badge = document.getElementById('ltTokenBadge');
+      if (!badge) return;
+      if (d.is_pro || d.unlimited) {
+        badge.className = 'lt-ub-tokens lt-ub-tokens--pro';
+        badge.textContent = 'Premium';
+      } else if (typeof d.tokens === 'number') {
+        var n = d.tokens;
+        badge.className = 'lt-ub-tokens' + (n <= 1 ? ' lt-ub-tokens--low' : '');
+        badge.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>' + n + ' token' + (n > 1 ? 's' : '');
+      } else { return; }
+      badge.style.display = 'inline-flex';
+    }).catch(function(){});
+  })();
 
   function _ltClearAllAccountData() {
     localStorage.removeItem('ta_token');
