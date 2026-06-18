@@ -268,6 +268,25 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
 /* PLATFORM PICKER */
 .platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.pf-firms-label{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--text3);margin:4px 0 8px}
+.pf-firms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.pf-firm{padding:7px 13px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.25);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.pf-firm:hover{background:rgba(127,184,232,.18);border-color:rgba(127,184,232,.5)}
+.pf-firms-or{text-align:center;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:0 0 14px}
+.pf-combo{position:relative;margin-bottom:14px}
+.pf-combo__input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.pf-combo__input:focus{border-color:rgba(127,184,232,.5)}
+.pf-combo__list{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:240px;overflow-y:auto;background:#10141B;border:1px solid rgba(127,184,232,.25);border-radius:10px;box-shadow:0 18px 50px rgba(0,0,0,.6);z-index:20;display:none;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}
+.pf-combo__list.show{display:block}
+.pf-combo__list::-webkit-scrollbar{width:7px}
+.pf-combo__list::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+.pf-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 13px;cursor:pointer;transition:background .12s;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;color:var(--text2)}
+.pf-opt:hover,.pf-opt.active{background:rgba(127,184,232,.1);color:var(--text)}
+.pf-opt__plat{font-family:var(--font-mono,monospace);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:50px;padding:2px 8px;flex-shrink:0}
+.pf-opt__none{padding:12px 13px;color:var(--text3);font-size:12.5px}
+.pf-opt--soon{opacity:.45;cursor:not-allowed}
+.pf-opt--soon:hover{background:transparent;color:var(--text2)}
+.pf-opt__plat--soon{color:var(--accent,#7FB8E8);background:rgba(127,184,232,.10);border-color:rgba(127,184,232,.3)}
 .platform-card{padding:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
 .platform-card:hover{border-color:rgba(127,184,232,.4);background:rgba(127,184,232,.06)}
 .platform-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
@@ -483,7 +502,19 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
           <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
         </div>
+        <div class="broker-banner-actions" id="brokerActions"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- IA COACH — pleine largeur, en dessous du journal -->
+  <div class="jr-panel" id="globalIaPanel" style="margin-bottom:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
+      <span class="jr-panel__title" style="margin:0" data-en="AI Coach — Performance analysis">IA Coach — Analyse de performance</span>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
+    </div>
+    <div id="globalIaContent" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
     </div>
   </div>
 
@@ -678,19 +709,69 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <button class="mt-btn" id="mtBtn5" onclick="selectMtType('mt5')">MT5</button>
       </div>
 
-      <div class="broker-steps">
-        <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
-        <b>2.</b> Ajoute ton compte <span id="mtTypeLabel">MT4</span> (broker + login + password)<br>
-        <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+      <div class="broker-steps" data-en="Enter the credentials of your prop-firm / broker account (the same ones you use to log into MT4/MT5). The connection and sync are automatic.">
+        Entre les identifiants de ton compte prop firm / broker (les mêmes que pour te connecter à MT4/MT5). La connexion et la synchro sont automatiques.
       </div>
 
-      <div class="broker-field">
-        <label>Auth Token MetaApi</label>
-        <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+      <!-- Mode simple : identifiants du compte -->
+      <div id="mtSimple">
+        <div class="broker-field">
+          <label data-en="Account login (number)">Login du compte (numéro)</label>
+          <input type="text" id="mtLoginInput" placeholder="ex. 51234567" autocomplete="off">
+        </div>
+        <div class="broker-field">
+          <label data-en="Investor / account password">Mot de passe (investisseur ou maître)</label>
+          <input type="password" id="mtPassInput" placeholder="••••••••" autocomplete="off">
+        </div>
+        <div class="broker-field">
+          <label data-en="Server (shown in your platform)">Serveur (affiché dans ta plateforme)</label>
+          <input type="text" id="mtServerInput" placeholder="ex. FTMO-Server, FundingPips-Live…" autocomplete="off">
+        </div>
+        <p class="pf-hint" style="margin:0 0 12px" data-en="Tip: an investor (read-only) password is enough to sync your history.">Astuce : un mot de passe « investisseur » (lecture seule) suffit pour synchroniser ton historique.</p>
+      </div>
+
+      <!-- Mode avancé : token MetaApi (repli) -->
+      <details id="mtAdvanced" style="margin-bottom:14px">
+        <summary style="cursor:pointer;font-size:12px;color:var(--text3);margin-bottom:10px" data-en="Advanced: connect with my own MetaApi token">Avancé : connecter avec mon propre token MetaApi</summary>
+        <div class="broker-field">
+          <label>Auth Token MetaApi</label>
+          <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+        </div>
+        <div class="broker-field">
+          <label>Account ID</label>
+          <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        </div>
+      </details>
+
+      <div class="broker-error" id="brokerError"></div>
+      <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
+        <span id="brokerSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2px: ProjectX (futures: Topstep, Tradeify, Lucid…) -->
+    <div id="brokerStep2PX" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
+      <div class="modal-title" data-en="Futures account (ProjectX)">Compte futures (ProjectX)</div>
+      <div class="modal-sub" data-en="Topstep · Tradeify · Lucid · other ProjectX firms">Topstep · Tradeify · Lucid · autres firms ProjectX</div>
+      <div class="broker-steps" data-en="1. In your prop firm dashboard → API / API Key section, generate a key.<br>2. Enter your username and the key below. Sync is automatic.">
+        <b>1.</b> Dans le dashboard de ta prop firm → section <b>API / API Key</b>, génère une clé.<br>
+        <b>2.</b> Entre ton identifiant et la clé ci-dessous. La synchro est automatique.
       </div>
       <div class="broker-field">
-        <label>Account ID</label>
-        <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        <label data-en="Prop firm">Prop firm</label>
+        <select class="broker-field" id="pxFirmSelect" onchange="pxOnFirmChange()" style="padding:11px 14px">
+          <option value="api.topstepx.com">Topstep (TopstepX)</option>
+          <option value="" data-en="Other (enter API URL)">Autre (saisir l'URL API)</option>
+        </select>
+      </div>
+      <div class="broker-field" id="pxBaseField" style="display:none">
+        <label data-en="Your firm's API URL">URL API de ta firm</label>
+        <input type="text" id="pxBaseInput" placeholder="api.xxxxx.com" autocomplete="off">
+      </div>
+      <div class="broker-field">
+        <label data-en="Username">Identifiant (username)</label>
+        <input type="text" id="pxUserInput" placeholder="ton_username" autocomplete="off">
       </div>
       <div class="broker-error" id="brokerError"></div>
       <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
@@ -1711,17 +1792,106 @@ var parsedCsvTrades = [];
 function openBrokerModal() {
   showBrokerStep1();
   document.getElementById('brokerModal').classList.add('show');
+  var s = document.getElementById('pfSearch'); if(s) s.value='';
+  pfSetup();
 }
 function closeBrokerModal() { document.getElementById('brokerModal').classList.remove('show'); }
 
 function showBrokerStep1() {
-  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX'].forEach(function(id) {
+  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX','brokerStep2PX'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = id === 'brokerStep1' ? '' : 'none';
   });
 }
-function showBrokerStep2(type) {
+function pxOnFirmChange(){
+  var sel = document.getElementById('pxFirmSelect');
+  var f = document.getElementById('pxBaseField');
+  if(f) f.style.display = (sel && sel.value) ? 'none' : '';
+}
+
+// ── Liste des prop firms (recherche) → plateforme de connexion ──
+// platform: dxtrade | tradelocker | metaapi | projectx | csv ; base (projectx) = URL API
+var PROP_FIRMS = [
+  // Forex / CFD
+  { n:'FTMO', p:'dxtrade' }, { n:'FundedNext', p:'dxtrade' }, { n:'FundingPips', p:'tradelocker' },
+  { n:'The5ers', p:'tradelocker' }, { n:'E8 Markets', p:'tradelocker' }, { n:'MyFundedFX', p:'tradelocker' },
+  { n:'Alpha Capital Group', p:'tradelocker' }, { n:'FundingTraders', p:'dxtrade' }, { n:'FunderPro', p:'dxtrade' },
+  { n:'Goat Funded Trader', p:'tradelocker' }, { n:'Instant Funding', p:'tradelocker' }, { n:'Blueberry Funded', p:'tradelocker' },
+  { n:'City Traders Imperium', p:'metaapi' }, { n:'Audacity Capital', p:'metaapi' }, { n:'Lark Funding', p:'tradelocker' },
+  { n:'Quantec Capital', p:'tradelocker' }, { n:'Maven Trading', p:'tradelocker' }, { n:'Aqua Funded', p:'tradelocker' },
+  { n:'PipFarm', p:'dxtrade' }, { n:'Hola Prime', p:'tradelocker' }, { n:'FundedFirm', p:'tradelocker' },
+  { n:'Brightfunded', p:'tradelocker' }, { n:'The Trading Pit', p:'dxtrade' }, { n:'5%ers High Stakes', p:'tradelocker' },
+  { n:'Funded Trading Plus', p:'metaapi' }, { n:'OFP Funding', p:'metaapi' }, { n:'Nordic Funder', p:'tradelocker' },
+  // Futures (ProjectX) — base connue : Topstep ; sinon saisie URL
+  { n:'Topstep', p:'projectx', b:'api.topstepx.com' },
+  { n:'Tradeify', p:'projectx', b:'' }, { n:'Lucid Trading', p:'projectx', b:'' },
+  { n:'MyFundedFutures', p:'projectx', b:'' }, { n:'Alpha Futures', p:'projectx', b:'' },
+  { n:'Bulenox', p:'projectx', b:'' }, { n:'Blusky', p:'projectx', b:'' },
+  { n:'TakeProfit Trader', p:'projectx', b:'' }, { n:'Legends Trading', p:'projectx', b:'' },
+  { n:'The Futures Desk', p:'projectx', b:'' }, { n:'Goat Futures', p:'projectx', b:'' },
+  // Futures sur Rithmic/Tradovate → non supporté en direct (import CSV)
+  { n:'Apex Trader Funding', p:'csv' }, { n:'Tradovate', p:'csv' }, { n:'NinjaTrader', p:'csv' }
+];
+var PLAT_LABEL = { dxtrade:'DXtrade', tradelocker:'TradeLocker', metaapi:'MT4/MT5', projectx:'ProjectX', csv:'CSV' };
+var _pfActive = -1;
+function pfRender(filter){
+  var list = document.getElementById('pfDropdown'); if(!list) return;
+  var q = (filter||'').toLowerCase().trim();
+  var rows = PROP_FIRMS.filter(function(f){ return !q || f.n.toLowerCase().indexOf(q)>-1; })
+    .sort(function(a,b){ return a.n.localeCompare(b.n); });
+  _pfActive = -1;
+  if(!rows.length){ list.innerHTML = '<div class="pf-opt__none">Aucune firm — utilise « choisir une plateforme » ci-dessous.</div>'; return; }
+  list.innerHTML = rows.map(function(f){
+    var arg = f.p==='projectx' ? (f.b||'') : '';
+    if(f.p==='metaapi'){ // MT4/MT5 → bientôt (nécessitera MetaApi)
+      return '<div class="pf-opt pf-opt--soon" aria-disabled="true">'
+        + '<span>'+f.n+'</span><span class="pf-opt__plat pf-opt__plat--soon">MT5 · SOON</span></div>';
+    }
+    return '<div class="pf-opt" data-plat="'+f.p+'" data-arg="'+arg+'">'
+      + '<span>'+f.n+'</span><span class="pf-opt__plat">'+(PLAT_LABEL[f.p]||f.p)+'</span></div>';
+  }).join('');
+}
+function pfSetup(){
+  var input = document.getElementById('pfSearch');
+  var list = document.getElementById('pfDropdown');
+  if(!input || !list || input._pfBound) return;
+  input._pfBound = true;
+  function open(){ pfRender(input.value); list.classList.add('show'); }
+  input.addEventListener('focus', open);
+  input.addEventListener('input', open);
+  list.addEventListener('mousedown', function(e){
+    var opt = e.target.closest('.pf-opt'); if(!opt) return;
+    e.preventDefault();
+    if(opt.classList.contains('pf-opt--soon')) return; // MT5 bientôt → non cliquable
+    var plat = opt.getAttribute('data-plat'), arg = opt.getAttribute('data-arg');
+    list.classList.remove('show'); input.blur();
+    if(plat==='csv'){ showBrokerStep2('csv'); }
+    else if(plat==='projectx'){ showBrokerStep2('projectx', arg); }
+    else { showBrokerStep2(plat); }
+  });
+  document.addEventListener('click', function(e){ if(!e.target.closest('#pfCombo')) list.classList.remove('show'); });
+}
+function showBrokerStep2(type, firm) {
   document.getElementById('brokerStep1').style.display = 'none';
+  if (type === 'projectx') {
+    document.getElementById('brokerStep2PX').style.display = '';
+    var sel = document.getElementById('pxFirmSelect');
+    ['pxUserInput','pxKeyInput'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+    var bi = document.getElementById('pxBaseInput'); if(bi) bi.value='';
+    // firm peut être 'topstep' (clé) ou directement une base 'api.xxx.com'
+    var MAP = { topstep:'api.topstepx.com' };
+    var base = firm ? (MAP[firm] || firm) : '';
+    if(sel){
+      var matchOpt = base && [].some.call(sel.options, function(o){ return o.value===base; });
+      sel.value = matchOpt ? base : '';
+      pxOnFirmChange();
+      if(!matchOpt && base && bi) bi.value = base;
+    }
+    document.getElementById('pxError').textContent='';
+    document.getElementById('pxSaveTxt').textContent='Connecter et synchroniser';
+    document.getElementById('pxSaveBtn').disabled=false;
+    return;
+  }
   if (type === 'metaapi') {
     document.getElementById('brokerStep2MetaApi').style.display = '';
     document.getElementById('brokerTokenInput').value = '';
@@ -1772,18 +1942,25 @@ function selectCsvFormat(f) {
 async function saveBrokerConnection() {
   var token = document.getElementById('brokerTokenInput').value.trim();
   var accountId = document.getElementById('brokerAccountInput').value.trim();
+  var login = (document.getElementById('mtLoginInput')||{}).value ? document.getElementById('mtLoginInput').value.trim() : '';
+  var pass = (document.getElementById('mtPassInput')||{}).value ? document.getElementById('mtPassInput').value.trim() : '';
+  var server = (document.getElementById('mtServerInput')||{}).value ? document.getElementById('mtServerInput').value.trim() : '';
   var errEl = document.getElementById('brokerError');
   errEl.textContent = '';
-  if (!token || !accountId) { errEl.textContent = 'Remplis les deux champs'; return; }
+  var useSimple = login && pass && server;
+  if (!useSimple && (!token || !accountId)) { errEl.textContent = 'Entre login + mot de passe + serveur (ou utilise le mode avancé)'; return; }
   if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
   var btn = document.getElementById('brokerSaveBtn');
   btn.disabled = true;
-  document.getElementById('brokerSaveTxt').textContent = 'Vérification…';
+  document.getElementById('brokerSaveTxt').textContent = 'Connexion…';
   try {
+    var payload = useSimple
+      ? { login: login, password: pass, server: server, platform: selectedMtType }
+      : { metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType };
     var res = await fetch('/api/broker-connect', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
-      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType })
+      body: JSON.stringify(payload)
     });
     var data = await res.json();
     if (!res.ok) {
@@ -1800,6 +1977,35 @@ async function saveBrokerConnection() {
     errEl.textContent = 'Erreur réseau';
     btn.disabled = false;
     document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+// ── ProjectX (futures) connection ──
+async function savePXConnection() {
+  var sel = document.getElementById('pxFirmSelect');
+  var base = (sel && sel.value) ? sel.value : (document.getElementById('pxBaseInput').value || '').trim();
+  var user = (document.getElementById('pxUserInput').value || '').trim();
+  var key = (document.getElementById('pxKeyInput').value || '').trim();
+  var errEl = document.getElementById('pxError');
+  errEl.textContent = '';
+  if (!base || !user || !key) { errEl.textContent = 'Firm + identifiant + clé API requis'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('pxSaveBtn');
+  btn.disabled = true; document.getElementById('pxSaveTxt').textContent = 'Connexion…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'projectx', pxBase: base, pxUsername: user, pxApiKey: key })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('pxSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true; window._brokerPlatform = 'projectx';
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'projectx', accountName: data.accountName });
+    syncBroker('projectx');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('pxSaveTxt').textContent = 'Connecter et synchroniser';
   }
 }
 
@@ -1869,6 +2075,7 @@ async function syncBroker(platformOverride) {
   var endpoint = '/api/sync-broker';
   if (platform === 'tradelocker') endpoint = '/api/sync-tradelocker';
   else if (platform === 'dxtrade') endpoint = '/api/sync-dxtrade';
+  else if (platform === 'projectx') endpoint = '/api/sync-projectx';
   try {
     var res = await fetch(endpoint, {
       method: 'POST',
@@ -1906,6 +2113,7 @@ function setBrokerSyncing(on) {
 }
 
 function updateBrokerBanner(info) {
+  return; // Broker banner remplacé par le panel "Bientôt"
   var banner = document.getElementById('brokerBanner');
   var titleEl = document.getElementById('brokerTitle');
   var subEl = document.getElementById('brokerSub');
@@ -2101,6 +2309,178 @@ async function importCsvTrades() {
     document.getElementById('csvImportTxt').textContent = 'Réessayer';
     document.getElementById('csvError').textContent = ok + ' importés, ' + fail + ' échoués';
   }
+}
+
+// ── MT5 IMPORT ──────────────────────────────────────────────────────────────
+var _mt5ImageData = null;
+var _mt5MediaType = 'image/png';
+var _mt5ParsedTrades = [];
+
+function mt5FileSelected(e) {
+  var file = e.target.files && e.target.files[0];
+  if (!file) return;
+  _mt5MediaType = file.type || 'image/png';
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var dataUrl = ev.target.result;
+    _mt5ImageData = dataUrl.split(',')[1];
+    var preview = document.getElementById('mt5Preview');
+    var previewImg = document.getElementById('mt5PreviewImg');
+    previewImg.src = dataUrl;
+    preview.style.display = 'block';
+    document.getElementById('mt5AnalyzeBtn').style.display = 'inline-flex';
+    document.getElementById('mt5Status').textContent = 'Image chargée — clique sur Analyser.';
+    document.getElementById('mt5Status').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function openMt5Modal() {
+  _mt5ImageData = null;
+  _mt5ParsedTrades = [];
+  document.getElementById('mt5Preview').style.display = 'none';
+  document.getElementById('mt5Status').style.display = 'none';
+  document.getElementById('mt5Results').style.display = 'none';
+  document.getElementById('mt5AnalyzeBtn').style.display = 'none';
+  document.getElementById('mt5ImportBtn').style.display = 'none';
+  document.getElementById('mt5FileInput').value = '';
+  document.getElementById('mt5DropZone').style.borderColor = 'rgba(127,184,232,.3)';
+  document.getElementById('mt5Modal').classList.add('show');
+}
+function closeMt5Modal() {
+  document.getElementById('mt5Modal').classList.remove('show');
+}
+
+function handleMt5Drop(e) {
+  e.preventDefault();
+  document.getElementById('mt5DropZone').style.borderColor = 'rgba(127,184,232,.3)';
+  var f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) handleMt5File(f);
+}
+
+function handleMt5File(file) {
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    _mt5ImageData = ev.target.result; // base64 data URL
+    document.getElementById('mt5PreviewImg').src = _mt5ImageData;
+    document.getElementById('mt5Preview').style.display = 'block';
+    document.getElementById('mt5Results').style.display = 'none';
+    document.getElementById('mt5Status').style.display = 'none';
+    document.getElementById('mt5ImportBtn').style.display = 'none';
+    document.getElementById('mt5AnalyzeBtn').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzeMt5Screenshot() {
+  if (!_mt5ImageData) return;
+  if (!(await spendToken('analyze'))) return;
+  var btn = document.getElementById('mt5AnalyzeBtn');
+  btn.disabled = true; btn.textContent = 'Analyse en cours…';
+  var st = document.getElementById('mt5Status');
+  st.style.display = 'block';
+  st.style.background = 'rgba(127,184,232,.06)';
+  st.style.border = '1px solid rgba(127,184,232,.2)';
+  st.style.color = 'var(--text2)';
+  st.textContent = 'Analyse de l\'image par l\'IA…';
+
+  try {
+    var base64 = _mt5ImageData.replace(/^data:image\/\w+;base64,/, '');
+    var res = await fetch('/api/analyze-mt5', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('ta_token') || '') },
+      body: JSON.stringify({ imgData: base64 })
+    });
+    var data = await res.json();
+    if (!res.ok || data.error) {
+      var errMsg = typeof data.error === 'object' ? (data.error.message || JSON.stringify(data.error)) : (data.error || 'Erreur serveur');
+      // Crédits insuffisants
+      if (errMsg && (errMsg.includes('credit') || errMsg.includes('balance') || res.status === 529 || res.status === 402)) errMsg = 'Crédits API insuffisants — recharge sur console.anthropic.com';
+      throw new Error(errMsg);
+    }
+    _mt5ParsedTrades = Array.isArray(data.trades) ? data.trades : [];
+    if (!_mt5ParsedTrades.length) throw new Error('Aucun trade détecté sur l\'image');
+
+    renderMt5Trades();
+    st.style.background = 'rgba(74,222,156,.06)';
+    st.style.border = '1px solid rgba(74,222,156,.2)';
+    st.style.color = 'var(--green)';
+    st.textContent = _mt5ParsedTrades.length + ' trade' + (_mt5ParsedTrades.length > 1 ? 's' : '') + ' détecté' + (_mt5ParsedTrades.length > 1 ? 's' : '');
+    document.getElementById('mt5ImportBtn').style.display = 'block';
+  } catch(err) {
+    st.style.background = 'rgba(240,100,122,.06)';
+    st.style.border = '1px solid rgba(240,100,122,.2)';
+    st.style.color = 'var(--red)';
+    st.textContent = err.message;
+  }
+  btn.disabled = false; btn.textContent = 'Relancer l\'analyse';
+}
+
+function renderMt5Trades() {
+  var list = document.getElementById('mt5Results');
+  list.innerHTML = '';
+  _mt5ParsedTrades.forEach(function(t, i) {
+    var pnlColor = (t.pnl > 0) ? 'var(--green)' : (t.pnl < 0 ? 'var(--red)' : 'var(--amber)');
+    var pnlSign = t.pnl > 0 ? '+' : '';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06)';
+    row.innerHTML = '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:' + (t.direction==='LONG'?'rgba(74,222,156,.12)':'rgba(240,100,122,.12)') + ';color:' + (t.direction==='LONG'?'var(--green)':'var(--red)') + '">' + (t.direction||'?') + '</span>'
+      + '<span style="font-size:13px;font-weight:600;color:var(--text2)">' + (t.pair||'—') + '<span style="font-size:11px;color:var(--text3);margin-left:6px">' + (t.date||'') + ' ' + (t.time||'') + '</span></span>'
+      + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:700;color:' + pnlColor + '">' + pnlSign + (t.pnl!=null?t.pnl.toFixed(2)+'€':'—') + '</span>'
+      + '<button onclick="_mt5ParsedTrades.splice('+i+',1);renderMt5Trades()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:0 4px">✕</button>';
+    list.appendChild(row);
+  });
+  document.getElementById('mt5Results').style.display = 'block';
+}
+
+async function importMt5Trades() {
+  if (!_mt5ParsedTrades.length) return;
+  var btn = document.getElementById('mt5ImportBtn');
+  btn.disabled = true; btn.textContent = 'Import en cours…';
+  var token = localStorage.getItem('ta_token') || '';
+  var ok = 0, fail = 0;
+  for (var i = 0; i < _mt5ParsedTrades.length; i++) {
+    var t = _mt5ParsedTrades[i];
+    try {
+      var body = {
+        date: t.date || new Date().toISOString().slice(0,10),
+        pair: t.pair || '',
+        direction: t.direction || 'LONG',
+        session: t.session || 'London',
+        entryPrice: t.entryPrice || null,
+        exitPrice: t.exitPrice || null,
+        sl: t.sl || null,
+        tp: t.tp || null,
+        lots: t.lots || null,
+        result: t.pnl >= 0 ? 'WIN' : 'LOSS',
+        pnl: t.pnl || 0,
+        rr: t.rr || null,
+        notes: 'Importé depuis MT5'
+      };
+      var r = await fetch('/api/journal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(body)
+      });
+      if (r.ok) ok++; else fail++;
+    } catch(e) { fail++; }
+  }
+  var st = document.getElementById('mt5Status');
+  st.style.display = 'block';
+  if (fail === 0) {
+    st.style.background = 'rgba(74,222,156,.06)';
+    st.style.border = '1px solid rgba(74,222,156,.2)';
+    st.style.color = 'var(--green)';
+    st.textContent = ok + ' trade' + (ok > 1 ? 's' : '') + ' importé' + (ok > 1 ? 's' : '') + ' avec succès';
+    setTimeout(function() { closeMt5Modal(); loadFromServer(); }, 1200);
+  } else {
+    st.style.background = 'rgba(232,194,104,.06)';
+    st.style.border = '1px solid rgba(232,194,104,.2)';
+    st.style.color = 'var(--amber)';
+    st.textContent = ok + ' importés, ' + fail + ' échoués';
+  }
+  btn.disabled = false; btn.textContent = 'Importer les trades';
 }
 </script>
 

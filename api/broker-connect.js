@@ -91,7 +91,39 @@ module.exports = async function handler(req, res) {
       let record = { user_id: userId, user_email: userEmail, platform };
       let accountName = platform.toUpperCase();
 
-      // ── MetaApi (MT4 / MT5) ──
+      // ── MetaApi (MT4 / MT5) — mode SIMPLE : login/mdp/serveur, provisionné côté serveur ──
+      if ((platform === 'mt4' || platform === 'mt5') && body.login && body.password && body.server) {
+        const SERVER_TOKEN = process.env.METAAPI_TOKEN;
+        if (!SERVER_TOKEN)
+          return res.status(400).json({ error: "La connexion simple n'est pas encore activée (token MetaApi serveur manquant). Utilise le mode avancé." });
+        const provHost = 'mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
+        // Crée (provisionne) le compte chez MetaApi à partir des identifiants
+        const createBody = JSON.stringify({
+          login: String(body.login), password: String(body.password), server: String(body.server),
+          platform: platform, name: (userEmail || 'LT') + ' · ' + body.server,
+          magic: 0, application: 'MetaApi', type: 'cloud-g2', region: 'new-york',
+          keywords: ['le-terminal']
+        });
+        const created = await new Promise((resolve) => {
+          const r2 = https.request({ hostname: provHost, path: '/users/current/accounts', method: 'POST',
+            headers: { 'auth-token': SERVER_TOKEN, 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(createBody) } },
+            (rs) => { let d=''; rs.on('data',c=>d+=c); rs.on('end',()=>{ try{ resolve({status:rs.statusCode, body:JSON.parse(d)});}catch(e){ resolve({status:rs.statusCode, body:d}); } }); });
+          r2.on('error', () => resolve({ status: 0 }));
+          r2.write(createBody); r2.end();
+        });
+        if (created.status === 401 || created.status === 403)
+          return res.status(400).json({ error: 'Token MetaApi serveur invalide' });
+        var newId = created.body && (created.body.id || created.body._id);
+        if (!newId)
+          return res.status(400).json({ error: "Connexion impossible — vérifie login, mot de passe et serveur." });
+        record = { ...record, meta_api_token: SERVER_TOKEN, meta_api_account_id: newId, account_name: platform.toUpperCase() + ' · ' + body.server };
+        const existingS = await supabaseRequest('GET', `/rest/v1/broker_connections?user_id=eq.${userId}&limit=1`, null, SERVICE_KEY, SERVICE_KEY);
+        if (Array.isArray(existingS.body) && existingS.body[0]) await supabaseRequest('PATCH', `/rest/v1/broker_connections?user_id=eq.${userId}`, record, SERVICE_KEY, SERVICE_KEY);
+        else await supabaseRequest('POST', '/rest/v1/broker_connections', record, SERVICE_KEY, SERVICE_KEY);
+        return res.status(200).json({ ok: true, accountName: record.account_name });
+      }
+
+      // ── MetaApi (MT4 / MT5) — mode AVANCÉ : token + account id ──
       if (platform === 'mt4' || platform === 'mt5') {
         const { metaApiToken, metaApiAccountId } = body;
         if (!metaApiToken || !metaApiAccountId)
@@ -146,29 +178,57 @@ module.exports = async function handler(req, res) {
         const { dxDomain, dxLogin, dxPassword } = body;
         if (!dxDomain || !dxLogin || !dxPassword)
           return res.status(400).json({ error: 'Domaine, login et mot de passe requis' });
-        const domain = dxDomain.replace(/^https?:\/\//, '').replace(/\/$/, '');
-        // Quick validation ping
+        const domain = dxDomain.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+        // domaine "tenant" DXsca (souvent "default" pour les prop firms) — séparable via login@domain
+        const tenant = (body.dxTenant || (dxLogin.indexOf('@') > -1 ? dxLogin.split('@')[1] : 'default'));
+        const userOnly = dxLogin.indexOf('@') > -1 ? dxLogin.split('@')[0] : dxLogin;
+        // Validation via l'endpoint de login DXsca
         try {
-          const authRes = await new Promise((resolve, reject) => {
-            const payload = JSON.stringify({ login: dxLogin, password: dxPassword, domain });
-            const opts = {
-              hostname: domain, path: '/dxsca-web/accounts',
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
-            };
+          const authRes = await new Promise((resolve) => {
+            const payload = JSON.stringify({ username: userOnly, domain: tenant, password: dxPassword });
+            const opts = { hostname: domain, path: '/dxsca-web/login', method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Content-Length': Buffer.byteLength(payload) } };
             const req2 = require('https').request(opts, r => {
               let d = ''; r.on('data', c => d += c);
-              r.on('end', () => { try { resolve({ status: r.statusCode, body: JSON.parse(d) }); } catch(e) { resolve({ status: r.statusCode }); } });
+              r.on('end', () => { try { resolve({ status: r.statusCode, body: JSON.parse(d) }); } catch(e) { resolve({ status: r.statusCode, body: d }); } });
             });
-            req2.on('error', reject); req2.write(payload); req2.end();
+            req2.on('error', () => resolve({ status: 0 }));
+            req2.write(payload); req2.end();
           });
-          if (authRes.status === 401 || authRes.status === 403)
-            return res.status(400).json({ error: 'Identifiants DXtrade invalides' });
+          if (authRes.status === 401 || authRes.status === 403 || (authRes.status === 200 && !authRes.body.sessionToken))
+            return res.status(400).json({ error: 'Identifiants DXtrade invalides — vérifie l\'URL (ex. dxtrade.ftmo.com), le login et le mot de passe DXtrade.' });
+          if (authRes.status === 404)
+            return res.status(400).json({ error: 'URL DXtrade incorrecte — utilise le domaine de connexion (ex. dxtrade.ftmo.com).' });
         } catch(e) {
-          // Domain may be unreachable — save anyway and let sync handle errors
+          // Domaine injoignable — on enregistre quand même, la sync gérera
         }
         accountName = `DXtrade · ${domain}`;
         record = { ...record, dx_domain: domain, dx_login: dxLogin, dx_password: dxPassword, account_name: accountName };
+      }
+
+      // ── ProjectX (Topstep / Tradeify / Lucid… — prop firms futures) ──
+      else if (platform === 'projectx') {
+        const { pxBase, pxUsername, pxApiKey } = body;
+        if (!pxBase || !pxUsername || !pxApiKey)
+          return res.status(400).json({ error: 'Firm, identifiant et clé API requis' });
+        const host = String(pxBase).replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+        // Valide la clé via loginKey
+        try {
+          const authBody = JSON.stringify({ userName: pxUsername, apiKey: pxApiKey });
+          const authRes = await new Promise((resolve) => {
+            const r2 = https.request({ hostname: host, path: '/api/Auth/loginKey', method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Content-Length': Buffer.byteLength(authBody) } },
+              rs => { let d=''; rs.on('data',c=>d+=c); rs.on('end',()=>{ try{ resolve({status:rs.statusCode, body:JSON.parse(d)});}catch(e){ resolve({status:rs.statusCode, body:d}); } }); });
+            r2.on('error', () => resolve({ status: 0 }));
+            r2.write(authBody); r2.end();
+          });
+          const jwt = authRes.body && (authRes.body.token || authRes.body.accessToken);
+          if (!jwt) return res.status(400).json({ error: 'Clé API ProjectX invalide — vérifie identifiant + clé + firm' });
+        } catch(e) {
+          return res.status(400).json({ error: 'Impossible de joindre ProjectX' });
+        }
+        accountName = 'ProjectX · ' + host.replace('api.', '').replace('.com', '');
+        record = { ...record, px_base: host, px_username: pxUsername, px_apikey: pxApiKey, account_name: accountName };
       }
 
       else {

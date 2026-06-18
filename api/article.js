@@ -98,7 +98,7 @@ Génère une analyse complète en JSON strict (sans markdown). Structure exacte 
 }`;
 
   const payload = JSON.stringify({
-    model: 'claude-sonnet-4-5',
+    model: 'claude-sonnet-4-6',
     max_tokens: 1500,
     messages: [{ role: 'user', content: prompt }]
   });

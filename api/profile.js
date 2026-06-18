@@ -8,7 +8,7 @@ function supabaseRequest(method, path, body, key, authToken) {
       'Content-Type': 'application/json',
       'apikey': key,
       'Authorization': `Bearer ${authToken || key}`,
-      'Prefer': (method === 'POST' || method === 'PATCH') ? 'return=representation' : undefined
+      'Prefer': (method === 'POST') ? 'resolution=merge-duplicates,return=representation' : (method === 'PATCH' ? 'return=representation' : undefined)
     };
     if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
     Object.keys(headers).forEach(k => headers[k] === undefined && delete headers[k]);

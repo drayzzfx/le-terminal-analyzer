@@ -23,6 +23,34 @@
 <link rel="stylesheet" href="./bubble-map.css">
 <style>
 :root{--bg-panel:#10141B;--v:var(--accent-deep);--v2:var(--accent);--text:var(--text-title);--text2:var(--text-body);--text3:var(--text-muted);--green:var(--bull)}
+/* ── Panneau actifs (afficher/masquer) ── */
+.bm-layout{display:flex;gap:14px;align-items:stretch}
+.bm-layout .bm-stage{flex:1;min-width:0}
+.bm-assets{width:240px;flex-shrink:0;display:flex;flex-direction:column;padding:14px;max-height:100%}
+.bm-assets__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bm-assets__title{font-family:var(--font-display,'Anton',sans-serif);text-transform:uppercase;font-size:15px;color:var(--text-title)}
+.bm-assets__all{background:transparent;border:1px solid var(--border-subtle);border-radius:6px;color:var(--text-muted);font-family:var(--font-text);font-size:11px;font-weight:600;padding:5px 9px;cursor:pointer;transition:all .2s}
+.bm-assets__all:hover{border-color:rgba(127,184,232,.45);color:var(--accent)}
+.bm-assets__search{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);border-radius:8px;color:var(--text-title);font-family:var(--font-text);font-size:12.5px;padding:8px 10px;margin-bottom:10px;outline:none}
+.bm-assets__search:focus{border-color:rgba(127,184,232,.45)}
+.bm-assets__list{overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}
+.bm-assets__list::-webkit-scrollbar{width:7px}
+.bm-assets__list::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+.bm-grp{border-bottom:1px solid var(--border-subtle)}
+.bm-grp__h{width:100%;display:flex;align-items:center;gap:8px;background:transparent;border:none;cursor:pointer;padding:10px 4px;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.bm-grp__name{flex:1;text-align:left}
+.bm-grp__count{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);letter-spacing:0}
+.bm-grp__caret{transition:transform .2s;color:var(--text-muted);flex-shrink:0}
+.bm-grp.open .bm-grp__caret{transform:rotate(180deg)}
+.bm-grp__body{display:none;padding-bottom:6px}
+.bm-grp.open .bm-grp__body{display:block}
+.bm-asset{display:flex;align-items:center;gap:8px;padding:6px 6px;border-radius:7px;cursor:pointer;transition:background .15s;font-family:var(--font-text);font-size:12.5px;color:var(--text-body)}
+.bm-asset:hover{background:rgba(255,255,255,.04)}
+.bm-asset input{accent-color:var(--accent);width:14px;height:14px;flex-shrink:0;cursor:pointer}
+.bm-asset.off{opacity:.45}
+.bm-asset__name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bm-asset__chg{font-family:var(--font-mono);font-size:11px}
+@media(max-width:880px){.bm-layout{flex-direction:column}.bm-assets{width:auto;max-height:260px}}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
 
@@ -255,6 +283,8 @@ function render() {
 /* Bubble Map — données live /api/bubbles (CoinGecko : top cryptos, MAJ 60 s).
    Taille = capitalisation, couleur = variation 24 h. */
 var bmCat='all', bmStarted=false, bmReduced=false, bmBubbles=[], bmMaxW=1;
+var bmHidden=(function(){try{return new Set(JSON.parse(localStorage.getItem('bm_hidden')||'[]'));}catch(e){return new Set();}})();
+function bmSaveHidden(){try{localStorage.setItem('bm_hidden',JSON.stringify(Array.from(bmHidden)));}catch(e){}}
 var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
 
 function bmRadius(w){ return 22 + Math.sqrt((w||0.5)/bmMaxW)*58; }
@@ -280,8 +310,75 @@ function bmApplyAssets(assets){
     return { s:a.name, cat:a.cat, d:a.change, w:a.w, cap:a.cap, price:a.price, r:r, x:W*0.2+Math.random()*W*0.6, y:H*0.2+Math.random()*H*0.6, vx:0, vy:0, k:1 };
   });
   bmUpdateLegend();
+  bmBuildAssetPanel();
   if(bmReduced && bmStarted) bmSettle();
 }
+
+var BM_CAT_LABELS={crypto:'Crypto',forex:'Forex',indices:'Indices',matieres:'Matières premières'};
+var bmGroupOpen={}; // catégories repliées par défaut
+var BM_CARET='<svg class="bm-grp__caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+function bmBuildAssetPanel(){
+  var list=document.getElementById('bmAssetList'); if(!list) return;
+  var q=(document.getElementById('bmAssetSearch')||{}).value||''; q=q.toLowerCase();
+  var searching=!!q;
+  var order=['crypto','forex','indices','matieres'];
+  var groups={}; bmBubbles.forEach(function(b){ (groups[b.cat]=groups[b.cat]||[]).push(b); });
+  var html='';
+  order.forEach(function(cat){
+    var all=(groups[cat]||[]);
+    var arr=all.filter(function(b){ return !q || b.s.toLowerCase().indexOf(q)>-1; });
+    if(!arr.length) return;
+    var hiddenCount=all.filter(function(b){return bmHidden.has(b.s);}).length;
+    var open=searching || bmGroupOpen[cat];
+    var shown=all.length-hiddenCount;
+    html+='<div class="bm-grp'+(open?' open':'')+'">'
+      +'<button type="button" class="bm-grp__h" data-grp="'+cat+'">'+BM_CARET
+      +'<span class="bm-grp__name">'+(BM_CAT_LABELS[cat]||cat)+'</span>'
+      +'<span class="bm-grp__count">'+shown+'/'+all.length+'</span></button>'
+      +'<div class="bm-grp__body">';
+    arr.forEach(function(b){
+      var off=bmHidden.has(b.s);
+      var col=b.d>=0?'var(--bull)':'var(--bear)';
+      html+='<label class="bm-asset'+(off?' off':'')+'">'
+        +'<input type="checkbox" data-sym="'+b.s+'"'+(off?'':' checked')+'>'
+        +'<span class="bm-asset__name">'+b.s+'</span>'
+        +'<span class="bm-asset__chg" style="color:'+col+'">'+(b.d>=0?'▲':'▼')+Math.abs(b.d).toFixed(2)+'%</span>'
+        +'</label>';
+    });
+    html+='</div></div>';
+  });
+  list.innerHTML=html||'<div style="color:var(--text-muted);font-size:12px;padding:10px 4px">Aucun actif</div>';
+}
+// Toggle d'un actif + repli/dépli des catégories
+(function(){
+  var list=document.getElementById('bmAssetList');
+  if(list) list.addEventListener('click',function(e){
+    var h=e.target.closest('.bm-grp__h'); if(!h) return;
+    var cat=h.getAttribute('data-grp');
+    bmGroupOpen[cat]=!bmGroupOpen[cat];
+    bmBuildAssetPanel();
+  });
+  if(list) list.addEventListener('change',function(e){
+    var inp=e.target.closest('input[data-sym]'); if(!inp) return;
+    var sym=inp.getAttribute('data-sym');
+    if(inp.checked) bmHidden.delete(sym); else bmHidden.add(sym);
+    bmSaveHidden();
+    var lbl=inp.closest('.bm-asset'); if(lbl) lbl.classList.toggle('off',!inp.checked);
+    // met à jour le compteur du groupe
+    var grp=inp.closest('.bm-grp'); if(grp){ var hd=grp.querySelector('.bm-grp__h'); if(hd){ var c=hd.getAttribute('data-grp'); var all=bmBubbles.filter(function(b){return b.cat===c;}); var shown=all.filter(function(b){return !bmHidden.has(b.s);}).length; var cnt=grp.querySelector('.bm-grp__count'); if(cnt) cnt.textContent=shown+'/'+all.length; } }
+    if(bmReduced) bmSettle();
+  });
+  var search=document.getElementById('bmAssetSearch');
+  if(search) search.addEventListener('input',bmBuildAssetPanel);
+  var all=document.getElementById('bmToggleAll');
+  if(all) all.addEventListener('click',function(){
+    // Si au moins un masqué → tout afficher ; sinon tout masquer
+    var anyHidden=bmBubbles.some(function(b){return bmHidden.has(b.s);});
+    if(anyHidden){ bmHidden.clear(); }
+    else { bmBubbles.forEach(function(b){ bmHidden.add(b.s); }); }
+    bmSaveHidden(); bmBuildAssetPanel(); if(bmReduced) bmSettle();
+  });
+})();
 
 function bmLoad(){
   fetch('/api/markets-bubbles').then(function(r){return r.json();}).then(function(d){
@@ -293,7 +390,7 @@ function bmStep(){
   var i,j,active=bmCat;
   for(i=0;i<bmBubbles.length;i++){
     var b=bmBubbles[i];
-    var on=active==='all'||b.cat===active;
+    var on=(active==='all'||b.cat===active) && !bmHidden.has(b.s);
     b.k+=((on?1:0.1)-b.k)*0.08;
     b.vx+=(bmW/2-b.x)*0.0004; b.vy+=(bmH/2-b.y)*0.0006;
     b.vx+=(Math.random()-0.5)*0.02; b.vy+=(Math.random()-0.5)*0.02;
