@@ -49,9 +49,8 @@
     'bubble.html':      { crumb: 'Bubble Map',          key: 'bubble' },
     'calculateur.html': { crumb: 'Calculateur de Pips', key: 'calculateur' },
     'mur-des-trades.html': { crumb: 'Mur des Trades',   key: 'trades' },
-    'patrimoine.html':            { crumb: 'Patrimoine · Portefeuille',   key: 'patrimoine' },
+    'patrimoine.html':            { crumb: 'Patrimoine',                  key: 'patrimoine' },
     'patrimoine-presentation.html': { crumb: 'Patrimoine · Présentation', key: 'patrimoine' },
-    'patrimoine-plan.html':       { crumb: 'Patrimoine · Plan',           key: 'patrimoine' },
     // Pages Éco (anciennes pages d'actus) — rattachées à la branche Calendrier
     'eco-edition.html':      { crumb: 'Calendrier Éco · Présentation', key: 'calendrier' },
     'eco-selection.html':    { crumb: 'Calendrier Éco · La sélection',  key: 'calendrier' },
@@ -115,9 +114,8 @@
     ] },
     { key: 'bubble', label: 'Bubble Map', href: './bubble.html', icon: I.bubble },
     { key: 'trades', label: 'Mur des Trades', href: './mur-des-trades.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>' },
-    { key: 'patrimoine', label: 'Patrimoine', href: './patrimoine-presentation.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>', children: [
-      { label: 'Présentation', href: './patrimoine-presentation.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>' },
-      { label: 'Portefeuille', href: './patrimoine.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>' }
+    { key: 'patrimoine', label: 'Patrimoine', href: './patrimoine.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>', children: [
+      { label: 'Découvrir', href: './patrimoine-presentation.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>' }
     ] },
     { key: 'calculateur', label: 'Calculateur de Pips', href: './calculateur.html', icon: I.calc }
   ];
