@@ -371,7 +371,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <div class="lt-nav__menu">
           <a class="lt-nav__menuitem" href="./index.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
           <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
           <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
@@ -444,7 +444,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <div class="page-head" style="margin-bottom:24px">
     <span class="eyebrow" data-en="&lt;span class=&quot;lt-dot&quot;&gt;&lt;/span&gt; Performance tracking"><span class="lt-dot"></span> Suivi de performance</span>
     <h1 data-en="Trading Journal">Journal de Trading</h1>
-    <p data-en="Your month at a glance: daily P&L, win rate, and AI analysis of your performance patterns.">Ton mois en un coup d'œil : P&L par jour, win rate, et l'analyse IA de tes patterns de performance.</p>
+    <p data-en="Your month at a glance: daily P&L, win rate, and AI analysis of your performance patterns.">Votre mois en un coup d'œil : P&L par jour, win rate, et l'analyse IA de vos patterns de performance.</p>
   </div>
 
   <!-- STATS — P&L en premier, style maquette -->
@@ -577,7 +577,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <div class="broker-banner-left">
           <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
           <div class="broker-banner-text">
-            <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connecte ton compte de trading</div>
+            <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connectez votre compte de trading</div>
             <div class="broker-banner-sub" id="brokerSub" data-en="MT4 · MT5 · Topstep · FTMO · CSV import">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
           </div>
         </div>
@@ -595,7 +595,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
     </div>
     <div id="globalIaContent" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
-      <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
+      <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lancez une analyse pour voir vos patterns.</span>
     </div>
   </div>
 
@@ -613,10 +613,10 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <div class="modal-box" style="max-width:560px;width:100%">
     <button class="modal-close" onclick="closeMt5Modal()">✕</button>
     <div class="modal-title">Importer depuis MT5</div>
-    <div class="modal-sub">Dépose un screenshot de ton historique MetaTrader 5 — l'IA extrait les trades automatiquement.</div>
+    <div class="modal-sub">Déposez un screenshot de votre historique MetaTrader 5 — l'IA extrait les trades automatiquement.</div>
     <div class="upload-zone" id="mt5DropZone" style="margin:20px 0;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;border:2px dashed rgba(127,184,232,.3);border-radius:10px;transition:border-color .2s" onclick="document.getElementById('mt5FileInput').click()" ondrop="handleMt5Drop(event)" ondragover="event.preventDefault();this.style.borderColor='rgba(127,184,232,.6)'" ondragleave="this.style.borderColor='rgba(127,184,232,.3)'">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(127,184,232,.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      <span style="font-size:13px;color:var(--text3)">Clique ou glisse ton screenshot MT5 ici</span>
+      <span style="font-size:13px;color:var(--text3)">Cliquez ou glissez votre screenshot MT5 ici</span>
       <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="mt5FileSelected(event)">
     </div>
     <div id="mt5Preview" style="display:none;margin-bottom:14px">
@@ -636,7 +636,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <div class="modal-box">
     <button class="modal-close" onclick="closeTradeModal()">✕</button>
     <div class="modal-title" id="modalTitle" data-en="New trade">Nouveau trade</div>
-    <div class="modal-sub" id="modalSub" data-en="Enter your trade details">Renseigne les détails de ton trade</div>
+    <div class="modal-sub" id="modalSub" data-en="Enter your trade details">Renseignez les détails de votre trade</div>
 
     <div class="form-grid three" style="margin-bottom:12px">
       <div class="field">
@@ -713,7 +713,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="tradeImg" accept="image/*" onchange="onTradeImg(this)">
         <div style="font-size:20px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></div>
-        <div class="upload-text" data-en="Drag or click to add a screenshot">Glisse ou clique pour ajouter un screenshot</div>
+        <div class="upload-text" data-en="Drag or click to add a screenshot">Glissez ou cliquez pour ajouter un screenshot</div>
         <div style="font-size:10px;color:var(--text3)">PNG, JPG</div>
       </div>
       <div class="upload-preview" id="uploadPreview">
@@ -760,7 +760,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <!-- STEP 1: platform picker -->
     <div id="brokerStep1">
       <div class="modal-title" data-en="Connect an account">Connecter un compte</div>
-      <div class="modal-sub" data-en="Choose your trading platform">Choisis ta plateforme de trading</div>
+      <div class="modal-sub" data-en="Choose your trading platform">Choisissez votre plateforme de trading</div>
       <div class="platform-grid">
         <div class="platform-card" onclick="showBrokerStep2('metaapi')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
@@ -789,7 +789,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div id="brokerStep2MetaApi" style="display:none">
       <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
       <div class="modal-title">MT4 / MT5 via MetaApi</div>
-      <div class="modal-sub" data-en="Automatic sync of your history">Sync automatique de ton historique</div>
+      <div class="modal-sub" data-en="Automatic sync of your history">Sync automatique de votre historique</div>
 
       <div class="mt-toggle">
         <button class="mt-btn on" id="mtBtn4" onclick="selectMtType('mt4')">MT4</button>
@@ -797,7 +797,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
 
       <div class="broker-steps" data-en="Enter the credentials of your prop-firm / broker account (the same ones you use to log into MT4/MT5). The connection and sync are automatic.">
-        Entre les identifiants de ton compte prop firm / broker (les mêmes que pour te connecter à MT4/MT5). La connexion et la synchro sont automatiques.
+        Entrez les identifiants de votre compte prop firm / broker (les mêmes que pour vous connecter à MT4/MT5). La connexion et la synchro sont automatiques.
       </div>
 
       <!-- Mode simple : identifiants du compte -->
@@ -811,10 +811,10 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
           <input type="password" id="mtPassInput" placeholder="••••••••" autocomplete="off">
         </div>
         <div class="broker-field">
-          <label data-en="Server (shown in your platform)">Serveur (affiché dans ta plateforme)</label>
+          <label data-en="Server (shown in your platform)">Serveur (affiché dans votre plateforme)</label>
           <input type="text" id="mtServerInput" placeholder="ex. FTMO-Server, FundingPips-Live…" autocomplete="off">
         </div>
-        <p class="pf-hint" style="margin:0 0 12px" data-en="Tip: an investor (read-only) password is enough to sync your history.">Astuce : un mot de passe « investisseur » (lecture seule) suffit pour synchroniser ton historique.</p>
+        <p class="pf-hint" style="margin:0 0 12px" data-en="Tip: an investor (read-only) password is enough to sync your history.">Astuce : un mot de passe « investisseur » (lecture seule) suffit pour synchroniser votre historique.</p>
       </div>
 
       <!-- Mode avancé : token MetaApi (repli) -->
@@ -842,8 +842,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="modal-title" data-en="Futures account (ProjectX)">Compte futures (ProjectX)</div>
       <div class="modal-sub" data-en="Topstep · Tradeify · Lucid · other ProjectX firms">Topstep · Tradeify · Lucid · autres firms ProjectX</div>
       <div class="broker-steps" data-en="1. In your prop firm dashboard → API / API Key section, generate a key.<br>2. Enter your username and the key below. Sync is automatic.">
-        <b>1.</b> Dans le dashboard de ta prop firm → section <b>API / API Key</b>, génère une clé.<br>
-        <b>2.</b> Entre ton identifiant et la clé ci-dessous. La synchro est automatique.
+        <b>1.</b> Dans le dashboard de votre prop firm → section <b>API / API Key</b>, générez une clé.<br>
+        <b>2.</b> Entrez votre identifiant et la clé ci-dessous. La synchro est automatique.
       </div>
       <div class="broker-field">
         <label data-en="Prop firm">Prop firm</label>
@@ -853,12 +853,12 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         </select>
       </div>
       <div class="broker-field" id="pxBaseField" style="display:none">
-        <label data-en="Your firm's API URL">URL API de ta firm</label>
+        <label data-en="Your firm's API URL">URL API de votre firm</label>
         <input type="text" id="pxBaseInput" placeholder="api.xxxxx.com" autocomplete="off">
       </div>
       <div class="broker-field">
         <label data-en="Username">Identifiant (username)</label>
-        <input type="text" id="pxUserInput" placeholder="ton_username" autocomplete="off">
+        <input type="text" id="pxUserInput" placeholder="votre_username" autocomplete="off">
       </div>
       <div class="broker-error" id="brokerError"></div>
       <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
@@ -872,13 +872,13 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="modal-title">TradeLocker</div>
       <div class="modal-sub" data-en="MyFundedFX · The5ers · and other prop firms">MyFundedFX · The5ers · et autres prop firms</div>
       <div class="broker-steps">
-        <b>1.</b> Utilise l'email et mot de passe de ton compte TradeLocker<br>
-        <b>2.</b> Le serveur est indiqué dans ton tableau de bord prop firm<br>
+        <b>1.</b> Utilisez l'email et mot de passe de votre compte TradeLocker<br>
+        <b>2.</b> Le serveur est indiqué dans votre tableau de bord prop firm<br>
         &nbsp;&nbsp;&nbsp;&nbsp;Exemples : <b>TT-LIVE-1</b>, <b>TT-LIVE-2</b>, <b>TradeLocker-Live</b>
       </div>
       <div class="broker-field">
         <label>Email TradeLocker</label>
-        <input type="email" id="tlEmailInput" placeholder="ton@email.com">
+        <input type="email" id="tlEmailInput" placeholder="vous@email.com">
       </div>
       <div class="broker-field">
         <label data-en="Password">Mot de passe</label>
@@ -900,9 +900,9 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="modal-title">DXtrade</div>
       <div class="modal-sub" data-en="Prop firms using the DXtrade platform">Prop firms utilisant la plateforme DXtrade</div>
       <div class="broker-steps">
-        <b>1.</b> Le domaine est l'URL de ta plateforme DXtrade<br>
+        <b>1.</b> Le domaine est l'URL de votre plateforme DXtrade<br>
         &nbsp;&nbsp;&nbsp;&nbsp;Exemple : <b>dxtrade.myfirm.com</b><br>
-        <b>2.</b> Login et mot de passe = tes identifiants de la plateforme
+        <b>2.</b> Login et mot de passe = vos identifiants de la plateforme
       </div>
       <div class="broker-field">
         <label data-en="DXtrade domain">Domaine DXtrade</label>
@@ -910,7 +910,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       </div>
       <div class="broker-field">
         <label>Login</label>
-        <input type="text" id="dxLoginInput" placeholder="ton_login">
+        <input type="text" id="dxLoginInput" placeholder="votre_login">
       </div>
       <div class="broker-field">
         <label data-en="Password">Mot de passe</label>
@@ -941,8 +941,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="csv-drop" id="csvDrop">
         <input type="file" accept=".csv,.txt" onchange="onCsvFile(event)" id="csvFileInput">
         <div class="csv-drop-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-        <div class="csv-drop-txt" data-en="Drag your CSV file here">Glisse ton fichier CSV ici</div>
-        <div class="csv-drop-sub" data-en="or click to select">ou clique pour sélectionner</div>
+        <div class="csv-drop-txt" data-en="Drag your CSV file here">Glissez votre fichier CSV ici</div>
+        <div class="csv-drop-sub" data-en="or click to select">ou cliquez pour sélectionner</div>
       </div>
 
       <div id="csvPreviewArea" style="display:none">
@@ -969,7 +969,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
     <div class="auth-field">
       <label>EMAIL</label>
-      <input type="email" id="authEmail" placeholder="ton@email.com">
+      <input type="email" id="authEmail" placeholder="vous@email.com">
     </div>
     <div class="auth-field">
       <label data-en="PASSWORD">MOT DE PASSE</label>
@@ -1232,7 +1232,7 @@ function openDayDetail(dateStr) {
         '<div class="ia-title"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="9" y="9" width="6" height="6"/><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> Analyse IA de cette journée</div>'+
         '<button class="ia-btn" id="dayIaBtn" onclick="requestDayIA(\''+dateStr+'\')">Analyser</button>'+
       '</div>'+
-      '<div id="dayIaContent" class="ia-content" style="color:var(--text3)">Clique sur "Analyser" pour obtenir un feedback IA sur tes trades de la journée.</div>'+
+      '<div id="dayIaContent" class="ia-content" style="color:var(--text3)">Cliquez sur "Analyser" pour obtenir un feedback IA sur vos trades de la journée.</div>'+
     '</div>';
 
     // Add trade for this day
@@ -1295,7 +1295,7 @@ function openTradeModal(date) {
   tradeResult = null;
   tradeImgData = null;
   document.getElementById('modalTitle').textContent = 'Nouveau trade';
-  document.getElementById('modalSub').textContent = 'Renseigne les détails de ton trade';
+  document.getElementById('modalSub').textContent = 'Renseignez les détails de votre trade';
   document.getElementById('tradePair').value = '';
   document.getElementById('tradeRR').value = '';
   document.getElementById('tradePnL').value = '';
@@ -1358,7 +1358,7 @@ async function saveTrade() {
   var date = document.getElementById('tradeDate').value;
   var pnl  = document.getElementById('tradePnL').value;
   if(!pair || !date || !tradeDir || !tradeResult) {
-    alert('Remplis au minimum : paire, date, direction et résultat.');
+    alert('Remplissez au minimum : paire, date, direction et résultat.');
     return;
   }
   // Tokens : ajouter un nouveau trade consomme un crédit (1 token = 5 trades). L'édition est gratuite.
@@ -1592,7 +1592,7 @@ function toggleGlobalIA() {
   var btn = document.getElementById('globalIaBtn');
   if(panel.style.display === 'none') {
     panel.style.display = 'block';
-    if(panel.innerHTML.includes('Lance une analyse')) {
+    if(panel.innerHTML.includes('Lancez une analyse')) {
       requestGlobalIA();
     }
   } else {
@@ -1603,7 +1603,7 @@ function toggleGlobalIA() {
 
 async function requestGlobalIA() {
   if(trades.length < 3) {
-    document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il te faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
+    document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il vous faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
     return;
   }
   // Analyse de performance = 2 tokens (Premium = illimité)
@@ -1612,7 +1612,7 @@ async function requestGlobalIA() {
   var content = document.getElementById('globalIaContent');
   btn.disabled = true;
   btn.textContent = '…';
-  content.innerHTML = '<div class="ia-loading"><div class="ia-orb"></div><span>Analyse de tes patterns en cours…</span></div>';
+  content.innerHTML = '<div class="ia-loading"><div class="ia-orb"></div><span>Analyse de vos patterns en cours…</span></div>';
 
   var wins = trades.filter(function(t){ return t.result==='win'; }).length;
   var losses = trades.filter(function(t){ return t.result==='loss'; }).length;
@@ -1790,7 +1790,7 @@ async function doAuth() {
   var password = document.getElementById('authPassword').value;
   var errEl = document.getElementById('authError');
   errEl.textContent = '';
-  if(!email || !password) { errEl.textContent = 'Remplis tous les champs'; return; }
+  if(!email || !password) { errEl.textContent = 'Remplissez tous les champs'; return; }
   try {
     var res = await fetch('/api/auth', {
       method:'POST',
@@ -1834,21 +1834,7 @@ function updateUserUI() {
 var isProJ = false;
 var userTokens = null;
 function jnlNoTokens(){
-  var ov = document.getElementById('paywallOverlay');
-  if(ov){ ov.style.display='flex'; return; }
-  var el = document.createElement('div');
-  el.id = 'paywallOverlay';
-  el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(7,9,12,.92);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:20px';
-  el.innerHTML = '<div style="max-width:440px;width:100%;background:#10141B;border:1px solid rgba(127,184,232,.2);border-radius:16px;padding:36px 32px;text-align:center;position:relative">' +
-    '<button onclick="document.getElementById(\'paywallOverlay\').style.display=\'none\'" style="position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:#5A7A9A;font-size:18px;line-height:1">✕</button>' +
-    '<div style="width:52px;height:52px;border-radius:12px;background:rgba(127,184,232,.1);border:1px solid rgba(127,184,232,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">' +
-      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7FB8E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>' +
-    '</div>' +
-    '<p style="font-family:Anton,sans-serif;font-size:24px;color:#F2F4F7;letter-spacing:.04em;margin:0 0 10px;text-transform:uppercase">TOKENS ÉPUISÉS</p>' +
-    '<p style="font-family:Inter,sans-serif;font-size:14px;color:#8BA0B8;line-height:1.6;margin:0 0 28px">Tu as utilisé tes 5 tokens offerts.<br>Passe en Premium pour des analyses et un journal illimités.</p>' +
-    '<a href="./tarifs.html" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:#7FB8E8;color:#07090C;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:.03em">Voir les offres Premium →</a>' +
-  '</div>';
-  document.body.appendChild(el);
+  if(confirm("Vous n'avez plus de tokens. Passez en Premium pour un accès illimité ?")) window.location.href='./tarifs.html';
 }
 async function refreshTokens(){
   if(!authToken) return;
@@ -2006,7 +1992,7 @@ function pfRender(filter){
   var rows = PROP_FIRMS.filter(function(f){ return !q || f.n.toLowerCase().indexOf(q)>-1; })
     .sort(function(a,b){ return a.n.localeCompare(b.n); });
   _pfActive = -1;
-  if(!rows.length){ list.innerHTML = '<div class="pf-opt__none">Aucune firm — utilise « choisir une plateforme » ci-dessous.</div>'; return; }
+  if(!rows.length){ list.innerHTML = '<div class="pf-opt__none">Aucune firm — utilisez « choisir une plateforme » ci-dessous.</div>'; return; }
   list.innerHTML = rows.map(function(f){
     var arg = f.p==='projectx' ? (f.b||'') : '';
     if(f.p==='metaapi'){ // MT4/MT5 → bientôt (nécessitera MetaApi)
@@ -2114,8 +2100,8 @@ async function saveBrokerConnection() {
   var errEl = document.getElementById('brokerError');
   errEl.textContent = '';
   var useSimple = login && pass && server;
-  if (!useSimple && (!token || !accountId)) { errEl.textContent = 'Entre login + mot de passe + serveur (ou utilise le mode avancé)'; return; }
-  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  if (!useSimple && (!token || !accountId)) { errEl.textContent = 'Entrez login + mot de passe + serveur (ou utilisez le mode avancé)'; return; }
+  if (!authToken) { errEl.textContent = 'Connectez-vous d\'abord'; return; }
   var btn = document.getElementById('brokerSaveBtn');
   btn.disabled = true;
   document.getElementById('brokerSaveTxt').textContent = 'Connexion…';
@@ -2155,7 +2141,7 @@ async function savePXConnection() {
   var errEl = document.getElementById('pxError');
   errEl.textContent = '';
   if (!base || !user || !key) { errEl.textContent = 'Firm + identifiant + clé API requis'; return; }
-  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  if (!authToken) { errEl.textContent = 'Connectez-vous d\'abord'; return; }
   var btn = document.getElementById('pxSaveBtn');
   btn.disabled = true; document.getElementById('pxSaveTxt').textContent = 'Connexion…';
   try {
@@ -2182,8 +2168,8 @@ async function saveTLConnection() {
   var server = document.getElementById('tlServerInput').value.trim();
   var errEl = document.getElementById('tlError');
   errEl.textContent = '';
-  if (!email || !password || !server) { errEl.textContent = 'Remplis tous les champs'; return; }
-  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  if (!email || !password || !server) { errEl.textContent = 'Remplissez tous les champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connectez-vous d\'abord'; return; }
   var btn = document.getElementById('tlSaveBtn');
   btn.disabled = true;
   document.getElementById('tlSaveTxt').textContent = 'Vérification…';
@@ -2211,8 +2197,8 @@ async function saveDXConnection() {
   var password = document.getElementById('dxPasswordInput').value.trim();
   var errEl = document.getElementById('dxError');
   errEl.textContent = '';
-  if (!domain || !login || !password) { errEl.textContent = 'Remplis tous les champs'; return; }
-  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  if (!domain || !login || !password) { errEl.textContent = 'Remplissez tous les champs'; return; }
+  if (!authToken) { errEl.textContent = 'Connectez-vous d\'abord'; return; }
   var btn = document.getElementById('dxSaveBtn');
   btn.disabled = true;
   document.getElementById('dxSaveTxt').textContent = 'Vérification…';
@@ -2287,7 +2273,7 @@ function updateBrokerBanner(info) {
   if (!info.connected) {
     banner.className = 'broker-banner disconnected';
     document.getElementById('brokerIcon').textContent = '';
-    titleEl.textContent = 'Connecte ton compte de trading';
+    titleEl.textContent = 'Connectez votre compte de trading';
     titleEl._name = null;
     subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
     actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>';
@@ -2419,7 +2405,7 @@ function onCsvFile(e) {
     if (!parsed) { document.getElementById('csvParseError').textContent = 'Fichier illisible'; return; }
     var fmt = detectFormat(parsed.headers);
     if (!fmt) {
-      document.getElementById('csvParseError').textContent = 'Format non reconnu — essaie de sélectionner un format manuellement';
+      document.getElementById('csvParseError').textContent = 'Format non reconnu — essayez de sélectionner un format manuellement';
       return;
     }
     document.getElementById('csvParseError').textContent = '';
@@ -2450,7 +2436,7 @@ function renderCsvPreview(tds) {
 
 async function importCsvTrades() {
   if (!parsedCsvTrades.length) return;
-  if (!authToken) { document.getElementById('csvError').textContent = 'Connecte-toi d\'abord'; return; }
+  if (!authToken) { document.getElementById('csvError').textContent = 'Connectez-vous d\'abord'; return; }
   var btn = document.getElementById('csvImportBtn');
   btn.disabled = true;
   document.getElementById('csvImportTxt').textContent = 'Import en cours…';
@@ -2495,7 +2481,7 @@ function mt5FileSelected(e) {
     previewImg.src = dataUrl;
     preview.style.display = 'block';
     document.getElementById('mt5AnalyzeBtn').style.display = 'inline-flex';
-    document.getElementById('mt5Status').textContent = 'Image chargée — clique sur Analyser.';
+    document.getElementById('mt5Status').textContent = 'Image chargée — cliquez sur Analyser.';
     document.getElementById('mt5Status').style.display = 'block';
   };
   reader.readAsDataURL(file);
@@ -2680,7 +2666,7 @@ async function importMt5Trades() {
     var sym=jrSym();
     if(series.length<2){
       ctx.fillStyle='rgba(138,147,165,.45)'; ctx.font='12px Inter,sans-serif';
-      ctx.textAlign='center'; ctx.fillText('Ajoute des trades pour voir la courbe',w/2,h/2); return;
+      ctx.textAlign='center'; ctx.fillText('Ajoutez des trades pour voir la courbe',w/2,h/2); return;
     }
     var padL=48, padR=10, padT=18, padB=24;
     var min=Math.min.apply(null,series), max=Math.max.apply(null,series), rng=(max-min)||1;

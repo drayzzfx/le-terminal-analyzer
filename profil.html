@@ -49,7 +49,7 @@
         <div class="lt-nav__menu">
           <a class="lt-nav__menuitem" href="./index.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
           <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
           <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
@@ -82,7 +82,7 @@
   <!-- État non connecté -->
   <div class="pf-card" id="pfGate" style="display:none">
     <div class="pf-gate">
-      <p data-en="Sign in to manage your profile.">Connecte-toi pour gérer ton profil.</p>
+      <p data-en="Sign in to manage your profile.">Connectez-vous pour gérer votre profil.</p>
       <button class="lt-btn lt-btn--primary" style="margin-top:14px" onclick="window.ltOpenLogin&&ltOpenLogin()" data-en="Sign in">Connexion</button>
     </div>
   </div>
@@ -114,7 +114,7 @@
         <div class="pf-field full">
           <label class="pf-label" for="pfPseudo" data-en="Username (display name)">Pseudo (nom affiché)</label>
           <input class="pf-input" type="text" id="pfPseudo" maxlength="40" placeholder="—">
-          <p class="pf-hint" data-en="If set, your username is shown across the site instead of your first/last name.">S'il est renseigné, ton pseudo est affiché partout sur le site à la place du nom/prénom.</p>
+          <p class="pf-hint" data-en="If set, your username is shown across the site instead of your first/last name.">S'il est renseigné, votre pseudo est affiché partout sur le site à la place du nom/prénom.</p>
         </div>
         <div class="pf-field full">
           <label class="pf-label" for="pfEmail" data-en="Email">E-mail</label>
@@ -181,7 +181,7 @@
   async function loadProfile(){
     try {
       var r = await fetch('/api/profile', { headers: { 'Authorization': 'Bearer ' + TOKEN } });
-      if(r.status === 401){ setStatus(getLang()==='en' ? 'Session expired — please sign in again to edit your profile.' : 'Session expirée — reconnecte-toi pour modifier ton profil.', 'err'); return; }
+      if(r.status === 401){ setStatus(getLang()==='en' ? 'Session expired — please sign in again to edit your profile.' : 'Session expirée — reconnectez-vous pour modifier votre profil.', 'err'); return; }
       if(!r.ok) return;
       var p = await r.json();
       if(p.first_name) $('pfFirst').value = p.first_name;
@@ -221,7 +221,7 @@
       setStatus(getLang()==='en' ? 'Profile saved.' : 'Profil enregistré.', 'ok');
     } catch(e){
       if(e.message === 'SESSION_EXPIRED'){
-        setStatus(getLang()==='en' ? 'Session expired — please sign in again.' : 'Session expirée — reconnecte-toi.', 'err');
+        setStatus(getLang()==='en' ? 'Session expired — please sign in again.' : 'Session expirée — reconnectez-vous.', 'err');
         if(window.ltOpenLogin) ltOpenLogin();
       } else {
         setStatus((getLang()==='en' ? 'Save failed: ' : 'Échec : ') + (e.message || ''), 'err');

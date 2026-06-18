@@ -16,7 +16,7 @@ La référence complète (tokens, guidelines, composants, UI kits) est versionn�
 - **Palette** : 4 noirs (`#07090C` → `#161B24`) ; **un seul** accent bleu glacial `#7FB8E8`, employé avec parcimonie (CTA, liens, lueurs). Sémantique marché : haussier `#4ADE9C`, baissier `#F0647A`, neutre `#E8C268`. **Pas de violet, pas de néon, pas de dégradé bleu-mauve.**
 - **Typo** : Anton (display, CAPITALES massives, métal brossé via `background-clip:text`), Inter (texte), JetBrains Mono (TOUS les chiffres, tabulaires). Titres display en CAPITALES ; eyebrows/labels en capitales interlettrées.
 - **Icônes** : SVG trait fin (`stroke-width:1.5`, `fill:none`) uniquement. **JAMAIS d'emoji.**
-- **Copy** : français, ton direct/feutré, on tutoie le trader. Chiffres format français (`68 412,50`).
+- **Copy** : français, ton direct/feutré, on **vouvoie** le client (« vous », jamais « tu ») — partout et à chaque fois, y compris pour toute nouvelle page/texte. Chiffres format français (`68 412,50`).
 - **Rayons nets** (2/4/6/10px), bordures hairline 1px, ombres froides, conteneur 1200px, base d'espacement 4px.
 - **Animation** : ease-out cinématique `cubic-bezier(0.16,1,0.3,1)`, reveals au scroll une seule fois, toujours honorer `prefers-reduced-motion`.
 
