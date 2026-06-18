@@ -290,10 +290,12 @@
         el.style.display = 'none';
       }
     });
-
-    var dock = document.querySelector('nav.lt-dock:not(.lt-dock--mobile-only)');
-    if (dock) dock.classList.add('lt-dock--mobile-only');
   }
+
+  // Masque le dock d'icônes de l'accueil sur toute page à appshell (desktop),
+  // y compris si la coquille .app est statique (ex. calculateur).
+  var _dock = document.querySelector('nav.lt-dock:not(.lt-dock--mobile-only)');
+  if (_dock) _dock.classList.add('lt-dock--mobile-only');
 
   // ── PART 2 : remplit la barre latérale (toutes les pages) ──
   var sideEl = document.querySelector('.app > .side, aside.side');
