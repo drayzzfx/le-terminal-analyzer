@@ -2187,7 +2187,12 @@ async function analyzeMt5Screenshot() {
       body: JSON.stringify({ imgData: base64 })
     });
     var data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || 'Erreur serveur');
+    if (!res.ok || data.error) {
+      var errMsg = typeof data.error === 'object' ? (data.error.message || JSON.stringify(data.error)) : (data.error || 'Erreur serveur');
+      // Crédits insuffisants
+      if (errMsg && (errMsg.includes('credit') || errMsg.includes('balance') || res.status === 529 || res.status === 402)) errMsg = 'Crédits API insuffisants — recharge sur console.anthropic.com';
+      throw new Error(errMsg);
+    }
     _mt5ParsedTrades = Array.isArray(data.trades) ? data.trades : [];
     if (!_mt5ParsedTrades.length) throw new Error('Aucun trade détecté sur l\'image');
 
