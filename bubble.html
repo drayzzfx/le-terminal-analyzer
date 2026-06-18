@@ -398,7 +398,7 @@ function bmActiveCount(){
 }
 function bmRadius(w){
   var n=bmActiveCount();
-  var scale= n<=12 ? 1.92 : n<=25 ? 1.68 : n<=40 ? 1.2 : n<=55 ? 1.1 : 0.73;
+  var scale= bmCat==='crypto' ? 2.2 : n<=12 ? 1.92 : n<=25 ? 1.68 : n<=40 ? 1.2 : n<=55 ? 1.1 : 0.73;
   return (22 + Math.sqrt((w||0.5)/bmMaxW)*58)*scale;
 }
 function bmRecomputeRadii(){
