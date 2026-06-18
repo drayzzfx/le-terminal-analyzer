@@ -8,7 +8,7 @@ function supabaseRequest(method, path, body, key, authToken) {
       'Content-Type': 'application/json',
       'apikey': key,
       'Authorization': `Bearer ${authToken || key}`,
-      'Prefer': (method === 'POST' || method === 'PATCH') ? 'return=representation' : undefined
+      'Prefer': (method === 'POST') ? 'resolution=merge-duplicates,return=representation' : (method === 'PATCH' ? 'return=representation' : undefined)
     };
     if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
     Object.keys(headers).forEach(k => headers[k] === undefined && delete headers[k]);
@@ -47,22 +47,27 @@ module.exports = async function handler(req, res) {
     const userEmail = userRes.body.email || '';
 
     if (req.method === 'GET') {
-      const r = await supabaseRequest('GET', `/rest/v1/user_profiles?id=eq.${userId}&select=trial_start,is_pro`, null, SERVICE_KEY, SERVICE_KEY);
+      const r = await supabaseRequest('GET', `/rest/v1/user_profiles?id=eq.${userId}&select=first_name,last_name,pseudo,avatar_url,trial_start,is_pro`, null, SERVICE_KEY, SERVICE_KEY);
       const profile = Array.isArray(r.body) ? r.body[0] : null;
       return res.status(200).json(profile || {});
     }
 
     if (req.method === 'PATCH') {
-      const { trial_start } = req.body || {};
-      // Upsert profile with trial_start
-      const r = await supabaseRequest('POST', '/rest/v1/user_profiles', {
-        id: userId,
-        email: userEmail,
-        trial_start: trial_start || null
-      }, SERVICE_KEY, SERVICE_KEY);
-      // If upsert failed, try update
+      const { first_name, last_name, pseudo, avatar_url, trial_start } = req.body || {};
+      const patch = {};
+      if (first_name !== undefined) patch.first_name = first_name;
+      if (last_name  !== undefined) patch.last_name  = last_name;
+      if (pseudo     !== undefined) patch.pseudo     = pseudo;
+      if (avatar_url !== undefined) patch.avatar_url = avatar_url;
+      if (trial_start !== undefined) patch.trial_start = trial_start;
+
+      // Upsert: insert or update on conflict (id)
+      const upsertBody = { id: userId, email: userEmail, ...patch };
+      const r = await supabaseRequest('POST', '/rest/v1/user_profiles', upsertBody, SERVICE_KEY, SERVICE_KEY);
       if (r.status >= 400) {
-        const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, { trial_start }, SERVICE_KEY, SERVICE_KEY);
+        // Fallback: plain PATCH
+        const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, patch, SERVICE_KEY, SERVICE_KEY);
+        if (u.status >= 400) return res.status(500).json({ error: 'Save failed', detail: u.body });
         return res.status(200).json(Array.isArray(u.body) ? u.body[0] : {});
       }
       return res.status(200).json(Array.isArray(r.body) ? r.body[0] : {});
