@@ -451,39 +451,34 @@
         chip.classList.remove('open');
       });
     }
-  }
 
-  // Charge et affiche le badge tokens dans la nav
-  (function() {
-    var tok = localStorage.getItem('ta_token');
-    if (!tok) return;
-    var pro = localStorage.getItem('lt_pro') === '1';
-    var badge = document.getElementById('ltTokenBadge');
-    if (!badge) return;
-    if (pro) {
-      badge.className = 'lt-ub-tokens lt-ub-tokens--pro';
-      badge.textContent = 'Premium';
-      badge.style.display = 'inline-flex';
-      return;
+    // Badge tokens — fetch après injection HTML
+    var _tok = localStorage.getItem('ta_token');
+    if (_tok) {
+      if (isPro) {
+        var _b = document.getElementById('ltTokenBadge');
+        if (_b) { _b.className = 'lt-ub-tokens lt-ub-tokens--pro'; _b.textContent = 'Premium'; _b.style.display = 'inline-flex'; }
+      } else {
+        fetch('/api/tokens', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _tok },
+          body: JSON.stringify({ action: 'get' })
+        }).then(function(r){ return r.json(); }).then(function(d) {
+          var _b2 = document.getElementById('ltTokenBadge');
+          if (!_b2) return;
+          if (d.is_pro || d.unlimited) {
+            _b2.className = 'lt-ub-tokens lt-ub-tokens--pro';
+            _b2.textContent = 'Premium';
+          } else if (typeof d.tokens === 'number') {
+            var n = d.tokens;
+            _b2.className = 'lt-ub-tokens' + (n <= 1 ? ' lt-ub-tokens--low' : '');
+            _b2.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> ' + n + ' token' + (n > 1 ? 's' : '');
+          } else { return; }
+          _b2.style.display = 'inline-flex';
+        }).catch(function(){});
+      }
     }
-    fetch('/api/tokens', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
-      body: JSON.stringify({ action: 'get' })
-    }).then(function(r){ return r.json(); }).then(function(d) {
-      var badge = document.getElementById('ltTokenBadge');
-      if (!badge) return;
-      if (d.is_pro || d.unlimited) {
-        badge.className = 'lt-ub-tokens lt-ub-tokens--pro';
-        badge.textContent = 'Premium';
-      } else if (typeof d.tokens === 'number') {
-        var n = d.tokens;
-        badge.className = 'lt-ub-tokens' + (n <= 1 ? ' lt-ub-tokens--low' : '');
-        badge.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>' + n + ' token' + (n > 1 ? 's' : '');
-      } else { return; }
-      badge.style.display = 'inline-flex';
-    }).catch(function(){});
-  })();
+  }
 
   function _ltClearAllAccountData() {
     localStorage.removeItem('ta_token');
