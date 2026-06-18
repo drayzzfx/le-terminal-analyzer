@@ -887,6 +887,25 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   gap: 14px;
 }
 
+/* ── Sélection multiple ── */
+.hist-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
+.hist-tool-actions { display: none; align-items: center; gap: 10px; }
+.hist-toolbar.is-selecting .hist-tool-actions { display: flex; }
+.hist-toolbar.is-selecting #histSelectBtn { display: none; }
+.hist-tool-btn { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all .2s; }
+.hist-tool-btn:hover { border-color: rgba(127,184,232,.4); color: var(--v2); }
+.hist-sel-count { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; color: var(--text3); }
+.hist-tool-del { background: rgba(240,100,122,.12); border: 1px solid rgba(240,100,122,.35); border-radius: 8px; padding: 8px 14px; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; color: #F0647A; cursor: pointer; transition: all .2s; }
+.hist-tool-del:hover { background: rgba(240,100,122,.2); }
+.hist-tool-del:disabled { opacity: .45; cursor: not-allowed; }
+
+.history-card { position: relative; }
+.history-card .hc-check { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--border); background: rgba(8,8,15,.6); display: none; align-items: center; justify-content: center; color: transparent; }
+.history-grid.selecting .history-card .hc-check { display: flex; }
+.history-grid.selecting .history-card .hc-verdict { display: none; }
+.history-card.is-selected { border-color: var(--v2); box-shadow: 0 0 0 1px var(--v2); }
+.history-card.is-selected .hc-check { background: var(--v2); border-color: var(--v2); color: #07090C; }
+
 .history-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: 16px; padding: 18px; cursor: pointer;
@@ -1028,6 +1047,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <a href="./tarifs.html">Tarifs</a>
         <a href="./index.html#method">Méthode</a>
         <a href="./index.html#community">Communauté</a>
+        <a href="./avis.html" data-en="Reviews">Avis</a>
       </nav>
       <div class="lt-nav__actions">
         <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
@@ -2760,6 +2780,9 @@ function buildHistoryGrid(){
   if(!Array.isArray(historyData)) historyData=[];
   var grid = document.getElementById('historyGrid');
   if(!grid) return;
+  grid.classList.toggle('selecting', !!_selectMode);
+  var tb = document.getElementById('histToolbar');
+  if(tb) tb.classList.toggle('is-selecting', !!_selectMode);
   // Garde l'index d'origine (openHDetail lit historyData[idx]) en sautant les supprimées.
   var rows = [];
   historyData.forEach(function(item,idx){
@@ -2769,7 +2792,10 @@ function buildHistoryGrid(){
     var sc=parseFloat(item.score)||0;
     var col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
     var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
-    rows.push('<div class="history-card" onclick="openHDetail('+idx+')">'+
+    var selCls = (_selectedIds instanceof Set && _selectedIds.has(String(item.id))) ? ' is-selected' : '';
+    var checkSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    rows.push('<div class="history-card'+selCls+'" onclick="onHistoryCardClick('+idx+')">'+
+      '<span class="hc-check">'+checkSvg+'</span>'+
       '<div class="hc-top"><span class="hc-pair">'+(item.pair||'—')+' · '+(item.direction||'')+'</span>'+
       '<span class="hc-verdict '+vC+'">'+vL+'</span></div>'+
       '<div class="hc-score" style="color:'+col+'">'+sc.toFixed(1)+'<span style="font-size:14px;color:var(--text3)">/10</span></div>'+
@@ -2787,6 +2813,13 @@ function buildHistoryGrid(){
 window.buildHistoryGrid = buildHistoryGrid;
 
 async function confirmOk(){
+  // Cas suppression groupée
+  if(typeof _bulkPending !== 'undefined' && _bulkPending){
+    _bulkPending = false;
+    document.getElementById('confirmOverlay').classList.remove('show');
+    _doBulkDelete();
+    return;
+  }
   var i = _pendingDeleteIdx;
   if(i < 0) return;
   var item = historyData[i];
@@ -2822,6 +2855,73 @@ async function confirmOk(){
   if(authToken && item.id){
     fetch('/api/history?id='+encodeURIComponent(item.id),{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}}).catch(function(){});
   }
+}
+
+// ── Sélection multiple ──
+var _selectMode = false;
+var _selectedIds = new Set();
+function onHistoryCardClick(idx){
+  if(_selectMode){ toggleCardSelect(idx); }
+  else { openHDetail(idx); }
+}
+function toggleCardSelect(idx){
+  var item = historyData[idx]; if(!item) return;
+  var id = String(item.id);
+  if(_selectedIds.has(id)) _selectedIds.delete(id); else _selectedIds.add(id);
+  buildHistoryGrid();
+  _updateSelCount();
+}
+function toggleSelectMode(){
+  _selectMode = !_selectMode;
+  _selectedIds = new Set();
+  var tb = document.getElementById('histToolbar');
+  if(tb) tb.classList.toggle('is-selecting', _selectMode);
+  buildHistoryGrid();
+  _updateSelCount();
+}
+function histSelectAll(){
+  if(!_selectMode) return;
+  var all = historyData.filter(function(it){ return !(_deletedIds instanceof Set) || !_deletedIds.has(String(it && it.id)); });
+  if(_selectedIds.size === all.length){ _selectedIds = new Set(); }
+  else { _selectedIds = new Set(all.map(function(it){ return String(it.id); })); }
+  buildHistoryGrid();
+  _updateSelCount();
+}
+function _updateSelCount(){
+  var c = document.getElementById('histSelCount');
+  var n = _selectedIds.size;
+  if(c) c.textContent = n + ' sélectionnée' + (n>1?'s':'');
+  var del = document.getElementById('histBulkDel');
+  if(del) del.disabled = (n===0);
+}
+var _bulkPending = false;
+function bulkDeleteSelected(){
+  if(!_selectedIds.size) return;
+  _bulkPending = true;
+  var box = document.getElementById('confirmOverlay');
+  var t = box.querySelector('.confirm-title');
+  var s = box.querySelector('.confirm-sub');
+  var n = _selectedIds.size;
+  if(t) t.textContent = 'Supprimer ' + n + ' analyse' + (n>1?'s':'') + ' ?';
+  if(s) s.innerHTML = 'Cette action est irréversible.<br>' + (n>1?'Les analyses seront définitivement supprimées.':"L'analyse sera définitivement supprimée.");
+  box.classList.add('show');
+}
+function _doBulkDelete(){
+  if(!_selectedIds.size) return;
+  if(!(_deletedIds instanceof Set)) _deletedIds = new Set();
+  var ids = Array.from(_selectedIds);
+  ids.forEach(function(id){
+    _deletedIds.add(String(id));
+    var idx = historyData.findIndex(function(x){ return String(x.id)===String(id); });
+    if(idx!==-1) historyData.splice(idx,1);
+    if(authToken){ try{ fetch('/api/history?id='+encodeURIComponent(id),{method:'DELETE',headers:{'Authorization':'Bearer '+authToken}}); }catch(e){} }
+  });
+  try{ localStorage.setItem('lt_deleted', JSON.stringify(Array.from(_deletedIds))); }catch(e){}
+  _saveLocalHistory();
+  _selectMode = false; _selectedIds = new Set();
+  var tb = document.getElementById('histToolbar'); if(tb) tb.classList.remove('is-selecting');
+  buildHistoryGrid();
+  _updateHistoryBadge();
 }
 window.closeConfirm=closeConfirm;
 window.confirmOk=confirmOk;
@@ -3453,6 +3553,15 @@ function quickSetResult(result){
     </button>
   </nav>
   <div class="history-page-content">
+    <div class="hist-toolbar" id="histToolbar">
+      <button class="hist-tool-btn" id="histSelectBtn" onclick="toggleSelectMode()">Sélectionner</button>
+      <div class="hist-tool-actions" id="histToolActions">
+        <span class="hist-sel-count" id="histSelCount">0 sélectionnée</span>
+        <button class="hist-tool-btn" onclick="histSelectAll()">Tout sélectionner</button>
+        <button class="hist-tool-btn" onclick="toggleSelectMode()">Annuler</button>
+        <button class="hist-tool-del" id="histBulkDel" onclick="bulkDeleteSelected()">Supprimer la sélection</button>
+      </div>
+    </div>
     <div class="history-grid" id="historyGrid">
       <div class="history-empty-page">
         <div class="big"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
