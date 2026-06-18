@@ -196,6 +196,22 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
         <button class="bm-filter" data-cat="forex">Forex</button>
         <button class="bm-filter" data-cat="indices">Indices</button>
         <button class="bm-filter" data-cat="matieres" data-en="Commodities">Mat. premières</button>
+        <div style="position:relative;display:inline-flex;">
+          <button id="bmAssetsBtn" onclick="bmTogglePanel()" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#7E8794;font-family:Inter,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;" data-en="Assets">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+            Actifs
+            <svg id="bmAssetsCaret" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <!-- Panneau dropdown actifs -->
+          <div id="bmAssetsPanel" style="display:none;position:absolute;top:calc(100% + 8px);left:0;width:260px;background:rgba(16,20,27,.98);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.12);border-radius:10px;box-shadow:0 24px 60px rgba(0,0,0,.6);padding:12px;z-index:9999;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-family:Anton,sans-serif;text-transform:uppercase;font-size:13px;color:#F2F4F7;">Actifs</span>
+              <button id="bmToggleAll" style="background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#7E8794;font-family:Inter,sans-serif;font-size:11px;font-weight:600;padding:4px 8px;cursor:pointer;">Tout basculer</button>
+            </div>
+            <input id="bmAssetSearch" placeholder="Rechercher…" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#F2F4F7;font-family:Inter,sans-serif;font-size:12.5px;padding:7px 10px;margin-bottom:8px;outline:none;">
+            <div id="bmAssetList" style="max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent;"></div>
+          </div>
+        </div>
       </div>
       <div class="bm-legend" id="bmLegend"></div>
     </div>
@@ -321,6 +337,24 @@ function render() {
 /* Bubble Map — données live /api/bubbles (CoinGecko : top cryptos, MAJ 60 s).
    Taille = capitalisation, couleur = variation 24 h. */
 var bmCat='all', bmStarted=false, bmReduced=false, bmBubbles=[], bmMaxW=1;
+function bmTogglePanel(){
+  var p=document.getElementById('bmAssetsPanel');
+  var c=document.getElementById('bmAssetsCaret');
+  var btn=document.getElementById('bmAssetsBtn');
+  if(!p) return;
+  var open=p.style.display==='none'||p.style.display==='';
+  p.style.display=open?'block':'none';
+  if(c) c.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+  if(btn) btn.style.color=open?'#7FB8E8':'#7E8794';
+  if(btn) btn.style.borderColor=open?'rgba(127,184,232,.45)':'rgba(255,255,255,.15)';
+}
+document.addEventListener('click',function(e){
+  var p=document.getElementById('bmAssetsPanel');
+  var btn=document.getElementById('bmAssetsBtn');
+  if(p && p.style.display==='block' && !p.contains(e.target) && btn && !btn.contains(e.target)){
+    bmTogglePanel();
+  }
+});
 var bmHidden=(function(){try{return new Set(JSON.parse(localStorage.getItem('bm_hidden')||'[]'));}catch(e){return new Set();}})();
 function bmSaveHidden(){try{localStorage.setItem('bm_hidden',JSON.stringify(Array.from(bmHidden)));}catch(e){}}
 var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
