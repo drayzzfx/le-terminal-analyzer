@@ -26,6 +26,20 @@
 /* ── Panneau actifs (afficher/masquer) ── */
 .bm-layout{display:flex;gap:14px;align-items:stretch}
 .bm-layout .bm-stage{flex:1;min-width:0}
+/* Panneau performances */
+.bm-perf{width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:0;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden}
+.bm-perf__hd{padding:12px 14px 10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.bm-perf__title{font-family:var(--font-display,'Anton',sans-serif);text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--text-muted)}
+.bm-perf__section{padding:10px 0 6px}
+.bm-perf__label{font-family:var(--font-text,'Inter',sans-serif);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:0 14px 6px}
+.bm-perf__row{display:flex;align-items:center;justify-content:space-between;padding:5px 14px;gap:8px;transition:background .15s;cursor:default}
+.bm-perf__row:hover{background:rgba(255,255,255,.04)}
+.bm-perf__sym{font-family:var(--font-text,'Inter',sans-serif);font-size:12px;font-weight:600;color:var(--text-title);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.bm-perf__chg{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;font-weight:700;flex-shrink:0}
+.bm-perf__chg.up{color:#4ADE9C}
+.bm-perf__chg.dn{color:#F0647A}
+.bm-perf__sep{height:1px;background:rgba(255,255,255,.05);margin:4px 0}
+.bm-perf__empty{padding:14px;font-size:12px;color:var(--text-muted);text-align:center}
 .bm-assets{width:240px;flex-shrink:0;display:flex;flex-direction:column;padding:14px;max-height:100%}
 .bm-assets__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .bm-assets__title{font-family:var(--font-display,'Anton',sans-serif);text-transform:uppercase;font-size:15px;color:var(--text-title)}
@@ -220,6 +234,10 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
       <canvas class="bm-canvas" id="bmCanvas"></canvas>
       <span class="bm-tag" data-en="CRYPTO · FOREX · INDICES · COMMODITIES · 60S REFRESH">CRYPTO · FOREX · INDICES · MATIÈRES · MAJ 60 S</span>
     </div>
+    <div class="bm-perf" id="bmPerfPanel">
+      <div class="bm-perf__hd"><span class="bm-perf__title">Performances</span></div>
+      <div id="bmPerfContent"><div class="bm-perf__empty">Chargement…</div></div>
+    </div>
   </div>
 
   <!-- VUE HEATMAP (TradingView) -->
@@ -394,6 +412,7 @@ function bmApplyAssets(assets){
     return { s:a.name, cat:a.cat, d:a.change, w:a.w, cap:a.cap, price:a.price, r:r, x:W*0.2+Math.random()*W*0.6, y:H*0.2+Math.random()*H*0.6, vx:0, vy:0, k:1 };
   });
   bmUpdateLegend();
+  bmUpdatePerf();
   bmBuildAssetPanel();
   if(bmReduced && bmStarted) bmSettle();
 }
@@ -556,8 +575,32 @@ function initBubbles(){
     bmCat=b.getAttribute('data-cat');
     f.querySelectorAll('.bm-filter').forEach(function(x){ x.classList.toggle('is-on',x===b); });
     if(bmReduced) bmSettle();
+    bmUpdatePerf();
   });
 })();
+function bmUpdatePerf(){
+  var panel=document.getElementById('bmPerfContent');
+  if(!panel||!bmBubbles.length) return;
+  var filtered=bmBubbles.filter(function(b){
+    return (bmCat==='all'||b.cat===bmCat) && !bmHidden.has(b.s);
+  });
+  if(!filtered.length){ panel.innerHTML='<div class="bm-perf__empty">Aucun actif visible</div>'; return; }
+  var sorted=filtered.slice().sort(function(a,b){return b.d-a.d;});
+  var top5=sorted.slice(0,5);
+  var bot5=sorted.slice(-5).reverse();
+  function row(b){
+    var sign=b.d>=0;
+    return '<div class="bm-perf__row">'
+      +'<span class="bm-perf__sym">'+b.s+'</span>'
+      +'<span class="bm-perf__chg '+(sign?'up':'dn')+'">'+(sign?'▲':'▼')+Math.abs(b.d).toFixed(2)+'%</span>'
+      +'</div>';
+  }
+  panel.innerHTML=
+    '<div class="bm-perf__section"><div class="bm-perf__label">Meilleures hausses</div>'+top5.map(row).join('')+'</div>'
+    +'<div class="bm-perf__sep"></div>'
+    +'<div class="bm-perf__section"><div class="bm-perf__label">Plus fortes baisses</div>'+bot5.map(row).join('')+'</div>';
+}
+
 // Données live + rafraîchissement chaque minute
 bmLoad();
 setInterval(bmLoad, 60000);
@@ -569,6 +612,7 @@ function setView(v){
   document.getElementById('vtBub').classList.toggle('on',!map);
   document.getElementById('heatWrap').style.display=map?'':'none';
   document.getElementById('bubbleWrap').style.display=map?'none':'';
+  var pp=document.getElementById('bmPerfPanel'); if(pp) pp.style.display=map?'none':'';
   if(map && !mapBuilt){ render(); mapBuilt=true; }
   if(!map){ initBubbles(); if(bmResize) bmResize(); }
 }
