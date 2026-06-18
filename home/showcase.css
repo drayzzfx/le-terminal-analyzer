@@ -92,3 +92,17 @@
 .shx-calc__lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
 .shx-calc__val { font-family: var(--font-mono); font-size: 30px; font-weight: 700; color: var(--accent-bright); line-height: 1; font-variant-numeric: tabular-nums; text-shadow: 0 0 18px var(--accent-glow); }
 .shx-calc__rr { font-family: var(--font-mono); font-size: 11px; color: var(--text-body); font-variant-numeric: tabular-nums; }
+
+/* viz patrimoine — carte portefeuille (valeur + P&L + allocation) */
+.shx-viz--patrimoine { display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; gap: 14px; }
+.shx-pm__head { display: flex; align-items: center; justify-content: space-between; }
+.shx-pm__lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+.shx-pm__live { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bull); }
+.shx-pm__live .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--bull); box-shadow: 0 0 8px var(--bull); }
+.shx-pm__val { font-family: var(--font-mono); font-size: 34px; font-weight: 700; color: var(--text-title); line-height: 1; font-variant-numeric: tabular-nums; }
+.shx-pm__pnl { font-family: var(--font-mono); font-size: 13px; color: var(--bull); font-variant-numeric: tabular-nums; }
+.shx-pm__bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; gap: 2px; background: var(--bg-void); margin-top: 6px; }
+.shx-pm__bar span { display: block; }
+.shx-pm__legend { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 9px 16px; }
+.shx-pm__legend li { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11.5px; color: var(--text-body); font-variant-numeric: tabular-nums; }
+.shx-pm__dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
