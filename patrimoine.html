@@ -128,15 +128,12 @@
         <span class="pt-connect__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M16 15h2"/></svg></span>
         <div class="pt-connect__main">
           <div class="pt-connect__t" id="ptConnTitle">Connecte ton compte d'investissement</div>
-          <div class="pt-connect__s" id="ptConnSub">Trade Republic · Boursorama · Degiro · Bourse Direct</div>
+          <div class="pt-connect__s" id="ptConnSub">Synchronisation Trade Republic · titres & ETF en temps réel</div>
         </div>
         <button class="lt-btn lt-btn--primary lt-btn--sm" id="ptConnBtn">Connecter un compte</button>
       </div>
       <div class="pt-plats" id="ptPlats" style="display:none">
         <button class="pt-plat" data-plat="Trade Republic" data-i="TR" data-c="#4ADE9C"><span class="pt-plat__logo" style="background:#4ADE9C">TR</span> Trade Republic</button>
-        <button class="pt-plat" data-plat="Boursorama" data-i="BO" data-c="#7FB8E8"><span class="pt-plat__logo" style="background:#7FB8E8">BO</span> Boursorama</button>
-        <button class="pt-plat" data-plat="Degiro" data-i="DG" data-c="#E8C268"><span class="pt-plat__logo" style="background:#E8C268">DG</span> Degiro</button>
-        <button class="pt-plat" data-plat="Bourse Direct" data-i="BD" data-c="#BFDCF5"><span class="pt-plat__logo" style="background:#BFDCF5">BD</span> Bourse Direct</button>
       </div>
     </div>
   </div>
@@ -212,13 +209,13 @@
   ];
   var PLANS=[
     {name:'Prudent', cls:'low', risk:'Faible', obj:'+3 à 5 % / an', horizon:'3 ans +', feature:false,
-     compo:[['ETF monde',55,'var(--accent)'],['Obligations',35,'var(--neutral)'],['Liquidités',10,'var(--text-muted)']],
+     compo:[['Oblig. d’État euro',40,'var(--neutral)'],['iShares Core MSCI World',30,'var(--accent)'],['Oblig. agrégées monde',15,'var(--accent-deep)'],['Or physique (iShares)',8,'var(--accent-bright)'],['Liquidités',7,'var(--text-muted)']],
      desc:'Préservation du capital, volatilité minimale.'},
     {name:'Équilibré', cls:'mid', risk:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', feature:true,
-     compo:[['Actions',60,'var(--accent)'],['Obligations',35,'var(--neutral)'],['Liquidités',5,'var(--text-muted)']],
+     compo:[['iShares Core MSCI World',45,'var(--accent)'],['MSCI Emerging Markets',15,'var(--accent-bright)'],['Oblig. d’État euro',25,'var(--neutral)'],['Or physique (iShares)',10,'var(--accent-deep)'],['Liquidités',5,'var(--text-muted)']],
      desc:'Le bon compromis croissance / sérénité.'},
     {name:'Dynamique', cls:'high', risk:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', feature:false,
-     compo:[['Actions croissance',75,'var(--accent)'],['Tech',15,'var(--accent-bright)'],['Crypto',10,'var(--bull)']],
+     compo:[['iShares Core MSCI World',40,'var(--accent)'],['Nasdaq 100',25,'var(--accent-bright)'],['MSCI Emerging Markets',15,'var(--accent-deep)'],['MSCI World Small Cap',12,'var(--bull)'],['Bitcoin',8,'var(--neutral)']],
      desc:'Forte volatilité, potentiel maximal.'}
   ];
 
