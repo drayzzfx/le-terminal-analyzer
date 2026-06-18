@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Mur des Trades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.mt-head{max-width:760px;margin:8px 0 28px}
+.mt-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.mt-eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.mt-title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(2rem,4.5vw,3rem);line-height:1.02;letter-spacing:.01em;color:var(--text-title);margin:0 0 14px}
+.mt-title .pr-metal{background:linear-gradient(180deg,#fff,#9fb0c4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mt-lead{font-family:var(--font-text);font-size:1rem;line-height:1.7;color:var(--text-muted)}
+
+/* ── Générateur ── */
+.gen{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,400px);gap:28px;align-items:start;margin-bottom:56px}
+@media(max-width:900px){.gen{grid-template-columns:1fr}}
+.gen__form{display:flex;flex-direction:column;gap:14px}
+.gen__row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.fld input,.fld select{font-family:var(--font-mono);font-size:14px;color:var(--text-title);background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:11px 13px;outline:none;transition:border-color .2s}
+.fld input:focus,.fld select:focus{border-color:var(--accent)}
+.gen__side{display:flex;gap:8px}
+.gen__side button{flex:1;font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:11px;border-radius:var(--r-md);border:1px solid var(--border-subtle);background:var(--bg-elevated);color:var(--text-muted);cursor:pointer;transition:all .2s}
+.gen__side button.on[data-side="long"]{color:var(--bull);border-color:rgba(74,222,156,.5);background:rgba(74,222,156,.12)}
+.gen__side button.on[data-side="short"]{color:var(--bear);border-color:rgba(240,100,122,.5);background:rgba(240,100,122,.12)}
+.gen__actions{display:flex;gap:10px;align-items:center;margin-top:4px}
+.gen__share{display:flex;gap:8px}
+.gen__share button{width:42px;height:42px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-elevated);color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s}
+.gen__share button:hover{border-color:var(--accent);color:var(--text-title)}
+.gen__share svg{width:17px;height:17px}
+.gen__bgs{display:flex;gap:8px;flex-wrap:wrap}
+.gen__bg{width:56px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border-subtle);overflow:hidden;cursor:pointer;background-size:cover;background-position:center;transition:border-color .2s,box-shadow .2s}
+.gen__bg:hover{border-color:var(--accent)}
+.gen__bg.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
+.gen__bg--none{background:linear-gradient(150deg,#11161f,#07090c)}
+
+/* ── Carte de trade (preview + export) ── */
+.tc{position:relative;width:100%;max-width:360px;margin:0 auto;aspect-ratio:4/5;border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden;background:#0a0d12;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.tc__bg{position:absolute;inset:0;background:linear-gradient(150deg,#11161f,#07090c 70%);background-size:cover;background-position:center 60%}
+.tc__bg::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 22% 112%,rgba(74,222,156,.22),transparent 60%),linear-gradient(180deg,rgba(7,9,12,.25),rgba(7,9,12,.82))}
+.tc.is-loss .tc__bg::after{background:radial-gradient(60% 60% at 22% 112%,rgba(240,100,122,.22),transparent 60%),linear-gradient(180deg,rgba(7,9,12,.25),rgba(7,9,12,.82))}
+.tc__in{position:relative;height:100%;display:flex;flex-direction:column;padding:26px}
+.tc__top{display:flex;align-items:flex-start;justify-content:space-between}
+.tc__brand{display:flex;align-items:center;gap:10px;color:var(--text-title)}
+.tc__brand__m{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow)}
+.tc__brand__t{display:flex;flex-direction:column;line-height:1.1}
+.tc__brand__t b{font-family:var(--font-display);font-size:1rem;letter-spacing:.05em;text-transform:uppercase}
+.tc__brand__t small{font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+.tc__verif{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-glow);background:var(--accent-glow-soft);border-radius:999px;padding:5px 10px}
+.tc__verif svg{width:12px;height:12px}
+.tc__pair{display:flex;align-items:center;gap:12px;margin-top:auto}
+.tc__pair b{font-family:var(--font-display);text-transform:uppercase;font-size:1.7rem;letter-spacing:.02em;color:var(--text-title)}
+.tc__side{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:999px;border:1px solid}
+.tc__side.long{color:var(--bull);border-color:rgba(74,222,156,.4);background:rgba(74,222,156,.12)}
+.tc__side.short{color:var(--bear);border-color:rgba(240,100,122,.4);background:rgba(240,100,122,.12)}
+.tc__side .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor}
+.tc__pct{font-family:var(--font-display);font-size:clamp(3.4rem,9vw,5rem);line-height:.92;color:var(--bull);text-shadow:0 0 34px rgba(74,222,156,.45);margin:6px 0 2px}
+.tc.is-loss .tc__pct{color:var(--bear);text-shadow:0 0 34px rgba(240,100,122,.4)}
+.tc__amt{font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:var(--text-title)}
+.tc__cap{font-family:var(--font-text);font-size:13px;color:var(--text-muted);margin-top:4px}
+.tc__sep{height:1px;background:rgba(127,184,232,.18);margin:18px 0}
+.tc__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tc__stats>div{display:flex;flex-direction:column;gap:4px}
+.tc__stats small{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.tc__stats b{font-family:var(--font-mono);font-size:1.05rem;font-weight:600;color:var(--text-title)}
+.tc__foot{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+.tc__handle{font-family:var(--font-text);font-weight:700;font-size:14px;color:var(--accent-bright)}
+.tc__meta{font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
+
+/* ── Derniers partages ── */
+.sh-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.sh-title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:.02em;color:var(--text-title);margin:0}
+.sh-tabs{display:flex;gap:8px}
+.sh-tab{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--text-muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:8px 16px;cursor:pointer;transition:all .2s}
+.sh-tab:hover{color:var(--text-title)}
+.sh-tab.on{color:var(--accent-bright);border-color:var(--accent-glow);background:var(--accent-glow-soft)}
+.sh-tab svg{width:14px;height:14px}
+.sh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+.sc{position:relative;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:var(--bg-elevated);padding:18px 20px;transition:border-color .2s,transform .2s}
+.sc:hover{border-color:var(--accent-glow);transform:translateY(-2px)}
+.sc__top{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.sc__av{width:38px;height:38px;border-radius:999px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;font-weight:700;color:#07090c}
+.sc__id{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.sc__id b{font-family:var(--font-text);font-weight:700;font-size:14px;color:var(--text-title)}
+.sc__id small{font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
+.sc__badge{margin-left:auto;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:var(--r-sm);border:1px solid}
+.sc__badge.long{color:var(--bull);border-color:rgba(74,222,156,.4);background:rgba(74,222,156,.1)}
+.sc__badge.short{color:var(--bear);border-color:rgba(240,100,122,.4);background:rgba(240,100,122,.1)}
+.sc__pairlbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--text-muted);text-transform:uppercase}
+.sc__pct{font-family:var(--font-display);font-size:2.4rem;line-height:1;color:var(--bull);margin:2px 0}
+.sc.is-loss .sc__pct{color:var(--bear)}
+.sc__amt{font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--text-body)}
+.sc__foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--border-subtle)}
+.sc__likes{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:12px;color:var(--text-muted)}
+.sc__likes svg{width:15px;height:15px}
+.sc__reshare{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer}
+.sc__reshare svg{width:14px;height:14px}
+.mt-disclaim{margin-top:30px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;color:var(--text-muted);opacity:.8}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="./index.html">
+      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop">
+        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Résultats vérifiés</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+        </div>
+      </div>
+      <a href="./tarifs.html">Tarifs</a>
+      <a href="./index.html#method">Méthode</a>
+      <a href="./index.html#community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr">
+
+  <section class="mt-head">
+    <span class="mt-eyebrow"><span class="lt-dot"></span> <span data-en="Community · Proof">Communauté · Preuves</span></span>
+    <h1 class="mt-title" data-en="The trade <span class='pr-metal'>wall.</span>">Le mur <span class="pr-metal">des trades.</span></h1>
+    <p class="mt-lead" data-en="Generate your trade result card and share it. The community wall gathers the latest verified results.">Génère la carte de ton résultat de trade et partage-la. Le mur rassemble les derniers résultats vérifiés de la communauté.</p>
+  </section>
+
+  <!-- GÉNÉRATEUR -->
+  <section class="gen">
+    <div class="gen__form">
+      <div class="fld"><label data-en="Pair / asset">Paire / actif</label><input id="gPair" value="BTC/USD"></div>
+      <div class="fld"><label data-en="Direction">Sens</label>
+        <div class="gen__side" id="gSide">
+          <button type="button" data-side="long" class="on">Long</button>
+          <button type="button" data-side="short">Short</button>
+        </div>
+      </div>
+      <div class="gen__row">
+        <div class="fld"><label data-en="Risked capital (€)">Capital engagé (€)</label><input id="gCap" type="number" value="4000"></div>
+        <div class="fld"><label data-en="Leverage">Levier</label><input id="gLev" type="number" value="33"></div>
+      </div>
+      <div class="gen__row">
+        <div class="fld"><label data-en="Entry">Entrée</label><input id="gEntry" type="number" value="62410"></div>
+        <div class="fld"><label data-en="Exit">Sortie</label><input id="gExit" type="number" value="68412"></div>
+      </div>
+      <div class="fld"><label data-en="Handle">Pseudo</label><input id="gHandle" value="@max_scalp"></div>
+      <div class="fld"><label data-en="Background">Fond / ambiance</label><div class="gen__bgs" id="gBgs"></div></div>
+      <div class="gen__actions">
+        <button class="lt-btn lt-btn--primary" id="gGen" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg> <span data-en="Download the image">Générer l'image</span></button>
+        <div class="gen__share">
+          <button id="shX" title="Partager sur X" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.53 3H20.5l-6.49 7.41L21.75 21h-6.02l-4.71-6.16L5.6 21H2.63l6.94-7.93L2.5 3h6.17l4.26 5.63L17.53 3zm-1.06 16h1.66L7.62 4.69H5.84L16.47 19z"/></svg></button>
+          <button id="shTg" title="Partager sur Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/></svg></button>
+          <button id="shLink" title="Copier le lien" aria-label="Copier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview / export -->
+    <div class="tc" id="tc">
+      <div class="tc__bg" id="tcBg"></div>
+      <div class="tc__in">
+        <div class="tc__top">
+          <span class="tc__brand"><span class="tc__brand__m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="tc__brand__t"><b>Le Terminal</b><small>Résultat de trade</small></span></span>
+          <span class="tc__verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Vérifié</span>
+        </div>
+        <div class="tc__pair"><b id="tcPair">BTC/USD</b><span class="tc__side long" id="tcSide"><span class="lt-dot"></span> Long</span></div>
+        <div class="tc__pct" id="tcPct">+318%</div>
+        <div class="tc__amt" id="tcAmt">+12 720 €</div>
+        <div class="tc__cap" id="tcCap">Capital engagé · 4 000 €</div>
+        <div class="tc__sep"></div>
+        <div class="tc__stats">
+          <div><small data-en="Entry">Entrée</small><b id="tcEntry">62 410</b></div>
+          <div><small data-en="Exit">Sortie</small><b id="tcExit">68 412</b></div>
+          <div><small>R:R</small><b id="tcRr">1 : 5.2</b></div>
+        </div>
+        <div class="tc__sep"></div>
+        <div class="tc__foot"><span class="tc__handle" id="tcHandle">@max_scalp</span><span class="tc__meta" id="tcMeta">le-terminal.app</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DERNIERS PARTAGES -->
+  <section>
+    <div class="sh-head">
+      <h2 class="sh-title" data-en="Latest shares">Derniers partages</h2>
+      <div class="sh-tabs" id="shTabs">
+        <button class="sh-tab on" data-sort="hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3-1 4-1 6a3 3 0 0 0 6 .5c0-1.5-.8-2.5-.8-2.5 2 1.5 3 3.8 3 6A6.2 6.2 0 0 1 6 13c0-3.5 3-5 6-10z"/></svg> <span data-en="Top today">Top du jour</span></button>
+        <button class="sh-tab" data-sort="recent" data-en="Recent">Récents</button>
+        <button class="sh-tab" data-sort="gain" data-en="Biggest gains">Plus gros gains</button>
+      </div>
+    </div>
+    <div class="sh-grid" id="shGrid"></div>
+    <p class="mt-disclaim" data-en="Illustrative results. Past performance does not guarantee future results. Trading involves a risk of capital loss.">Résultats illustratifs. Les performances passées ne préjugent pas des performances futures. Le trading comporte un risque de perte en capital.</p>
+  </section>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function(){
+  'use strict';
+  // Fonds disponibles pour la carte. Pour en ajouter : dépose l'image dans
+  // assets/ et ajoute une entrée { id, label, src } ci-dessous.
+  // Une vignette n'apparaît QUE si le fichier existe dans assets/ (probe à la
+  // volée). Pour activer une ambiance : dépose l'image au nom indiqué.
+  var BACKGROUNDS = [
+    { id:'jet',         label:'Jet',           src:'./assets/trade-jet.jpg' },
+    { id:'jet-nuit',    label:'Jet (nuit)',    src:'./assets/bg-jet-nuit.jpg' },
+    { id:'bugatti-heli',label:'Bugatti + héli',src:'./assets/bg-bugatti-heli.jpg' },
+    { id:'lambo-jet',   label:'Lambo + jet',   src:'./assets/bg-lambo-jet.jpg' },
+    { id:'bugatti-jet', label:'Bugatti + jet', src:'./assets/bg-bugatti-jet.jpg' },
+    { id:'villa',       label:'Villa',         src:'./assets/bg-villa.jpg' },
+    { id:'showroom',    label:'Showroom',      src:'./assets/bg-showroom.jpg' },
+    { id:'yacht',       label:'Yacht',         src:'./assets/bg-yacht.jpg' },
+    { id:'cash',        label:'Cash',          src:'./assets/bg-cash.jpg' },
+    { id:'rolls',       label:'Rolls',         src:'./assets/bg-rolls.jpg' },
+    { id:'illu',        label:'Illustration',  src:'./assets/trade-jet.svg' },
+    { id:'none',        label:'Sobre',         src:null }
+  ];
+  var currentBg = BACKGROUNDS[0].src;
+
+  var SHARES = [
+    { h:'@max_scalp',   pair:'BTC/USD', side:'long',  pct:318, amount:12720, mins:2,   likes:248 },
+    { h:'@deltaone',    pair:'SOL/USD', side:'long',  pct:211, amount:6330,  mins:52,  likes:187 },
+    { h:'@nova_fx',     pair:'EUR/USD', side:'short', pct:142, amount:11360, mins:11,  likes:156 },
+    { h:'@ict_lucas',   pair:'US100',   side:'long',  pct:86,  amount:10320, mins:24,  likes:132 },
+    { h:'@kenji_t',     pair:'NVDA',    side:'long',  pct:73,  amount:6570,  mins:60,  likes:120 },
+    { h:'@sarah_swings',pair:'XAU/USD', side:'long',  pct:54,  amount:3240,  mins:38,  likes:98 },
+    { h:'@linea',       pair:'GBP/USD', side:'short', pct:38,  amount:2660,  mins:120, likes:64 },
+    { h:'@risk_off',    pair:'WTI',     side:'short', pct:-22, amount:-1100, mins:60,  likes:41 }
+  ];
+  var AV=['#7FB8E8','#4ADE9C','#4ADE9C','#E8C268','#4ADE9C','#9fb0c4','#E8C268','#F0647A'];
+
+  function getLang(){return localStorage.getItem('lt_lang')||'fr';}
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function nb(n){return Math.abs(Math.round(n)).toLocaleString('fr-FR');}
+  function ago(m){if(m<60)return m+' min';var h=Math.round(m/60);return h+' h';}
+  function initials(h){var s=h.replace('@','');return (s[0]||'').toUpperCase()+(s[1]||'').toUpperCase();}
+
+  // ── Générateur ──
+  var side='long';
+  function compute(){
+    var entry=parseFloat(document.getElementById('gEntry').value)||0;
+    var exit=parseFloat(document.getElementById('gExit').value)||0;
+    var cap=parseFloat(document.getElementById('gCap').value)||0;
+    var lev=parseFloat(document.getElementById('gLev').value)||1;
+    var move=entry?((exit-entry)/entry):0; if(side==='short')move=-move;
+    var pct=move*lev*100;
+    var gain=cap*move*lev;
+    var rr=Math.abs(move)>0?(1+Math.abs(pct)/60):1; // R:R illustratif
+    return {entry:entry,exit:exit,cap:cap,pct:pct,gain:gain,rr:rr};
+  }
+  function renderPreview(){
+    var c=compute(), win=c.gain>=0, l=getLang();
+    var tc=document.getElementById('tc'); tc.classList.toggle('is-loss',!win);
+    document.getElementById('tcPair').textContent=document.getElementById('gPair').value||'—';
+    var sd=document.getElementById('tcSide'); sd.className='tc__side '+side; sd.innerHTML='<span class="lt-dot"></span> '+(side==='long'?'Long':'Short');
+    document.getElementById('tcPct').textContent=(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'%';
+    document.getElementById('tcAmt').textContent=(c.gain>=0?'+':'−')+nb(c.gain)+' €';
+    document.getElementById('tcCap').textContent=(l==='en'?'Capital risked · ':'Capital engagé · ')+nb(c.cap)+' €';
+    document.getElementById('tcEntry').textContent=nb(c.entry);
+    document.getElementById('tcExit').textContent=nb(c.exit);
+    document.getElementById('tcRr').textContent='1 : '+c.rr.toFixed(1);
+    document.getElementById('tcHandle').textContent=document.getElementById('gHandle').value||'@trader';
+    var d=new Date(); document.getElementById('tcMeta').textContent='le-terminal.app · '+d.toLocaleDateString(l==='en'?'en-GB':'fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  }
+  // Sélecteur de fond
+  function applyBg(){var el=document.getElementById('tcBg');if(el)el.style.backgroundImage=currentBg?('url('+currentBg+')'):'none';}
+  function renderBgs(){
+    var w=document.getElementById('gBgs'); if(!w)return; w.innerHTML='';
+    BACKGROUNDS.forEach(function(b){
+      function add(){
+        var btn=document.createElement('button');
+        btn.type='button';
+        btn.className='gen__bg'+(b.src?'':' gen__bg--none')+(b.src===currentBg?' on':'');
+        btn.setAttribute('data-src', b.src||''); btn.title=b.label;
+        if(b.src) btn.style.backgroundImage='url('+b.src+')';
+        w.appendChild(btn);
+      }
+      if(!b.src){ add(); return; }                  // « Sobre » toujours dispo
+      var im=new Image(); im.onload=add; im.src=b.src; // sinon seulement si le fichier existe
+    });
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest && e.target.closest('.gen__bg'); if(!b)return;
+    var s=b.getAttribute('data-src'); currentBg=s||null;
+    Array.prototype.forEach.call(b.parentNode.children,function(x){x.classList.toggle('on',x===b);});
+    applyBg();
+  });
+  applyBg();
+
+  document.getElementById('gSide').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b)return; side=b.getAttribute('data-side');
+    Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
+    renderPreview();
+  });
+  ['gPair','gCap','gLev','gEntry','gExit','gHandle'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',renderPreview);
+  });
+
+  // ── Export image (canvas) ──
+  function exportImage(){
+    var c=compute(), win=c.gain>=0, W=1080, H=1350;
+    var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    var x=cv.getContext('2d');
+    function draw(bg){
+      // fond
+      if(bg){var r=Math.max(W/bg.width,H/bg.height);var w=bg.width*r,h=bg.height*r;x.drawImage(bg,(W-w)/2,(H-h)/2,w,h);}
+      else{var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#11161f');g.addColorStop(1,'#07090c');x.fillStyle=g;x.fillRect(0,0,W,H);}
+      // voile
+      var gg=x.createLinearGradient(0,0,0,H);gg.addColorStop(0,'rgba(7,9,12,.35)');gg.addColorStop(1,'rgba(7,9,12,.85)');x.fillStyle=gg;x.fillRect(0,0,W,H);
+      var col=win?'#4ADE9C':'#F0647A';
+      x.fillStyle='#F2F4F7';x.font='700 30px Anton, sans-serif';x.fillText('LE TERMINAL',150,80);
+      x.fillStyle='#8b97a6';x.font='700 16px "JetBrains Mono", monospace';x.fillText('RÉSULTAT DE TRADE',150,108);
+      // pair + side
+      x.fillStyle='#F2F4F7';x.font='700 60px Anton, sans-serif';x.fillText((document.getElementById('gPair').value||'').toUpperCase(),90,900);
+      // pct
+      x.fillStyle=col;x.font='800 200px Anton, sans-serif';x.fillText((c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'%',80,1080);
+      x.fillStyle='#F2F4F7';x.font='700 48px "JetBrains Mono", monospace';x.fillText((c.gain>=0?'+':'−')+nb(c.gain)+' €',90,1150);
+      x.fillStyle='#8b97a6';x.font='400 28px Inter, sans-serif';x.fillText('Capital engagé · '+nb(c.cap)+' €',90,1195);
+      // stats
+      x.fillStyle='#8b97a6';x.font='700 20px "JetBrains Mono", monospace';
+      x.fillText('ENTRÉE',90,1270);x.fillText('SORTIE',430,1270);x.fillText('R:R',770,1270);
+      x.fillStyle='#F2F4F7';x.font='600 34px "JetBrains Mono", monospace';
+      x.fillText(nb(c.entry),90,1310);x.fillText(nb(c.exit),430,1310);x.fillText('1 : '+c.rr.toFixed(1),770,1310);
+      x.fillStyle='#BFDCF5';x.font='700 30px Inter, sans-serif';x.fillText(document.getElementById('gHandle').value||'@trader',90,60);
+      var url=cv.toDataURL('image/png');
+      var a=document.createElement('a');a.href=url;a.download='le-terminal-trade.png';a.click();
+    }
+    if(!currentBg){draw(null);return;}
+    var img=new Image(); img.crossOrigin='anonymous';
+    img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=currentBg;
+  }
+  document.getElementById('gGen').addEventListener('click',exportImage);
+  function shareText(){var c=compute();return (document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';}
+  document.getElementById('shX').onclick=function(){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(shareText())+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');};
+  document.getElementById('shTg').onclick=function(){window.open('https://t.me/share/url?url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html')+'&text='+encodeURIComponent(shareText()),'_blank');};
+  document.getElementById('shLink').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText('https://le-terminal-analyzer.vercel.app/mur-des-trades.html');};
+
+  // ── Derniers partages ──
+  var sort='hot';
+  function scCard(t,i){
+    var win=t.amount>=0,l=getLang();
+    return '<article class="sc'+(win?'':' is-loss')+'">'
+      +'<div class="sc__top"><span class="sc__av" style="background:'+AV[i%AV.length]+'">'+initials(t.h)+'</span>'
+      +'<span class="sc__id"><b>'+esc(t.h)+'</b><small>'+ago(t.mins)+'</small></span>'
+      +'<span class="sc__badge '+t.side+'">'+(t.side==='long'?'Long':'Short')+'</span></div>'
+      +'<div class="sc__pairlbl">'+esc(t.pair)+'</div>'
+      +'<div class="sc__pct">'+(t.pct>=0?'+':'−')+Math.abs(t.pct)+'%</div>'
+      +'<div class="sc__amt">'+(t.amount>=0?'+':'−')+nb(t.amount)+' €</div>'
+      +'<div class="sc__foot"><span class="sc__likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.3 3-5.5A3.5 3.5 0 0 0 12 6 3.5 3.5 0 0 0 2 8.5C2 10.7 3.5 12.5 5 14l7 7z"/></svg> '+t.likes+'</span>'
+      +'<button class="sc__reshare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg> '+(l==='en'?'Reshare':'Repartager')+'</button></div>'
+      +'</article>';
+  }
+  function renderGrid(){
+    var arr=SHARES.slice();
+    if(sort==='recent')arr.sort(function(a,b){return a.mins-b.mins;});
+    else if(sort==='gain')arr.sort(function(a,b){return b.amount-a.amount;});
+    else arr.sort(function(a,b){return b.likes-a.likes;});
+    document.getElementById('shGrid').innerHTML=arr.map(scCard).join('');
+  }
+  document.getElementById('shTabs').addEventListener('click',function(e){
+    var b=e.target.closest('.sh-tab'); if(!b)return; sort=b.getAttribute('data-sort');
+    Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
+    renderGrid();
+  });
+
+  function init(){ renderBgs(); renderPreview(); renderGrid(); }
+  window.ecoReloadNews=init;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>
