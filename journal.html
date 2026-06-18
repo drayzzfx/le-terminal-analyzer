@@ -460,51 +460,51 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <span class="jr-panel__title">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
+      <!-- Boutons d'action -->
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="add-trade-btn" onclick="openTradeModal()" style="margin-bottom:0">+ Ajouter un trade</button>
+        <button class="import-mt5-btn" onclick="openMt5Modal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Importer depuis MT5
+        </button>
+      </div>
       <!-- IA Coach — soon -->
-      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none!important;user-select:none">
-        <div style="position:absolute;inset:0;z-index:10;cursor:not-allowed"></div>
+      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none;user-select:none">
+        <div style="position:absolute;inset:0;z-index:10"></div>
         <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:11">Bientôt</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
           <span class="jr-panel__title" style="margin:0">IA Coach</span>
-          <span class="lt-btn lt-btn--primary lt-btn--sm" style="opacity:.4;cursor:not-allowed">Analyser</span>
+          <span class="lt-btn lt-btn--primary lt-btn--sm" style="opacity:.4">Analyser</span>
         </div>
-        <div style="margin-top:10px">
-          <span style="color:var(--text3);font-size:12px">Analyse automatique de tes patterns de trading.</span>
-        </div>
+        <div style="margin-top:10px"><span style="color:var(--text3);font-size:12px">Analyse automatique de tes patterns de trading.</span></div>
       </div>
-      <!-- IDs fantômes pour éviter les erreurs JS -->
+      <!-- Connexion broker — soon -->
+      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none;user-select:none">
+        <div style="position:absolute;inset:0;z-index:10"></div>
+        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:11">Bientôt</div>
+        <span class="jr-panel__title">Connexion broker</span>
+        <div style="font-size:12px;color:var(--text3);margin-top:6px">MT4 · MT5 · Topstep · FTMO</div>
+      </div>
+      <!-- IDs fantômes pour le JS -->
       <div id="globalIaHeader" style="display:none"></div>
       <div id="globalIaContent" style="display:none"></div>
       <button id="globalIaBtn" style="display:none"></button>
-      <!-- Connexion broker — soon -->
-      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.6;pointer-events:none;user-select:none">
-        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:2">Bientôt</div>
-        <span class="jr-panel__title">Connexion broker</span>
-        <div style="font-size:12px;color:var(--text3);margin-top:4px">MT4 · MT5 · Topstep · FTMO</div>
-      </div>
     </div>
   </div>
 
-  <!-- BROKER BANNER (hidden — remplacé par le panel soon à droite) -->
-  <div id="brokerBanner" style="display:none">
+  <!-- BROKER BANNER (caché — géré par updateBrokerBanner) -->
+  <div id="brokerBanner" style="display:none!important">
     <div id="brokerIcon"></div>
     <div id="brokerTitle"></div>
     <div id="brokerSub"></div>
     <div id="brokerActions"></div>
   </div>
 
-  <!-- DERNIERS TRADES — pleine largeur, style maquette -->
+  <!-- DERNIERS TRADES — pleine largeur -->
   <div class="jr-panel" style="margin-bottom:18px">
     <span class="jr-panel__title">Derniers trades</span>
     <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
   </div>
-
-  <!-- ADD TRADE -->
-  <button class="add-trade-btn" onclick="openTradeModal()">+ Ajouter un trade</button>
-  <button class="import-mt5-btn" onclick="openMt5Modal()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    Importer depuis MT5
-  </button>
 
 </div>
 </div>
@@ -1934,19 +1934,18 @@ function setBrokerSyncing(on) {
 }
 
 function updateBrokerBanner(info) {
+  // Bannière déplacée en colonne droite (soon) — on ne l'affiche plus ici
   var banner = document.getElementById('brokerBanner');
+  if (banner) banner.style.display = 'none';
   var titleEl = document.getElementById('brokerTitle');
   var subEl = document.getElementById('brokerSub');
   var actionsEl = document.getElementById('brokerActions');
   if (!info.connected) {
-    banner.className = 'broker-banner disconnected';
-    document.getElementById('brokerIcon').textContent = '';
-    titleEl.textContent = 'Connecte ton compte de trading';
-    titleEl._name = null;
-    subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
-    actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>';
+    if(titleEl) titleEl.textContent = 'Connecte ton compte de trading';
+    if(subEl) subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
     return;
   }
+  // connected — inutilisé tant que la bannière est cachée
   banner.className = 'broker-banner connected';
   document.getElementById('brokerIcon').textContent = '✓';
   var platformLabel = info.platform ? info.platform.toUpperCase() : 'Compte';
