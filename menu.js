@@ -424,12 +424,12 @@
     // Chip rectangulaire (même DA que les boutons) + menu déroulant avec profil + déconnexion
     bar.innerHTML =
       '<span id="ltTokenBadge" style="display:none" class="lt-ub-tokens"></span>' +
-      '<div class="lt-ub-chip" id="ltUbChip" title="' + email + (isPro ? ' · Premium' : '') + '">' +
+      '<div class="lt-ub-chip" id="ltUbChip" title="' + email + '">' +
         '<div class="lt-ub-avatar">' + avatarInner + '</div>' +
         '<span class="lt-ub-name">' + displayName + '</span>' + caret +
       '</div>' +
       '<div class="lt-ub-menu" id="ltUbMenu">' +
-        '<div class="lt-ub-menu__mail">' + email + (isPro ? '<span class="lt-ub-menu__badge">Premium</span>' : '') + '</div>' +
+        '<div class="lt-ub-menu__mail">' + email + '</div>' +
         '<a class="lt-ub-link" href="./profil.html">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
           '<span data-en="My profile">Mon profil</span></a>' +
@@ -453,14 +453,10 @@
       });
     }
 
-    // Badge tokens — fetch après injection HTML
+    // Badge tokens — affiché uniquement pour les non-pro (compteur de tokens restants)
     var _tok = localStorage.getItem('ta_token');
-    if (_tok) {
-      if (isPro) {
-        var _b = document.getElementById('ltTokenBadge');
-        if (_b) { _b.className = 'lt-ub-tokens lt-ub-tokens--pro'; _b.textContent = 'Premium'; _b.style.display = 'inline-flex'; }
-      } else {
-        fetch('/api/tokens', {
+    if (_tok && !isPro) {
+      fetch('/api/tokens', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _tok },
           body: JSON.stringify({ action: 'get' })
@@ -468,14 +464,14 @@
           var _b2 = document.getElementById('ltTokenBadge');
           if (!_b2) return;
           if (d.is_pro || d.unlimited) {
-            _b2.className = 'lt-ub-tokens lt-ub-tokens--pro';
-            _b2.textContent = 'Premium';
+            // Pro confirmé côté serveur → on ne montre rien
+            localStorage.setItem('lt_pro', '1');
           } else if (typeof d.tokens === 'number') {
             var n = d.tokens;
             _b2.className = 'lt-ub-tokens' + (n <= 1 ? ' lt-ub-tokens--low' : '');
             _b2.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> ' + n + ' token' + (n > 1 ? 's' : '');
-          } else { return; }
-          _b2.style.display = 'inline-flex';
+            _b2.style.display = 'inline-flex';
+          }
         }).catch(function(){});
       }
     }
