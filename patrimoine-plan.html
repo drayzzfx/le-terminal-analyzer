@@ -166,7 +166,7 @@
         <div class="lt-nav__menu">
           <a class="lt-nav__menuitem" href="./index.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
           <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
           <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
@@ -260,10 +260,10 @@
   var CLASSES = { actions:['Actions','#4ADE9C'], oblig:['Obligations','#E8C268'], or:['Or','#D9B45B'], crypto:['Crypto','#F0647A'], cash:['Liquidités','#C3CAD4'] };
   var classColor = function(k){ return (CLASSES[k]||['','var(--accent)'])[1]; };
   var ROUTINE = [
-    ['Versement automatique','Programme le même montant, le même jour chaque mois (DCA). Tu lisses ton prix d’entrée et tu enlèves l’émotion.'],
-    ['Parts capitalisantes (Acc)','Privilégie les ETF « Acc » : les dividendes sont réinvestis automatiquement, les intérêts composés travaillent pour toi.'],
-    ['Rééquilibrage 1–2×/an','Une à deux fois par an, remets les poids à leur cible. Tu vends ce qui a trop monté, tu renforces le reste.'],
-    ['Sécurisation progressive','À l’approche de ton objectif, glisse doucement vers les poches prudentes pour verrouiller tes gains.']
+    ['Versement automatique','Programmez le même montant, le même jour chaque mois (DCA). Vous lissez votre prix d’entrée et vous enlevez l’émotion.'],
+    ['Parts capitalisantes (Acc)','Privilégiez les ETF « Acc » : les dividendes sont réinvestis automatiquement, les intérêts composés travaillent pour vous.'],
+    ['Rééquilibrage 1–2×/an','Une à deux fois par an, remettez les poids à leur cible. Vous vendez ce qui a trop monté, vous renforcez le reste.'],
+    ['Sécurisation progressive','À l’approche de votre objectif, glissez doucement vers les poches prudentes pour verrouiller vos gains.']
   ];
 
   var IC = {
@@ -419,7 +419,7 @@
     + '</div>'
     + '<section class="pd-cta"><div class="pd-cta__glow"></div>'
     +   '<h2 class="pd-cta__title">Prêt à lancer le plan '+plan.name+' ?</h2>'
-    +   '<p class="pd-cta__lede">Démarre dès '+plan.minStake+', ajuste ou change de plan à tout moment. Aucun engagement de durée.</p>'
+    +   '<p class="pd-cta__lede">Démarrez dès '+plan.minStake+', ajustez ou changez de plan à tout moment. Aucun engagement de durée.</p>'
     +   '<div class="pd-cta__btns"><button class="lt-btn lt-btn--primary lt-btn--lg">Commencer avec ce plan</button><a class="pd-cta__ghost" href="./patrimoine.html">Comparer les plans</a></div>'
     + '</section>';
 

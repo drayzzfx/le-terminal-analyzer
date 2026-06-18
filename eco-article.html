@@ -324,7 +324,7 @@
         <div class="lt-nav__menu">
           <a class="lt-nav__menuitem" href="./index.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
           <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
           <a class="lt-nav__menuitem" href="./patrimoine-presentation.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
@@ -637,7 +637,7 @@
     root.innerHTML = '<div class="art-loading">'
       + '<div class="art-spinner"></div>'
       + '<p>'+(l==='en'?'Generating analysis…':'Génération de l\'analyse…')+'<br>'
-      + '<small>'+(l==='en'?'Le Terminal is analysing the article for you.':'Le Terminal analyse l\'article pour toi.')+'</small></p>'
+      + '<small>'+(l==='en'?'Le Terminal is analysing the article for you.':'Le Terminal analyse l\'article pour vous.')+'</small></p>'
       + '</div>';
   }
 
@@ -655,7 +655,7 @@
         root.innerHTML = '<div style="text-align:center;padding:60px 20px">'
           + '<div style="margin-bottom:16px;color:#7FB8E8"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>'
           + '<div style="font-family:\'Anton\',\'Arial Narrow\',sans-serif;text-transform:uppercase;font-size:22px;color:#F2F4F7;margin-bottom:10px">'+(_l0==='en'?'Sign in required':'Connexion requise')+'</div>'
-          + '<p style="color:#7E8794;font-size:14px;margin-bottom:24px">'+(_l0==='en'?'Create a free account to analyze announcements.':'Crée un compte gratuit pour analyser les annonces.')+'</p>'
+          + '<p style="color:#7E8794;font-size:14px;margin-bottom:24px">'+(_l0==='en'?'Create a free account to analyze announcements.':'Créez un compte gratuit pour analyser les annonces.')+'</p>'
           + '<a href="./index.html" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#7FB8E8,#5A9BD4);border-radius:10px;color:#07090C;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;text-decoration:none">'+(_l0==='en'?'Sign in':'Se connecter')+'</a></div>';
         return;
       }
@@ -671,7 +671,7 @@
             root.innerHTML = '<div style="text-align:center;padding:60px 20px">'
               + '<div style="margin-bottom:16px;color:#E8C268"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>'
               + '<div style="font-family:\'Anton\',\'Arial Narrow\',sans-serif;text-transform:uppercase;font-size:22px;color:#F2F4F7;margin-bottom:10px">'+(_l0==='en'?'Out of tokens':'Plus de tokens')+'</div>'
-              + '<p style="color:#7E8794;font-size:14px;margin-bottom:24px;line-height:1.7">'+(_l0==='en'?'You have no tokens left. Go Premium for unlimited analyses.':'Tu n\'as plus de tokens. Passe en Premium pour des analyses illimitées.')+'</p>'
+              + '<p style="color:#7E8794;font-size:14px;margin-bottom:24px;line-height:1.7">'+(_l0==='en'?'You have no tokens left. Go Premium for unlimited analyses.':'Vous n\'avez plus de tokens. Passez en Premium pour des analyses illimitées.')+'</p>'
               + '<a href="./tarifs.html" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#7FB8E8,#5A9BD4);border-radius:10px;color:#07090C;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;text-decoration:none">'+(_l0==='en'?'Go Premium':'Passer en Premium')+'</a></div>';
             return;
           }
