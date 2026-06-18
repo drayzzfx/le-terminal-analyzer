@@ -2496,6 +2496,7 @@ function handleMt5Drop(e) {
 
 function handleMt5File(file) {
   if (!file) return;
+  _mt5MediaType = file.type || 'image/jpeg';
   var reader = new FileReader();
   reader.onload = function(ev) {
     _mt5ImageData = ev.target.result; // base64 data URL
@@ -2526,7 +2527,7 @@ async function analyzeMt5Screenshot() {
     var res = await fetch('/api/analyze-mt5', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('ta_token') || '') },
-      body: JSON.stringify({ imgData: base64 })
+      body: JSON.stringify({ imgData: base64, mediaType: _mt5MediaType })
     });
     var data = await res.json();
     if (!res.ok || data.error) {
