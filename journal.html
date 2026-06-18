@@ -564,6 +564,29 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 </div>
 </div>
 
+<!-- MT5 IMPORT MODAL -->
+<div class="modal-overlay" id="mt5Modal">
+  <div class="modal-box" style="max-width:560px;width:100%">
+    <button class="modal-close" onclick="closeMt5Modal()">✕</button>
+    <div class="modal-title">Importer depuis MT5</div>
+    <div class="modal-sub">Dépose un screenshot de ton historique MetaTrader 5 — l'IA extrait les trades automatiquement.</div>
+    <div class="upload-zone" id="mt5DropZone" style="margin:20px 0;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;border:2px dashed rgba(127,184,232,.3);border-radius:10px;transition:border-color .2s" onclick="document.getElementById('mt5FileInput').click()" ondrop="handleMt5Drop(event)" ondragover="event.preventDefault();this.style.borderColor='rgba(127,184,232,.6)'" ondragleave="this.style.borderColor='rgba(127,184,232,.3)'">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(127,184,232,.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <span style="font-size:13px;color:var(--text3)">Clique ou glisse ton screenshot MT5 ici</span>
+      <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="mt5FileSelected(event)">
+    </div>
+    <div id="mt5Preview" style="display:none;margin-bottom:14px">
+      <img id="mt5PreviewImg" style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.1);max-height:220px;object-fit:contain">
+    </div>
+    <div id="mt5Status" style="display:none;font-size:12.5px;padding:8px 12px;border-radius:6px;margin-bottom:10px"></div>
+    <div id="mt5Results" style="display:none;margin-bottom:14px;max-height:260px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px">
+      <button class="submit-btn" id="mt5AnalyzeBtn" onclick="analyzeMt5Screenshot()" style="display:none;flex:1">Analyser l'image</button>
+      <button class="submit-btn" id="mt5ImportBtn" onclick="importMt5Trades()" style="display:none;flex:1;background:linear-gradient(135deg,#4ADE9C,#2db87a)!important;color:#07090C!important;box-shadow:0 0 0 1px rgba(74,222,156,.3),0 8px 24px rgba(74,222,156,.2)!important">Importer les trades</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADD / EDIT TRADE MODAL -->
 <div class="modal-overlay" id="tradeModal">
   <div class="modal-box">
