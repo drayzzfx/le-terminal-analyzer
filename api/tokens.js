@@ -63,7 +63,7 @@ module.exports = async function handler(req, res) {
     if (!profile) {
       await supabaseRequest('POST', '/rest/v1/user_profiles',
         { id: userId, email: userEmail, tokens: 5, journal_slots: 0 },
-        SERVICE_KEY, 'resolution=ignore-duplicates');
+        SERVICE_KEY, null, 'resolution=ignore-duplicates');
       profile = { tokens: 5, journal_slots: 0, is_pro: false };
     }
 

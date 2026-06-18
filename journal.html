@@ -2424,6 +2424,7 @@ function handleMt5File(file) {
 
 async function analyzeMt5Screenshot() {
   if (!_mt5ImageData) return;
+  if (!(await spendToken('analyze'))) return;
   var btn = document.getElementById('mt5AnalyzeBtn');
   btn.disabled = true; btn.textContent = 'Analyse en cours…';
   var st = document.getElementById('mt5Status');
