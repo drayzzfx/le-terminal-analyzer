@@ -2628,7 +2628,8 @@ async function importMt5Trades() {
     st.style.border = '1px solid rgba(74,222,156,.2)';
     st.style.color = 'var(--green)';
     st.textContent = ok + ' trade' + (ok > 1 ? 's' : '') + ' importé' + (ok > 1 ? 's' : '') + ' avec succès';
-    setTimeout(function() { closeMt5Modal(); }, 1200);
+    document.getElementById('mt5AnalyzeBtn').style.display = 'none';
+    document.getElementById('mt5ImportBtn').style.display = 'none';
   } else if (ok > 0) {
     st.style.background = 'rgba(232,194,104,.06)';
     st.style.border = '1px solid rgba(232,194,104,.2)';
