@@ -281,6 +281,9 @@ body {
 }
 .analyzer-tab:hover { color: var(--text2); border-bottom-color: rgba(127,184,232,.3); }
 .analyzer-tab[data-count]:not([data-count=''])::after { content: ' (' attr(data-count) ')'; font-size: 11px; opacity: .7; }
+/* Vues Historique/Perfs intégrées dans l'AppShell : pas de header propre, la barre
+   d'onglets suit le fil d'ariane (statique, pas de sticky qui chevauche le breadcrumb). */
+#historyPage .analyzer-tabs, #perfPage .analyzer-tabs { position: static; top: auto; }
 
 
 .lang-switch { display: flex; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); }
@@ -830,10 +833,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .history-btn.show{display:flex}
 
 /* HISTORY DETAIL MODAL */
-.hdetail-overlay{display:none;position:fixed;inset:0;z-index:700;background:rgba(8,8,15,.96);backdrop-filter:blur(20px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.hdetail-overlay{display:none;position:fixed;inset:0;z-index:700;background:rgba(7,9,12,.72);backdrop-filter:blur(8px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 .hdetail-overlay.show{display:flex}
-.hdetail-box{max-width:760px;width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;margin:auto;position:relative}
-.hdetail-close{position:absolute;top:16px;right:18px;background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer}
+.hdetail-box{max-width:760px;width:100%;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04);padding:28px;margin:auto;position:relative}
+.hdetail-close{position:absolute;top:16px;right:18px;background:transparent;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;transition:color .2s}
+.hdetail-close:hover{color:var(--text-title)}
 
 /* HISTORY PAGE */
 #historyPage {
@@ -1016,17 +1020,17 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .side-menu-footer{padding:16px 12px;border-top:1px solid var(--border)}
 
 /* ── CUSTOM CONFIRM MODAL ── */
-.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px)}
+.confirm-overlay{position:fixed;inset:0;background:rgba(7,9,12,.72);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(8px)}
 .confirm-overlay.show{opacity:1;pointer-events:all}
-.confirm-box{background:#0B0E13;border:1px solid rgba(240,100,122,.25);border-radius:20px;padding:32px 28px;width:min(360px,90vw);text-align:center;transform:scale(.95);transition:transform .25s;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+.confirm-box{background:var(--bg-elevated);border:1px solid rgba(240,100,122,.3);border-radius:var(--r-lg);padding:32px 28px;width:min(360px,90vw);text-align:center;transform:scale(.95);transition:transform .25s;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04)}
 .confirm-overlay.show .confirm-box{transform:scale(1)}
-.confirm-icon{font-size:36px;margin-bottom:14px}
-.confirm-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
-.confirm-sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.confirm-icon{font-size:36px;margin-bottom:14px;color:var(--bear)}
+.confirm-title{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.01em;font-size:20px;font-weight:800;color:var(--text-title);margin-bottom:8px}
+.confirm-sub{font-family:var(--font-text);font-size:13px;color:var(--text-body);line-height:1.6;margin-bottom:24px}
 .confirm-btns{display:flex;gap:10px;justify-content:center}
-.confirm-cancel{flex:1;padding:11px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
-.confirm-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
-.confirm-ok{flex:1;padding:11px;background:rgba(240,100,122,.15);border:1px solid rgba(240,100,122,.4);border-radius:12px;color:#F0647A;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-cancel{flex:1;padding:11px;background:transparent;border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-body);font-family:var(--font-text);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-cancel:hover{border-color:var(--border);color:var(--text-title)}
+.confirm-ok{flex:1;padding:11px;background:rgba(240,100,122,.15);border:1px solid rgba(240,100,122,.4);border-radius:var(--r-md);color:var(--bear);font-family:var(--font-text);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .confirm-ok:hover{background:rgba(240,100,122,.25);border-color:rgba(240,100,122,.6)}
 @media print {
   .topbar,.back-btn,.analyzer-tabs,#iaFeedbackBtn,.history-page-header { display: none !important; }
@@ -3672,13 +3676,6 @@ function quickSetResult(result){
 
 <!-- HISTORY PAGE -->
 <div id="historyPage">
-  <header class="history-page-header">
-    <div style="display:flex;align-items:center;gap:10px">
-      <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-      <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
-    </div>
-    <button class="back-btn" onclick="closeHistoryPage()">← Retour</button>
-  </header>
   <nav class="analyzer-tabs">
     <button class="analyzer-tab" style="color:var(--v2);border-bottom-color:var(--v2)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
@@ -3688,6 +3685,9 @@ function quickSetResult(result){
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       Perfs
     </button>
+    <span style="margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:6px">
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="closeHistoryPage()">← Retour</button>
+    </span>
   </nav>
   <div class="history-page-content">
     <div class="hist-toolbar" id="histToolbar">
@@ -3711,14 +3711,6 @@ function quickSetResult(result){
 
 <!-- PERFORMANCES PAGE -->
 <div id="perfPage">
-  <header class="perf-header">
-    <div style="display:flex;align-items:center;gap:10px">
-      <button class="lt-hamburger" onclick="ltOpenMenu()"><span></span><span></span><span></span></button>
-      <a class="lt-nav__brand" href="./index.html" style="text-decoration:none"><span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="lt-nav__word">LE&nbsp;TERMINAL</span></a>
-    </div>
-    <button class="back-btn" onclick="closePerf()">← Retour</button>
-    <button onclick="window.print()" style="padding:7px 16px;background:rgba(127,184,232,.12);border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;cursor:pointer"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Exporter PDF</button>
-  </header>
   <nav class="analyzer-tabs">
     <button class="analyzer-tab" onclick="closePerf('hist');openHistory()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
@@ -3728,6 +3720,10 @@ function quickSetResult(result){
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       Perfs
     </button>
+    <span style="margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:6px">
+      <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg> Exporter PDF</button>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="closePerf()">← Retour</button>
+    </span>
   </nav>
   <div class="perf-content">
     <div id="perfLoading" style="text-align:center;padding:60px;color:var(--text3)">Chargement des stats…</div>
@@ -3987,16 +3983,16 @@ function quickSetResult(result){
 })();
 </script>
 
-<div id="onboardingOverlay" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(8,8,15,.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
-  <div style="background:#10141B;border:1px solid rgba(127,184,232,.3);border-radius:24px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 60px rgba(127,184,232,.15)">
-    <div style="font-size:40px;margin-bottom:16px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4L12 3Z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z"/></svg></div>
-    <div style="font-family:'Anton','Arial Narrow',sans-serif;font-size:22px;font-weight:800;color:#EEF2F7;margin-bottom:8px">Bienvenue sur Le Terminal</div>
-    <div style="color:#7E8794;font-size:14px;line-height:1.7;margin-bottom:24px">Ton hub de trading ICT/SMC. Voici comment démarrer :</div>
+<div id="onboardingOverlay" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(7,9,12,.72);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04)">
+    <div style="font-size:40px;margin-bottom:16px;color:var(--accent)"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4L12 3Z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z"/></svg></div>
+    <div style="font-family:var(--font-display);text-transform:uppercase;letter-spacing:.01em;font-size:24px;font-weight:800;color:var(--text-title);margin-bottom:8px">Bienvenue sur Le Terminal</div>
+    <div style="font-family:var(--font-text);color:var(--text-muted);font-size:14px;line-height:1.7;margin-bottom:24px">Ton hub de trading ICT/SMC. Voici comment démarrer :</div>
     <div id="onboardSteps"></div>
     <div style="display:flex;justify-content:center;gap:6px;margin:20px 0" id="onboardDots"></div>
     <div style="display:flex;gap:10px">
-      <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#3A414C;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;cursor:pointer">Passer</button>
-      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:linear-gradient(135deg,#7FB8E8,#BFDCF5);border:none;border-radius:10px;color:white;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer">Suivant →</button>
+      <button onclick="skipOnboarding()" style="flex:1;padding:10px;background:transparent;border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-muted);font-family:var(--font-text);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">Passer</button>
+      <button id="onboardNextBtn" onclick="nextOnboardStep()" style="flex:2;padding:10px;background:var(--accent);border:none;border-radius:var(--r-md);color:var(--bg-void);font-family:var(--font-text);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">Suivant →</button>
     </div>
   </div>
 </div>
