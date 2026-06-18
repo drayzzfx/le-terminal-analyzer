@@ -461,16 +461,21 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
       <!-- IA Coach — soon -->
-      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.6;pointer-events:none;user-select:none">
-        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:2">Bientôt</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
+      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none!important;user-select:none">
+        <div style="position:absolute;inset:0;z-index:10;cursor:not-allowed"></div>
+        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:11">Bientôt</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
           <span class="jr-panel__title" style="margin:0">IA Coach</span>
-          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" disabled style="opacity:.5;cursor:not-allowed">Analyser</button>
+          <span class="lt-btn lt-btn--primary lt-btn--sm" style="opacity:.4;cursor:not-allowed">Analyser</span>
         </div>
         <div style="margin-top:10px">
           <span style="color:var(--text3);font-size:12px">Analyse automatique de tes patterns de trading.</span>
         </div>
       </div>
+      <!-- IDs fantômes pour éviter les erreurs JS -->
+      <div id="globalIaHeader" style="display:none"></div>
+      <div id="globalIaContent" style="display:none"></div>
+      <button id="globalIaBtn" style="display:none"></button>
       <!-- Connexion broker — soon -->
       <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.6;pointer-events:none;user-select:none">
         <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:2">Bientôt</div>
