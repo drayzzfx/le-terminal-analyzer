@@ -6,7 +6,7 @@
 <title>LE TERMINAL — Journal de Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <style>
 /* Journal : contenu en pleine largeur (pas de plafond 1200px) */
@@ -268,6 +268,25 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
 /* PLATFORM PICKER */
 .platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.pf-firms-label{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--text3);margin:4px 0 8px}
+.pf-firms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.pf-firm{padding:7px 13px;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.25);border-radius:50px;color:var(--v2);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.pf-firm:hover{background:rgba(127,184,232,.18);border-color:rgba(127,184,232,.5)}
+.pf-firms-or{text-align:center;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:0 0 14px}
+.pf-combo{position:relative;margin-bottom:14px}
+.pf-combo__input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.pf-combo__input:focus{border-color:rgba(127,184,232,.5)}
+.pf-combo__list{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:240px;overflow-y:auto;background:#10141B;border:1px solid rgba(127,184,232,.25);border-radius:10px;box-shadow:0 18px 50px rgba(0,0,0,.6);z-index:20;display:none;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}
+.pf-combo__list.show{display:block}
+.pf-combo__list::-webkit-scrollbar{width:7px}
+.pf-combo__list::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+.pf-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 13px;cursor:pointer;transition:background .12s;font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;color:var(--text2)}
+.pf-opt:hover,.pf-opt.active{background:rgba(127,184,232,.1);color:var(--text)}
+.pf-opt__plat{font-family:var(--font-mono,monospace);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:50px;padding:2px 8px;flex-shrink:0}
+.pf-opt__none{padding:12px 13px;color:var(--text3);font-size:12.5px}
+.pf-opt--soon{opacity:.45;cursor:not-allowed}
+.pf-opt--soon:hover{background:transparent;color:var(--text2)}
+.pf-opt__plat--soon{color:var(--accent,#7FB8E8);background:rgba(127,184,232,.10);border-color:rgba(127,184,232,.3)}
 .platform-card{padding:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
 .platform-card:hover{border-color:rgba(127,184,232,.4);background:rgba(127,184,232,.06)}
 .platform-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
@@ -342,34 +361,35 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="lt-nav__drop">
         <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="lt-nav__menu">
-          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
-          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
-          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Trading Journal">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Economic Calendar">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Pip Calculator">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
         </div>
       </div>
-      <a href="./tarifs.html">Tarifs</a>
-      <a href="./index.html#method">Méthode</a>
-      <a href="./index.html#community">Communauté</a>
+      <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
+      <a href="./index.html#method" data-en="Method">Méthode</a>
+      <a href="./index.html#community" data-en="Community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
     </nav>
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
-      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()">Connexion</button>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():openAuth()" data-en="Log in">Connexion</button>
       <div id="ltUserBar"></div>
-      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html">Accès Premium</a>
+      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html" data-en="Premium Access">Accès Premium</a>
     </div>
   </header>
 </div>
 
 <!-- ============ LEFT DOCK ============ -->
 <nav class="lt-dock" aria-label="Pages">
-  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span><span class="lt-dock__tip">Accueil</span></a>
-  <a class="lt-dock__item is-active" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span><span class="lt-dock__tip">Journal de Trading</span></a>
-  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip">Calendrier Éco</span></a>
+  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl" data-en="Home">Accueil</span><span class="lt-dock__tip" data-en="Home">Accueil</span></a>
+  <a class="lt-dock__item is-active" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl" data-en="Journal">Journal</span><span class="lt-dock__tip" data-en="Trading Journal">Journal de Trading</span></a>
+  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span><span class="lt-dock__tip" data-en="Economic Calendar">Calendrier Éco</span></a>
   <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span><span class="lt-dock__tip">Setup Analyzer</span></a>
   <a class="lt-dock__item" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span><span class="lt-dock__tip">Bubble Map</span></a>
-  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip">Calculateur de Pips</span></a>
+  <a class="lt-dock__item" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span><span class="lt-dock__tip" data-en="Pip Calculator">Calculateur de Pips</span></a>
 </nav>
 
 <div class="main">
@@ -377,15 +397,15 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
   <!-- HERO — style maquette -->
   <div class="page-head" style="margin-bottom:24px">
-    <span class="eyebrow"><span class="lt-dot"></span> Suivi de performance</span>
-    <h1>Journal de Trading</h1>
-    <p>Ton mois en un coup d'œil : P&L par jour, win rate, et l'analyse IA de tes patterns de performance.</p>
+    <span class="eyebrow" data-en="&lt;span class=&quot;lt-dot&quot;&gt;&lt;/span&gt; Performance tracking"><span class="lt-dot"></span> Suivi de performance</span>
+    <h1 data-en="Trading Journal">Journal de Trading</h1>
+    <p data-en="Your month at a glance: daily P&L, win rate, and AI analysis of your performance patterns.">Ton mois en un coup d'œil : P&L par jour, win rate, et l'analyse IA de tes patterns de performance.</p>
   </div>
 
   <!-- STATS — P&L en premier, style maquette -->
   <div class="stats-row" id="statsRow">
     <div class="jr-stat">
-      <span class="jr-stat__l">P&L Total</span>
+      <span class="jr-stat__l" data-en="Total P&L">P&L Total</span>
       <span class="jr-stat__v" id="statPnL" style="color:var(--green)">—</span>
     </div>
     <div class="jr-stat">
@@ -397,11 +417,11 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <span class="jr-stat__v" id="statWR" style="color:var(--green)">—</span>
     </div>
     <div class="jr-stat">
-      <span class="jr-stat__l">RR Moyen</span>
+      <span class="jr-stat__l" data-en="Avg RR">RR Moyen</span>
       <span class="jr-stat__v" id="statRR">—</span>
     </div>
     <div class="jr-stat">
-      <span class="jr-stat__l">Série actuelle</span>
+      <span class="jr-stat__l" data-en="Current streak">Série actuelle</span>
       <span class="jr-stat__v" id="statStreak" style="color:var(--amber)">—</span>
     </div>
   </div>
@@ -440,8 +460,21 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .broker-banner{background:var(--bg-elevated,rgba(255,255,255,.02))!important;border:1px solid var(--border-subtle,rgba(255,255,255,.08))!important;border-radius:var(--r-lg,16px)!important}
   .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border:1px solid transparent!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;transition:all .15s!important}
   .add-trade-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)}
-  .import-mt5-btn{width:100%;padding:11px 14px;background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:10px;color:var(--v2,#7FB8E8);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:.03em;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
-  .import-mt5-btn:hover{background:rgba(127,184,232,.12);border-color:rgba(127,184,232,.4)}
+  /* ── Modales : alignées sur le design system « Cinematic Luxury » (rayons nets, boutons plats, hairline, ombres froides) ── */
+  .modal-box,.detail-box,.broker-modal{background:var(--bg-elevated,#161B24)!important;border:1px solid var(--border-subtle,#1C212A)!important;border-radius:var(--r-lg,10px)!important;box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(127,184,232,.06)!important}
+  .confirm-box{background:var(--bg-elevated,#161B24)!important;border:1px solid var(--border-subtle,#1C212A)!important;border-radius:var(--r-lg,10px)!important}
+  .modal-box::before,.detail-box::before{display:none!important}
+  .modal-overlay{background:rgba(7,9,12,.8)!important;-webkit-backdrop-filter:blur(14px)!important;backdrop-filter:blur(14px)!important}
+  .modal-title,.day-detail-date{font-family:var(--font-display,'Anton'),sans-serif!important;text-transform:uppercase!important;letter-spacing:.01em!important}
+  .modal-box input[type=text],.modal-box input[type=number],.modal-box input[type=date],.modal-box select,.modal-box textarea,.detail-box input,.detail-box select,.detail-box textarea,.broker-field input{border-radius:var(--r-sm,4px)!important;background:var(--bg-base,#07090C)!important;border:1px solid var(--border-subtle,#1C212A)!important}
+  .modal-box input:focus,.modal-box select:focus,.modal-box textarea:focus,.broker-field input:focus{border-color:var(--accent,#7FB8E8)!important;background:var(--accent-glow-soft,rgba(127,184,232,.12))!important}
+  .submit-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;border:1px solid transparent!important;border-radius:var(--r-sm,4px)!important;background-image:none!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;text-transform:uppercase!important;letter-spacing:.04em!important;font-weight:600!important}
+  .submit-btn:hover{background:var(--accent-bright,#BFDCF5)!important}
+  .dir-btn,.res-btn,.preview-rm,.confirm-cancel,.confirm-ok,.broker-connect-btn,.broker-sync-btn,.broker-disconnect-btn{border-radius:var(--r-sm,4px)!important}
+  .upload-zone,.platform-card,.csv-drop,.csv-preview,.broker-icon{border-radius:var(--r-md,6px)!important}
+  .platform-card.soon::after,.broker-banner{border-radius:var(--r-md,6px)!important}
+  .broker-connect-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;background-image:none!important}
+  .broker-connect-btn:hover{background:var(--accent-bright,#BFDCF5)!important}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -457,60 +490,91 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
     <div class="jr-side">
       <div class="jr-panel">
-        <span class="jr-panel__title">Courbe d'équité</span>
+        <span class="jr-panel__title" data-en="Equity curve">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
-      <!-- Boutons d'action -->
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button class="add-trade-btn" onclick="openTradeModal()" style="margin-bottom:0">+ Ajouter un trade</button>
-        <button class="import-mt5-btn" onclick="openMt5Modal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Importer depuis MT5
-        </button>
+
+      <!-- ADD TRADE + IMPORT MT5 buttons -->
+      <button class="add-trade-btn" onclick="openTradeModal()" style="width:100%;margin-bottom:8px" data-en="+ Add a trade">+ Ajouter un trade</button>
+      <button class="import-mt5-btn" onclick="openMt5Modal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importer depuis MT5
+      </button>
+
+      <!-- BROKER SOON panel -->
+      <div class="broker-soon-panel" style="margin-top:8px">
+        <span class="soon-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Bientôt
+        </span>
+        <div class="soon-title">Connexion Broker</div>
+        <div class="soon-sub">Sync automatique avec MetaTrader 5, FTMO, Topstep et TradeLocker — en cours de développement.</div>
       </div>
-      <!-- IA Coach — actif -->
-      <div class="jr-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
-          <span class="jr-panel__title" style="margin:0">IA Coach</span>
-          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()">Analyser</button>
+
+      <!-- BROKER BANNER (caché) -->
+      <div class="broker-banner disconnected" id="brokerBanner" style="display:none">
+        <div class="broker-banner-left">
+          <div class="broker-icon" id="brokerIcon"></div>
+          <div class="broker-banner-text">
+            <div class="broker-banner-title" id="brokerTitle"></div>
+            <div class="broker-banner-sub" id="brokerSub"></div>
+          </div>
         </div>
-        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
-          <span style="color:var(--text3);font-size:13px">Lance une analyse pour voir tes patterns.</span>
-        </div>
-      </div>
-      <!-- Connexion broker — soon -->
-      <div class="jr-panel" style="position:relative;overflow:hidden;opacity:.55;pointer-events:none;user-select:none">
-        <div style="position:absolute;inset:0;z-index:10"></div>
-        <div style="position:absolute;top:10px;right:10px;background:rgba(232,194,104,.15);border:1px solid rgba(232,194,104,.35);border-radius:50px;color:var(--amber);font-size:9px;font-weight:700;padding:2px 9px;letter-spacing:.08em;text-transform:uppercase;z-index:11">Bientôt</div>
-        <span class="jr-panel__title">Connexion broker</span>
-        <div style="font-size:12px;color:var(--text3);margin-top:6px">MT4 · MT5 · Topstep · FTMO</div>
+        <div class="broker-banner-actions" id="brokerActions"></div>
       </div>
     </div>
   </div>
 
-  <!-- BROKER BANNER (caché — géré par updateBrokerBanner) -->
-  <div id="brokerBanner" style="display:none!important">
-    <div id="brokerIcon"></div>
-    <div id="brokerTitle"></div>
-    <div id="brokerSub"></div>
-    <div id="brokerActions"></div>
+  <!-- IA COACH — pleine largeur, en dessous du journal -->
+  <div class="jr-panel" id="globalIaPanel" style="margin-bottom:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
+      <span class="jr-panel__title" style="margin:0" data-en="AI Coach — Performance analysis">IA Coach — Analyse de performance</span>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
+    </div>
+    <div id="globalIaContent" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
+    </div>
   </div>
 
-  <!-- DERNIERS TRADES — pleine largeur -->
+  <!-- DERNIERS TRADES — pleine largeur, style maquette -->
   <div class="jr-panel" style="margin-bottom:18px">
-    <span class="jr-panel__title">Derniers trades</span>
-    <div class="jr-tbl" id="jrRecent"><div class="jr-empty">Aucun trade enregistré pour l'instant.</div></div>
+    <span class="jr-panel__title" data-en="Recent trades">Derniers trades</span>
+    <div class="jr-tbl" id="jrRecent"><div class="jr-empty" data-en="No trades recorded yet.">Aucun trade enregistré pour l'instant.</div></div>
   </div>
+
 
 </div>
+</div>
+
+<!-- MT5 IMPORT MODAL -->
+<div class="modal-overlay" id="mt5Modal" style="display:none">
+  <div class="modal-box" style="max-width:560px">
+    <button class="modal-close" onclick="closeMt5Modal()">&#x2715;</button>
+    <div class="modal-title">Importer depuis MT5</div>
+    <div class="modal-sub">Dépose un screenshot de ton historique MetaTrader 5 — l'IA extrait les trades automatiquement.</div>
+    <div class="upload-zone" id="mt5DropZone" style="margin:20px 0;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer" onclick="document.getElementById('mt5FileInput').click()">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--v2,#7FB8E8)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span style="font-size:13px;color:var(--text3)">Clique ou glisse ton screenshot MT5 ici</span>
+      <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="mt5FileSelected(event)">
+    </div>
+    <div id="mt5Preview" style="display:none;margin-bottom:14px">
+      <img id="mt5PreviewImg" style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.1);max-height:220px;object-fit:contain">
+    </div>
+    <div id="mt5Status" style="font-size:12.5px;color:var(--text3);min-height:18px;margin-bottom:10px"></div>
+    <div id="mt5Results" style="display:none;margin-bottom:14px;max-height:260px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="submit-btn" id="mt5AnalyzeBtn" onclick="analyzeMt5Screenshot()" style="display:none">Analyser l'image</button>
+      <button class="submit-btn" id="mt5ImportBtn" onclick="importMt5Trades()" style="display:none;background:linear-gradient(135deg,#4ADE9C,#2db87a);color:#07090C;box-shadow:0 0 0 1px rgba(74,222,156,.3),0 8px 24px rgba(74,222,156,.2)">Importer les trades</button>
+    </div>
+  </div>
 </div>
 
 <!-- ADD / EDIT TRADE MODAL -->
 <div class="modal-overlay" id="tradeModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeTradeModal()">✕</button>
-    <div class="modal-title" id="modalTitle">Nouveau trade</div>
-    <div class="modal-sub" id="modalSub">Renseigne les détails de ton trade</div>
+    <div class="modal-title" id="modalTitle" data-en="New trade">Nouveau trade</div>
+    <div class="modal-sub" id="modalSub" data-en="Enter your trade details">Renseigne les détails de ton trade</div>
 
     <div class="form-grid three" style="margin-bottom:12px">
       <div class="field">
@@ -518,7 +582,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <input type="date" id="tradeDate">
       </div>
       <div class="field" style="grid-column:span 2">
-        <label class="lbl">Paire / Actif</label>
+        <label class="lbl" data-en="Pair / Asset">Paire / Actif</label>
         <input type="text" id="tradePair" placeholder="XAUUSD, NAS100, BTC…" autocomplete="off" oninput="showJournalSuggestions(this.value)" onfocus="showJournalSuggestions(this.value)" onblur="setTimeout(hideJournalSuggestions,200)">
       </div>
     </div>
@@ -544,7 +608,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
     <div class="form-grid three" style="margin-bottom:12px">
       <div class="field">
-        <label class="lbl">Résultat</label>
+        <label class="lbl" data-en="Result">Résultat</label>
         <div class="result-group">
           <button class="res-btn win" id="resW" onclick="setRes('win')">W</button>
           <button class="res-btn loss" id="resL" onclick="setRes('loss')">L</button>
@@ -552,7 +616,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         </div>
       </div>
       <div class="field">
-        <label class="lbl">RR Réalisé</label>
+        <label class="lbl" data-en="Realized RR">RR Réalisé</label>
         <input type="number" id="tradeRR" placeholder="2.5" step="0.1" min="0">
       </div>
       <div class="field">
@@ -562,9 +626,9 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
 
     <div class="field" style="margin-bottom:12px">
-      <label class="lbl">Setup / Stratégie</label>
+      <label class="lbl" data-en="Setup / Strategy">Setup / Stratégie</label>
       <select id="tradeSetup">
-        <option value="">— Choisir —</option>
+        <option value="" data-en="— Choose —">— Choisir —</option>
         <option>OB + FVG</option>
         <option>Liquidity Sweep</option>
         <option>OTE</option>
@@ -572,8 +636,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <option>ICT Unicorn</option>
         <option>Silver Bullet</option>
         <option>Power of 3</option>
-        <option>Support / Résistance</option>
-        <option>Autre</option>
+        <option data-en="Support / Resistance">Support / Résistance</option>
+        <option data-en="Other">Autre</option>
       </select>
     </div>
 
@@ -583,16 +647,16 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
 
     <div class="field" style="margin-bottom:16px">
-      <label class="lbl">Screenshot du trade</label>
+      <label class="lbl" data-en="Trade screenshot">Screenshot du trade</label>
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="tradeImg" accept="image/*" onchange="onTradeImg(this)">
         <div style="font-size:20px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></div>
-        <div class="upload-text">Glisse ou clique pour ajouter un screenshot</div>
+        <div class="upload-text" data-en="Drag or click to add a screenshot">Glisse ou clique pour ajouter un screenshot</div>
         <div style="font-size:10px;color:var(--text3)">PNG, JPG</div>
       </div>
       <div class="upload-preview" id="uploadPreview">
         <img id="previewImg" src="" alt="">
-        <button class="preview-rm" onclick="removeTradeImg()">✕ Retirer</button>
+        <button class="preview-rm" onclick="removeTradeImg()" data-en="✕ Remove">✕ Retirer</button>
       </div>
     </div>
 
@@ -612,11 +676,11 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <div style="font-size:32px;margin-bottom:12px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></div>
-    <div style="font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:18px;font-weight:800;margin-bottom:8px">Supprimer ce trade ?</div>
-    <div style="font-size:13px;color:var(--text2)">Cette action est irréversible.</div>
+    <div style="font-family:'Inter', system-ui, -apple-system, sans-serif;font-size:18px;font-weight:800;margin-bottom:8px" data-en="Delete this trade?">Supprimer ce trade ?</div>
+    <div style="font-size:13px;color:var(--text2)" data-en="This action cannot be undone.">Cette action est irréversible.</div>
     <div class="confirm-btns">
-      <button class="confirm-cancel" onclick="closeConfirm()">Annuler</button>
-      <button class="confirm-ok" onclick="confirmDelete()">Supprimer</button>
+      <button class="confirm-cancel" onclick="closeConfirm()" data-en="Cancel">Annuler</button>
+      <button class="confirm-ok" onclick="confirmDelete()" data-en="Delete">Supprimer</button>
     </div>
   </div>
 </div>
@@ -626,38 +690,6 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <img id="lightboxImg" src="" alt="">
 </div>
 
-<!-- MT5 IMPORT MODAL -->
-<div class="modal-overlay" id="mt5Modal">
-  <div class="modal-box" style="max-width:520px">
-    <button class="modal-close" onclick="closeMt5Modal()">✕</button>
-    <div class="modal-title">Importer depuis MT5</div>
-    <div class="modal-sub">Dépose un screenshot de ton historique MT5 — l'IA extrait automatiquement tous les trades</div>
-
-    <div id="mt5DropZone" style="border:2px dashed rgba(127,184,232,.3);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;margin:20px 0;position:relative" onclick="document.getElementById('mt5FileInput').click()" ondragover="event.preventDefault();this.style.borderColor='rgba(127,184,232,.7)'" ondragleave="this.style.borderColor='rgba(127,184,232,.3)'" ondrop="handleMt5Drop(event)">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(127,184,232,.6)" stroke-width="1.5" style="margin:0 auto 10px;display:block"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      <div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:4px">Glisse ton screenshot ici</div>
-      <div style="font-size:12px;color:var(--text3)">ou clique pour sélectionner — JPG, PNG, WebP</div>
-      <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="handleMt5File(this.files[0])">
-    </div>
-
-    <div id="mt5Preview" style="display:none;margin-bottom:16px">
-      <img id="mt5PreviewImg" style="width:100%;border-radius:8px;border:1px solid var(--border);max-height:200px;object-fit:contain" alt="">
-    </div>
-
-    <div id="mt5Status" style="display:none;margin-bottom:16px;padding:12px 14px;border-radius:8px;font-size:13px"></div>
-
-    <div id="mt5Results" style="display:none;margin-bottom:16px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Trades détectés</div>
-      <div id="mt5TradeList" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto"></div>
-    </div>
-
-    <div style="display:flex;gap:10px">
-      <button class="submit-btn" id="mt5AnalyzeBtn" onclick="analyzeMt5Screenshot()" style="display:none">Analyser l'image</button>
-      <button class="submit-btn" id="mt5ImportBtn" onclick="importMt5Trades()" style="display:none;background:linear-gradient(135deg,#4ADE9C,#2db87a)">Importer les trades</button>
-    </div>
-  </div>
-</div>
-
 <!-- BROKER MODAL -->
 <div class="modal-overlay" id="brokerModal">
   <div class="modal-box broker-modal">
@@ -665,68 +697,131 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 
     <!-- STEP 1: platform picker -->
     <div id="brokerStep1">
-      <div class="modal-title">Connecter un compte</div>
-      <div class="modal-sub">Choisis ta plateforme de trading</div>
+      <div class="modal-title" data-en="Connect an account">Connecter un compte</div>
+      <div class="modal-sub" data-en="Choose your trading platform">Choisis ta plateforme de trading</div>
+
+      <!-- Prop firms — menu déroulant recherchable, connexion directe (sync auto), sans CSV -->
+      <div class="pf-firms-label" data-en="Your prop firm? Search &amp; connect (auto-sync):">Ta prop firm ? Cherche et connecte (sync auto) :</div>
+      <div class="pf-combo" id="pfCombo">
+        <input type="text" class="pf-combo__input" id="pfSearch" placeholder="Rechercher ta prop firm…" autocomplete="off">
+        <div class="pf-combo__list" id="pfDropdown"></div>
+      </div>
+      <div class="pf-firms-or" data-en="— or choose a platform —">— ou choisis une plateforme —</div>
+
       <div class="platform-grid">
         <div class="platform-card" onclick="showBrokerStep2('metaapi')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
           <div class="platform-card-name">MT4 / MT5</div>
-          <div class="platform-card-sub">Via MetaApi<br>Sync automatique</div>
+          <div class="platform-card-sub" data-en="Advanced · requires MetaApi">Avancé · requiert MetaApi</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('csv')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
-          <div class="platform-card-name">Import CSV</div>
+          <div class="platform-card-name" data-en="CSV import">Import CSV</div>
           <div class="platform-card-sub">Topstep, FTMO<br>MyFundedFX, etc.</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('tradelocker')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
           <div class="platform-card-name">TradeLocker</div>
-          <div class="platform-card-sub">MyFundedFX, The5ers<br>Sync automatique</div>
+          <div class="platform-card-sub" data-en="MyFundedFX, The5ers<br>Automatic sync">MyFundedFX, The5ers<br>Sync automatique</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('dxtrade')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
           <div class="platform-card-name">DXtrade</div>
-          <div class="platform-card-sub">Funded firms DXtrade<br>Sync automatique</div>
+          <div class="platform-card-sub" data-en="DXtrade funded firms<br>Automatic sync">Funded firms DXtrade<br>Sync automatique</div>
         </div>
       </div>
     </div>
 
     <!-- STEP 2a: MetaApi (MT4/MT5) -->
     <div id="brokerStep2MetaApi" style="display:none">
-      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
       <div class="modal-title">MT4 / MT5 via MetaApi</div>
-      <div class="modal-sub">Sync automatique de ton historique</div>
+      <div class="modal-sub" data-en="Automatic sync of your history">Sync automatique de ton historique</div>
 
       <div class="mt-toggle">
         <button class="mt-btn on" id="mtBtn4" onclick="selectMtType('mt4')">MT4</button>
         <button class="mt-btn" id="mtBtn5" onclick="selectMtType('mt5')">MT5</button>
       </div>
 
-      <div class="broker-steps">
-        <b>1.</b> Crée un compte gratuit sur <a href="https://app.metaapi.cloud" target="_blank">app.metaapi.cloud</a><br>
-        <b>2.</b> Ajoute ton compte <span id="mtTypeLabel">MT4</span> (broker + login + password)<br>
-        <b>3.</b> Copie ton <b>Auth Token</b> (onglet "API Tokens") et l'<b>Account ID</b>
+      <div class="broker-steps" data-en="Enter the credentials of your prop-firm / broker account (the same ones you use to log into MT4/MT5). The connection and sync are automatic.">
+        Entre les identifiants de ton compte prop firm / broker (les mêmes que pour te connecter à MT4/MT5). La connexion et la synchro sont automatiques.
       </div>
 
-      <div class="broker-field">
-        <label>Auth Token MetaApi</label>
-        <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+      <!-- Mode simple : identifiants du compte -->
+      <div id="mtSimple">
+        <div class="broker-field">
+          <label data-en="Account login (number)">Login du compte (numéro)</label>
+          <input type="text" id="mtLoginInput" placeholder="ex. 51234567" autocomplete="off">
+        </div>
+        <div class="broker-field">
+          <label data-en="Investor / account password">Mot de passe (investisseur ou maître)</label>
+          <input type="password" id="mtPassInput" placeholder="••••••••" autocomplete="off">
+        </div>
+        <div class="broker-field">
+          <label data-en="Server (shown in your platform)">Serveur (affiché dans ta plateforme)</label>
+          <input type="text" id="mtServerInput" placeholder="ex. FTMO-Server, FundingPips-Live…" autocomplete="off">
+        </div>
+        <p class="pf-hint" style="margin:0 0 12px" data-en="Tip: an investor (read-only) password is enough to sync your history.">Astuce : un mot de passe « investisseur » (lecture seule) suffit pour synchroniser ton historique.</p>
       </div>
-      <div class="broker-field">
-        <label>Account ID</label>
-        <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-      </div>
+
+      <!-- Mode avancé : token MetaApi (repli) -->
+      <details id="mtAdvanced" style="margin-bottom:14px">
+        <summary style="cursor:pointer;font-size:12px;color:var(--text3);margin-bottom:10px" data-en="Advanced: connect with my own MetaApi token">Avancé : connecter avec mon propre token MetaApi</summary>
+        <div class="broker-field">
+          <label>Auth Token MetaApi</label>
+          <input type="password" id="brokerTokenInput" placeholder="eyJ0eXAiOiJKV1Q...">
+        </div>
+        <div class="broker-field">
+          <label>Account ID</label>
+          <input type="text" id="brokerAccountInput" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        </div>
+      </details>
+
       <div class="broker-error" id="brokerError"></div>
       <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
-        <span id="brokerSaveTxt">Connecter et synchroniser</span>
+        <span id="brokerSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
+      </button>
+    </div>
+
+    <!-- STEP 2px: ProjectX (futures: Topstep, Tradeify, Lucid…) -->
+    <div id="brokerStep2PX" style="display:none">
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
+      <div class="modal-title" data-en="Futures account (ProjectX)">Compte futures (ProjectX)</div>
+      <div class="modal-sub" data-en="Topstep · Tradeify · Lucid · other ProjectX firms">Topstep · Tradeify · Lucid · autres firms ProjectX</div>
+      <div class="broker-steps" data-en="1. In your prop firm dashboard → API / API Key section, generate a key.<br>2. Enter your username and the key below. Sync is automatic.">
+        <b>1.</b> Dans le dashboard de ta prop firm → section <b>API / API Key</b>, génère une clé.<br>
+        <b>2.</b> Entre ton identifiant et la clé ci-dessous. La synchro est automatique.
+      </div>
+      <div class="broker-field">
+        <label data-en="Prop firm">Prop firm</label>
+        <select class="broker-field" id="pxFirmSelect" onchange="pxOnFirmChange()" style="padding:11px 14px">
+          <option value="api.topstepx.com">Topstep (TopstepX)</option>
+          <option value="" data-en="Other (enter API URL)">Autre (saisir l'URL API)</option>
+        </select>
+      </div>
+      <div class="broker-field" id="pxBaseField" style="display:none">
+        <label data-en="Your firm's API URL">URL API de ta firm</label>
+        <input type="text" id="pxBaseInput" placeholder="api.xxxxx.com" autocomplete="off">
+      </div>
+      <div class="broker-field">
+        <label data-en="Username">Identifiant (username)</label>
+        <input type="text" id="pxUserInput" placeholder="ton_username" autocomplete="off">
+      </div>
+      <div class="broker-field">
+        <label data-en="API key">Clé API</label>
+        <input type="password" id="pxKeyInput" placeholder="••••••••" autocomplete="off">
+      </div>
+      <div class="broker-error" id="pxError"></div>
+      <button class="submit-btn" id="pxSaveBtn" onclick="savePXConnection()">
+        <span id="pxSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
       </button>
     </div>
 
     <!-- STEP 2c: TradeLocker -->
     <div id="brokerStep2TL" style="display:none">
-      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
       <div class="modal-title">TradeLocker</div>
-      <div class="modal-sub">MyFundedFX · The5ers · et autres prop firms</div>
+      <div class="modal-sub" data-en="MyFundedFX · The5ers · and other prop firms">MyFundedFX · The5ers · et autres prop firms</div>
       <div class="broker-steps">
         <b>1.</b> Utilise l'email et mot de passe de ton compte TradeLocker<br>
         <b>2.</b> Le serveur est indiqué dans ton tableau de bord prop firm<br>
@@ -737,31 +832,31 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <input type="email" id="tlEmailInput" placeholder="ton@email.com">
       </div>
       <div class="broker-field">
-        <label>Mot de passe</label>
+        <label data-en="Password">Mot de passe</label>
         <input type="password" id="tlPasswordInput" placeholder="••••••••">
       </div>
       <div class="broker-field">
-        <label>Serveur</label>
+        <label data-en="Server">Serveur</label>
         <input type="text" id="tlServerInput" placeholder="TT-LIVE-1">
       </div>
       <div class="broker-error" id="tlError"></div>
       <button class="submit-btn" id="tlSaveBtn" onclick="saveTLConnection()">
-        <span id="tlSaveTxt">Connecter et synchroniser</span>
+        <span id="tlSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
       </button>
     </div>
 
     <!-- STEP 2d: DXtrade -->
     <div id="brokerStep2DX" style="display:none">
-      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
       <div class="modal-title">DXtrade</div>
-      <div class="modal-sub">Prop firms utilisant la plateforme DXtrade</div>
+      <div class="modal-sub" data-en="Prop firms using the DXtrade platform">Prop firms utilisant la plateforme DXtrade</div>
       <div class="broker-steps">
         <b>1.</b> Le domaine est l'URL de ta plateforme DXtrade<br>
         &nbsp;&nbsp;&nbsp;&nbsp;Exemple : <b>dxtrade.myfirm.com</b><br>
         <b>2.</b> Login et mot de passe = tes identifiants de la plateforme
       </div>
       <div class="broker-field">
-        <label>Domaine DXtrade</label>
+        <label data-en="DXtrade domain">Domaine DXtrade</label>
         <input type="text" id="dxDomainInput" placeholder="dxtrade.myfirm.com">
       </div>
       <div class="broker-field">
@@ -769,25 +864,25 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <input type="text" id="dxLoginInput" placeholder="ton_login">
       </div>
       <div class="broker-field">
-        <label>Mot de passe</label>
+        <label data-en="Password">Mot de passe</label>
         <input type="password" id="dxPasswordInput" placeholder="••••••••">
       </div>
       <div class="broker-error" id="dxError"></div>
       <button class="submit-btn" id="dxSaveBtn" onclick="saveDXConnection()">
-        <span id="dxSaveTxt">Connecter et synchroniser</span>
+        <span id="dxSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
       </button>
     </div>
 
     <!-- STEP 2b: CSV Import -->
     <div id="brokerStep2CSV" style="display:none">
-      <button class="broker-back" onclick="showBrokerStep1()">← Retour</button>
-      <div class="modal-title">Import CSV</div>
+      <button class="broker-back" onclick="showBrokerStep1()" data-en="← Back">← Retour</button>
+      <div class="modal-title" data-en="CSV import">Import CSV</div>
       <div class="modal-sub">Topstep · FTMO · MyFundedFX · MT4/MT5 Statement</div>
 
       <div style="margin-bottom:12px">
-        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--v3);text-transform:uppercase;margin-bottom:8px">Format</div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--v3);text-transform:uppercase;margin-bottom:8px" data-en="Format">Format</div>
         <div class="csv-platforms">
-          <button class="csv-platform-btn on" id="csvFmtBtn_auto" onclick="selectCsvFormat('auto')">Auto-détect</button>
+          <button class="csv-platform-btn on" id="csvFmtBtn_auto" onclick="selectCsvFormat('auto')" data-en="Auto-detect">Auto-détect</button>
           <button class="csv-platform-btn" id="csvFmtBtn_topstep" onclick="selectCsvFormat('topstep')">Topstep</button>
           <button class="csv-platform-btn" id="csvFmtBtn_ftmo" onclick="selectCsvFormat('ftmo')">FTMO</button>
           <button class="csv-platform-btn" id="csvFmtBtn_mt4" onclick="selectCsvFormat('mt4')">MT4 Statement</button>
@@ -797,15 +892,15 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
       <div class="csv-drop" id="csvDrop">
         <input type="file" accept=".csv,.txt" onchange="onCsvFile(event)" id="csvFileInput">
         <div class="csv-drop-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-        <div class="csv-drop-txt">Glisse ton fichier CSV ici</div>
-        <div class="csv-drop-sub">ou clique pour sélectionner</div>
+        <div class="csv-drop-txt" data-en="Drag your CSV file here">Glisse ton fichier CSV ici</div>
+        <div class="csv-drop-sub" data-en="or click to select">ou clique pour sélectionner</div>
       </div>
 
       <div id="csvPreviewArea" style="display:none">
         <div class="csv-preview" id="csvPreviewTable"></div>
         <div class="broker-error" id="csvError"></div>
         <button class="submit-btn" id="csvImportBtn" onclick="importCsvTrades()">
-          <span id="csvImportTxt">Importer les trades</span>
+          <span id="csvImportTxt" data-en="Import trades">Importer les trades</span>
         </button>
       </div>
       <div class="broker-error" id="csvParseError"></div>
@@ -818,20 +913,20 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuth()">✕</button>
-    <div style="font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;margin-bottom:20px">Connexion</div>
+    <div style="font-family:'Anton', 'Arial Narrow', sans-serif;font-size:22px;font-weight:800;margin-bottom:20px" data-en="Log in">Connexion</div>
     <div class="auth-tabs">
-      <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Connexion</button>
-      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
+      <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')" data-en="Log in">Connexion</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')" data-en="Sign up">Créer un compte</button>
     </div>
     <div class="auth-field">
       <label>EMAIL</label>
       <input type="email" id="authEmail" placeholder="ton@email.com">
     </div>
     <div class="auth-field">
-      <label>MOT DE PASSE</label>
+      <label data-en="PASSWORD">MOT DE PASSE</label>
       <input type="password" id="authPassword" placeholder="••••••••">
     </div>
-    <button class="auth-submit" onclick="doAuth()"><span id="authTxt">Se connecter</span></button>
+    <button class="auth-submit" onclick="doAuth()"><span id="authTxt" data-en="Log in">Se connecter</span></button>
     <div class="auth-error" id="authError"></div>
   </div>
 </div>
@@ -1735,17 +1830,106 @@ var parsedCsvTrades = [];
 function openBrokerModal() {
   showBrokerStep1();
   document.getElementById('brokerModal').classList.add('show');
+  var s = document.getElementById('pfSearch'); if(s) s.value='';
+  pfSetup();
 }
 function closeBrokerModal() { document.getElementById('brokerModal').classList.remove('show'); }
 
 function showBrokerStep1() {
-  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX'].forEach(function(id) {
+  ['brokerStep1','brokerStep2MetaApi','brokerStep2CSV','brokerStep2TL','brokerStep2DX','brokerStep2PX'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = id === 'brokerStep1' ? '' : 'none';
   });
 }
-function showBrokerStep2(type) {
+function pxOnFirmChange(){
+  var sel = document.getElementById('pxFirmSelect');
+  var f = document.getElementById('pxBaseField');
+  if(f) f.style.display = (sel && sel.value) ? 'none' : '';
+}
+
+// ── Liste des prop firms (recherche) → plateforme de connexion ──
+// platform: dxtrade | tradelocker | metaapi | projectx | csv ; base (projectx) = URL API
+var PROP_FIRMS = [
+  // Forex / CFD
+  { n:'FTMO', p:'dxtrade' }, { n:'FundedNext', p:'dxtrade' }, { n:'FundingPips', p:'tradelocker' },
+  { n:'The5ers', p:'tradelocker' }, { n:'E8 Markets', p:'tradelocker' }, { n:'MyFundedFX', p:'tradelocker' },
+  { n:'Alpha Capital Group', p:'tradelocker' }, { n:'FundingTraders', p:'dxtrade' }, { n:'FunderPro', p:'dxtrade' },
+  { n:'Goat Funded Trader', p:'tradelocker' }, { n:'Instant Funding', p:'tradelocker' }, { n:'Blueberry Funded', p:'tradelocker' },
+  { n:'City Traders Imperium', p:'metaapi' }, { n:'Audacity Capital', p:'metaapi' }, { n:'Lark Funding', p:'tradelocker' },
+  { n:'Quantec Capital', p:'tradelocker' }, { n:'Maven Trading', p:'tradelocker' }, { n:'Aqua Funded', p:'tradelocker' },
+  { n:'PipFarm', p:'dxtrade' }, { n:'Hola Prime', p:'tradelocker' }, { n:'FundedFirm', p:'tradelocker' },
+  { n:'Brightfunded', p:'tradelocker' }, { n:'The Trading Pit', p:'dxtrade' }, { n:'5%ers High Stakes', p:'tradelocker' },
+  { n:'Funded Trading Plus', p:'metaapi' }, { n:'OFP Funding', p:'metaapi' }, { n:'Nordic Funder', p:'tradelocker' },
+  // Futures (ProjectX) — base connue : Topstep ; sinon saisie URL
+  { n:'Topstep', p:'projectx', b:'api.topstepx.com' },
+  { n:'Tradeify', p:'projectx', b:'' }, { n:'Lucid Trading', p:'projectx', b:'' },
+  { n:'MyFundedFutures', p:'projectx', b:'' }, { n:'Alpha Futures', p:'projectx', b:'' },
+  { n:'Bulenox', p:'projectx', b:'' }, { n:'Blusky', p:'projectx', b:'' },
+  { n:'TakeProfit Trader', p:'projectx', b:'' }, { n:'Legends Trading', p:'projectx', b:'' },
+  { n:'The Futures Desk', p:'projectx', b:'' }, { n:'Goat Futures', p:'projectx', b:'' },
+  // Futures sur Rithmic/Tradovate → non supporté en direct (import CSV)
+  { n:'Apex Trader Funding', p:'csv' }, { n:'Tradovate', p:'csv' }, { n:'NinjaTrader', p:'csv' }
+];
+var PLAT_LABEL = { dxtrade:'DXtrade', tradelocker:'TradeLocker', metaapi:'MT4/MT5', projectx:'ProjectX', csv:'CSV' };
+var _pfActive = -1;
+function pfRender(filter){
+  var list = document.getElementById('pfDropdown'); if(!list) return;
+  var q = (filter||'').toLowerCase().trim();
+  var rows = PROP_FIRMS.filter(function(f){ return !q || f.n.toLowerCase().indexOf(q)>-1; })
+    .sort(function(a,b){ return a.n.localeCompare(b.n); });
+  _pfActive = -1;
+  if(!rows.length){ list.innerHTML = '<div class="pf-opt__none">Aucune firm — utilise « choisir une plateforme » ci-dessous.</div>'; return; }
+  list.innerHTML = rows.map(function(f){
+    var arg = f.p==='projectx' ? (f.b||'') : '';
+    if(f.p==='metaapi'){ // MT4/MT5 → bientôt (nécessitera MetaApi)
+      return '<div class="pf-opt pf-opt--soon" aria-disabled="true">'
+        + '<span>'+f.n+'</span><span class="pf-opt__plat pf-opt__plat--soon">MT5 · SOON</span></div>';
+    }
+    return '<div class="pf-opt" data-plat="'+f.p+'" data-arg="'+arg+'">'
+      + '<span>'+f.n+'</span><span class="pf-opt__plat">'+(PLAT_LABEL[f.p]||f.p)+'</span></div>';
+  }).join('');
+}
+function pfSetup(){
+  var input = document.getElementById('pfSearch');
+  var list = document.getElementById('pfDropdown');
+  if(!input || !list || input._pfBound) return;
+  input._pfBound = true;
+  function open(){ pfRender(input.value); list.classList.add('show'); }
+  input.addEventListener('focus', open);
+  input.addEventListener('input', open);
+  list.addEventListener('mousedown', function(e){
+    var opt = e.target.closest('.pf-opt'); if(!opt) return;
+    e.preventDefault();
+    if(opt.classList.contains('pf-opt--soon')) return; // MT5 bientôt → non cliquable
+    var plat = opt.getAttribute('data-plat'), arg = opt.getAttribute('data-arg');
+    list.classList.remove('show'); input.blur();
+    if(plat==='csv'){ showBrokerStep2('csv'); }
+    else if(plat==='projectx'){ showBrokerStep2('projectx', arg); }
+    else { showBrokerStep2(plat); }
+  });
+  document.addEventListener('click', function(e){ if(!e.target.closest('#pfCombo')) list.classList.remove('show'); });
+}
+function showBrokerStep2(type, firm) {
   document.getElementById('brokerStep1').style.display = 'none';
+  if (type === 'projectx') {
+    document.getElementById('brokerStep2PX').style.display = '';
+    var sel = document.getElementById('pxFirmSelect');
+    ['pxUserInput','pxKeyInput'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+    var bi = document.getElementById('pxBaseInput'); if(bi) bi.value='';
+    // firm peut être 'topstep' (clé) ou directement une base 'api.xxx.com'
+    var MAP = { topstep:'api.topstepx.com' };
+    var base = firm ? (MAP[firm] || firm) : '';
+    if(sel){
+      var matchOpt = base && [].some.call(sel.options, function(o){ return o.value===base; });
+      sel.value = matchOpt ? base : '';
+      pxOnFirmChange();
+      if(!matchOpt && base && bi) bi.value = base;
+    }
+    document.getElementById('pxError').textContent='';
+    document.getElementById('pxSaveTxt').textContent='Connecter et synchroniser';
+    document.getElementById('pxSaveBtn').disabled=false;
+    return;
+  }
   if (type === 'metaapi') {
     document.getElementById('brokerStep2MetaApi').style.display = '';
     document.getElementById('brokerTokenInput').value = '';
@@ -1796,18 +1980,25 @@ function selectCsvFormat(f) {
 async function saveBrokerConnection() {
   var token = document.getElementById('brokerTokenInput').value.trim();
   var accountId = document.getElementById('brokerAccountInput').value.trim();
+  var login = (document.getElementById('mtLoginInput')||{}).value ? document.getElementById('mtLoginInput').value.trim() : '';
+  var pass = (document.getElementById('mtPassInput')||{}).value ? document.getElementById('mtPassInput').value.trim() : '';
+  var server = (document.getElementById('mtServerInput')||{}).value ? document.getElementById('mtServerInput').value.trim() : '';
   var errEl = document.getElementById('brokerError');
   errEl.textContent = '';
-  if (!token || !accountId) { errEl.textContent = 'Remplis les deux champs'; return; }
+  var useSimple = login && pass && server;
+  if (!useSimple && (!token || !accountId)) { errEl.textContent = 'Entre login + mot de passe + serveur (ou utilise le mode avancé)'; return; }
   if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
   var btn = document.getElementById('brokerSaveBtn');
   btn.disabled = true;
-  document.getElementById('brokerSaveTxt').textContent = 'Vérification…';
+  document.getElementById('brokerSaveTxt').textContent = 'Connexion…';
   try {
+    var payload = useSimple
+      ? { login: login, password: pass, server: server, platform: selectedMtType }
+      : { metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType };
     var res = await fetch('/api/broker-connect', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
-      body: JSON.stringify({ metaApiToken: token, metaApiAccountId: accountId, platform: selectedMtType })
+      body: JSON.stringify(payload)
     });
     var data = await res.json();
     if (!res.ok) {
@@ -1824,6 +2015,35 @@ async function saveBrokerConnection() {
     errEl.textContent = 'Erreur réseau';
     btn.disabled = false;
     document.getElementById('brokerSaveTxt').textContent = 'Connecter et synchroniser';
+  }
+}
+
+// ── ProjectX (futures) connection ──
+async function savePXConnection() {
+  var sel = document.getElementById('pxFirmSelect');
+  var base = (sel && sel.value) ? sel.value : (document.getElementById('pxBaseInput').value || '').trim();
+  var user = (document.getElementById('pxUserInput').value || '').trim();
+  var key = (document.getElementById('pxKeyInput').value || '').trim();
+  var errEl = document.getElementById('pxError');
+  errEl.textContent = '';
+  if (!base || !user || !key) { errEl.textContent = 'Firm + identifiant + clé API requis'; return; }
+  if (!authToken) { errEl.textContent = 'Connecte-toi d\'abord'; return; }
+  var btn = document.getElementById('pxSaveBtn');
+  btn.disabled = true; document.getElementById('pxSaveTxt').textContent = 'Connexion…';
+  try {
+    var res = await fetch('/api/broker-connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+      body: JSON.stringify({ platform: 'projectx', pxBase: base, pxUsername: user, pxApiKey: key })
+    });
+    var data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur connexion'; btn.disabled = false; document.getElementById('pxSaveTxt').textContent = 'Connecter et synchroniser'; return; }
+    brokerConnected = true; window._brokerPlatform = 'projectx';
+    closeBrokerModal();
+    updateBrokerBanner({ connected: true, platform: 'projectx', accountName: data.accountName });
+    syncBroker('projectx');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau'; btn.disabled = false; document.getElementById('pxSaveTxt').textContent = 'Connecter et synchroniser';
   }
 }
 
@@ -1893,6 +2113,7 @@ async function syncBroker(platformOverride) {
   var endpoint = '/api/sync-broker';
   if (platform === 'tradelocker') endpoint = '/api/sync-tradelocker';
   else if (platform === 'dxtrade') endpoint = '/api/sync-dxtrade';
+  else if (platform === 'projectx') endpoint = '/api/sync-projectx';
   try {
     var res = await fetch(endpoint, {
       method: 'POST',
@@ -1930,18 +2151,20 @@ function setBrokerSyncing(on) {
 }
 
 function updateBrokerBanner(info) {
-  // Bannière déplacée en colonne droite (soon) — on ne l'affiche plus ici
+  return; // Broker banner remplacé par le panel "Bientôt"
   var banner = document.getElementById('brokerBanner');
-  if (banner) banner.style.display = 'none';
   var titleEl = document.getElementById('brokerTitle');
   var subEl = document.getElementById('brokerSub');
   var actionsEl = document.getElementById('brokerActions');
   if (!info.connected) {
-    if(titleEl) titleEl.textContent = 'Connecte ton compte de trading';
-    if(subEl) subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
+    banner.className = 'broker-banner disconnected';
+    document.getElementById('brokerIcon').textContent = '';
+    titleEl.textContent = 'Connecte ton compte de trading';
+    titleEl._name = null;
+    subEl.textContent = 'MT4 · MT5 · Topstep · FTMO · Import CSV';
+    actionsEl.innerHTML = '<button class="broker-connect-btn" onclick="openBrokerModal()">Connecter</button>';
     return;
   }
-  // connected — inutilisé tant que la bannière est cachée
   banner.className = 'broker-banner connected';
   document.getElementById('brokerIcon').textContent = '✓';
   var platformLabel = info.platform ? info.platform.toUpperCase() : 'Compte';
@@ -2128,7 +2351,27 @@ async function importCsvTrades() {
 
 // ── MT5 IMPORT ──────────────────────────────────────────────────────────────
 var _mt5ImageData = null;
+var _mt5MediaType = 'image/png';
 var _mt5ParsedTrades = [];
+
+function mt5FileSelected(e) {
+  var file = e.target.files && e.target.files[0];
+  if (!file) return;
+  _mt5MediaType = file.type || 'image/png';
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var dataUrl = ev.target.result;
+    _mt5ImageData = dataUrl.split(',')[1];
+    var preview = document.getElementById('mt5Preview');
+    var previewImg = document.getElementById('mt5PreviewImg');
+    previewImg.src = dataUrl;
+    preview.style.display = 'block';
+    document.getElementById('mt5AnalyzeBtn').style.display = 'inline-flex';
+    document.getElementById('mt5Status').textContent = 'Image chargée — clique sur Analyser.';
+    document.getElementById('mt5Status').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
 
 function openMt5Modal() {
   _mt5ImageData = null;
@@ -2212,7 +2455,7 @@ async function analyzeMt5Screenshot() {
 }
 
 function renderMt5Trades() {
-  var list = document.getElementById('mt5TradeList');
+  var list = document.getElementById('mt5Results');
   list.innerHTML = '';
   _mt5ParsedTrades.forEach(function(t, i) {
     var pnlColor = (t.pnl > 0) ? 'var(--green)' : (t.pnl < 0 ? 'var(--red)' : 'var(--amber)');
