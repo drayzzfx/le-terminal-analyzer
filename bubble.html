@@ -393,7 +393,7 @@ var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
 
 function bmRadius(w){
   var n=bmBubbles.length||60;
-  var scale= n<=20 ? 1 : n<=35 ? 0.88 : n<=55 ? 0.76 : 0.65;
+  var scale= n<=20 ? 1.1 : n<=35 ? 1 : n<=55 ? 0.86 : 0.73;
   return (22 + Math.sqrt((w||0.5)/bmMaxW)*58)*scale;
 }
 function bmMd(v){ return (v/1e9).toLocaleString('fr-FR',{maximumFractionDigits:0}); }
