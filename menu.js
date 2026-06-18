@@ -39,11 +39,12 @@
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`, label: 'Historique', href: './app.html#historique' },
       { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, label: 'Perfs', href: './app.html#perfs' },
     ] },
-    { id: 'bubble.html',          icon: ICONS.bubble,  label: 'Bubble Map',          href: './bubble.html' },
-    { id: 'calculateur.html',     icon: ICONS.calc,    label: 'Calculateur de Pips', href: './calculateur.html' },
-    { id: 'mur-des-trades.html',  icon: ICONS.mur,     label: 'Mur des Trades',      href: './mur-des-trades.html', pro: true },
-    { id: 'profil.html',          icon: ICONS.profil,  label: 'Profil',              href: './profil.html' },
-    { id: 'avis.html',            icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`, label: 'Avis',  href: './avis.html' },
+    { id: 'bubble.html',      icon: ICONS.bubble,     label: 'Bubble Map',          href: './bubble.html' },
+    { id: 'patrimoine.html',  icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>`, label: 'Patrimoine', href: './patrimoine-presentation.html', children: [
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>`, label: 'Présentation', href: './patrimoine-presentation.html' },
+      { icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>`, label: 'Portefeuille', href: './patrimoine.html' },
+    ] },
+    { id: 'calculateur.html', icon: ICONS.calc,       label: 'Calculateur de Pips', href: './calculateur.html' },
   ];
 
   // ── CSS ──
@@ -561,30 +562,29 @@
     if(document.getElementById('ltAuthOverlay')) return;
     var style = document.createElement('style');
     style.textContent = [
-      '#ltAuthOverlay{display:none;position:fixed;inset:0;z-index:9000;background:rgba(8,8,15,.96);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px}',
-      '#ltAuthOverlay.show{display:flex;animation:ltFadeUp .3s ease}',
+      '#ltAuthOverlay{display:none;position:fixed;inset:0;z-index:9000;background:rgba(7,9,12,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:20px}',
+      '#ltAuthOverlay.show{display:flex;animation:ltFadeUp .3s cubic-bezier(0.16,1,0.3,1)}',
       '@keyframes ltFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}',
-      '#ltAuthBox{max-width:400px;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(127,184,232,.25);border-radius:20px;padding:32px;position:relative;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.7)}',
-      '#ltAuthBox::before{content:"";position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,#7FB8E8,#BFDCF5,transparent)}',
-      '.lta-close{position:absolute;top:14px;right:16px;background:transparent;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;line-height:1}',
-      '.lta-close:hover{color:#fff}',
-      '.lta-title{font-size:22px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-bottom:6px}',
-      '.lta-sub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:20px}',
-      '.lta-tabs{display:flex;gap:0;margin-bottom:20px;border:1px solid rgba(255,255,255,.1);border-radius:50px;overflow:hidden}',
-      '.lta-tab{flex:1;padding:9px;background:transparent;border:none;color:rgba(255,255,255,.45);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}',
-      '.lta-tab.on{background:rgba(127,184,232,.18);color:#fff}',
-      '.lta-google{width:100%;padding:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:50px;color:rgba(255,255,255,.8);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:14px}',
-      '.lta-google:hover{background:rgba(255,255,255,.09)}',
-      '.lta-sep{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.25);font-size:11px;margin-bottom:14px}',
-      '.lta-sep::before,.lta-sep::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.1)}',
+      '#ltAuthBox{max-width:400px;width:100%;background:var(--bg-elevated,#161B24);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-lg,10px);padding:32px;position:relative;text-align:center;box-shadow:0 32px 64px rgba(0,0,0,.6),0 0 0 1px rgba(127,184,232,.06)}',
+      '.lta-close{position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text-muted,#7E8794);font-size:20px;cursor:pointer;line-height:1;transition:color .15s}',
+      '.lta-close:hover{color:var(--text-title,#F2F4F7)}',
+      '.lta-title{font-family:var(--font-display,"Anton"),sans-serif;font-size:26px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--text-title,#F2F4F7);margin-bottom:6px}',
+      '.lta-sub{font-size:13px;color:var(--text-muted,#7E8794);margin-bottom:20px}',
+      '.lta-tabs{display:flex;gap:4px;margin-bottom:20px;border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-md,6px);padding:3px}',
+      '.lta-tab{flex:1;padding:9px;background:transparent;border:none;border-radius:var(--r-sm,4px);color:var(--text-muted,#7E8794);font-family:var(--font-text,"Inter"),sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}',
+      '.lta-tab.on{background:var(--accent-glow-soft,rgba(127,184,232,.12));color:var(--accent-bright,#BFDCF5)}',
+      '.lta-google{width:100%;padding:11px;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-body,#C3CAD4);font-family:var(--font-text,"Inter"),sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:14px}',
+      '.lta-google:hover{border-color:var(--accent,#7FB8E8);color:var(--text-title,#F2F4F7)}',
+      '.lta-sep{display:flex;align-items:center;gap:10px;color:var(--text-muted,#7E8794);font-size:11px;margin-bottom:14px;text-transform:uppercase;letter-spacing:.1em}',
+      '.lta-sep::before,.lta-sep::after{content:"";flex:1;height:1px;background:var(--border-subtle,#1C212A)}',
       '.lta-field{text-align:left;margin-bottom:12px}',
-      '.lta-field label{display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:6px}',
-      '.lta-field input{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:14px;box-sizing:border-box;outline:none;transition:border-color .2s}',
-      '.lta-field input:focus{border-color:rgba(127,184,232,.5)}',
-      '.lta-submit{width:100%;padding:13px;background:linear-gradient(135deg,#7FB8E8,#5A9BD4);border:none;border-radius:50px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;transition:opacity .2s}',
-      '.lta-submit:hover{opacity:.85}',
-      '.lta-submit:disabled{opacity:.5;cursor:not-allowed}',
-      '.lta-error{font-size:12px;color:#F0647A;margin-top:10px;min-height:18px}'
+      '.lta-field label{display:block;font-family:var(--font-mono,"JetBrains Mono"),monospace;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--text-muted,#7E8794);margin-bottom:6px}',
+      '.lta-field input{width:100%;padding:11px 14px;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-title,#F2F4F7);font-family:var(--font-text,"Inter"),sans-serif;font-size:14px;box-sizing:border-box;outline:none;transition:border-color .2s,background .2s}',
+      '.lta-field input:focus{border-color:var(--accent,#7FB8E8);background:var(--accent-glow-soft,rgba(127,184,232,.12))}',
+      '.lta-submit{width:100%;padding:13px;background:var(--accent,#7FB8E8);border:1px solid transparent;border-radius:var(--r-sm,4px);color:#07090C;font-family:var(--font-text,"Inter"),sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;margin-top:4px;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35));transition:background .15s,transform .15s}',
+      '.lta-submit:hover{background:var(--accent-bright,#BFDCF5);transform:translateY(-1px)}',
+      '.lta-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}',
+      '.lta-error{font-size:12px;color:var(--bear,#F0647A);margin-top:10px;min-height:18px}'
     ].join('');
     document.head.appendChild(style);
 
@@ -855,6 +855,7 @@
   }
 
   // Init - run immediately and after checkSession completes
+  window.ltRenderUserBar = ltRenderUserBar;
   ltSyncUser();
   ltRenderUserBar();
   // Re-render after page auth logic runs (e.g. checkSession async)
@@ -869,11 +870,100 @@
 
   // ── CURSEUR POINT DORÉ NÉON (toutes les pages) ──
   (function(){
-    if(window.matchMedia('(pointer:coarse)').matches) return;
-    if(window._ltCursorInit) return;
-    window._ltCursorInit = true;
-    ['lt-cursor-dot','lt-cursor-ring','lt-c','lt-ch','lt-cur-dot','lt-cur-ring'].forEach(function(id){
-      var el=document.getElementById(id); if(el) el.remove();
+    // Désactivé : un seul curseur optimisé (#lt-c, transform + rAF, dans cursor.js / appshell.js)
+    // gère désormais tout le site. L'ancien curseur mix-blend-mode (lourd au repaint) est retiré.
+    return;
+    if(window.matchMedia('(pointer: coarse)').matches) return; // mobile : skip
+
+    // CSS
+    var cs = document.createElement('style');
+    cs.textContent = [
+      '* { cursor: none !important; }',
+      // mix-blend-mode:difference → le curseur s'inverse par rapport au fond,
+      // donc toujours parfaitement visible (sombre, clair, image, graphique…).
+      '#lt-cur-dot {',
+        'position:fixed;top:0;left:0;z-index:2147483647;pointer-events:none;',
+        'width:9px;height:9px;border-radius:50%;',
+        'background:#ffffff;mix-blend-mode:difference;',
+        'transform:translate(-50%,-50%);',
+        'transition:width .15s,height .15s;',
+        'will-change:transform;',
+      '}',
+      '#lt-cur-ring {',
+        'position:fixed;top:0;left:0;z-index:2147483646;pointer-events:none;',
+        'width:26px;height:26px;border-radius:50%;',
+        'border:2px solid #ffffff;mix-blend-mode:difference;',
+        'transform:translate(-50%,-50%);',
+        'transition:width .25s,height .25s,border-color .25s;',
+        'will-change:transform;',
+      '}',
+      'body.lt-cur-hover #lt-cur-dot {',
+        'width:12px;height:12px;',
+      '}',
+      'body.lt-cur-hover #lt-cur-ring {',
+        'width:36px;height:36px;border-width:2.5px;',
+      '}',
+      '@media (pointer:coarse){#lt-cur-dot,#lt-cur-ring{display:none!important}*{cursor:auto!important}}'
+    ].join('');
+    document.head.appendChild(cs);
+
+    // Éléments DOM
+    var dot = document.createElement('div'); dot.id = 'lt-cur-dot';
+    var ring = document.createElement('div'); ring.id = 'lt-cur-ring';
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    var mx = window.innerWidth/2, my = window.innerHeight/2;
+    var rx = mx, ry = my;
+    var dotScale = 1, ringScale = 1;
+
+    // Position + échelle composées en un seul transform (jamais left/top → pas de layout)
+    function drawDot(){  dot.style.transform  = 'translate3d('+mx+'px,'+my+'px,0) translate(-50%,-50%) scale('+dotScale+')'; }
+    function drawRing(){ ring.style.transform = 'translate3d('+rx+'px,'+ry+'px,0) translate(-50%,-50%) scale('+ringScale+')'; }
+    drawDot(); drawRing();
+
+    document.addEventListener('mousemove', function(e){
+      mx = e.clientX; my = e.clientY;
+      drawDot();
+      wakeLoop();
+    });
+
+    var hoverSel = 'a,button,input,select,textarea,[onclick],[role="button"]';
+    document.addEventListener('mouseover', function(e){
+      if(e.target.closest(hoverSel)) document.body.classList.add('lt-cur-hover');
+    });
+    document.addEventListener('mouseout', function(e){
+      if(e.target.closest(hoverSel)) document.body.classList.remove('lt-cur-hover');
+    });
+
+    document.addEventListener('mousedown', function(){
+      dotScale = 0.6; ringScale = 0.85;
+      drawDot(); drawRing();
+    });
+    document.addEventListener('mouseup', function(){
+      dotScale = 1; ringScale = 1;
+      drawDot(); drawRing();
+    });
+
+    // Quand la souris entre dans un iframe (ex: TradingView bubble map),
+    // les mousemove s'arrêtent → on masque le curseur custom et on restaure le natif
+    var iframeStyle = document.createElement('style');
+    iframeStyle.textContent = 'body.lt-in-iframe * { cursor: auto !important; } body.lt-in-iframe #lt-cur-dot, body.lt-in-iframe #lt-cur-ring { opacity: 0 !important; }';
+    document.head.appendChild(iframeStyle);
+
+    function enterIframe(){ document.body.classList.add('lt-in-iframe'); }
+    function leaveIframe(){ document.body.classList.remove('lt-in-iframe'); }
+
+    // On masque le curseur custom UNIQUEMENT quand le pointeur quitte réellement
+    // la fenêtre/le document (ex: entre dans un iframe TradingView) — jamais sur
+    // simple immobilité. Détection via mouseleave document + blur de la fenêtre
+    // (un iframe qui prend le focus déclenche un blur du parent).
+    document.addEventListener('mouseleave', enterIframe);
+    document.addEventListener('mouseenter', leaveIframe);
+    document.addEventListener('mousemove', leaveIframe);
+    window.addEventListener('blur', function(){
+      // Si le focus part vers un iframe de la page → on masque le curseur custom.
+      if(document.activeElement && document.activeElement.tagName === 'IFRAME') enterIframe();
     });
     var s=document.createElement('style');
     s.textContent=

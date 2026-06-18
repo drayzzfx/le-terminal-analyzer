@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lt-cache-v13';
+const CACHE_NAME = 'lt-cache-v14';
 const ASSETS_TO_CACHE = [
   './app.html',
   './calculateur.html',
@@ -29,12 +29,12 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || url.pathname.startsWith('/api/') || url.origin !== self.location.origin) {
     return;
   }
-  // Pages HTML + JS : toujours réseau (network-first) pour avoir les dernières versions
-  if (url.pathname === '/' || url.pathname.endsWith('.html') || url.pathname.endsWith('.js')) {
+  // Pages HTML + JS + CSS : toujours réseau (network-first) pour avoir les dernières versions
+  if (url.pathname === '/' || url.pathname.endsWith('.html') || url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
     event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
     return;
   }
-  // Autres assets statiques (css, images) : cache-first
+  // Autres assets statiques (images, polices) : cache-first
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;

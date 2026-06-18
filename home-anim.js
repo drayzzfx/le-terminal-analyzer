@@ -156,8 +156,14 @@
           ctx.fillStyle = 'rgba(191,220,245,' + (p.a * beam * 0.6) + ')';
           ctx.fill();
         }
-        raf = requestAnimationFrame(draw);
+        raf = (visible && !document.hidden) ? requestAnimationFrame(draw) : 0;
       };
+      var visible = true;
+      var kick = function () { if (visible && !document.hidden && !raf) draw(); };
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) kick(); else if (raf) { cancelAnimationFrame(raf); raf = 0; } }).observe(canvas);
+      }
+      document.addEventListener('visibilitychange', kick);
       draw();
     })();
   }
@@ -411,12 +417,18 @@
         ctx.fill();
       }
       ctx.shadowBlur = 0;
-      raf = requestAnimationFrame(draw);
+      raf = (visible && !document.hidden) ? requestAnimationFrame(draw) : 0;
     }
 
     build();
     window.addEventListener('resize', build);
     if (prefersReducedMotion()) { ctx.clearRect(0, 0, w, h); return; }
+    var visible = true;
+    var kick = function () { if (visible && !document.hidden && !raf) draw(); };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) kick(); else if (raf) { cancelAnimationFrame(raf); raf = 0; } }).observe(canvas);
+    }
+    document.addEventListener('visibilitychange', kick);
     draw();
   }
 
@@ -633,8 +645,14 @@
       ctx.fillStyle = '#BFDCF5';
       ctx.shadowColor = 'rgba(127,184,232,0.8)';
       ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
-      if (!reduced) raf = requestAnimationFrame(draw);
+      if (!reduced && visible && !document.hidden) raf = requestAnimationFrame(draw); else raf = 0;
     }
+    var visible = true;
+    var kick = function () { if (!reduced && visible && !document.hidden && !raf) draw(); };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) kick(); else if (raf) { cancelAnimationFrame(raf); raf = 0; } }).observe(c);
+    }
+    document.addEventListener('visibilitychange', kick);
     draw();
   }
 
@@ -653,7 +671,7 @@
       var rest = {
         background: btn.style.background,
         color: btn.style.color,
-        borderColor: btn.style.borderColor || 'transparent',
+        borderColor: btn.style.borderColor || (variant === 'secondary' ? 'var(--border)' : variant === 'ghost' ? 'var(--border-subtle)' : 'transparent'),
         transform: 'none'
       };
       btn.addEventListener('mouseenter', function () {

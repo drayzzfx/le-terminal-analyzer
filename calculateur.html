@@ -72,7 +72,7 @@
   .risk-bar-track { height: 6px; background: var(--border-subtle); border-radius: 50px; overflow: hidden; }
   .risk-bar-fill { height: 100%; border-radius: 50px; transition: width .6s cubic-bezier(.4,0,.2,1); }
 
-  /* ---- Tips ICT ---- */
+  /* ---- Tips ---- */
   .tips-title { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; }
   .tip-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-body); line-height: 1.6; }
   .tip-item:last-child { border: none; }
@@ -94,33 +94,35 @@
     </a>
     <nav class="lt-nav__links">
       <div class="lt-nav__drop">
-        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <button class="lt-nav__droptrigger" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="lt-nav__menu">
-          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
-          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
-          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
-          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Trading Journal">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Economic Calendar">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Pip Calculator">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
         </div>
       </div>
-      <a href="./tarifs.html">Tarifs</a>
-      <a href="./index.html#method">Méthode</a>
-      <a href="./index.html#community">Communauté</a>
+      <a href="./patrimoine-presentation.html" data-en="Wealth">Patrimoine</a>
+      <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
+      <a href="./index.html#method" data-en="Method">Méthode</a>
+      <a href="./index.html#community" data-en="Community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
     </nav>
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
-      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())" data-en="Sign in">Connexion</button>
       <div id="ltUserBar"></div>
-      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'">Accès Premium</button>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'" data-en="Premium Access">Accès Premium</button>
     </div>
   </header>
 </div>
 
 <!-- ============ MOBILE DOCK ============ -->
 <nav class="lt-dock lt-dock--mobile-only" aria-label="Pages">
-  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl">Accueil</span></a>
+  <a class="lt-dock__item" href="./index.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg><span class="lt-dock__lbl" data-en="Home">Accueil</span></a>
   <a class="lt-dock__item" href="./journal.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span class="lt-dock__lbl">Journal</span></a>
-  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl">Éco</span></a>
+  <a class="lt-dock__item" href="./calendrier.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg><span class="lt-dock__lbl" data-en="Eco">Éco</span></a>
   <a class="lt-dock__item" href="./app.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span class="lt-dock__lbl">Analyzer</span></a>
   <a class="lt-dock__item" href="./bubble.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg><span class="lt-dock__lbl">Bubble</span></a>
   <a class="lt-dock__item is-active" href="./calculateur.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg><span class="lt-dock__lbl">Pips</span></a>
@@ -131,7 +133,7 @@
 
   <!-- SIDEBAR -->
   <aside class="side">
-    <span class="side__label">Outils</span>
+    <span class="side__label" data-en="Tools">Outils</span>
     <a class="side__item" href="./journal.html"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg></span>Journal</a>
     <a class="side__item" href="./calendrier.html"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg></span>Calendrier Éco</a>
     <a class="side__item" href="./app.html"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg></span>Setup Analyzer</a>
@@ -139,18 +141,18 @@
     <a class="side__item is-active" href="./calculateur.html"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg></span>Calculateur</a>
     <div class="side__spacer"></div>
     <div class="side__pro">
-      <h4>Accès Premium</h4>
-      <p>Analyses illimitées, journal complet et alertes macro en direct.</p>
-      <button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href='./tarifs.html'">Passer Premium</button>
+      <h4 data-en="Premium Access">Accès Premium</h4>
+      <p data-en="Unlimited analyses, full journal and live macro alerts.">Analyses illimitées, journal complet et alertes macro en direct.</p>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href='./tarifs.html'" data-en="Go Premium">Passer Premium</button>
     </div>
   </aside>
 
   <!-- MAIN -->
   <div class="main">
     <div class="top">
-      <div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b>Calculateur de Pips</b></div>
+      <div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b data-en="Pip Calculator">Calculateur de Pips</b></div>
       <div class="top__right">
-        <span class="top__status"><span class="lt-dot"></span> Marché ouvert</span>
+        <span class="top__status" data-en="<span class='lt-dot'></span> Market open"><span class="lt-dot"></span> Marché ouvert</span>
         <span class="top__avatar">TR</span>
       </div>
     </div>
@@ -158,9 +160,9 @@
     <div class="content">
       <!-- PAGE HEAD -->
       <div class="page-head">
-        <span class="eyebrow"><span class="lt-dot"></span> Gestion du risque</span>
-        <h1>Calculateur de Pips</h1>
-        <p>Taille de position exacte, valeur du pip, risque en devise et R:R — calculé en direct depuis tes paramètres. 30+ paires, autocomplete, simulateur d'objectif et breakeven.</p>
+        <span class="eyebrow" data-en="<span class='lt-dot'></span> Risk management"><span class="lt-dot"></span> Gestion du risque</span>
+        <h1 data-en="Pip Calculator">Calculateur de Pips</h1>
+        <p data-en="Exact position size, pip value, currency risk and R:R — computed live from your inputs. 30+ pairs, autocomplete, target simulator and breakeven.">Taille de position exacte, valeur du pip, risque en devise et R:R — calculé en direct depuis tes paramètres. 30+ paires, autocomplete, simulateur d'objectif et breakeven.</p>
       </div>
 
       <div class="calc-grid">
@@ -169,10 +171,10 @@
 
           <!-- Paramètres -->
           <div class="panel calc-form">
-            <span class="panel__title">Paramètres</span>
+            <span class="panel__title" data-en="Parameters">Paramètres</span>
 
             <div>
-              <span class="field-mini-label">Paire / Actif</span>
+              <span class="field-mini-label" data-en="Pair / Asset">Paire / Actif</span>
               <div class="pair-grid" id="pairGrid">
                 <button class="pair-btn active" onclick="selectPair('XAUUSD')">XAUUSD</button>
                 <button class="pair-btn" onclick="selectPair('EURUSD')">EURUSD</button>
@@ -193,14 +195,14 @@
 
             <div class="calc-row">
               <label class="calc-field">
-                <span class="calc-field__label">Taille du compte</span>
+                <span class="calc-field__label" data-en="Account size">Taille du compte</span>
                 <div class="calc-field__wrap">
                   <input class="calc-input" id="accountSize" type="number" value="10000" min="1" oninput="calculate()">
                   <span class="calc-field__suffix" id="curUnit">€</span>
                 </div>
               </label>
               <label class="calc-field">
-                <span class="calc-field__label">SL en pips</span>
+                <span class="calc-field__label" data-en="SL in pips">SL en pips</span>
                 <div class="calc-field__wrap">
                   <input class="calc-input" id="slPips" type="number" value="20" min="1" oninput="calculate()">
                   <span class="calc-field__suffix">pips</span>
@@ -212,11 +214,11 @@
               <div class="risk-display">
                 <div>
                   <div class="risk-val" id="riskDisplay">1%</div>
-                  <div class="risk-label">du capital</div>
+                  <div class="risk-label" data-en="of capital">du capital</div>
                 </div>
                 <div style="text-align:right">
                   <div style="font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:22px;font-weight:600;color:var(--text-body)" id="riskAmount">—</div>
-                  <div class="risk-label">risqué</div>
+                  <div class="risk-label" data-en="at risk">risqué</div>
                 </div>
               </div>
               <input type="range" id="riskSlider" min="0.1" max="5" step="0.1" value="1" oninput="onRiskSlide(this.value)">
@@ -232,19 +234,19 @@
 
           <!-- Calcul par prix -->
           <div class="panel calc-form">
-            <span class="panel__title">Calcul par prix (optionnel)</span>
+            <span class="panel__title" data-en="Price-based calculation (optional)">Calcul par prix (optionnel)</span>
             <div class="dir-toggle">
               <button class="dir-btn long active" id="dirLong" onclick="setDir('long')">▲ LONG</button>
               <button class="dir-btn short" id="dirShort" onclick="setDir('short')">▼ SHORT</button>
             </div>
             <div class="calc-row">
-              <label class="calc-field"><span class="calc-field__label">Prix d'entrée</span>
+              <label class="calc-field"><span class="calc-field__label" data-en="Entry price">Prix d'entrée</span>
                 <div class="calc-field__wrap"><input class="calc-input" id="entryPrice" type="number" placeholder="1.08500" step="any" autocomplete="off" oninput="calcPriceToSL()"></div>
               </label>
-              <label class="calc-field"><span class="calc-field__label">Stop Loss prix</span>
+              <label class="calc-field"><span class="calc-field__label" data-en="Stop Loss price">Stop Loss prix</span>
                 <div class="calc-field__wrap"><input class="calc-input" id="slPrice" type="number" placeholder="1.08200" step="any" autocomplete="off" oninput="calcPriceToSL()"></div>
               </label>
-              <label class="calc-field"><span class="calc-field__label">Take Profit prix</span>
+              <label class="calc-field"><span class="calc-field__label" data-en="Take Profit price">Take Profit prix</span>
                 <div class="calc-field__wrap"><input class="calc-input" id="tpPrice" type="number" placeholder="1.09100" step="any" autocomplete="off" oninput="calcRR()"></div>
               </label>
             </div>
@@ -254,18 +256,18 @@
 
           <!-- Breakeven & Simulateur -->
           <div class="panel calc-form" id="breakevenSection">
-            <span class="panel__title">Breakeven &amp; Simulateur</span>
+            <span class="panel__title" data-en="Breakeven &amp; Simulator">Breakeven &amp; Simulateur</span>
             <div class="calc-row">
-              <label class="calc-field"><span class="calc-field__label">Nb de trades / semaine</span>
+              <label class="calc-field"><span class="calc-field__label" data-en="Trades / week">Nb de trades / semaine</span>
                 <div class="calc-field__wrap"><input class="calc-input" id="simTrades" type="number" placeholder="5" min="1" autocomplete="off" oninput="runSimulator()"></div>
               </label>
-              <label class="calc-field"><span class="calc-field__label">Objectif (€ ou R)</span>
+              <label class="calc-field"><span class="calc-field__label" data-en="Target (€ or R)">Objectif (€ ou R)</span>
                 <div class="calc-field__wrap"><input class="calc-input" id="simTarget" type="number" placeholder="500" min="1" autocomplete="off" oninput="runSimulator()"><span class="calc-field__suffix" id="simUnit">€</span></div>
               </label>
             </div>
             <div id="simResult" style="display:none;background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:var(--r-md);padding:12px;font-size:13px;line-height:1.7;color:var(--text-body)"></div>
             <div style="margin-top:4px">
-              <span class="field-mini-label">Breakeven (seuil de rentabilité)</span>
+              <span class="field-mini-label" data-en="Breakeven (profitability threshold)">Breakeven (seuil de rentabilité)</span>
               <div id="breakevenResult" style="background:var(--neutral-glow);border:1px solid rgba(232,194,104,0.3);border-radius:var(--r-md);padding:12px;font-size:13px;color:var(--text-body);line-height:1.7"></div>
             </div>
           </div>
@@ -274,7 +276,7 @@
         <!-- ============ COLONNE SORTIE ============ -->
         <div class="calc-out">
           <div class="panel" id="resultCard" style="flex-direction:column;gap:18px">
-            <span class="panel__title">Position recommandée</span>
+            <span class="panel__title" data-en="Recommended position">Position recommandée</span>
             <div>
               <div class="calc-lots">
                 <span class="calc-lots__val" id="resLot">—</span>
@@ -284,37 +286,39 @@
             </div>
             <div class="calc-results">
               <div class="calc-result">
-                <span class="calc-result__k">Montant risqué</span>
+                <span class="calc-result__k" data-en="Amount at risk">Montant risqué</span>
                 <span class="calc-result__v" id="resMontant" style="color:var(--bear)">—</span>
-                <span style="font-size:10px;color:var(--text-muted)" id="resMontantSub">sur ce trade</span>
+                <span style="font-size:10px;color:var(--text-muted)" id="resMontantSub" data-en="on this trade">sur ce trade</span>
               </div>
               <div class="calc-result">
-                <span class="calc-result__k">Valeur pip</span>
+                <span class="calc-result__k" data-en="Pip value">Valeur pip</span>
                 <span class="calc-result__v" id="resPipVal">—</span>
                 <span style="font-size:10px;color:var(--text-muted)" id="resPipNote"></span>
               </div>
               <div class="calc-result">
-                <span class="calc-result__k">Paire</span>
+                <span class="calc-result__k" data-en="Pair">Paire</span>
                 <span class="calc-result__v" id="resPair">—</span>
               </div>
               <div class="calc-result">
-                <span class="calc-result__k">Distance SL</span>
+                <span class="calc-result__k" data-en="SL distance">Distance SL</span>
                 <span class="calc-result__v" id="resSL">—</span>
               </div>
             </div>
             <div class="risk-bar-wrap">
-              <div class="risk-bar-label"><span>Risque capital</span><span id="resRiskPct">—</span></div>
+              <div class="risk-bar-label"><span data-en="Capital at risk">Risque capital</span><span id="resRiskPct">—</span></div>
               <div class="risk-bar-track"><div class="risk-bar-fill" id="riskBarFill" style="width:0%"></div></div>
             </div>
           </div>
 
           <!-- Tips -->
           <div class="panel">
-            <div class="tips-title">Règles de gestion du risque ICT</div>
-            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><span>Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les pros restent souvent sous 1%.</span></div>
-            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 20h18L3 4z"/><path d="M7 16h2M9.5 12h1.5"/></svg></span><span>Ton SL doit être placé sous/sur un niveau de structure logique (OB, FVG, swing) — jamais un montant fixe en pips.</span></div>
-            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span>Pour un RR de 2:1 minimum, ton TP doit valoir au moins 2× la distance du SL. Base d'une espérance positive.</span></div>
-            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span><span>Ajuste toujours ta taille de position en fonction du SL — le lot découle du risque, jamais l'inverse.</span></div>
+            <div class="tips-title" data-en="Risk management rules">Règles de gestion du risque</div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><span data-en="Never risk more than <strong>1-2%</strong> of your capital per trade. Pros often stay under 1%.">Ne risque jamais plus de <strong>1-2%</strong> de ton capital par trade. Les pros restent souvent sous 1%.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 20h18L3 4z"/><path d="M7 16h2M9.5 12h1.5"/></svg></span><span data-en="Place your SL beyond a logical level (support/resistance, swing, recent high or low) — never an arbitrary fixed pip amount.">Place ton SL au-delà d'un niveau logique (support/résistance, swing, plus haut ou bas récent) — jamais un montant fixe arbitraire en pips.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span data-en="For a minimum 2:1 RR, your TP must be worth at least 2× the SL distance. The basis of a positive expectancy.">Pour un RR de 2:1 minimum, ton TP doit valoir au moins 2× la distance du SL. Base d'une espérance positive.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span><span data-en="Always size your position from the SL — the lot follows the risk, never the other way around.">Ajuste toujours ta taille de position en fonction du SL — le lot découle du risque, jamais l'inverse.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 2 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span><span data-en="Set a max daily loss (e.g. 3%) and stop trading once you hit it — protect your capital and your mindset.">Fixe une perte maximale par jour (ex. 3%) et arrête de trader une fois atteinte — protège ton capital et ton mental.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></span><span data-en="Never widen your stop to avoid a loss: accept the risk you defined at entry. No revenge trading.">Ne déplace jamais ton stop pour éviter une perte : accepte le risque défini à l'entrée. Pas de revenge trading.</span></div>
           </div>
         </div>
       </div>

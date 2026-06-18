@@ -6,43 +6,49 @@ const https = require('https');
 // ── SOURCES RSS PAR ZONE ──────────────────────────────────────────────────────
 const SOURCES = {
   europe: [
-    { name: 'La Tribune',        url: 'https://www.latribune.fr/rss/une.xml' },
-    { name: 'Financial Times',   url: 'https://www.ft.com/rss/home/europe' },
-    { name: 'Les Échos',         url: 'https://www.lesechos.fr/rss/rss_une.xml' },
-    { name: 'Le Monde Économie', url: 'https://www.lemonde.fr/economie/rss_full.xml' },
+    { name: 'Les Échos',            url: 'https://www.lesechos.fr/rss/rss_une.xml' },
+    { name: 'La Tribune',           url: 'https://www.latribune.fr/rss/une.xml' },
+    { name: 'Le Monde Économie',    url: 'https://www.lemonde.fr/economie/rss_full.xml' },
+    { name: 'ING Think',            url: 'https://think.ing.com/rss/' },
   ],
   ameriques: [
-    { name: 'CNBC Economy',      url: 'https://www.cnbc.com/id/20910258/device/rss/rss.html' },
-    { name: 'MarketWatch',       url: 'https://feeds.marketwatch.com/marketwatch/topstories/' },
-    { name: 'AP Business',       url: 'https://feeds.apnews.com/rss/apf-business' },
+    { name: 'CNBC Economy',         url: 'https://www.cnbc.com/id/20910258/device/rss/rss.html' },
+    { name: 'MarketWatch',          url: 'https://feeds.marketwatch.com/marketwatch/topstories/' },
+    { name: 'Yahoo Finance',        url: 'https://finance.yahoo.com/news/rssindex' },
   ],
   asie: [
-    { name: 'SCMP Business',     url: 'https://www.scmp.com/rss/91/feed' },
-    { name: 'Nikkei Asia',       url: 'https://asia.nikkei.com/rss/feed/nar' },
+    { name: 'SCMP Business',        url: 'https://www.scmp.com/rss/91/feed' },
+    { name: 'Nikkei Asia',          url: 'https://asia.nikkei.com/rss/feed/nar' },
   ],
   institutions: [
-    { name: 'BCE',               url: 'https://www.ecb.europa.eu/rss/press.html' },
-    { name: 'FMI',               url: 'https://www.imf.org/external/np/exr/rss/news.xml' },
-    { name: 'Banque de France',  url: 'https://www.banque-france.fr/fr/rss.xml' },
-    { name: 'Fed',               url: 'https://www.federalreserve.gov/feeds/press_all.xml' },
-    { name: 'BIS',               url: 'https://www.bis.org/rss/press.rss' },
+    { name: 'BCE',                  url: 'https://www.ecb.europa.eu/rss/press.html' },
+    { name: 'Fed',                  url: 'https://www.federalreserve.gov/feeds/press_all.xml' },
+    { name: 'FMI',                  url: 'https://www.imf.org/external/np/exr/rss/news.xml' },
+    { name: 'Banque de France',     url: 'https://www.banque-france.fr/fr/rss.xml' },
+    { name: 'BIS',                  url: 'https://www.bis.org/rss/press.rss' },
+    { name: 'Central Bank News',    url: 'https://www.centralbanknews.info/feeds/posts/default?alt=rss' },
   ],
   marches: [
-    { name: 'Investing.com News',url: 'https://www.investing.com/rss/news.rss' },
-    { name: 'FXStreet',          url: 'https://www.fxstreet.com/rss/news' },
-    { name: 'ForexFactory',      url: 'https://forexfactory.com/ff_calendar_thisweek.xml' },
+    { name: 'Investing.com',        url: 'https://www.investing.com/rss/news.rss' },
+    { name: 'FXStreet',             url: 'https://www.fxstreet.com/rss/news' },
+    { name: 'Financial Juice',      url: 'https://www.financialjuice.com/feed.ashx?xy=rss' },
+    { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed' },
+  ],
+  international: [
+    { name: 'Le Monde International',  url: 'https://www.lemonde.fr/international/rss_full.xml' },
+    { name: 'The Guardian — Monde',    url: 'https://www.theguardian.com/world/rss' },
+    { name: 'The Guardian — Business', url: 'https://www.theguardian.com/uk/business/rss' },
   ],
   crypto: [
-    { name: 'Cointelegraph',     url: 'https://cointelegraph.com/rss' },
-    { name: 'Decrypt',           url: 'https://decrypt.co/feed' },
-    { name: 'Bitcoin Magazine',  url: 'https://bitcoinmagazine.com/.rss/full/' },
-    { name: 'The Block',         url: 'https://www.theblock.co/rss.xml' },
+    { name: 'Cointelegraph',        url: 'https://cointelegraph.com/rss' },
+    { name: 'Decrypt',              url: 'https://decrypt.co/feed' },
+    { name: 'Bitcoin Magazine',     url: 'https://bitcoinmagazine.com/.rss/full/' },
+    { name: 'The Block',            url: 'https://www.theblock.co/rss.xml' },
   ],
-  // Zone flash : sources spécialisées dans le breaking news marché
   flash: [
-    { name: 'ZeroHedge',        url: 'https://feeds.feedburner.com/zerohedge/feed' },
-    { name: 'ForexLive',        url: 'https://www.forexlive.com/feed/news' },
-    { name: 'Reuters Business', url: 'https://feeds.reuters.com/reuters/businessNews' },
+    { name: 'Financial Juice',      url: 'https://www.financialjuice.com/feed.ashx?xy=rss' },
+    { name: 'InvestingLive',        url: 'https://www.investinglive.com/feed' },
+    { name: 'ZeroHedge',            url: 'https://feeds.feedburner.com/zerohedge/feed' },
   ],
 };
 
@@ -142,7 +148,7 @@ async function logFeedError(source, url, error) {
 // Pour la zone "flash" : champ supplémentaire market_moving (50+ pts SP500/DAX/Nasdaq)
 async function getSummaryAndSentiment(title, desc, zone) {
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) return { summary: '', summary_en: '', sentiment: 'Neutre', market_moving: true };
+  if (!ANTHROPIC_API_KEY) return { title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', market_moving: true, important: true };
 
   const isFlash = zone === 'flash';
   const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 400);
@@ -161,15 +167,22 @@ Zone : ${zone}
 
 Réponds UNIQUEMENT en JSON strict, sans markdown :
 {
+  "title_fr": "<le titre traduit en FRANÇAIS naturel, fidèle et concis — pas de traduction mot-à-mot, garde les noms propres/tickers/sigles tels quels>",
+  "title_en": "<the headline in ENGLISH>",
   "summary_fr": "<résumé factuel 1-2 phrases en FRANÇAIS>",
   "summary_en": "<same 1-2 sentences in ENGLISH>",
-  "sentiment": "<Positif|Négatif|Neutre>"${flashField}
+  "sentiment": "<Positif|Négatif|Neutre>",
+  "important": <true|false>${flashField}
 }
+
+Règle titre : "title_fr" DOIT être en français correct, même si le titre d'origine est en anglais. Si le titre est déjà en français, recopie-le tel quel. "title_en" = la version anglaise du même titre.
 
 Règles sentiment :
 - Positif : données meilleures qu'attendu, hausse marchés, accord commercial, croissance, emploi fort
 - Négatif : données décevantes, baisse marchés, crise, récession, conflit, faillite
-- Neutre : statu quo, publication sans surprise, déclaration sans impact clair${flashExtra}`;
+- Neutre : statu quo, publication sans surprise, déclaration sans impact clair
+
+Règle "important" : true UNIQUEMENT si l'annonce est vraiment significative pour un trader (macro, banque centrale, donnée clé CPI/NFP/PIB/emploi/inflation, décision de taux, mouvement de marché notable, géopolitique à impact, résultats majeurs). false pour : opinion/édito, sujet de société, marronnier, contenu promo/sponsorisé, sujet déjà connu sans nouveauté, info mineure.${flashExtra}`;
 
   const payload = JSON.stringify({
     model: 'claude-haiku-4-5',
@@ -200,15 +213,18 @@ Règles sentiment :
           let sentiment = parsed.sentiment || 'Neutre';
           if (!['Positif','Négatif','Neutre'].includes(sentiment)) sentiment = 'Neutre';
           resolve({
+            title_fr:     parsed.title_fr || '',
+            title_en:     parsed.title_en || '',
             summary:      parsed.summary_fr || parsed.summary || '',
             summary_en:   parsed.summary_en || '',
             sentiment,
             market_moving: parsed.market_moving !== false, // true par défaut pour zones non-flash
+            important: parsed.important !== false, // true par défaut si non précisé
           });
-        } catch(e) { resolve({ summary: '', summary_en: '', sentiment: 'Neutre' }); }
+        } catch(e) { resolve({ title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', important: true }); }
       });
     });
-    req.on('error', () => resolve({ summary: '', summary_en: '', sentiment: 'Neutre' }));
+    req.on('error', () => resolve({ title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', important: true }));
     req.write(payload);
     req.end();
   });
@@ -243,14 +259,16 @@ module.exports = async function handler(req, res) {
             if (age > 48 * 3600 * 1000) { stats.skipped++; continue; }
           }
 
-          const { summary, summary_en, sentiment, market_moving } = await getSummaryAndSentiment(item.title, item.desc, zone);
+          const { title_fr, title_en, summary, summary_en, sentiment, market_moving, important } = await getSummaryAndSentiment(item.title, item.desc, zone);
 
-          // Zone flash : filtre strict — uniquement les annonces pouvant bouger les marchés de 50+ pts
-          if (zone === 'flash' && !market_moving) { stats.skipped++; continue; }
+          // Filtre qualité : flash = market-moving 50+ pts ; autres zones = seulement les annonces significatives
+          if (zone === 'flash' ? !market_moving : !important) { stats.skipped++; continue; }
 
-          await insertNewsItem({
+          const ins = await insertNewsItem({
             guid: item.guid,
-            title: item.title,
+            // title = version française (traduite à l'ingestion), stockée dans la
+            // colonne existante. Pas de colonne supplémentaire → aucune migration.
+            title: title_fr || item.title,
             summary:    summary    || item.desc.replace(/<[^>]+>/g,'').slice(0,200),
             summary_en: summary_en || '',
             source: source.name,
@@ -259,7 +277,13 @@ module.exports = async function handler(req, res) {
             zone,
             sentiment,
           });
-          stats.inserted++;
+          // On ne compte « inséré » que si Supabase a vraiment accepté la ligne.
+          if (ins && ins.status >= 400) {
+            stats.skipped++;
+            stats.errors.push(`insert ${zone}/${source.name}: ${ins.status} ${JSON.stringify(ins.body).slice(0, 160)}`);
+          } else {
+            stats.inserted++;
+          }
 
           await new Promise(r => setTimeout(r, 300));
         }

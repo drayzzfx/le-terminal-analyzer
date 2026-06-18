@@ -47,28 +47,23 @@ module.exports = async function handler(req, res) {
     const userEmail = userRes.body.email || '';
 
     if (req.method === 'GET') {
-      const r = await supabaseRequest('GET', `/rest/v1/user_profiles?id=eq.${userId}&select=first_name,last_name,pseudo,avatar_url,trial_start,is_pro`, null, SERVICE_KEY, SERVICE_KEY);
+      const r = await supabaseRequest('GET', `/rest/v1/user_profiles?id=eq.${userId}&select=*`, null, SERVICE_KEY, SERVICE_KEY);
       const profile = Array.isArray(r.body) ? r.body[0] : null;
-      return res.status(200).json(profile || {});
+      return res.status(200).json(Object.assign({ email: userEmail }, profile || {}));
     }
 
     if (req.method === 'PATCH') {
-      const { first_name, last_name, pseudo, avatar_url, trial_start } = req.body || {};
-      const patch = {};
-      if (first_name !== undefined) patch.first_name = first_name;
-      if (last_name  !== undefined) patch.last_name  = last_name;
-      if (pseudo     !== undefined) patch.pseudo     = pseudo;
-      if (avatar_url !== undefined) patch.avatar_url = avatar_url;
-      if (trial_start !== undefined) patch.trial_start = trial_start;
-
-      // Upsert: insert or update on conflict (id)
-      const upsertBody = { id: userId, email: userEmail, ...patch };
-      const r = await supabaseRequest('POST', '/rest/v1/user_profiles', upsertBody, SERVICE_KEY, SERVICE_KEY);
+      const b = req.body || {};
+      const allowed = ['first_name', 'last_name', 'pseudo', 'avatar_url', 'trial_start'];
+      const fields = {};
+      allowed.forEach(k => { if (b[k] !== undefined) fields[k] = b[k]; });
+      // Tente l'insertion (nouveau profil), sinon mise à jour
+      const r = await supabaseRequest('POST', '/rest/v1/user_profiles',
+        Object.assign({ id: userId, email: userEmail }, fields), SERVICE_KEY, SERVICE_KEY);
       if (r.status >= 400) {
-        // Fallback: plain PATCH
-        const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, patch, SERVICE_KEY, SERVICE_KEY);
-        if (u.status >= 400) return res.status(500).json({ error: 'Save failed', detail: u.body });
-        return res.status(200).json(Array.isArray(u.body) ? u.body[0] : {});
+        const u = await supabaseRequest('PATCH', `/rest/v1/user_profiles?id=eq.${userId}`, fields, SERVICE_KEY, SERVICE_KEY);
+        if (u.status >= 400) return res.status(500).json({ error: 'save_failed', detail: u.body });
+        return res.status(200).json(Array.isArray(u.body) ? u.body[0] : (u.body || {}));
       }
       return res.status(200).json(Array.isArray(r.body) ? r.body[0] : {});
     }

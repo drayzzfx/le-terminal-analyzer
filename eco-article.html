@@ -6,7 +6,7 @@
 <title>Le Terminal — Analyse</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./eco.css">
 <style>
@@ -25,12 +25,12 @@
 /* ═══════════════════════════════════════════════════
    LAYOUT
 ═══════════════════════════════════════════════════ */
-.art-page { max-width: 860px; margin: 0 auto; padding-bottom: 100px; }
+.art-page { max-width: 1140px; margin: 0 auto; padding-bottom: 100px; }
 
 /* ── Bouton retour ─────────────────────────────── */
 .art-back-bar {
   padding: 18px 28px 0;
-  max-width: 860px; margin: 0 auto;
+  max-width: 1140px; margin: 0 auto;
 }
 .art-back {
   display: inline-flex; align-items: center; gap: 6px;
@@ -115,7 +115,7 @@
 .art-hero__lead {
   font-size: 14px; line-height: 1.65;
   color: rgba(255,255,255,0.75);
-  max-width: 640px;
+  max-width: 820px;
   font-weight: 300;
 }
 
@@ -233,15 +233,15 @@
   background: linear-gradient(135deg, rgba(127,184,232,0.06), rgba(74,222,156,0.04));
   border: 1px solid rgba(127,184,232,0.18); border-radius: 16px;
   padding: 22px 28px;
-  font-family: var(--display);
-  font-size: 17px; font-weight: 700; line-height: 1.4;
+  font-family: var(--font-text, 'Inter', system-ui, sans-serif);
+  font-size: 17px; font-weight: 600; line-height: 1.5;
   color: var(--text); text-align: center;
   position: relative; overflow: hidden;
 }
 .art-conclusion::before {
   content: '"'; position: absolute; top: -10px; left: 16px;
-  font-size: 80px; color: rgba(127,184,232,0.08);
-  font-family: Georgia, serif; line-height: 1;
+  font-size: 80px; color: rgba(127,184,232,0.10);
+  font-family: var(--font-display, 'Anton'), sans-serif; line-height: 1;
 }
 
 /* ── Source CTA ─────────────────────────────────── */
@@ -283,6 +283,28 @@
 .art-skel-line--title { height: 28px; width: 80%; margin: 16px 0 20px; }
 .art-skel-line--short { width: 45%; }
 .art-skel-line--med   { width: 70%; }
+
+/* ── Alignement design system « Cinematic Luxury » (rayons nets) ── */
+.art-back { border-radius: var(--r-sm,4px); }
+.art-hero { border-radius: var(--r-lg,10px); }
+.art-hero__zone, .art-hero__source, .art-hero__time { border-radius: var(--r-sm,4px); }
+.art-metrics { border-radius: 0 0 var(--r-lg,10px) var(--r-lg,10px); }
+.art-section { border-radius: var(--r-lg,10px); }
+.art-skel, .art-skel-line--h { border-radius: var(--r-lg,10px); }
+/* Bouton « source » : pleine largeur + style primaire plat (DS) */
+.art-source-cta { display: block; padding: 18px 0 4px; }
+.art-source-cta .btn {
+  display: flex; width: 100%; box-sizing: border-box; align-items: center; justify-content: center; gap: 10px;
+  background: var(--accent,#7FB8E8); background-image: none; color: #07090C;
+  border: 1px solid transparent; border-radius: var(--r-sm,4px);
+  padding: 15px 20px; font-family: var(--font-text,'Inter'),sans-serif; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em; font-size: 13px;
+  box-shadow: 0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)), 0 8px 28px var(--accent-glow,rgba(127,184,232,.35));
+}
+.art-source-cta .btn:hover {
+  background: var(--accent-bright,#BFDCF5); transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)), 0 12px 32px var(--accent-glow,rgba(127,184,232,.35));
+}
 </style>
 </head>
 <body class="eco-page">
@@ -296,24 +318,26 @@
     </a>
     <nav class="lt-nav__links">
       <div class="lt-nav__drop">
-        <button class="lt-nav__droptrigger">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+        <button class="lt-nav__droptrigger" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="lt-nav__menu">
-          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="./journal.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Score IA de ton setup</span></a>
-          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Flux de capitaux en direct</span></a>
-          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="./app.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de ton setup</span></a>
+          <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
         </div>
       </div>
-      <a href="./tarifs.html">Tarifs</a>
-      <a href="./index.html#method">Méthode</a>
-      <a href="./index.html#community">Communauté</a>
+      <a href="./patrimoine-presentation.html" data-en="Wealth">Patrimoine</a>
+      <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
+      <a href="./index.html#method" data-en="Method">Méthode</a>
+      <a href="./index.html#community" data-en="Community">Communauté</a>
+      <a href="./avis.html" data-en="Reviews">Avis</a>
     </nav>
     <div class="lt-nav__actions">
       <span class="lt-nav__pill" title="Langue / Menu" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
-      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())">Connexion</button>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():(window.ltToggleLang&&ltToggleLang())" data-en="Sign in">Connexion</button>
       <div id="ltUserBar"></div>
-      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'">Accès Premium</button>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" onclick="location.href='./tarifs.html'" data-en="Premium Access">Accès Premium</button>
     </div>
   </header>
 </div>
@@ -609,7 +633,7 @@
     root.innerHTML = '<div class="art-loading">'
       + '<div class="art-spinner"></div>'
       + '<p>'+(l==='en'?'Generating analysis…':'Génération de l\'analyse…')+'<br>'
-      + '<small>'+(l==='en'?'Claude is reading the article for you.':'Claude analyse l\'article pour vous.')+'</small></p>'
+      + '<small>'+(l==='en'?'Le Terminal is analysing the article for you.':'Le Terminal analyse l\'article pour toi.')+'</small></p>'
       + '</div>';
   }
 

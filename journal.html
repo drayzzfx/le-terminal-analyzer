@@ -368,6 +368,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
           <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Pip Calculator">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
         </div>
       </div>
+      <a href="./patrimoine-presentation.html" data-en="Wealth">Patrimoine</a>
       <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
       <a href="./index.html#method" data-en="Method">Méthode</a>
       <a href="./index.html#community" data-en="Community">Communauté</a>
@@ -458,15 +459,8 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .cal-title,.cal-month{font-family:var(--font-mono,'JetBrains Mono',monospace)!important;font-size:12px!important;letter-spacing:.12em!important;text-transform:uppercase!important;color:var(--text-muted,#7E8794)!important;font-weight:500!important}
   /* Boutons bas de page — intégrés au design */
   .broker-banner{background:var(--bg-elevated,rgba(255,255,255,.02))!important;border:1px solid var(--border-subtle,rgba(255,255,255,.08))!important;border-radius:var(--r-lg,16px)!important}
-  .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.05em!important;border:1px solid transparent!important;border-radius:var(--r-sm,6px)!important;box-shadow:0 0 0 1px rgba(127,184,232,.3),0 6px 20px rgba(127,184,232,.22)!important;transition:all .15s!important;padding:12px 14px!important;width:100%!important;margin-bottom:8px!important}
-  .add-trade-btn:hover{background:#BFDCF5!important;color:#07090C!important;transform:translateY(-1px)}
-  .import-mt5-btn{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm,6px);color:var(--text2,#A8B4C4);font-family:var(--font-text,'Inter',sans-serif);font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-  .import-mt5-btn:hover{background:rgba(127,184,232,.08);border-color:rgba(127,184,232,.28);color:var(--accent,#7FB8E8)}
-  .broker-soon-panel{background:rgba(22,27,36,.7);border:1px solid rgba(255,255,255,.06);border-radius:var(--r-sm,6px);padding:14px 16px;margin-top:10px;display:flex;flex-direction:column;gap:6px}
-  .broker-soon-panel .soon-badge{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono','Courier New',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3,#4A5568);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:2px 8px;width:fit-content}
-  .broker-soon-panel .soon-title{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12.5px;font-weight:600;color:var(--text2,#A8B4C4)}
-  .broker-soon-panel .soon-sub{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:11px;color:var(--text3,#4A5568);line-height:1.55}
-  .broker-soon-btn{width:100%;padding:9px 14px;background:transparent;border:1px solid rgba(255,255,255,.07);border-radius:var(--r-sm,6px);color:var(--text3,#4A5568);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:6px;opacity:.5}
+  .add-trade-btn{background:var(--accent,#7FB8E8)!important;color:#07090C!important;font-family:var(--font-text,'Inter',sans-serif)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.04em!important;border:1px solid transparent!important;border-radius:var(--r-sm,10px)!important;box-shadow:0 0 0 1px var(--accent-glow,rgba(127,184,232,.35)),0 8px 28px var(--accent-glow,rgba(127,184,232,.35))!important;transition:all .15s!important}
+  .add-trade-btn:hover{background:var(--accent-bright,#BFDCF5)!important;transform:translateY(-1px)}
   /* ── Modales : alignées sur le design system « Cinematic Luxury » (rayons nets, boutons plats, hairline, ombres froides) ── */
   .modal-box,.detail-box,.broker-modal{background:var(--bg-elevated,#161B24)!important;border:1px solid var(--border-subtle,#1C212A)!important;border-radius:var(--r-lg,10px)!important;box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(127,184,232,.06)!important}
   .confirm-box{background:var(--bg-elevated,#161B24)!important;border:1px solid var(--border-subtle,#1C212A)!important;border-radius:var(--r-lg,10px)!important}
@@ -500,36 +494,13 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <span class="jr-panel__title" data-en="Equity curve">Courbe d'équité</span>
         <canvas id="jrEquity" class="jr-eq"></canvas>
       </div>
-
-      <!-- ADD TRADE + IMPORT MT5 buttons -->
-      <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
-      <button class="import-mt5-btn" onclick="openMt5Modal()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Importer depuis MT5
-      </button>
-
-      <!-- BROKER SOON panel -->
-      <div class="broker-soon-panel">
-        <span class="soon-badge">
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Bientôt
-        </span>
-        <div class="soon-title">Connexion compte broker</div>
-        <div class="soon-sub">Sync automatique MT5, FTMO, Topstep, TradeLocker — en développement.</div>
-        <button class="broker-soon-btn" disabled>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/></svg>
-          Connecter un compte
-        </button>
-      </div>
-
-      <!-- BROKER BANNER (caché) -->
-      <div class="broker-banner disconnected" id="brokerBanner" style="display:none">
-        <div class="broker-banner-left">
-          <div class="broker-icon" id="brokerIcon"></div>
-          <div class="broker-banner-text">
-            <div class="broker-banner-title" id="brokerTitle"></div>
-            <div class="broker-banner-sub" id="brokerSub"></div>
-          </div>
+      <div class="jr-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px" id="globalIaHeader">
+          <span class="jr-panel__title" style="margin:0" data-en="AI Coach">IA Coach</span>
+          <button class="lt-btn lt-btn--primary lt-btn--sm" id="globalIaBtn" onclick="toggleGlobalIA()" data-en="Analyze">Analyser</button>
+        </div>
+        <div id="globalIaContent" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)">
+          <span style="color:var(--text3);font-size:13px" data-en="Run an analysis to see your patterns.">Lance une analyse pour voir tes patterns.</span>
         </div>
         <div class="broker-banner-actions" id="brokerActions"></div>
       </div>
@@ -553,31 +524,24 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div class="jr-tbl" id="jrRecent"><div class="jr-empty" data-en="No trades recorded yet.">Aucun trade enregistré pour l'instant.</div></div>
   </div>
 
-
-</div>
-</div>
-
-<!-- MT5 IMPORT MODAL -->
-<div class="modal-overlay" id="mt5Modal">
-  <div class="modal-box" style="max-width:560px">
-    <button class="modal-close" onclick="closeMt5Modal()">&#x2715;</button>
-    <div class="modal-title">Importer depuis MT5</div>
-    <div class="modal-sub">Dépose un screenshot de ton historique MetaTrader 5 — l'IA extrait les trades automatiquement.</div>
-    <div class="upload-zone" id="mt5DropZone" style="margin:20px 0;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer" onclick="document.getElementById('mt5FileInput').click()" ondrop="handleMt5Drop(event)" ondragover="event.preventDefault();this.style.borderColor='rgba(127,184,232,.6)'" ondragleave="this.style.borderColor='rgba(127,184,232,.3)'">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--v2,#7FB8E8)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <span style="font-size:13px;color:var(--text3)">Clique ou glisse ton screenshot MT5 ici</span>
-      <input type="file" id="mt5FileInput" accept="image/*" style="display:none" onchange="mt5FileSelected(event)">
+  <!-- BROKER BANNER -->
+  <div class="broker-banner disconnected" id="brokerBanner">
+    <div class="broker-banner-left">
+      <div class="broker-icon" id="brokerIcon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M4.9 16.1a7 7 0 0 1 0-9.9M7.8 13.2a3 3 0 0 1 0-4.2M19.1 6.2a7 7 0 0 1 0 9.9M16.2 9.1a3 3 0 0 1 0 4.2"/><circle cx="12" cy="11" r="1"/><path d="m13 12 3 9M11 12l-3 9"/></svg></div>
+      <div class="broker-banner-text">
+        <div class="broker-banner-title" id="brokerTitle" data-en="Connect your trading account">Connecte ton compte de trading</div>
+        <div class="broker-banner-sub" id="brokerSub" data-en="MT4 · MT5 · Topstep · FTMO · CSV import">MT4 · MT5 · Topstep · FTMO · Import CSV</div>
+      </div>
     </div>
-    <div id="mt5Preview" style="display:none;margin-bottom:14px">
-      <img id="mt5PreviewImg" style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.1);max-height:220px;object-fit:contain">
-    </div>
-    <div id="mt5Status" style="font-size:12.5px;color:var(--text3);min-height:18px;margin-bottom:10px"></div>
-    <div id="mt5Results" style="display:none;margin-bottom:14px;max-height:260px;overflow-y:auto"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="submit-btn" id="mt5AnalyzeBtn" onclick="analyzeMt5Screenshot()" style="display:none">Analyser l'image</button>
-      <button class="submit-btn" id="mt5ImportBtn" onclick="importMt5Trades()" style="display:none;background:linear-gradient(135deg,#4ADE9C,#2db87a);color:#07090C;box-shadow:0 0 0 1px rgba(74,222,156,.3),0 8px 24px rgba(74,222,156,.2)">Importer les trades</button>
+    <div class="broker-banner-actions" id="brokerActions">
+      <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="openBrokerModal()" data-en="Connect">Connecter</button>
     </div>
   </div>
+
+  <!-- ADD TRADE -->
+  <button class="add-trade-btn" onclick="openTradeModal()" data-en="+ Add a trade">+ Ajouter un trade</button>
+
+</div>
 </div>
 
 <!-- ADD / EDIT TRADE MODAL -->
@@ -710,20 +674,11 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div id="brokerStep1">
       <div class="modal-title" data-en="Connect an account">Connecter un compte</div>
       <div class="modal-sub" data-en="Choose your trading platform">Choisis ta plateforme de trading</div>
-
-      <!-- Prop firms — menu déroulant recherchable, connexion directe (sync auto), sans CSV -->
-      <div class="pf-firms-label" data-en="Your prop firm? Search &amp; connect (auto-sync):">Ta prop firm ? Cherche et connecte (sync auto) :</div>
-      <div class="pf-combo" id="pfCombo">
-        <input type="text" class="pf-combo__input" id="pfSearch" placeholder="Rechercher ta prop firm…" autocomplete="off">
-        <div class="pf-combo__list" id="pfDropdown"></div>
-      </div>
-      <div class="pf-firms-or" data-en="— or choose a platform —">— ou choisis une plateforme —</div>
-
       <div class="platform-grid">
         <div class="platform-card" onclick="showBrokerStep2('metaapi')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
           <div class="platform-card-name">MT4 / MT5</div>
-          <div class="platform-card-sub" data-en="Advanced · requires MetaApi">Avancé · requiert MetaApi</div>
+          <div class="platform-card-sub" data-en="Via MetaApi<br>Automatic sync">Via MetaApi<br>Sync automatique</div>
         </div>
         <div class="platform-card" onclick="showBrokerStep2('csv')">
           <div class="platform-card-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
@@ -818,13 +773,9 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <label data-en="Username">Identifiant (username)</label>
         <input type="text" id="pxUserInput" placeholder="ton_username" autocomplete="off">
       </div>
-      <div class="broker-field">
-        <label data-en="API key">Clé API</label>
-        <input type="password" id="pxKeyInput" placeholder="••••••••" autocomplete="off">
-      </div>
-      <div class="broker-error" id="pxError"></div>
-      <button class="submit-btn" id="pxSaveBtn" onclick="savePXConnection()">
-        <span id="pxSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
+      <div class="broker-error" id="brokerError"></div>
+      <button class="submit-btn" id="brokerSaveBtn" onclick="saveBrokerConnection()">
+        <span id="brokerSaveTxt" data-en="Connect and sync">Connecter et synchroniser</span>
       </button>
     </div>
 
