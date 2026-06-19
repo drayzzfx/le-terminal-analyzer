@@ -12,6 +12,13 @@
 <style>
 .mt-head{max-width:760px;margin:8px 0 28px}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(8px)}}
+#ltToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;}
+.lt-toast{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:8px;border:1px solid;font-family:Inter,sans-serif;font-size:13px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:toastIn .25s cubic-bezier(0.16,1,0.3,1) forwards;white-space:nowrap;}
+.lt-toast--warn{background:#0f1620;border-color:rgba(232,194,104,.35);color:#E8C268;}
+.lt-toast--err{background:#0f1620;border-color:rgba(240,100,122,.3);color:#F0647A;}
+.lt-toast--ok{background:#0f1620;border-color:rgba(74,222,156,.3);color:#4ADE9C;}
 .mt-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
 .mt-eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
 .mt-title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(2rem,4.5vw,3rem);line-height:1.02;letter-spacing:.01em;color:var(--text-title);margin:0 0 14px}
@@ -253,6 +260,7 @@
 </div>
 </main>
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<div id="ltToast"></div>
 <script src="./eco.js"></script>
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
@@ -281,6 +289,16 @@
 
 
   function getLang(){return localStorage.getItem('lt_lang')||'fr';}
+  function ltToast(msg, type){
+    var wrap=document.getElementById('ltToast'); if(!wrap)return;
+    var icons={warn:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',err:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',ok:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'};
+    var t=document.createElement('div');
+    t.className='lt-toast lt-toast--'+(type||'warn');
+    t.innerHTML=(icons[type||'warn']||'')+msg;
+    wrap.innerHTML=''; wrap.appendChild(t);
+    clearTimeout(wrap._tid);
+    wrap._tid=setTimeout(function(){t.style.animation='toastOut .2s ease forwards';setTimeout(function(){wrap.innerHTML='';},250);},3500);
+  }
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function nb(n){return Math.abs(Math.round(n)).toLocaleString('fr-FR');}
   function ago(m){if(m<60)return m+' min';var h=Math.round(m/60);return h+' h';}
@@ -514,7 +532,7 @@
   function publishToWall(){
     var c=compute();
     if(!c.entry||!c.exit){
-      alert('Chargez d\'abord un screenshot de trade pour publier sur le mur.');
+      ltToast('Chargez d\'abord un screenshot de trade pour publier sur le mur.','warn'); return;
       return;
     }
     var btn=document.getElementById('shLink');
@@ -541,7 +559,7 @@
       // scroll vers le mur
       document.getElementById('shGrid').scrollIntoView({behavior:'smooth',block:'start'});
     })
-    .catch(function(){btn.disabled=false;btn.style.opacity='';alert('Erreur lors de la publication.');});
+    .catch(function(){btn.disabled=false;btn.style.opacity='';ltToast('Erreur lors de la publication. Réessayez.','err');});
   }
 
   // ── Mur communautaire ──
