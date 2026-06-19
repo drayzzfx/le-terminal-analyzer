@@ -417,11 +417,7 @@
     +   '<section class="pd-card"><span class="pd-card__eyebrow" style="color:var(--bull)">Les avantages</span><ul class="pd-list pd-list--pro">'+plan.pros.map(function(p){return '<li>'+IC.check+' '+p+'</li>';}).join('')+'</ul></section>'
     +   '<section class="pd-card"><span class="pd-card__eyebrow" style="color:var(--neutral)">Points d\'attention</span><ul class="pd-list pd-list--con">'+plan.cons.map(function(p){return '<li>'+IC.alert+' '+p+'</li>';}).join('')+'</ul></section>'
     + '</div>'
-    + '<section class="pd-cta"><div class="pd-cta__glow"></div>'
-    +   '<h2 class="pd-cta__title">Prêt à lancer le plan '+plan.name+' ?</h2>'
-    +   '<p class="pd-cta__lede">Démarrez dès '+plan.minStake+', ajustez ou changez de plan à tout moment. Aucun engagement de durée.</p>'
-    +   '<div class="pd-cta__btns"><button class="lt-btn lt-btn--primary lt-btn--lg">Commencer avec ce plan</button><a class="pd-cta__ghost" href="./patrimoine.html">Comparer les plans</a></div>'
-    + '</section>';
+    + '';
 
   // ── Interactions ──
   document.getElementById('pdInitial').addEventListener('input', renderProjection);
