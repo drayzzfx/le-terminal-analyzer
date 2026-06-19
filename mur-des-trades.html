@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="./presentation.css">
 <style>
 .mt-head{max-width:760px;margin:8px 0 28px}
+@keyframes spin{to{transform:rotate(360deg)}}
 .mt-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
 .mt-eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
 .mt-title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(2rem,4.5vw,3rem);line-height:1.02;letter-spacing:.01em;color:var(--text-title);margin:0 0 14px}
@@ -155,31 +156,56 @@
   <!-- GÉNÉRATEUR -->
   <section class="gen">
     <div class="gen__form">
-      <div class="fld"><label data-en="Pair / asset">Paire / actif</label><input id="gPair" value="BTC/USD"></div>
-      <div class="fld"><label data-en="Direction">Sens</label>
-        <div class="gen__side" id="gSide">
-          <button type="button" data-side="long" class="on">Long</button>
-          <button type="button" data-side="short">Short</button>
+
+      <!-- ÉTAPE 1 : upload screenshot -->
+      <div class="fld">
+        <label>Screenshot de votre trade (MT5, TradingView, Binance…)</label>
+        <div id="gUploadZone" style="border:1.5px dashed rgba(127,184,232,.35);border-radius:8px;padding:22px 16px;text-align:center;cursor:pointer;transition:border-color .2s;background:rgba(127,184,232,.04);" onclick="document.getElementById('gScreenFile').click()">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7FB8E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-family:Inter,sans-serif;font-size:13px;color:#7FB8E8;font-weight:600">Déposez votre screenshot ici</div>
+          <div style="font-family:Inter,sans-serif;font-size:11px;color:#5a6472;margin-top:4px">PNG, JPG · Cliquez ou glissez</div>
+        </div>
+        <input type="file" id="gScreenFile" accept="image/*" style="display:none">
+        <div id="gScreenPreview" style="display:none;margin-top:10px;position:relative;">
+          <img id="gScreenImg" style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.08);max-height:220px;object-fit:contain;background:#0d1117;" alt="Screenshot">
+          <button id="gScreenRemove" style="position:absolute;top:6px;right:6px;background:rgba(7,9,12,.8);border:1px solid rgba(255,255,255,.15);border-radius:4px;color:#7E8794;font-size:11px;padding:3px 8px;cursor:pointer;font-family:Inter,sans-serif;">✕ Retirer</button>
+        </div>
+        <div id="gExtractState" style="display:none;margin-top:10px;"></div>
+      </div>
+
+      <!-- ÉTAPE 2 : données extraites (lecture seule) + pseudo -->
+      <div id="gExtracted" style="display:none;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;background:rgba(74,222,156,.07);border:1px solid rgba(74,222,156,.2);border-radius:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE9C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span style="font-family:Inter,sans-serif;font-size:12px;color:#4ADE9C;font-weight:600">Données extraites du screenshot — non modifiables</span>
+        </div>
+        <div class="gen__row">
+          <div class="fld"><label>Paire</label><input id="gPair" readonly style="opacity:.6;cursor:default;"></div>
+          <div class="fld"><label>Sens</label><input id="gSideRead" readonly style="opacity:.6;cursor:default;"></div>
+        </div>
+        <div class="gen__row">
+          <div class="fld"><label>Capital engagé (€)</label><input id="gCap" readonly style="opacity:.6;cursor:default;"></div>
+          <div class="fld"><label>Levier</label><input id="gLev" readonly style="opacity:.6;cursor:default;"></div>
+        </div>
+        <div class="gen__row">
+          <div class="fld"><label>Entrée</label><input id="gEntry" readonly style="opacity:.6;cursor:default;"></div>
+          <div class="fld"><label>Sortie</label><input id="gExit" readonly style="opacity:.6;cursor:default;"></div>
+        </div>
+        <div class="fld" style="margin-top:4px;">
+          <label>Pseudo <span style="font-size:10px;color:#7E8794;font-weight:400;letter-spacing:0;">(seul champ modifiable)</span></label>
+          <input id="gHandle" value="@mon_pseudo" placeholder="@votre_pseudo">
+        </div>
+        <div class="fld"><label>Fond / ambiance</label><div class="gen__bgs" id="gBgs"></div></div>
+        <div class="gen__actions">
+          <button class="lt-btn lt-btn--primary" id="gGen" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg> Générer l'image</button>
+          <div class="gen__share">
+            <button id="shX" title="Partager sur X" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.53 3H20.5l-6.49 7.41L21.75 21h-6.02l-4.71-6.16L5.6 21H2.63l6.94-7.93L2.5 3h6.17l4.26 5.63L17.53 3zm-1.06 16h1.66L7.62 4.69H5.84L16.47 19z"/></svg></button>
+            <button id="shTg" title="Partager sur Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/></svg></button>
+            <button id="shLink" title="Copier le lien" aria-label="Copier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
+          </div>
         </div>
       </div>
-      <div class="gen__row">
-        <div class="fld"><label data-en="Risked capital (€)">Capital engagé (€)</label><input id="gCap" type="number" value="4000"></div>
-        <div class="fld"><label data-en="Leverage">Levier</label><input id="gLev" type="number" value="33"></div>
-      </div>
-      <div class="gen__row">
-        <div class="fld"><label data-en="Entry">Entrée</label><input id="gEntry" type="number" value="62410"></div>
-        <div class="fld"><label data-en="Exit">Sortie</label><input id="gExit" type="number" value="68412"></div>
-      </div>
-      <div class="fld"><label data-en="Handle">Pseudo</label><input id="gHandle" value="@max_scalp"></div>
-      <div class="fld"><label data-en="Background">Fond / ambiance</label><div class="gen__bgs" id="gBgs"></div></div>
-      <div class="gen__actions">
-        <button class="lt-btn lt-btn--primary" id="gGen" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg> <span data-en="Download the image">Générer l'image</span></button>
-        <div class="gen__share">
-          <button id="shX" title="Partager sur X" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.53 3H20.5l-6.49 7.41L21.75 21h-6.02l-4.71-6.16L5.6 21H2.63l6.94-7.93L2.5 3h6.17l4.26 5.63L17.53 3zm-1.06 16h1.66L7.62 4.69H5.84L16.47 19z"/></svg></button>
-          <button id="shTg" title="Partager sur Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/></svg></button>
-          <button id="shLink" title="Copier le lien" aria-label="Copier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
-        </div>
-      </div>
+
     </div>
 
     <!-- Preview / export -->
@@ -269,6 +295,8 @@
 
   // ── Générateur ──
   var side='long';
+  var screenDataUrl=null;
+
   function compute(){
     var entry=parseFloat(document.getElementById('gEntry').value)||0;
     var exit=parseFloat(document.getElementById('gExit').value)||0;
@@ -277,7 +305,7 @@
     var move=entry?((exit-entry)/entry):0; if(side==='short')move=-move;
     var pct=move*lev*100;
     var gain=cap*move*lev;
-    var rr=Math.abs(move)>0?(1+Math.abs(pct)/60):1; // R:R illustratif
+    var rr=Math.abs(move)>0?(1+Math.abs(pct)/60):1;
     return {entry:entry,exit:exit,cap:cap,pct:pct,gain:gain,rr:rr};
   }
   function renderPreview(){
@@ -294,6 +322,92 @@
     document.getElementById('tcHandle').textContent=document.getElementById('gHandle').value||'@trader';
     var d=new Date(); document.getElementById('tcMeta').textContent='le-terminal.app · '+d.toLocaleDateString(l==='en'?'en-GB':'fr-FR',{day:'numeric',month:'long',year:'numeric'});
   }
+
+  // ── Upload screenshot ──
+  var uploadZone=document.getElementById('gUploadZone');
+  var fileIn=document.getElementById('gScreenFile');
+
+  uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.style.borderColor='rgba(127,184,232,.7)';});
+  uploadZone.addEventListener('dragleave',function(){uploadZone.style.borderColor='rgba(127,184,232,.35)';});
+  uploadZone.addEventListener('drop',function(e){
+    e.preventDefault();uploadZone.style.borderColor='rgba(127,184,232,.35)';
+    var f=e.dataTransfer.files[0]; if(f&&f.type.startsWith('image/')) loadScreenFile(f);
+  });
+  fileIn.addEventListener('change',function(){if(this.files[0]) loadScreenFile(this.files[0]);});
+  document.getElementById('gScreenRemove').addEventListener('click',function(e){
+    e.stopPropagation();
+    screenDataUrl=null;
+    document.getElementById('gScreenPreview').style.display='none';
+    document.getElementById('gExtracted').style.display='none';
+    document.getElementById('gExtractState').style.display='none';
+    fileIn.value='';
+  });
+
+  function loadScreenFile(f){
+    var r=new FileReader();
+    r.onload=function(ev){
+      screenDataUrl=ev.target.result;
+      document.getElementById('gScreenImg').src=screenDataUrl;
+      document.getElementById('gScreenPreview').style.display='block';
+      extractTradeData();
+    };
+    r.readAsDataURL(f);
+  }
+
+  function extractTradeData(){
+    var state=document.getElementById('gExtractState');
+    state.style.display='block';
+    state.innerHTML='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.15);border-radius:6px;font-family:Inter,sans-serif;font-size:12px;color:#7FB8E8;">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>'
+      +'Analyse du screenshot en cours…</div>';
+    document.getElementById('gExtracted').style.display='none';
+
+    var b64=screenDataUrl.split(',')[1];
+    var mime=(screenDataUrl.match(/^data:(image\/\w+);/)||['','image/jpeg'])[1];
+
+    var sysPrompt='Tu es un extracteur de données de trade. Analyse ce screenshot de plateforme de trading (MT5, TradingView, Binance, ByBit, etc.) et extrais UNIQUEMENT les données visibles. Réponds en JSON strict sans markdown :\n{"pair":"<paire ex BTC/USD>","side":"long"|"short","entry":<nombre>,"exit":<nombre>,"cap":<capital en devise, 0 si non visible>,"lev":<levier entier, 1 si non visible>,"found":true|false}\nSi une valeur n\'est pas visible sur le screenshot, utilise 0 pour les nombres. Si le screenshot ne semble pas être un trade, retourne found:false.';
+
+    fetch('/api/analyze',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:sysPrompt,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
+          {type:'text',text:'Extrais les données de ce trade.'}
+        ]}]
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var raw=(data.content&&data.content[0]&&data.content[0].text)||'';
+      var j1=raw.indexOf('{'),j2=raw.lastIndexOf('}');
+      var parsed;
+      try{ parsed=JSON.parse(raw.slice(j1,j2+1)); }catch(e){ parsed=null; }
+
+      if(!parsed||!parsed.found){
+        state.innerHTML='<div style="padding:10px 12px;background:rgba(240,100,122,.07);border:1px solid rgba(240,100,122,.2);border-radius:6px;font-family:Inter,sans-serif;font-size:12px;color:#F0647A;">Impossible d\'extraire les données. Vérifiez que votre screenshot montre un trade terminé avec entrée et sortie visibles.</div>';
+        return;
+      }
+
+      // Remplir les champs en lecture seule
+      document.getElementById('gPair').value=parsed.pair||'';
+      side=parsed.side==='short'?'short':'long';
+      document.getElementById('gSideRead').value=side==='long'?'Long':'Short';
+      document.getElementById('gCap').value=parsed.cap||'';
+      document.getElementById('gLev').value=parsed.lev||1;
+      document.getElementById('gEntry').value=parsed.entry||'';
+      document.getElementById('gExit').value=parsed.exit||'';
+
+      state.style.display='none';
+      document.getElementById('gExtracted').style.display='block';
+      renderPreview();
+    })
+    .catch(function(){
+      state.innerHTML='<div style="padding:10px 12px;background:rgba(240,100,122,.07);border:1px solid rgba(240,100,122,.2);border-radius:6px;font-family:Inter,sans-serif;font-size:12px;color:#F0647A;">Erreur lors de l\'analyse. Réessayez.</div>';
+    });
+  }
+
   // Sélecteur de fond
   function applyBg(){var el=document.getElementById('tcBg');if(el)el.style.backgroundImage=currentBg?('url('+currentBg+')'):'none';}
   function renderBgs(){
@@ -307,8 +421,8 @@
         if(b.src) btn.style.backgroundImage='url('+b.src+')';
         w.appendChild(btn);
       }
-      if(!b.src){ add(); return; }                  // « Sobre » toujours dispo
-      var im=new Image(); im.onload=add; im.src=b.src; // sinon seulement si le fichier existe
+      if(!b.src){ add(); return; }
+      var im=new Image(); im.onload=add; im.src=b.src;
     });
   }
   document.addEventListener('click',function(e){
@@ -319,14 +433,7 @@
   });
   applyBg();
 
-  document.getElementById('gSide').addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b)return; side=b.getAttribute('data-side');
-    Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
-    renderPreview();
-  });
-  ['gPair','gCap','gLev','gEntry','gExit','gHandle'].forEach(function(id){
-    document.getElementById(id).addEventListener('input',renderPreview);
-  });
+  document.getElementById('gHandle').addEventListener('input',renderPreview);
 
   // ── Export image (canvas) ──
   function exportImage(){
@@ -362,7 +469,7 @@
     img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=currentBg;
   }
   document.getElementById('gGen').addEventListener('click',exportImage);
-  function shareText(){var c=compute();return (document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';}
+  function shareText(){var c=compute();return (document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal · Screenshot vérifié';}
   document.getElementById('shX').onclick=function(){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(shareText())+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');};
   document.getElementById('shTg').onclick=function(){window.open('https://t.me/share/url?url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html')+'&text='+encodeURIComponent(shareText()),'_blank');};
   document.getElementById('shLink').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText('https://le-terminal-analyzer.vercel.app/mur-des-trades.html');};
@@ -395,7 +502,7 @@
     renderGrid();
   });
 
-  function init(){ renderBgs(); renderPreview(); renderGrid(); }
+  function init(){ renderBgs(); renderGrid(); }
   window.ecoReloadNews=init;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
