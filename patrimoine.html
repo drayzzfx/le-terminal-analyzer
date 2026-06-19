@@ -505,33 +505,6 @@
     var el = document.getElementById(‘pfEntryTotal’); if(el) el.textContent = fmtEur0(total);
   }
 
-  document.getElementById(‘pfAssetList’).addEventListener(‘change’, function(e){
-    var cb = e.target.closest(‘input[type=checkbox]’);
-    var amt = e.target.closest(‘input[type=number]’);
-    if(cb){
-      var id = cb.getAttribute(‘data-id’);
-      var row = document.querySelector(‘.pf-asset[data-id="’+id+’"]’);
-      if(cb.checked){ holdings[id]=holdings[id]||0; if(row) row.classList.add(‘is-checked’); }
-      else { delete holdings[id]; if(row){ row.classList.remove(‘is-checked’); var inp=row.querySelector(‘input[type=number]’); if(inp) inp.value=’’; } }
-      updateEntryTotal();
-    }
-    if(amt){
-      var id2=amt.getAttribute(‘data-id’), v=parseFloat(amt.value)||0;
-      if(v>0) holdings[id2]=v; else delete holdings[id2];
-      updateEntryTotal();
-    }
-  });
-
-  document.getElementById(‘pfFilters’).addEventListener(‘click’, function(e){
-    var btn=e.target.closest(‘.pf-filter’); if(!btn) return;
-    filterType=btn.getAttribute(‘data-type’);
-    Array.prototype.forEach.call(document.querySelectorAll(‘.pf-filter’),function(b){ b.classList.toggle(‘is-on’,b===btn); });
-    renderAssetList();
-  });
-
-  document.getElementById(‘pfSearchInput’).addEventListener(‘input’, function(e){ searchQ=e.target.value; renderAssetList(); });
-  document.getElementById(‘pfSaveBtn’).addEventListener(‘click’, saveHoldings);
-
   // ── Dashboard ──
   function computeAlloc(){
     var byType={}, total=0;
@@ -591,11 +564,6 @@
     fc.textContent=(change>=0?’+’:’’)+change.toFixed(1).replace(‘.’,’,’)+’ % sur la periode’;
     fc.style.color=up?’var(--bull)’:’var(--bear)’;
   }
-  document.getElementById(‘pfPeriod’).addEventListener(‘click’,function(e){
-    var b=e.target.closest(‘.pf-period__btn’); if(!b) return;
-    Array.prototype.forEach.call(this.children,function(x){ x.classList.toggle(‘is-on’,x===b); });
-    drawChart(b.getAttribute(‘data-p’));
-  });
 
   // ── Donut depuis les holdings ──
   function drawDonutFromHoldings(alloc){
@@ -647,7 +615,49 @@
     }).join('');
   }
 
-  function init(){ renderAssetList(); updateDashboard(); drawPlans(); loadHoldings(); }
+  function init(){
+    // Assure que pfMain est visible
+    var pm = document.getElementById('pfMain'); if(pm) pm.style.display='block';
+
+    // Event listeners
+    var assetList = document.getElementById('pfAssetList');
+    if(assetList) assetList.addEventListener('change', function(e){
+      var cb=e.target.closest('input[type=checkbox]'), amt=e.target.closest('input[type=number]');
+      if(cb){
+        var id=cb.getAttribute('data-id'), row=document.querySelector('.pf-asset[data-id="'+id+'"]');
+        if(cb.checked){ holdings[id]=holdings[id]||0; if(row) row.classList.add('is-checked'); }
+        else { delete holdings[id]; if(row){ row.classList.remove('is-checked'); var inp=row.querySelector('input[type=number]'); if(inp) inp.value=''; } }
+        updateEntryTotal();
+      }
+      if(amt){ var id2=amt.getAttribute('data-id'), v=parseFloat(amt.value)||0; if(v>0) holdings[id2]=v; else delete holdings[id2]; updateEntryTotal(); }
+    });
+
+    var filters = document.getElementById('pfFilters');
+    if(filters) filters.addEventListener('click', function(e){
+      var btn=e.target.closest('.pf-filter'); if(!btn) return;
+      filterType=btn.getAttribute('data-type');
+      Array.prototype.forEach.call(document.querySelectorAll('.pf-filter'),function(b){ b.classList.toggle('is-on',b===btn); });
+      renderAssetList();
+    });
+
+    var search = document.getElementById('pfSearchInput');
+    if(search) search.addEventListener('input', function(e){ searchQ=e.target.value; renderAssetList(); });
+
+    var saveBtn = document.getElementById('pfSaveBtn');
+    if(saveBtn) saveBtn.addEventListener('click', saveHoldings);
+
+    var period = document.getElementById('pfPeriod');
+    if(period) period.addEventListener('click', function(e){
+      var b=e.target.closest('.pf-period__btn'); if(!b) return;
+      Array.prototype.forEach.call(this.children,function(x){ x.classList.toggle('is-on',x===b); });
+      drawChart(b.getAttribute('data-p'));
+    });
+
+    renderAssetList();
+    updateDashboard();
+    drawPlans();
+    loadHoldings();
+  }
   window.ecoReloadNews = function(){};
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
