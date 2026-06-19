@@ -17,15 +17,33 @@ const NONCRYPTO = [
   { name: 'USD/CAD', cat: 'forex', y: 'CAD=X',    w: 1.8, dec: 4 },
   { name: 'USD/CHF', cat: 'forex', y: 'CHF=X',    w: 1.6, dec: 4 },
   { name: 'NZD/USD', cat: 'forex', y: 'NZDUSD=X', w: 1.1, dec: 4 },
-  // Forex — crosses
+  // Forex — crosses JPY
   { name: 'EUR/JPY', cat: 'forex', y: 'EURJPY=X', w: 1.6, dec: 2 },
   { name: 'GBP/JPY', cat: 'forex', y: 'GBPJPY=X', w: 1.4, dec: 2 },
-  { name: 'EUR/GBP', cat: 'forex', y: 'EURGBP=X', w: 1.3, dec: 4 },
   { name: 'AUD/JPY', cat: 'forex', y: 'AUDJPY=X', w: 1.0, dec: 2 },
+  { name: 'CHF/JPY', cat: 'forex', y: 'CHFJPY=X', w: 0.9, dec: 2 },
+  { name: 'CAD/JPY', cat: 'forex', y: 'CADJPY=X', w: 0.8, dec: 2 },
+  { name: 'NZD/JPY', cat: 'forex', y: 'NZDJPY=X', w: 0.7, dec: 2 },
+  // Forex — crosses EUR
+  { name: 'EUR/GBP', cat: 'forex', y: 'EURGBP=X', w: 1.3, dec: 4 },
+  { name: 'EUR/CHF', cat: 'forex', y: 'EURCHF=X', w: 1.1, dec: 4 },
+  { name: 'EUR/AUD', cat: 'forex', y: 'EURAUD=X', w: 0.9, dec: 4 },
+  { name: 'EUR/CAD', cat: 'forex', y: 'EURCAD=X', w: 0.8, dec: 4 },
+  { name: 'EUR/NZD', cat: 'forex', y: 'EURNZD=X', w: 0.7, dec: 4 },
+  // Forex — crosses GBP
+  { name: 'GBP/CHF', cat: 'forex', y: 'GBPCHF=X', w: 0.8, dec: 4 },
+  { name: 'GBP/AUD', cat: 'forex', y: 'GBPAUD=X', w: 0.7, dec: 4 },
+  { name: 'GBP/CAD', cat: 'forex', y: 'GBPCAD=X', w: 0.7, dec: 4 },
+  // Forex — émergents / exotiques
   { name: 'USD/MXN', cat: 'forex', y: 'MXN=X',    w: 0.9, dec: 3 },
   { name: 'USD/SGD', cat: 'forex', y: 'SGD=X',    w: 0.8, dec: 4 },
   { name: 'USD/TRY', cat: 'forex', y: 'TRY=X',    w: 0.7, dec: 3 },
   { name: 'USD/ZAR', cat: 'forex', y: 'ZAR=X',    w: 0.6, dec: 3 },
+  { name: 'USD/CNH', cat: 'forex', y: 'CNH=X',    w: 1.0, dec: 4 },
+  { name: 'USD/HKD', cat: 'forex', y: 'HKD=X',    w: 0.6, dec: 4 },
+  { name: 'USD/NOK', cat: 'forex', y: 'NOK=X',    w: 0.6, dec: 3 },
+  { name: 'USD/SEK', cat: 'forex', y: 'SEK=X',    w: 0.6, dec: 3 },
+  { name: 'AUD/NZD', cat: 'forex', y: 'AUDNZD=X', w: 0.6, dec: 4 },
   // Indices — USA
   { name: 'S&P 500',    cat: 'indices', y: '^GSPC',  w: 6.0, dec: 0 },
   { name: 'Nasdaq 100', cat: 'indices', y: '^NDX',   w: 5.0, dec: 0 },

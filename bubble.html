@@ -98,6 +98,33 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 .src{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-left:auto}
 .src a{color:var(--accent);text-decoration:none}
 #ltUserBar{display:inline-flex;align-items:center;gap:8px}
+
+/* ── Modale auth (gate non-connecté) ── */
+.bm-gate{display:none;position:fixed;inset:0;z-index:800;background:rgba(7,9,12,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);align-items:center;justify-content:center;padding:20px}
+.bm-gate.show{display:flex;animation:bmFadeUp .28s cubic-bezier(.16,1,.3,1)}
+@keyframes bmFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.bm-gate__box{max-width:420px;width:100%;background:var(--bg-elevated,#161B24);border:1px solid rgba(127,184,232,.22);border-radius:10px;padding:36px 32px;position:relative;text-align:center}
+.bm-gate__box::before{content:'';position:absolute;top:0;left:28px;right:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(127,184,232,.5),transparent)}
+.bm-gate__icon{margin:0 auto 18px;width:48px;height:48px;border-radius:50%;background:rgba(127,184,232,.08);border:1px solid rgba(127,184,232,.18);display:flex;align-items:center;justify-content:center}
+.bm-gate__title{font-family:Anton,sans-serif;font-size:22px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-title,#F2F4F7);margin-bottom:8px}
+.bm-gate__sub{font-size:13.5px;color:var(--text-muted,#7E8794);line-height:1.55;margin-bottom:28px}
+.bm-gate__tabs{display:flex;border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden;margin-bottom:20px}
+.bm-gate__tab{flex:1;padding:9px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:var(--text-muted,#7E8794);cursor:pointer;transition:all .18s}
+.bm-gate__tab.on{background:rgba(127,184,232,.15);color:var(--accent,#7FB8E8)}
+.bm-gate__field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;text-align:left}
+.bm-gate__field label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text-muted,#7E8794);text-transform:uppercase}
+.bm-gate__field input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:var(--text-title,#F2F4F7);padding:10px 12px;font-family:Inter,sans-serif;font-size:13px;outline:none;transition:border-color .18s;width:100%}
+.bm-gate__field input:focus{border-color:rgba(127,184,232,.5)}
+.bm-gate__submit{width:100%;padding:12px;background:var(--accent,#7FB8E8);border:none;border-radius:6px;color:#07090C;font-family:Inter,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .18s;margin-top:4px}
+.bm-gate__submit:hover{background:var(--accent-bright,#BFDCF5)}
+.bm-gate__sep{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22)}
+.bm-gate__sep::before,.bm-gate__sep::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.bm-gate__google{width:100%;padding:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:6px;color:var(--text-title,#F2F4F7);font-family:Inter,sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .18s}
+.bm-gate__google:hover{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.28)}
+.bm-gate__submit:disabled{opacity:.4;cursor:not-allowed}
+.bm-gate__err{font-size:12px;color:#F0647A;margin-top:8px;min-height:16px;text-align:left}
+.bm-gate__close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted,#7E8794);cursor:pointer;padding:4px;line-height:1;border-radius:4px}
+.bm-gate__close:hover{color:var(--text-title,#F2F4F7)}
 </style>
 </head>
 <body>
@@ -182,6 +209,42 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
     <span class="lt-dock__tip">Mur des Trades</span>
   </a>
 </nav>
+
+<!-- ── Modale auth (accès pages protégées) ── -->
+<div class="bm-gate" id="bmGate" role="dialog" aria-modal="true" aria-label="Connexion requise">
+  <div class="bm-gate__box">
+    <button class="bm-gate__close" onclick="bmGateClose()" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="bm-gate__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7FB8E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <p class="bm-gate__title">Accès réservé</p>
+    <p class="bm-gate__sub">La Bubble Map est accessible librement.<br>Cette fonctionnalité requiert un compte gratuit.</p>
+    <div class="bm-gate__tabs">
+      <button class="bm-gate__tab on" id="bmGateTabLogin" onclick="bmGateSwitchTab('login')">Connexion</button>
+      <button class="bm-gate__tab" id="bmGateTabSignup" onclick="bmGateSwitchTab('signup')">Créer un compte</button>
+    </div>
+    <!-- Bouton Google (commun aux deux onglets) -->
+    <button class="bm-gate__google" onclick="bmGateDoGoogle()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuer avec Google
+    </button>
+    <div class="bm-gate__sep">ou</div>
+    <div id="bmGateLoginForm">
+      <div class="bm-gate__field"><label>E-mail</label><input type="email" id="bmGateEmail" placeholder="vous@exemple.com" autocomplete="email"/></div>
+      <div class="bm-gate__field"><label>Mot de passe</label><input type="password" id="bmGatePass" placeholder="••••••••" autocomplete="current-password"/></div>
+      <button class="bm-gate__submit" id="bmGateSubmit" onclick="bmGateDoLogin()">Se connecter</button>
+      <p class="bm-gate__err" id="bmGateErr"></p>
+    </div>
+    <div id="bmGateSignupForm" style="display:none">
+      <div class="bm-gate__field"><label>E-mail</label><input type="email" id="bmGateEmailS" placeholder="vous@exemple.com" autocomplete="email"/></div>
+      <div class="bm-gate__field"><label>Mot de passe</label><input type="password" id="bmGatePassS" placeholder="8 caractères minimum" autocomplete="new-password"/></div>
+      <button class="bm-gate__submit" id="bmGateSubmitS" onclick="bmGateDoSignup()">Créer mon compte</button>
+      <p class="bm-gate__err" id="bmGateErrS"></p>
+    </div>
+  </div>
+</div>
 
 <div class="main">
 <div class="content">
@@ -391,7 +454,19 @@ var bmHidden=(function(){try{return new Set(JSON.parse(localStorage.getItem('bm_
 function bmSaveHidden(){try{localStorage.setItem('bm_hidden',JSON.stringify(Array.from(bmHidden)));}catch(e){}}
 var bmC, bmCtx, bmW=0, bmH=0, bmRaf=0, bmMouse={x:-999,y:-999};
 
-function bmRadius(w){ return 22 + Math.sqrt((w||0.5)/bmMaxW)*58; }
+function bmActiveCount(){
+  if(!bmBubbles.length) return 60;
+  if(bmCat==='all') return bmBubbles.length;
+  return bmBubbles.filter(function(b){return b.cat===bmCat;}).length||1;
+}
+function bmRadius(w){
+  var n=bmActiveCount();
+  var scale= bmCat==='crypto' ? 2.5 : n<=12 ? 1.92 : n<=25 ? 1.68 : n<=40 ? 1.2 : n<=55 ? 1.1 : 0.73;
+  return (22 + Math.sqrt((w||0.5)/bmMaxW)*58)*scale;
+}
+function bmRecomputeRadii(){
+  bmBubbles.forEach(function(b){ b.r=bmRadius(b.w); });
+}
 function bmMd(v){ return (v/1e9).toLocaleString('fr-FR',{maximumFractionDigits:0}); }
 
 function bmUpdateLegend(){
@@ -407,6 +482,8 @@ function bmApplyAssets(assets){
   var ws=assets.map(function(a){return a.w||0.5;}); ws.push(0.5);
   bmMaxW=Math.max.apply(null,ws);
   var byS={},i; for(i=0;i<bmBubbles.length;i++) byS[bmBubbles[i].s]=bmBubbles[i];
+  // set length first so bmRadius scale factor is correct
+  bmBubbles=assets.map(function(a){return {s:a.name};});
   bmBubbles=assets.map(function(a){
     var ex=byS[a.name], r=bmRadius(a.w);
     if(ex){ ex.d=a.change; ex.cat=a.cat; ex.w=a.w; ex.cap=a.cap; ex.price=a.price; ex.r=r; return ex; }
@@ -576,6 +653,12 @@ function initBubbles(){
     var b=e.target.closest('.bm-filter'); if(!b) return;
     bmCat=b.getAttribute('data-cat');
     f.querySelectorAll('.bm-filter').forEach(function(x){ x.classList.toggle('is-on',x===b); });
+    bmRecomputeRadii();
+    // repositionne les bulles actives depuis le centre pour éviter les chevauchements post-resize
+    bmBubbles.forEach(function(bub){
+      var active=(bmCat==='all'||bub.cat===bmCat)&&!bmHidden.has(bub.s);
+      if(active){ bub.x=(bmW||700)*0.2+Math.random()*(bmW||700)*0.6; bub.y=(bmH||440)*0.2+Math.random()*(bmH||440)*0.6; bub.vx=0; bub.vy=0; }
+    });
     if(bmReduced) bmSettle();
     bmUpdatePerf();
   });
@@ -626,5 +709,151 @@ setView('bubbles'); // vue Bulles par défaut — la heatmap se construit au 1er
 <script src="./appshell.js"></script>
 <script src="./menu.js"></script>
 <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(function(){}); }</script>
+
+<!-- ── Gate : accès pages protégées pour non-connectés ── -->
+<script>(function(){
+  // Pages libres d'accès même sans compte
+  var FREE_PAGES = ['bubble.html','index.html','landing.html','tarifs.html','legal.html','avis.html','calculateur.html','mur-des-trades.html'];
+  function isLoggedIn(){ return !!localStorage.getItem('ta_token'); }
+
+  function isFree(href){
+    if(!href || href.charAt(0)==='#') return true;
+    try{
+      var u = new URL(href, location.href);
+      if(u.origin !== location.origin) return true; // liens externes → libres
+      var seg = u.pathname.split('/').pop() || 'index.html';
+      return FREE_PAGES.some(function(p){ return seg===p || seg===''; });
+    }catch(e){ return true; }
+  }
+
+  // Destination à ouvrir après connexion réussie
+  var _pendingHref = null;
+
+  // Intercepte tous les clics sur les liens de navigation
+  document.addEventListener('click', function(e){
+    if(isLoggedIn()) return; // déjà connecté → navigation normale
+    var a = e.target.closest('a[href]');
+    if(!a) return;
+    if(isFree(a.getAttribute('href'))) return;
+    e.preventDefault();
+    _pendingHref = a.getAttribute('href');
+    bmGateOpen();
+  }, true);
+
+  window.bmGateOpen = function(){
+    document.getElementById('bmGate').classList.add('show');
+    setTimeout(function(){ document.getElementById('bmGateEmail').focus(); }, 80);
+  };
+  window.bmGateClose = function(){
+    document.getElementById('bmGate').classList.remove('show');
+    _pendingHref = null;
+  };
+  // Fermer en cliquant le fond
+  document.getElementById('bmGate').addEventListener('click', function(e){
+    if(e.target === this) bmGateClose();
+  });
+
+  window.bmGateSwitchTab = function(tab){
+    var isLogin = tab==='login';
+    document.getElementById('bmGateTabLogin').classList.toggle('on', isLogin);
+    document.getElementById('bmGateTabSignup').classList.toggle('on', !isLogin);
+    document.getElementById('bmGateLoginForm').style.display = isLogin ? '' : 'none';
+    document.getElementById('bmGateSignupForm').style.display = isLogin ? 'none' : '';
+  };
+
+  function bmGateApi(path, body){
+    return fetch('/api/auth', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(Object.assign({action: path}, body))
+    }).then(function(r){ return r.json(); });
+  }
+
+  function bmGateSuccess(data){
+    if(data && data.session && data.session.access_token){
+      localStorage.setItem('ta_token', data.session.access_token);
+      if(data.user && data.user.email) localStorage.setItem('ta_email', data.user.email);
+    }
+    bmGateClose();
+    if(_pendingHref) window.location.href = _pendingHref;
+    else window.location.reload();
+  }
+
+  window.bmGateDoLogin = function(){
+    var email = document.getElementById('bmGateEmail').value.trim();
+    var pass  = document.getElementById('bmGatePass').value;
+    var err   = document.getElementById('bmGateErr');
+    var btn   = document.getElementById('bmGateSubmit');
+    err.textContent = '';
+    if(!email || !pass){ err.textContent = 'Renseignez votre e-mail et mot de passe.'; return; }
+    btn.disabled = true; btn.textContent = 'Connexion…';
+    bmGateApi('login', {email:email, password:pass})
+      .then(function(d){
+        if(d && d.session){ bmGateSuccess(d); }
+        else { err.textContent = (d && d.error) || 'Identifiants incorrects.'; }
+      })
+      .catch(function(){ err.textContent = 'Erreur réseau, réessayez.'; })
+      .finally(function(){ btn.disabled=false; btn.textContent='Se connecter'; });
+  };
+
+  window.bmGateDoSignup = function(){
+    var email = document.getElementById('bmGateEmailS').value.trim();
+    var pass  = document.getElementById('bmGatePassS').value;
+    var err   = document.getElementById('bmGateErrS');
+    var btn   = document.getElementById('bmGateSubmitS');
+    err.textContent = '';
+    if(!email || !pass){ err.textContent = 'Renseignez un e-mail et un mot de passe.'; return; }
+    if(pass.length < 8){ err.textContent = 'Le mot de passe doit faire 8 caractères minimum.'; return; }
+    btn.disabled = true; btn.textContent = 'Création…';
+    bmGateApi('signup', {email:email, password:pass})
+      .then(function(d){
+        if(d && d.session){ bmGateSuccess(d); }
+        else if(d && d.user && !d.session){
+          err.style.color='#4ADE9C';
+          err.textContent = 'Compte créé ! Vérifiez votre e-mail pour confirmer.';
+        }
+        else { err.textContent = (d && d.error) || 'Erreur lors de la création du compte.'; }
+      })
+      .catch(function(){ err.textContent = 'Erreur réseau, réessayez.'; })
+      .finally(function(){ btn.disabled=false; btn.textContent='Créer mon compte'; });
+  };
+
+  // Google OAuth
+  var _supabaseUrl = '';
+  fetch('/api/config').then(function(r){ return r.json(); }).then(function(d){ _supabaseUrl = d.supabaseUrl || ''; }).catch(function(){});
+
+  window.bmGateDoGoogle = function(){
+    if(!_supabaseUrl){ setTimeout(bmGateDoGoogle, 400); return; }
+    // Stocke la destination pour récupération post-redirect
+    if(_pendingHref) sessionStorage.setItem('bm_gate_redirect', _pendingHref);
+    var redirectTo = window.location.origin + '/bubble.html';
+    window.location.href = _supabaseUrl + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(redirectTo);
+  };
+
+  // Récupère le token OAuth après retour Google (hash #access_token=...)
+  (function handleOAuthCallback(){
+    var hash = window.location.hash;
+    if(!hash || hash.indexOf('access_token') === -1) return;
+    var params = new URLSearchParams(hash.slice(1));
+    var token = params.get('access_token');
+    if(!token || params.get('token_type') !== 'bearer') return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    localStorage.setItem('ta_token', token);
+    fetch('/api/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'user', token:token}) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d && d.email) localStorage.setItem('ta_email', d.email); })
+      .catch(function(){})
+      .finally(function(){
+        var dest = sessionStorage.getItem('bm_gate_redirect');
+        sessionStorage.removeItem('bm_gate_redirect');
+        if(dest) window.location.href = dest;
+      });
+  })();
+
+  // Touche Escape pour fermer
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') bmGateClose();
+  });
+})();</script>
 </body>
 </html>
