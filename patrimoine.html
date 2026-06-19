@@ -619,17 +619,20 @@
     // Assure que pfMain est visible
     var pm = document.getElementById('pfMain'); if(pm) pm.style.display='block';
 
+    // Plans en premier (données statiques, pas de dépendance)
+    try { drawPlans(); } catch(e){ console.error('[pf] drawPlans:', e); }
+
     // Event listeners
     var assetList = document.getElementById('pfAssetList');
     if(assetList) assetList.addEventListener('change', function(e){
       var cb=e.target.closest('input[type=checkbox]'), amt=e.target.closest('input[type=number]');
       if(cb){
-        var id=cb.getAttribute('data-id'), row=document.querySelector('.pf-asset[data-id="'+id+'"]');
-        if(cb.checked){ holdings[id]=holdings[id]||0; if(row) row.classList.add('is-checked'); }
-        else { delete holdings[id]; if(row){ row.classList.remove('is-checked'); var inp=row.querySelector('input[type=number]'); if(inp) inp.value=''; } }
+        var cbId=cb.getAttribute('data-id'), row=document.querySelector('.pf-asset[data-id="'+cbId+'"]');
+        if(cb.checked){ holdings[cbId]=holdings[cbId]||0; if(row) row.classList.add('is-checked'); }
+        else { delete holdings[cbId]; if(row){ row.classList.remove('is-checked'); var inp=row.querySelector('input[type=number]'); if(inp) inp.value=''; } }
         updateEntryTotal();
       }
-      if(amt){ var id2=amt.getAttribute('data-id'), v=parseFloat(amt.value)||0; if(v>0) holdings[id2]=v; else delete holdings[id2]; updateEntryTotal(); }
+      if(amt){ var amtId=amt.getAttribute('data-id'), v=parseFloat(amt.value)||0; if(v>0) holdings[amtId]=v; else delete holdings[amtId]; updateEntryTotal(); }
     });
 
     var filters = document.getElementById('pfFilters');
@@ -653,9 +656,8 @@
       drawChart(b.getAttribute('data-p'));
     });
 
-    renderAssetList();
+    try { renderAssetList(); } catch(e){ console.error('[pf] renderAssetList:', e); }
     try { updateDashboard(); } catch(e){ console.error('[pf] updateDashboard:', e); }
-    drawPlans();
     try { loadHoldings(); } catch(e){ console.error('[pf] loadHoldings:', e); }
   }
   window.ecoReloadNews = function(){};
@@ -663,6 +665,14 @@
   function safeInit(){
     try { init(); } catch(e){ console.error('[pf] init error:', e); }
   }
+
+  // Fallback window.load : garantit que plans et liste s'affichent même si init a planté
+  window.addEventListener('load', function(){
+    var pp = document.getElementById('pfPlans');
+    if(pp && !pp.innerHTML.trim()) { try { drawPlans(); } catch(e){} }
+    var al = document.getElementById('pfAssetList');
+    if(al && !al.innerHTML.trim()) { try { renderAssetList(); } catch(e){} }
+  });
 
   // setTimeout garantit que appshell.js a fini ses manipulations DOM
   if(document.readyState === 'loading'){
