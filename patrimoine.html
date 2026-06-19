@@ -654,12 +654,22 @@
     });
 
     renderAssetList();
-    updateDashboard();
+    try { updateDashboard(); } catch(e){ console.error('[pf] updateDashboard:', e); }
     drawPlans();
-    loadHoldings();
+    try { loadHoldings(); } catch(e){ console.error('[pf] loadHoldings:', e); }
   }
   window.ecoReloadNews = function(){};
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+
+  function safeInit(){
+    try { init(); } catch(e){ console.error('[pf] init error:', e); }
+  }
+
+  // setTimeout garantit que appshell.js a fini ses manipulations DOM
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(safeInit, 0); });
+  } else {
+    setTimeout(safeInit, 0);
+  }
 })();
 </script>
 </body>
