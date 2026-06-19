@@ -29,30 +29,46 @@
 /* buttons : on réutilise .lt-btn du design system */
 .lt-btn svg { width: 16px; height: 16px; }
 
-/* ---------- connection module ---------- */
-.pf-conn { display: flex; flex-direction: column; gap: 18px; }
-.pf-conn__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-.pf-conn__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 0.01em; color: var(--text-title); margin: 10px 0 8px; }
-.pf-conn__lede { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--text-body); max-width: 60ch; }
-.pf-brokers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-@media (max-width: 560px) { .pf-brokers { grid-template-columns: 1fr; } }
-.pf-broker { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-surface); cursor: pointer; text-align: left; transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out); }
-.pf-broker:hover { border-color: var(--accent); transform: translateY(-2px); background: var(--accent-glow-soft); }
-.pf-broker__mark { flex-shrink: 0; width: 42px; height: 42px; border-radius: var(--r-sm); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 14px; font-weight: 700; background: var(--bg-void); }
-.pf-broker__name { font-size: 14.5px; font-weight: 600; color: var(--text-title); }
-.pf-broker__tag { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent-glow); border-radius: var(--r-sm); padding: 3px 7px; }
-.pf-broker__go { margin-left: auto; color: var(--text-muted); display: inline-flex; transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
-.pf-broker:hover .pf-broker__go { color: var(--accent); transform: translateX(3px); }
-.pf-brokers__note { grid-column: 1 / -1; display: flex; align-items: center; gap: 9px; margin: 4px 0 0; font-size: 12px; color: var(--text-muted); }
-.pf-brokers__note svg { color: var(--accent); }
-.pf-conn--ok { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-.pf-conn__okleft { display: flex; align-items: center; gap: 16px; }
-.pf-conn__okmeta { display: flex; flex-direction: column; gap: 6px; }
-.pf-conn__okrow { display: flex; align-items: center; gap: 12px; }
-.pf-conn__okrow b { font-size: 1.1rem; color: var(--text-title); }
-.pf-conn__sync { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
-.pf-conn__sync svg { color: var(--bull); }
-.pf-conn__okact { display: flex; gap: 10px; }
+/* ---------- saisie manuelle ---------- */
+.pf-entry { display: flex; flex-direction: column; gap: 20px; }
+.pf-entry__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.pf-entry__hd { display: flex; flex-direction: column; gap: 6px; }
+.pf-entry__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
+.pf-entry__lede { margin: 0; font-size: 0.93rem; line-height: 1.55; color: var(--text-body); max-width: 62ch; }
+.pf-search { position: relative; }
+.pf-search__input { width: 260px; background: var(--bg-void); border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 9px 36px 9px 14px; font-family: var(--font-mono); font-size: 13px; color: var(--text-title); outline: none; transition: border-color var(--dur-fast) var(--ease-out); }
+.pf-search__input::placeholder { color: var(--text-muted); }
+.pf-search__input:focus { border-color: var(--accent); }
+.pf-search__ic { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+.pf-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.pf-filter { padding: 5px 12px; border: 1px solid var(--border-subtle); border-radius: var(--r-sm); background: transparent; color: var(--text-muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
+.pf-filter:hover { color: var(--text-title); border-color: var(--border); }
+.pf-filter.is-on { background: var(--accent-glow-soft); color: var(--accent-bright); border-color: var(--accent-glow); }
+.pf-asset-list { display: flex; flex-direction: column; gap: 6px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
+.pf-asset-list::-webkit-scrollbar { width: 4px; } .pf-asset-list::-webkit-scrollbar-track { background: transparent; } .pf-asset-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.pf-asset { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-surface); transition: border-color var(--dur-fast) var(--ease-out); }
+.pf-asset.is-checked { border-color: var(--accent-glow); background: rgba(127,184,232,0.04); }
+.pf-asset__cb { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+.pf-asset__tag { flex-shrink: 0; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; }
+.pf-asset__tag--etf { color: var(--accent); background: rgba(127,184,232,0.12); }
+.pf-asset__tag--action { color: var(--bull); background: rgba(74,222,156,0.12); }
+.pf-asset__tag--crypto { color: var(--bear); background: rgba(240,100,122,0.12); }
+.pf-asset__tag--obligation { color: var(--neutral); background: rgba(232,194,104,0.12); }
+.pf-asset__tag--liquidites { color: var(--text-muted); background: rgba(195,202,212,0.12); }
+.pf-asset__name { flex: 1; font-size: 13.5px; color: var(--text-body); }
+.pf-asset__amount { display: none; align-items: center; gap: 6px; }
+.pf-asset.is-checked .pf-asset__amount { display: flex; }
+.pf-asset__amtinput { width: 110px; background: var(--bg-void); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 6px 10px; font-family: var(--font-mono); font-size: 13px; color: var(--text-title); outline: none; text-align: right; }
+.pf-asset__amtinput:focus { border-color: var(--accent); }
+.pf-asset__amtcur { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.pf-empty { text-align: center; padding: 32px 0; color: var(--text-muted); font-size: 13px; }
+.pf-save-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; }
+.pf-save-bar__total { display: flex; flex-direction: column; gap: 3px; }
+.pf-save-bar__lbl { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+.pf-save-bar__val { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; color: var(--text-title); }
+@keyframes toastIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes toastOut { from { opacity:1; } to { opacity:0; transform:translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .pf-asset, .pf-filter { transition: none; } }
 
 /* ---------- overview + chart ---------- */
 .pf-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; align-items: start; }
@@ -174,10 +190,40 @@
     <p>Suivez votre patrimoine investi en un coup d'œil — positions synchronisées, performance dans le temps et plans adaptés à votre profil de risque.</p>
   </div>
 
-  <!-- Connexion -->
-  <div id="pfConn"></div>
+  <!-- Saisie manuelle -->
+  <div id="pfEntry" class="panel pf-entry">
+    <div class="pf-entry__top">
+      <div class="pf-entry__hd">
+        <h3 class="pf-entry__title">Mon portefeuille</h3>
+        <p class="pf-entry__lede">Cochez les actifs que vous détenez et saisissez le montant investi pour chacun. Vos données sont sauvegardées sur votre compte.</p>
+      </div>
+      <div class="pf-search">
+        <input class="pf-search__input" id="pfSearchInput" type="text" placeholder="Rechercher un actif...">
+        <span class="pf-search__ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      </div>
+    </div>
+    <div class="pf-filters" id="pfFilters">
+      <button class="pf-filter is-on" data-type="all">Tous</button>
+      <button class="pf-filter" data-type="etf">ETF</button>
+      <button class="pf-filter" data-type="action">Actions</button>
+      <button class="pf-filter" data-type="crypto">Crypto</button>
+      <button class="pf-filter" data-type="obligation">Obligations</button>
+      <button class="pf-filter" data-type="liquidites">Liquidités</button>
+    </div>
+    <div class="pf-asset-list" id="pfAssetList"></div>
+    <div class="pf-save-bar">
+      <div class="pf-save-bar__total">
+        <span class="pf-save-bar__lbl">Capital total saisi</span>
+        <span class="pf-save-bar__val" id="pfEntryTotal">0 €</span>
+      </div>
+      <button class="lt-btn lt-btn--primary" id="pfSaveBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
 
-  <!-- Reste (visible une fois connecté) -->
+  <!-- Dashboard + plans -->
   <div id="pfMain">
     <div class="pf-grid">
       <!-- Vue d'ensemble + courbe -->
@@ -247,145 +293,332 @@
 <script>
 (function(){
   'use strict';
-  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fmtEur0 = function(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; };
-  var TOTAL = 48250, INVESTED = 38000;
+  var reduced = window.matchMedia && window.matchMedia(‘(prefers-reduced-motion: reduce)’).matches;
+  var fmtEur0 = function(n){ return Math.round(n).toLocaleString(‘fr-FR’) + ‘ €’; };
+  var TOTAL = 0;
 
-  // ── Icônes ──
-  var IC = {
-    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',
-    sync: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 4v4h-4M3 20v-4h4"/></svg>',
-    shield: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 19 6v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
-    arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'
-  };
-
-  // ── Connexion (maquette de flux) ──
-  var BROKERS = [
-    { id:'tr', name:'Trade Republic', tag:'Le plus populaire', col:'#F2F4F7' },
-    { id:'bourso', name:'BoursoBank', tag:'', col:'#E8C268' },
-    { id:'degiro', name:'DEGIRO', tag:'', col:'#4ADE9C' },
-    { id:'ibkr', name:'Interactive Brokers', tag:'', col:'#7FB8E8' }
+  // ── Liste complète des actifs Trade Republic ──
+  var TR_ASSETS = [
+    {id:’IE00B4L5Y983’,name:’iShares Core MSCI World UCITS ETF’,type:’etf’},
+    {id:’IE00B5BMR087’,name:’iShares Core S&P 500 UCITS ETF’,type:’etf’},
+    {id:’IE00BKM4GZ66’,name:’iShares Core MSCI Emerging Markets IMI UCITS ETF’,type:’etf’},
+    {id:’LU0392494562’,name:’Xtrackers MSCI World Swap UCITS ETF’,type:’etf’},
+    {id:’IE00B0M62Q58’,name:’iShares MSCI Europe UCITS ETF’,type:’etf’},
+    {id:’IE00B52MJY50’,name:’iShares Core MSCI Europe UCITS ETF’,type:’etf’},
+    {id:’LU1737652823’,name:’Amundi MSCI World UCITS ETF’,type:’etf’},
+    {id:’IE00B3XXRP09’,name:’Vanguard S&P 500 UCITS ETF’,type:’etf’},
+    {id:’IE00BK5BQT80’,name:’Vanguard FTSE All-World UCITS ETF’,type:’etf’},
+    {id:’IE00B3RBWM25’,name:’Vanguard FTSE All-World High Dividend Yield UCITS ETF’,type:’etf’},
+    {id:’IE00B4WXJJ64’,name:’SPDR S&P 500 UCITS ETF’,type:’etf’},
+    {id:’LU0908500753’,name:’Amundi S&P 500 UCITS ETF’,type:’etf’},
+    {id:’IE00BQT3WG13’,name:’iShares Nasdaq 100 UCITS ETF’,type:’etf’},
+    {id:’LU1829221024’,name:’Amundi Nasdaq-100 UCITS ETF’,type:’etf’},
+    {id:’IE00B53L3W79’,name:’iShares STOXX Europe 600 UCITS ETF’,type:’etf’},
+    {id:’LU0846194776’,name:’Amundi STOXX Europe 600 UCITS ETF’,type:’etf’},
+    {id:’LU1681043599’,name:’Xtrackers DAX UCITS ETF’,type:’etf’},
+    {id:’FR0010296061’,name:’Lyxor CAC 40 (DR) UCITS ETF’,type:’etf’},
+    {id:’IE00B60SX394’,name:’iShares Core Global Aggregate Bond UCITS ETF’,type:’etf’},
+    {id:’IE00B14X4T88’,name:’iShares MSCI Japan UCITS ETF’,type:’etf’},
+    {id:’IE00B0M63177’,name:’iShares MSCI China UCITS ETF’,type:’etf’},
+    {id:’LU1737653631’,name:’Amundi MSCI Emerging Markets UCITS ETF’,type:’etf’},
+    {id:’IE00BFNM3P36’,name:’iShares Core FTSE 100 UCITS ETF’,type:’etf’},
+    {id:’IE00B4MCHH10’,name:’iShares MSCI World Small Cap UCITS ETF’,type:’etf’},
+    {id:’LU2089238203’,name:’Xtrackers S&P 500 UCITS ETF’,type:’etf’},
+    {id:’IE00B6R52143’,name:’iShares Global Clean Energy UCITS ETF’,type:’etf’},
+    {id:’IE00B3WJKG14’,name:’iShares Global Water UCITS ETF’,type:’etf’},
+    {id:’IE00B3F81R35’,name:’iShares Global Infrastructure UCITS ETF’,type:’etf’},
+    {id:’IE00B1TXHL60’,name:’iShares MSCI World SRI UCITS ETF’,type:’etf’},
+    {id:’LU1861134382’,name:’Lyxor MSCI All Country World UCITS ETF’,type:’etf’},
+    {id:’IE00B3F81409’,name:’iShares Automation & Robotics UCITS ETF’,type:’etf’},
+    {id:’IE00BYZK4776’,name:’iShares Digitalisation UCITS ETF’,type:’etf’},
+    {id:’IE00B4WXJK79’,name:’SPDR MSCI World UCITS ETF’,type:’etf’},
+    {id:’AAPL’,name:’Apple’,type:’action’},
+    {id:’MSFT’,name:’Microsoft’,type:’action’},
+    {id:’GOOGL’,name:’Alphabet (Google)’,type:’action’},
+    {id:’AMZN’,name:’Amazon’,type:’action’},
+    {id:’NVDA’,name:’NVIDIA’,type:’action’},
+    {id:’META’,name:’Meta Platforms’,type:’action’},
+    {id:’TSLA’,name:’Tesla’,type:’action’},
+    {id:’BRKB’,name:’Berkshire Hathaway B’,type:’action’},
+    {id:’JPM’,name:’JPMorgan Chase’,type:’action’},
+    {id:’V’,name:’Visa’,type:’action’},
+    {id:’JNJ’,name:’Johnson & Johnson’,type:’action’},
+    {id:’WMT’,name:’Walmart’,type:’action’},
+    {id:’NFLX’,name:’Netflix’,type:’action’},
+    {id:’DIS’,name:’Walt Disney’,type:’action’},
+    {id:’PYPL’,name:’PayPal’,type:’action’},
+    {id:’AMD’,name:’Advanced Micro Devices’,type:’action’},
+    {id:’INTC’,name:’Intel’,type:’action’},
+    {id:’COIN’,name:’Coinbase’,type:’action’},
+    {id:’PLTR’,name:’Palantir’,type:’action’},
+    {id:’SOFI’,name:’SoFi Technologies’,type:’action’},
+    {id:’NIO’,name:’NIO’,type:’action’},
+    {id:’BABA’,name:’Alibaba’,type:’action’},
+    {id:’UBER’,name:’Uber’,type:’action’},
+    {id:’ABNB’,name:’Airbnb’,type:’action’},
+    {id:’SNOW’,name:’Snowflake’,type:’action’},
+    {id:’SQ’,name:’Block (Square)’,type:’action’},
+    {id:’SHOP’,name:’Shopify’,type:’action’},
+    {id:’SPOT’,name:’Spotify’,type:’action’},
+    {id:’RBLX’,name:’Roblox’,type:’action’},
+    {id:’HOOD’,name:’Robinhood’,type:’action’},
+    {id:’MCD’,name:"McDonald’s",type:’action’},
+    {id:’KO’,name:’Coca-Cola’,type:’action’},
+    {id:’PEP’,name:’PepsiCo’,type:’action’},
+    {id:’NKE’,name:’Nike’,type:’action’},
+    {id:’SBUX’,name:’Starbucks’,type:’action’},
+    {id:’BA’,name:’Boeing’,type:’action’},
+    {id:’GS’,name:’Goldman Sachs’,type:’action’},
+    {id:’PFE’,name:’Pfizer’,type:’action’},
+    {id:’MRNA’,name:’Moderna’,type:’action’},
+    {id:’MCPA’,name:’LVMH’,type:’action’},
+    {id:’ORPA’,name:"L’Oreal",type:’action’},
+    {id:’TTEPA’,name:’TotalEnergies’,type:’action’},
+    {id:’SANPA’,name:’Sanofi’,type:’action’},
+    {id:’BNPPA’,name:’BNP Paribas’,type:’action’},
+    {id:’ACAPA’,name:’Credit Agricole’,type:’action’},
+    {id:’AIPA’,name:’Air Liquide’,type:’action’},
+    {id:’DSYPA’,name:’Dassault Systemes’,type:’action’},
+    {id:’CAPPA’,name:’Capgemini’,type:’action’},
+    {id:’STMPA’,name:’STMicroelectronics’,type:’action’},
+    {id:’SAFPA’,name:’Safran’,type:’action’},
+    {id:’RRNOPA’,name:’Renault’,type:’action’},
+    {id:’ASMLAS’,name:’ASML’,type:’action’},
+    {id:’ADYENAS’,name:’Adyen’,type:’action’},
+    {id:’SAPDE’,name:’SAP’,type:’action’},
+    {id:’SIEDE’,name:’Siemens’,type:’action’},
+    {id:’BMWDE’,name:’BMW’,type:’action’},
+    {id:’MBGDE’,name:’Mercedes-Benz’,type:’action’},
+    {id:’VOW3DE’,name:’Volkswagen’,type:’action’},
+    {id:’ALVDE’,name:’Allianz’,type:’action’},
+    {id:’BAYNDE’,name:’Bayer’,type:’action’},
+    {id:’ADSDE’,name:’Adidas’,type:’action’},
+    {id:’NOVDE’,name:’Novo Nordisk’,type:’action’},
+    {id:’NESNSW’,name:’Nestle’,type:’action’},
+    {id:’AZNEL’,name:’AstraZeneca’,type:’action’},
+    {id:’SHELLL’,name:’Shell’,type:’action’},
+    {id:’BTC’,name:’Bitcoin (BTC)’,type:’crypto’},
+    {id:’ETH’,name:’Ethereum (ETH)’,type:’crypto’},
+    {id:’SOL’,name:’Solana (SOL)’,type:’crypto’},
+    {id:’BNB’,name:’BNB’,type:’crypto’},
+    {id:’XRP’,name:’XRP (Ripple)’,type:’crypto’},
+    {id:’ADA’,name:’Cardano (ADA)’,type:’crypto’},
+    {id:’AVAX’,name:’Avalanche (AVAX)’,type:’crypto’},
+    {id:’DOT’,name:’Polkadot (DOT)’,type:’crypto’},
+    {id:’MATIC’,name:’Polygon (MATIC)’,type:’crypto’},
+    {id:’LINK’,name:’Chainlink (LINK)’,type:’crypto’},
+    {id:’LTC’,name:’Litecoin (LTC)’,type:’crypto’},
+    {id:’UNI’,name:’Uniswap (UNI)’,type:’crypto’},
+    {id:’ATOM’,name:’Cosmos (ATOM)’,type:’crypto’},
+    {id:’NEAR’,name:’NEAR Protocol’,type:’crypto’},
+    {id:’DOGE’,name:’Dogecoin (DOGE)’,type:’crypto’},
+    {id:’SHIB’,name:’Shiba Inu (SHIB)’,type:’crypto’},
+    {id:’IE00B3F81R35OBL’,name:’iShares Euro Corporate Bond UCITS ETF’,type:’obligation’},
+    {id:’LU1829218609’,name:’Amundi Euro Corporate Bond UCITS ETF’,type:’obligation’},
+    {id:’IE00B14X4N78’,name:’iShares Euro Government Bond UCITS ETF’,type:’obligation’},
+    {id:’IE00BGPP6588’,name:’iShares USD Treasury Bond 1-3yr UCITS ETF’,type:’obligation’},
+    {id:’IE00B3B8Q275’,name:’iShares EUR High Yield Corporate Bond UCITS ETF’,type:’obligation’},
+    {id:’CASHEUR’,name:’Liquidites / Especes (EUR)’,type:’liquidites’},
+    {id:’CASHMMKT’,name:’Fonds monetaire EUR’,type:’liquidites’}
   ];
-  function initials(name){ return name.split(' ').map(function(w){return w[0];}).slice(0,2).join(''); }
-  var state = { connected:true, broker:BROKERS[0], picking:false };
 
-  function renderConn(){
-    var el = document.getElementById('pfConn');
-    if(state.connected){
-      var b = state.broker;
-      el.innerHTML =
-        '<div class="pf-conn pf-conn--ok panel">'
-        + '<div class="pf-conn__okleft">'
-        +   '<span class="pf-broker__mark" style="color:'+b.col+';border-color:'+b.col+'55">'+initials(b.name)+'</span>'
-        +   '<div class="pf-conn__okmeta">'
-        +     '<div class="pf-conn__okrow"><b>'+b.name+'</b><span class="pf-badge pf-badge--bull"><span class="lt-dot"></span>Connecté</span></div>'
-        +     '<span class="pf-conn__sync">'+IC.sync+' Synchronisé il y a 2 min · 14 positions importées</span>'
-        +   '</div>'
-        + '</div>'
-        + '<div class="pf-conn__okact">'
-        +   '<button class="lt-btn lt-btn--ghost lt-btn--sm" data-act="disconnect">Déconnecter</button>'
-        +   '<button class="lt-btn lt-btn--secondary lt-btn--sm" data-act="resync">'+IC.sync+' Resynchroniser</button>'
-        + '</div>'
-        + '</div>';
-    } else {
-      var brokersHtml = '';
-      if(state.picking){
-        brokersHtml = '<div class="pf-brokers">'
-          + BROKERS.map(function(b){
-              return '<button class="pf-broker" data-broker="'+b.id+'">'
-                + '<span class="pf-broker__mark" style="color:'+b.col+';border-color:'+b.col+'55">'+initials(b.name)+'</span>'
-                + '<span class="pf-broker__name">'+b.name+'</span>'
-                + (b.tag ? '<span class="pf-broker__tag">'+b.tag+'</span>' : '')
-                + '<span class="pf-broker__go">'+IC.arrow+'</span></button>';
-            }).join('')
-          + '<p class="pf-brokers__note">'+IC.shield+' Chiffré de bout en bout · Aucun identifiant stocké · Révocable à tout moment</p>'
-          + '</div>';
-      }
-      el.innerHTML =
-        '<div class="pf-conn panel">'
-        + '<div class="pf-conn__head"><div>'
-        +   '<span class="eyebrow"><span class="lt-dot"></span> Connexion sécurisée</span>'
-        +   '<h3 class="pf-conn__title">Connectez votre compte d\'investissement</h3>'
-        +   '<p class="pf-conn__lede">Liez votre plateforme pour synchroniser automatiquement vos positions. Lecture seule — Le Terminal n\'exécute jamais d\'ordre.</p>'
-        +   '</div>'
-        +   (state.picking ? '' : '<button class="lt-btn lt-btn--primary" data-act="pick">'+IC.link+' Connecter un compte</button>')
-        + '</div>'
-        + brokersHtml
-        + '</div>';
-    }
-    document.getElementById('pfMain').style.display = state.connected ? 'block' : 'none';
+  var TYPE_COLORS = { etf:’#7FB8E8’, action:’#4ADE9C’, crypto:’#F0647A’, obligation:’#E8C268’, liquidites:’#C3CAD4’ };
+  var TYPE_LABELS = { etf:’ETF’, action:’Actions’, crypto:’Crypto’, obligation:’Obligations’, liquidites:’Liquidites’ };
+
+  // ── Etat saisie ──
+  var holdings = {};
+  var filterType = ‘all’;
+  var searchQ = ‘’;
+
+  function getToken(){ return localStorage.getItem(‘ta_token’) || ‘’; }
+
+  // ── Toast ──
+  function showToast(msg, type){
+    var c = document.getElementById(‘ltToast’);
+    if(!c){ c = document.createElement(‘div’); c.id=’ltToast’; c.style.cssText=’position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none’; document.body.appendChild(c); }
+    var t = document.createElement(‘div’);
+    var bg = type===’err’?’rgba(240,100,122,0.15)’:type===’ok’?’rgba(74,222,156,0.12)’:’rgba(232,194,104,0.12)’;
+    var brd = type===’err’?’rgba(240,100,122,0.4)’:type===’ok’?’rgba(74,222,156,0.35)’:’rgba(232,194,104,0.35)’;
+    var col = type===’err’?’#F0647A’:type===’ok’?’#4ADE9C’:’#E8C268’;
+    t.style.cssText=’pointer-events:auto;padding:12px 18px;border-radius:6px;border:1px solid ‘+brd+’;background:’+bg+’;color:’+col+’;font-family:Inter,sans-serif;font-size:13.5px;backdrop-filter:blur(8px);animation:toastIn .3s cubic-bezier(.16,1,.3,1)’;
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(function(){ t.style.animation=’toastOut .3s cubic-bezier(.16,1,.3,1) forwards’; setTimeout(function(){ t.remove(); },300); }, 3500);
   }
 
-  document.getElementById('pfConn').addEventListener('click', function(e){
-    var act = e.target.closest('[data-act]'), bk = e.target.closest('[data-broker]');
-    if(act){
-      var a = act.getAttribute('data-act');
-      if(a==='pick'){ state.picking = true; renderConn(); }
-      else if(a==='disconnect'){ state.connected = false; state.picking = false; renderConn(); }
-      else if(a==='resync'){ /* maquette */ }
-    } else if(bk){
-      var id = bk.getAttribute('data-broker');
-      state.broker = BROKERS.filter(function(b){return b.id===id;})[0];
-      state.connected = true; state.picking = false; renderConn();
+  // ── Chargement depuis Supabase ──
+  function loadHoldings(){
+    var token = getToken(); if(!token) return;
+    fetch(‘/api/portfolio’, { headers: {‘Authorization’:’Bearer ‘+token} })
+      .then(function(r){ return r.json(); })
+      .then(function(rows){
+        if(!Array.isArray(rows)) return;
+        holdings = {};
+        rows.forEach(function(r){ holdings[r.asset_id] = parseFloat(r.amount)||0; });
+        renderAssetList();
+        updateDashboard();
+      }).catch(function(){});
+  }
+
+  // ── Sauvegarde ──
+  function saveHoldings(){
+    var token = getToken();
+    if(!token){ showToast(‘Connectez-vous pour sauvegarder votre portefeuille.’,’warn’); return; }
+    var rows = Object.keys(holdings).filter(function(id){ return holdings[id]>0; }).map(function(id){
+      var a = TR_ASSETS.filter(function(x){ return x.id===id; })[0];
+      return { asset_id:id, asset_name:a?a.name:id, asset_type:a?a.type:’etf’, amount:holdings[id] };
+    });
+    var btn = document.getElementById(‘pfSaveBtn’); btn.disabled = true;
+    fetch(‘/api/portfolio’,{ method:’POST’, headers:{‘Content-Type’:’application/json’,’Authorization’:’Bearer ‘+token}, body:JSON.stringify(rows) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ btn.disabled=false; if(d.ok){ showToast(‘Portefeuille sauvegarde.’,’ok’); updateDashboard(); } else showToast(‘Erreur lors de la sauvegarde.’,’err’); })
+      .catch(function(){ btn.disabled=false; showToast(‘Erreur reseau.’,’err’); });
+  }
+
+  // ── Rendu liste ──
+  function typeLabel(t){ return {etf:’ETF’,action:’Action’,crypto:’Crypto’,obligation:’Obligation’,liquidites:’Cash’}[t]||t; }
+
+  function renderAssetList(){
+    var list = document.getElementById(‘pfAssetList’);
+    var q = searchQ.toLowerCase();
+    var filtered = TR_ASSETS.filter(function(a){
+      return (filterType===’all’||a.type===filterType) && (!q||a.name.toLowerCase().indexOf(q)!==-1||a.id.toLowerCase().indexOf(q)!==-1);
+    });
+    if(!filtered.length){ list.innerHTML=’<div class="pf-empty">Aucun actif trouve pour cette recherche.</div>’; return; }
+    list.innerHTML = filtered.map(function(a){
+      var checked = holdings[a.id]>0;
+      return ‘<div class="pf-asset’+(checked?’ is-checked’:’’)+’" data-id="’+a.id+’">’
+        + ‘<input class="pf-asset__cb" type="checkbox" data-id="’+a.id+’"’+(checked?’ checked’:’’)+’ aria-label="’+a.name+’">’
+        + ‘<span class="pf-asset__tag pf-asset__tag--’+a.type+’">’+typeLabel(a.type)+’</span>’
+        + ‘<span class="pf-asset__name">’+a.name+’</span>’
+        + ‘<div class="pf-asset__amount">’
+        +   ‘<input class="pf-asset__amtinput" type="number" min="0" step="0.01" placeholder="0" value="’+(checked?holdings[a.id]:’’)+’" data-id="’+a.id+’" aria-label="Montant investi">’
+        +   ‘<span class="pf-asset__amtcur">EUR</span>’
+        + ‘</div>’
+        + ‘</div>’;
+    }).join(‘’);
+    updateEntryTotal();
+  }
+
+  function updateEntryTotal(){
+    var total = Object.keys(holdings).reduce(function(s,k){ return s+(holdings[k]||0); },0);
+    var el = document.getElementById(‘pfEntryTotal’); if(el) el.textContent = fmtEur0(total);
+  }
+
+  document.getElementById(‘pfAssetList’).addEventListener(‘change’, function(e){
+    var cb = e.target.closest(‘input[type=checkbox]’);
+    var amt = e.target.closest(‘input[type=number]’);
+    if(cb){
+      var id = cb.getAttribute(‘data-id’);
+      var row = document.querySelector(‘.pf-asset[data-id="’+id+’"]’);
+      if(cb.checked){ holdings[id]=holdings[id]||0; if(row) row.classList.add(‘is-checked’); }
+      else { delete holdings[id]; if(row){ row.classList.remove(‘is-checked’); var inp=row.querySelector(‘input[type=number]’); if(inp) inp.value=’’; } }
+      updateEntryTotal();
+    }
+    if(amt){
+      var id2=amt.getAttribute(‘data-id’), v=parseFloat(amt.value)||0;
+      if(v>0) holdings[id2]=v; else delete holdings[id2];
+      updateEntryTotal();
     }
   });
 
-  // ── Courbe d'évolution ──
+  document.getElementById(‘pfFilters’).addEventListener(‘click’, function(e){
+    var btn=e.target.closest(‘.pf-filter’); if(!btn) return;
+    filterType=btn.getAttribute(‘data-type’);
+    Array.prototype.forEach.call(document.querySelectorAll(‘.pf-filter’),function(b){ b.classList.toggle(‘is-on’,b===btn); });
+    renderAssetList();
+  });
+
+  document.getElementById(‘pfSearchInput’).addEventListener(‘input’, function(e){ searchQ=e.target.value; renderAssetList(); });
+  document.getElementById(‘pfSaveBtn’).addEventListener(‘click’, saveHoldings);
+
+  // ── Dashboard ──
+  function computeAlloc(){
+    var byType={}, total=0;
+    Object.keys(holdings).forEach(function(id){
+      var amt=holdings[id]||0; if(!amt) return;
+      var a=TR_ASSETS.filter(function(x){ return x.id===id; })[0];
+      var t=a?a.type:’etf’;
+      byType[t]=(byType[t]||0)+amt; total+=amt;
+    });
+    return {byType:byType,total:total};
+  }
+
+  function updateDashboard(){
+    var alloc=computeAlloc();
+    TOTAL=alloc.total;
+    var el=document.getElementById(‘pfTotal’);
+    if(el){
+      if(reduced){ el.textContent=fmtEur0(TOTAL); }
+      else {
+        var t0=null,dur=900,from=0;
+        (function tick(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur); el.textContent=fmtEur0(from+(TOTAL-from)*(1-Math.pow(1-k,3))); if(k<1)requestAnimationFrame(tick); })(performance.now());
+      }
+    }
+    var pnlEl=document.querySelector(‘.pf-ov__pnl’);
+    if(pnlEl && TOTAL===0) pnlEl.innerHTML=’<span class="pf-ov__pnlsub">Saisissez vos actifs ci-dessus pour voir votre portefeuille.</span>’;
+    drawDonutFromHoldings(alloc);
+    drawChart(‘1A’);
+  }
+
+  // ── Courbe d’evolution ──
   function seriesFor(period){
-    var cfg = { '1M':[30,46050,0.012], '6M':[26,41200,0.03], '1A':[24,33800,0.05], 'Max':[30,12000,0.08] }[period];
-    var n = cfg[0], start = cfg[1], vol = cfg[2], end = 48250, pts = [], seed = period.length*991;
-    function rnd(){ seed = (seed*1103515245 + 12345) & 0x7fffffff; return (seed/0x7fffffff) - 0.5; }
-    for(var i=0;i<n;i++){ var t=i/(n-1); var base=start+(end-start)*Math.pow(t,0.92); var w=base*vol*rnd()*(1-t*0.5); pts.push(Math.max(8000, base+w)); }
+    var end=TOTAL||10000;
+    var cfg={‘1M’:[30,end*0.955,0.012],’6M’:[26,end*0.855,0.03],’1A’:[24,end*0.70,0.05],’Max’:[30,end*0.25,0.08]}[period];
+    var n=cfg[0],start=cfg[1],vol=cfg[2],pts=[],seed=period.length*991;
+    function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return (seed/0x7fffffff)-0.5; }
+    for(var i=0;i<n;i++){ var t2=i/(n-1); var base=start+(end-start)*Math.pow(t2,0.92); var w=base*vol*rnd()*(1-t2*0.5); pts.push(Math.max(100,base+w)); }
     pts[pts.length-1]=end; return pts;
   }
   function drawChart(period){
-    var data = seriesFor(period), W=720, H=240, pad=8;
-    var min = Math.min.apply(null,data)*0.985, max = Math.max.apply(null,data)*1.01;
-    var x = function(i){ return pad + (i/(data.length-1))*(W-pad*2); };
-    var y = function(v){ return H-pad - ((v-min)/(max-min))*(H-pad*2); };
-    var line = data.map(function(v,i){ return (i===0?'M':'L')+x(i).toFixed(1)+','+y(v).toFixed(1); }).join(' ');
-    var area = line+' L'+x(data.length-1).toFixed(1)+','+H+' L'+x(0).toFixed(1)+','+H+' Z';
-    var change = ((data[data.length-1]-data[0])/data[0])*100, up = change>=0;
-    var col = up?'var(--bull)':'var(--bear)', fillCol = up?'rgba(74,222,156,':'rgba(240,100,122,';
-    document.getElementById('pfChart').innerHTML =
-      '<defs><linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+fillCol+'0.28)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient></defs>'
-      + '<line x1="0" x2="720" y1="60" y2="60" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="120" y2="120" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="180" y2="180" stroke="rgba(58,65,76,0.25)"/>'
-      + '<path d="'+area+'" fill="url(#pfFill)"/>'
-      + '<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px '+fillCol+'0.4))"/>'
-      + '<circle cx="'+x(data.length-1).toFixed(1)+'" cy="'+y(data[data.length-1]).toFixed(1)+'" r="4.5" fill="'+col+'" stroke="#07090C" stroke-width="2"/>';
-    var lbl = { '1M':'1 mois','6M':'6 mois','1A':'1 an','Max':'tout l’historique' }[period];
-    document.getElementById('pfFootPeriod').textContent = lbl;
-    var fc = document.getElementById('pfFootChange');
-    fc.textContent = (change>=0?'+':'') + change.toFixed(1).replace('.',',') + ' % sur la période';
-    fc.style.color = up?'var(--bull)':'var(--bear)';
+    var data=seriesFor(period),W=720,H=240,pad=8;
+    var min=Math.min.apply(null,data)*0.985,max=Math.max.apply(null,data)*1.01;
+    var x=function(i){ return pad+(i/(data.length-1))*(W-pad*2); };
+    var y=function(v){ return H-pad-((v-min)/(max-min))*(H-pad*2); };
+    var line=data.map(function(v,i){ return (i===0?’M’:’L’)+x(i).toFixed(1)+’,’+y(v).toFixed(1); }).join(‘ ‘);
+    var area=line+’ L’+x(data.length-1).toFixed(1)+’,’+H+’ L’+x(0).toFixed(1)+’,’+H+’ Z’;
+    var change=((data[data.length-1]-data[0])/data[0])*100,up=change>=0;
+    var col=up?’var(--bull)’:’var(--bear)’,fillCol=up?’rgba(74,222,156,’:’rgba(240,100,122,’;
+    document.getElementById(‘pfChart’).innerHTML=
+      ‘<defs><linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="’+fillCol+’0.28)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient></defs>’
+      +’<line x1="0" x2="720" y1="60" y2="60" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="120" y2="120" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="180" y2="180" stroke="rgba(58,65,76,0.25)"/>’
+      +’<path d="’+area+’" fill="url(#pfFill)"/>’
+      +’<path d="’+line+’" fill="none" stroke="’+col+’" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px ‘+fillCol+’0.4))"/>’
+      +’<circle cx="’+x(data.length-1).toFixed(1)+’" cy="’+y(data[data.length-1]).toFixed(1)+’" r="4.5" fill="’+col+’" stroke="#07090C" stroke-width="2"/>’;
+    var lbl={‘1M’:’1 mois’,’6M’:’6 mois’,’1A’:’1 an’,’Max’:’tout l\’historique’}[period];
+    document.getElementById(‘pfFootPeriod’).textContent=lbl;
+    var fc=document.getElementById(‘pfFootChange’);
+    fc.textContent=(change>=0?’+’:’’)+change.toFixed(1).replace(‘.’,’,’)+’ % sur la periode’;
+    fc.style.color=up?’var(--bull)’:’var(--bear)’;
   }
-  document.getElementById('pfPeriod').addEventListener('click', function(e){
-    var b = e.target.closest('.pf-period__btn'); if(!b) return;
-    Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle('is-on', x===b); });
-    drawChart(b.getAttribute('data-p'));
+  document.getElementById(‘pfPeriod’).addEventListener(‘click’,function(e){
+    var b=e.target.closest(‘.pf-period__btn’); if(!b) return;
+    Array.prototype.forEach.call(this.children,function(x){ x.classList.toggle(‘is-on’,x===b); });
+    drawChart(b.getAttribute(‘data-p’));
   });
 
-  // ── Donut d'allocation ──
-  var ALLOC = [
-    { k:'ETF monde', pct:42, col:'#7FB8E8' },
-    { k:'Actions', pct:28, col:'#4ADE9C' },
-    { k:'Obligations', pct:14, col:'#E8C268' },
-    { k:'Liquidités', pct:9, col:'#C3CAD4' },
-    { k:'Crypto', pct:7, col:'#F0647A' }
-  ];
-  function drawDonut(){
-    var R=56, C=2*Math.PI*R, acc=0;
-    var html = '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>';
-    ALLOC.forEach(function(a){
-      var len = a.pct/100*C;
-      html += '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+a.col+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-acc)+'" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>';
-      acc += len;
+  // ── Donut depuis les holdings ──
+  function drawDonutFromHoldings(alloc){
+    var R=56,C=2*Math.PI*R,acc=0;
+    var types=Object.keys(alloc.byType),total=alloc.total;
+    var html=’<circle cx="70" cy="70" r="’+R+’" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>’;
+    if(!total){
+      html+=’<text x="70" y="67" text-anchor="middle" class="pf-donut__big">&#8212;</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">aucune donnee</text>’;
+      document.getElementById(‘pfDonut’).innerHTML=html;
+      document.getElementById(‘pfLegend’).innerHTML=’<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:12px 0">Saisissez vos actifs pour voir la repartition.</div>’;
+      return;
+    }
+    types.forEach(function(t){
+      var pct=alloc.byType[t]/total,len=pct*C;
+      html+=’<circle cx="70" cy="70" r="’+R+’" fill="none" stroke="’+(TYPE_COLORS[t]||’#7FB8E8’)+’" stroke-width="16" stroke-dasharray="’+len+’ ‘+(C-len)+’" stroke-dashoffset="’+(-acc)+’" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>’;
+      acc+=len;
     });
-    html += '<text x="70" y="64" text-anchor="middle" class="pf-donut__big">5</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classes</text>';
-    document.getElementById('pfDonut').innerHTML = html;
-    document.getElementById('pfLegend').innerHTML = ALLOC.map(function(a){
-      return '<div class="pf-leg"><span class="pf-leg__dot" style="background:'+a.col+'"></span><span class="pf-leg__k">'+a.k+'</span><span class="pf-leg__pct">'+a.pct+' %</span><span class="pf-leg__val">'+fmtEur0(TOTAL*a.pct/100)+'</span></div>';
-    }).join('');
+    html+=’<text x="70" y="64" text-anchor="middle" class="pf-donut__big">’+types.length+’</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classe’+(types.length>1?’s’:’’)+’</text>’;
+    document.getElementById(‘pfDonut’).innerHTML=html;
+    document.getElementById(‘pfLegend’).innerHTML=types.map(function(t){
+      var pct=Math.round(alloc.byType[t]/total*100);
+      return ‘<div class="pf-leg"><span class="pf-leg__dot" style="background:’+(TYPE_COLORS[t]||’#7FB8E8’)+’"></span><span class="pf-leg__k">’+(TYPE_LABELS[t]||t)+’</span><span class="pf-leg__pct">’+pct+’ %</span><span class="pf-leg__val">’+fmtEur0(alloc.byType[t])+’</span></div>’;
+    }).join(‘’);
   }
 
   // ── Plans ──
@@ -414,16 +647,7 @@
     }).join('');
   }
 
-  // ── Compteur du total ──
-  function countTotal(){
-    var el = document.getElementById('pfTotal');
-    if(reduced){ el.textContent = fmtEur0(TOTAL); return; }
-    var t0=null, dur=1200;
-    function tick(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur); el.textContent=fmtEur0(TOTAL*(1-Math.pow(1-k,3))); if(k<1)requestAnimationFrame(tick); }
-    requestAnimationFrame(tick);
-  }
-
-  function init(){ renderConn(); drawChart('1A'); drawDonut(); drawPlans(); countTotal(); }
+  function init(){ renderAssetList(); updateDashboard(); drawPlans(); loadHoldings(); }
   window.ecoReloadNews = function(){};
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
