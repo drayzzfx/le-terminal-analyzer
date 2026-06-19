@@ -304,6 +304,18 @@
     });
   }
 
+  // Homogénéise le fil d'ariane sur TOUTES les pages : même structure + avatar
+  // dynamique (initiales du compte). Corrige les pages à .top statique (ex.
+  // calculateur affichait « TR » en dur au lieu des initiales réelles).
+  var _topEl = document.querySelector('.top');
+  if (_topEl) {
+    var _em = ''; try { _em = localStorage.getItem('ta_email') || ''; } catch (e) {}
+    var _ini = _em ? _em.slice(0, 2).toUpperCase() : 'LT';
+    _topEl.innerHTML = '<div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b>' + cfg.crumb + '</b></div>'
+      + '<div class="top__right"><span class="top__status"><span class="lt-dot"></span> Marché ouvert</span>'
+      + '<span class="top__avatar">' + _ini + '</span></div>';
+  }
+
   // Masque le dock d'icônes de l'accueil sur toute page à appshell (desktop),
   // y compris si la coquille .app est statique (ex. calculateur).
   var _dock = document.querySelector('nav.lt-dock:not(.lt-dock--mobile-only)');
