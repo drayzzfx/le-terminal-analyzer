@@ -173,7 +173,14 @@
         <div id="gExtractState" style="display:none;margin-top:10px;"></div>
       </div>
 
-      <!-- ÉTAPE 2 : données extraites (lecture seule) + pseudo -->
+      <!-- Pseudo + fond : toujours visibles -->
+      <div class="fld">
+        <label>Pseudo</label>
+        <input id="gHandle" value="@mon_pseudo" placeholder="@votre_pseudo">
+      </div>
+      <div class="fld"><label>Fond / ambiance</label><div class="gen__bgs" id="gBgs"></div></div>
+
+      <!-- ÉTAPE 2 : données extraites (lecture seule) — apparaît après upload -->
       <div id="gExtracted" style="display:none;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;background:rgba(74,222,156,.07);border:1px solid rgba(74,222,156,.2);border-radius:6px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE9C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
@@ -191,18 +198,15 @@
           <div class="fld"><label>Entrée</label><input id="gEntry" readonly style="opacity:.6;cursor:default;"></div>
           <div class="fld"><label>Sortie</label><input id="gExit" readonly style="opacity:.6;cursor:default;"></div>
         </div>
-        <div class="fld" style="margin-top:4px;">
-          <label>Pseudo <span style="font-size:10px;color:#7E8794;font-weight:400;letter-spacing:0;">(seul champ modifiable)</span></label>
-          <input id="gHandle" value="@mon_pseudo" placeholder="@votre_pseudo">
-        </div>
-        <div class="fld"><label>Fond / ambiance</label><div class="gen__bgs" id="gBgs"></div></div>
-        <div class="gen__actions">
-          <button class="lt-btn lt-btn--primary" id="gGen" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg> Générer l'image</button>
-          <div class="gen__share">
-            <button id="shX" title="Partager sur X" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.53 3H20.5l-6.49 7.41L21.75 21h-6.02l-4.71-6.16L5.6 21H2.63l6.94-7.93L2.5 3h6.17l4.26 5.63L17.53 3zm-1.06 16h1.66L7.62 4.69H5.84L16.47 19z"/></svg></button>
-            <button id="shTg" title="Partager sur Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/></svg></button>
-            <button id="shLink" title="Copier le lien" aria-label="Copier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
-          </div>
+      </div>
+
+      <!-- Bouton générer : toujours visible -->
+      <div class="gen__actions">
+        <button class="lt-btn lt-btn--primary" id="gGen" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg> Générer l'image</button>
+        <div class="gen__share">
+          <button id="shX" title="Partager sur X" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.53 3H20.5l-6.49 7.41L21.75 21h-6.02l-4.71-6.16L5.6 21H2.63l6.94-7.93L2.5 3h6.17l4.26 5.63L17.53 3zm-1.06 16h1.66L7.62 4.69H5.84L16.47 19z"/></svg></button>
+          <button id="shTg" title="Partager sur Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/></svg></button>
+          <button id="shLink" title="Copier le lien" aria-label="Copier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
         </div>
       </div>
 
@@ -502,7 +506,7 @@
     renderGrid();
   });
 
-  function init(){ renderBgs(); renderGrid(); }
+  function init(){ renderBgs(); renderPreview(); renderGrid(); }
   window.ecoReloadNews=init;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
