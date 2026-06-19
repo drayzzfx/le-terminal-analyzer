@@ -117,6 +117,10 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 .bm-gate__field input:focus{border-color:rgba(127,184,232,.5)}
 .bm-gate__submit{width:100%;padding:12px;background:var(--accent,#7FB8E8);border:none;border-radius:6px;color:#07090C;font-family:Inter,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .18s;margin-top:4px}
 .bm-gate__submit:hover{background:var(--accent-bright,#BFDCF5)}
+.bm-gate__sep{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22)}
+.bm-gate__sep::before,.bm-gate__sep::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.bm-gate__google{width:100%;padding:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:6px;color:var(--text-title,#F2F4F7);font-family:Inter,sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .18s}
+.bm-gate__google:hover{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.28)}
 .bm-gate__submit:disabled{opacity:.4;cursor:not-allowed}
 .bm-gate__err{font-size:12px;color:#F0647A;margin-top:8px;min-height:16px;text-align:left}
 .bm-gate__close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted,#7E8794);cursor:pointer;padding:4px;line-height:1;border-radius:4px}
@@ -221,6 +225,12 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
       <button class="bm-gate__tab on" id="bmGateTabLogin" onclick="bmGateSwitchTab('login')">Connexion</button>
       <button class="bm-gate__tab" id="bmGateTabSignup" onclick="bmGateSwitchTab('signup')">Créer un compte</button>
     </div>
+    <!-- Bouton Google (commun aux deux onglets) -->
+    <button class="bm-gate__google" onclick="bmGateDoGoogle()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuer avec Google
+    </button>
+    <div class="bm-gate__sep">ou</div>
     <div id="bmGateLoginForm">
       <div class="bm-gate__field"><label>E-mail</label><input type="email" id="bmGateEmail" placeholder="vous@exemple.com" autocomplete="email"/></div>
       <div class="bm-gate__field"><label>Mot de passe</label><input type="password" id="bmGatePass" placeholder="••••••••" autocomplete="current-password"/></div>
@@ -703,7 +713,7 @@ setView('bubbles'); // vue Bulles par défaut — la heatmap se construit au 1er
 <!-- ── Gate : accès pages protégées pour non-connectés ── -->
 <script>(function(){
   // Pages libres d'accès même sans compte
-  var FREE_PAGES = ['bubble.html','index.html','landing.html','tarifs.html','legal.html','avis.html'];
+  var FREE_PAGES = ['bubble.html','index.html','landing.html','tarifs.html','legal.html','avis.html','calculateur.html','mur-des-trades.html'];
   function isLoggedIn(){ return !!localStorage.getItem('ta_token'); }
 
   function isFree(href){
@@ -807,6 +817,38 @@ setView('bubbles'); // vue Bulles par défaut — la heatmap se construit au 1er
       .catch(function(){ err.textContent = 'Erreur réseau, réessayez.'; })
       .finally(function(){ btn.disabled=false; btn.textContent='Créer mon compte'; });
   };
+
+  // Google OAuth
+  var _supabaseUrl = '';
+  fetch('/api/config').then(function(r){ return r.json(); }).then(function(d){ _supabaseUrl = d.supabaseUrl || ''; }).catch(function(){});
+
+  window.bmGateDoGoogle = function(){
+    if(!_supabaseUrl){ setTimeout(bmGateDoGoogle, 400); return; }
+    // Stocke la destination pour récupération post-redirect
+    if(_pendingHref) sessionStorage.setItem('bm_gate_redirect', _pendingHref);
+    var redirectTo = window.location.origin + '/bubble.html';
+    window.location.href = _supabaseUrl + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(redirectTo);
+  };
+
+  // Récupère le token OAuth après retour Google (hash #access_token=...)
+  (function handleOAuthCallback(){
+    var hash = window.location.hash;
+    if(!hash || hash.indexOf('access_token') === -1) return;
+    var params = new URLSearchParams(hash.slice(1));
+    var token = params.get('access_token');
+    if(!token || params.get('token_type') !== 'bearer') return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    localStorage.setItem('ta_token', token);
+    fetch('/api/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'user', token:token}) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d && d.email) localStorage.setItem('ta_email', d.email); })
+      .catch(function(){})
+      .finally(function(){
+        var dest = sessionStorage.getItem('bm_gate_redirect');
+        sessionStorage.removeItem('bm_gate_redirect');
+        if(dest) window.location.href = dest;
+      });
+  })();
 
   // Touche Escape pour fermer
   document.addEventListener('keydown', function(e){
