@@ -184,6 +184,7 @@
 .lt-nav__links > a { font-size: 13px; color: var(--text-muted); letter-spacing: 0.04em; transition: color var(--dur-fast) var(--ease-out); }
 .lt-nav__links > a:hover { color: var(--text-title); }
 .lt-nav__actions { display: flex; gap: 10px; align-items: center; }
+.lt-nav__cta-ic { display: none; }  /* icône premium : visible seulement en mobile (voir media ≤560) */
 .lt-nav__pill { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); border: 1px solid var(--border-subtle); border-radius: var(--r-sm); padding: 5px 9px; cursor: pointer; transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
 .lt-nav__pill:hover { color: var(--accent); border-color: var(--border); }
 
@@ -207,10 +208,21 @@
   .lt-nav, .lt-chrome.is-scrolled .lt-nav { padding: 12px 20px; }
 }
 @media (max-width: 560px) {
-  .lt-nav, .lt-chrome.is-scrolled .lt-nav { padding: 10px 14px; }
-  .lt-nav__word { letter-spacing: 0.14em; font-size: 12.5px; }
+  .lt-nav, .lt-chrome.is-scrolled .lt-nav { padding: 10px 12px; }
+  /* Mobile : on libère de la place — logo réduit au pictogramme, langue masquée */
+  .lt-nav__word { display: none; }
   .lt-nav__pill { display: none; }
   .lt-nav__actions { gap: 8px; }
+  /* Premium → bouton carré à icône (texte masqué) */
+  .lt-nav__cta { padding: 0; width: 38px; height: 38px; border-radius: var(--r-md); flex-shrink: 0; }
+  .lt-nav__cta-txt { display: none; }
+  .lt-nav__cta-ic { display: inline-flex; }
+  /* Profil → puce carrée (avatar seul, sans nom ni chevron) */
+  .lt-ub-name, .lt-ub-caret { display: none !important; }
+  .lt-ub-chip { padding: 0 !important; width: 38px; height: 38px; justify-content: center; }
+  .lt-ub-avatar { width: 26px; height: 26px; }
+  /* Connexion (déconnecté) → bouton compact qui ne déborde pas */
+  #loginBtn { padding: 8px 12px; }
 }
 
 /* ---------- LEFT SIDE DOCK (fixed page menu, mobile bottom bar) ---------- */

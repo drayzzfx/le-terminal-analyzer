@@ -79,7 +79,7 @@
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
       <div id="ltUserBar"></div>
       <script>(function(){var e=localStorage.getItem('ta_email'),t=localStorage.getItem('ta_token');if(e&&t){var lb=document.getElementById('loginBtn');if(lb)lb.style.display='none';var bar=document.getElementById('ltUserBar');if(bar){var ini=e.charAt(0).toUpperCase(),pseudo=localStorage.getItem('lt_pseudo')||'',name=pseudo||e.split('@')[0];bar.style.cssText='display:inline-flex;align-items:center;gap:8px;position:relative;';bar.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);cursor:pointer;" id="ltUbChipEarly"><div style="width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#7FB8E8,#BFDCF5);display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:12px;font-weight:700;color:#07090C;">'+ini+'</div><span style="font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#F2F4F7;">'+name+'</span></div>';}}})()</script>
-      <a class="lt-btn lt-btn--primary lt-btn--sm" href="./tarifs.html" data-en="Premium Access">Accès Premium</a>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="./tarifs.html"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
     </div>
   </header>
 </div>
