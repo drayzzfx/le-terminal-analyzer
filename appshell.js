@@ -251,7 +251,19 @@
       + 'body.eco-page .calcard__frame{width:100%}'
       // Le fil d'ariane est « sticky » : son fond doit être opaque + flouté, sinon
       // le contenu qui défile dessous transparaît (effet de chevauchement).
-      + '.top{background:var(--bg-base,#07090C);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}';
+      + '.top{background:var(--bg-base,#07090C);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}'
+      // ── Mobile / iPad (≤880px) : hamburger + tiroir de navigation complet ──
+      + '.lt-burger{display:none}.lt-mnav,.lt-mnav__bd{display:none}'
+      + '@media (max-width:880px){'
+      +   'body{overflow-x:hidden}'
+      +   '.lt-burger{display:inline-flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:38px;height:38px;margin-right:10px;background:transparent;border:1px solid var(--border-subtle);border-radius:var(--r-md,6px);cursor:pointer;flex-shrink:0;padding:0}'
+      +   '.lt-burger span{display:block;width:17px;height:1.6px;background:var(--text-body);border-radius:2px}'
+      +   '.lt-mnav__bd{display:block;position:fixed;inset:0;z-index:1400;background:rgba(7,9,12,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}'
+      +   '.lt-mnav__bd.is-open{opacity:1;visibility:visible}'
+      +   '.lt-mnav{display:block;position:fixed;top:0;left:0;bottom:0;z-index:1401;width:min(84vw,300px);background:linear-gradient(180deg,var(--bg-surface),var(--bg-base));border-right:1px solid var(--border-subtle);box-shadow:0 0 60px rgba(0,0,0,.6);transform:translateX(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);overflow-y:auto;-webkit-overflow-scrolling:touch}'
+      +   '.lt-mnav.is-open{transform:none}'
+      +   '.lt-mnav__inner{padding:16px 12px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}'
+      + '}';
     document.head.appendChild(st);
   }
 
@@ -340,5 +352,41 @@
     });
     // Vérifie le PRO côté serveur et met à jour le pied (email + déconnexion)
     refreshProFooter();
+
+    // ── Mobile / iPad (≤880px) : tiroir de navigation complet ──
+    // Le menu hiérarchique (barre Outils, sous-pages éco incluses) n'est pas
+    // accessible sous 880px (sidebar masquée). On clone la navigation dans un
+    // tiroir ouvert par un hamburger placé dans le fil d'ariane.
+    var _topbar = document.querySelector('.top');
+    var _crumb = _topbar && _topbar.querySelector('.top__crumb');
+    if (_crumb && !document.querySelector('.lt-mnav')) {
+      var burger = document.createElement('button');
+      burger.className = 'lt-burger';
+      burger.type = 'button';
+      burger.setAttribute('aria-label', 'Ouvrir le menu');
+      burger.innerHTML = '<span></span><span></span><span></span>';
+      _crumb.insertBefore(burger, _crumb.firstChild);
+
+      var bd = document.createElement('div'); bd.className = 'lt-mnav__bd';
+      var drawer = document.createElement('aside'); drawer.className = 'lt-mnav';
+      drawer.setAttribute('aria-label', 'Navigation');
+      drawer.innerHTML = '<div class="lt-mnav__inner">' + sideEl.innerHTML + '</div>';
+      document.body.appendChild(bd);
+      document.body.appendChild(drawer);
+
+      var mnavClose = function () { drawer.classList.remove('is-open'); bd.classList.remove('is-open'); };
+      burger.addEventListener('click', function () { drawer.classList.add('is-open'); bd.classList.add('is-open'); });
+      bd.addEventListener('click', mnavClose);
+      drawer.addEventListener('click', function (e) {
+        var car = e.target.closest('.side__caret');
+        if (car) {
+          e.preventDefault();
+          var sub = car.closest('.side__row').nextElementSibling;
+          if (sub && sub.classList.contains('side__sub')) { sub.classList.toggle('is-open'); car.classList.toggle('is-open'); }
+          return;
+        }
+        if (e.target.closest('a.side__item, a.side__subitem')) mnavClose();
+      });
+    }
   }
 })();
