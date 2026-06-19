@@ -308,6 +308,15 @@
   // y compris si la coquille .app est statique (ex. calculateur).
   var _dock = document.querySelector('nav.lt-dock:not(.lt-dock--mobile-only)');
   if (_dock) _dock.classList.add('lt-dock--mobile-only');
+  // Si la page n'a pas de dock, on l'injecte (barre du bas mobile) pour que TOUTES
+  // les pages aient l'accès rapide aux outils (Patrimoine, Calendrier éco, etc.).
+  if (!document.querySelector('nav.lt-dock')) {
+    var _shortLbl = { dashboard:'Accueil', journal:'Journal', analyzer:'Analyzer', patrimoine:'Patrim.', calendrier:'Éco', bubble:'Bubble', calculateur:'Pips', trades:'Trades' };
+    var _dockHTML = '<nav class="lt-dock lt-dock--mobile-only" aria-label="Pages">' + NAV.map(function (p) {
+      return '<a class="lt-dock__item' + (p.key === cfg.key ? ' is-active' : '') + '" href="' + p.href + '">' + p.icon + '<span class="lt-dock__lbl">' + (_shortLbl[p.key] || p.label) + '</span></a>';
+    }).join('') + '</nav>';
+    document.body.insertAdjacentHTML('beforeend', _dockHTML);
+  }
 
   // ── PART 2 : remplit la barre latérale (toutes les pages) ──
   var sideEl = document.querySelector('.app > .side, aside.side');
@@ -357,15 +366,14 @@
     // Le menu hiérarchique (barre Outils, sous-pages éco incluses) n'est pas
     // accessible sous 880px (sidebar masquée). On clone la navigation dans un
     // tiroir ouvert par un hamburger placé dans le fil d'ariane.
-    var _topbar = document.querySelector('.top');
-    var _crumb = _topbar && _topbar.querySelector('.top__crumb');
-    if (_crumb && !document.querySelector('.lt-mnav')) {
+    var _nav = document.querySelector('.lt-nav');
+    if (_nav && !document.querySelector('.lt-mnav')) {
       var burger = document.createElement('button');
       burger.className = 'lt-burger';
       burger.type = 'button';
       burger.setAttribute('aria-label', 'Ouvrir le menu');
       burger.innerHTML = '<span></span><span></span><span></span>';
-      _crumb.insertBefore(burger, _crumb.firstChild);
+      _nav.insertBefore(burger, _nav.firstChild);
 
       var bd = document.createElement('div'); bd.className = 'lt-mnav__bd';
       var drawer = document.createElement('aside'); drawer.className = 'lt-mnav';
