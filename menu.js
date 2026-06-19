@@ -643,7 +643,9 @@
 
   window.ltDoGoogleAuth = function() {
     if(!_ltSbUrl) { setTimeout(ltDoGoogleAuth, 500); return; }
-    window.location.href = _ltSbUrl + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(window.location.origin + '/index.html');
+    // Après Google → revient sur la page courante (ou la destination en attente)
+    var dest = sessionStorage.getItem('lt_gate_redirect') || window.location.href.split('#')[0];
+    window.location.href = _ltSbUrl + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(dest);
   };
 
   window.ltDoAuth = async function() {
@@ -1046,6 +1048,82 @@
     } else {
       inject();
     }
+  })();
+
+  // ── INTERCEPTEUR GLOBAL : pages protégées sans connexion ──
+  (function(){
+    // Pages accessibles sans compte
+    var LT_FREE = {
+      '': true, 'index.html': true, 'landing.html': true,
+      'bubble.html': true, 'calculateur.html': true, 'mur-des-trades.html': true,
+      'tarifs.html': true, 'legal.html': true, 'avis.html': true,
+    };
+
+    function ltIsLoggedIn(){ return !!localStorage.getItem('ta_token'); }
+
+    function ltPageSeg(href){
+      if(!href) return '';
+      try {
+        var u = new URL(href, location.href);
+        if(u.origin !== location.origin) return null; // externe → ne pas bloquer
+        return u.pathname.split('/').pop() || 'index.html';
+      } catch(e){ return ''; }
+    }
+
+    // Récupère le token OAuth après retour Google (hash #access_token=...)
+    (function handleOAuth(){
+      var hash = window.location.hash;
+      if(!hash || hash.indexOf('access_token') === -1) return;
+      var params = new URLSearchParams(hash.slice(1));
+      var token = params.get('access_token');
+      if(!token || params.get('token_type') !== 'bearer') return;
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      localStorage.setItem('ta_token', token);
+      fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'user', token:token})})
+        .then(function(r){ return r.json(); })
+        .then(function(d){ if(d && d.email) localStorage.setItem('ta_email', d.email); })
+        .catch(function(){})
+        .finally(function(){
+          var dest = sessionStorage.getItem('lt_gate_redirect');
+          sessionStorage.removeItem('lt_gate_redirect');
+          if(dest) window.location.href = dest;
+          else { ltSyncUser(); ltRenderUserBar(); }
+        });
+    })();
+
+    document.addEventListener('click', function(e){
+      if(ltIsLoggedIn()) return;
+      var a = e.target.closest('a[href]');
+      if(!a) return;
+      var href = a.getAttribute('href');
+      if(!href || href.charAt(0) === '#') return; // ancre pure → libre
+      var seg = ltPageSeg(href);
+      if(seg === null) return; // lien externe
+      if(LT_FREE[seg]) return; // page libre
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Mémorise la destination pour la redirection post-connexion
+      try {
+        var abs = new URL(href, location.href).href;
+        sessionStorage.setItem('lt_gate_redirect', abs);
+      } catch(err){}
+
+      ltInjectAuthModal();
+      var el = document.getElementById('ltAuthOverlay');
+      if(el) { el.classList.add('show'); ltSwitchAuthTab('login'); }
+    }, true);
+
+    // Après connexion par e-mail, redirige si une destination était en attente
+    var _origDoAuth = window.ltDoAuth;
+    window.ltDoAuth = async function(){
+      await _origDoAuth.apply(this, arguments);
+      if(localStorage.getItem('ta_token')){
+        var dest = sessionStorage.getItem('lt_gate_redirect');
+        if(dest){ sessionStorage.removeItem('lt_gate_redirect'); window.location.href = dest; }
+      }
+    };
   })();
 
 })();
