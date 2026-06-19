@@ -239,15 +239,15 @@
   <!-- DERNIERS PARTAGES -->
   <section>
     <div class="sh-head">
-      <h2 class="sh-title" data-en="Latest shares">Derniers partages</h2>
+      <h2 class="sh-title">Le mur communautaire</h2>
       <div class="sh-tabs" id="shTabs">
-        <button class="sh-tab on" data-sort="hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3-1 4-1 6a3 3 0 0 0 6 .5c0-1.5-.8-2.5-.8-2.5 2 1.5 3 3.8 3 6A6.2 6.2 0 0 1 6 13c0-3.5 3-5 6-10z"/></svg> <span data-en="Top today">Top du jour</span></button>
-        <button class="sh-tab" data-sort="recent" data-en="Recent">Récents</button>
-        <button class="sh-tab" data-sort="gain" data-en="Biggest gains">Plus gros gains</button>
+        <button class="sh-tab on" data-sort="likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.3 3-5.5A3.5 3.5 0 0 0 12 6 3.5 3.5 0 0 0 2 8.5C2 10.7 3.5 12.5 5 14l7 7z"/></svg> Top votes</button>
+        <button class="sh-tab" data-sort="recent">Récents</button>
+        <button class="sh-tab" data-sort="gain">Plus gros gains</button>
       </div>
     </div>
-    <div class="sh-grid" id="shGrid"></div>
-    <p class="mt-disclaim" data-en="Illustrative results. Past performance does not guarantee future results. Trading involves a risk of capital loss.">Résultats illustratifs. Les performances passées ne préjugent pas des performances futures. Le trading comporte un risque de perte en capital.</p>
+    <div id="shGrid" class="sh-grid"></div>
+    <p class="mt-disclaim">Résultats vérifiés par screenshot. Les performances passées ne préjugent pas des performances futures. Le trading comporte un risque de perte en capital.</p>
   </section>
 
 </div>
@@ -279,17 +279,6 @@
   ];
   var currentBg = BACKGROUNDS[0].src;
 
-  var SHARES = [
-    { h:'@max_scalp',   pair:'BTC/USD', side:'long',  pct:318, amount:12720, mins:2,   likes:248 },
-    { h:'@deltaone',    pair:'SOL/USD', side:'long',  pct:211, amount:6330,  mins:52,  likes:187 },
-    { h:'@nova_fx',     pair:'EUR/USD', side:'short', pct:142, amount:11360, mins:11,  likes:156 },
-    { h:'@ict_lucas',   pair:'US100',   side:'long',  pct:86,  amount:10320, mins:24,  likes:132 },
-    { h:'@kenji_t',     pair:'NVDA',    side:'long',  pct:73,  amount:6570,  mins:60,  likes:120 },
-    { h:'@sarah_swings',pair:'XAU/USD', side:'long',  pct:54,  amount:3240,  mins:38,  likes:98 },
-    { h:'@linea',       pair:'GBP/USD', side:'short', pct:38,  amount:2660,  mins:120, likes:64 },
-    { h:'@risk_off',    pair:'WTI',     side:'short', pct:-22, amount:-1100, mins:60,  likes:41 }
-  ];
-  var AV=['#7FB8E8','#4ADE9C','#4ADE9C','#E8C268','#4ADE9C','#9fb0c4','#E8C268','#F0647A'];
 
   function getLang(){return localStorage.getItem('lt_lang')||'fr';}
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -472,41 +461,163 @@
     var img=new Image(); img.crossOrigin='anonymous';
     img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=currentBg;
   }
-  document.getElementById('gGen').addEventListener('click',exportImage);
-  function shareText(){var c=compute();return (document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal · Screenshot vérifié';}
-  document.getElementById('shX').onclick=function(){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(shareText())+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');};
-  document.getElementById('shTg').onclick=function(){window.open('https://t.me/share/url?url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html')+'&text='+encodeURIComponent(shareText()),'_blank');};
-  document.getElementById('shLink').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText('https://le-terminal-analyzer.vercel.app/mur-des-trades.html');};
+  // ── Export image (canvas) + Publier sur le mur ──
+  var AV=['#7FB8E8','#4ADE9C','#4ADE9C','#E8C268','#4ADE9C','#9fb0c4','#E8C268','#F0647A'];
 
-  // ── Derniers partages ──
-  var sort='hot';
-  function scCard(t,i){
-    var win=t.amount>=0,l=getLang();
-    return '<article class="sc'+(win?'':' is-loss')+'">'
-      +'<div class="sc__top"><span class="sc__av" style="background:'+AV[i%AV.length]+'">'+initials(t.h)+'</span>'
-      +'<span class="sc__id"><b>'+esc(t.h)+'</b><small>'+ago(t.mins)+'</small></span>'
-      +'<span class="sc__badge '+t.side+'">'+(t.side==='long'?'Long':'Short')+'</span></div>'
-      +'<div class="sc__pairlbl">'+esc(t.pair)+'</div>'
-      +'<div class="sc__pct">'+(t.pct>=0?'+':'−')+Math.abs(t.pct)+'%</div>'
-      +'<div class="sc__amt">'+(t.amount>=0?'+':'−')+nb(t.amount)+' €</div>'
-      +'<div class="sc__foot"><span class="sc__likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.3 3-5.5A3.5 3.5 0 0 0 12 6 3.5 3.5 0 0 0 2 8.5C2 10.7 3.5 12.5 5 14l7 7z"/></svg> '+t.likes+'</span>'
-      +'<button class="sc__reshare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg> '+(l==='en'?'Reshare':'Repartager')+'</button></div>'
-      +'</article>';
+  function buildCanvas(callback){
+    var c=compute(), win=c.gain>=0, W=1080, H=1350;
+    var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    var x=cv.getContext('2d');
+    function draw(bg){
+      if(bg){var r=Math.max(W/bg.width,H/bg.height);var w=bg.width*r,h=bg.height*r;x.drawImage(bg,(W-w)/2,(H-h)/2,w,h);}
+      else{var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#11161f');g.addColorStop(1,'#07090c');x.fillStyle=g;x.fillRect(0,0,W,H);}
+      var gg=x.createLinearGradient(0,0,0,H);gg.addColorStop(0,'rgba(7,9,12,.35)');gg.addColorStop(1,'rgba(7,9,12,.85)');x.fillStyle=gg;x.fillRect(0,0,W,H);
+      var col=win?'#4ADE9C':'#F0647A';
+      x.fillStyle='#F2F4F7';x.font='700 30px Anton, sans-serif';x.fillText('LE TERMINAL',150,80);
+      x.fillStyle='#8b97a6';x.font='700 16px "JetBrains Mono", monospace';x.fillText('RÉSULTAT DE TRADE · SCREENSHOT VÉRIFIÉ',150,108);
+      x.fillStyle='#F2F4F7';x.font='700 60px Anton, sans-serif';x.fillText((document.getElementById('gPair').value||'').toUpperCase(),90,900);
+      x.fillStyle=col;x.font='800 200px Anton, sans-serif';x.fillText((c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'%',80,1080);
+      x.fillStyle='#F2F4F7';x.font='700 48px "JetBrains Mono", monospace';x.fillText((c.gain>=0?'+':'−')+nb(c.gain)+' €',90,1150);
+      x.fillStyle='#8b97a6';x.font='400 28px Inter, sans-serif';x.fillText('Capital engagé · '+nb(c.cap)+' €',90,1195);
+      x.fillStyle='#8b97a6';x.font='700 20px "JetBrains Mono", monospace';
+      x.fillText('ENTRÉE',90,1270);x.fillText('SORTIE',430,1270);x.fillText('R:R',770,1270);
+      x.fillStyle='#F2F4F7';x.font='600 34px "JetBrains Mono", monospace';
+      var rr=c.rr; x.fillText(nb(c.entry),90,1310);x.fillText(nb(c.exit),430,1310);x.fillText('1 : '+rr.toFixed(1),770,1310);
+      x.fillStyle='#BFDCF5';x.font='700 30px Inter, sans-serif';x.fillText(document.getElementById('gHandle').value||'@trader',90,60);
+      callback(cv);
+    }
+    if(!currentBg){draw(null);return;}
+    var img=new Image(); img.crossOrigin='anonymous';
+    img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=currentBg;
   }
-  function renderGrid(){
-    var arr=SHARES.slice();
-    if(sort==='recent')arr.sort(function(a,b){return a.mins-b.mins;});
-    else if(sort==='gain')arr.sort(function(a,b){return b.amount-a.amount;});
-    else arr.sort(function(a,b){return b.likes-a.likes;});
-    document.getElementById('shGrid').innerHTML=arr.map(scCard).join('');
-  }
-  document.getElementById('shTabs').addEventListener('click',function(e){
-    var b=e.target.closest('.sh-tab'); if(!b)return; sort=b.getAttribute('data-sort');
-    Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
-    renderGrid();
+
+  document.getElementById('gGen').addEventListener('click',function(){
+    buildCanvas(function(cv){
+      var url=cv.toDataURL('image/png');
+      var a=document.createElement('a');a.href=url;a.download='le-terminal-trade.png';a.click();
+    });
   });
 
-  function init(){ renderBgs(); renderPreview(); renderGrid(); }
+  // Bouton "Publier sur le mur"
+  document.getElementById('shX').onclick=function(){
+    var c=compute();
+    var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal · Screenshot vérifié';
+    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');
+  };
+  document.getElementById('shTg').onclick=function(){
+    var c=compute();
+    var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';
+    window.open('https://t.me/share/url?url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html')+'&text='+encodeURIComponent(text),'_blank');
+  };
+  document.getElementById('shLink').onclick=publishToWall;
+
+  function publishToWall(){
+    var c=compute();
+    if(!c.entry||!c.exit){
+      alert('Chargez d\'abord un screenshot de trade pour publier sur le mur.');
+      return;
+    }
+    var btn=document.getElementById('shLink');
+    btn.disabled=true; btn.style.opacity='.5';
+    var bgId=BACKGROUNDS.find(function(b){return b.src===currentBg;});
+    fetch('/api/trades',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        pseudo:document.getElementById('gHandle').value||'@trader',
+        pair:document.getElementById('gPair').value||'',
+        side:side,
+        entry:c.entry,
+        exit:c.exit,
+        cap:c.cap,
+        lev:parseFloat(document.getElementById('gLev').value)||1,
+        bg_id:bgId?bgId.id:''
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(){
+      btn.disabled=false; btn.style.opacity='';
+      loadGrid();
+      // scroll vers le mur
+      document.getElementById('shGrid').scrollIntoView({behavior:'smooth',block:'start'});
+    })
+    .catch(function(){btn.disabled=false;btn.style.opacity='';alert('Erreur lors de la publication.');});
+  }
+
+  // ── Mur communautaire ──
+  var sort='likes';
+  var likedIds={};
+
+  function agoDate(d){
+    var diff=Math.round((Date.now()-new Date(d).getTime())/60000);
+    if(diff<1)return 'à l\'instant';
+    if(diff<60)return diff+' min';
+    var h=Math.round(diff/60); if(h<24)return h+' h';
+    return Math.round(h/24)+' j';
+  }
+  function initials(h){var s=(h||'').replace('@','');return (s[0]||'').toUpperCase()+(s[1]||'').toUpperCase();}
+
+  function scCard(t,i){
+    var win=(t.pct||0)>=0;
+    return '<article class="sc'+(win?'':' is-loss')+'" data-id="'+t.id+'">'
+      +'<div class="sc__top">'
+      +'<span class="sc__av" style="background:'+AV[i%AV.length]+'">'+initials(t.pseudo)+'</span>'
+      +'<span class="sc__id"><b>'+esc(t.pseudo)+'</b><small>'+agoDate(t.created_at)+'</small></span>'
+      +'<span class="sc__badge '+(t.side||'long')+'">'+(t.side==='short'?'Short':'Long')+'</span>'
+      +'</div>'
+      +'<div class="sc__pairlbl">'+esc(t.pair||'')+'</div>'
+      +'<div class="sc__pct">'+(win?'+':'−')+Math.abs(Math.round(t.pct||0))+'%</div>'
+      +'<div class="sc__amt">'+(win?'+':'−')+nb(Math.abs(t.gain||0))+' €</div>'
+      +'<div class="sc__foot">'
+      +'<button class="sc__likes'+(likedIds[t.id]?' liked':'')+'" data-like="'+t.id+'">'
+      +'<svg viewBox="0 0 24 24" fill="'+(likedIds[t.id]?'#F0647A':'none')+'" stroke="'+(likedIds[t.id]?'#F0647A':'currentColor')+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.3 3-5.5A3.5 3.5 0 0 0 12 6 3.5 3.5 0 0 0 2 8.5C2 10.7 3.5 12.5 5 14l7 7z"/></svg>'
+      +' <span>'+( t.likes||0)+'</span></button>'
+      +'</div>'
+      +'</article>';
+  }
+
+  function loadGrid(){
+    var grid=document.getElementById('shGrid');
+    grid.innerHTML='<div style="padding:40px;text-align:center;color:#5a6472;font-family:Inter,sans-serif;font-size:13px;">Chargement…</div>';
+    var sortParam=sort==='likes'?'likes':sort==='gain'?'gain':'recent';
+    fetch('/api/trades?sort='+sortParam)
+      .then(function(r){return r.json();})
+      .then(function(arr){
+        if(!arr.length){
+          grid.innerHTML='<div style="padding:40px;text-align:center;color:#5a6472;font-family:Inter,sans-serif;font-size:13px;">Aucun trade partagé pour l\'instant.<br>Soyez le premier à publier votre résultat !</div>';
+          return;
+        }
+        grid.innerHTML=arr.map(scCard).join('');
+      })
+      .catch(function(){grid.innerHTML='<div style="padding:20px;text-align:center;color:#F0647A;font-family:Inter,sans-serif;font-size:12px;">Erreur de chargement.</div>';});
+  }
+
+  document.getElementById('shTabs').addEventListener('click',function(e){
+    var b=e.target.closest('.sh-tab'); if(!b)return;
+    sort=b.getAttribute('data-sort');
+    Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});
+    loadGrid();
+  });
+
+  document.getElementById('shGrid').addEventListener('click',function(e){
+    var btn=e.target.closest('[data-like]'); if(!btn)return;
+    var id=parseInt(btn.getAttribute('data-like')); if(!id||likedIds[id])return;
+    likedIds[id]=true;
+    var span=btn.querySelector('span'); if(span)span.textContent=parseInt(span.textContent||0)+1;
+    var sv=btn.querySelector('svg');
+    if(sv){sv.setAttribute('fill','#F0647A');sv.setAttribute('stroke','#F0647A');}
+    btn.classList.add('liked');
+    fetch('/api/trades?id='+id,{method:'PATCH'}).catch(function(){});
+  });
+
+  // Remplacer le bouton "Copier lien" par "Publier sur le mur"
+  var shLinkBtn=document.getElementById('shLink');
+  if(shLinkBtn){
+    shLinkBtn.title='Publier sur le mur communautaire';
+    shLinkBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
+  }
+
+  function init(){ renderBgs(); renderPreview(); loadGrid(); }
   window.ecoReloadNews=init;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
