@@ -174,10 +174,6 @@
     <p>Suivez votre patrimoine investi en un coup d'œil.</p>
   </div>
 
-  <!-- Connexion -->
-  <div id="pfConn"></div>
-
-  <!-- Reste (visible une fois connecté) -->
   <div id="pfMain">
     <div class="pf-grid">
       <!-- Vue d'ensemble + courbe -->
@@ -250,85 +246,6 @@
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fmtEur0 = function(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; };
   var TOTAL = 48250, INVESTED = 38000;
-
-  // ── Icônes ──
-  var IC = {
-    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',
-    sync: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 4v4h-4M3 20v-4h4"/></svg>',
-    shield: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 19 6v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
-    arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'
-  };
-
-  // ── Connexion (maquette de flux) ──
-  var BROKERS = [
-    { id:'tr', name:'Trade Republic', tag:'Le plus populaire', col:'#F2F4F7' },
-    { id:'bourso', name:'BoursoBank', tag:'', col:'#E8C268' },
-    { id:'degiro', name:'DEGIRO', tag:'', col:'#4ADE9C' },
-    { id:'ibkr', name:'Interactive Brokers', tag:'', col:'#7FB8E8' }
-  ];
-  function initials(name){ return name.split(' ').map(function(w){return w[0];}).slice(0,2).join(''); }
-  var state = { connected:true, broker:BROKERS[0], picking:false };
-
-  function renderConn(){
-    var el = document.getElementById('pfConn');
-    if(state.connected){
-      var b = state.broker;
-      el.innerHTML =
-        '<div class="pf-conn pf-conn--ok panel">'
-        + '<div class="pf-conn__okleft">'
-        +   '<span class="pf-broker__mark" style="color:'+b.col+';border-color:'+b.col+'55">'+initials(b.name)+'</span>'
-        +   '<div class="pf-conn__okmeta">'
-        +     '<div class="pf-conn__okrow"><b>'+b.name+'</b><span class="pf-badge pf-badge--bull"><span class="lt-dot"></span>Connecté</span></div>'
-        +     '<span class="pf-conn__sync">'+IC.sync+' Synchronisé il y a 2 min · 14 positions importées</span>'
-        +   '</div>'
-        + '</div>'
-        + '<div class="pf-conn__okact">'
-        +   '<button class="lt-btn lt-btn--ghost lt-btn--sm" data-act="disconnect">Déconnecter</button>'
-        +   '<button class="lt-btn lt-btn--secondary lt-btn--sm" data-act="resync">'+IC.sync+' Resynchroniser</button>'
-        + '</div>'
-        + '</div>';
-    } else {
-      var brokersHtml = '';
-      if(state.picking){
-        brokersHtml = '<div class="pf-brokers">'
-          + BROKERS.map(function(b){
-              return '<button class="pf-broker" data-broker="'+b.id+'">'
-                + '<span class="pf-broker__mark" style="color:'+b.col+';border-color:'+b.col+'55">'+initials(b.name)+'</span>'
-                + '<span class="pf-broker__name">'+b.name+'</span>'
-                + (b.tag ? '<span class="pf-broker__tag">'+b.tag+'</span>' : '')
-                + '<span class="pf-broker__go">'+IC.arrow+'</span></button>';
-            }).join('')
-          + '<p class="pf-brokers__note">'+IC.shield+' Chiffré de bout en bout · Aucun identifiant stocké · Révocable à tout moment</p>'
-          + '</div>';
-      }
-      el.innerHTML =
-        '<div class="pf-conn panel">'
-        + '<div class="pf-conn__head"><div>'
-        +   '<span class="eyebrow"><span class="lt-dot"></span> Connexion sécurisée</span>'
-        +   '<h3 class="pf-conn__title">Connectez votre compte d\'investissement</h3>'
-        +   '<p class="pf-conn__lede">Liez votre plateforme pour synchroniser automatiquement vos positions. Lecture seule — Le Terminal n\'exécute jamais d\'ordre.</p>'
-        +   '</div>'
-        +   (state.picking ? '' : '<button class="lt-btn lt-btn--primary" data-act="pick">'+IC.link+' Connecter un compte</button>')
-        + '</div>'
-        + brokersHtml
-        + '</div>';
-    }
-    document.getElementById('pfMain').style.display = state.connected ? 'block' : 'none';
-  }
-
-  document.getElementById('pfConn').addEventListener('click', function(e){
-    var act = e.target.closest('[data-act]'), bk = e.target.closest('[data-broker]');
-    if(act){
-      var a = act.getAttribute('data-act');
-      if(a==='pick'){ state.picking = true; renderConn(); }
-      else if(a==='disconnect'){ state.connected = false; state.picking = false; renderConn(); }
-      else if(a==='resync'){ /* maquette */ }
-    } else if(bk){
-      var id = bk.getAttribute('data-broker');
-      state.broker = BROKERS.filter(function(b){return b.id===id;})[0];
-      state.connected = true; state.picking = false; renderConn();
-    }
-  });
 
   // ── Courbe d'évolution ──
   function seriesFor(period){
@@ -423,7 +340,7 @@
     requestAnimationFrame(tick);
   }
 
-  function init(){ renderConn(); drawChart('1A'); drawDonut(); drawPlans(); countTotal(); }
+  function init(){ drawChart('1A'); drawDonut(); drawPlans(); countTotal(); }
   window.ecoReloadNews = function(){};
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
