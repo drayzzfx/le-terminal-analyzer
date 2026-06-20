@@ -500,6 +500,8 @@
     localStorage.removeItem('lt_history');
     localStorage.removeItem('lt_deleted');
     localStorage.removeItem('jnl_trades');
+    localStorage.removeItem('lt_pseudo');
+    localStorage.removeItem('lt_avatar');
   }
 
   window.ltGlobalLogout = function() {
