@@ -676,8 +676,9 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .day-note-flag{cursor:pointer}
   /* ── Bouton « Notes du jour » dans le détail ── */
   .day-notesbtn-wrap{margin-top:16px}
-  .day-notesbtn{display:inline-flex;align-items:center;gap:9px;width:100%;justify-content:center;padding:12px 18px;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-body,#C3CAD4);font-family:var(--font-text,'Inter',sans-serif);font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
-  .day-notesbtn:hover{border-color:var(--accent,#7FB8E8);color:var(--text-title,#F2F4F7);background:var(--accent-glow-soft,rgba(127,184,232,.12))}
+  .day-notesbtn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:transparent;border:1px solid var(--border,#3A414C);border-radius:var(--r-sm,4px);color:var(--text-body,#C3CAD4);font-family:var(--font-text,'Inter',sans-serif);font-size:12.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+  .day-notesbtn:hover{border-color:var(--accent,#7FB8E8);color:var(--text-title,#F2F4F7);background:var(--accent-glow-soft,rgba(127,184,232,.10))}
+  .day-notesbtn svg{width:14px;height:14px;flex:none}
   .day-notesbtn__n{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;color:var(--accent,#7FB8E8)}
   /* ── Pop-up bloc-notes du jour ── */
   .note-box{max-width:760px}
@@ -685,10 +686,11 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .note-drop.drag{border:1px dashed var(--accent,#7FB8E8);background:var(--accent-glow-soft,rgba(127,184,232,.08))}
   .note-drop__ov{position:absolute;inset:0;display:none;align-items:center;justify-content:center;border-radius:var(--r-md,6px);background:rgba(127,184,232,.10);color:var(--accent-bright,#BFDCF5);font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none;z-index:2}
   .note-drop.drag .note-drop__ov{display:flex}
-  .note-ta{width:100%;min-height:120px;resize:vertical;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-title,#F2F4F7);font-family:var(--font-text,'Inter',sans-serif);font-size:14px;padding:12px 14px;line-height:1.65;box-sizing:border-box}
-  .note-ta:focus{border-color:var(--accent,#7FB8E8);outline:none}
-  .note-imgs{display:flex;flex-direction:column;gap:14px;margin-top:16px}
-  .note-img{position:relative;border-radius:var(--r-md,6px);overflow:hidden;border:1px solid var(--border-subtle,#1C212A);background:var(--bg-base,#07090C)}
+  .note-editor{width:100%;min-height:200px;max-height:60vh;overflow:auto;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-title,#F2F4F7);font-family:var(--font-text,'Inter',sans-serif);font-size:14px;padding:14px;line-height:1.7;box-sizing:border-box;outline:none}
+  .note-editor:focus{border-color:var(--accent,#7FB8E8)}
+  .note-editor:empty::before{content:attr(data-ph);color:var(--text-muted,#7E8794);pointer-events:none}
+  .note-editor div{min-height:1.4em}
+  .note-img{position:relative;display:block;margin:12px 0;border-radius:var(--r-md,6px);overflow:hidden;border:1px solid var(--border-subtle,#1C212A);background:var(--bg-base,#07090C);max-width:100%}
   .note-img img{width:100%;height:auto;display:block}
   .note-img__rm{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:var(--r-sm,4px);background:rgba(7,9,12,.8);border:1px solid var(--border-subtle,#1C212A);color:#F0647A;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
   .note-img:hover .note-img__rm{opacity:1}
@@ -906,8 +908,7 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     <div class="modal-sub" id="noteModalDate">—</div>
     <div class="note-drop" id="noteDrop">
       <div class="note-drop__ov" data-en="Drop your screenshots here">Déposez vos screenshots ici</div>
-      <textarea class="note-ta" id="noteText" placeholder="Vos observations, le contexte du marché, vos erreurs… (collez ou glissez vos screenshots)"></textarea>
-      <div class="note-imgs" id="noteImgs"></div>
+      <div class="note-editor" id="noteEditor" contenteditable="true" data-ph="Écrivez, collez ou glissez une photo, puis écrivez en dessous…" data-en-ph="Write, paste or drop a photo, then write below it…"></div>
     </div>
     <div class="note-bar">
       <button class="day-notesbtn" type="button" style="width:auto" onclick="document.getElementById('noteFile').click()">
@@ -3081,15 +3082,27 @@ async function importMt5Trades() {
   window.addEventListener('resize', function(){ try{ var m=compute(); drawCum(m); drawDaily(m); }catch(e){} });
 })();
 </script>
-<!-- ░ Bloc-notes du jour : pop-up dédié (texte + images inline), indicateur calendrier ░ -->
+<!-- ░ Bloc-notes du jour : pop-up dédié (texte + images entrelacés), indicateur calendrier ░ -->
 <script>
 (function(){
   var KEY='jnl_notes';
   function all(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
   function saveAll(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); return true; }catch(e){ alert('Stockage local plein : supprimez quelques images de notes.'); return false; } }
-  window.jdGetNotes=function(date){ var n=all()[date]||{}; return { text:n.text||'', imgs:(n.imgs||[]).slice() }; };
-  window.jdHasNote=function(date){ var n=all()[date]; return !!(n && ((n.text&&n.text.trim()) || (n.imgs&&n.imgs.length))); };
-  function setNotes(date,n){ var o=all(); if((n.text&&n.text.trim())||(n.imgs&&n.imgs.length)){ o[date]={text:n.text||'',imgs:n.imgs||[]}; } else { delete o[date]; } saveAll(o); }
+
+  // Modèle de note = liste ordonnée de blocs {t:'text',v} | {t:'img',src}.
+  // Rétro-compat avec l'ancien format {text, imgs}.
+  function toItems(n){
+    if(!n) return [];
+    if(n.items) return n.items.slice();
+    var arr=[]; if(n.text&&n.text.trim()) arr.push({t:'text',v:n.text}); (n.imgs||[]).forEach(function(s){ arr.push({t:'img',src:s}); }); return arr;
+  }
+  window.jdGetItems=function(date){ return toItems(all()[date]); };
+  window.jdHasNote=function(date){ var it=toItems(all()[date]); return it.some(function(b){ return b.t==='img' || (b.v&&b.v.trim()!==''); }); };
+  function countImgs(it){ var c=0; it.forEach(function(b){ if(b.t==='img') c++; }); return c; }
+  function setItems(date,items){
+    var clean=(items||[]).filter(function(b){ return b.t==='img' || (b.v&&b.v.trim()!==''); });
+    var o=all(); if(clean.length){ o[date]={items:clean}; } else { delete o[date]; } saveAll(o);
+  }
   function refreshCal(){ try{ if(typeof renderCalendar==='function') renderCalendar(); }catch(e){} }
 
   // Date courante du pop-up.
@@ -3098,8 +3111,8 @@ async function importMt5Trades() {
   // Met à jour le compteur du bouton « Notes du jour » dans le détail.
   window.jdUpdateNoteBtn=function(date){
     var c=document.getElementById('dnCount'); if(!c) return;
-    var n=window.jdGetNotes(date), nb=n.imgs.length;
-    c.textContent = nb ? (nb+' '+(nb>1?'images':'image')) : (n.text&&n.text.trim() ? '•' : '');
+    var it=jdGetItems(date), nb=countImgs(it), hasTxt=it.some(function(b){ return b.t==='text'&&b.v&&b.v.trim()!==''; });
+    c.textContent = nb ? (nb+' '+(nb>1?'images':'image')) : (hasTxt ? '•' : '');
   };
 
   // Format français de la date (ex. « jeudi 12 juin 2026 »).
@@ -3110,18 +3123,45 @@ async function importMt5Trades() {
     }catch(e){ return date; }
   }
 
-  // Affiche les images en pleine largeur (déjà visibles, pas de clic).
-  function renderImgs(){
-    var wrap=document.getElementById('noteImgs'); if(!wrap||!curDate) return;
-    var n=window.jdGetNotes(curDate); wrap.innerHTML='';
-    n.imgs.forEach(function(src,idx){
-      var fig=document.createElement('div'); fig.className='note-img';
-      var im=document.createElement('img'); im.src=src; im.alt='note';
-      var rm=document.createElement('button'); rm.type='button'; rm.className='note-img__rm'; rm.textContent='✕'; rm.title='Retirer';
-      rm.addEventListener('click',function(){ var nn=window.jdGetNotes(curDate); nn.imgs.splice(idx,1); setNotes(curDate,nn); renderImgs(); refreshCal(); flagSaved(); });
-      fig.appendChild(im); fig.appendChild(rm); wrap.appendChild(fig);
+  function ed(){ return document.getElementById('noteEditor'); }
+
+  // Crée le bloc image (non éditable) avec son bouton « retirer ».
+  function makeFigure(src){
+    var fig=document.createElement('div'); fig.className='note-img'; fig.setAttribute('contenteditable','false');
+    var im=document.createElement('img'); im.src=src; im.alt='note';
+    var rm=document.createElement('button'); rm.type='button'; rm.className='note-img__rm'; rm.textContent='✕'; rm.title='Retirer';
+    fig.appendChild(im); fig.appendChild(rm);
+    return fig;
+  }
+
+  // Rend le modèle dans l'éditeur (texte et images dans l'ordre).
+  function renderEditor(items){
+    var e=ed(); if(!e) return; e.innerHTML='';
+    (items||[]).forEach(function(b){
+      if(b.t==='img'){ e.appendChild(makeFigure(b.src)); }
+      else { (b.v||'').split('\n').forEach(function(ln){ var d=document.createElement('div'); if(ln==='') d.appendChild(document.createElement('br')); else d.textContent=ln; e.appendChild(d); }); }
     });
   }
+
+  // Lit l'éditeur et reconstruit le modèle ordonné.
+  function serialize(){
+    var e=ed(); if(!e) return [];
+    var items=[], parts=[];
+    function flush(){ var t=parts.join('\n').replace(/\n{3,}/g,'\n\n'); if(t.trim()!=='') items.push({t:'text',v:t}); parts=[]; }
+    Array.prototype.forEach.call(e.childNodes, function(n){
+      if(n.nodeType===1 && n.classList && n.classList.contains('note-img')){
+        flush(); var im=n.querySelector('img'); if(im) items.push({t:'img',src:im.src});
+      } else {
+        parts.push(n.nodeType===3 ? (n.nodeValue||'') : (n.innerText||''));
+      }
+    });
+    flush();
+    return items;
+  }
+
+  function save(){ if(!curDate) return; setItems(curDate, serialize()); refreshCal(); flagSaved(); }
+  function flagSaved(){ var s=document.getElementById('noteSaved'); if(!s) return; s.style.display='inline'; clearTimeout(s._t); s._t=setTimeout(function(){ s.style.display='none'; },1600); }
+
   // Redimensionne l'image (max 1400px, JPEG q.85) pour ne pas saturer le stockage.
   function readImg(file,cb){
     var r=new FileReader();
@@ -3132,52 +3172,75 @@ async function importMt5Trades() {
       img.onerror=function(){ cb(null); }; img.src=r.result; };
     r.readAsDataURL(file);
   }
-  function addFiles(files){
-    if(!curDate) return;
-    var arr=Array.prototype.slice.call(files||[]).filter(function(f){ return f && f.type && f.type.indexOf('image')===0; });
-    var pend=arr.length; if(!pend) return;
-    arr.forEach(function(f){ readImg(f,function(durl){ if(durl){ var n=window.jdGetNotes(curDate); n.imgs.push(durl); setNotes(curDate,n); } if(--pend<=0){ renderImgs(); refreshCal(); flagSaved(); } }); });
-  }
-  function saveText(){ if(!curDate) return; var ta=document.getElementById('noteText'); if(!ta) return; var n=window.jdGetNotes(curDate); n.text=ta.value; setNotes(curDate,n); refreshCal(); }
-  function flagSaved(){ var s=document.getElementById('noteSaved'); if(!s) return; s.style.display='inline'; clearTimeout(s._t); s._t=setTimeout(function(){ s.style.display='none'; },1600); }
 
-  // Branche une seule fois les écouteurs (textarea, fichier, glisser-déposer, coller).
+  // Insère une image à l'emplacement du curseur, puis une ligne vide pour continuer à écrire dessous.
+  function insertFigureAtCaret(src){
+    var e=ed(); if(!e) return;
+    var fig=makeFigure(src);
+    var after=document.createElement('div'); after.appendChild(document.createElement('br'));
+    var sel=window.getSelection();
+    if(sel && sel.rangeCount && e.contains(sel.anchorNode)){
+      var range=sel.getRangeAt(0); range.collapse(false); range.insertNode(fig);
+      fig.parentNode.insertBefore(after, fig.nextSibling);
+    } else {
+      e.appendChild(fig); e.appendChild(after);
+    }
+    var r2=document.createRange(); r2.setStart(after,0); r2.collapse(true);
+    if(sel){ sel.removeAllRanges(); sel.addRange(r2); }
+    e.focus();
+  }
+
+  // Insère plusieurs images en série (lecture asynchrone), en préservant l'ordre.
+  function insertFiles(files, i){
+    i=i||0;
+    var arr=Array.prototype.slice.call(files||[]).filter(function(f){ return f && f.type && f.type.indexOf('image')===0; });
+    if(i>=arr.length){ if(i>0) save(); return; }
+    readImg(arr[i], function(durl){ if(durl) insertFigureAtCaret(durl); insertFiles(arr, i+1); });
+  }
+
+  // Place le curseur sous le point de dépôt si possible.
+  function caretToPoint(x,y){
+    var e=ed(); if(!e) return; var r=null;
+    if(document.caretRangeFromPoint) r=document.caretRangeFromPoint(x,y);
+    else if(document.caretPositionFromPoint){ var p=document.caretPositionFromPoint(x,y); if(p){ r=document.createRange(); r.setStart(p.offsetNode,p.offset); } }
+    if(r && e.contains(r.startContainer)){ r.collapse(true); var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+    else { e.focus(); }
+  }
+
+  // Branche une seule fois les écouteurs.
   function wire(){
     if(wired) return; wired=true;
-    var ta=document.getElementById('noteText'),
-        drop=document.getElementById('noteDrop'),
-        file=document.getElementById('noteFile'),
-        ov=document.getElementById('noteModal');
-    if(ta){
-      ta.addEventListener('blur',function(){ saveText(); });
-      ta.addEventListener('input',function(){ saveText(); });
-      ta.addEventListener('paste',function(e){
-        var items=(e.clipboardData&&e.clipboardData.items)||[]; var imgs=[];
+    var e=ed(), drop=document.getElementById('noteDrop'), file=document.getElementById('noteFile'), ov=document.getElementById('noteModal');
+    if(e){
+      e.addEventListener('blur', save);
+      e.addEventListener('input', function(){ if(!curDate) return; setItems(curDate, serialize()); refreshCal(); });
+      e.addEventListener('click', function(ev){ var b=ev.target.closest && ev.target.closest('.note-img__rm'); if(b){ ev.preventDefault(); var fig=b.closest('.note-img'); if(fig){ fig.remove(); save(); } } });
+      e.addEventListener('paste', function(ev){
+        var items=(ev.clipboardData&&ev.clipboardData.items)||[]; var imgs=[];
         for(var i=0;i<items.length;i++){ if(items[i].type&&items[i].type.indexOf('image')===0){ var f=items[i].getAsFile(); if(f) imgs.push(f); } }
-        if(imgs.length){ e.preventDefault(); addFiles(imgs); }
+        if(imgs.length){ ev.preventDefault(); insertFiles(imgs,0); }
       });
     }
-    if(file) file.addEventListener('change',function(e){ addFiles(e.target.files); e.target.value=''; });
+    if(file) file.addEventListener('change',function(ev){ if(ed()) ed().focus(); insertFiles(ev.target.files,0); ev.target.value=''; });
     if(drop){
-      ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.add('drag'); }); });
-      ['dragleave','dragend'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); e.stopPropagation(); if(e.target===drop||!drop.contains(e.relatedTarget)) drop.classList.remove('drag'); }); });
-      drop.addEventListener('drop',function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+      ['dragenter','dragover'].forEach(function(t){ drop.addEventListener(t,function(ev){ ev.preventDefault(); ev.stopPropagation(); drop.classList.add('drag'); }); });
+      ['dragleave','dragend'].forEach(function(t){ drop.addEventListener(t,function(ev){ ev.preventDefault(); ev.stopPropagation(); if(ev.target===drop||!drop.contains(ev.relatedTarget)) drop.classList.remove('drag'); }); });
+      drop.addEventListener('drop',function(ev){ ev.preventDefault(); ev.stopPropagation(); drop.classList.remove('drag'); if(ev.dataTransfer&&ev.dataTransfer.files&&ev.dataTransfer.files.length){ caretToPoint(ev.clientX,ev.clientY); insertFiles(ev.dataTransfer.files,0); } });
     }
-    if(ov) ov.addEventListener('click',function(e){ if(e.target===ov) closeNoteModal(); });
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var m=document.getElementById('noteModal'); if(m&&m.classList.contains('show')) closeNoteModal(); } });
+    if(ov) ov.addEventListener('click',function(ev){ if(ev.target===ov) closeNoteModal(); });
+    document.addEventListener('keydown',function(ev){ if(ev.key==='Escape'){ var m=document.getElementById('noteModal'); if(m&&m.classList.contains('show')) closeNoteModal(); } });
   }
 
   window.jdOpenNoteModal=function(date){
     var m=document.getElementById('noteModal'); if(!m) return;
     curDate=date; wire();
     var dl=document.getElementById('noteModalDate'); if(dl) dl.textContent=frDate(date);
-    var ta=document.getElementById('noteText'); if(ta) ta.value=window.jdGetNotes(date).text;
-    renderImgs();
+    renderEditor(jdGetItems(date));
     m.classList.add('show');
-    if(ta) setTimeout(function(){ try{ ta.focus(); }catch(e){} },120);
+    var e=ed(); if(e) setTimeout(function(){ try{ e.focus(); }catch(err){} },120);
   };
   window.closeNoteModal=function(){
-    saveText();
+    save();
     var m=document.getElementById('noteModal'); if(m) m.classList.remove('show');
     if(curDate){ refreshCal(); if(typeof jdUpdateNoteBtn==='function') jdUpdateNoteBtn(curDate); }
   };
