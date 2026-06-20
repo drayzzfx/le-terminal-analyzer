@@ -45,8 +45,8 @@ jobs:
           # Force UNIQUEMENT sur la branche technique (jamais sur main) → non destructif pour drayzz.
           git push --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" HEAD:sync-pobsteta
           echo "Ouverture de la PR (ou mise à jour si elle existe déjà) ..."
-          PR_BODY=$'Pull request automatique : changements poussés sur pobsteta/main, à relire et merger. La fusion ajoute le contenu sans supprimer les fichiers propres à drayzzfx.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)'
+          PR_BODY=$'\U0001F7E2 Pull request automatique : changements poussés sur pobsteta/main, à relire et merger. La fusion ajoute le contenu sans supprimer les fichiers propres à drayzzfx.\n\n\U0001F7E2 Préparée et vérifiée par Claude Code.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)'
           gh pr create --repo "$REPO" --base main --head sync-pobsteta \
-            --title "Synchro depuis pobsteta/main" \
+            --title "🟢 Synchro depuis pobsteta/main" \
             --body "$PR_BODY" \
             || echo "PR déjà ouverte — elle a été mise à jour par le push de la branche."
