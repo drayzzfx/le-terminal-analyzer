@@ -1409,13 +1409,6 @@
   var pill = document.getElementById('ltLangPill');
   if(pill){
     try { pill.textContent = (localStorage.getItem('lt_lang') === 'en') ? 'EN' : 'FR'; } catch(e){}
-    pill.style.cursor = 'pointer';
-    pill.addEventListener('click', function(){
-      var next = (pill.textContent === 'FR') ? 'en' : 'fr';
-      pill.textContent = next.toUpperCase();
-      if (window.ltSetLang) { ltSetLang(next); }
-      else { try { localStorage.setItem('lt_lang', next); localStorage.setItem('lte_lang', next); } catch(e){} }
-    });
   }
 })();
 </script>

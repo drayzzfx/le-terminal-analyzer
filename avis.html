@@ -225,8 +225,7 @@
     drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
   }
   var pill=document.getElementById('ltLangPill');
-  if(pill){ try{ pill.textContent=(localStorage.getItem('lt_lang')==='en')?'EN':'FR'; }catch(e){} pill.style.cursor='pointer';
-    pill.addEventListener('click',function(){ var n=(pill.textContent==='FR')?'en':'fr'; pill.textContent=n.toUpperCase(); if(window.ltSetLang){ ltSetLang(n); } else { try{ localStorage.setItem('lt_lang',n); localStorage.setItem('lte_lang',n); }catch(e){} } }); }
+  if(pill){ try{ pill.textContent=(localStorage.getItem('lt_lang')==='en')?'EN':'FR'; }catch(e){} }
 })();
 </script>
 <script src="./menu.js"></script>
