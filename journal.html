@@ -3258,6 +3258,12 @@ async function importMt5Trades() {
     var m=document.getElementById('noteModal'); if(m) m.classList.remove('show');
     if(curDate){ refreshCal(); if(typeof jdUpdateNoteBtn==='function') jdUpdateNoteBtn(curDate); }
   };
+
+  // Le calendrier est rendu une 1re fois AVANT que ce module ne soit défini :
+  // on le rafraîchit donc une fois prêt pour que les indicateurs de note
+  // s'affichent dès le chargement / après un refresh de la page.
+  refreshCal();
+  window.addEventListener('load', refreshCal);
 })();
 </script>
 <script src="./appshell.js"></script>
