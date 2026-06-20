@@ -1876,10 +1876,7 @@ async function analyze(){
   // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){window.location.href="./index.html";return}
-  // Connexion requise ; le quota (1 token / analyse) est désormais vérifié et
-  // décompté CÔTÉ SERVEUR dans /api/analyze (impossible à contourner).
   if(!authToken){ window.location.href='./index.html'; return; }
-
   const rrv=calcRR();
   const steps=c().steps; let si=0;
   showLoad();
