@@ -225,36 +225,31 @@
           <div class="pf-ov__val">
             <span class="pf-ov__label">Valeur totale du portefeuille</span>
             <span class="pf-ov__total" id="pfTotal">0 €</span>
-            <div class="pf-capital-row">
-              <label for="pfCapInput">Capital</label>
-              <input type="number" id="pfCapInput" min="0" step="100" placeholder="0">
-              <span>€</span>
-            </div>
-            <div class="pf-ov__pnl">
-              <span class="pf-ov__pnlmain" style="color:var(--bull)">▲ +10 250 €</span>
-              <span class="pf-badge pf-badge--bull">+27,0 %</span>
-              <span class="pf-ov__pnlsub">depuis l'investissement initial · 38 000 €</span>
-            </div>
+            <div id="pfPnl" class="pf-ov__pnl" style="display:none"></div>
           </div>
           <div class="pf-period" id="pfPeriod">
-            <button class="pf-period__btn" data-p="1M">1M</button>
-            <button class="pf-period__btn" data-p="6M">6M</button>
-            <button class="pf-period__btn is-on" data-p="1A">1A</button>
-            <button class="pf-period__btn" data-p="Max">Max</button>
+            <button class="pf-period__btn is-on" data-p="5Y">5 ans</button>
+            <button class="pf-period__btn" data-p="10Y">10 ans</button>
+            <button class="pf-period__btn" data-p="20Y">20 ans</button>
+            <button class="pf-period__btn" data-p="30Y">30 ans</button>
           </div>
         </div>
-        <div class="pf-chart">
-          <svg class="pf-chart__svg" id="pfChart" viewBox="0 0 720 240" preserveAspectRatio="none"></svg>
-          <div class="pf-chart__foot">
-            <span>Évolution sur <b id="pfFootPeriod">1 an</b></span>
+        <div class="pf-chart" id="pfChartWrap">
+          <div id="pfChartEmpty" style="height:240px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-muted)">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 16 4-8 4 6 3-4"/></svg>
+            <span style="font-size:13px">Ajoutez des actifs pour voir la projection</span>
+          </div>
+          <svg class="pf-chart__svg" id="pfChart" viewBox="0 0 720 240" preserveAspectRatio="none" style="display:none"></svg>
+          <div class="pf-chart__foot" id="pfChartFoot" style="display:none">
+            <span>Projection sur <b id="pfFootPeriod">5 ans</b> · rendement attendu <b id="pfFootRate"></b></span>
             <span id="pfFootChange" style="color:var(--bull)"></span>
           </div>
         </div>
         <div class="pf-ov__sub">
-          <div class="pf-substat"><span class="pf-substat__k">Investi</span><span class="pf-substat__v">38 000 €</span></div>
-          <div class="pf-substat"><span class="pf-substat__k">Plus-value</span><span class="pf-substat__v" style="color:var(--bull)">+10 250 €</span></div>
-          <div class="pf-substat"><span class="pf-substat__k">Dividendes perçus</span><span class="pf-substat__v" style="color:var(--bull)">+ 642 €</span></div>
-          <div class="pf-substat"><span class="pf-substat__k">Rendement annualisé</span><span class="pf-substat__v" style="color:var(--bull)">+ 11,4 %</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Capital investi</span><span class="pf-substat__v" id="pfStatInvested">—</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Gain potentiel</span><span class="pf-substat__v" id="pfStatGain" style="color:var(--bull)">—</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Valeur finale</span><span class="pf-substat__v" id="pfStatFinal">—</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Rendement attendu</span><span class="pf-substat__v" id="pfStatRate" style="color:var(--bull)">—</span></div>
         </div>
       </div>
 
@@ -424,55 +419,83 @@
     try{ localStorage.setItem('lt_pf_state', JSON.stringify({ total:TOTAL, assets:pfPortfolio })); }catch(e){}
   }
 
+  // Rendement annuel attendu par catégorie (hypothèse prudente)
+  var CAT_RETURN = { ETF:0.08, Action:0.09, Obligation:0.03, Liquidites:0.02, Crypto:0.14 };
+
+  function portfolioTotal(){
+    var s=0;
+    TR_ASSETS.forEach(function(a){ s+=(pfPortfolio[a.id]||0); });
+    return s;
+  }
+
   function computeAlloc(){
-    var totals = {}, grand = 0;
-    TR_ASSETS.forEach(function(a){
-      var v = pfPortfolio[a.id] || 0;
-      if(v > 0){ totals[a.cat] = (totals[a.cat]||0) + v; grand += v; }
-    });
-    if(!grand) return [
-      { k:'ETF monde',    pct:42, col:'#7FB8E8' },
-      { k:'Actions',      pct:28, col:'#4ADE9C' },
-      { k:'Obligations',  pct:14, col:'#E8C268' },
-      { k:'Liquidites',  pct:9,  col:'#C3CAD4' },
-      { k:'Crypto',       pct:7,  col:'#F0647A' }
-    ];
+    var totals={}, grand=0;
+    TR_ASSETS.forEach(function(a){ var v=pfPortfolio[a.id]||0; if(v>0){ totals[a.cat]=(totals[a.cat]||0)+v; grand+=v; } });
+    if(!grand) return [];
     return Object.keys(totals)
-      .map(function(c){ return { k:c, pct:Math.round(totals[c]/grand*100), col:CAT_COL[c]||'#7FB8E8' }; })
+      .map(function(c){ return { k:CAT_LABEL[c]||c, cat:c, pct:Math.round(totals[c]/grand*100), val:totals[c], col:CAT_COL[c]||'#7FB8E8' }; })
       .sort(function(a,b){ return b.pct-a.pct; });
   }
 
-  // ── Courbe ──
-  function seriesFor(period){
-    var ratios = { '1M':0.954,'6M':0.854,'1A':0.700,'Max':0.249 };
-    var ns     = { '1M':30,  '6M':26,  '1A':24,  'Max':30   };
-    var vols   = { '1M':0.012,'6M':0.03,'1A':0.05,'Max':0.08 };
-    var n=ns[period], start=TOTAL*ratios[period], vol=vols[period], pts=[], seed=period.length*991;
-    function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return (seed/0x7fffffff)-0.5; }
-    for(var i=0;i<n;i++){ var t=i/(n-1); var base=start+(TOTAL-start)*Math.pow(t,0.92); pts.push(Math.max(TOTAL*0.01, base+base*vol*rnd()*(1-t*0.5))); }
-    pts[pts.length-1]=TOTAL; return pts;
+  function expectedReturn(){
+    var grand=0, weighted=0;
+    TR_ASSETS.forEach(function(a){ var v=pfPortfolio[a.id]||0; if(v>0){ weighted+=v*(CAT_RETURN[a.cat]||0.05); grand+=v; } });
+    return grand>0 ? weighted/grand : 0;
+  }
+
+  // ── Projection ──
+  function projectionSeries(years, r){
+    var n=years*12+1, pts=[];
+    for(var i=0;i<n;i++) pts.push(TOTAL*Math.pow(1+r/12,i));
+    return pts;
   }
   function drawChart(period){
     currentPeriod=period;
-    var data=seriesFor(period), W=720, H=240, pad=8;
-    var mn=Math.min.apply(null,data)*0.985, mx=Math.max.apply(null,data)*1.01;
-    var x=function(i){ return pad+(i/(data.length-1))*(W-pad*2); };
-    var y=function(v){ return H-pad-((v-mn)/(mx-mn))*(H-pad*2); };
-    var line=data.map(function(v,i){ return (i===0?'M':'L')+x(i).toFixed(1)+','+y(v).toFixed(1); }).join(' ');
-    var area=line+' L'+x(data.length-1).toFixed(1)+','+H+' L'+x(0).toFixed(1)+','+H+' Z';
-    var change=((data[data.length-1]-data[0])/data[0])*100, up=change>=0;
-    var col=up?'var(--bull)':'var(--bear)', fc2=up?'rgba(74,222,156,':'rgba(240,100,122,';
-    document.getElementById('pfChart').innerHTML=
-      '<defs><linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+fc2+'0.28)"/><stop offset="1" stop-color="'+fc2+'0)"/></linearGradient></defs>'
-      +'<line x1="0" x2="720" y1="60" y2="60" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="120" y2="120" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="180" y2="180" stroke="rgba(58,65,76,0.25)"/>'
-      +'<path d="'+area+'" fill="url(#pfFill)"/>'
-      +'<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px '+fc2+'0.4))"/>'
-      +'<circle cx="'+x(data.length-1).toFixed(1)+'" cy="'+y(data[data.length-1]).toFixed(1)+'" r="4.5" fill="'+col+'" stroke="#07090C" stroke-width="2"/>';
-    var lbl={'1M':'1 mois','6M':'6 mois','1A':'1 an','Max':'tout l’historique'}[period];
-    document.getElementById('pfFootPeriod').textContent=lbl;
+    if(!TOTAL){ return; }
+    var years={'5Y':5,'10Y':10,'20Y':20,'30Y':30}[period]||10;
+    var r=expectedReturn();
+    var rPess=Math.max(0,r-0.03), rOpt=r+0.035;
+    var base=projectionSeries(years,r);
+    var pess=projectionSeries(years,rPess);
+    var opt=projectionSeries(years,rOpt);
+    var W=720,H=240,pad=10;
+    var allVals=base.concat(opt,pess);
+    var mn=Math.min.apply(null,allVals)*0.98, mx=Math.max.apply(null,allVals)*1.01;
+    var xi=function(i){ return pad+(i/(base.length-1))*(W-pad*2); };
+    var yv=function(v){ return H-pad-((v-mn)/(mx-mn))*(H-pad*2); };
+    var pathFor=function(arr){ return arr.map(function(v,i){ return (i===0?'M':'L')+xi(i).toFixed(1)+','+yv(v).toFixed(1); }).join(' '); };
+    var lineBase=pathFor(base), lineOpt=pathFor(opt), linePess=pathFor(pess);
+    var areaOpt=lineOpt+' '+pathFor(pess).replace('M','L').split('').reverse().join('')+' Z';
+    // zone entre opt et pess
+    var zonePoints=opt.map(function(v,i){ return xi(i).toFixed(1)+','+yv(v).toFixed(1); }).join(' ')
+      +' '+pess.slice().reverse().map(function(v,i){ return xi(base.length-1-i).toFixed(1)+','+yv(v).toFixed(1); }).join(' ');
+    var finalVal=base[base.length-1], gain=finalVal-TOTAL, gainPct=(gain/TOTAL)*100;
+    var svg=document.getElementById('pfChart');
+    svg.innerHTML=
+      '<defs>'
+      +'<linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(74,222,156,0.22)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient>'
+      +'</defs>'
+      +'<polygon points="'+zonePoints+'" fill="rgba(127,184,232,0.07)"/>'
+      +'<path d="'+linePess+'" fill="none" stroke="rgba(127,184,232,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
+      +'<path d="'+lineOpt+'" fill="none" stroke="rgba(74,222,156,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
+      +'<path d="'+lineBase+' L'+xi(base.length-1).toFixed(1)+','+H+' L'+xi(0).toFixed(1)+','+H+' Z" fill="url(#pfFill)"/>'
+      +'<path d="'+lineBase+'" fill="none" stroke="var(--bull)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px rgba(74,222,156,0.4))"/>'
+      +'<circle cx="'+xi(base.length-1).toFixed(1)+'" cy="'+yv(finalVal).toFixed(1)+'" r="4.5" fill="var(--bull)" stroke="#07090C" stroke-width="2"/>';
+    var lbls={'5Y':'5 ans','10Y':'10 ans','20Y':'20 ans','30Y':'30 ans'};
+    document.getElementById('pfFootPeriod').textContent=lbls[period]||period;
+    document.getElementById('pfFootRate').textContent='+'+(r*100).toFixed(1).replace('.',',')+' % / an';
     var fc=document.getElementById('pfFootChange');
-    fc.textContent=(change>=0?'+':'')+change.toFixed(1).replace('.',',')+' % sur la période';
-    fc.style.color=up?'var(--bull)':'var(--bear)';
+    fc.textContent='+'+(gainPct).toFixed(0)+' % soit +'+Math.round(gain).toLocaleString('fr-FR')+' €';
+    fc.style.color='var(--bull)';
+    // substats
+    document.getElementById('pfStatInvested').textContent=fmtEur0(TOTAL);
+    document.getElementById('pfStatGain').textContent='+'+fmtEur0(gain);
+    document.getElementById('pfStatFinal').textContent=fmtEur0(finalVal);
+    document.getElementById('pfStatRate').textContent='+'+(r*100).toFixed(1).replace('.',',')+' % / an';
+    // show/hide
+    document.getElementById('pfChartEmpty').style.display='none';
+    svg.style.display='block';
+    document.getElementById('pfChartFoot').style.display='flex';
   }
   document.getElementById('pfPeriod').addEventListener('click',function(e){
     var b=e.target.closest('.pf-period__btn'); if(!b) return;
@@ -480,16 +503,38 @@
     drawChart(b.getAttribute('data-p'));
   });
 
+  function resetChart(){
+    document.getElementById('pfChartEmpty').style.display='';
+    document.getElementById('pfChart').style.display='none';
+    document.getElementById('pfChartFoot').style.display='none';
+    document.getElementById('pfStatInvested').textContent='—';
+    document.getElementById('pfStatGain').textContent='—';
+    document.getElementById('pfStatFinal').textContent='—';
+    document.getElementById('pfStatRate').textContent='—';
+  }
+
   // ── Donut ──
   function drawDonut(){
-    var alloc=computeAlloc(), R=56, C=2*Math.PI*R, acc=0;
+    var alloc=computeAlloc();
+    var R=56, C=2*Math.PI*R, acc=0;
+    if(!alloc.length){
+      document.getElementById('pfDonut').innerHTML='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--border-subtle)" stroke-width="16"/><text x="70" y="68" text-anchor="middle" class="pf-donut__cap">Aucun</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">actif</text>';
+      document.getElementById('pfLegend').innerHTML='<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:8px 0">Selectionnez des actifs<br>et renseignez un montant</div>';
+      document.getElementById('pfTotal').textContent='— €';
+      resetChart();
+      return;
+    }
     var html='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>';
     alloc.forEach(function(a){ var len=a.pct/100*C; html+='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+a.col+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-acc)+'" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>'; acc+=len; });
     html+='<text x="70" y="64" text-anchor="middle" class="pf-donut__big">'+alloc.length+'</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classes</text>';
     document.getElementById('pfDonut').innerHTML=html;
     document.getElementById('pfLegend').innerHTML=alloc.map(function(a){
-      return '<div class="pf-leg"><span class="pf-leg__dot" style="background:'+a.col+'"></span><span class="pf-leg__k">'+a.k+'</span><span class="pf-leg__pct">'+a.pct+' %</span><span class="pf-leg__val">'+fmtEur0(TOTAL*a.pct/100)+'</span></div>';
+      return '<div class="pf-leg"><span class="pf-leg__dot" style="background:'+a.col+'"></span><span class="pf-leg__k">'+a.k+'</span><span class="pf-leg__pct">'+a.pct+' %</span><span class="pf-leg__val">'+fmtEur0(a.val)+'</span></div>';
     }).join('');
+    // total depuis les actifs
+    TOTAL=portfolioTotal();
+    document.getElementById('pfTotal').textContent=fmtEur0(TOTAL);
+    drawChart(currentPeriod);
   }
 
   // ── Liste d'actifs (accordéon par catégorie) ──
@@ -551,23 +596,7 @@
     }).join('');
   }
 
-  // ── Compteur total ──
-  function countTotal(){
-    var el=document.getElementById('pfTotal');
-    if(reduced){ el.textContent=fmtEur0(TOTAL); return; }
-    var t0=null, dur=900;
-    function tick(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur); el.textContent=fmtEur0(TOTAL*(1-Math.pow(1-k,3))); if(k<1)requestAnimationFrame(tick); }
-    requestAnimationFrame(tick);
-  }
-
   function init(){
-    // Capital input
-    var cap=document.getElementById('pfCapInput');
-    cap.value=TOTAL;
-    cap.addEventListener('input',function(){
-      var v=parseFloat(this.value);
-      if(!isNaN(v)&&v>=0){ TOTAL=v; drawChart(currentPeriod); countTotal(); drawDonut(); saveState(); }
-    });
 
     // Recherche actifs
     document.getElementById('pfAssetSearch').addEventListener('input',function(){
@@ -599,7 +628,7 @@
       drawDonut(); saveState();
     });
 
-    drawChart('1A'); drawDonut(); drawPlans(); countTotal(); renderAssets();
+    drawDonut(); drawPlans(); renderAssets();
   }
 
   window.ecoReloadNews=function(){};
