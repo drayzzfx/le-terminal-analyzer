@@ -93,8 +93,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .cal-nav-btn:hover{border-color:rgba(127,184,232,.4);color:var(--v2)}
 .cal-month{font-size:13px;font-weight:600;color:var(--text2);min-width:130px;text-align:center}
 
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr) 0.85fr;gap:6px}
 .cal-dow{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--text3);text-align:center;padding:8px 0;text-transform:uppercase}
+.cal-dow--wk{color:var(--v2,#7FB8E8)}
+/* ── Récap hebdo (colonne de droite) ── */
+.cal-week{position:relative;border-radius:10px;padding:12px 10px;min-height:140px;border:1px solid rgba(127,184,232,.16);background:rgba(127,184,232,.04);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;text-align:center}
+.cal-week.profit{background:rgba(74,222,156,.08);border-color:rgba(74,222,156,.22)}
+.cal-week.loss{background:rgba(240,100,122,.08);border-color:rgba(240,100,122,.22)}
+.cal-week__l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3,#7E8794)}
+.cal-week__v{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--text2,#C3CAD4)}
+.cal-week.profit .cal-week__v{color:var(--green,#4ADE9C)}
+.cal-week.loss .cal-week__v{color:var(--red,#F0647A)}
 .cal-day{position:relative;border-radius:10px;padding:12px 10px;min-height:140px;cursor:pointer;transition:all .2s;border:1px solid transparent;background:rgba(255,255,255,.02)}
 .cal-day:hover{background:rgba(127,184,232,.06);border-color:rgba(127,184,232,.2)}
 .cal-day.other-month{opacity:.3;pointer-events:none}
@@ -1143,8 +1152,8 @@ function renderCalendar() {
   document.getElementById('calTitle').textContent = MONTHS_FR[curMonth] + ' ' + curYear;
   document.getElementById('calMonth').textContent = MONTHS_FR[curMonth] + ' ' + curYear;
 
-  // Day-of-week headers
-  var html = DAYS_FR.map(function(d){ return '<div class="cal-dow">'+d+'</div>'; }).join('');
+  // Day-of-week headers (+ colonne récap hebdo)
+  var html = DAYS_FR.map(function(d){ return '<div class="cal-dow">'+d+'</div>'; }).join('') + '<div class="cal-dow cal-dow--wk" data-en="Wk">Sem.</div>';
 
   // First day of month (0=Sun, adjusted to Mon=0)
   var firstDay = new Date(curYear, curMonth, 1).getDay();
@@ -1162,10 +1171,27 @@ function renderCalendar() {
     tradeMap[d].push(t);
   });
 
+  // Helper : ajoute une cellule jour ; à chaque fin de semaine (7 colonnes),
+  // insère une case récap hebdo (P&L total + nombre de trades de la semaine).
+  var _col = 0, _wkPnl = 0, _wkN = 0;
+  function pushCell(cellHtml, cpnl, cn){
+    html += cellHtml; _wkPnl += cpnl; _wkN += cn; _col++;
+    if(_col === 7){
+      var wc = _wkPnl > 0 ? ' profit' : (_wkPnl < 0 ? ' loss' : '');
+      var wv = _wkN ? ((_wkPnl > 0 ? '+' : '') + _wkPnl.toFixed(0) + curSym()) : '—';
+      html += '<div class="cal-week'+wc+'">'
+        + '<div class="cal-week__l" data-en="Week">Semaine</div>'
+        + '<div class="cal-week__v">'+wv+'</div>'
+        + (_wkN ? '<div class="day-trades-count">'+_wkN+' trade'+(_wkN>1?'s':'')+'</div>' : '')
+        + '</div>';
+      _col = 0; _wkPnl = 0; _wkN = 0;
+    }
+  }
+
   // Prev month padding
   for(var i = 0; i < firstDay; i++) {
     var d = daysInPrev - firstDay + 1 + i;
-    html += '<div class="cal-day other-month"><div class="day-num">'+d+'</div></div>';
+    pushCell('<div class="cal-day other-month"><div class="day-num">'+d+'</div></div>', 0, 0);
   }
 
   // Current month days
@@ -1200,18 +1226,18 @@ function renderCalendar() {
       pnlHtml += '<div class="day-trades-count">'+dayTrades.length+' trade'+(dayTrades.length>1?'s':'')+'</div>';
     }
 
-    html += '<div class="'+cls+'" onclick="openDayDetail(\''+dateStr+'\')">'+
+    pushCell('<div class="'+cls+'" onclick="openDayDetail(\''+dateStr+'\')">'+
       '<div class="day-num">'+day+'</div>'+
       pnlHtml+
       (dots?'<div class="day-dots">'+dots+'</div>':'')+
-    '</div>';
+    '</div>', pnl, dayTrades.length);
   }
 
   // Next month padding
   var total = firstDay + daysInMonth;
   var remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
   for(var j = 1; j <= remaining; j++) {
-    html += '<div class="cal-day other-month"><div class="day-num">'+j+'</div></div>';
+    pushCell('<div class="cal-day other-month"><div class="day-num">'+j+'</div></div>', 0, 0);
   }
 
   grid.innerHTML = html;
