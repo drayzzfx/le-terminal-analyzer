@@ -473,6 +473,48 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
     </div>
   </div>
 
+  <!-- ░ TABLEAU DE BORD PERFORMANCE (KPIs avancés + score + graphes) ░ -->
+  <div class="perf2">
+    <div class="perf2-kpis">
+      <div class="perf2-kpi">
+        <span class="perf2-kpi__l" data-en="Profit Factor">Profit Factor</span>
+        <span class="perf2-kpi__v" id="p2PF">—</span>
+        <span class="perf2-kpi__sub" id="p2PFsub" data-en="gains / losses">gains / pertes</span>
+      </div>
+      <div class="perf2-kpi">
+        <span class="perf2-kpi__l" data-en="Day Win %">Jours gagnants</span>
+        <span class="perf2-kpi__v" id="p2DWin">—</span>
+        <span class="perf2-kpi__sub" id="p2DWinsub">—</span>
+      </div>
+      <div class="perf2-kpi">
+        <span class="perf2-kpi__l" data-en="Avg win / loss">Gain / perte moyen</span>
+        <span class="perf2-kpi__v" id="p2WL">—</span>
+        <span class="perf2-kpi__sub" id="p2WLsub">—</span>
+      </div>
+    </div>
+    <div class="perf2-charts">
+      <div class="jr-panel perf2-score">
+        <span class="jr-panel__title" data-en="Terminal Score">Score Terminal</span>
+        <div class="perf2-score__wrap">
+          <svg class="perf2-gauge" viewBox="0 0 120 120" fill="none">
+            <circle cx="60" cy="60" r="50" stroke="var(--border-subtle,#1C212A)" stroke-width="10"/>
+            <circle id="p2GaugeArc" cx="60" cy="60" r="50" stroke="var(--accent,#7FB8E8)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="perf2-score__n" id="p2Score">—</div>
+        </div>
+        <div class="perf2-score__cap" id="p2ScoreCap" data-en="Add trades">Ajoutez des trades</div>
+      </div>
+      <div class="jr-panel">
+        <span class="jr-panel__title" data-en="Cumulative net P&amp;L">P&amp;L net cumulé</span>
+        <canvas id="p2Cum" class="perf2-cv"></canvas>
+      </div>
+      <div class="jr-panel">
+        <span class="jr-panel__title" data-en="Net daily P&amp;L">P&amp;L net quotidien</span>
+        <canvas id="p2Daily" class="perf2-cv"></canvas>
+      </div>
+    </div>
+  </div>
+
   <!-- ░ TABLEAU DE BORD (équité + derniers trades) — style maquette ░ -->
   <style>
   .jr-dash{display:grid;grid-template-columns:3fr 340px;gap:20px;margin:18px 0;align-items:start}
@@ -534,6 +576,22 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .import-mt5-btn:hover{background:rgba(127,184,232,.08);border-color:rgba(127,184,232,.28);color:#7FB8E8}
   /* ── add-trade-btn dans la sidebar ── */
   .jr-side .add-trade-btn{margin-bottom:0!important}
+  /* ── Tableau de bord performance (KPIs avancés + score + graphes) ── */
+  .perf2{display:flex;flex-direction:column;gap:16px;margin:0 0 24px}
+  .perf2-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:880px){.perf2-kpis{grid-template-columns:1fr}}
+  .perf2-kpi{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+  .perf2-kpi__l{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#7E8794)}
+  .perf2-kpi__v{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:24px;font-weight:700;color:var(--text-title,#F2F4F7);line-height:1}
+  .perf2-kpi__sub{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10.5px;color:var(--text-muted,#7E8794)}
+  .perf2-charts{display:grid;grid-template-columns:300px 1fr 1fr;gap:16px}
+  @media(max-width:980px){.perf2-charts{grid-template-columns:1fr}}
+  .perf2-cv{width:100%;height:200px;display:block}
+  .perf2-score{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .perf2-score__wrap{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center;margin:8px 0 12px}
+  .perf2-gauge{width:150px;height:150px}
+  .perf2-score__n{position:absolute;font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:40px;font-weight:700;color:var(--text-title,#F2F4F7);line-height:1}
+  .perf2-score__cap{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted,#7E8794)}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -2723,6 +2781,117 @@ async function importMt5Trades() {
   if(typeof window.renderStats==='function'){ var _rs=window.renderStats; window.renderStats=function(){ var r=_rs.apply(this,arguments); jrRender(); return r; }; }
   window.addEventListener('load', function(){ setTimeout(jrRender,80); });
   window.addEventListener('resize', function(){ try{ jrDrawEquity(); }catch(e){} });
+})();
+</script>
+<!-- ░ Tableau de bord performance : KPIs avancés + Score Terminal + graphes ░ -->
+<script>
+(function(){
+  'use strict';
+  function $(id){ return document.getElementById(id); }
+  function trd(){ return (window.trades && Array.isArray(window.trades)) ? window.trades : []; }
+  function sym(){ try{ return (typeof curSym==='function') ? curSym() : '€'; }catch(e){ return '€'; } }
+  function fmt(v){ return (v>=0?'+':'')+Math.round(v).toLocaleString('fr-FR')+' '+sym(); }
+  function shortN(v){ var a=Math.abs(v), s; if(a>=1000){ s=(v/1000).toFixed(a>=10000?0:1)+'k'; } else { s=String(Math.round(v)); } return (v>=0?'+':'')+s; }
+
+  function compute(){
+    var arr=trd(), nW=0,nL=0,gW=0,gL=0,net=0;
+    arr.forEach(function(t){ var p=parseFloat(t.pnl)||0; net+=p;
+      if(t.result==='win'){ nW++; gW+=p; } else if(t.result==='loss'){ nL++; gL+=Math.abs(p); } });
+    var tradeWin=(nW+nL)>0 ? nW/(nW+nL)*100 : 0;
+    var pf=gL>0 ? gW/gL : (gW>0 ? Infinity : 0);
+    var avgW=nW ? gW/nW : 0, avgL=nL ? gL/nL : 0;
+    var wl=avgL>0 ? avgW/avgL : (avgW>0 ? Infinity : 0);
+    var byDay={}; arr.forEach(function(t){ var d=t.date||'?'; if(d==='?') return; byDay[d]=(byDay[d]||0)+(parseFloat(t.pnl)||0); });
+    var days=Object.keys(byDay).sort(), dv=days.map(function(d){ return byDay[d]; });
+    var wd=dv.filter(function(v){ return v>0; }).length, ld=dv.filter(function(v){ return v<0; }).length;
+    var dayWin=(wd+ld)>0 ? wd/(wd+ld)*100 : 0;
+    var cum=0, cs=dv.map(function(v){ cum+=v; return cum; });
+    return { n:arr.length, net:net, tradeWin:tradeWin, pf:pf, avgW:avgW, avgL:avgL, wl:wl,
+             dayWin:dayWin, wd:wd, ld:ld, days:days, dv:dv, cs:cs };
+  }
+
+  // Score composite /100 : moyenne pondérée de 4 sous-scores normalisés.
+  function score(m){
+    if(!m.n) return null;
+    var cl=function(x){ return Math.max(0,Math.min(100,x)); };
+    var sWin=cl(m.tradeWin);                              // win rate
+    var sPF =cl((isFinite(m.pf)?m.pf:3)*40);              // PF 2.5 → 100, 1 → 40
+    var sWL =cl((isFinite(m.wl)?m.wl:3)*45);              // ratio 2.2 → 100
+    var sDay=cl(m.dayWin);                                // jours gagnants
+    return Math.round(0.30*sWin + 0.30*sPF + 0.20*sWL + 0.20*sDay);
+  }
+
+  function emptyMsg(ctx,w,h){
+    ctx.fillStyle='rgba(138,147,165,.45)'; ctx.font='12px Inter,sans-serif';
+    ctx.textAlign='center'; ctx.fillText('Ajoutez des trades pour voir le graphe', w/2, h/2);
+  }
+  function setup(c){
+    var ctx=c.getContext('2d'), dpr=Math.min(window.devicePixelRatio||1,2);
+    var w=c.offsetWidth||320, h=c.offsetHeight||200; c.width=w*dpr; c.height=h*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+    return { ctx:ctx, w:w, h:h };
+  }
+
+  function drawCum(m){
+    var c=$('p2Cum'); if(!c) return; var s0=setup(c), ctx=s0.ctx, w=s0.w, h=s0.h;
+    var s=[0].concat(m.cs);
+    if(s.length<2){ emptyMsg(ctx,w,h); return; }
+    var padL=52,padR=12,padT=14,padB=18;
+    var min=Math.min.apply(null,s), max=Math.max.apply(null,s), rng=(max-min)||1;
+    var cum=m.cs[m.cs.length-1], up=cum>=0;
+    var line=up?'#4ADE9C':'#F0647A', fillA=up?'rgba(74,222,156,.14)':'rgba(240,100,122,.14)';
+    var px=function(i){ return padL+(i/(s.length-1))*(w-padL-padR); };
+    var py=function(v){ return padT+(1-(v-min)/rng)*(h-padT-padB); };
+    ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='right'; ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=1;
+    [0,0.5,1].forEach(function(t){ var val=min+t*rng, y=py(val);
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+      ctx.fillStyle='rgba(138,147,165,.6)'; ctx.fillText(shortN(val), padL-5, y+3.5); });
+    ctx.beginPath(); s.forEach(function(v,i){ i?ctx.lineTo(px(i),py(v)):ctx.moveTo(px(i),py(v)); });
+    ctx.strokeStyle=line; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+    ctx.lineTo(px(s.length-1),h-padB); ctx.lineTo(padL,h-padB); ctx.closePath();
+    var g=ctx.createLinearGradient(0,padT,0,h); g.addColorStop(0,fillA); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g; ctx.fill();
+  }
+
+  function drawDaily(m){
+    var c=$('p2Daily'); if(!c) return; var s0=setup(c), ctx=s0.ctx, w=s0.w, h=s0.h;
+    var dv=m.dv; if(!dv.length){ emptyMsg(ctx,w,h); return; }
+    var padL=52,padR=12,padT=14,padB=18;
+    var max=Math.max.apply(null,dv.concat([0])), min=Math.min.apply(null,dv.concat([0])), rng=(max-min)||1;
+    var py=function(v){ return padT+(1-(v-min)/rng)*(h-padT-padB); };
+    var y0=py(0);
+    ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='right'; ctx.strokeStyle='rgba(255,255,255,.05)';
+    [max,0,min].forEach(function(val){ var y=py(val);
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+      ctx.fillStyle='rgba(138,147,165,.6)'; ctx.fillText(shortN(val), padL-5, y+3.5); });
+    var n=dv.length, slot=(w-padL-padR)/n, bw=Math.max(2, slot-3);
+    dv.forEach(function(v,i){
+      var x=padL+i*slot+(slot-bw)/2, y=py(v);
+      ctx.fillStyle=v>=0?'#4ADE9C':'#F0647A';
+      ctx.fillRect(x, Math.min(y,y0), bw, Math.max(1,Math.abs(y-y0)));
+    });
+  }
+
+  function render(){
+    var m=compute(), s=sym();
+    if($('p2PF')){ $('p2PF').textContent = m.n ? (isFinite(m.pf)?m.pf.toFixed(2):'∞') : '—'; }
+    if($('p2DWin')){ $('p2DWin').textContent = m.days.length ? Math.round(m.dayWin)+'%' : '—'; }
+    if($('p2DWinsub')){ $('p2DWinsub').textContent = m.days.length ? (m.wd+' gagnants · '+m.ld+' perdants') : ''; }
+    if($('p2WL')){ $('p2WL').textContent = m.n ? (isFinite(m.wl)?m.wl.toFixed(2):'∞') : '—'; }
+    if($('p2WLsub')){ $('p2WLsub').textContent = m.n ? ('+'+Math.round(m.avgW).toLocaleString('fr-FR')+' / -'+Math.round(m.avgL).toLocaleString('fr-FR')+' '+s) : ''; }
+    var sc=score(m), arc=$('p2GaugeArc');
+    if($('p2Score')) $('p2Score').textContent = sc==null ? '—' : String(sc);
+    var col = sc==null ? 'var(--text-muted,#7E8794)' : (sc>=70?'#4ADE9C':(sc>=45?'#E8C268':'#F0647A'));
+    if(arc){ var C=2*Math.PI*50; arc.style.strokeDasharray=C; arc.style.strokeDashoffset=C*(1-((sc||0)/100)); arc.style.stroke=col; }
+    if($('p2Score')) $('p2Score').style.color=col;
+    if($('p2ScoreCap')) $('p2ScoreCap').textContent = sc==null ? 'Ajoutez des trades' : (sc>=70?'Solide':(sc>=45?'À consolider':'Fragile'));
+    try{ drawCum(m); drawDaily(m); }catch(e){}
+  }
+
+  // Hook : se redessine à chaque renderStats + au load + au resize.
+  if(typeof window.renderStats==='function'){ var _o=window.renderStats; window.renderStats=function(){ var r=_o.apply(this,arguments); try{ render(); }catch(e){} return r; }; }
+  window.addEventListener('load', function(){ setTimeout(render,140); });
+  window.addEventListener('resize', function(){ try{ var m=compute(); drawCum(m); drawDaily(m); }catch(e){} });
 })();
 </script>
 <script src="./appshell.js"></script>
