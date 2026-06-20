@@ -1339,10 +1339,13 @@ function openDayDetail(dateStr) {
   '</div>';
 
   if(!dayTrades.length) {
-    html += '<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">'+
+    html += '<div style="text-align:center;padding:32px 20px;color:var(--text3);font-size:13px">'+
       '<div style="font-size:40px;margin-bottom:12px"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>'+
-      'Aucun trade ce jour<br><br>'+
-      '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer">+ Ajouter un trade</button>'+
+      '<span data-en="No trade this day. You can still note your day (why you didn\'t trade, mood, screenshots…).">Aucun trade ce jour. Vous pouvez quand même noter votre journée — pourquoi vous n\'avez pas tradé, ressenti, captures…</span><br><br>'+
+      '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'+
+        '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer" data-en="+ Add a trade">+ Ajouter un trade</button>'+
+        '<button onclick="jdFocusNote()" style="padding:10px 24px;background:transparent;border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer" data-en="+ Add a note">+ Ajouter une note</button>'+
+      '</div>'+
     '</div>';
   } else {
     // Toolbar multi-sélection
@@ -3080,6 +3083,7 @@ async function importMt5Trades() {
   }
   function saveText(date){ var ta=document.getElementById('dayNoteText'); if(!ta) return; var n=window.jdGetNotes(date); n.text=ta.value; setNotes(date,n); refreshCal(); }
 
+  window.jdFocusNote=function(){ var t=document.getElementById('dayNoteText'); if(t){ try{ t.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} setTimeout(function(){ t.focus(); }, 120); } };
   window.jdInitNotes=function(date){
     var ta=document.getElementById('dayNoteText'); if(ta) ta.value=window.jdGetNotes(date).text;
     renderImgs(date);
