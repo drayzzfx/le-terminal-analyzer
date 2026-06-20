@@ -522,6 +522,41 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
         <canvas id="p2Daily" class="perf2-cv"></canvas>
       </div>
     </div>
+    <div class="perf3">
+      <div class="perf3-col">
+        <span class="perf3-col__h" data-en="All trades">Tous les trades</span>
+        <div class="perf3-row"><span data-en="Gross P&amp;L">P&amp;L brut</span><b id="s3Gross">—</b></div>
+        <div class="perf3-row"><span data-en="# of trades">Nombre de trades</span><b id="s3N">—</b></div>
+        <div class="perf3-row"><span data-en="% profitable">% gagnants</span><b id="s3Prof">—</b></div>
+        <div class="perf3-row"><span data-en="Avg / trade">Moyenne / trade</span><b id="s3Avg">—</b></div>
+        <div class="perf3-row"><span data-en="Expectancy / trade">Espérance / trade</span><b id="s3Exp">—</b></div>
+      </div>
+      <div class="perf3-col">
+        <span class="perf3-col__h" data-en="Winning trades">Trades gagnants</span>
+        <div class="perf3-row"><span data-en="Total profit">Profit total</span><b id="s3WTot" style="color:var(--green,#4ADE9C)">—</b></div>
+        <div class="perf3-row"><span data-en="Count">Nombre</span><b id="s3WN">—</b></div>
+        <div class="perf3-row"><span data-en="Largest win">Plus gros gain</span><b id="s3WMax">—</b></div>
+        <div class="perf3-row"><span data-en="Avg win">Gain moyen</span><b id="s3WAvg">—</b></div>
+        <div class="perf3-row"><span data-en="Std dev">Écart-type</span><b id="s3WStd">—</b></div>
+      </div>
+      <div class="perf3-col">
+        <span class="perf3-col__h" data-en="Losing trades">Trades perdants</span>
+        <div class="perf3-row"><span data-en="Total loss">Perte totale</span><b id="s3LTot" style="color:var(--red,#F0647A)">—</b></div>
+        <div class="perf3-row"><span data-en="Count">Nombre</span><b id="s3LN">—</b></div>
+        <div class="perf3-row"><span data-en="Largest loss">Plus grosse perte</span><b id="s3LMax">—</b></div>
+        <div class="perf3-row"><span data-en="Avg loss">Perte moyenne</span><b id="s3LAvg">—</b></div>
+        <div class="perf3-row"><span data-en="Std dev">Écart-type</span><b id="s3LStd">—</b></div>
+      </div>
+      <div class="perf3-col perf3-pie">
+        <span class="perf3-col__h" data-en="Winning vs losing">Gagnants vs perdants</span>
+        <div class="perf3-pie__c" id="s3Pie"></div>
+        <div class="perf3-legend">
+          <div><i style="background:#4ADE9C"></i><span data-en="Winning">Gagnants</span><b id="s3PieW">—</b></div>
+          <div><i style="background:#E8C268"></i><span data-en="Breakeven">Breakeven</span><b id="s3PieB">—</b></div>
+          <div><i style="background:#F0647A"></i><span data-en="Losing">Perdants</span><b id="s3PieL">—</b></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ░ TABLEAU DE BORD (équité + derniers trades) — style maquette ░ -->
@@ -601,6 +636,22 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .perf2-gauge{width:150px;height:150px}
   .perf2-score__n{position:absolute;font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:40px;font-weight:700;color:var(--text-title,#F2F4F7);line-height:1}
   .perf2-score__cap{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted,#7E8794)}
+  /* ── Statistiques détaillées (tous / gagnants / perdants + camembert) ── */
+  .perf3{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px}
+  @media(max-width:980px){.perf3{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.perf3{grid-template-columns:1fr}}
+  .perf3-col{background:var(--bg-elevated,rgba(255,255,255,.02));border:1px solid var(--border-subtle,rgba(255,255,255,.08));border-radius:var(--r-lg,16px);padding:16px 18px;display:flex;flex-direction:column;gap:1px;min-width:0}
+  .perf3-col__h{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-title,#F2F4F7);text-align:center;padding-bottom:10px;margin-bottom:6px;border-bottom:1px solid var(--border-subtle,rgba(255,255,255,.08))}
+  .perf3-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;font-size:12.5px;border-bottom:1px solid rgba(255,255,255,.04)}
+  .perf3-row:last-child{border-bottom:none}
+  .perf3-row span{color:var(--text-muted,#7E8794)}
+  .perf3-row b{font-family:var(--font-mono,'JetBrains Mono',monospace);font-weight:700;color:var(--text-title,#F2F4F7);white-space:nowrap}
+  .perf3-pie{align-items:center}
+  .perf3-pie__c{width:124px;height:124px;border-radius:50%;margin:10px 0 14px;background:var(--border-subtle,#1C212A)}
+  .perf3-legend{display:flex;flex-direction:column;gap:7px;width:100%;font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;color:var(--text-body,#C3CAD4)}
+  .perf3-legend div{display:flex;align-items:center;gap:8px}
+  .perf3-legend i{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+  .perf3-legend b{margin-left:auto;color:var(--text-title,#F2F4F7)}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -2820,9 +2871,13 @@ async function importMt5Trades() {
   function shortN(v){ var a=Math.abs(v), s; if(a>=1000){ s=(v/1000).toFixed(a>=10000?0:1)+'k'; } else { s=String(Math.round(v)); } return (v>=0?'+':'')+s; }
 
   function compute(){
-    var arr=trd(), nW=0,nL=0,gW=0,gL=0,net=0;
+    var arr=trd(), nW=0,nL=0,nBE=0,gW=0,gL=0,net=0, winsP=[], lossA=[];
     arr.forEach(function(t){ var p=parseFloat(t.pnl)||0; net+=p;
-      if(t.result==='win'){ nW++; gW+=p; } else if(t.result==='loss'){ nL++; gL+=Math.abs(p); } });
+      if(t.result==='win'){ nW++; gW+=p; winsP.push(p); }
+      else if(t.result==='loss'){ nL++; gL+=Math.abs(p); lossA.push(Math.abs(p)); }
+      else if(t.result==='be'){ nBE++; } });
+    var _std=function(a){ if(a.length<2) return 0; var mn=a.reduce(function(s,x){return s+x;},0)/a.length; var v=a.reduce(function(s,x){return s+(x-mn)*(x-mn);},0)/a.length; return Math.sqrt(v); };
+    var maxWin=winsP.length?Math.max.apply(null,winsP):0, maxLoss=lossA.length?Math.max.apply(null,lossA):0;
     var tradeWin=(nW+nL)>0 ? nW/(nW+nL)*100 : 0;
     var pf=gL>0 ? gW/gL : (gW>0 ? Infinity : 0);
     var avgW=nW ? gW/nW : 0, avgL=nL ? gL/nL : 0;
@@ -2833,7 +2888,11 @@ async function importMt5Trades() {
     var dayWin=(wd+ld)>0 ? wd/(wd+ld)*100 : 0;
     var cum=0, cs=dv.map(function(v){ cum+=v; return cum; });
     return { n:arr.length, net:net, tradeWin:tradeWin, pf:pf, avgW:avgW, avgL:avgL, wl:wl,
-             dayWin:dayWin, wd:wd, ld:ld, days:days, dv:dv, cs:cs };
+             dayWin:dayWin, wd:wd, ld:ld, days:days, dv:dv, cs:cs,
+             nW:nW, nL:nL, nBE:nBE, gW:gW, gL:gL, maxWin:maxWin, maxLoss:maxLoss,
+             stdWin:_std(winsP), stdLoss:_std(lossA),
+             expectancy: arr.length ? net/arr.length : 0,
+             profitable: arr.length ? nW/arr.length*100 : 0 };
   }
 
   // Score composite /100 : moyenne pondérée de 4 sous-scores normalisés.
@@ -2911,6 +2970,29 @@ async function importMt5Trades() {
     if(arc){ var C=2*Math.PI*50; arc.style.strokeDasharray=C; arc.style.strokeDashoffset=C*(1-((sc||0)/100)); arc.style.stroke=col; }
     if($('p2Score')) $('p2Score').style.color=col;
     if($('p2ScoreCap')) $('p2ScoreCap').textContent = sc==null ? 'Ajoutez des trades' : (sc>=70?'Solide':(sc>=45?'À consolider':'Fragile'));
+    // ── Statistiques détaillées (tous / gagnants / perdants + camembert) ──
+    var setT=function(id,v){ var e=$(id); if(e) e.textContent=v; };
+    var euro=function(v){ return Math.round(v).toLocaleString('fr-FR')+' '+s; };
+    if(m.n){
+      setT('s3Gross', fmt(m.net));
+      setT('s3N', m.n);
+      setT('s3Prof', m.profitable.toFixed(1)+'%');
+      setT('s3Avg', fmt(m.net/m.n));
+      setT('s3Exp', fmt(m.expectancy));
+      setT('s3WTot', '+'+euro(m.gW));
+      setT('s3WN', m.nW);
+      setT('s3WMax', m.nW ? '+'+euro(m.maxWin) : '—');
+      setT('s3WAvg', m.nW ? '+'+euro(m.avgW) : '—');
+      setT('s3WStd', m.nW ? euro(m.stdWin) : '—');
+      setT('s3LTot', '-'+euro(m.gL));
+      setT('s3LN', m.nL);
+      setT('s3LMax', m.nL ? '-'+euro(m.maxLoss) : '—');
+      setT('s3LAvg', m.nL ? '-'+euro(m.avgL) : '—');
+      setT('s3LStd', m.nL ? euro(m.stdLoss) : '—');
+      var wp=m.nW/m.n*100, bp=m.nBE/m.n*100, lp=m.nL/m.n*100, pie=$('s3Pie');
+      if(pie) pie.style.background='conic-gradient(#4ADE9C 0 '+wp+'%, #E8C268 '+wp+'% '+(wp+bp)+'%, #F0647A '+(wp+bp)+'% 100%)';
+      setT('s3PieW', wp.toFixed(1)+'%'); setT('s3PieB', bp.toFixed(1)+'%'); setT('s3PieL', lp.toFixed(1)+'%');
+    }
     try{ drawCum(m); drawDaily(m); }catch(e){}
   }
 
