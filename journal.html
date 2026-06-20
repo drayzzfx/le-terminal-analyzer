@@ -667,13 +667,13 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .day-notes__save{margin-left:auto;font-family:var(--font-text,'Inter',sans-serif);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#07090C;background:var(--accent,#7FB8E8);border:1px solid transparent;border-radius:var(--r-sm,4px);padding:8px 16px;cursor:pointer}
   .day-notes__save:hover{background:var(--accent-bright,#BFDCF5)}
   /* indicateur de note sur la case calendrier */
-  .day-note-flag{position:absolute;top:8px;right:8px;color:var(--accent,#7FB8E8);opacity:.9;display:inline-flex}
-  .day-note-flag svg{width:13px;height:13px}
+  .day-note-flag{position:absolute;top:6px;right:6px;display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:var(--r-sm,4px);border:1px solid var(--accent,#7FB8E8);background:var(--accent-glow-soft,rgba(127,184,232,.14));color:var(--accent,#7FB8E8);cursor:pointer;transition:background .15s,border-color .15s}
+  .day-note-flag:hover{background:var(--accent-glow,rgba(127,184,232,.28));border-color:var(--accent-bright,#BFDCF5)}
+  .day-note-flag svg{width:12px;height:12px}
   /* lightbox image */
   .jd-lightbox{position:fixed;inset:0;z-index:1500;display:none;align-items:center;justify-content:center;background:rgba(7,9,12,.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:24px;cursor:zoom-out}
   .jd-lightbox.show{display:flex}
   .jd-lightbox img{max-width:92vw;max-height:88vh;border-radius:var(--r-md,6px);box-shadow:0 24px 64px rgba(0,0,0,.7)}
-  .day-note-flag{cursor:pointer}
   /* ── Bouton « Notes du jour » dans le détail ── */
   .day-notesbtn-wrap{margin-top:16px}
   .day-notesbtn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:transparent;border:1px solid var(--border,#3A414C);border-radius:var(--r-sm,4px);color:var(--text-body,#C3CAD4);font-family:var(--font-text,'Inter',sans-serif);font-size:12.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
@@ -3143,18 +3143,29 @@ async function importMt5Trades() {
     });
   }
 
-  // Lit l'éditeur et reconstruit le modèle ordonné.
+  // Lit l'éditeur et reconstruit le modèle ordonné. Parcours récursif :
+  // une image reste captée même si le navigateur l'imbrique dans un autre bloc.
   function serialize(){
     var e=ed(); if(!e) return [];
-    var items=[], parts=[];
-    function flush(){ var t=parts.join('\n').replace(/\n{3,}/g,'\n\n'); if(t.trim()!=='') items.push({t:'text',v:t}); parts=[]; }
-    Array.prototype.forEach.call(e.childNodes, function(n){
-      if(n.nodeType===1 && n.classList && n.classList.contains('note-img')){
-        flush(); var im=n.querySelector('img'); if(im) items.push({t:'img',src:im.src});
-      } else {
-        parts.push(n.nodeType===3 ? (n.nodeValue||'') : (n.innerText||''));
+    var items=[], buf='';
+    function flush(){ var t=buf.replace(/\n{3,}/g,'\n\n').replace(/^\n+|\n+$/g,''); if(t.trim()!=='') items.push({t:'text',v:t}); buf=''; }
+    function isImg(n){ return n.nodeType===1 && n.classList && n.classList.contains('note-img'); }
+    function walk(node){
+      for(var i=0;i<node.childNodes.length;i++){
+        var n=node.childNodes[i];
+        if(isImg(n)){ flush(); var im=n.querySelector('img'); if(im && im.src) items.push({t:'img',src:im.src}); continue; }
+        if(n.nodeType===3){ buf+=(n.nodeValue||''); continue; }
+        if(n.nodeType===1){
+          if(n.tagName==='IMG'){ if(n.src) items.push({t:'img',src:n.src}); continue; }
+          if(n.tagName==='BR'){ buf+='\n'; continue; }
+          var block=/^(DIV|P|LI|H[1-6])$/.test(n.tagName);
+          if(block && buf!=='' && buf.charAt(buf.length-1)!=='\n') buf+='\n';
+          walk(n);
+          if(block && buf!=='' && buf.charAt(buf.length-1)!=='\n') buf+='\n';
+        }
       }
-    });
+    }
+    walk(e);
     flush();
     return items;
   }
@@ -3213,7 +3224,10 @@ async function importMt5Trades() {
     var e=ed(), drop=document.getElementById('noteDrop'), file=document.getElementById('noteFile'), ov=document.getElementById('noteModal');
     if(e){
       e.addEventListener('blur', save);
-      e.addEventListener('input', function(){ if(!curDate) return; setItems(curDate, serialize()); refreshCal(); });
+      // On persiste à chaque frappe, mais on ne rafraîchit le calendrier (donc
+      // l'indicateur de note) qu'à la sauvegarde explicite, pour qu'il ne
+      // clignote pas pendant la saisie.
+      e.addEventListener('input', function(){ if(!curDate) return; setItems(curDate, serialize()); });
       e.addEventListener('click', function(ev){ var b=ev.target.closest && ev.target.closest('.note-img__rm'); if(b){ ev.preventDefault(); var fig=b.closest('.note-img'); if(fig){ fig.remove(); save(); } } });
       e.addEventListener('paste', function(ev){
         var items=(ev.clipboardData&&ev.clipboardData.items)||[]; var imgs=[];
