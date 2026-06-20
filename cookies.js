@@ -88,7 +88,30 @@
 
   window.ltOpenConsent = function () { render(); };
 
-  function init() { if (!get()) render(); }
+  // Rend le consentement révocable « aussi facilement qu'il a été donné » (RGPD art. 7-3) :
+  //  - tout élément [data-cookie-settings] rouvre la bannière ;
+  //  - un lien « Gérer les cookies » est ajouté à côté du lien Cookies des pieds de page.
+  function wireManage() {
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest ? e.target.closest('[data-cookie-settings]') : null;
+      if (t) { e.preventDefault(); render(); }
+    });
+    try {
+      var sel = 'footer a[href*="legal.html#cookies"], .ltf a[href*="legal.html#cookies"], .lg-footer a[href*="legal.html#cookies"]';
+      Array.prototype.forEach.call(document.querySelectorAll(sel), function (a) {
+        if (a.getAttribute('data-lt-mgr')) return;
+        var m = document.createElement('a');
+        m.href = '#'; m.className = a.className;
+        m.setAttribute('data-en', 'Manage cookies');
+        m.setAttribute('data-cookie-settings', '');
+        m.textContent = EN ? 'Manage cookies' : 'Gérer les cookies';
+        a.parentNode.insertBefore(m, a.nextSibling);
+        a.setAttribute('data-lt-mgr', '1');
+      });
+    } catch (e) {}
+  }
+
+  function init() { wireManage(); if (!get()) render(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
