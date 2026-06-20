@@ -143,6 +143,16 @@
 .pf-asset-list { max-height:220px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--r-md); margin-bottom:16px; }
 .pf-asset-list::-webkit-scrollbar { width:3px; }
 .pf-asset-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+/* accordéon catégories */
+.pf-cat-header { display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-void); border-bottom:1px solid var(--border-subtle); cursor:pointer; user-select:none; transition:background var(--dur-fast) var(--ease-out); border-left:3px solid var(--cat-col,#7FB8E8); }
+.pf-cat-header:hover { background:rgba(127,184,232,0.06); }
+.pf-cat-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+.pf-cat-label { font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-body); flex:1; }
+.pf-cat-badge { font-family:var(--font-mono); font-size:10px; font-weight:700; color:#07090C; background:var(--accent); border-radius:999px; padding:1px 6px; }
+.pf-cat-arrow { color:var(--text-muted); transition:transform var(--dur-fast) var(--ease-out); flex-shrink:0; }
+.pf-cat-header.is-open .pf-cat-arrow { transform:rotate(180deg); }
+.pf-cat-body { display:none; }
+.pf-cat-body.is-open { display:block; }
 .pf-asset-cat { font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:6px 11px 4px; background:var(--bg-void); position:sticky; top:0; z-index:1; border-bottom:1px solid var(--border-subtle); border-left:3px solid transparent; }
 .pf-asset-item { display:flex; align-items:center; gap:9px; padding:7px 11px; border-bottom:1px solid var(--border-subtle); transition:background var(--dur-fast) var(--ease-out); }
 .pf-asset-item:last-child { border-bottom:none; }
@@ -295,57 +305,120 @@
   var pfPortfolio = SAVED.assets || {};   // { assetId: montant€ }
   var currentPeriod = '1A';
 
-  var CAT_COL = { 'ETF':'#7FB8E8', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidités':'#C3CAD4', 'Crypto':'#F0647A' };
+  var CAT_COL = { 'ETF':'#7FB8E8', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidites':'#C3CAD4', 'Crypto':'#F0647A' };
+  var CAT_LABEL = { 'ETF':'ETF', 'Action':'Actions', 'Crypto':'Crypto', 'Obligation':'Obligations', 'Liquidites':'Liquidites' };
 
   // ── Catalogue Trade Republic ──
   var TR_ASSETS = [
-    { id:'vwce',  name:'FTSE All-World ETF',      cat:'ETF',        ticker:'VWCE'  },
-    { id:'iwda',  name:'MSCI World ETF',           cat:'ETF',        ticker:'IWDA'  },
-    { id:'sxr8',  name:'S&P 500 ETF',              cat:'ETF',        ticker:'SXR8'  },
-    { id:'sxrv',  name:'NASDAQ 100 ETF',           cat:'ETF',        ticker:'SXRV'  },
-    { id:'iema',  name:'Marchés émergents ETF',    cat:'ETF',        ticker:'IEMA'  },
-    { id:'xesc',  name:'Euro Stoxx 50 ETF',        cat:'ETF',        ticker:'XESC'  },
-    { id:'exs1',  name:'DAX ETF',                  cat:'ETF',        ticker:'EXS1'  },
-    { id:'c40',   name:'CAC 40 ETF',               cat:'ETF',        ticker:'C40'   },
-    { id:'paeem', name:'MSCI Em. Markets ETF',     cat:'ETF',        ticker:'PAEEM' },
-    { id:'aapl',  name:'Apple',                    cat:'Action',     ticker:'AAPL'  },
-    { id:'msft',  name:'Microsoft',                cat:'Action',     ticker:'MSFT'  },
-    { id:'nvda',  name:'Nvidia',                   cat:'Action',     ticker:'NVDA'  },
-    { id:'amzn',  name:'Amazon',                   cat:'Action',     ticker:'AMZN'  },
-    { id:'googl', name:'Alphabet',                 cat:'Action',     ticker:'GOOGL' },
-    { id:'meta',  name:'Meta Platforms',           cat:'Action',     ticker:'META'  },
-    { id:'tsla',  name:'Tesla',                    cat:'Action',     ticker:'TSLA'  },
-    { id:'jpm',   name:'JPMorgan Chase',           cat:'Action',     ticker:'JPM'   },
-    { id:'v',     name:'Visa',                     cat:'Action',     ticker:'V'     },
-    { id:'ko',    name:'Coca-Cola',                cat:'Action',     ticker:'KO'    },
-    { id:'xom',   name:'ExxonMobil',               cat:'Action',     ticker:'XOM'   },
-    { id:'dis',   name:'Disney',                   cat:'Action',     ticker:'DIS'   },
-    { id:'unh',   name:'UnitedHealth',             cat:'Action',     ticker:'UNH'   },
-    { id:'brkb',  name:'Berkshire Hathaway',       cat:'Action',     ticker:'BRK.B' },
-    { id:'mc',    name:'LVMH',                     cat:'Action',     ticker:'MC'    },
-    { id:'asml',  name:'ASML Holding',             cat:'Action',     ticker:'ASML'  },
-    { id:'air',   name:'Airbus',                   cat:'Action',     ticker:'AIR'   },
-    { id:'tte',   name:'TotalEnergies',            cat:'Action',     ticker:'TTE'   },
-    { id:'sap',   name:'SAP',                      cat:'Action',     ticker:'SAP'   },
-    { id:'novo',  name:'Novo Nordisk',             cat:'Action',     ticker:'NOVO'  },
-    { id:'sie',   name:'Siemens',                  cat:'Action',     ticker:'SIE'   },
-    { id:'rms',   name:'Hermes',                   cat:'Action',     ticker:'RMS'   },
-    { id:'or',    name:'L\'Oreal',                 cat:'Action',     ticker:'OR'    },
-    { id:'race',  name:'Ferrari',                  cat:'Action',     ticker:'RACE'  },
-    { id:'bnp',   name:'BNP Paribas',              cat:'Action',     ticker:'BNP'   },
-    { id:'nesn',  name:'Nestle',                   cat:'Action',     ticker:'NESN'  },
-    { id:'btc',   name:'Bitcoin (ETP)',            cat:'Crypto',     ticker:'BTCE'  },
-    { id:'eth',   name:'Ethereum (ETP)',           cat:'Crypto',     ticker:'ZETH'  },
-    { id:'sol',   name:'Solana (ETP)',             cat:'Crypto',     ticker:'GSOL'  },
-    { id:'ibgx',  name:'Oblig. Etat EUR ETF',      cat:'Obligation', ticker:'IBGX'  },
-    { id:'ibtm',  name:'US Treasury ETF',          cat:'Obligation', ticker:'IBTM'  },
-    { id:'ieac',  name:'Corp. EUR IG ETF',         cat:'Obligation', ticker:'IEAC'  },
-    { id:'ihyg',  name:'High Yield EUR ETF',       cat:'Obligation', ticker:'IHYG'  },
-    { id:'xeon',  name:'Fonds monetaire EUR',      cat:'Liquidites', ticker:'XEON'  },
-    { id:'cash',  name:'Liquidites / Cash',        cat:'Liquidites', ticker:'-'     }
+    // ETFs
+    { id:'vwce',   name:'FTSE All-World ETF',          cat:'ETF',        ticker:'VWCE'   },
+    { id:'iwda',   name:'MSCI World ETF',               cat:'ETF',        ticker:'IWDA'   },
+    { id:'sxr8',   name:'S&P 500 ETF',                  cat:'ETF',        ticker:'SXR8'   },
+    { id:'sxrv',   name:'NASDAQ 100 ETF',               cat:'ETF',        ticker:'SXRV'   },
+    { id:'iema',   name:'Marches emergents ETF',        cat:'ETF',        ticker:'IEMA'   },
+    { id:'xesc',   name:'Euro Stoxx 50 ETF',            cat:'ETF',        ticker:'XESC'   },
+    { id:'exs1',   name:'DAX ETF',                      cat:'ETF',        ticker:'EXS1'   },
+    { id:'c40',    name:'CAC 40 ETF',                   cat:'ETF',        ticker:'C40'    },
+    { id:'paeem',  name:'MSCI Em. Markets ETF',         cat:'ETF',        ticker:'PAEEM'  },
+    { id:'isac',   name:'MSCI ACWI ETF',                cat:'ETF',        ticker:'ISAC'   },
+    { id:'exxt',   name:'NASDAQ-100 ETF (iShares)',     cat:'ETF',        ticker:'EXXT'   },
+    { id:'vusa',   name:'S&P 500 ETF (Vanguard)',       cat:'ETF',        ticker:'VUSA'   },
+    { id:'smci',   name:'MSCI Small Cap ETF',           cat:'ETF',        ticker:'WSML'   },
+    { id:'eqqq',   name:'NASDAQ 100 ETF (Invesco)',     cat:'ETF',        ticker:'EQQQ'   },
+    { id:'qdve',   name:'S&P 500 IT Sector ETF',        cat:'ETF',        ticker:'QDVE'   },
+    { id:'cspx',   name:'S&P 500 ETF (iShares acc.)',   cat:'ETF',        ticker:'CSPX'   },
+    { id:'veur',   name:'FTSE Developed Europe ETF',    cat:'ETF',        ticker:'VEUR'   },
+    { id:'verx',   name:'FTSE Dev. Europe ex-UK ETF',   cat:'ETF',        ticker:'VERX'   },
+    // Actions US
+    { id:'aapl',   name:'Apple',                        cat:'Action',     ticker:'AAPL'   },
+    { id:'msft',   name:'Microsoft',                    cat:'Action',     ticker:'MSFT'   },
+    { id:'nvda',   name:'Nvidia',                       cat:'Action',     ticker:'NVDA'   },
+    { id:'amzn',   name:'Amazon',                       cat:'Action',     ticker:'AMZN'   },
+    { id:'googl',  name:'Alphabet',                     cat:'Action',     ticker:'GOOGL'  },
+    { id:'meta',   name:'Meta Platforms',               cat:'Action',     ticker:'META'   },
+    { id:'tsla',   name:'Tesla',                        cat:'Action',     ticker:'TSLA'   },
+    { id:'jpm',    name:'JPMorgan Chase',               cat:'Action',     ticker:'JPM'    },
+    { id:'v',      name:'Visa',                         cat:'Action',     ticker:'V'      },
+    { id:'ko',     name:'Coca-Cola',                    cat:'Action',     ticker:'KO'     },
+    { id:'xom',    name:'ExxonMobil',                   cat:'Action',     ticker:'XOM'    },
+    { id:'dis',    name:'Disney',                       cat:'Action',     ticker:'DIS'    },
+    { id:'unh',    name:'UnitedHealth',                 cat:'Action',     ticker:'UNH'    },
+    { id:'brkb',   name:'Berkshire Hathaway',           cat:'Action',     ticker:'BRK.B'  },
+    { id:'ma',     name:'Mastercard',                   cat:'Action',     ticker:'MA'     },
+    { id:'pep',    name:'PepsiCo',                      cat:'Action',     ticker:'PEP'    },
+    { id:'jnj',    name:'Johnson & Johnson',            cat:'Action',     ticker:'JNJ'    },
+    { id:'pg',     name:'Procter & Gamble',             cat:'Action',     ticker:'PG'     },
+    { id:'hd',     name:'Home Depot',                   cat:'Action',     ticker:'HD'     },
+    { id:'abbv',   name:'AbbVie',                       cat:'Action',     ticker:'ABBV'   },
+    { id:'mrk',    name:'Merck',                        cat:'Action',     ticker:'MRK'    },
+    { id:'cvx',    name:'Chevron',                      cat:'Action',     ticker:'CVX'    },
+    { id:'lly',    name:'Eli Lilly',                    cat:'Action',     ticker:'LLY'    },
+    { id:'avgo',   name:'Broadcom',                     cat:'Action',     ticker:'AVGO'   },
+    { id:'orcl',   name:'Oracle',                       cat:'Action',     ticker:'ORCL'   },
+    { id:'nflx',   name:'Netflix',                      cat:'Action',     ticker:'NFLX'   },
+    { id:'amd',    name:'AMD',                          cat:'Action',     ticker:'AMD'    },
+    { id:'intc',   name:'Intel',                        cat:'Action',     ticker:'INTC'   },
+    { id:'crm',    name:'Salesforce',                   cat:'Action',     ticker:'CRM'    },
+    { id:'adbe',   name:'Adobe',                        cat:'Action',     ticker:'ADBE'   },
+    { id:'pypl',   name:'PayPal',                       cat:'Action',     ticker:'PYPL'   },
+    { id:'uber',   name:'Uber',                         cat:'Action',     ticker:'UBER'   },
+    { id:'spot',   name:'Spotify',                      cat:'Action',     ticker:'SPOT'   },
+    { id:'shop',   name:'Shopify',                      cat:'Action',     ticker:'SHOP'   },
+    { id:'sq',     name:'Block (ex-Square)',            cat:'Action',     ticker:'SQ'     },
+    { id:'coin',   name:'Coinbase',                     cat:'Action',     ticker:'COIN'   },
+    { id:'pltr',   name:'Palantir',                     cat:'Action',     ticker:'PLTR'   },
+    { id:'rivn',   name:'Rivian',                       cat:'Action',     ticker:'RIVN'   },
+    // Actions EU
+    { id:'mc',     name:'LVMH',                         cat:'Action',     ticker:'MC'     },
+    { id:'asml',   name:'ASML Holding',                 cat:'Action',     ticker:'ASML'   },
+    { id:'air',    name:'Airbus',                       cat:'Action',     ticker:'AIR'    },
+    { id:'tte',    name:'TotalEnergies',                cat:'Action',     ticker:'TTE'    },
+    { id:'sap',    name:'SAP',                          cat:'Action',     ticker:'SAP'    },
+    { id:'novo',   name:'Novo Nordisk',                 cat:'Action',     ticker:'NOVO'   },
+    { id:'sie',    name:'Siemens',                      cat:'Action',     ticker:'SIE'    },
+    { id:'rms',    name:'Hermes',                       cat:'Action',     ticker:'RMS'    },
+    { id:'or',     name:'L\'Oreal',                     cat:'Action',     ticker:'OR'     },
+    { id:'race',   name:'Ferrari',                      cat:'Action',     ticker:'RACE'   },
+    { id:'bnp',    name:'BNP Paribas',                  cat:'Action',     ticker:'BNP'    },
+    { id:'nesn',   name:'Nestle',                       cat:'Action',     ticker:'NESN'   },
+    { id:'rog',    name:'Roche Holding',                cat:'Action',     ticker:'ROG'    },
+    { id:'novn',   name:'Novartis',                     cat:'Action',     ticker:'NOVN'   },
+    { id:'abbn',   name:'ABB',                          cat:'Action',     ticker:'ABBN'   },
+    { id:'ads',    name:'Adidas',                       cat:'Action',     ticker:'ADS'    },
+    { id:'bmw',    name:'BMW',                          cat:'Action',     ticker:'BMW'    },
+    { id:'vow',    name:'Volkswagen',                   cat:'Action',     ticker:'VOW'    },
+    { id:'muc',    name:'Munich Re',                    cat:'Action',     ticker:'MUV2'   },
+    { id:'alv',    name:'Allianz',                      cat:'Action',     ticker:'ALV'    },
+    { id:'eni',    name:'ENI',                          cat:'Action',     ticker:'ENI'    },
+    { id:'san',    name:'Banco Santander',              cat:'Action',     ticker:'SAN'    },
+    { id:'iber',   name:'Iberdrola',                    cat:'Action',     ticker:'IBE'    },
+    { id:'kering', name:'Kering',                       cat:'Action',     ticker:'KER'    },
+    { id:'stmn',   name:'STMicroelectronics',           cat:'Action',     ticker:'STM'    },
+    { id:'cap',    name:'Capgemini',                    cat:'Action',     ticker:'CAP'    },
+    { id:'ai',     name:'Air Liquide',                  cat:'Action',     ticker:'AI'     },
+    // Crypto (ETPs/ETCs)
+    { id:'btc',    name:'Bitcoin (ETP)',                cat:'Crypto',     ticker:'BTCE'   },
+    { id:'eth',    name:'Ethereum (ETP)',               cat:'Crypto',     ticker:'ZETH'   },
+    { id:'sol',    name:'Solana (ETP)',                 cat:'Crypto',     ticker:'GSOL'   },
+    { id:'xrp',    name:'XRP (ETP)',                    cat:'Crypto',     ticker:'XRPH'   },
+    { id:'ada',    name:'Cardano (ETP)',                cat:'Crypto',     ticker:'AADA'   },
+    { id:'dot',    name:'Polkadot (ETP)',               cat:'Crypto',     ticker:'PDOT'   },
+    { id:'link',   name:'Chainlink (ETP)',              cat:'Crypto',     ticker:'LNKC'   },
+    // Obligations
+    { id:'ibgx',   name:'Oblig. Etat EUR ETF',         cat:'Obligation', ticker:'IBGX'   },
+    { id:'ibtm',   name:'US Treasury ETF',             cat:'Obligation', ticker:'IBTM'   },
+    { id:'ieac',   name:'Corp. EUR IG ETF',            cat:'Obligation', ticker:'IEAC'   },
+    { id:'ihyg',   name:'High Yield EUR ETF',          cat:'Obligation', ticker:'IHYG'   },
+    { id:'ibts',   name:'Oblig. Etat EUR 1-3 ans ETF', cat:'Obligation', ticker:'IBTS'   },
+    { id:'xgsh',   name:'Oblig. Etat All. Court terme',cat:'Obligation', ticker:'XGSH'   },
+    // Liquidites
+    { id:'xeon',   name:'Fonds monetaire EUR',         cat:'Liquidites', ticker:'XEON'   },
+    { id:'ern0',   name:'Fonds monetaire EUR (Amundi)',cat:'Liquidites', ticker:'ERN0'   },
+    { id:'cash',   name:'Liquidites / Cash',           cat:'Liquidites', ticker:'-'      }
   ];
 
   var CAT_ORDER = ['ETF','Action','Crypto','Obligation','Liquidites'];
+  var openCats = {};
 
   function saveState(){
     try{ localStorage.setItem('lt_pf_state', JSON.stringify({ total:TOTAL, assets:pfPortfolio })); }catch(e){}
@@ -419,15 +492,28 @@
     }).join('');
   }
 
-  // ── Liste d'actifs ──
+  // ── Liste d'actifs (accordéon par catégorie) ──
   var searchQ='';
   function renderAssets(){
     var q=searchQ.toLowerCase();
     var html='';
+    var anyResult=false;
     CAT_ORDER.forEach(function(cat){
       var items=TR_ASSETS.filter(function(a){ return a.cat===cat&&(!q||a.name.toLowerCase().indexOf(q)>=0||a.ticker.toLowerCase().indexOf(q)>=0); });
       if(!items.length) return;
-      html+='<div class="pf-asset-cat" style="border-left-color:'+(CAT_COL[cat]||'#7FB8E8')+'">'+cat+'</div>';
+      anyResult=true;
+      var col=CAT_COL[cat]||'#7FB8E8';
+      var label=CAT_LABEL[cat]||cat;
+      var checkedCount=items.filter(function(a){ return pfPortfolio[a.id]!==undefined; }).length;
+      var isOpen=openCats[cat]||(q.length>0);
+      var badge=checkedCount?'<span class="pf-cat-badge">'+checkedCount+'</span>':'';
+      html+='<div class="pf-cat-header'+(isOpen?' is-open':'')+'" data-cat="'+cat+'" style="--cat-col:'+col+'">'
+        +'<span class="pf-cat-dot" style="background:'+col+'"></span>'
+        +'<span class="pf-cat-label">'+label+'</span>'
+        +badge
+        +'<svg class="pf-cat-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+        +'</div>';
+      html+='<div class="pf-cat-body'+(isOpen?' is-open':'')+'" data-cat-body="'+cat+'">';
       items.forEach(function(a){
         var checked=pfPortfolio[a.id]!==undefined;
         var amt=pfPortfolio[a.id]||'';
@@ -437,8 +523,9 @@
           +'<div class="pf-asset-item__amt"><input type="number" class="pf-amt" data-id="'+a.id+'" min="0" step="100" placeholder="0"'+(amt!==''?' value="'+amt+'"':'')+'><span>€</span></div>'
           +'</div>';
       });
+      html+='</div>';
     });
-    if(!html) html='<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:13px">Aucun résultat</div>';
+    if(!anyResult) html='<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:13px">Aucun résultat</div>';
     document.getElementById('pfAssetList').innerHTML=html;
   }
 
@@ -485,6 +572,18 @@
     // Recherche actifs
     document.getElementById('pfAssetSearch').addEventListener('input',function(){
       searchQ=this.value; renderAssets();
+    });
+
+    // Accordéon catégories + checkboxes — délégation unique
+    document.getElementById('pfAssetList').addEventListener('click',function(e){
+      var hdr=e.target.closest('.pf-cat-header');
+      if(hdr){
+        var cat=hdr.getAttribute('data-cat');
+        openCats[cat]=!openCats[cat];
+        hdr.classList.toggle('is-open', openCats[cat]);
+        var body=document.querySelector('[data-cat-body="'+cat+'"]');
+        if(body) body.classList.toggle('is-open', openCats[cat]);
+      }
     });
 
     // Liste actifs — délégation
