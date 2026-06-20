@@ -1427,8 +1427,10 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 </div>
 
 <script>
-// Blocage immédiat avant rendu
+// Blocage immédiat avant rendu (ne pas bloquer si callback OAuth en cours)
 (function(){
+  var isOAuthCallback = window.location.hash.indexOf('access_token') !== -1;
+  if(isOAuthCallback) return; // laisser le callback OAuth traiter le token
   var pro=localStorage.getItem('lt_pro')==='1';
   var tok=localStorage.getItem('ta_token');
   if(!tok){ window.location.replace('./tarifs.html'); }
