@@ -287,6 +287,25 @@
 
   var isUserPro = localStorage.getItem('lt_pro') === '1';
 
+  // Vérification serveur au chargement — évite que l'ancien flag lt_pro='1' persiste
+  var _verifyToken = localStorage.getItem('ta_token');
+  if (_verifyToken) {
+    fetch('/api/check-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _verifyToken }
+    }).then(function(r){ return r.json(); }).then(function(d) {
+      var serverPro = !!(d && d.is_pro);
+      var localPro  = localStorage.getItem('lt_pro') === '1';
+      if (serverPro && !localPro) {
+        localStorage.setItem('lt_pro', '1');
+        location.reload();
+      } else if (!serverPro && localPro) {
+        localStorage.removeItem('lt_pro');
+        location.reload();
+      }
+    }).catch(function(){});
+  }
+
   var navItems = PAGES.map(function(p) {
     var isActive = page === p.id || (page === '' && p.id === 'index.html') || treeActive(p);
     var isLocked = p.pro && !isUserPro;
