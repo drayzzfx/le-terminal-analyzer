@@ -1876,8 +1876,9 @@ async function analyze(){
   // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
   if(!canGo()){window.location.href="./index.html";return}
-  // Système de tokens : 1 token par analyse (Premium = illimité)
-  if(!(await spendToken('analyze'))) return;
+  // Connexion requise ; le quota (1 token / analyse) est désormais vérifié et
+  // décompté CÔTÉ SERVEUR dans /api/analyze (impossible à contourner).
+  if(!authToken){ window.location.href='./index.html'; return; }
 
   const rrv=calcRR();
   const steps=c().steps; let si=0;
@@ -1918,12 +1919,15 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
   try{
     const res=await fetch('/api/analyze',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:c().sys,messages:[{role:'user',content}]})
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body:JSON.stringify({system:c().sys,messages:[{role:'user',content}],kind:'analyze'})
     });
+    if(res.status===401){ clearInterval(iv); showForm(); window.location.href='./index.html'; return; }
+    if(res.status===402){ clearInterval(iv); showForm(); userTokens=0; showNoTokens(); return; }
     if(!res.ok){const e=await res.json().catch(()=>({}));const msg=typeof e.error==='string'?e.error:(e.error?.message||'Erreur '+res.status);throw new Error(msg);}
     clearInterval(iv);
     const data=await res.json();
+    try{ refreshTokens(); }catch(e){}
     if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
     const rawText=data.content[0].text; let raw=rawText.replace(/```json/gi,'').replace(/```/g,'').trim(); const j1=raw.indexOf('{'),j2=raw.lastIndexOf('}'); if(j1!==-1&&j2!==-1) raw=raw.slice(j1,j2+1);
     let parsed;
@@ -2209,8 +2213,8 @@ async function sendChatMsg(){
   try{
     var res = await fetch('/api/analyze', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({system: lang==='fr'?sysChatFR:sysChatEN, messages: chatHistory})
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body: JSON.stringify({system: lang==='fr'?sysChatFR:sysChatEN, messages: chatHistory, kind:'chat'})
     });
     var typing = document.getElementById('chatTyping');
     if(typing) typing.remove();
@@ -2807,7 +2811,8 @@ async function requestIAFeedback(){
           'Tu analyses les performances hebdomadaires d\'un trader pour l\'aider à progresser. '+
           'Tu génères des rapports structurés qui identifient les patterns récurrents gagnants et perdants, '+
           'évalues la discipline (respect des verdicts IA), et proposes des actions concrètes ICT-specific.',
-        messages:[{role:'user',content:prompt}]
+        messages:[{role:'user',content:prompt}],
+        kind:'coach'
       })});
     var rd=await r.json();
     var txt=rd.content&&rd.content[0]?rd.content[0].text:'Rapport indisponible';
