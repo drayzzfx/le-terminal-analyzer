@@ -885,12 +885,11 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 /* HISTORY PAGE */
 #historyPage {
   display: none;
-  min-height: 100vh;
   background: var(--bg);
 }
 #historyPage.show { display: block; }
-/* Intégré dans la grille AppShell → s'affiche à droite de la barre OUTILS */
-.app > #historyPage, .app > #perfPage { grid-column: 2; grid-row: 1; min-height: calc(100vh - var(--chrome-h, 102px)); }
+/* Intégrées DANS .main (sous le fil d'ariane) → le breadcrumb reste visible, comme les autres pages */
+#historyPage, #perfPage { min-height: calc(100vh - var(--chrome-h, 64px) - 64px); }
 
 .history-page-header, .perf-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -926,7 +925,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .back-btn:hover { border-color: rgba(127,184,232,.4); color: var(--v2); }
 
 .history-page-content {
-  max-width: 900px; margin: 0 auto; padding: 32px 24px 80px;
+  max-width: 1200px; margin: 0; padding: 32px 32px 80px;
 }
 
 .history-grid {
@@ -1016,10 +1015,10 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .result-btn.active-be{background:rgba(232,194,104,.1);border-color:rgba(232,194,104,.3);color:var(--amber)}
 
 /* PERFORMANCES PAGE */
-#perfPage{display:none;min-height:100vh;background:var(--bg)}
+#perfPage{display:none;background:var(--bg)}
 #perfPage.show{display:block}
 .perf-header{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
-.perf-content{max-width:960px;margin:0 auto;padding:32px 24px 80px}
+.perf-content{max-width:1200px;margin:0;padding:32px 32px 80px}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:28px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
 .stat-val{font-family:'Anton','Arial Narrow',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.03em;line-height:1}
@@ -1076,8 +1075,12 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 .confirm-ok{flex:1;padding:11px;background:rgba(240,100,122,.15);border:1px solid rgba(240,100,122,.4);border-radius:var(--r-md);color:var(--bear);font-family:var(--font-text);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .confirm-ok:hover{background:rgba(240,100,122,.25);border-color:rgba(240,100,122,.6)}
 @media print {
-  .topbar,.back-btn,.analyzer-tabs,#iaFeedbackBtn,.history-page-header { display: none !important; }
+  .topbar,.back-btn,.analyzer-tabs,#iaFeedbackBtn,.history-page-header,
+  .lt-chrome,.lt-nav,.top,.side,.lt-dock,.lt-burger,#historyPage { display: none !important; }
   #perfPage { display: block !important; }
+  #perfPage .an-head__r, #perfPage .lt-btn { display: none !important; }
+  .app { grid-template-columns: 1fr !important; padding: 0 !important; }
+  .main { padding: 0 !important; }
   body { background: white !important; color: black !important; }
   .stat-card, .perf-section { break-inside: avoid; }
 }
@@ -3057,7 +3060,9 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function _analyzerMainEl(){ return document.querySelector('#app .main') || document.getElementById('app'); }
-function _hideAnalyzerMain(hide){ var m=_analyzerMainEl(); if(m) m.style.display = hide ? 'none' : ''; }
+// Masque uniquement le contenu de l'analyzer (.content), PAS la .main entière,
+// pour que le fil d'ariane (.top, dans .main) reste visible sur Historique/Perfs.
+function _hideAnalyzerMain(hide){ var c=document.querySelector('#app .main > .content'); if(c) c.style.display = hide ? 'none' : ''; }
 function openHistory(){
     _hideAnalyzerMain(true);
     var pp=document.getElementById('perfPage'); if(pp) pp.classList.remove('show');
@@ -3971,12 +3976,15 @@ function quickSetResult(result){
           <button class="an-seg__btn" type="button" onclick="closePerf('hist');openHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Historique</button>
           <button class="an-seg__btn is-on" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Perfs</button>
         </div>
-        <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg> Exporter PDF</button>
         <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="closePerf()">← Retour</button>
       </div>
     </div>
     <div id="perfLoading" style="text-align:center;padding:60px;color:var(--text3)">Chargement des stats…</div>
     <div id="perfContent" style="display:none">
+
+      <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+        <button class="lt-btn lt-btn--secondary lt-btn--sm" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg> Exporter PDF</button>
+      </div>
 
       <!-- STAT CARDS -->
       <div class="stat-grid" id="statGrid"></div>
@@ -4201,12 +4209,12 @@ function quickSetResult(result){
 // pour que la barre latérale reste visible sur ces vues.
 (function integratePages(){
   function run(){
-    var appWrap = document.querySelector('#app > .app') || document.querySelector('.app');
+    var mainEl = document.querySelector('#app .main') || document.querySelector('.app .main') || document.querySelector('.main');
     var hp = document.getElementById('historyPage');
     var pp = document.getElementById('perfPage');
-    if(appWrap && hp && pp && hp.parentElement !== appWrap){
-      appWrap.appendChild(hp);
-      appWrap.appendChild(pp);
+    if(mainEl && hp && pp && hp.parentElement !== mainEl){
+      mainEl.appendChild(hp);
+      mainEl.appendChild(pp);
     }
   }
   if(document.readyState !== 'loading') run();
