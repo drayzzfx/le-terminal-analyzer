@@ -302,6 +302,103 @@
   //    et il décalait l'AppShell vers le bas (mauvaise position de la barre latérale). ──
   Array.prototype.slice.call(document.querySelectorAll('.pricetape')).forEach(function (el) { el.remove(); });
 
+  // ── Statut des marchés EN DIRECT (badge cliquable du fil d'ariane) ──
+  function topRightHTML(initials){
+    return '<div class="top__right">'
+      + '<div class="mkt" id="mktWrap">'
+      +   '<button class="top__status" id="mktStatus" type="button" aria-haspopup="true" aria-expanded="false">'
+      +     '<span class="lt-dot" id="mktDot"></span><span id="mktLbl" data-en="Market open">Marché ouvert</span>'
+      +     '<svg class="mkt__c" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+      +   '</button>'
+      +   '<div class="mkt-pop" id="mktPop" hidden></div>'
+      + '</div>'
+      + '<span class="top__avatar">' + initials + '</span>'
+      + '</div>';
+  }
+  function tzParts(tz){
+    try{
+      var p = new Intl.DateTimeFormat('en-US',{timeZone:tz,weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+      var o={}; p.forEach(function(x){ o[x.type]=x.value; });
+      var wd={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+      return { day:wd[o.weekday], min:(parseInt(o.hour,10)%24)*60+parseInt(o.minute,10) };
+    }catch(e){ return null; }
+  }
+  function inSess(p,oH,oM,cH,cM){ if(!p||p.day<1||p.day>5) return false; var t=p.min; return t>=oH*60+oM && t<cH*60+cM; }
+  function computeMarkets(){
+    var now=new Date(), uDay=now.getUTCDay(), uMin=now.getUTCHours()*60+now.getUTCMinutes();
+    // Forex : ouvre dimanche 21:00 UTC, ferme vendredi 21:00 UTC
+    var fx = (uDay===0 && uMin>=21*60) || (uDay>=1 && uDay<=4) || (uDay===5 && uMin<21*60);
+    return {
+      open: fx, // l'état « marché » de référence suit le Forex (marché phare du trading)
+      list:[
+        { n:'Forex',          en:'Forex',         open:fx,                                      h:'Dim. 21:00 → Ven. 21:00 UTC' },
+        { n:'Actions US',     en:'US stocks',     open:inSess(tzParts('America/New_York'),9,30,16,0), h:'9:30–16:00 ET' },
+        { n:'Actions Europe', en:'EU stocks',     open:inSess(tzParts('Europe/Paris'),9,0,17,30),     h:'9:00–17:30 CET' },
+        { n:'Actions Asie',   en:'Asia stocks',   open:inSess(tzParts('Asia/Tokyo'),9,0,15,0),         h:'9:00–15:00 JST' },
+        { n:'Crypto',         en:'Crypto',        open:true,                                    h:'24h/24 · 7j/7' }
+      ]
+    };
+  }
+  function refreshMkt(){
+    var btn=document.getElementById('mktStatus'); if(!btn) return;
+    var en=(localStorage.getItem('lt_lang')==='en'), m=computeMarkets();
+    btn.classList.toggle('mkt--closed', !m.open);
+    var lbl=document.getElementById('mktLbl');
+    if(lbl){ lbl.setAttribute('data-en', m.open?'Market open':'Market closed'); lbl.textContent = en ? (m.open?'Market open':'Market closed') : (m.open?'Marché ouvert':'Marché fermé'); }
+    var pop=document.getElementById('mktPop');
+    if(pop){
+      pop.innerHTML = '<div class="mkt-pop__h" data-en="Markets status">Statut des marchés</div>'
+        + m.list.map(function(x){
+            var st = x.open ? (en?'Open':'Ouvert') : (en?'Closed':'Fermé');
+            return '<div class="mkt-row"><span class="mkt-row__dot '+(x.open?'on':'off')+'"></span>'
+              + '<span class="mkt-row__txt"><span class="mkt-row__n">'+(en?x.en:x.n)+'</span><span class="mkt-row__h">'+x.h+'</span></span>'
+              + '<span class="mkt-row__s '+(x.open?'on':'off')+'">'+st+'</span></div>';
+          }).join('')
+        + '<div class="mkt-pop__f" data-en="Local time · indicative">Heure locale · indicatif</div>';
+    }
+  }
+  function injectMktCss(){
+    if(document.getElementById('ltMktCss')) return;
+    var s=document.createElement('style'); s.id='ltMktCss';
+    s.textContent =
+      '.top__status{display:inline-flex;align-items:center;gap:7px;cursor:pointer;background:transparent;border:1px solid var(--border-subtle,#1C212A);border-radius:50px;padding:5px 11px;color:var(--text-body,#C3CAD4);font-family:var(--font-text,"Inter",sans-serif);font-size:12px;font-weight:600;letter-spacing:.02em;transition:border-color .15s,color .15s}'
+      + '.top__status:hover{border-color:var(--border,#3A414C);color:var(--text-title,#F2F4F7)}'
+      + '.top__status .mkt__c{opacity:.55}'
+      + '.top__status.mkt--closed{color:var(--text-muted,#7E8794)}'
+      + '.top__status.mkt--closed .lt-dot{background:var(--bear,#F0647A);box-shadow:0 0 0 3px rgba(240,100,122,.18)}'
+      + '.mkt{position:relative;display:inline-flex}'
+      + '.mkt-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:min(252px,82vw);background:var(--bg-elevated,#161B24);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-md,6px);box-shadow:0 18px 48px rgba(0,0,0,.55);padding:12px 13px;animation:mktPop .18s cubic-bezier(.16,1,.3,1)}'
+      + '@keyframes mktPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}'
+      + '.mkt-pop__h{font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#7E8794);margin-bottom:8px}'
+      + '.mkt-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-top:1px solid var(--border-subtle,#1C212A)}'
+      + '.mkt-row:first-of-type{border-top:none}'
+      + '.mkt-row__dot{width:8px;height:8px;border-radius:50%;flex:none}'
+      + '.mkt-row__dot.on{background:var(--bull,#4ADE9C);box-shadow:0 0 7px rgba(74,222,156,.7)}'
+      + '.mkt-row__dot.off{background:var(--bear,#F0647A)}'
+      + '.mkt-row__txt{flex:1;min-width:0;display:flex;flex-direction:column}'
+      + '.mkt-row__n{font-size:12.5px;color:var(--text-title,#F2F4F7);font-weight:600;line-height:1.2}'
+      + '.mkt-row__h{font-size:10px;color:var(--text-muted,#7E8794);font-family:var(--font-mono,"JetBrains Mono",monospace);margin-top:2px}'
+      + '.mkt-row__s{font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}'
+      + '.mkt-row__s.on{color:var(--bull,#4ADE9C)}.mkt-row__s.off{color:var(--bear,#F0647A)}'
+      + '.mkt-pop__f{margin-top:9px;padding-top:9px;border-top:1px solid var(--border-subtle,#1C212A);font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#7E8794)}';
+    document.head.appendChild(s);
+  }
+  function initMarketStatus(){
+    injectMktCss(); refreshMkt();
+    if(window._ltMktWired) return; window._ltMktWired=true;
+    var btn=document.getElementById('mktStatus'), pop=document.getElementById('mktPop'), wrap=document.getElementById('mktWrap');
+    if(!btn||!pop) return;
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var willOpen = pop.hasAttribute('hidden');
+      if(willOpen){ refreshMkt(); pop.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); }
+      else { pop.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); }
+    });
+    document.addEventListener('click', function(e){ if(wrap && !wrap.contains(e.target)){ pop.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); } });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ pop.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); } });
+    setInterval(refreshMkt, 30000);
+  }
+
   // ── PART 1 : enveloppe AppShell si absente (pages injectées) ──
   // Conteneur de contenu : .main (nouvelles pages) ou <main> (pages éco)
   var main = document.querySelector('.main') || document.querySelector('main');
@@ -310,9 +407,7 @@
     try { var em = localStorage.getItem('ta_email') || ''; if (em) initials = em.slice(0, 2).toUpperCase(); } catch (e) {}
     var top = document.createElement('div');
     top.className = 'top';
-    top.innerHTML = '<div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b>' + cfg.crumb + '</b></div>'
-      + '<div class="top__right"><span class="top__status"><span class="lt-dot"></span> Marché ouvert</span>'
-      + '<span class="top__avatar">' + initials + '</span></div>';
+    top.innerHTML = '<div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b>' + cfg.crumb + '</b></div>' + topRightHTML(initials);
 
     var side = document.createElement('aside');
     side.className = 'side';
@@ -342,10 +437,10 @@
   if (_topEl) {
     var _em = ''; try { _em = localStorage.getItem('ta_email') || ''; } catch (e) {}
     var _ini = _em ? _em.slice(0, 2).toUpperCase() : 'LT';
-    _topEl.innerHTML = '<div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b>' + cfg.crumb + '</b></div>'
-      + '<div class="top__right"><span class="top__status"><span class="lt-dot"></span> Marché ouvert</span>'
-      + '<span class="top__avatar">' + _ini + '</span></div>';
+    _topEl.innerHTML = '<div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b>' + cfg.crumb + '</b></div>' + topRightHTML(_ini);
   }
+  // Active le statut des marchés en direct (sur toute page dotée du fil d'ariane)
+  if (document.querySelector('.top')) initMarketStatus();
 
   // Masque le dock d'icônes de l'accueil sur toute page à appshell (desktop),
   // y compris si la coquille .app est statique (ex. calculateur).

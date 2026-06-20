@@ -149,6 +149,25 @@
 .ac-grade__n{font-size:11.5px;font-weight:600;color:var(--text-title)}
 .ac-grade__x{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);margin-top:3px;letter-spacing:.04em}
 @media(prefers-reduced-motion:reduce){.ac-xpbar__fill::after{animation:none}}
+.ac-badge,.ac-grade{cursor:pointer}
+.ac-badge:focus-visible,.ac-grade:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* ── modal détail badge / grade ── */
+.ac-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(7,9,12,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ac-modal.show{display:flex;animation:acFade .25s var(--ease-out)}
+.ac-modal__box{position:relative;width:100%;max-width:420px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:32px 26px 26px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04)}
+.ac-modal__box::before{content:'';position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--accent-glow),transparent)}
+.ac-modal__x{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:4px;transition:color .2s}
+.ac-modal__x:hover{color:var(--text-title)}
+.ac-m__ic{width:74px;height:74px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border:1px solid var(--border-subtle);color:var(--text-muted)}
+.ac-m__ic.on{background:var(--accent);color:#07090C;border-color:transparent;box-shadow:0 0 20px var(--accent-glow)}
+.ac-m__ic svg{width:36px;height:36px}
+.ac-m__t{font-family:var(--font-display);text-transform:uppercase;font-size:21px;letter-spacing:.02em;color:var(--text-title);margin-bottom:9px}
+.ac-mst{display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 11px;border-radius:50px;border:1px solid var(--border);color:var(--text-muted)}
+.ac-mst.ok{color:var(--bull);border-color:rgba(74,222,156,.4);background:rgba(74,222,156,.08)}
+.ac-m__d{font-size:13.5px;color:var(--text-body);line-height:1.6;margin:14px 0 0}
+.ac-m__how{margin-top:16px;padding-top:15px;border-top:1px solid var(--border-subtle);text-align:left;font-size:12.5px;color:var(--text-body);line-height:1.6}
+.ac-m__howlbl{display:block;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.ac-m__prog{margin-top:9px;font-family:var(--font-mono);font-size:11.5px;color:var(--accent)}
 /* ── objectifs ── */
 .ac-goal{margin-bottom:16px}
 .ac-goal__top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
@@ -354,6 +373,7 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
           </div>
           <div class="ac-xpbreak" id="actBreak"></div>
           <div class="ac-grades" id="actGrades"></div>
+          <p class="ac-hint" style="margin-top:16px" data-en="To climb the ranks: analyze setups (+15 XP), log your trades (+20 XP), build your portfolio (+12 XP/holding) and read the eco calendar — time spent on the cockpit earns XP too. Tap a grade to see the next milestone.">Pour grimper en grade : analysez des setups (+15 XP), journalisez vos trades (+20 XP), étoffez votre patrimoine (+12 XP/ligne) et lisez le calendrier éco — le temps passé sur le cockpit rapporte aussi de l'XP. Cliquez sur un grade pour voir le palier suivant.</p>
         </div>
         <div class="ac-card">
           <div class="ac-xp">
@@ -449,6 +469,15 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
 
 </div>
 </main>
+
+<!-- Modal détail badge / grade -->
+<div class="ac-modal" id="acModal">
+  <div class="ac-modal__box">
+    <button class="ac-modal__x" id="acModalX" type="button" aria-label="Fermer">✕</button>
+    <div id="acmBody"></div>
+  </div>
+</div>
+
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
 <script src="./appshell.js"></script>
@@ -459,6 +488,7 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
   var TOKEN = localStorage.getItem('ta_token') || '';
   var EMAIL = localStorage.getItem('ta_email') || '';
   var avatarData = '';
+  var curBadges = [], lastActXp = 0;
   function $(id){ return document.getElementById(id); }
   function getLang(){ return localStorage.getItem('lt_lang') || 'fr'; }
   function EN(){ return getLang()==='en'; }
@@ -650,28 +680,55 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
     var wins=T.filter(function(t){return t.result==='win';}).length, losses=T.filter(function(t){return t.result==='loss';}).length;
     var pf = losses? (T.filter(function(t){return t.result==='win';}).reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0) / Math.abs(T.filter(function(t){return t.result==='loss';}).reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0))) : 0;
 
+    // métriques complémentaires
+    var scores=S.map(function(x){return parseFloat(x.score)||0;}).filter(function(v){return v>0;});
+    var avgScore=scores.length?(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+    var dec=wins+losses, winRate=dec?(wins/dec*100):0;
+    var holdings=portfolioCache?portfolioCache.length:0;
+    var totalVal=portfolioCache?portfolioCache.reduce(function(a,b){return a+(parseFloat(b.amount)||0);},0):0;
+    var sessions=Object.keys(T.reduce(function(a,t){ if(t.session)a[t.session]=1; return a; },{})).length;
+    var usage=readUsage(), toolsUsed=Object.keys(usage).filter(function(k){return usage[k]&&usage[k].visits;}).length;
+
     var ic={
       star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
       chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l3-3 2 2 4-5"/></svg>',
       book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18"/></svg>',
+      books:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5v14M8 5v14"/><rect x="11" y="4" width="4" height="16" rx="1"/><path d="M17 6l3 13"/></svg>',
       flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2s4 4 4 8a4 4 0 0 1-8 0c0-1 .5-2 1-2.5C9 8 12 6 12 2z"/></svg>',
       crown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l4 5 5-7 5 7 4-5v11H3z"/></svg>',
       user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
       pie:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>',
-      target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>'
+      target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>',
+      medal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="5"/><path d="M8.5 13l-1.5 8 5-3 5 3-1.5-8"/></svg>',
+      gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 16a8 8 0 1 1 16 0"/><line x1="12" y1="16" x2="16" y2="10.5"/></svg>',
+      shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+      bricks:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M3 15h18M8.5 4v6M14 10v5M9.5 15v5"/></svg>',
+      compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 10.5 10.5 8.5 15.5 13.5 13.5"/></svg>',
+      coins:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M15 11.6c2.4.3 6 1.2 6 3.4 0 1.7-2.7 3-6 3-1.2 0-2.3-.15-3.2-.4"/></svg>',
+      globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>'
     };
+    function P(cur,tgt,unit){ return Math.min(cur,tgt)+' / '+tgt+(unit?(' '+unit):''); }
     var defs=[
-      {on:S.length>=1, ic:ic.star, t:(EN()?'First setup':'Premier setup'), d:(EN()?'Analyze 1 setup':'Analyser 1 setup')},
-      {on:S.length>=10, ic:ic.chart, t:(EN()?'Diligent analyst':'Analyste assidu'), d:(EN()?'10 setups analyzed':'10 setups analysés')},
-      {on:T.length>=1, ic:ic.book, t:(EN()?'First trade':'Premier trade'), d:(EN()?'Log 1 trade':'Journaliser 1 trade')},
-      {on:T.length>=10, ic:ic.book, t:(EN()?'Full journal':'Carnet rempli'), d:(EN()?'10 trades logged':'10 trades journalisés')},
-      {on:!!prof, ic:ic.user, t:(EN()?'Complete profile':'Profil complet'), d:(EN()?'Username + photo':'Pseudo + photo')},
-      {on:isPro(), ic:ic.crown, t:'Premium', d:(EN()?'Active membership':'Abonnement actif')},
-      {on:streak>=7, ic:ic.flame, t:(EN()?'7-day streak':'Série de 7 jours'), d:(EN()?'7 active days in a row':'7 jours actifs d\'affilée')},
-      {on:classes>=3, ic:ic.pie, t:(EN()?'Diversified':'Patrimoine diversifié'), d:(EN()?'3+ asset classes':'3+ classes d\'actifs')},
-      {on:(wins+losses)>=10 && pf>=1.5, ic:ic.target, t:(EN()?'Strategist':'Stratège'), d:(EN()?'Profit factor ≥ 1.5':'Profit factor ≥ 1,5')}
+      {on:S.length>=1,  ic:ic.star,   t:(EN()?'First setup':'Premier setup'),      d:(EN()?'You ran your first AI analysis.':'Vous avez lancé votre première analyse IA.'),                 how:(EN()?'Analyze 1 setup in the Setup Analyzer.':'Analysez 1 setup dans le Setup Analyzer.'),         prog:P(S.length,1,'setup')},
+      {on:S.length>=10, ic:ic.chart,  t:(EN()?'Diligent analyst':'Analyste assidu'),d:(EN()?'Ten setups analyzed. Consistency pays.':'Dix setups analysés. La régularité paie.'),                how:(EN()?'Analyze 10 setups.':'Analysez 10 setups.'),                                                prog:P(S.length,10,'setups')},
+      {on:S.length>=50, ic:ic.medal,  t:'Centurion',                                d:(EN()?'Fifty setups in the books.':'Cinquante setups au compteur.'),                                          how:(EN()?'Analyze 50 setups.':'Analysez 50 setups.'),                                                prog:P(S.length,50,'setups')},
+      {on:scores.length>=10&&avgScore>=7, ic:ic.gauge, t:(EN()?'Sharp eye':'Œil affûté'),d:(EN()?'Your average AI score is 7+ over 10 setups.':'Votre score IA moyen dépasse 7 sur 10 setups.'),    how:(EN()?'Keep an average score ≥ 7 over 10+ setups.':'Gardez un score moyen ≥ 7 sur 10+ setups.'), prog:(EN()?'avg ':'moy ')+(scores.length?avgScore.toFixed(1):'—')+' / 7'},
+      {on:T.length>=1,  ic:ic.book,   t:(EN()?'First trade':'Premier trade'),       d:(EN()?'Your trading journal is open.':'Votre journal de trading est ouvert.'),                              how:(EN()?'Log 1 trade in the journal.':'Journalisez 1 trade dans le journal.'),                       prog:P(T.length,1,'trade')},
+      {on:T.length>=10, ic:ic.books,  t:(EN()?'Full journal':'Carnet rempli'),      d:(EN()?'Ten trades logged. Your stats come alive.':'Dix trades journalisés. Vos stats prennent vie.'),     how:(EN()?'Log 10 trades.':'Journalisez 10 trades.'),                                                 prog:P(T.length,10,'trades')},
+      {on:dec>=20&&winRate>=50, ic:ic.shield, t:(EN()?'Disciplined':'Discipliné'),  d:(EN()?'20+ decided trades with a 50%+ win rate.':'20+ trades décidés avec 50%+ de réussite.'),           how:(EN()?'Reach 20 decided trades and ≥ 50% win rate.':'Atteignez 20 trades décidés et ≥ 50% de réussite.'), prog:dec+' '+(EN()?'trades · ':'trades · ')+Math.round(winRate)+'%'},
+      {on:dec>=10&&pf>=1.5, ic:ic.target, t:(EN()?'Strategist':'Stratège'),         d:(EN()?'A profit factor of 1.5+ over 10 trades.':'Un profit factor de 1,5+ sur 10 trades.'),             how:(EN()?'Reach a profit factor ≥ 1.5 over 10+ trades.':'Atteignez un profit factor ≥ 1,5 sur 10+ trades.'), prog:(EN()?'PF ':'PF ')+(dec?pf.toFixed(2):'—')+' / 1,5'},
+      {on:T.length>=5&&net>0, ic:ic.coins, t:(EN()?'In the green':'Dans le vert'),  d:(EN()?'Your cumulative P&L is positive.':'Votre P&L cumulé est positif.'),                                  how:(EN()?'Keep a positive net P&L over 5+ trades.':'Gardez un P&L net positif sur 5+ trades.'),       prog:(net>0?'+':'')+nfFr(net,0)+' '+curSym()},
+      {on:sessions>=3,  ic:ic.globe,  t:(EN()?'Versatile':'Polyvalent'),            d:(EN()?'You trade across 3+ sessions.':'Vous tradez sur 3+ sessions.'),                                        how:(EN()?'Log trades in 3 different sessions (London, NY…).':'Journalisez des trades sur 3 sessions différentes (London, NY…).'), prog:P(sessions,3,'sessions')},
+      {on:!!prof,       ic:ic.user,   t:(EN()?'Complete profile':'Profil complet'), d:(EN()?'Username and photo set.':'Pseudo et photo renseignés.'),                                              how:(EN()?'Add a username and a profile photo in Settings.':'Ajoutez un pseudo et une photo dans Paramètres.'), prog:''},
+      {on:isPro(),      ic:ic.crown,  t:'Premium',                                  d:(EN()?'Full access to the cockpit.':'Accès complet au cockpit.'),                                            how:(EN()?'Activate a Premium membership.':'Activez un abonnement Premium.'),                          prog:''},
+      {on:streak>=7,    ic:ic.flame,  t:(EN()?'7-day streak':'Série de 7 jours'),   d:(EN()?'Seven active days in a row.':'Sept jours actifs d\'affilée.'),                                         how:(EN()?'Be active 7 days in a row.':'Soyez actif 7 jours d\'affilée.'),                             prog:P(streak,7,EN()?'days':'jours')},
+      {on:streak>=30,   ic:ic.flame,  t:(EN()?'Marathon':'Marathon'),               d:(EN()?'Thirty active days in a row. Iron habit.':'Trente jours actifs d\'affilée. Habitude de fer.'),       how:(EN()?'Be active 30 days in a row.':'Soyez actif 30 jours d\'affilée.'),                           prog:P(streak,30,EN()?'days':'jours')},
+      {on:classes>=3,   ic:ic.pie,    t:(EN()?'Diversified':'Patrimoine diversifié'),d:(EN()?'Three or more asset classes.':'Trois classes d\'actifs ou plus.'),                                    how:(EN()?'Hold 3+ asset classes in your portfolio.':'Détenez 3+ classes d\'actifs dans votre portefeuille.'), prog:P(classes,3,'classes')},
+      {on:holdings>=5,  ic:ic.bricks, t:(EN()?'Builder':'Bâtisseur'),               d:(EN()?'Five or more holdings in your portfolio.':'Cinq lignes ou plus dans votre portefeuille.'),         how:(EN()?'Add 5 holdings to your portfolio.':'Ajoutez 5 lignes à votre portefeuille.'),              prog:P(holdings,5,EN()?'holdings':'lignes')},
+      {on:toolsUsed>=4, ic:ic.compass,t:(EN()?'Explorer':'Explorateur'),            d:(EN()?'You roamed across 4+ tools of the cockpit.':'Vous avez exploré 4+ outils du cockpit.'),            how:(EN()?'Use at least 4 different tools.':'Utilisez au moins 4 outils différents.'),                prog:P(toolsUsed,4,EN()?'tools':'outils')}
     ];
-    $('acBadges').innerHTML=defs.map(function(b){ return '<div class="ac-badge'+(b.on?' on':'')+'"><div class="ac-badge__ic">'+b.ic+'</div><div class="ac-badge__t">'+esc(b.t)+'</div><div class="ac-badge__d">'+esc(b.d)+'</div></div>'; }).join('');
+    curBadges=defs;
+    $('acBadges').innerHTML=defs.map(function(b,i){ return '<div class="ac-badge'+(b.on?' on':'')+'" data-i="'+i+'" role="button" tabindex="0"><div class="ac-badge__ic">'+b.ic+'</div><div class="ac-badge__t">'+esc(b.t)+'</div><div class="ac-badge__d">'+esc(b.on?b.d:b.how)+'</div></div>'; }).join('');
 
     // Niveau / XP
     var xp=S.length*10 + T.length*15 + classes*8 + (isPro()?120:0) + (prof?40:0);
@@ -687,20 +744,27 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
 
   /* ── Niveau d'activité (XP évolutive : temps + fonctionnalités) ── */
   var GRADES=[
-    {n:'Recrue',    en:'Recruit',    min:0},
-    {n:'Trader',    en:'Trader',     min:250},
-    {n:'Analyste',  en:'Analyst',    min:600},
-    {n:'Opérateur', en:'Operator',   min:1200},
-    {n:'Expert',    en:'Expert',     min:2500},
-    {n:'Élite',     en:'Elite',      min:5000},
-    {n:'Légende',   en:'Legend',     min:10000}
+    {n:'Recrue',    en:'Recruit',  min:0,     d:'Vos premiers pas sur le cockpit. Tout commence ici.',                      de:'Your first steps on the cockpit. It all starts here.'},
+    {n:'Trader',    en:'Trader',   min:250,   d:'Vous prenez vos marques : premiers setups et premiers trades journalisés.', de:'Finding your footing: first setups and first logged trades.'},
+    {n:'Analyste',  en:'Analyst',  min:600,   d:'Vous analysez avec méthode et consultez le marché régulièrement.',         de:'You analyze methodically and follow the market regularly.'},
+    {n:'Opérateur', en:'Operator', min:1200,  d:'Le cockpit est votre poste de pilotage quotidien.',                         de:'The cockpit is your daily trading desk.'},
+    {n:'Expert',    en:'Expert',   min:2500,  d:'Usage intensif et constant de tous les outils du terminal.',                de:'Intensive, consistent use of every tool in the terminal.'},
+    {n:'Élite',     en:'Elite',    min:5000,  d:'Vous faites partie des opérateurs les plus assidus.',                       de:'You are among the most dedicated operators.'},
+    {n:'Légende',   en:'Legend',   min:10000, d:'Maîtrise totale. Le grade ultime du cockpit.',                              de:'Total mastery. The ultimate cockpit rank.'}
+  ];
+  // Insignes orientés trading (bougie → tendance → loupe → terminal → cible → trophée → couronne)
+  var GRADE_ICONS=[
+    '<rect x="10" y="8" width="4" height="8" rx="1"/><line x1="12" y1="4" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="20"/>',
+    '<polyline points="3 16 9 10 13 14 21 6"/><polyline points="15 6 21 6 21 12"/>',
+    '<circle cx="10.5" cy="10.5" r="6"/><line x1="15" y1="15" x2="20" y2="20"/><polyline points="7.5 11.5 9.5 9 11.5 10.5 13.5 7.5"/>',
+    '<rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M7 13l3-3 2 2 4-4"/><line x1="9" y1="20.5" x2="15" y2="20.5"/><line x1="12" y1="17" x2="12" y2="20.5"/>',
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>',
+    '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v.8a3 3 0 0 0 3 3M17 6h2.5v.8a3 3 0 0 1-3 3"/><line x1="12" y1="13" x2="12" y2="16.5"/><path d="M8.5 20.5h7M9.5 20.5v-1a2.5 2.5 0 0 1 5 0v1"/>',
+    '<path d="M4 9l3.2 3 4.8-6 4.8 6 3.2-3v9H4z"/><path d="M11 13.6l1 1.9 1-1.9" fill="none"/><circle cx="12" cy="14.5" r="1.1" fill="currentColor" stroke="none"/>'
   ];
   function gradeSvg(tier){
-    var inner='', n=Math.min(tier,5);
-    for(var i=0;i<n;i++){ var y=15.5-i*2.5; inner+='<path d="M8.4 '+y.toFixed(1)+' L12 '+(y-2.1).toFixed(1)+' L15.6 '+y.toFixed(1)+'"/>'; }
-    var star = tier>=6 ? '<path d="M12 4.3l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" fill="currentColor" stroke="none"/>' : '';
-    var crown = tier>=7 ? '<path d="M8 3.2l1.6 1.7L12 2.4l2.4 2.5L16 3.2v2.6H8z" fill="currentColor" stroke="none"/>' : '';
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1.6l8.5 4.8v9.2L12 22.4 3.5 15.6V6.4z"/>'+inner+star+crown+'</svg>';
+    var p=GRADE_ICONS[Math.max(0,Math.min(tier-1,GRADE_ICONS.length-1))];
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
   }
   function activityStats(){
     var u=readUsage(), totMs=0; Object.keys(u).forEach(function(k){ totMs+=(u[k].ms||0); });
@@ -721,7 +785,7 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
     return {total:total,parts:parts};
   }
   function renderActivity(){
-    var st=activityStats(), xp=st.total;
+    var st=activityStats(), xp=st.total; lastActXp=xp;
     var ti=0; for(var i=0;i<GRADES.length;i++){ if(xp>=GRADES[i].min) ti=i; }
     var cur=GRADES[ti], next=GRADES[ti+1]||null;
     var gName=EN()?cur.en:cur.n;
@@ -738,11 +802,32 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
       .sort(function(a,b){return b.xp-a.xp;})
       .map(function(p){ return '<span class="ac-xpchip"><i></i>'+esc(p.label)+' <b>'+nfFr(p.xp,0)+' XP</b></span>'; }).join('')
       || '<span class="ac-xpchip"><i></i>'+(EN()?'Start using the cockpit to earn XP.':'Commencez à utiliser le cockpit pour gagner de l\'XP.')+'</span>';
-    // badges de grade
+    // badges de grade (cliquables)
     $('actGrades').innerHTML=GRADES.map(function(g,idx){
       var on=xp>=g.min, isCur=idx===ti;
-      return '<div class="ac-grade'+(isCur?' cur':(on?' on':''))+'"><div class="ac-grade__m">'+gradeSvg(idx+1)+'</div><div class="ac-grade__n">'+esc(EN()?g.en:g.n)+'</div><div class="ac-grade__x">'+(g.min?nfFr(g.min,0)+' XP':'0 XP')+'</div></div>';
+      return '<div class="ac-grade'+(isCur?' cur':(on?' on':''))+'" data-i="'+idx+'" role="button" tabindex="0"><div class="ac-grade__m">'+gradeSvg(idx+1)+'</div><div class="ac-grade__n">'+esc(EN()?g.en:g.n)+'</div><div class="ac-grade__x">'+(g.min?nfFr(g.min,0)+' XP':'0 XP')+'</div></div>';
     }).join('');
+  }
+  /* ── Modal détail (badge ou grade) ── */
+  function openModal(html){ var m=$('acModal'); if(!m) return; $('acmBody').innerHTML=html; m.classList.add('show'); }
+  function closeModal(){ var m=$('acModal'); if(m) m.classList.remove('show'); }
+  function showBadge(i){
+    var b=curBadges[i]; if(!b) return;
+    var st = b.on ? '<span class="ac-mst ok">'+(EN()?'Unlocked':'Débloqué')+'</span>' : '<span class="ac-mst">'+(EN()?'Locked':'Verrouillé')+'</span>';
+    openModal('<div class="ac-m__ic'+(b.on?' on':'')+'">'+b.ic+'</div><div class="ac-m__t">'+esc(b.t)+'</div>'+st+
+      '<p class="ac-m__d">'+esc(b.d)+'</p>'+
+      '<div class="ac-m__how"><span class="ac-m__howlbl">'+(EN()?'How to unlock':'Comment l\'obtenir')+'</span>'+esc(b.how)+
+      (b.prog?'<div class="ac-m__prog">'+esc(b.prog)+'</div>':'')+'</div>');
+  }
+  function showGrade(i){
+    var g=GRADES[i]; if(!g) return; var on=lastActXp>=g.min;
+    var st = on ? '<span class="ac-mst ok">'+(EN()?'Reached':'Atteint')+'</span>' : '<span class="ac-mst">'+(EN()?'To reach':'À atteindre')+'</span>';
+    var how = on
+      ? (EN()?'Grade reached. Keep using the cockpit to climb higher.':'Grade atteint. Continuez à utiliser le cockpit pour grimper.')
+      : (EN()?('Reach '+nfFr(g.min,0)+' XP to unlock this grade — '+nfFr(g.min-lastActXp,0)+' XP to go.'):('Atteignez '+nfFr(g.min,0)+' XP pour débloquer ce grade — '+nfFr(g.min-lastActXp,0)+' XP restants.'));
+    openModal('<div class="ac-m__ic'+(on?' on':'')+'">'+gradeSvg(i+1)+'</div><div class="ac-m__t">'+esc(EN()?g.en:g.n)+'</div>'+st+
+      '<p class="ac-m__d">'+esc(EN()?g.de:g.d)+'</p>'+
+      '<div class="ac-m__how"><span class="ac-m__howlbl">'+(EN()?'How to reach it':'Comment l\'atteindre')+'</span>'+esc(how)+'</div>');
   }
   function computeStreak(S,T){
     var set={}; function add(d){ if(!d)return; var dt=new Date(d); if(isNaN(dt))return; set[dt.toISOString().slice(0,10)]=1; }
@@ -899,6 +984,18 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
     if(TOKEN){ fetch('/api/portfolio',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){return r.ok?r.json():[];}).then(function(rows){ portfolioCache=Array.isArray(rows)?rows:[]; var tot=portfolioCache.reduce(function(a,b){return a+(parseFloat(b.amount)||0);},0); if(window.kPatriSet)window.kPatriSet(tot?nfFr(tot,0)+' €':'—'); }).catch(function(){}); }
     $('goalWeek').addEventListener('change',saveGoals); $('goalPnl').addEventListener('change',saveGoals);
     document.getElementById('acNav').addEventListener('click',function(e){ var b=e.target.closest('.ac-tab'); if(b) showTab(b.getAttribute('data-tab')); });
+    // Ouverture des détails (badges + grades), clic et clavier
+    $('acBadges').addEventListener('click',function(e){ var el=e.target.closest('.ac-badge'); if(el) showBadge(+el.getAttribute('data-i')); });
+    $('actGrades').addEventListener('click',function(e){ var el=e.target.closest('.ac-grade'); if(el) showGrade(+el.getAttribute('data-i')); });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){ closeModal(); return; }
+      if((e.key==='Enter'||e.key===' ')){ var t=e.target;
+        if(t&&t.classList&&t.classList.contains('ac-badge')){ e.preventDefault(); showBadge(+t.getAttribute('data-i')); }
+        else if(t&&t.classList&&t.classList.contains('ac-grade')){ e.preventDefault(); showGrade(+t.getAttribute('data-i')); }
+      }
+    });
+    $('acModalX').addEventListener('click',closeModal);
+    $('acModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
     var h=(location.hash||'').replace('#',''); showTab(h||'dashboard');
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
