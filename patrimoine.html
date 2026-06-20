@@ -285,70 +285,70 @@
 <script src="./menu.js"></script>
 <script>
 (function(){
-  ‘use strict’;
-  var reduced = window.matchMedia && window.matchMedia(‘(prefers-reduced-motion: reduce)’).matches;
-  var fmtEur0 = function(n){ return Math.round(n).toLocaleString(‘fr-FR’) + ‘ €’; };
+  'use strict';
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fmtEur0 = function(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; };
 
   // ── État persisté ──
-  var SAVED = (function(){ try{ return JSON.parse(localStorage.getItem(‘lt_pf_state’)||’{}’); }catch(e){ return {}; } })();
+  var SAVED = (function(){ try{ return JSON.parse(localStorage.getItem('lt_pf_state')||'{}'); }catch(e){ return {}; } })();
   var TOTAL = SAVED.total || 48250;
   var pfPortfolio = SAVED.assets || {};   // { assetId: montant€ }
-  var currentPeriod = ‘1A’;
+  var currentPeriod = '1A';
 
-  var CAT_COL = { ‘ETF’:’#7FB8E8’, ‘Action’:’#4ADE9C’, ‘Obligation’:’#E8C268’, ‘Liquidités’:’#C3CAD4’, ‘Crypto’:’#F0647A’ };
+  var CAT_COL = { 'ETF':'#7FB8E8', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidités':'#C3CAD4', 'Crypto':'#F0647A' };
 
   // ── Catalogue Trade Republic ──
   var TR_ASSETS = [
-    { id:’vwce’,  name:’FTSE All-World ETF’,      cat:’ETF’,        ticker:’VWCE’  },
-    { id:’iwda’,  name:’MSCI World ETF’,           cat:’ETF’,        ticker:’IWDA’  },
-    { id:’sxr8’,  name:’S&P 500 ETF’,              cat:’ETF’,        ticker:’SXR8’  },
-    { id:’sxrv’,  name:’NASDAQ 100 ETF’,           cat:’ETF’,        ticker:’SXRV’  },
-    { id:’iema’,  name:’Marchés émergents ETF’,    cat:’ETF’,        ticker:’IEMA’  },
-    { id:’xesc’,  name:’Euro Stoxx 50 ETF’,        cat:’ETF’,        ticker:’XESC’  },
-    { id:’exs1’,  name:’DAX ETF’,                  cat:’ETF’,        ticker:’EXS1’  },
-    { id:’c40’,   name:’CAC 40 ETF’,               cat:’ETF’,        ticker:’C40’   },
-    { id:’paeem’, name:’MSCI Em. Markets ETF’,     cat:’ETF’,        ticker:’PAEEM’ },
-    { id:’aapl’,  name:’Apple’,                    cat:’Action’,     ticker:’AAPL’  },
-    { id:’msft’,  name:’Microsoft’,                cat:’Action’,     ticker:’MSFT’  },
-    { id:’nvda’,  name:’Nvidia’,                   cat:’Action’,     ticker:’NVDA’  },
-    { id:’amzn’,  name:’Amazon’,                   cat:’Action’,     ticker:’AMZN’  },
-    { id:’googl’, name:’Alphabet’,                 cat:’Action’,     ticker:’GOOGL’ },
-    { id:’meta’,  name:’Meta Platforms’,           cat:’Action’,     ticker:’META’  },
-    { id:’tsla’,  name:’Tesla’,                    cat:’Action’,     ticker:’TSLA’  },
-    { id:’jpm’,   name:’JPMorgan Chase’,           cat:’Action’,     ticker:’JPM’   },
-    { id:’v’,     name:’Visa’,                     cat:’Action’,     ticker:’V’     },
-    { id:’ko’,    name:’Coca-Cola’,                cat:’Action’,     ticker:’KO’    },
-    { id:’xom’,   name:’ExxonMobil’,               cat:’Action’,     ticker:’XOM’   },
-    { id:’dis’,   name:’Disney’,                   cat:’Action’,     ticker:’DIS’   },
-    { id:’unh’,   name:’UnitedHealth’,             cat:’Action’,     ticker:’UNH’   },
-    { id:’brkb’,  name:’Berkshire Hathaway’,       cat:’Action’,     ticker:’BRK.B’ },
-    { id:’mc’,    name:’LVMH’,                     cat:’Action’,     ticker:’MC’    },
-    { id:’asml’,  name:’ASML Holding’,             cat:’Action’,     ticker:’ASML’  },
-    { id:’air’,   name:’Airbus’,                   cat:’Action’,     ticker:’AIR’   },
-    { id:’tte’,   name:’TotalEnergies’,            cat:’Action’,     ticker:’TTE’   },
-    { id:’sap’,   name:’SAP’,                      cat:’Action’,     ticker:’SAP’   },
-    { id:’novo’,  name:’Novo Nordisk’,             cat:’Action’,     ticker:’NOVO’  },
-    { id:’sie’,   name:’Siemens’,                  cat:’Action’,     ticker:’SIE’   },
-    { id:’rms’,   name:’Hermes’,                   cat:’Action’,     ticker:’RMS’   },
-    { id:’or’,    name:’L\’Oreal’,                 cat:’Action’,     ticker:’OR’    },
-    { id:’race’,  name:’Ferrari’,                  cat:’Action’,     ticker:’RACE’  },
-    { id:’bnp’,   name:’BNP Paribas’,              cat:’Action’,     ticker:’BNP’   },
-    { id:’nesn’,  name:’Nestle’,                   cat:’Action’,     ticker:’NESN’  },
-    { id:’btc’,   name:’Bitcoin (ETP)’,            cat:’Crypto’,     ticker:’BTCE’  },
-    { id:’eth’,   name:’Ethereum (ETP)’,           cat:’Crypto’,     ticker:’ZETH’  },
-    { id:’sol’,   name:’Solana (ETP)’,             cat:’Crypto’,     ticker:’GSOL’  },
-    { id:’ibgx’,  name:’Oblig. Etat EUR ETF’,      cat:’Obligation’, ticker:’IBGX’  },
-    { id:’ibtm’,  name:’US Treasury ETF’,          cat:’Obligation’, ticker:’IBTM’  },
-    { id:’ieac’,  name:’Corp. EUR IG ETF’,         cat:’Obligation’, ticker:’IEAC’  },
-    { id:’ihyg’,  name:’High Yield EUR ETF’,       cat:’Obligation’, ticker:’IHYG’  },
-    { id:’xeon’,  name:’Fonds monetaire EUR’,      cat:’Liquidites’, ticker:’XEON’  },
-    { id:’cash’,  name:’Liquidites / Cash’,        cat:’Liquidites’, ticker:’-’     }
+    { id:'vwce',  name:'FTSE All-World ETF',      cat:'ETF',        ticker:'VWCE'  },
+    { id:'iwda',  name:'MSCI World ETF',           cat:'ETF',        ticker:'IWDA'  },
+    { id:'sxr8',  name:'S&P 500 ETF',              cat:'ETF',        ticker:'SXR8'  },
+    { id:'sxrv',  name:'NASDAQ 100 ETF',           cat:'ETF',        ticker:'SXRV'  },
+    { id:'iema',  name:'Marchés émergents ETF',    cat:'ETF',        ticker:'IEMA'  },
+    { id:'xesc',  name:'Euro Stoxx 50 ETF',        cat:'ETF',        ticker:'XESC'  },
+    { id:'exs1',  name:'DAX ETF',                  cat:'ETF',        ticker:'EXS1'  },
+    { id:'c40',   name:'CAC 40 ETF',               cat:'ETF',        ticker:'C40'   },
+    { id:'paeem', name:'MSCI Em. Markets ETF',     cat:'ETF',        ticker:'PAEEM' },
+    { id:'aapl',  name:'Apple',                    cat:'Action',     ticker:'AAPL'  },
+    { id:'msft',  name:'Microsoft',                cat:'Action',     ticker:'MSFT'  },
+    { id:'nvda',  name:'Nvidia',                   cat:'Action',     ticker:'NVDA'  },
+    { id:'amzn',  name:'Amazon',                   cat:'Action',     ticker:'AMZN'  },
+    { id:'googl', name:'Alphabet',                 cat:'Action',     ticker:'GOOGL' },
+    { id:'meta',  name:'Meta Platforms',           cat:'Action',     ticker:'META'  },
+    { id:'tsla',  name:'Tesla',                    cat:'Action',     ticker:'TSLA'  },
+    { id:'jpm',   name:'JPMorgan Chase',           cat:'Action',     ticker:'JPM'   },
+    { id:'v',     name:'Visa',                     cat:'Action',     ticker:'V'     },
+    { id:'ko',    name:'Coca-Cola',                cat:'Action',     ticker:'KO'    },
+    { id:'xom',   name:'ExxonMobil',               cat:'Action',     ticker:'XOM'   },
+    { id:'dis',   name:'Disney',                   cat:'Action',     ticker:'DIS'   },
+    { id:'unh',   name:'UnitedHealth',             cat:'Action',     ticker:'UNH'   },
+    { id:'brkb',  name:'Berkshire Hathaway',       cat:'Action',     ticker:'BRK.B' },
+    { id:'mc',    name:'LVMH',                     cat:'Action',     ticker:'MC'    },
+    { id:'asml',  name:'ASML Holding',             cat:'Action',     ticker:'ASML'  },
+    { id:'air',   name:'Airbus',                   cat:'Action',     ticker:'AIR'   },
+    { id:'tte',   name:'TotalEnergies',            cat:'Action',     ticker:'TTE'   },
+    { id:'sap',   name:'SAP',                      cat:'Action',     ticker:'SAP'   },
+    { id:'novo',  name:'Novo Nordisk',             cat:'Action',     ticker:'NOVO'  },
+    { id:'sie',   name:'Siemens',                  cat:'Action',     ticker:'SIE'   },
+    { id:'rms',   name:'Hermes',                   cat:'Action',     ticker:'RMS'   },
+    { id:'or',    name:'L\'Oreal',                 cat:'Action',     ticker:'OR'    },
+    { id:'race',  name:'Ferrari',                  cat:'Action',     ticker:'RACE'  },
+    { id:'bnp',   name:'BNP Paribas',              cat:'Action',     ticker:'BNP'   },
+    { id:'nesn',  name:'Nestle',                   cat:'Action',     ticker:'NESN'  },
+    { id:'btc',   name:'Bitcoin (ETP)',            cat:'Crypto',     ticker:'BTCE'  },
+    { id:'eth',   name:'Ethereum (ETP)',           cat:'Crypto',     ticker:'ZETH'  },
+    { id:'sol',   name:'Solana (ETP)',             cat:'Crypto',     ticker:'GSOL'  },
+    { id:'ibgx',  name:'Oblig. Etat EUR ETF',      cat:'Obligation', ticker:'IBGX'  },
+    { id:'ibtm',  name:'US Treasury ETF',          cat:'Obligation', ticker:'IBTM'  },
+    { id:'ieac',  name:'Corp. EUR IG ETF',         cat:'Obligation', ticker:'IEAC'  },
+    { id:'ihyg',  name:'High Yield EUR ETF',       cat:'Obligation', ticker:'IHYG'  },
+    { id:'xeon',  name:'Fonds monetaire EUR',      cat:'Liquidites', ticker:'XEON'  },
+    { id:'cash',  name:'Liquidites / Cash',        cat:'Liquidites', ticker:'-'     }
   ];
 
-  var CAT_ORDER = [‘ETF’,’Action’,’Crypto’,’Obligation’,’Liquidites’];
+  var CAT_ORDER = ['ETF','Action','Crypto','Obligation','Liquidites'];
 
   function saveState(){
-    try{ localStorage.setItem(‘lt_pf_state’, JSON.stringify({ total:TOTAL, assets:pfPortfolio })); }catch(e){}
+    try{ localStorage.setItem('lt_pf_state', JSON.stringify({ total:TOTAL, assets:pfPortfolio })); }catch(e){}
   }
 
   function computeAlloc(){
@@ -358,22 +358,22 @@
       if(v > 0){ totals[a.cat] = (totals[a.cat]||0) + v; grand += v; }
     });
     if(!grand) return [
-      { k:’ETF monde’,    pct:42, col:’#7FB8E8’ },
-      { k:’Actions’,      pct:28, col:’#4ADE9C’ },
-      { k:’Obligations’,  pct:14, col:’#E8C268’ },
-      { k:’Liquidites’,  pct:9,  col:’#C3CAD4’ },
-      { k:’Crypto’,       pct:7,  col:’#F0647A’ }
+      { k:'ETF monde',    pct:42, col:'#7FB8E8' },
+      { k:'Actions',      pct:28, col:'#4ADE9C' },
+      { k:'Obligations',  pct:14, col:'#E8C268' },
+      { k:'Liquidites',  pct:9,  col:'#C3CAD4' },
+      { k:'Crypto',       pct:7,  col:'#F0647A' }
     ];
     return Object.keys(totals)
-      .map(function(c){ return { k:c, pct:Math.round(totals[c]/grand*100), col:CAT_COL[c]||’#7FB8E8’ }; })
+      .map(function(c){ return { k:c, pct:Math.round(totals[c]/grand*100), col:CAT_COL[c]||'#7FB8E8' }; })
       .sort(function(a,b){ return b.pct-a.pct; });
   }
 
   // ── Courbe ──
   function seriesFor(period){
-    var ratios = { ‘1M’:0.954,’6M’:0.854,’1A’:0.700,’Max’:0.249 };
-    var ns     = { ‘1M’:30,  ‘6M’:26,  ‘1A’:24,  ‘Max’:30   };
-    var vols   = { ‘1M’:0.012,’6M’:0.03,’1A’:0.05,’Max’:0.08 };
+    var ratios = { '1M':0.954,'6M':0.854,'1A':0.700,'Max':0.249 };
+    var ns     = { '1M':30,  '6M':26,  '1A':24,  'Max':30   };
+    var vols   = { '1M':0.012,'6M':0.03,'1A':0.05,'Max':0.08 };
     var n=ns[period], start=TOTAL*ratios[period], vol=vols[period], pts=[], seed=period.length*991;
     function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return (seed/0x7fffffff)-0.5; }
     for(var i=0;i<n;i++){ var t=i/(n-1); var base=start+(TOTAL-start)*Math.pow(t,0.92); pts.push(Math.max(TOTAL*0.01, base+base*vol*rnd()*(1-t*0.5))); }
@@ -385,88 +385,88 @@
     var mn=Math.min.apply(null,data)*0.985, mx=Math.max.apply(null,data)*1.01;
     var x=function(i){ return pad+(i/(data.length-1))*(W-pad*2); };
     var y=function(v){ return H-pad-((v-mn)/(mx-mn))*(H-pad*2); };
-    var line=data.map(function(v,i){ return (i===0?’M’:’L’)+x(i).toFixed(1)+’,’+y(v).toFixed(1); }).join(‘ ‘);
-    var area=line+’ L’+x(data.length-1).toFixed(1)+’,’+H+’ L’+x(0).toFixed(1)+’,’+H+’ Z’;
+    var line=data.map(function(v,i){ return (i===0?'M':'L')+x(i).toFixed(1)+','+y(v).toFixed(1); }).join(' ');
+    var area=line+' L'+x(data.length-1).toFixed(1)+','+H+' L'+x(0).toFixed(1)+','+H+' Z';
     var change=((data[data.length-1]-data[0])/data[0])*100, up=change>=0;
-    var col=up?’var(--bull)’:’var(--bear)’, fc2=up?’rgba(74,222,156,’:’rgba(240,100,122,’;
-    document.getElementById(‘pfChart’).innerHTML=
-      ‘<defs><linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="’+fc2+’0.28)"/><stop offset="1" stop-color="’+fc2+’0)"/></linearGradient></defs>’
-      +’<line x1="0" x2="720" y1="60" y2="60" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="120" y2="120" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="180" y2="180" stroke="rgba(58,65,76,0.25)"/>’
-      +’<path d="’+area+’" fill="url(#pfFill)"/>’
-      +’<path d="’+line+’" fill="none" stroke="’+col+’" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px ‘+fc2+’0.4))"/>’
-      +’<circle cx="’+x(data.length-1).toFixed(1)+’" cy="’+y(data[data.length-1]).toFixed(1)+’" r="4.5" fill="’+col+’" stroke="#07090C" stroke-width="2"/>’;
-    var lbl={‘1M’:’1 mois’,’6M’:’6 mois’,’1A’:’1 an’,’Max’:’tout l’historique’}[period];
-    document.getElementById(‘pfFootPeriod’).textContent=lbl;
-    var fc=document.getElementById(‘pfFootChange’);
-    fc.textContent=(change>=0?’+’:’’)+change.toFixed(1).replace(‘.’,’,’)+’ % sur la période’;
-    fc.style.color=up?’var(--bull)’:’var(--bear)’;
+    var col=up?'var(--bull)':'var(--bear)', fc2=up?'rgba(74,222,156,':'rgba(240,100,122,';
+    document.getElementById('pfChart').innerHTML=
+      '<defs><linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+fc2+'0.28)"/><stop offset="1" stop-color="'+fc2+'0)"/></linearGradient></defs>'
+      +'<line x1="0" x2="720" y1="60" y2="60" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="120" y2="120" stroke="rgba(58,65,76,0.25)"/><line x1="0" x2="720" y1="180" y2="180" stroke="rgba(58,65,76,0.25)"/>'
+      +'<path d="'+area+'" fill="url(#pfFill)"/>'
+      +'<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px '+fc2+'0.4))"/>'
+      +'<circle cx="'+x(data.length-1).toFixed(1)+'" cy="'+y(data[data.length-1]).toFixed(1)+'" r="4.5" fill="'+col+'" stroke="#07090C" stroke-width="2"/>';
+    var lbl={'1M':'1 mois','6M':'6 mois','1A':'1 an','Max':'tout l’historique'}[period];
+    document.getElementById('pfFootPeriod').textContent=lbl;
+    var fc=document.getElementById('pfFootChange');
+    fc.textContent=(change>=0?'+':'')+change.toFixed(1).replace('.',',')+' % sur la période';
+    fc.style.color=up?'var(--bull)':'var(--bear)';
   }
-  document.getElementById(‘pfPeriod’).addEventListener(‘click’,function(e){
-    var b=e.target.closest(‘.pf-period__btn’); if(!b) return;
-    Array.prototype.forEach.call(this.children,function(x){ x.classList.toggle(‘is-on’,x===b); });
-    drawChart(b.getAttribute(‘data-p’));
+  document.getElementById('pfPeriod').addEventListener('click',function(e){
+    var b=e.target.closest('.pf-period__btn'); if(!b) return;
+    Array.prototype.forEach.call(this.children,function(x){ x.classList.toggle('is-on',x===b); });
+    drawChart(b.getAttribute('data-p'));
   });
 
   // ── Donut ──
   function drawDonut(){
     var alloc=computeAlloc(), R=56, C=2*Math.PI*R, acc=0;
-    var html=’<circle cx="70" cy="70" r="’+R+’" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>’;
-    alloc.forEach(function(a){ var len=a.pct/100*C; html+=’<circle cx="70" cy="70" r="’+R+’" fill="none" stroke="’+a.col+’" stroke-width="16" stroke-dasharray="’+len+’ ‘+(C-len)+’" stroke-dashoffset="’+(-acc)+’" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>’; acc+=len; });
-    html+=’<text x="70" y="64" text-anchor="middle" class="pf-donut__big">’+alloc.length+’</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classes</text>’;
-    document.getElementById(‘pfDonut’).innerHTML=html;
-    document.getElementById(‘pfLegend’).innerHTML=alloc.map(function(a){
-      return ‘<div class="pf-leg"><span class="pf-leg__dot" style="background:’+a.col+’"></span><span class="pf-leg__k">’+a.k+’</span><span class="pf-leg__pct">’+a.pct+’ %</span><span class="pf-leg__val">’+fmtEur0(TOTAL*a.pct/100)+’</span></div>’;
-    }).join(‘’);
+    var html='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>';
+    alloc.forEach(function(a){ var len=a.pct/100*C; html+='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+a.col+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-acc)+'" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>'; acc+=len; });
+    html+='<text x="70" y="64" text-anchor="middle" class="pf-donut__big">'+alloc.length+'</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classes</text>';
+    document.getElementById('pfDonut').innerHTML=html;
+    document.getElementById('pfLegend').innerHTML=alloc.map(function(a){
+      return '<div class="pf-leg"><span class="pf-leg__dot" style="background:'+a.col+'"></span><span class="pf-leg__k">'+a.k+'</span><span class="pf-leg__pct">'+a.pct+' %</span><span class="pf-leg__val">'+fmtEur0(TOTAL*a.pct/100)+'</span></div>';
+    }).join('');
   }
 
-  // ── Liste d’actifs ──
-  var searchQ=’’;
+  // ── Liste d'actifs ──
+  var searchQ='';
   function renderAssets(){
     var q=searchQ.toLowerCase();
-    var html=’’;
+    var html='';
     CAT_ORDER.forEach(function(cat){
       var items=TR_ASSETS.filter(function(a){ return a.cat===cat&&(!q||a.name.toLowerCase().indexOf(q)>=0||a.ticker.toLowerCase().indexOf(q)>=0); });
       if(!items.length) return;
-      html+=’<div class="pf-asset-cat" style="border-left-color:’+(CAT_COL[cat]||’#7FB8E8’)+’">’+cat+’</div>’;
+      html+='<div class="pf-asset-cat" style="border-left-color:'+(CAT_COL[cat]||'#7FB8E8')+'">'+cat+'</div>';
       items.forEach(function(a){
         var checked=pfPortfolio[a.id]!==undefined;
-        var amt=pfPortfolio[a.id]||’’;
-        html+=’<div class="pf-asset-item’+(checked?’ is-checked’:’’)+’">’
-          +’<input type="checkbox" class="pf-cb" data-id="’+a.id+’"’+(checked?’ checked’:’’)+’>’
-          +’<span class="pf-asset-item__name">’+a.name+’ <span class="pf-asset-item__ticker">’+a.ticker+’</span></span>’
-          +’<div class="pf-asset-item__amt"><input type="number" class="pf-amt" data-id="’+a.id+’" min="0" step="100" placeholder="0"’+(amt!==’’?’ value="’+amt+’"’:’’)+’><span>€</span></div>’
-          +’</div>’;
+        var amt=pfPortfolio[a.id]||'';
+        html+='<div class="pf-asset-item'+(checked?' is-checked':'')+'">'
+          +'<input type="checkbox" class="pf-cb" data-id="'+a.id+'"'+(checked?' checked':'')+'>'
+          +'<span class="pf-asset-item__name">'+a.name+' <span class="pf-asset-item__ticker">'+a.ticker+'</span></span>'
+          +'<div class="pf-asset-item__amt"><input type="number" class="pf-amt" data-id="'+a.id+'" min="0" step="100" placeholder="0"'+(amt!==''?' value="'+amt+'"':'')+'><span>€</span></div>'
+          +'</div>';
       });
     });
-    if(!html) html=’<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:13px">Aucun résultat</div>’;
-    document.getElementById(‘pfAssetList’).innerHTML=html;
+    if(!html) html='<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:13px">Aucun résultat</div>';
+    document.getElementById('pfAssetList').innerHTML=html;
   }
 
   // ── Plans (intouchables) ──
   var PLANS = [
-    { name:’Prudent’,   key:’prudent’,   risk:1, riskLabel:’Faible’, obj:’+3 à 5 % / an’,   horizon:’3 ans +’, desc:’Préservation du capital, volatilité minimale.’,         mix:[[‘Obligations’,70,’#E8C268’],[‘ETF monde’,25,’#7FB8E8’],[‘Liquidités’,5,’#C3CAD4’]] },
-    { name:’Équilibré’, key:’equilibre’, risk:2, riskLabel:’Modéré’, obj:’+6 à 9 % / an’, horizon:’5 ans +’, featured:true, desc:’Le compromis croissance / sécurité le plus choisi.’, mix:[[‘Actions’,60,’#4ADE9C’],[‘Obligations’,35,’#E8C268’],[‘Liquidités’,5,’#C3CAD4’]] },
-    { name:’Dynamique’, key:’dynamique’, risk:3, riskLabel:’Élevé’, obj:’+10 à 15 % / an’, horizon:’8 ans +’, desc:’Forte croissance, forte volatilité. Pour le long terme.’,  mix:[[‘Actions croissance’,75,’#4ADE9C’],[‘ETF tech’,15,’#7FB8E8’],[‘Crypto’,10,’#F0647A’]] }
+    { name:'Prudent',   key:'prudent',   risk:1, riskLabel:'Faible', obj:'+3 à 5 % / an',   horizon:'3 ans +', desc:'Préservation du capital, volatilité minimale.',         mix:[['Obligations',70,'#E8C268'],['ETF monde',25,'#7FB8E8'],['Liquidités',5,'#C3CAD4']] },
+    { name:'Équilibré', key:'equilibre', risk:2, riskLabel:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', featured:true, desc:'Le compromis croissance / sécurité le plus choisi.', mix:[['Actions',60,'#4ADE9C'],['Obligations',35,'#E8C268'],['Liquidités',5,'#C3CAD4']] },
+    { name:'Dynamique', key:'dynamique', risk:3, riskLabel:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', desc:'Forte croissance, forte volatilité. Pour le long terme.',  mix:[['Actions croissance',75,'#4ADE9C'],['ETF tech',15,'#7FB8E8'],['Crypto',10,'#F0647A']] }
   ];
   function drawPlans(){
-    document.getElementById(‘pfPlans’).innerHTML=PLANS.map(function(p){
-      var dots=’<span class="pf-risk">’+[1,2,3].map(function(i){ return ‘<span class="pf-risk__dot’+(i<=p.risk?’ is-on lvl’+p.risk:’’)+’"></span>’; }).join(‘’)+’</span>’;
-      var bar=’<div class="pf-plan__mixbar">’+p.mix.map(function(m){ return ‘<span style="width:’+m[1]+’%;background:’+m[2]+’"></span>’; }).join(‘’)+’</div>’;
-      var list=’<ul class="pf-plan__mix">’+p.mix.map(function(m){ return ‘<li><span class="pf-plan__mixdot" style="background:’+m[2]+’"></span>’+m[1]+’ % ‘+m[0]+’</li>’; }).join(‘’)+’</ul>’;
-      return ‘<article class="pf-plan’+(p.featured?’ is-featured’:’’)+’">’
-        +(p.featured?’<span class="pf-plan__flag">Recommandé</span>’:’’)
-        +’<div class="pf-plan__top"><h3 class="pf-plan__name">’+p.name+’</h3>’
-        +’<div class="pf-plan__risk">’+dots+’<span class="pf-plan__risklabel">Risque ‘+p.riskLabel+’</span></div></div>’
-        +’<div class="pf-plan__obj"><span class="pf-plan__objval">’+p.obj+’</span><span class="pf-plan__objcap">Objectif annualisé · Horizon ‘+p.horizon+’</span></div>’
-        +’<p class="pf-plan__desc">’+p.desc+’</p>’+bar+list
-        +’<a class="lt-btn ‘+(p.featured?’lt-btn--primary’:’lt-btn--secondary’)+’" style="width:100%" href="./patrimoine-plan.html?p=’+p.key+’">Choisir ce plan</a>’
-        +’</article>’;
-    }).join(‘’);
+    document.getElementById('pfPlans').innerHTML=PLANS.map(function(p){
+      var dots='<span class="pf-risk">'+[1,2,3].map(function(i){ return '<span class="pf-risk__dot'+(i<=p.risk?' is-on lvl'+p.risk:'')+'"></span>'; }).join('')+'</span>';
+      var bar='<div class="pf-plan__mixbar">'+p.mix.map(function(m){ return '<span style="width:'+m[1]+'%;background:'+m[2]+'"></span>'; }).join('')+'</div>';
+      var list='<ul class="pf-plan__mix">'+p.mix.map(function(m){ return '<li><span class="pf-plan__mixdot" style="background:'+m[2]+'"></span>'+m[1]+' % '+m[0]+'</li>'; }).join('')+'</ul>';
+      return '<article class="pf-plan'+(p.featured?' is-featured':'')+'">'
+        +(p.featured?'<span class="pf-plan__flag">Recommandé</span>':'')
+        +'<div class="pf-plan__top"><h3 class="pf-plan__name">'+p.name+'</h3>'
+        +'<div class="pf-plan__risk">'+dots+'<span class="pf-plan__risklabel">Risque '+p.riskLabel+'</span></div></div>'
+        +'<div class="pf-plan__obj"><span class="pf-plan__objval">'+p.obj+'</span><span class="pf-plan__objcap">Objectif annualisé · Horizon '+p.horizon+'</span></div>'
+        +'<p class="pf-plan__desc">'+p.desc+'</p>'+bar+list
+        +'<a class="lt-btn '+(p.featured?'lt-btn--primary':'lt-btn--secondary')+'" style="width:100%" href="./patrimoine-plan.html?p='+p.key+'">Choisir ce plan</a>'
+        +'</article>';
+    }).join('');
   }
 
   // ── Compteur total ──
   function countTotal(){
-    var el=document.getElementById(‘pfTotal’);
+    var el=document.getElementById('pfTotal');
     if(reduced){ el.textContent=fmtEur0(TOTAL); return; }
     var t0=null, dur=900;
     function tick(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur); el.textContent=fmtEur0(TOTAL*(1-Math.pow(1-k,3))); if(k<1)requestAnimationFrame(tick); }
@@ -475,36 +475,36 @@
 
   function init(){
     // Capital input
-    var cap=document.getElementById(‘pfCapInput’);
+    var cap=document.getElementById('pfCapInput');
     cap.value=TOTAL;
-    cap.addEventListener(‘input’,function(){
+    cap.addEventListener('input',function(){
       var v=parseFloat(this.value);
       if(!isNaN(v)&&v>=0){ TOTAL=v; drawChart(currentPeriod); countTotal(); drawDonut(); saveState(); }
     });
 
     // Recherche actifs
-    document.getElementById(‘pfAssetSearch’).addEventListener(‘input’,function(){
+    document.getElementById('pfAssetSearch').addEventListener('input',function(){
       searchQ=this.value; renderAssets();
     });
 
     // Liste actifs — délégation
-    document.getElementById(‘pfAssetList’).addEventListener(‘change’,function(e){
-      var id=e.target.getAttribute(‘data-id’); if(!id) return;
-      if(e.target.classList.contains(‘pf-cb’)){
-        var item=e.target.closest(‘.pf-asset-item’);
-        if(e.target.checked){ pfPortfolio[id]=0; item.classList.add(‘is-checked’); }
-        else { delete pfPortfolio[id]; item.classList.remove(‘is-checked’); }
-      } else if(e.target.classList.contains(‘pf-amt’)){
+    document.getElementById('pfAssetList').addEventListener('change',function(e){
+      var id=e.target.getAttribute('data-id'); if(!id) return;
+      if(e.target.classList.contains('pf-cb')){
+        var item=e.target.closest('.pf-asset-item');
+        if(e.target.checked){ pfPortfolio[id]=0; item.classList.add('is-checked'); }
+        else { delete pfPortfolio[id]; item.classList.remove('is-checked'); }
+      } else if(e.target.classList.contains('pf-amt')){
         var v2=parseFloat(e.target.value); pfPortfolio[id]=isNaN(v2)?0:v2;
       }
       drawDonut(); saveState();
     });
 
-    drawChart(‘1A’); drawDonut(); drawPlans(); countTotal(); renderAssets();
+    drawChart('1A'); drawDonut(); drawPlans(); countTotal(); renderAssets();
   }
 
   window.ecoReloadNews=function(){};
-  if(document.readyState===’loading’) document.addEventListener(‘DOMContentLoaded’,init); else init();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
 <script src="./lang.js"></script>
