@@ -57,7 +57,7 @@
 .lu-orbit__ring--2 i { background: var(--bull); box-shadow: 0 0 8px var(--bull); }
 @keyframes lu-spin { to { transform: rotate(360deg); } }
 
-.lu-viz--cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; width: 84px; height: 48px; }
+.lu-viz--cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; width: 84px; height: 64px; align-self: center; justify-self: center; }
 .lu-viz--cal span { border-radius: 2px; background: var(--bg-surface); border: 1px solid var(--border-subtle); animation: lu-cal 3s ease-in-out infinite; }
 .lu-viz--cal span.is-up { background: var(--bull-glow); border-color: rgba(74,222,156,0.5); }
 .lu-viz--cal span.is-down { background: var(--bear-glow); border-color: rgba(240,100,122,0.5); }
