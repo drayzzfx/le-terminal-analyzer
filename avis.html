@@ -48,6 +48,44 @@
 .av-cta p{color:var(--text-muted);font-size:14px;margin:0 0 22px}
 @media(max-width:900px){.av-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.av-grid{grid-template-columns:1fr}.av-rating{padding:26px 28px}}
+/* preuve factuelle vérifiable */
+.av-vp{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:38px 0 0}
+.av-vp__c{text-align:center;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:22px 16px}
+.av-vp__n{font-family:var(--font-mono);font-weight:700;font-size:28px;color:var(--accent-bright);line-height:1}
+.av-vp__l{font-size:12px;color:var(--text-muted);margin-top:7px;line-height:1.4}
+@media(max-width:760px){.av-vp{grid-template-columns:1fr 1fr}}
+/* note des fondateurs */
+.av-note{margin:40px 0 0;background:linear-gradient(165deg,rgba(127,184,232,.06),rgba(22,27,36,.5));border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:26px 28px}
+.av-note__q{font-size:15px;line-height:1.7;color:var(--text-body);margin:0}
+.av-note__sig{display:flex;align-items:center;gap:11px;margin-top:16px}
+.av-note__av{width:38px;height:38px;border-radius:50%;background:linear-gradient(150deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;color:#07090C;font-weight:700;font-size:14px}
+.av-note__name{font-size:13px;font-weight:600;color:var(--text-title)}
+.av-note__role{font-size:11px;color:var(--text-muted)}
+/* en-tête section avis */
+.av-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:54px 0 18px}
+.av-head__t{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(20px,3vw,28px);color:var(--text-title);margin:0}
+/* état vide */
+.av-empty{grid-column:1/-1;text-align:center;padding:46px 24px;border:1px dashed var(--border);border-radius:var(--r-lg);color:var(--text-muted)}
+.av-empty svg{width:30px;height:30px;opacity:.5;margin-bottom:12px}
+.av-empty strong{display:block;color:var(--text-title);font-size:15px;margin-bottom:6px;font-weight:600}
+.av-transp{margin:18px 0 0;font-size:11.5px;color:var(--text-muted);line-height:1.6;text-align:center}
+/* modal formulaire */
+.av-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(7,9,12,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.av-modal.show{display:flex}
+.av-modal__box{position:relative;width:100%;max-width:480px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:28px 26px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.av-modal__x{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1}
+.av-modal__t{font-family:var(--font-display);text-transform:uppercase;font-size:20px;color:var(--text-title);margin:0 0 16px}
+.av-fld{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
+.av-fld label{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.av-in{background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--r-sm);color:var(--text-title);padding:11px 13px;font-family:var(--font-text);font-size:14px;outline:none;width:100%;box-sizing:border-box}
+.av-in:focus{border-color:var(--accent)}
+textarea.av-in{min-height:96px;resize:vertical;line-height:1.6}
+.av-starin{display:inline-flex;gap:5px}
+.av-starin button{background:transparent;border:none;cursor:pointer;color:#E8C268;padding:2px;opacity:.3;transition:opacity .15s}
+.av-starin button.on{opacity:1}
+.av-consent{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--text-body);line-height:1.5;margin:4px 0 14px}
+.av-consent input{margin-top:2px;flex:none}
+.av-msg{font-size:12.5px;margin-top:10px}.av-msg.ok{color:var(--bull)}.av-msg.err{color:var(--bear)}
 </style>
 </head>
 <body>
@@ -136,36 +174,64 @@
 </nav>
 
 <main class="av-wrap">
-  <!-- HERO + NOTE GLOBALE -->
+  <!-- HERO -->
   <section class="av-hero" data-reveal>
     <div class="av-hero__halo" aria-hidden="true"></div>
-    <span class="lt-eyebrow" data-en="<span class='lt-dot'></span> Verified reviews"><span class="lt-dot"></span> Avis vérifiés</span>
+    <span class="lt-eyebrow"><span class="lt-dot"></span> <span data-en="Community reviews">Avis de la communauté</span></span>
     <h1 class="pr-hero__title" style="margin:10px 0 0"><span class="lt-metal" data-en="What traders say">Ce que disent les traders</span></h1>
-    <div class="av-rating">
-      <div class="av-rating__score">4,8<span>/5</span></div>
-      <div class="av-stars" id="avHeroStars"></div>
-      <div class="av-rating__sub" data-en="Based on 62 verified reviews">Sur la base de 62 avis vérifiés</div>
-      <div class="av-rating__tp"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg> <span data-en="Excellent">Excellent</span></div>
-    </div>
-    <div class="av-dist">
-      <div class="av-dist__row"><span class="av-dist__k">5 ★</span><span class="av-dist__bar"><span class="av-dist__fill" style="width:80%"></span></span><span class="av-dist__p">80 %</span></div>
-      <div class="av-dist__row"><span class="av-dist__k">4 ★</span><span class="av-dist__bar"><span class="av-dist__fill" style="width:14%"></span></span><span class="av-dist__p">14 %</span></div>
-      <div class="av-dist__row"><span class="av-dist__k">3 ★</span><span class="av-dist__bar"><span class="av-dist__fill" style="width:4%"></span></span><span class="av-dist__p">4 %</span></div>
-      <div class="av-dist__row"><span class="av-dist__k">2 ★</span><span class="av-dist__bar"><span class="av-dist__fill" style="width:1%"></span></span><span class="av-dist__p">1 %</span></div>
-      <div class="av-dist__row"><span class="av-dist__k">1 ★</span><span class="av-dist__bar"><span class="av-dist__fill" style="width:1%"></span></span><span class="av-dist__p">1 %</span></div>
-    </div>
+    <div id="avRatingWrap"></div>
   </section>
 
-  <!-- AVIS -->
-  <section class="av-grid" id="avGrid" data-reveal data-stagger></section>
+  <!-- PREUVE FACTUELLE (vérifiable) -->
+  <section class="av-vp" data-reveal>
+    <div class="av-vp__c"><div class="av-vp__n">7</div><div class="av-vp__l" data-en="Tools in one terminal">Outils dans un seul terminal</div></div>
+    <div class="av-vp__c"><div class="av-vp__n">IA</div><div class="av-vp__l" data-en="Setup analysis &amp; coaching">Analyse de setup &amp; coaching</div></div>
+    <div class="av-vp__c"><div class="av-vp__n">FR · EN</div><div class="av-vp__l" data-en="Bilingual interface">Interface bilingue</div></div>
+    <div class="av-vp__c"><div class="av-vp__n">0 €</div><div class="av-vp__l" data-en="Free to start">Pour commencer</div></div>
+  </section>
+
+  <!-- NOTE DES FONDATEURS -->
+  <section class="av-note" data-reveal>
+    <p class="av-note__q" data-en="&laquo; Le Terminal has just launched. Rather than displaying made-up reviews, we'd rather let our first users speak &mdash; real, verified reviews, week after week. Try it for free, then tell us what you think. &raquo;">« Le Terminal vient d'ouvrir. Plutôt que d'afficher des avis inventés, nous préférons laisser parler nos premiers utilisateurs — de vrais avis, vérifiés, au fil des semaines. Essayez gratuitement, puis dites-nous ce que vous en pensez. »</p>
+    <div class="av-note__sig"><span class="av-note__av">LT</span><span><span class="av-note__name">L'équipe Le Terminal</span><br><span class="av-note__role" data-en="Founders">Fondateurs</span></span></div>
+  </section>
+
+  <!-- AVIS RÉELS (membres) -->
+  <div class="av-head" data-reveal>
+    <h2 class="av-head__t" data-en="Member reviews">Avis des membres</h2>
+    <button class="lt-btn lt-btn--secondary lt-btn--sm" type="button" id="avLeave" data-en="Leave a review">Laisser un avis</button>
+  </div>
+  <section class="av-grid" id="avGrid" data-stagger></section>
+  <p class="av-transp" data-en="Reviews are submitted by signed-in members and published after verification. We do not remove negative reviews.">Les avis sont déposés par des membres connectés et publiés après vérification. Nous ne supprimons pas les avis négatifs.</p>
 
   <!-- CTA -->
   <section class="av-cta" data-reveal>
-    <h2 data-en="Join 180+ traders">Rejoignez 180+ traders</h2>
-    <p data-en="Five tools, one terminal. Start free, go Premium when you're ready.">Cinq outils, un terminal. Commencez gratuitement, passez en Premium quand vous voulez.</p>
+    <h2 data-en="Five tools, one terminal">Cinq outils, un terminal</h2>
+    <p data-en="Start free, go Premium when you're ready.">Commencez gratuitement, passez en Premium quand vous voulez.</p>
     <a class="lt-btn lt-btn--primary lt-btn--lg" href="./tarifs.html" data-en="See pricing">Voir les tarifs</a>
   </section>
 </main>
+
+<!-- MODAL : laisser un avis -->
+<div class="av-modal" id="avModal" role="dialog" aria-label="Laisser un avis">
+  <div class="av-modal__box">
+    <button class="av-modal__x" id="avModalX" type="button" aria-label="Fermer">✕</button>
+    <h3 class="av-modal__t" data-en="Leave a review">Laisser un avis</h3>
+    <div id="avFormWrap">
+      <div class="av-fld"><label data-en="Your name / handle">Votre nom / pseudo</label><input class="av-in" id="avName" maxlength="40" placeholder="Ex. Thomas R."></div>
+      <div class="av-fld"><label data-en="Your profile (optional)">Votre profil (facultatif)</label><input class="av-in" id="avRole" maxlength="60" placeholder="Ex. Day trader · Forex"></div>
+      <div class="av-fld"><label data-en="Rating">Note</label><div class="av-starin" id="avStarIn"></div></div>
+      <div class="av-fld"><label data-en="Your review">Votre avis</label><textarea class="av-in" id="avBody" maxlength="1000" placeholder="Votre expérience avec Le Terminal…"></textarea></div>
+      <label class="av-consent"><input type="checkbox" id="avConsent"><span data-en="I authorize the publication of my review (name/handle, profile, rating, text) on the site.">J'autorise la publication de mon avis (nom/pseudo, profil, note, texte) sur le site.</span></label>
+      <button class="lt-btn lt-btn--primary" type="button" id="avSubmit" style="width:100%" data-en="Submit">Envoyer</button>
+      <div class="av-msg" id="avMsg"></div>
+    </div>
+    <div id="avGate" style="display:none;text-align:center;padding:8px 0">
+      <p style="color:var(--text-body);font-size:13.5px" data-en="Sign in to leave a review.">Connectez-vous pour laisser un avis.</p>
+      <button class="lt-btn lt-btn--primary" style="margin-top:10px" onclick="window.ltOpenLogin&&ltOpenLogin()" data-en="Sign in">Connexion</button>
+    </div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -173,42 +239,99 @@
   function getLang(){ return localStorage.getItem('lt_lang')||'fr'; }
   function stars(n){ var s=''; for(var i=0;i<5;i++){ s+='<svg viewBox="0 0 24 24" width="15" height="15" style="opacity:'+(i<n?1:.2)+'"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>'; } return s; }
 
-  var REVIEWS = [
-    {n:'Thomas R.', i:'T', r:'Day trader · Forex', en:'Day trader · Forex', d:'12 juin 2026', s:5, fr:"Le Setup Analyzer a changé ma façon de trader. Un score clair et objectif sur chaque setup, je ne rentre plus jamais à l'aveugle. Mon win rate a grimpé en deux mois.", te:"The Setup Analyzer changed the way I trade. A clear, objective score on every setup — I never enter blind anymore. My win rate climbed in two months."},
-    {n:'Sarah L.', i:'S', r:'Swing trader · Indices', en:'Swing trader · Indices', d:'9 juin 2026', s:5, fr:"Le journal couplé au coach IA, c'est exactement ce qui me manquait. Il pointe mes erreurs récurrentes que je ne voyais pas. Indispensable.", te:"The journal paired with the AI coach is exactly what I was missing. It pinpoints recurring mistakes I couldn't see. Essential."},
-    {n:'Karim B.', i:'K', r:'Trader crypto', en:'Crypto trader', d:'7 juin 2026', s:5, fr:"Tout au même endroit : calendrier éco, calculateur, bubble map, analyse. J'ai résilié mes trois autres abonnements. Le rapport qualité-prix est imbattable.", te:"Everything in one place: eco calendar, calculator, bubble map, analysis. I cancelled my three other subscriptions. Unbeatable value."},
-    {n:'Léa M.', i:'L', r:'Débutante', en:'Beginner', d:'5 juin 2026', s:5, fr:"Je débute et je me sentais perdue. Les analyses expliquées pour débutants ET pour pros m'ont fait progresser plus vite que six mois de YouTube.", te:"I'm a beginner and felt lost. The analyses explained for both beginners and pros made me progress faster than six months of YouTube."},
-    {n:'@maxtrades', i:'M', r:'Trader à temps plein', en:'Full-time trader', d:'3 juin 2026', s:5, fr:"La bubble map en temps réel est devenue mon point de départ chaque matin. Je vois immédiatement où va l'argent. Bluffant.", te:"The real-time bubble map became my starting point every morning. I instantly see where the money flows. Stunning."},
-    {n:'Inès F.', i:'I', r:'Swing trader', en:'Swing trader', d:'1 juin 2026', s:4, fr:"Très complet et beau visuellement. J'aurais aimé une appli mobile native, mais le site fonctionne parfaitement sur téléphone.", te:"Very complete and visually beautiful. I'd have loved a native mobile app, but the site works perfectly on phone."},
-    {n:'Pierre G.', i:'P', r:'Day trader · Futures', en:'Day trader · Futures', d:'30 mai 2026', s:3, fr:"Bons outils dans l'ensemble, mais le score IA se trompe parfois sur mes setups en range — je le prends comme une aide, pas une vérité absolue. Et le Premium reste un peu cher pour mon usage occasionnel.", te:"Good tools overall, but the AI score sometimes gets my range setups wrong — I treat it as guidance, not gospel. And Premium stays a bit pricey for my occasional use."},
-    {n:'Hugo D.', i:'H', r:'Day trader · Or', en:'Day trader · Gold', d:'28 mai 2026', s:5, fr:"Le calculateur de position m'évite les erreurs de lot qui m'ont coûté cher avant. Simple, rapide, exactement ce qu'il faut.", te:"The position calculator saves me from the lot-size mistakes that cost me dearly before. Simple, fast, exactly right."},
-    {n:'Aminata S.', i:'A', r:'Trader indices', en:'Index trader', d:'26 mai 2026', s:5, fr:"Le calendrier éco filtré sur les annonces à fort impact me fait gagner un temps fou. Plus besoin de fouiller dix sites.", te:"The eco calendar filtered to high-impact releases saves me huge time. No more digging through ten sites."},
-    {n:'@julien_fx', i:'J', r:'Trader forex', en:'Forex trader', d:'23 mai 2026', s:5, fr:"L'analyse IA des news est d'une clarté rare. Je comprends enfin l'impact réel d'une annonce sur mes paires.", te:"The AI news analysis is remarkably clear. I finally understand the real impact of a release on my pairs."},
-    {n:'Camille T.', i:'C', r:'Trader crypto', en:'Crypto trader', d:'20 mai 2026', s:4, fr:"Excellent outil, l'interface est superbe et fluide. Quelques annonces de plus sur les altcoins seraient un vrai plus.", te:"Excellent tool, the interface is gorgeous and smooth. A few more altcoin announcements would be a real plus."},
-    {n:'@sofia.tr', i:'S', r:'Swing trader', en:'Swing trader', d:'19 mai 2026', s:3, fr:"Interface superbe et calendrier éco bien fait. En revanche, les données crypto accusent parfois un léger retard et il manque encore une vraie appli mobile. Du potentiel, mais à peaufiner.", te:"Gorgeous interface and a well-made eco calendar. That said, crypto data sometimes lags a bit and a real mobile app is still missing. Promising, but needs polish."},
-    {n:'Romain V.', i:'R', r:'Day trader', en:'Day trader', d:'17 mai 2026', s:5, fr:"Le suivi de performance du journal m'a ouvert les yeux sur mes meilleures sessions. Je trade désormais quand j'ai un edge.", te:"The journal's performance tracking opened my eyes to my best sessions. I now trade only when I have an edge."},
-    {n:'Nadia K.', i:'N', r:'Investisseuse', en:'Investor', d:'14 mai 2026', s:5, fr:"Design soigné, données fiables, et un vrai gain de confiance avant chaque trade. Le meilleur abonnement que j'ai pris.", te:"Polished design, reliable data, and real confidence before each trade. The best subscription I've taken."}
-  ];
+  var API='/api/reviews';
+  function tok(){ try{return localStorage.getItem('ta_token')||'';}catch(e){return '';} }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function frDate(iso){ try{ var d=new Date(iso); if(isNaN(d))return ''; return d.toLocaleDateString(getLang()==='en'?'en-GB':'fr-FR',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
 
-  function render(){
-    var l=getLang();
-    var hs=document.getElementById('avHeroStars'); if(hs) hs.innerHTML=stars(5);
-    var grid=document.getElementById('avGrid'); if(!grid) return;
-    grid.innerHTML=REVIEWS.map(function(rv){
-      var txt=l==='en'?rv.te:rv.fr;
-      var role=l==='en'?rv.en:rv.r;
+  var DATA={reviews:[],count:0,average:0};
+
+  function renderHero(){
+    var l=getLang(), w=document.getElementById('avRatingWrap'); if(!w) return;
+    if(DATA.count>0){
+      w.innerHTML='<div class="av-rating"><div class="av-rating__score">'+String(DATA.average).replace('.',',')+'<span>/5</span></div>'
+        +'<div class="av-stars">'+stars(Math.round(DATA.average))+'</div>'
+        +'<div class="av-rating__sub">'+(l==='en'?('Based on '+DATA.count+' member review'+(DATA.count>1?'s':'')):('Sur la base de '+DATA.count+' avis membre'+(DATA.count>1?'s':'')))+'</div></div>';
+    } else {
+      w.innerHTML='<p class="av-rating__sub" style="margin-top:16px">'+(l==='en'?'Be among the first to share your experience.':'Soyez parmi les premiers à partager votre expérience.')+'</p>';
+    }
+  }
+  function renderGrid(){
+    var l=getLang(), grid=document.getElementById('avGrid'); if(!grid) return;
+    if(!DATA.reviews.length){
+      grid.innerHTML='<div class="av-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+        +'<strong>'+(l==='en'?'No reviews yet':'Pas encore d\'avis')+'</strong>'
+        +(l==='en'?'Real member reviews will appear here. Want to be the first?':'Les vrais avis des membres apparaîtront ici. Envie d\'être le premier ?')+'</div>';
+      return;
+    }
+    grid.innerHTML=DATA.reviews.map(function(rv){
+      var initial=esc((rv.author_name||'?').charAt(0).toUpperCase());
       return '<article class="av-card">'
-        +'<div class="av-card__top"><span class="av-card__stars">'+stars(rv.s)+'</span>'
-        +'<span class="av-card__verif"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'+(l==='en'?'Verified':'Vérifié')+'</span></div>'
-        +'<p class="av-card__txt">'+txt+'</p>'
-        +'<div class="av-card__foot"><span class="av-card__ava">'+rv.i+'</span>'
-        +'<span><span class="av-card__name">'+rv.n+'</span><br><span class="av-card__meta">'+role+'</span></span>'
-        +'<span class="av-card__date">'+rv.d+'</span></div>'
+        +'<div class="av-card__top"><span class="av-card__stars">'+stars(rv.rating)+'</span>'
+        +'<span class="av-card__verif"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'+(l==='en'?'Verified member':'Membre vérifié')+'</span></div>'
+        +'<p class="av-card__txt">'+esc(rv.body)+'</p>'
+        +'<div class="av-card__foot"><span class="av-card__ava">'+initial+'</span>'
+        +'<span><span class="av-card__name">'+esc(rv.author_name)+'</span><br><span class="av-card__meta">'+esc(rv.role||'')+'</span></span>'
+        +'<span class="av-card__date">'+frDate(rv.created_at)+'</span></div>'
         +'</article>';
     }).join('');
   }
+  function render(){ renderHero(); renderGrid(); }
   window.ecoReloadNews=render; // re-render au changement de langue
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',render); else render();
+
+  function load(){
+    fetch(API).then(function(r){return r.ok?r.json():null;}).then(function(d){
+      if(d){ DATA.reviews=Array.isArray(d.reviews)?d.reviews:[]; DATA.count=d.count||0; DATA.average=d.average||0; }
+      render();
+    }).catch(function(){ render(); });
+  }
+
+  // ── Formulaire « Laisser un avis » (membre connecté) ──
+  var curRating=5;
+  function paintStarIn(){ var c=document.getElementById('avStarIn'); if(!c) return; c.innerHTML='';
+    for(var i=1;i<=5;i++){ (function(v){ var b=document.createElement('button'); b.type='button'; b.className=(v<=curRating?'on':''); b.setAttribute('aria-label',v+'/5');
+      b.innerHTML='<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>';
+      b.addEventListener('click',function(){ curRating=v; paintStarIn(); }); c.appendChild(b); })(i); } }
+  function openModal(){
+    var m=document.getElementById('avModal'); if(!m) return; var logged=!!tok();
+    document.getElementById('avFormWrap').style.display=logged?'':'none';
+    document.getElementById('avGate').style.display=logged?'none':'';
+    if(logged){ curRating=5; paintStarIn(); var msg=document.getElementById('avMsg'); if(msg){msg.textContent='';msg.className='av-msg';} }
+    m.classList.add('show');
+  }
+  function closeModal(){ var m=document.getElementById('avModal'); if(m) m.classList.remove('show'); }
+  function submit(){
+    var l=getLang(), msg=document.getElementById('avMsg');
+    var name=(document.getElementById('avName').value||'').trim();
+    var role=(document.getElementById('avRole').value||'').trim();
+    var body=(document.getElementById('avBody').value||'').trim();
+    var consent=document.getElementById('avConsent').checked;
+    function err(t){ msg.textContent=t; msg.className='av-msg err'; }
+    if(name.length<2) return err(l==='en'?'Please enter your name.':'Indiquez votre nom.');
+    if(body.length<10) return err(l==='en'?'Your review is too short.':'Votre avis est trop court.');
+    if(!consent) return err(l==='en'?'Please confirm the publication consent.':"Veuillez confirmer l'autorisation de publication.");
+    var btn=document.getElementById('avSubmit'); btn.disabled=true; msg.textContent=l==='en'?'Sending…':'Envoi…'; msg.className='av-msg';
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok()},
+      body:JSON.stringify({author_name:name,role:role,rating:curRating,body:body,lang:l,consent:true})})
+    .then(function(r){ return r.json().then(function(d){ return {s:r.status,d:d||{}}; }); })
+    .then(function(o){
+      btn.disabled=false;
+      if(o.s===401){ if(window.ltOpenLogin) ltOpenLogin(); return err(l==='en'?'Please sign in again.':'Reconnectez-vous.'); }
+      if(o.s!==200 || !o.d.ok){ return err(l==='en'?'Could not submit. Please try again.':"Échec de l'envoi. Réessayez."); }
+      msg.textContent=l==='en'?'Thank you! Your review will be published after verification.':'Merci ! Votre avis sera publié après vérification.';
+      msg.className='av-msg ok'; setTimeout(closeModal,2200);
+    }).catch(function(){ btn.disabled=false; err(l==='en'?'Network error.':'Erreur réseau.'); });
+  }
+
+  function init(){
+    load();
+    var lv=document.getElementById('avLeave'); if(lv) lv.addEventListener('click',openModal);
+    var x=document.getElementById('avModalX'); if(x) x.addEventListener('click',closeModal);
+    var sb=document.getElementById('avSubmit'); if(sb) sb.addEventListener('click',submit);
+    var m=document.getElementById('avModal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeModal(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
 <script>
