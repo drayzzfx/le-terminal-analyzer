@@ -104,16 +104,16 @@
       border: 1px solid rgba(127,184,232,.25);
     }
     .lt-nav-item.soon { opacity: .45; cursor: not-allowed; pointer-events: none; }
-    .lt-nav-item.pro-locked { opacity: .55; cursor: pointer; }
-    .lt-nav-item.pro-locked:hover { background: rgba(255,180,0,.08); color: #E8C268; }
+    .lt-nav-item.pro-locked { opacity: .35; cursor: not-allowed; pointer-events: none; }
+    .lt-nav-item.pro-locked:hover { background: transparent; }
     .lt-nav-pro-badge {
       margin-left: auto; font-size: 9px; font-weight: 700;
       letter-spacing: .08em; color: #E8C268;
       background: rgba(255,180,0,.1); border: 1px solid rgba(255,180,0,.25);
       border-radius: 50px; padding: 3px 8px;
     }
-    .lt-subnav-item.pro-locked { opacity: .55; cursor: pointer; }
-    .lt-subnav-item.pro-locked:hover { color: #E8C268; }
+    .lt-subnav-item.pro-locked { opacity: .35; cursor: not-allowed; pointer-events: none; }
+    .lt-subnav-item.pro-locked:hover { color: inherit; }
     .lt-nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: .7; }
     .lt-nav-item:hover .lt-nav-icon, .lt-nav-item.active .lt-nav-icon { opacity: 1; }
     .lt-nav-soon {
@@ -271,18 +271,20 @@
     var locked = parentLocked || (c.pro && !isUserPro) || false;
     var act = (!locked && selfActive(c)) ? ' active' : '';
     var lockCls = locked ? ' pro-locked' : '';
-    var href = locked ? './index.html?paywall=1' : c.href;
+    var href = locked ? null : c.href;
+    var tag = locked ? 'span' : 'a';
+    var hrefAttr = href ? ' href="' + href + '"' : '';
     if(c.children && c.children.length) {
       var inner = c.children.map(function(cc) { return renderSub(cc, 0, locked); }).join('');
       return '<div class="lt-subnav-group">' +
                '<div class="lt-subnav-row">' +
-                 '<a class="lt-subnav-item' + act + lockCls + '" href="' + href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>' +
+                 '<' + tag + ' class="lt-subnav-item' + act + lockCls + '"' + hrefAttr + '><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</' + tag + '>' +
                  '<button class="lt-nav-caret lt-caret-sm open" type="button" aria-label="Déplier" onclick="ltToggleSub(event, this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav lt-subnav--deep"><div>' + inner + '</div></div>' +
              '</div>';
     }
-    return '<a class="lt-subnav-item' + act + lockCls + '" href="' + href + '"><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</a>';
+    return '<' + tag + ' class="lt-subnav-item' + act + lockCls + '"' + hrefAttr + '><span class="lt-subnav-ic">' + c.icon + '</span>' + c.label + '</' + tag + '>';
   }
 
   var isUserPro = localStorage.getItem('lt_pro') === '1';
@@ -312,13 +314,14 @@
     var cls = 'lt-nav-item' + (isActive ? ' active' : '') + (p.soon ? ' soon' : '') + (isLocked ? ' pro-locked' : '');
     var soon = p.soon ? '<span class="lt-nav-soon">Bientôt</span>' : '';
     var proBadge = isLocked ? '<span class="lt-nav-pro-badge"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> PRO</span>' : '';
-    var href = isLocked ? './index.html?paywall=1' : p.href;
+    var tag = isLocked ? 'span' : 'a';
+    var hrefAttr = isLocked ? '' : ' href="' + p.href + '"';
 
     if(p.children && p.children.length) {
       var subItems = p.children.map(function(c) { return renderSub(c, 0, isLocked); }).join('');
       return '<div class="lt-nav-group">' +
                '<div class="lt-nav-row">' +
-                 '<a class="' + cls + '" href="' + href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + proBadge + '</a>' +
+                 '<' + tag + ' class="' + cls + '"' + hrefAttr + '><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + proBadge + '</' + tag + '>' +
                  '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
                '</div>' +
                '<div class="lt-subnav"><div>' + subItems + '</div></div>' +
@@ -327,7 +330,7 @@
     if(p.soon) {
       return '<div class="' + cls + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + '</div>';
     }
-    return '<a class="' + cls + '" href="' + href + '"><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + proBadge + '</a>';
+    return '<' + tag + ' class="' + cls + '"' + hrefAttr + '><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + soon + proBadge + '</' + tag + '>';
   }).join('');
 
   var menuHTML = `
