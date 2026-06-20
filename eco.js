@@ -202,8 +202,8 @@ function showTab(id){
   var end = new Date();
   var start = new Date();
   start.setDate(start.getDate() - 182);
-  var url = "https://api.frankfurter.app/" + iso(start) + ".." + iso(end) +
-            "?from=EUR&to=USD";
+  // Via le proxy serveur /api/fx (pas d'appel direct à frankfurter depuis le navigateur)
+  var url = "/api/fx?from=EUR&to=USD&start=" + iso(start) + "&end=" + iso(end);
 
   fetch(url).then(function (r) { return r.json(); }).then(function (data) {
     var rates = data && data.rates ? data.rates : {};

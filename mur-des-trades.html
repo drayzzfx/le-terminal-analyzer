@@ -133,7 +133,7 @@
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
           <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
-          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Verified results">Résultats vérifiés</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
         </div>
       </div>
       <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
@@ -154,9 +154,9 @@
 <div class="pr">
 
   <section class="mt-head">
-    <span class="mt-eyebrow"><span class="lt-dot"></span> <span data-en="Community · Proof">Communauté · Preuves</span></span>
+    <span class="mt-eyebrow"><span class="lt-dot"></span> <span data-en="Community · Shares">Communauté · Partages</span></span>
     <h1 class="mt-title" data-en="The trade <span class='pr-metal'>wall.</span>">Le mur <span class="pr-metal">des trades.</span></h1>
-    <p class="mt-lead" data-en="Generate your trade result card and share it. The community wall gathers the latest verified results.">Générez la carte de votre résultat de trade et partagez-la. Le mur rassemble les derniers résultats vérifiés de la communauté.</p>
+    <p class="mt-lead" data-en="Generate your trade result card and share it. The community wall gathers the latest trades shared by members.">Générez la carte de votre résultat de trade et partagez-la. Le mur rassemble les derniers trades partagés par la communauté.</p>
   </section>
 
   <!-- GÉNÉRATEUR -->
@@ -224,7 +224,7 @@
       <div class="tc__in">
         <div class="tc__top">
           <span class="tc__brand"><span class="tc__brand__m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span><span class="tc__brand__t"><b>Le Terminal</b><small>Résultat de trade</small></span></span>
-          <span class="tc__verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Vérifié</span>
+          <span class="tc__verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-en="Member">Membre</span></span>
         </div>
         <div class="tc__pair"><b id="tcPair">BTC/USD</b><span class="tc__side long" id="tcSide"><span class="lt-dot"></span> Long</span></div>
         <div class="tc__pct" id="tcPct">+318%</div>
@@ -253,7 +253,7 @@
       </div>
     </div>
     <div id="shGrid" class="sh-grid"></div>
-    <p class="mt-disclaim">Résultats vérifiés par screenshot. Les performances passées ne préjugent pas des performances futures. Le trading comporte un risque de perte en capital.</p>
+    <p class="mt-disclaim" data-en="Results are self-reported by members and are not verified by Le Terminal. Past performance does not guarantee future results. Trading involves a risk of capital loss.">Résultats auto-déclarés par les membres et non vérifiés par Le Terminal. Les performances passées ne préjugent pas des performances futures. Le trading comporte un risque de perte en capital.</p>
   </section>
 
 </div>
@@ -516,7 +516,7 @@
   // Bouton "Publier sur le mur"
   document.getElementById('shX').onclick=function(){
     var c=compute();
-    var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal · Screenshot vérifié';
+    var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';
     window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');
   };
   document.getElementById('shTg').onclick=function(){

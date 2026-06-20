@@ -1111,7 +1111,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <a class="lt-nav__menuitem" href="./calendrier.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
           <a class="lt-nav__menuitem" href="./bubble.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
           <a class="lt-nav__menuitem" href="./calculateur.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
-          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Verified results">Résultats vérifiés</span></a>
+          <a class="lt-nav__menuitem" href="./mur-des-trades.html"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
         </div>
       </div>
       <a href="./tarifs.html" data-en="Pricing">Tarifs</a>
@@ -3632,35 +3632,30 @@ async function doFetchPrice(pair){
   var chEl = document.getElementById('livePriceChange');
   if(!bar || !valEl || !chEl) return;
 
-  // Try Binance first for crypto
-  var binanceMap = {'BTC':'BTCUSDT','BTCUSD':'BTCUSDT','ETH':'ETHUSDT','ETHUSD':'ETHUSDT',
-    'SOL':'SOLUSDT','SOLUSD':'SOLUSDT','XRP':'XRPUSDT','XRPUSD':'XRPUSDT',
-    'BNB':'BNBUSDT','ADA':'ADAUSDT','DOT':'DOTUSDT','AVAX':'AVAXUSDT','LINK':'LINKUSDT'};
-  var binSym = binanceMap[pair];
-  if(binSym){
+  // Crypto via /api/price (proxy serveur — aucune IP transmise à un tiers depuis le navigateur)
+  var cryptoSet = {'BTC':1,'BTCUSD':1,'ETH':1,'ETHUSD':1,'SOL':1,'SOLUSD':1,'XRP':1,'XRPUSD':1,
+    'BNB':1,'ADA':1,'DOT':1,'AVAX':1,'LINK':1};
+  if(cryptoSet[pair]){
     try{
-      var r = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol='+binSym);
+      var r = await fetch('/api/price?symbol='+encodeURIComponent(pair));
       var d = await r.json();
-      if(d.lastPrice){
-        var price = parseFloat(d.lastPrice);
-        var change = parseFloat(d.priceChangePercent);
-        showLivePrice(price < 10 ? price.toFixed(4) : price.toLocaleString('en-US',{maximumFractionDigits:2}), change);
+      if(d && typeof d.price === 'number'){
+        var price = d.price;
+        showLivePrice(price < 10 ? price.toFixed(4) : price.toLocaleString('en-US',{maximumFractionDigits:2}), (typeof d.change==='number'?d.change:null));
         return;
       }
     }catch(e){}
   }
 
-  // Forex via Frankfurter
-  var fxPairs = {'EURUSD':['EUR','USD'],'GBPUSD':['GBP','USD'],'AUDUSD':['AUD','USD'],
-    'NZDUSD':['NZD','USD'],'USDCAD':['USD','CAD'],'USDCHF':['USD','CHF'],
-    'USDJPY':['USD','JPY'],'EURGBP':['EUR','GBP'],'EURJPY':['EUR','JPY'],'GBPJPY':['GBP','JPY']};
-  if(fxPairs[pair]){
+  // Forex via /api/price (proxy serveur)
+  var fxSet = {'EURUSD':1,'GBPUSD':1,'AUDUSD':1,'NZDUSD':1,'USDCAD':1,'USDCHF':1,
+    'USDJPY':1,'EURGBP':1,'EURJPY':1,'GBPJPY':1};
+  if(fxSet[pair]){
     try{
-      var f = fxPairs[pair];
-      var r = await fetch('https://api.frankfurter.app/latest?from='+f[0]+'&to='+f[1]);
+      var r = await fetch('/api/price?symbol='+encodeURIComponent(pair));
       var d = await r.json();
-      if(d.rates && d.rates[f[1]]){
-        showLivePrice(d.rates[f[1]].toFixed(f[1]==='JPY'?2:4), null);
+      if(d && typeof d.price === 'number'){
+        showLivePrice(d.price.toFixed(pair.indexOf('JPY')!==-1?2:4), null);
         return;
       }
     }catch(e){}
