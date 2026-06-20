@@ -303,7 +303,8 @@
   Array.prototype.slice.call(document.querySelectorAll('.pricetape')).forEach(function (el) { el.remove(); });
 
   // ── Statut des marchés EN DIRECT (badge cliquable du fil d'ariane) ──
-  function topRightHTML(initials){
+  function topRightHTML(){
+    // Avatar/initiales du compte retirés volontairement du fil d'ariane.
     return '<div class="top__right">'
       + '<div class="mkt" id="mktWrap">'
       +   '<button class="top__status" id="mktStatus" type="button" aria-haspopup="true" aria-expanded="false">'
@@ -312,7 +313,6 @@
       +   '</button>'
       +   '<div class="mkt-pop" id="mktPop" hidden></div>'
       + '</div>'
-      + '<span class="top__avatar">' + initials + '</span>'
       + '</div>';
   }
   function tzParts(tz){
