@@ -42,6 +42,36 @@
   'use strict';
 
   var path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+
+  // ── Traceur d'usage local (privé, jamais envoyé) : alimente « Où vous passez
+  // votre temps » dans l'Espace Compte. Compte les visites et le temps actif par outil.
+  (function trackUsage(){
+    try{
+      var TOOLS = {
+        'app.html':'Setup Analyzer','journal.html':'Journal','calendrier.html':'Calendrier Éco',
+        'bubble.html':'Bubble Map','calculateur.html':'Calculateur de Pips','mur-des-trades.html':'Mur des Trades',
+        'patrimoine.html':'Patrimoine','patrimoine-presentation.html':'Patrimoine','patrimoine-plan.html':'Patrimoine'
+      };
+      var tool = TOOLS[path] || (/^eco-/.test(path) ? 'Calendrier Éco' : null);
+      if(!tool) return;
+      var KEY='lt_usage';
+      function read(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
+      var u=read(); if(!u[tool]) u[tool]={ms:0,visits:0};
+      u[tool].visits++; u[tool].last=new Date().toISOString();
+      try{ localStorage.setItem(KEY, JSON.stringify(u)); }catch(e){}
+      var t0=Date.now(), active=true;
+      function flush(){
+        var dt = active ? (Date.now()-t0) : 0; t0=Date.now();
+        if(dt<=0 || dt>1000*60*60) return; // ignore négatif / onglet laissé ouvert > 1 h
+        var uu=read(); if(!uu[tool]) uu[tool]={ms:0,visits:0};
+        uu[tool].ms=(uu[tool].ms||0)+dt;
+        try{ localStorage.setItem(KEY, JSON.stringify(uu)); }catch(e){}
+      }
+      document.addEventListener('visibilitychange', function(){ if(document.hidden){ flush(); active=false; } else { t0=Date.now(); active=true; } });
+      window.addEventListener('pagehide', flush);
+    }catch(e){}
+  })();
+
   var PAGES = {
     'journal.html':     { crumb: 'Journal de Trading',  key: 'journal' },
     'calendrier.html':  { crumb: 'Calendrier Éco',      key: 'calendrier' },
@@ -65,7 +95,8 @@
     'eco-calendrier.html':   { crumb: 'Calendrier Éco · Calendrier',    key: 'calendrier' },
     'eco-crypto.html':       { crumb: 'Calendrier Éco · Crypto',        key: 'calendrier' },
     'eco-archive.html':      { crumb: 'Calendrier Éco · Archive',       key: 'calendrier' },
-    'profil.html':           { crumb: 'Mon profil',                     key: 'profil' },
+    'profil.html':           { crumb: 'Mon compte',                     key: 'profil' },
+    'compte.html':           { crumb: 'Mon compte',                     key: 'profil' },
     'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
   };
   var cfg = PAGES[path];
