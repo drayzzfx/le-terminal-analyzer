@@ -122,6 +122,33 @@
 .ac-xp__lvl span{font-size:7px;letter-spacing:.1em;text-transform:uppercase}
 .ac-xp__b{flex:1}
 .ac-xp__b .ac-bar__track{height:10px}
+/* ── Niveau d'activité : barre néon + grades ── */
+.ac-rank{display:flex;align-items:center;gap:18px}
+.ac-rank__medal{width:60px;height:60px;flex:none;color:var(--accent-bright);filter:drop-shadow(0 0 9px var(--accent-glow))}
+.ac-rank__medal svg{width:100%;height:100%}
+.ac-rank__b{flex:1;min-width:0}
+.ac-rank__top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+.ac-rank__grade{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.02em;font-size:18px;color:var(--text-title)}
+.ac-rank__xp{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-variant-numeric:tabular-nums}
+.ac-rank__next{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:7px}
+.ac-xpbar{height:15px;border-radius:50px;background:var(--bg-base);border:1px solid var(--border-subtle);overflow:hidden;position:relative}
+.ac-xpbar__fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#5A9BD4,var(--accent),var(--accent-bright));box-shadow:0 0 10px rgba(127,184,232,.85),0 0 22px rgba(127,184,232,.5),inset 0 1px 0 rgba(255,255,255,.55);transition:width .9s var(--ease-out);position:relative;min-width:0}
+.ac-xpbar__fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:translateX(-100%);animation:acShine 2.8s var(--ease-out) infinite}
+@keyframes acShine{0%{transform:translateX(-100%)}55%,100%{transform:translateX(120%)}}
+.ac-xpbreak{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.ac-xpchip{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;color:var(--text-body);background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:50px;padding:6px 12px}
+.ac-xpchip i{width:7px;height:7px;border-radius:2px;background:var(--accent);flex:none}
+.ac-xpchip b{font-family:var(--font-mono);color:var(--accent);font-size:11px;font-weight:600}
+.ac-grades{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.ac-grade{flex:1 1 86px;min-width:86px;text-align:center;border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:13px 8px;background:var(--bg-base);opacity:.42;filter:grayscale(.55);transition:opacity .25s var(--ease-out),filter .25s var(--ease-out),border-color .25s var(--ease-out),box-shadow .25s var(--ease-out)}
+.ac-grade.on{opacity:1;filter:none;border-color:var(--accent)}
+.ac-grade.cur{opacity:1;filter:none;border-color:var(--accent-bright);box-shadow:0 0 0 1px var(--accent),0 0 18px var(--accent-glow)}
+.ac-grade__m{width:34px;height:34px;margin:0 auto 7px;color:var(--accent)}
+.ac-grade.on .ac-grade__m,.ac-grade.cur .ac-grade__m{color:var(--accent-bright)}
+.ac-grade__m svg{width:100%;height:100%}
+.ac-grade__n{font-size:11.5px;font-weight:600;color:var(--text-title)}
+.ac-grade__x{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);margin-top:3px;letter-spacing:.04em}
+@media(prefers-reduced-motion:reduce){.ac-xpbar__fill::after{animation:none}}
 /* ── objectifs ── */
 .ac-goal{margin-bottom:16px}
 .ac-goal__top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
@@ -315,14 +342,28 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
       <!-- ░ ACCOMPLISSEMENTS ░ -->
       <section class="ac-panel" id="tab-badges">
         <div class="ac-card">
+          <h3 class="ac-card__title" data-en="Activity level">Niveau d'activité</h3>
+          <p class="ac-hint" style="margin:-8px 0 18px" data-en="Earn XP by using the cockpit: time spent, logged trades, analyzed setups, portfolio, economic reads and the trade wall.">Gagnez de l'XP en utilisant le cockpit : temps passé, trades journalisés, setups analysés, patrimoine, lectures éco et mur des trades.</p>
+          <div class="ac-rank">
+            <div class="ac-rank__medal" id="actMedal"></div>
+            <div class="ac-rank__b">
+              <div class="ac-rank__top"><span class="ac-rank__grade" id="actGrade">Recrue</span><span class="ac-rank__xp" id="actXp">0 XP</span></div>
+              <div class="ac-xpbar"><div class="ac-xpbar__fill" id="actFill" style="width:0"></div></div>
+              <div class="ac-rank__next" id="actNext">—</div>
+            </div>
+          </div>
+          <div class="ac-xpbreak" id="actBreak"></div>
+          <div class="ac-grades" id="actGrades"></div>
+        </div>
+        <div class="ac-card">
           <div class="ac-xp">
             <div class="ac-xp__lvl"><b id="xpLvl">1</b><span data-en="Level">Niveau</span></div>
             <div class="ac-xp__b">
               <div class="ac-bar__top"><b id="xpName">Apprenti</b><span id="xpNext">— XP</span></div>
-              <div class="ac-bar__track"><div class="ac-bar__fill" id="xpFill" style="width:0;background:var(--accent)"></div></div>
+              <div class="ac-xpbar"><div class="ac-xpbar__fill" id="xpFill" style="width:0"></div></div>
             </div>
           </div>
-          <h3 class="ac-card__title" data-en="Badges">Badges débloqués</h3>
+          <h3 class="ac-card__title" data-en="Unlocked badges">Badges débloqués</h3>
           <div class="ac-badges" id="acBadges"></div>
         </div>
         <div class="ac-card">
@@ -640,7 +681,68 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
     $('xpNext').textContent=into+' / 200 XP';
     $('xpFill').style.width=(into/200*100)+'%';
 
+    renderActivity();
     renderGoals(S,T);
+  }
+
+  /* ── Niveau d'activité (XP évolutive : temps + fonctionnalités) ── */
+  var GRADES=[
+    {n:'Recrue',    en:'Recruit',    min:0},
+    {n:'Trader',    en:'Trader',     min:250},
+    {n:'Analyste',  en:'Analyst',    min:600},
+    {n:'Opérateur', en:'Operator',   min:1200},
+    {n:'Expert',    en:'Expert',     min:2500},
+    {n:'Élite',     en:'Elite',      min:5000},
+    {n:'Légende',   en:'Legend',     min:10000}
+  ];
+  function gradeSvg(tier){
+    var inner='', n=Math.min(tier,5);
+    for(var i=0;i<n;i++){ var y=15.5-i*2.5; inner+='<path d="M8.4 '+y.toFixed(1)+' L12 '+(y-2.1).toFixed(1)+' L15.6 '+y.toFixed(1)+'"/>'; }
+    var star = tier>=6 ? '<path d="M12 4.3l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" fill="currentColor" stroke="none"/>' : '';
+    var crown = tier>=7 ? '<path d="M8 3.2l1.6 1.7L12 2.4l2.4 2.5L16 3.2v2.6H8z" fill="currentColor" stroke="none"/>' : '';
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1.6l8.5 4.8v9.2L12 22.4 3.5 15.6V6.4z"/>'+inner+star+crown+'</svg>';
+  }
+  function activityStats(){
+    var u=readUsage(), totMs=0; Object.keys(u).forEach(function(k){ totMs+=(u[k].ms||0); });
+    var mins=Math.floor(totMs/60000);
+    function visits(t){ return u[t]&&u[t].visits?u[t].visits:0; }
+    var S=readSetups().length, T=readTrades().length;
+    var holdings=portfolioCache?portfolioCache.length:0;
+    var ecoReads=(function(){ try{ var e=JSON.parse(localStorage.getItem('eco_unlocked')||'[]'); return Array.isArray(e)?e.length:0; }catch(_){ return 0; } })();
+    var parts=[
+      {k:'time',       label:(EN()?'Time spent':'Temps passé'),      xp:Math.min(mins*2,1500),                 meta:(mins?fmtDur(totMs):'—')},
+      {k:'journal',    label:'Journal',                              xp:T*20,                                  meta:T+(EN()?' trades':' trades')},
+      {k:'analyzer',   label:'Setup Analyzer',                       xp:S*15,                                  meta:S+(EN()?' setups':' setups')},
+      {k:'patrimoine', label:'Patrimoine',                           xp:holdings*12,                           meta:holdings+(EN()?' holdings':' lignes')},
+      {k:'calendar',   label:(EN()?'Eco calendar':'Calendrier éco'), xp:Math.min(visits('Calendrier Éco')*5,400)+ecoReads*15, meta:(visits('Calendrier Éco')+(EN()?' visits':' visites'))},
+      {k:'wall',       label:(EN()?'Trade wall':'Mur des Trades'),   xp:Math.min(visits('Mur des Trades')*6,300), meta:(visits('Mur des Trades')+(EN()?' visits':' visites'))}
+    ];
+    var total=parts.reduce(function(a,b){return a+b.xp;},0);
+    return {total:total,parts:parts};
+  }
+  function renderActivity(){
+    var st=activityStats(), xp=st.total;
+    var ti=0; for(var i=0;i<GRADES.length;i++){ if(xp>=GRADES[i].min) ti=i; }
+    var cur=GRADES[ti], next=GRADES[ti+1]||null;
+    var gName=EN()?cur.en:cur.n;
+    $('actMedal').innerHTML=gradeSvg(ti+1);
+    $('actGrade').textContent=gName;
+    $('actXp').textContent=nfFr(xp,0)+' XP';
+    var pct = next ? Math.max(3,Math.min(100,(xp-cur.min)/(next.min-cur.min)*100)) : 100;
+    $('actFill').style.width=pct+'%';
+    $('actNext').textContent = next
+      ? (EN()?('Next: '+next.en+' · '+nfFr(next.min-xp,0)+' XP to go'):('Prochain : '+next.n+' · '+nfFr(next.min-xp,0)+' XP restants'))
+      : (EN()?'Top grade reached.':'Grade maximal atteint.');
+    // détail de l'XP
+    $('actBreak').innerHTML=st.parts.filter(function(p){return p.xp>0;})
+      .sort(function(a,b){return b.xp-a.xp;})
+      .map(function(p){ return '<span class="ac-xpchip"><i></i>'+esc(p.label)+' <b>'+nfFr(p.xp,0)+' XP</b></span>'; }).join('')
+      || '<span class="ac-xpchip"><i></i>'+(EN()?'Start using the cockpit to earn XP.':'Commencez à utiliser le cockpit pour gagner de l\'XP.')+'</span>';
+    // badges de grade
+    $('actGrades').innerHTML=GRADES.map(function(g,idx){
+      var on=xp>=g.min, isCur=idx===ti;
+      return '<div class="ac-grade'+(isCur?' cur':(on?' on':''))+'"><div class="ac-grade__m">'+gradeSvg(idx+1)+'</div><div class="ac-grade__n">'+esc(EN()?g.en:g.n)+'</div><div class="ac-grade__x">'+(g.min?nfFr(g.min,0)+' XP':'0 XP')+'</div></div>';
+    }).join('');
   }
   function computeStreak(S,T){
     var set={}; function add(d){ if(!d)return; var dt=new Date(d); if(isNaN(dt))return; set[dt.toISOString().slice(0,10)]=1; }
