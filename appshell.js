@@ -195,9 +195,9 @@
         ? '<img src="' + avatar + '" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'
         : '<span style="width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0095FF,#38B6FF);color:#fff;font-family:var(--font-display,\'Anton\',sans-serif);font-size:15px">' + initial + '</span>';
       return '<div class="side__pro side__account" id="sideFooter">'
-        + '<div class="side__acct">' + av
+        + '<a class="side__acct" href="./compte.html" title="Mon compte">' + av
         + '<div class="side__acct-txt"><span class="side__acct-name">' + displayName + '</span>'
-        + (email ? '<span class="side__acct-mail">' + email + '</span>' : '') + '</div></div>'
+        + (email ? '<span class="side__acct-mail">' + email + '</span>' : '') + '</div></a>'
         + '<button class="lt-btn lt-btn--ghost lt-btn--sm" style="width:100%" onclick="(window.ltGlobalLogout?ltGlobalLogout():(window.ltLogout?ltLogout():(localStorage.clear(),location.href=\'./index.html\')))">Déconnexion</button></div>';
     }
     return '<div class="side__pro" id="sideFooter"><h4>Accès Premium</h4><p>Analyses illimitées, journal complet et alertes macro en direct.</p>'
@@ -380,7 +380,9 @@
       + '.mkt-row__h{font-size:10px;color:var(--text-muted,#7E8794);font-family:var(--font-mono,"JetBrains Mono",monospace);margin-top:2px}'
       + '.mkt-row__s{font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}'
       + '.mkt-row__s.on{color:var(--bull,#4ADE9C)}.mkt-row__s.off{color:var(--bear,#F0647A)}'
-      + '.mkt-pop__f{margin-top:9px;padding-top:9px;border-top:1px solid var(--border-subtle,#1C212A);font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#7E8794)}';
+      + '.mkt-pop__f{margin-top:9px;padding-top:9px;border-top:1px solid var(--border-subtle,#1C212A);font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#7E8794)}'
+      + 'a.side__acct{cursor:pointer;text-decoration:none;border-radius:var(--r-md,8px);transition:background .15s}'
+      + 'a.side__acct:hover{background:var(--bg-elevated,#161B24)}';
     document.head.appendChild(s);
   }
   function initMarketStatus(){
