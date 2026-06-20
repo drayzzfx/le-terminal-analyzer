@@ -1427,6 +1427,13 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 </div>
 
 <script>
+// Blocage immédiat avant rendu
+(function(){
+  var pro=localStorage.getItem('lt_pro')==='1';
+  var tok=localStorage.getItem('ta_token');
+  if(!tok){ window.location.replace('./tarifs.html'); }
+  else if(!pro){ document.documentElement.style.visibility='hidden'; }
+})();
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
 var lastAnalysisParams = null;
@@ -2922,7 +2929,8 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      if(!isPro){ window.location.href='./tarifs.html'; return; }
+      if(!isPro){ window.location.replace('./tarifs.html'); return; }
+      document.documentElement.style.visibility='';
       updateUserUI();loadHistory();
     } else {
       // API says invalid - but keep session alive if network error might be the cause

@@ -1169,6 +1169,13 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 </div>
 
 <script>
+// Blocage immédiat avant rendu
+(function(){
+  var pro=localStorage.getItem('lt_pro')==='1';
+  var tok=localStorage.getItem('ta_token');
+  if(!tok){ window.location.replace('./tarifs.html'); }
+  else if(!pro){ document.documentElement.style.visibility='hidden'; }
+})();
 // ── STATE ──
 var trades = [];
 var currency = 'EUR';
@@ -2154,7 +2161,8 @@ async function checkSession() {
       } catch(e) {
         if(localStorage.getItem('lt_pro')==='1') isProJ=true;
       }
-      if(!isProJ){ window.location.href='./tarifs.html'; return; }
+      if(!isProJ){ window.location.replace('./tarifs.html'); return; }
+      document.documentElement.style.visibility='';
       updateUserUI();
       await syncAllLocalTrades();
       loadFromServer();
