@@ -1,6 +1,41 @@
 const https = require('https');
 const crypto = require('crypto');
 
+// Lit le corps BRUT de la requête (nécessaire pour vérifier la signature HMAC).
+// Le parsing automatique du body est désactivé via module.exports.config (bas du fichier).
+function readRawBody(req) {
+  return new Promise((resolve, reject) => {
+    if (typeof req.body === 'string') return resolve(req.body);
+    if (Buffer.isBuffer(req.body)) return resolve(req.body.toString('utf8'));
+    let data = '';
+    try { req.setEncoding('utf8'); } catch (e) {}
+    req.on('data', (chunk) => { data += chunk; });
+    req.on('end', () => resolve(data));
+    req.on('error', reject);
+  });
+}
+
+// Vérifie la signature du webhook Whop : HMAC-SHA256 (hex) du corps brut signé
+// avec le secret du webhook. Gère un éventuel préfixe "sha256=" et un format
+// horodaté "t=...,v1=...". Comparaison à temps constant (anti timing-attack).
+function verifyWhopSignature(rawBody, header, secret) {
+  if (!secret || !header) return false;
+  const expected = crypto.createHmac('sha256', secret).update(rawBody, 'utf8').digest('hex');
+  const expectedBuf = Buffer.from(expected, 'hex');
+  const candidates = [];
+  String(header).split(',').forEach((part) => {
+    const trimmed = part.trim();
+    candidates.push(trimmed.includes('=') ? trimmed.split('=').slice(1).join('=').trim() : trimmed);
+  });
+  candidates.push(String(header).trim());
+  return candidates.some((cand) => {
+    try {
+      const buf = Buffer.from(cand, 'hex');
+      return buf.length === expectedBuf.length && crypto.timingSafeEqual(buf, expectedBuf);
+    } catch (e) { return false; }
+  });
+}
+
 function supabaseRequest(method, path, body, anonKey) {
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const url = new URL(SUPABASE_URL);
@@ -69,20 +104,39 @@ async function verifyWhopMembership(userEmail) {
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, whop-signature');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, whop-signature, x-whop-signature');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const ANON_KEY = process.env.SUPABASE_ANON_KEY;
   const WHOP_API_KEY = process.env.WHOP_API_KEY;
+  const WHOP_WEBHOOK_SECRET = process.env.WHOP_WEBHOOK_SECRET;
 
   if (!ANON_KEY || !WHOP_API_KEY) {
     return res.status(500).json({ error: 'Missing config' });
   }
+  // Sécurité : sans secret de webhook configuré, on REFUSE (fail-closed) plutôt
+  // que d'accepter des événements non authentifiés qui octroieraient un accès
+  // Premium frauduleux. → Définir WHOP_WEBHOOK_SECRET dans Vercel.
+  if (!WHOP_WEBHOOK_SECRET) {
+    console.error('[webhook] WHOP_WEBHOOK_SECRET manquant — webhook refusé (fail-closed).');
+    return res.status(500).json({ error: 'Webhook secret not configured' });
+  }
 
   try {
-    const event = req.body;
+    // Corps brut + vérification de signature AVANT tout traitement.
+    const rawBody = await readRawBody(req);
+    const signature = req.headers['x-whop-signature'] || req.headers['whop-signature'] || '';
+    if (!verifyWhopSignature(rawBody, signature, WHOP_WEBHOOK_SECRET)) {
+      console.warn('[webhook] Signature invalide — requête rejetée.');
+      return res.status(401).json({ error: 'Invalid signature' });
+    }
+
+    let event;
+    try { event = JSON.parse(rawBody || '{}'); }
+    catch (e) { return res.status(400).json({ error: 'Invalid JSON' }); }
+
     const action = event.action || event.event;
     const data = event.data || event;
 
@@ -166,3 +220,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 };
+
+// Désactive le parsing automatique du corps : la vérification de signature HMAC
+// exige le corps brut, octet pour octet (sinon la signature ne correspond pas).
+module.exports.config = { api: { bodyParser: false } };
