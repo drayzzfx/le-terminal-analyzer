@@ -106,6 +106,8 @@
     .lt-nav-item.soon { opacity: .45; cursor: not-allowed; pointer-events: none; }
     .lt-nav-item.pro-locked { opacity: .35; cursor: not-allowed; pointer-events: none; }
     .lt-nav-item.pro-locked:hover { background: transparent; }
+    .lt-nav-group.pro-locked-group { opacity: .35; pointer-events: none; }
+    .lt-nav-group.pro-locked-group * { pointer-events: none; }
     .lt-nav-pro-badge {
       margin-left: auto; font-size: 9px; font-weight: 700;
       letter-spacing: .08em; color: #E8C268;
@@ -319,7 +321,7 @@
 
     if(p.children && p.children.length) {
       var subItems = p.children.map(function(c) { return renderSub(c, 0, isLocked); }).join('');
-      return '<div class="lt-nav-group">' +
+      return '<div class="lt-nav-group' + (isLocked ? ' pro-locked-group' : '') + '">' +
                '<div class="lt-nav-row">' +
                  '<' + tag + ' class="' + cls + '"' + hrefAttr + '><span class="lt-nav-icon">' + p.icon + '</span>' + p.label + proBadge + '</' + tag + '>' +
                  '<button class="lt-nav-caret" type="button" aria-label="Déplier" onclick="ltToggleSub(event,this)">' + CARET + '</button>' +
