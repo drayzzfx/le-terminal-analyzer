@@ -1752,31 +1752,104 @@ async function requestGlobalIA() {
   btn.textContent = '…';
   content.innerHTML = '<div class="ia-loading"><div class="ia-orb"></div><span>Analyse de vos patterns en cours…</span></div>';
 
+  var sym = curSym();
   var wins = trades.filter(function(t){ return t.result==='win'; }).length;
   var losses = trades.filter(function(t){ return t.result==='loss'; }).length;
   var be = trades.filter(function(t){ return t.result==='be'; }).length;
   var totalPnL = trades.reduce(function(s,t){ return s+(parseFloat(t.pnl)||0); }, 0);
   var rrVals = trades.filter(function(t){ return t.rr; }).map(function(t){ return parseFloat(t.rr)||0; });
   var avgRR = rrVals.length ? (rrVals.reduce(function(a,b){return a+b;},0)/rrVals.length).toFixed(2) : 'N/A';
+  var wr = (wins+losses) > 0 ? Math.round(wins/(wins+losses)*100) : 0;
 
-  var summary = trades.slice(-20).map(function(t){
-    return '- '+t.date+' | '+t.pair+' '+t.dir+' | '+t.result.toUpperCase()+' | RR: '+(t.rr||'?')+'R | P&L: '+(t.pnl||'0')+curSym()+(t.setup?' | '+t.setup:'');
+  // ── Courbe d'équité : drawdown max, plus longue série perdante ──
+  var sorted = trades.slice().sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
+  var equity = [0], cum = 0;
+  sorted.forEach(function(t){ cum += parseFloat(t.pnl)||0; equity.push(cum); });
+  var peak = 0, maxDD = 0;
+  equity.forEach(function(v){ if(v > peak) peak = v; var dd = peak - v; if(dd > maxDD) maxDD = dd; });
+  var longestLoss = 0, curLoss = 0;
+  sorted.forEach(function(t){ if(t.result==='loss'){ curLoss++; longestLoss=Math.max(longestLoss,curLoss); } else curLoss=0; });
+
+  // ── Distribution par paire ──
+  var byPair = {};
+  trades.forEach(function(t){
+    var p = t.pair||'Inconnu';
+    if(!byPair[p]) byPair[p]={trades:0,wins:0,pnl:0};
+    byPair[p].trades++; if(t.result==='win') byPair[p].wins++; byPair[p].pnl+=parseFloat(t.pnl)||0;
+  });
+  var pairLines = Object.keys(byPair).sort(function(a,b){ return byPair[b].pnl-byPair[a].pnl; }).slice(0,8).map(function(p){
+    var d=byPair[p]; var pwr=d.trades>0?Math.round(d.wins/d.trades*100):0;
+    return '  '+p+' : '+d.trades+' trades, WR '+pwr+'%, P&L '+(d.pnl>=0?'+':'')+d.pnl.toFixed(0)+sym;
   }).join('\n');
 
-  var prompt = 'Statistiques globales :\n'+
-    '- Total trades: '+trades.length+' | Wins: '+wins+' | Losses: '+losses+' | BE: '+be+'\n'+
-    '- Win rate: '+(wins+losses>0?Math.round(wins/(wins+losses)*100)+'%':'N/A')+'\n'+
-    '- P&L total: '+totalPnL.toFixed(2)+curSym()+'\n'+
-    '- RR moyen: '+avgRR+'R\n\n'+
-    'Derniers trades:\n'+summary+'\n\n'+
-    'Analyse les patterns de ce trader en 5-6 points structurés : forces, faiblesses récurrentes, paires les plus performantes, gestion du risque, discipline et 3 recommandations concrètes et prioritaires pour améliorer ses performances. Sois direct, précis, et utilise la terminologie ICT/SMC.';
+  // ── Distribution par setup/stratégie ──
+  var bySetup = {};
+  trades.forEach(function(t){
+    var s = t.setup||'Non renseigné';
+    if(!bySetup[s]) bySetup[s]={trades:0,wins:0,pnl:0};
+    bySetup[s].trades++; if(t.result==='win') bySetup[s].wins++; bySetup[s].pnl+=parseFloat(t.pnl)||0;
+  });
+  var setupLines = Object.keys(bySetup).sort(function(a,b){ return bySetup[b].trades-bySetup[a].trades; }).slice(0,6).map(function(s){
+    var d=bySetup[s]; var swr=d.trades>0?Math.round(d.wins/d.trades*100):0;
+    return '  '+s+' : '+d.trades+' trades, WR '+swr+'%, P&L '+(d.pnl>=0?'+':'')+d.pnl.toFixed(0)+sym;
+  }).join('\n');
+
+  // ── Distribution par session ──
+  var bySess = {};
+  trades.forEach(function(t){
+    var s = t.session||'Non renseignée';
+    if(!bySess[s]) bySess[s]={trades:0,wins:0,pnl:0};
+    bySess[s].trades++; if(t.result==='win') bySess[s].wins++; bySess[s].pnl+=parseFloat(t.pnl)||0;
+  });
+  var sessLines = Object.keys(bySess).sort(function(a,b){ return bySess[b].pnl-bySess[a].pnl; }).map(function(s){
+    var d=bySess[s]; var swr=d.trades>0?Math.round(d.wins/d.trades*100):0;
+    return '  '+s+' : '+d.trades+' trades, WR '+swr+'%, P&L '+(d.pnl>=0?'+':'')+d.pnl.toFixed(0)+sym;
+  }).join('\n');
+
+  // ── Meilleur / pire jour ──
+  var byDay = {};
+  trades.forEach(function(t){ if(!byDay[t.date]) byDay[t.date]=0; byDay[t.date]+=parseFloat(t.pnl)||0; });
+  var dayKeys = Object.keys(byDay);
+  var bestDay = dayKeys.length ? dayKeys.reduce(function(a,b){ return byDay[a]>byDay[b]?a:b; }) : null;
+  var worstDay = dayKeys.length ? dayKeys.reduce(function(a,b){ return byDay[a]<byDay[b]?a:b; }) : null;
+
+  // ── Trades récents (30 derniers) ──
+  var summary = sorted.slice(-30).map(function(t){
+    return '- '+t.date+' | '+t.pair+' '+t.dir+' | '+t.result.toUpperCase()+' | RR: '+(t.rr||'?')+'R | P&L: '+(t.pnl||'0')+sym+(t.setup?' | Setup: '+t.setup:'')+(t.session?' | Session: '+t.session:'');
+  }).join('\n');
+
+  var prompt =
+    '=== STATISTIQUES GLOBALES ===\n'+
+    'Total trades : '+trades.length+' | Wins : '+wins+' | Losses : '+losses+' | BE : '+be+'\n'+
+    'Win rate : '+wr+'%\n'+
+    'P&L total : '+(totalPnL>=0?'+':'')+totalPnL.toFixed(2)+sym+'\n'+
+    'RR moyen : '+avgRR+'R\n\n'+
+    '=== COURBE D\'ÉQUITÉ ===\n'+
+    'P&L final cumulé : '+(cum>=0?'+':'')+cum.toFixed(0)+sym+'\n'+
+    'Drawdown maximum : -'+maxDD.toFixed(0)+sym+'\n'+
+    'Plus longue série de pertes consécutives : '+longestLoss+' trades\n'+
+    (bestDay ? 'Meilleure journée : '+bestDay+' ('+( byDay[bestDay]>=0?'+':'')+byDay[bestDay].toFixed(0)+sym+')\n' : '')+
+    (worstDay ? 'Pire journée : '+worstDay+' ('+byDay[worstDay].toFixed(0)+sym+')\n' : '')+'\n'+
+    '=== PAR PAIRE ===\n'+pairLines+'\n\n'+
+    '=== PAR SETUP / STRATÉGIE ===\n'+setupLines+'\n\n'+
+    '=== PAR SESSION ===\n'+sessLines+'\n\n'+
+    '=== 30 DERNIERS TRADES ===\n'+summary+'\n\n'+
+    'Sur la base de toutes ces données (statistiques, courbe d\'équité, drawdown, paires, setups, sessions), fais une analyse structurée en 6-7 points : '+
+    '1) Bilan global et trajectoire de la courbe d\'équité, '+
+    '2) Forces identifiées, '+
+    '3) Faiblesses récurrentes et patterns négatifs, '+
+    '4) Paires et sessions les plus et moins performantes, '+
+    '5) Qualité des setups utilisés, '+
+    '6) Gestion du risque et discipline (drawdown, séries de pertes), '+
+    '7) 3 recommandations concrètes et prioritaires. '+
+    'Sois direct, précis, utilise la terminologie ICT/SMC quand pertinent.';
 
   try {
     var res = await fetch('/api/analyze', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        system: 'Tu es un coach de trading d\'élite spécialisé ICT/SMC. Tu analyses les journaux de trading et identifies les patterns de comportement pour aider les traders à progresser.',
+        system: 'Tu es un coach de trading d\'élite spécialisé ICT/SMC. Tu analyses des journaux de trading complets (statistiques, courbe d\'équité, drawdown, distribution par paire/session/setup) pour identifier les patterns comportementaux et donner un feedback précis et actionnable.',
         messages: [{role:'user', content: prompt}]
       })
     });
