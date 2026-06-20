@@ -83,7 +83,7 @@
       <a href="./avis.html" data-en="Reviews">Avis</a>
     </nav>
     <div class="lt-nav__actions">
-      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue" onclick="window.ltToggleLang&&ltToggleLang()">FR</span>
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
       <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
       <div id="ltUserBar"></div>
       <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="./tarifs.html"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
@@ -224,8 +224,7 @@
     function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
     drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
   }
-  var pill=document.getElementById('ltLangPill');
-  if(pill){ try{ pill.textContent=(localStorage.getItem('lt_lang')==='en')?'EN':'FR'; }catch(e){} }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
 })();
 </script>
 <script src="./menu.js"></script>
@@ -293,5 +292,6 @@
     </div>
   </div>
 </footer>
+<script src="./lang.js"></script>
 </body>
 </html>
