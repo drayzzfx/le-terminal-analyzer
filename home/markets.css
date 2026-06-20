@@ -3,10 +3,16 @@
    restyled in the glacial cinematic brand. */
 
 .lt-mk { position: relative; z-index: 2; overflow: hidden; padding: var(--sp-9) 0; isolation: isolate; }
-.lt-mk__field { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+/* La galaxie + la lueur s'estompent vers le haut et le bas pour se fondre dans
+   les sections voisines (sinon overflow:hidden trace un trait net aux bords). */
+.lt-mk__field { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%); }
 .lt-mk::before { /* cold central glow */
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: radial-gradient(60% 70% at 50% 42%, rgba(127,184,232,0.10), transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
 }
 
 .lt-mk__head { max-width: var(--container); margin: 0 auto var(--sp-7); padding: 0 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }

@@ -1,7 +1,9 @@
 /* Le Terminal — "Level Ups" bento grid + animated mini-visuals. */
 
-.lu { position: relative; z-index: 2; max-width: var(--container); margin: 0 auto; padding: var(--sp-9) 40px; overflow: hidden; }
-.lu__glow { position: absolute; top: 10%; right: -8%; width: 480px; height: 480px; background: radial-gradient(circle, var(--accent-glow), transparent 68%); filter: blur(40px); opacity: 0.5; pointer-events: none; z-index: -1; }
+/* Pas d'overflow:hidden : la lueur déborde et se fond naturellement (le body
+   coupe déjà le débordement horizontal), au lieu d'être tranchée net au bord. */
+.lu { position: relative; z-index: 2; max-width: var(--container); margin: 0 auto; padding: var(--sp-9) 40px; }
+.lu__glow { position: absolute; top: 10%; right: -8%; width: 480px; height: 480px; background: radial-gradient(circle, var(--accent-glow), transparent 72%); filter: blur(56px); opacity: 0.42; pointer-events: none; z-index: -1; }
 .lu__head { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; margin-bottom: var(--sp-7); }
 .lu__title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.14; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
 .lu__lede { max-width: 52ch; color: var(--text-body); font-size: 1.05rem; line-height: 1.6; margin: 0; }
