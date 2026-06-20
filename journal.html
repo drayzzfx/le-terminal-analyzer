@@ -673,6 +673,28 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .jd-lightbox{position:fixed;inset:0;z-index:1500;display:none;align-items:center;justify-content:center;background:rgba(7,9,12,.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:24px;cursor:zoom-out}
   .jd-lightbox.show{display:flex}
   .jd-lightbox img{max-width:92vw;max-height:88vh;border-radius:var(--r-md,6px);box-shadow:0 24px 64px rgba(0,0,0,.7)}
+  .day-note-flag{cursor:pointer}
+  /* ── Bouton « Notes du jour » dans le détail ── */
+  .day-notesbtn-wrap{margin-top:16px}
+  .day-notesbtn{display:inline-flex;align-items:center;gap:9px;width:100%;justify-content:center;padding:12px 18px;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-body,#C3CAD4);font-family:var(--font-text,'Inter',sans-serif);font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+  .day-notesbtn:hover{border-color:var(--accent,#7FB8E8);color:var(--text-title,#F2F4F7);background:var(--accent-glow-soft,rgba(127,184,232,.12))}
+  .day-notesbtn__n{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;color:var(--accent,#7FB8E8)}
+  /* ── Pop-up bloc-notes du jour ── */
+  .note-box{max-width:760px}
+  .note-drop{position:relative;border:1px solid transparent;border-radius:var(--r-md,6px);transition:border-color .15s,background .15s}
+  .note-drop.drag{border:1px dashed var(--accent,#7FB8E8);background:var(--accent-glow-soft,rgba(127,184,232,.08))}
+  .note-drop__ov{position:absolute;inset:0;display:none;align-items:center;justify-content:center;border-radius:var(--r-md,6px);background:rgba(127,184,232,.10);color:var(--accent-bright,#BFDCF5);font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none;z-index:2}
+  .note-drop.drag .note-drop__ov{display:flex}
+  .note-ta{width:100%;min-height:120px;resize:vertical;background:var(--bg-base,#07090C);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-sm,4px);color:var(--text-title,#F2F4F7);font-family:var(--font-text,'Inter',sans-serif);font-size:14px;padding:12px 14px;line-height:1.65;box-sizing:border-box}
+  .note-ta:focus{border-color:var(--accent,#7FB8E8);outline:none}
+  .note-imgs{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+  .note-img{position:relative;border-radius:var(--r-md,6px);overflow:hidden;border:1px solid var(--border-subtle,#1C212A);background:var(--bg-base,#07090C)}
+  .note-img img{width:100%;height:auto;display:block}
+  .note-img__rm{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:var(--r-sm,4px);background:rgba(7,9,12,.8);border:1px solid var(--border-subtle,#1C212A);color:#F0647A;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+  .note-img:hover .note-img__rm{opacity:1}
+  @media(hover:none){.note-img__rm{opacity:1}}
+  .note-bar{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border-subtle,#1C212A)}
+  .note-saved{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:11px;color:var(--bull,#4ADE9C)}
   </style>
   <div class="jr-dash">
     <div class="calendar-section" style="margin:0">
@@ -873,6 +895,29 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   <div class="detail-box">
     <button class="modal-close" onclick="closeDayModal()">✕</button>
     <div id="dayDetailContent"></div>
+  </div>
+</div>
+
+<!-- POP-UP BLOC-NOTES DU JOUR -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal-box note-box">
+    <button class="modal-close" onclick="closeNoteModal()">✕</button>
+    <div class="modal-title" data-en="Day notebook">Bloc-notes du jour</div>
+    <div class="modal-sub" id="noteModalDate">—</div>
+    <div class="note-drop" id="noteDrop">
+      <div class="note-drop__ov" data-en="Drop your screenshots here">Déposez vos screenshots ici</div>
+      <textarea class="note-ta" id="noteText" placeholder="Vos observations, le contexte du marché, vos erreurs… (collez ou glissez vos screenshots)"></textarea>
+      <div class="note-imgs" id="noteImgs"></div>
+    </div>
+    <div class="note-bar">
+      <button class="day-notesbtn" type="button" style="width:auto" onclick="document.getElementById('noteFile').click()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
+        <span data-en="Add an image">Ajouter une image</span>
+      </button>
+      <input type="file" id="noteFile" accept="image/*" multiple style="display:none">
+      <span class="note-saved" id="noteSaved" style="margin-left:auto;display:none" data-en="Saved ✓">Enregistré ✓</span>
+      <button class="submit-btn" type="button" style="margin:0;width:auto;padding:11px 22px" onclick="closeNoteModal()" data-en="Done">Terminé</button>
+    </div>
   </div>
 </div>
 
@@ -1298,7 +1343,7 @@ function renderCalendar() {
       pnlHtml += '<div class="day-trades-count">'+dayTrades.length+' trade'+(dayTrades.length>1?'s':'')+'</div>';
     }
 
-    var noteFlag = (typeof jdHasNote==='function' && jdHasNote(dateStr)) ? '<span class="day-note-flag" title="Note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>' : '';
+    var noteFlag = (typeof jdHasNote==='function' && jdHasNote(dateStr)) ? '<span class="day-note-flag" title="Voir la note" onclick="event.stopPropagation();jdOpenNoteModal(\''+dateStr+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>' : '';
     pushCell('<div class="'+cls+'" onclick="openDayDetail(\''+dateStr+'\')">'+
       '<div class="day-num">'+day+'</div>'+ noteFlag +
       pnlHtml+
@@ -1344,7 +1389,7 @@ function openDayDetail(dateStr) {
       '<span data-en="No trade this day. You can still note your day (why you didn\'t trade, mood, screenshots…).">Aucun trade ce jour. Vous pouvez quand même noter votre journée — pourquoi vous n\'avez pas tradé, ressenti, captures…</span><br><br>'+
       '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'+
         '<button onclick="openTradeModalDate(\''+dateStr+'\')" style="padding:10px 24px;background:var(--v);border:none;border-radius:50px;color:white;font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer" data-en="+ Add a trade">+ Ajouter un trade</button>'+
-        '<button onclick="jdFocusNote()" style="padding:10px 24px;background:transparent;border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer" data-en="+ Add a note">+ Ajouter une note</button>'+
+        '<button onclick="jdOpenNoteModal(\''+dateStr+'\')" style="padding:10px 24px;background:transparent;border:1px solid rgba(127,184,232,.3);border-radius:50px;color:var(--v2);font-family:\'Inter\', system-ui, -apple-system, sans-serif;font-size:13px;font-weight:700;cursor:pointer" data-en="+ Add a note">+ Ajouter une note</button>'+
       '</div>'+
     '</div>';
   } else {
@@ -1404,19 +1449,16 @@ function openDayDetail(dateStr) {
     '</div>';
   }
 
-  // ── Notes du jour (texte + images) — toujours présentes ──
-  html += '<div class="day-notes">'+
-    '<div class="day-notes__h"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span data-en="Notes for this day">Notes du jour</span></div>'+
-    '<textarea id="dayNoteText" class="day-notes__ta" placeholder="Vos notes, ressenti, contexte de marché, plan… (vous pouvez aussi coller une image)"></textarea>'+
-    '<div class="day-notes__imgs" id="dayNoteImgs"></div>'+
-    '<div class="day-notes__bar">'+
-      '<label class="day-notes__add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg> <span data-en="Add an image">Ajouter une image</span><input type="file" accept="image/*" id="dayNoteFile" multiple style="display:none"></label>'+
-      '<button class="day-notes__save" id="dayNoteSave" type="button" data-en="Save">Enregistrer</button>'+
-    '</div>'+
+  // ── Accès aux notes du jour (pop-up bloc-notes dédiée) ──
+  html += '<div class="day-notesbtn-wrap">'+
+    '<button class="day-notesbtn" type="button" onclick="jdOpenNoteModal(\''+dateStr+'\')">'+
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'+
+      '<span data-en="Notes for this day">Notes du jour</span><span class="day-notesbtn__n" id="dnCount"></span>'+
+    '</button>'+
   '</div>';
 
   document.getElementById('dayDetailContent').innerHTML = html;
-  if(typeof jdInitNotes==='function') jdInitNotes(dateStr);
+  if(typeof jdUpdateNoteBtn==='function') jdUpdateNoteBtn(dateStr);
   document.getElementById('dayModal').classList.add('show');
 }
 
@@ -3112,7 +3154,7 @@ async function importMt5Trades() {
   window.addEventListener('resize', function(){ try{ var m=compute(); drawCum(m); drawDaily(m); }catch(e){} });
 })();
 </script>
-<!-- ░ Notes du jour : texte + images (screenshots), indicateur calendrier ░ -->
+<!-- ░ Bloc-notes du jour : pop-up dédié (texte + images inline), indicateur calendrier ░ -->
 <script>
 (function(){
   var KEY='jnl_notes';
@@ -3123,47 +3165,94 @@ async function importMt5Trades() {
   function setNotes(date,n){ var o=all(); if((n.text&&n.text.trim())||(n.imgs&&n.imgs.length)){ o[date]={text:n.text||'',imgs:n.imgs||[]}; } else { delete o[date]; } saveAll(o); }
   function refreshCal(){ try{ if(typeof renderCalendar==='function') renderCalendar(); }catch(e){} }
 
-  function lightbox(src){
-    var lb=document.getElementById('jdLightbox');
-    if(!lb){ lb=document.createElement('div'); lb.id='jdLightbox'; lb.className='jd-lightbox'; lb.innerHTML='<img alt="">'; document.body.appendChild(lb); lb.addEventListener('click',function(){ lb.classList.remove('show'); }); }
-    lb.querySelector('img').src=src; lb.classList.add('show');
+  // Date courante du pop-up.
+  var curDate=null, wired=false;
+
+  // Met à jour le compteur du bouton « Notes du jour » dans le détail.
+  window.jdUpdateNoteBtn=function(date){
+    var c=document.getElementById('dnCount'); if(!c) return;
+    var n=window.jdGetNotes(date), nb=n.imgs.length;
+    c.textContent = nb ? (nb+' '+(nb>1?'images':'image')) : (n.text&&n.text.trim() ? '•' : '');
+  };
+
+  // Format français de la date (ex. « jeudi 12 juin 2026 »).
+  function frDate(date){
+    try{ var p=date.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
+      var s=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+      return s.charAt(0).toUpperCase()+s.slice(1);
+    }catch(e){ return date; }
   }
-  function renderImgs(date){
-    var wrap=document.getElementById('dayNoteImgs'); if(!wrap) return;
-    var n=window.jdGetNotes(date); wrap.innerHTML='';
+
+  // Affiche les images en pleine largeur (déjà visibles, pas de clic).
+  function renderImgs(){
+    var wrap=document.getElementById('noteImgs'); if(!wrap||!curDate) return;
+    var n=window.jdGetNotes(curDate); wrap.innerHTML='';
     n.imgs.forEach(function(src,idx){
-      var th=document.createElement('div'); th.className='day-note-thumb';
-      var im=document.createElement('img'); im.src=src; im.alt='note'; im.addEventListener('click',function(){ lightbox(src); });
-      var rm=document.createElement('button'); rm.type='button'; rm.className='day-note-thumb__rm'; rm.textContent='✕'; rm.title='Retirer';
-      rm.addEventListener('click',function(e){ e.stopPropagation(); var nn=window.jdGetNotes(date); nn.imgs.splice(idx,1); setNotes(date,nn); renderImgs(date); refreshCal(); });
-      th.appendChild(im); th.appendChild(rm); wrap.appendChild(th);
+      var fig=document.createElement('div'); fig.className='note-img';
+      var im=document.createElement('img'); im.src=src; im.alt='note';
+      var rm=document.createElement('button'); rm.type='button'; rm.className='note-img__rm'; rm.textContent='✕'; rm.title='Retirer';
+      rm.addEventListener('click',function(){ var nn=window.jdGetNotes(curDate); nn.imgs.splice(idx,1); setNotes(curDate,nn); renderImgs(); refreshCal(); flagSaved(); });
+      fig.appendChild(im); fig.appendChild(rm); wrap.appendChild(fig);
     });
   }
-  // Redimensionne l'image (max 1100px, JPEG q.82) pour ne pas saturer le stockage.
+  // Redimensionne l'image (max 1400px, JPEG q.85) pour ne pas saturer le stockage.
   function readImg(file,cb){
     var r=new FileReader();
     r.onload=function(){ var img=new Image(); img.onload=function(){
-      var max=1100,w=img.width,h=img.height; if(w>max||h>max){ var k=Math.min(max/w,max/h); w=Math.round(w*k); h=Math.round(h*k); }
+      var max=1400,w=img.width,h=img.height; if(w>max||h>max){ var k=Math.min(max/w,max/h); w=Math.round(w*k); h=Math.round(h*k); }
       var c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-      try{ cb(c.toDataURL('image/jpeg',0.82)); }catch(e){ cb(null); } };
+      try{ cb(c.toDataURL('image/jpeg',0.85)); }catch(e){ cb(null); } };
       img.onerror=function(){ cb(null); }; img.src=r.result; };
     r.readAsDataURL(file);
   }
-  function addFiles(date,files){
+  function addFiles(files){
+    if(!curDate) return;
     var arr=Array.prototype.slice.call(files||[]).filter(function(f){ return f && f.type && f.type.indexOf('image')===0; });
     var pend=arr.length; if(!pend) return;
-    arr.forEach(function(f){ readImg(f,function(durl){ if(durl){ var n=window.jdGetNotes(date); n.imgs.push(durl); setNotes(date,n); } if(--pend<=0){ renderImgs(date); refreshCal(); } }); });
+    arr.forEach(function(f){ readImg(f,function(durl){ if(durl){ var n=window.jdGetNotes(curDate); n.imgs.push(durl); setNotes(curDate,n); } if(--pend<=0){ renderImgs(); refreshCal(); flagSaved(); } }); });
   }
-  function saveText(date){ var ta=document.getElementById('dayNoteText'); if(!ta) return; var n=window.jdGetNotes(date); n.text=ta.value; setNotes(date,n); refreshCal(); }
+  function saveText(){ if(!curDate) return; var ta=document.getElementById('noteText'); if(!ta) return; var n=window.jdGetNotes(curDate); n.text=ta.value; setNotes(curDate,n); refreshCal(); }
+  function flagSaved(){ var s=document.getElementById('noteSaved'); if(!s) return; s.style.display='inline'; clearTimeout(s._t); s._t=setTimeout(function(){ s.style.display='none'; },1600); }
 
-  window.jdFocusNote=function(){ var t=document.getElementById('dayNoteText'); if(t){ try{ t.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} setTimeout(function(){ t.focus(); }, 120); } };
-  window.jdInitNotes=function(date){
-    var ta=document.getElementById('dayNoteText'); if(ta) ta.value=window.jdGetNotes(date).text;
-    renderImgs(date);
-    var file=document.getElementById('dayNoteFile'); if(file) file.addEventListener('change',function(e){ addFiles(date,e.target.files); e.target.value=''; });
-    var sv=document.getElementById('dayNoteSave'); if(sv) sv.addEventListener('click',function(){ saveText(date); var o=sv.textContent; sv.textContent='Enregistré ✓'; setTimeout(function(){ sv.textContent=o; },1400); });
-    if(ta){ ta.addEventListener('blur',function(){ saveText(date); });
-      ta.addEventListener('paste',function(e){ var items=(e.clipboardData&&e.clipboardData.items)||[]; var imgs=[]; for(var i=0;i<items.length;i++){ if(items[i].type&&items[i].type.indexOf('image')===0){ var f=items[i].getAsFile(); if(f) imgs.push(f); } } if(imgs.length) addFiles(date,imgs); }); }
+  // Branche une seule fois les écouteurs (textarea, fichier, glisser-déposer, coller).
+  function wire(){
+    if(wired) return; wired=true;
+    var ta=document.getElementById('noteText'),
+        drop=document.getElementById('noteDrop'),
+        file=document.getElementById('noteFile'),
+        ov=document.getElementById('noteModal');
+    if(ta){
+      ta.addEventListener('blur',function(){ saveText(); });
+      ta.addEventListener('input',function(){ saveText(); });
+      ta.addEventListener('paste',function(e){
+        var items=(e.clipboardData&&e.clipboardData.items)||[]; var imgs=[];
+        for(var i=0;i<items.length;i++){ if(items[i].type&&items[i].type.indexOf('image')===0){ var f=items[i].getAsFile(); if(f) imgs.push(f); } }
+        if(imgs.length){ e.preventDefault(); addFiles(imgs); }
+      });
+    }
+    if(file) file.addEventListener('change',function(e){ addFiles(e.target.files); e.target.value=''; });
+    if(drop){
+      ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.add('drag'); }); });
+      ['dragleave','dragend'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); e.stopPropagation(); if(e.target===drop||!drop.contains(e.relatedTarget)) drop.classList.remove('drag'); }); });
+      drop.addEventListener('drop',function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+    }
+    if(ov) ov.addEventListener('click',function(e){ if(e.target===ov) closeNoteModal(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var m=document.getElementById('noteModal'); if(m&&m.classList.contains('show')) closeNoteModal(); } });
+  }
+
+  window.jdOpenNoteModal=function(date){
+    var m=document.getElementById('noteModal'); if(!m) return;
+    curDate=date; wire();
+    var dl=document.getElementById('noteModalDate'); if(dl) dl.textContent=frDate(date);
+    var ta=document.getElementById('noteText'); if(ta) ta.value=window.jdGetNotes(date).text;
+    renderImgs();
+    m.classList.add('show');
+    if(ta) setTimeout(function(){ try{ ta.focus(); }catch(e){} },120);
+  };
+  window.closeNoteModal=function(){
+    saveText();
+    var m=document.getElementById('noteModal'); if(m) m.classList.remove('show');
+    if(curDate){ refreshCal(); if(typeof jdUpdateNoteBtn==='function') jdUpdateNoteBtn(curDate); }
   };
 })();
 </script>
