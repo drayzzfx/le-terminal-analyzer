@@ -101,3 +101,13 @@ Each file is an independent Vercel serverless function. All make raw `https.requ
 - `ta_token` — Supabase JWT auth token
 - `ta_email` — logged-in user email
 - `lt_lang` — `'fr'` or `'en'`
+
+## Bascule de langue FR/EN (`lang.js`) — NE PAS recâbler
+
+La bascule FR/EN est gérée **exclusivement** par **`lang.js`**, un module isolé et robuste, branché par **délégation d'événement** (un seul écouteur de clic sur `document` qui capte toute pastille `.lt-nav__pill` / `#ltLangPill`). Il fonctionne même si `menu.js` est cassé/absent (système `data-en` autonome), et délègue à `menu.js` la traduction riche quand il est sain.
+
+**Règles permanentes (pour ne plus jamais casser le bouton) :**
+- **Toute page** (existante ou nouvelle) doit charger `<script src="./lang.js"></script>` en dernier, avant `</body>`.
+- La pastille de langue est un simple `<span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>` — **JAMAIS** d'`onclick` ni d'`addEventListener` local dessus (sinon double déclenchement). La délégation de `lang.js` suffit.
+- Le texte traduisible reste en FR dans le HTML, l'anglais dans l'attribut `data-en` (le FR d'origine est mémorisé dans `data-fr` au 1er passage).
+- Ne pas réintroduire de wiring de langue dans `menu.js`/inline : `lang.js` est la source de vérité.
