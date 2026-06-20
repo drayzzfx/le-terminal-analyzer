@@ -1923,11 +1923,9 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       body:JSON.stringify({system:c().sys,messages:[{role:'user',content}],kind:'analyze'})
     });
     if(res.status===401){ clearInterval(iv); showForm(); window.location.href='./index.html'; return; }
-    if(res.status===402){ clearInterval(iv); showForm(); userTokens=0; showNoTokens(); return; }
     if(!res.ok){const e=await res.json().catch(()=>({}));const msg=typeof e.error==='string'?e.error:(e.error?.message||'Erreur '+res.status);throw new Error(msg);}
     clearInterval(iv);
     const data=await res.json();
-    try{ refreshTokens(); }catch(e){}
     if(!data.content||!data.content[0]) throw new Error('Réponse invalide');
     const rawText=data.content[0].text; let raw=rawText.replace(/```json/gi,'').replace(/```/g,'').trim(); const j1=raw.indexOf('{'),j2=raw.lastIndexOf('}'); if(j1!==-1&&j2!==-1) raw=raw.slice(j1,j2+1);
     let parsed;
@@ -2927,7 +2925,7 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      await refreshTokens();
+      if(!isPro){ window.location.href='./tarifs.html'; return; }
       updateUserUI();loadHistory();
     } else {
       // API says invalid - but keep session alive if network error might be the cause
@@ -2942,48 +2940,6 @@ async function checkSession(){
   }catch(e){
     // Network error - keep session from localStorage, user stays logged in
     updateUserUI();
-  }
-}
-
-var userTokens = null;
-function renderTokenChip(){
-  var chip=document.getElementById('tokenChip');
-  var txt=document.getElementById('tokenChipTxt');
-  if(!chip||!txt) return;
-  if(isPro){ chip.style.display='block'; txt.innerHTML='<strong style="color:var(--v2)">Premium</strong> · analyses illimitées'; return; }
-  if(userTokens==null){ chip.style.display='none'; return; }
-  chip.style.display='block';
-  txt.innerHTML='Il vous reste <strong style="color:'+(userTokens>0?'var(--v2)':'#F87171')+'">'+userTokens+' token'+(userTokens>1?'s':'')+'</strong> · 1 token = 1 analyse';
-}
-async function refreshTokens(){
-  if(!authToken) return;
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
-    var d=await res.json();
-    if(typeof d.tokens==='number') userTokens=d.tokens;
-    if(d.is_pro) isPro=true;
-  }catch(e){}
-  renderTokenChip();
-}
-// Dépense des tokens pour une action ; renvoie true si autorisé. Premium = toujours true.
-async function spendToken(reason){
-  if(isPro) return true;
-  if(!authToken){ window.location.href='./index.html'; return false; }
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
-    var d=await res.json();
-    if(d.unlimited){ isPro=true; renderTokenChip(); return true; }
-    if(typeof d.tokens==='number') userTokens=d.tokens;
-    renderTokenChip();
-    if(d.ok) return true;
-    showNoTokens();
-    return false;
-  }catch(e){ return true; } // en cas d'erreur réseau on ne bloque pas
-}
-function showNoTokens(){
-  renderTokenChip();
-  if(confirm('Vous n\'avez plus de tokens. Passez en Premium pour des analyses illimitées ?')){
-    window.location.href='./tarifs.html';
   }
 }
 

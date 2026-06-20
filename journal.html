@@ -1579,8 +1579,6 @@ async function saveTrade() {
     alert('Remplissez au minimum : paire, date, direction et résultat.');
     return;
   }
-  // Tokens : ajouter un nouveau trade consomme un crédit (1 token = 5 trades). L'édition est gratuite.
-  if(!editingId){ if(!(await journalTradeToken())) return; }
 
   var trade = {
     id: editingId || Date.now().toString(),
@@ -1824,8 +1822,6 @@ async function requestGlobalIA() {
     document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il vous faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
     return;
   }
-  // Analyse de performance = 2 tokens (Premium = illimité)
-  if(!(await spendToken('journal_perf'))) return;
   var btn = document.getElementById('globalIaBtn');
   var content = document.getElementById('globalIaContent');
   btn.disabled = true;
@@ -2121,55 +2117,7 @@ function updateUserUI() {
   }
 }
 
-// ── SYSTÈME DE TOKENS ──
 var isProJ = false;
-var userTokens = null;
-function jnlNoTokens(){
-  if(confirm("Vous n'avez plus de tokens. Passez en Premium pour un accès illimité ?")) window.location.href='./tarifs.html';
-}
-async function refreshTokens(){
-  if(!authToken) return;
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
-    var d=await res.json();
-    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, d.is_pro||d.unlimited); }
-    if(d.is_pro||d.unlimited) isProJ=true;
-  }catch(e){}
-}
-function updateTokenBadge(n, isPro){
-  var b=document.getElementById('ltTokenBadge');
-  if(!b) return;
-  if(isPro){ b.style.display='none'; return; }
-  b.className='lt-ub-tokens'+(n<=1?' lt-ub-tokens--low':'');
-  b.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> '+n+' token'+(n>1?'s':'');
-  b.style.display='inline-flex';
-  b.style.cursor='pointer';
-  b.onclick=function(){ if(n<=0) jnlNoTokens(); else window.location.href='./tarifs.html'; };
-}
-async function spendToken(reason){
-  if(isProJ) return true;
-  if(!authToken){ window.location.href='./index.html'; return false; }
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
-    var d=await res.json();
-    if(d.unlimited){ isProJ=true; return true; }
-    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, false); }
-    if(d.ok) return true;
-    jnlNoTokens(); return false;
-  }catch(e){ return true; }
-}
-async function journalTradeToken(){
-  if(isProJ) return true;
-  if(!authToken){ window.location.href='./index.html'; return false; }
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'journal_trade'})});
-    var d=await res.json();
-    if(d.unlimited){ isProJ=true; return true; }
-    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, false); }
-    if(d.ok) return true;
-    jnlNoTokens(); return false;
-  }catch(e){ return true; }
-}
 
 async function checkSession() {
   var token = localStorage.getItem('ta_token');
@@ -2197,7 +2145,7 @@ async function checkSession() {
         renderStats(); renderCalendar();
       }
       localStorage.setItem('ta_user_id', data.id);
-      // Accès gratuit + tokens : on vérifie le statut Premium puis on charge les tokens
+      // Vérification du statut pro
       try {
         var proRes = await fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}});
         var proData = await proRes.json();
@@ -2206,7 +2154,7 @@ async function checkSession() {
       } catch(e) {
         if(localStorage.getItem('lt_pro')==='1') isProJ=true;
       }
-      await refreshTokens();
+      if(!isProJ){ window.location.href='./tarifs.html'; return; }
       updateUserUI();
       await syncAllLocalTrades();
       loadFromServer();
@@ -2819,7 +2767,7 @@ function handleMt5File(file) {
 
 async function analyzeMt5Screenshot() {
   if (!_mt5ImageData) return;
-  if (!(await spendToken('analyze'))) return;
+
   var btn = document.getElementById('mt5AnalyzeBtn');
   btn.disabled = true; btn.textContent = 'Analyse en cours…';
   var st = document.getElementById('mt5Status');
@@ -2886,11 +2834,6 @@ async function importMt5Trades() {
   var ok = 0, fail = 0;
   for (var i = 0; i < _mt5ParsedTrades.length; i++) {
     var t = _mt5ParsedTrades[i];
-    // Consume 1 journal_trade token per trade (1 token = 5 trades)
-    if (!(await journalTradeToken())) {
-      document.getElementById('mt5Status').textContent = 'Tokens insuffisants — ' + ok + ' trade' + (ok>1?'s':'') + ' importé' + (ok>1?'s':'') + '.';
-      break;
-    }
     var tradeDate = t.date || new Date().toISOString().slice(0,10);
     var tradeDir  = t.direction || 'LONG';
     var tradeRes  = (t.pnl != null ? (parseFloat(t.pnl) >= 0 ? 'WIN' : 'LOSS') : (t.result || 'WIN'));
