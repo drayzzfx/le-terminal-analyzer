@@ -1431,8 +1431,8 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   if(isOAuthCallback) return; // laisser le callback OAuth traiter le token
   var pro=localStorage.getItem('lt_pro')==='1';
   var tok=localStorage.getItem('ta_token');
-  if(!tok){ window.location.replace('./tarifs.html'); }
-  else if(!pro){ document.documentElement.style.visibility='hidden'; }
+  if(!tok){ window.location.replace('/tarifs.html'); }
+  else if(!pro){ document.documentElement.style.visibility='hidden'; setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000); }
 })();
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
@@ -2929,7 +2929,7 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      if(!isPro){ window.location.replace('./tarifs.html'); return; }
+      if(!isPro){ window.location.replace('/tarifs.html'); return; }
       document.documentElement.style.visibility='';
       updateUserUI();loadHistory();
     } else {
@@ -2951,17 +2951,20 @@ async function checkSession(){
 async function checkProStatus(){
   if(!authToken) return;
   try{
+    var controller=new AbortController();
+    var _to=setTimeout(function(){controller.abort();},6000);
     var res=await fetch('/api/check-pro',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      signal:controller.signal
     });
+    clearTimeout(_to);
     var data=await res.json();
     if(data.is_pro){
       isPro=true;
       localStorage.setItem('lt_pro','1');
-      console.log('PRO status confirmed via:', data.source);
     }
-  }catch(e){ console.log('Pro check error:', e); }
+  }catch(e){ }
 }
 var historyData=[];
 var _deletedIds = new Set();
