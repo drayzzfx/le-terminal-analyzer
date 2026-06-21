@@ -1173,8 +1173,12 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   if(isOAuthCallback) return;
   var tok=localStorage.getItem('ta_token');
   if(!tok){ window.location.replace('/tarifs.html'); return; }
+  var pro=localStorage.getItem('lt_pro')==='1';
+  if(!pro){ window.location.replace('/tarifs.html'); return; }
+  // Cache dit pro → vérifier côté serveur pour éviter les faux positifs
   document.documentElement.style.visibility='hidden';
   setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000);
+  fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro){localStorage.setItem('lt_pro','1');document.documentElement.style.visibility='';}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){window.location.replace('/tarifs.html');});
 })();
 // ── STATE ──
 var trades = [];
