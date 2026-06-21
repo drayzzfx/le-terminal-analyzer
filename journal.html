@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>(function(){var isOAuth=window.location.hash.indexOf('access_token')!==-1;if(isOAuth)return;var tok=localStorage.getItem('ta_token');if(!tok){window.location.replace('/tarifs.html');return;}var pro=localStorage.getItem('lt_pro')==='1';if(!pro){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000);fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro){localStorage.setItem('lt_pro','1');document.documentElement.style.visibility='';}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){window.location.replace('/tarifs.html');});})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE TERMINAL — Journal de Trading</title>
 <link rel="stylesheet" href="./fonts.css">
@@ -1581,8 +1582,6 @@ async function saveTrade() {
     alert('Remplissez au minimum : paire, date, direction et résultat.');
     return;
   }
-  // Tokens : ajouter un nouveau trade consomme un crédit (1 token = 5 trades). L'édition est gratuite.
-  if(!editingId){ if(!(await journalTradeToken())) return; }
 
   var trade = {
     id: editingId || Date.now().toString(),
@@ -1826,39 +1825,110 @@ async function requestGlobalIA() {
     document.getElementById('globalIaContent').innerHTML = '<span style="color:var(--amber)">Il vous faut au moins 3 trades enregistrés pour obtenir une analyse globale.</span>';
     return;
   }
-  // Analyse de performance = 2 tokens (Premium = illimité)
-  if(!(await spendToken('journal_perf'))) return;
   var btn = document.getElementById('globalIaBtn');
   var content = document.getElementById('globalIaContent');
   btn.disabled = true;
   btn.textContent = '…';
   content.innerHTML = '<div class="ia-loading"><div class="ia-orb"></div><span>Analyse de vos patterns en cours…</span></div>';
 
+  var sym = curSym();
   var wins = trades.filter(function(t){ return t.result==='win'; }).length;
   var losses = trades.filter(function(t){ return t.result==='loss'; }).length;
   var be = trades.filter(function(t){ return t.result==='be'; }).length;
   var totalPnL = trades.reduce(function(s,t){ return s+(parseFloat(t.pnl)||0); }, 0);
   var rrVals = trades.filter(function(t){ return t.rr; }).map(function(t){ return parseFloat(t.rr)||0; });
   var avgRR = rrVals.length ? (rrVals.reduce(function(a,b){return a+b;},0)/rrVals.length).toFixed(2) : 'N/A';
+  var wr = (wins+losses) > 0 ? Math.round(wins/(wins+losses)*100) : 0;
 
-  var summary = trades.slice(-20).map(function(t){
-    return '- '+t.date+' | '+t.pair+' '+t.dir+' | '+t.result.toUpperCase()+' | RR: '+(t.rr||'?')+'R | P&L: '+(t.pnl||'0')+curSym()+(t.setup?' | '+t.setup:'');
+  // ── Courbe d'équité : drawdown max, plus longue série perdante ──
+  var sorted = trades.slice().sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
+  var equity = [0], cum = 0;
+  sorted.forEach(function(t){ cum += parseFloat(t.pnl)||0; equity.push(cum); });
+  var peak = 0, maxDD = 0;
+  equity.forEach(function(v){ if(v > peak) peak = v; var dd = peak - v; if(dd > maxDD) maxDD = dd; });
+  var longestLoss = 0, curLoss = 0;
+  sorted.forEach(function(t){ if(t.result==='loss'){ curLoss++; longestLoss=Math.max(longestLoss,curLoss); } else curLoss=0; });
+
+  // ── Distribution par paire ──
+  var byPair = {};
+  trades.forEach(function(t){
+    var p = t.pair||'Inconnu';
+    if(!byPair[p]) byPair[p]={trades:0,wins:0,pnl:0};
+    byPair[p].trades++; if(t.result==='win') byPair[p].wins++; byPair[p].pnl+=parseFloat(t.pnl)||0;
+  });
+  var pairLines = Object.keys(byPair).sort(function(a,b){ return byPair[b].pnl-byPair[a].pnl; }).slice(0,8).map(function(p){
+    var d=byPair[p]; var pwr=d.trades>0?Math.round(d.wins/d.trades*100):0;
+    return '  '+p+' : '+d.trades+' trades, WR '+pwr+'%, P&L '+(d.pnl>=0?'+':'')+d.pnl.toFixed(0)+sym;
   }).join('\n');
 
-  var prompt = 'Statistiques globales :\n'+
-    '- Total trades: '+trades.length+' | Wins: '+wins+' | Losses: '+losses+' | BE: '+be+'\n'+
-    '- Win rate: '+(wins+losses>0?Math.round(wins/(wins+losses)*100)+'%':'N/A')+'\n'+
-    '- P&L total: '+totalPnL.toFixed(2)+curSym()+'\n'+
-    '- RR moyen: '+avgRR+'R\n\n'+
-    'Derniers trades:\n'+summary+'\n\n'+
-    'Analyse les patterns de ce trader en 5-6 points structurés : forces, faiblesses récurrentes, paires les plus performantes, gestion du risque, discipline et 3 recommandations concrètes et prioritaires pour améliorer ses performances. Sois direct, précis, et utilise la terminologie ICT/SMC.';
+  // ── Distribution par setup/stratégie ──
+  var bySetup = {};
+  trades.forEach(function(t){
+    var s = t.setup||'Non renseigné';
+    if(!bySetup[s]) bySetup[s]={trades:0,wins:0,pnl:0};
+    bySetup[s].trades++; if(t.result==='win') bySetup[s].wins++; bySetup[s].pnl+=parseFloat(t.pnl)||0;
+  });
+  var setupLines = Object.keys(bySetup).sort(function(a,b){ return bySetup[b].trades-bySetup[a].trades; }).slice(0,6).map(function(s){
+    var d=bySetup[s]; var swr=d.trades>0?Math.round(d.wins/d.trades*100):0;
+    return '  '+s+' : '+d.trades+' trades, WR '+swr+'%, P&L '+(d.pnl>=0?'+':'')+d.pnl.toFixed(0)+sym;
+  }).join('\n');
+
+  // ── Distribution par session ──
+  var bySess = {};
+  trades.forEach(function(t){
+    var s = t.session||'Non renseignée';
+    if(!bySess[s]) bySess[s]={trades:0,wins:0,pnl:0};
+    bySess[s].trades++; if(t.result==='win') bySess[s].wins++; bySess[s].pnl+=parseFloat(t.pnl)||0;
+  });
+  var sessLines = Object.keys(bySess).sort(function(a,b){ return bySess[b].pnl-bySess[a].pnl; }).map(function(s){
+    var d=bySess[s]; var swr=d.trades>0?Math.round(d.wins/d.trades*100):0;
+    return '  '+s+' : '+d.trades+' trades, WR '+swr+'%, P&L '+(d.pnl>=0?'+':'')+d.pnl.toFixed(0)+sym;
+  }).join('\n');
+
+  // ── Meilleur / pire jour ──
+  var byDay = {};
+  trades.forEach(function(t){ if(!byDay[t.date]) byDay[t.date]=0; byDay[t.date]+=parseFloat(t.pnl)||0; });
+  var dayKeys = Object.keys(byDay);
+  var bestDay = dayKeys.length ? dayKeys.reduce(function(a,b){ return byDay[a]>byDay[b]?a:b; }) : null;
+  var worstDay = dayKeys.length ? dayKeys.reduce(function(a,b){ return byDay[a]<byDay[b]?a:b; }) : null;
+
+  // ── Trades récents (30 derniers) ──
+  var summary = sorted.slice(-30).map(function(t){
+    return '- '+t.date+' | '+t.pair+' '+t.dir+' | '+t.result.toUpperCase()+' | RR: '+(t.rr||'?')+'R | P&L: '+(t.pnl||'0')+sym+(t.setup?' | Setup: '+t.setup:'')+(t.session?' | Session: '+t.session:'');
+  }).join('\n');
+
+  var prompt =
+    '=== STATISTIQUES GLOBALES ===\n'+
+    'Total trades : '+trades.length+' | Wins : '+wins+' | Losses : '+losses+' | BE : '+be+'\n'+
+    'Win rate : '+wr+'%\n'+
+    'P&L total : '+(totalPnL>=0?'+':'')+totalPnL.toFixed(2)+sym+'\n'+
+    'RR moyen : '+avgRR+'R\n\n'+
+    '=== COURBE D\'ÉQUITÉ ===\n'+
+    'P&L final cumulé : '+(cum>=0?'+':'')+cum.toFixed(0)+sym+'\n'+
+    'Drawdown maximum : -'+maxDD.toFixed(0)+sym+'\n'+
+    'Plus longue série de pertes consécutives : '+longestLoss+' trades\n'+
+    (bestDay ? 'Meilleure journée : '+bestDay+' ('+( byDay[bestDay]>=0?'+':'')+byDay[bestDay].toFixed(0)+sym+')\n' : '')+
+    (worstDay ? 'Pire journée : '+worstDay+' ('+byDay[worstDay].toFixed(0)+sym+')\n' : '')+'\n'+
+    '=== PAR PAIRE ===\n'+pairLines+'\n\n'+
+    '=== PAR SETUP / STRATÉGIE ===\n'+setupLines+'\n\n'+
+    '=== PAR SESSION ===\n'+sessLines+'\n\n'+
+    '=== 30 DERNIERS TRADES ===\n'+summary+'\n\n'+
+    'Sur la base de toutes ces données (statistiques, courbe d\'équité, drawdown, paires, setups, sessions), fais une analyse structurée en 6-7 points : '+
+    '1) Bilan global et trajectoire de la courbe d\'équité, '+
+    '2) Forces identifiées, '+
+    '3) Faiblesses récurrentes et patterns négatifs, '+
+    '4) Paires et sessions les plus et moins performantes, '+
+    '5) Qualité des setups utilisés, '+
+    '6) Gestion du risque et discipline (drawdown, séries de pertes), '+
+    '7) 3 recommandations concrètes et prioritaires. '+
+    'Sois direct, précis, utilise la terminologie ICT/SMC quand pertinent.';
 
   try {
     var res = await fetch('/api/analyze', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        system: 'Tu es un coach de trading d\'élite spécialisé ICT/SMC. Tu analyses les journaux de trading et identifies les patterns de comportement pour aider les traders à progresser.',
+        system: 'Tu es un coach de trading d\'élite spécialisé ICT/SMC. Tu analyses des journaux de trading complets (statistiques, courbe d\'équité, drawdown, distribution par paire/session/setup) pour identifier les patterns comportementaux et donner un feedback précis et actionnable.',
         messages: [{role:'user', content: prompt}]
       })
     });
@@ -2050,55 +2120,7 @@ function updateUserUI() {
   }
 }
 
-// ── SYSTÈME DE TOKENS ──
 var isProJ = false;
-var userTokens = null;
-function jnlNoTokens(){
-  if(confirm("Vous n'avez plus de tokens. Passez en Premium pour un accès illimité ?")) window.location.href='./tarifs.html';
-}
-async function refreshTokens(){
-  if(!authToken) return;
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'get'})});
-    var d=await res.json();
-    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, d.is_pro||d.unlimited); }
-    if(d.is_pro||d.unlimited) isProJ=true;
-  }catch(e){}
-}
-function updateTokenBadge(n, isPro){
-  var b=document.getElementById('ltTokenBadge');
-  if(!b) return;
-  if(isPro){ b.style.display='none'; return; }
-  b.className='lt-ub-tokens'+(n<=1?' lt-ub-tokens--low':'');
-  b.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> '+n+' token'+(n>1?'s':'');
-  b.style.display='inline-flex';
-  b.style.cursor='pointer';
-  b.onclick=function(){ if(n<=0) jnlNoTokens(); else window.location.href='./tarifs.html'; };
-}
-async function spendToken(reason){
-  if(isProJ) return true;
-  if(!authToken){ window.location.href='./index.html'; return false; }
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'spend',reason:reason||'analyze'})});
-    var d=await res.json();
-    if(d.unlimited){ isProJ=true; return true; }
-    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, false); }
-    if(d.ok) return true;
-    jnlNoTokens(); return false;
-  }catch(e){ return true; }
-}
-async function journalTradeToken(){
-  if(isProJ) return true;
-  if(!authToken){ window.location.href='./index.html'; return false; }
-  try{
-    var res=await fetch('/api/tokens',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({action:'journal_trade'})});
-    var d=await res.json();
-    if(d.unlimited){ isProJ=true; return true; }
-    if(typeof d.tokens==='number'){ userTokens=d.tokens; updateTokenBadge(d.tokens, false); }
-    if(d.ok) return true;
-    jnlNoTokens(); return false;
-  }catch(e){ return true; }
-}
 
 async function checkSession() {
   var token = localStorage.getItem('ta_token');
@@ -2126,7 +2148,7 @@ async function checkSession() {
         renderStats(); renderCalendar();
       }
       localStorage.setItem('ta_user_id', data.id);
-      // Accès gratuit + tokens : on vérifie le statut Premium puis on charge les tokens
+      // Vérification du statut pro
       try {
         var proRes = await fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}});
         var proData = await proRes.json();
@@ -2135,7 +2157,8 @@ async function checkSession() {
       } catch(e) {
         if(localStorage.getItem('lt_pro')==='1') isProJ=true;
       }
-      await refreshTokens();
+      if(!isProJ){ window.location.replace('/tarifs.html'); return; }
+      document.documentElement.style.visibility='';
       updateUserUI();
       await syncAllLocalTrades();
       loadFromServer();
@@ -2143,9 +2166,13 @@ async function checkSession() {
     } else if(data.error) {
       authToken = null; currentUser = null;
       localStorage.removeItem('ta_token');
-      updateUserUI();
+      window.location.replace('/tarifs.html');
+      return;
     }
-  } catch(e) {}
+  } catch(e) {
+    window.location.replace('/tarifs.html');
+    return;
+  }
 }
 
 // ── INIT ──
@@ -2748,7 +2775,7 @@ function handleMt5File(file) {
 
 async function analyzeMt5Screenshot() {
   if (!_mt5ImageData) return;
-  if (!(await spendToken('analyze'))) return;
+
   var btn = document.getElementById('mt5AnalyzeBtn');
   btn.disabled = true; btn.textContent = 'Analyse en cours…';
   var st = document.getElementById('mt5Status');
@@ -2815,11 +2842,6 @@ async function importMt5Trades() {
   var ok = 0, fail = 0;
   for (var i = 0; i < _mt5ParsedTrades.length; i++) {
     var t = _mt5ParsedTrades[i];
-    // Consume 1 journal_trade token per trade (1 token = 5 trades)
-    if (!(await journalTradeToken())) {
-      document.getElementById('mt5Status').textContent = 'Tokens insuffisants — ' + ok + ' trade' + (ok>1?'s':'') + ' importé' + (ok>1?'s':'') + '.';
-      break;
-    }
     var tradeDate = t.date || new Date().toISOString().slice(0,10);
     var tradeDir  = t.direction || 'LONG';
     var tradeRes  = (t.pnl != null ? (parseFloat(t.pnl) >= 0 ? 'WIN' : 'LOSS') : (t.result || 'WIN'));
