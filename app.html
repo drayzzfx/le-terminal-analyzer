@@ -1378,6 +1378,10 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
           <div class="fb-body" id="adviceText">—</div>
         </div>
       </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:12px 15px;background:rgba(232,194,104,.06);border:1px solid rgba(232,194,104,.22);border-radius:12px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span style="font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;line-height:1.6;color:#B59C64" data-en="AI-generated educational decision-support. This is not investment advice or a personalised recommendation — you remain solely responsible for your decisions. Trading involves a high risk of capital loss.">Aide à la décision éducative générée par IA. Ceci n'est pas un conseil en investissement ni une recommandation personnalisée — vous restez seul responsable de vos décisions. Le trading comporte un risque élevé de perte en capital.</span>
+      </div>
       <div id="quickOutcome" style="margin-top:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px">
         <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">Avez-vous pris ce trade ?</div>
         <div style="display:flex;gap:8px">
@@ -2871,6 +2875,7 @@ function renderReport(text, totalTrades, tradesTaken, winRate, avgRR){
     html+='<div style="font-size:13px;font-weight:700;color:'+meta.col+';margin-bottom:10px">'+meta.icon+' '+escapeHtml(title)+'</div>';
     html+=bodyHtml+'</div>';
   }
+  html+='<div style="display:flex;gap:9px;align-items:flex-start;margin-top:16px;padding:11px 13px;background:rgba(232,194,104,.06);border:1px solid rgba(232,194,104,.22);border-radius:10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span style="font-size:11px;line-height:1.55;color:#B59C64">Analyse pédagogique générée par IA, à but éducatif. Ce n\'est pas un conseil en investissement ni une recommandation personnalisée ; vous restez seul responsable de vos décisions.</span></div>';
   return html;
 }
 
