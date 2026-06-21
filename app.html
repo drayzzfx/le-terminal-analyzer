@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>(function(){var isOAuth=window.location.hash.indexOf('access_token')!==-1;if(isOAuth)return;var tok=localStorage.getItem('ta_token');if(!tok){window.location.replace('/tarifs.html');return;}var pro=localStorage.getItem('lt_pro')==='1';if(!pro){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000);fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro){localStorage.setItem('lt_pro','1');document.documentElement.style.visibility='';}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){window.location.replace('/tarifs.html');});})();</script>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#7FB8E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1425,19 +1426,6 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 </div>
 
 <script>
-// Blocage immédiat avant rendu (ne pas bloquer si callback OAuth en cours)
-(function(){
-  var isOAuthCallback = window.location.hash.indexOf('access_token') !== -1;
-  if(isOAuthCallback) return; // laisser le callback OAuth traiter le token
-  var tok=localStorage.getItem('ta_token');
-  if(!tok){ window.location.replace('/tarifs.html'); return; }
-  var pro=localStorage.getItem('lt_pro')==='1';
-  if(!pro){ window.location.replace('/tarifs.html'); return; }
-  // Cache dit pro → vérifier côté serveur pour éviter les faux positifs
-  document.documentElement.style.visibility='hidden';
-  setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000);
-  fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro){localStorage.setItem('lt_pro','1');document.documentElement.style.visibility='';}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){window.location.replace('/tarifs.html');});
-})();
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
 var lastAnalysisParams = null;
