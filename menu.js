@@ -509,6 +509,25 @@
     if(typeof doLogout === 'function') { doLogout(); } else { window.location.href = './index.html'; }
   };
 
+  // Charge le profil (pseudo + avatar) depuis le serveur si absent du cache
+  var _ltProfileFetched = false;
+  function _ltFetchProfile() {
+    if(_ltProfileFetched) return;
+    var tok = localStorage.getItem('ta_token');
+    if(!tok) return;
+    // Ne refetch que si pseudo ou avatar manquant
+    if(localStorage.getItem('lt_pseudo') && localStorage.getItem('lt_avatar')) return;
+    _ltProfileFetched = true;
+    fetch('/api/profile', { method: 'GET', headers: { 'Authorization': 'Bearer ' + tok } })
+      .then(function(r){ return r.json(); })
+      .then(function(p){
+        if(p.pseudo){ localStorage.setItem('lt_pseudo', p.pseudo); }
+        if(p.avatar_url){ localStorage.setItem('lt_avatar', p.avatar_url); }
+        if(p.pseudo || p.avatar_url){ ltRenderUserBar(); ltSyncUser(); }
+      })
+      .catch(function(){});
+  }
+
   // Run sync after DOM is ready and after any checkSession finishes
   // Override updateUserUI on each page to also call ltSyncUser
   var _origUpdateUI = window.updateUserUI;
@@ -516,6 +535,7 @@
     if(typeof _origUpdateUI === 'function') _origUpdateUI();
     ltSyncUser();
     ltRenderUserBar();
+    _ltFetchProfile();
   };
 
   window.ltLogout = function() {
