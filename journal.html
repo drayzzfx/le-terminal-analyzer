@@ -2170,9 +2170,13 @@ async function checkSession() {
     } else if(data.error) {
       authToken = null; currentUser = null;
       localStorage.removeItem('ta_token');
-      updateUserUI();
+      window.location.replace('/tarifs.html');
+      return;
     }
-  } catch(e) {}
+  } catch(e) {
+    window.location.replace('/tarifs.html');
+    return;
+  }
 }
 
 // ── INIT ──

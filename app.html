@@ -2933,18 +2933,18 @@ async function checkSession(){
       document.documentElement.style.visibility='';
       updateUserUI();loadHistory();
     } else {
-      // API says invalid - but keep session alive if network error might be the cause
-      // Only clear if explicit invalid response
       if(data.error){
         authToken=null;currentUser=null;
         localStorage.removeItem('ta_token');
         localStorage.removeItem('ta_email');
-        updateUserUI();
+        window.location.replace('/tarifs.html');
+        return;
       }
     }
   }catch(e){
-    // Network error - keep session from localStorage, user stays logged in
-    updateUserUI();
+    // Network error — impossible de vérifier, rediriger par sécurité
+    window.location.replace('/tarifs.html');
+    return;
   }
 }
 
