@@ -1171,10 +1171,10 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 (function(){
   var isOAuthCallback = window.location.hash.indexOf('access_token') !== -1;
   if(isOAuthCallback) return;
-  var pro=localStorage.getItem('lt_pro')==='1';
   var tok=localStorage.getItem('ta_token');
-  if(!tok){ window.location.replace('/tarifs.html'); }
-  else if(!pro){ document.documentElement.style.visibility='hidden'; setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000); }
+  if(!tok){ window.location.replace('/tarifs.html'); return; }
+  document.documentElement.style.visibility='hidden';
+  setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000);
 })();
 // ── STATE ──
 var trades = [];

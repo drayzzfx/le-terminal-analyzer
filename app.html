@@ -1429,10 +1429,10 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
 (function(){
   var isOAuthCallback = window.location.hash.indexOf('access_token') !== -1;
   if(isOAuthCallback) return; // laisser le callback OAuth traiter le token
-  var pro=localStorage.getItem('lt_pro')==='1';
   var tok=localStorage.getItem('ta_token');
-  if(!tok){ window.location.replace('/tarifs.html'); }
-  else if(!pro){ document.documentElement.style.visibility='hidden'; setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000); }
+  if(!tok){ window.location.replace('/tarifs.html'); return; }
+  document.documentElement.style.visibility='hidden';
+  setTimeout(function(){if(document.documentElement.style.visibility==='hidden')window.location.replace('/tarifs.html');},7000);
 })();
 // ── STATE ──
 let lang='fr', dir=null, isPro=false, selPlan='y', imgData=null;
