@@ -1181,7 +1181,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
       <div class="page-head" style="margin-bottom:0">
         <span class="eyebrow"><span class="lt-dot"></span> Setup Analyzer</span>
         <h1 id="page-title">Analyse de Setup</h1>
-        <p id="page-sub">Glissez la capture de votre setup. Le moteur IA propriétaire évalue la structure, les zones clés et les confluences de votre stratégie, puis rend un verdict net.</p>
+        <p id="page-sub">Glissez la capture de votre setup. Le moteur IA propriétaire évalue la structure, les zones clés et les confluences de votre stratégie, puis évalue clairement la qualité de votre setup.</p>
       </div>
       <div class="an-head__r">
         <button class="lt-btn lt-btn--ghost lt-btn--sm" onclick="openHistory()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Historique</button>
@@ -1374,10 +1374,14 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
         <div class="fb-card">
           <div class="fb-head">
             <div class="fb-dot" style="background:#7FB8E8"></div>
-            <span class="fb-title" id="fc-advice" style="color:#7FB8E8">Recommandations</span>
+            <span class="fb-title" id="fc-advice" style="color:#7FB8E8">Points d'attention</span>
           </div>
           <div class="fb-body" id="adviceText">—</div>
         </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:12px 15px;background:rgba(232,194,104,.06);border:1px solid rgba(232,194,104,.22);border-radius:12px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span style="font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:12px;line-height:1.6;color:#B59C64" data-en="AI-generated educational decision-support. This is not investment advice or a personalised recommendation — you remain solely responsible for your decisions. Trading involves a high risk of capital loss.">Aide à la décision éducative générée par IA. Ceci n'est pas un conseil en investissement ni une recommandation personnalisée — vous restez seul responsable de vos décisions. Le trading comporte un risque élevé de perte en capital.</span>
       </div>
       <div id="quickOutcome" style="margin-top:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px">
         <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px">Avez-vous pris ce trade ?</div>
@@ -1453,7 +1457,7 @@ function enterApp(){
 const T={
   fr:{
     pageTitle:'Analyse de Setup',
-    pageSub:'Glissez la capture de votre setup. Le moteur IA propriétaire évalue la structure, les zones clés et les confluences de votre stratégie, puis rend un verdict net.',
+    pageSub:'Glissez la capture de votre setup. Le moteur IA propriétaire évalue la structure, les zones clés et les confluences de votre stratégie, puis évalue clairement la qualité de votre setup.',
     fst1:'Trade', fst2:'Niveaux', fst3:'Contexte', fst4:'Graphique',
     lblPair:'Paire / Actif', lblDir:'Direction', lblTf:'Timeframe',
     lblEntry:'Entrée', lblTp:'Take Profit', lblSl:'Stop Loss',
@@ -1465,7 +1469,7 @@ const T={
     steps:['ÉVALUATION DES CONFLUENCES','CALCUL DU RISQUE','ANALYSE DE LA STRUCTURE','GÉNÉRATION DU FEEDBACK'],
     resTag:'RÉSULTAT D\'ANALYSE', mDirLbl:'Direction', mPairLbl:'Actif',
     crtLbl:'Graphique soumis',
-    fcForces:'Points Forts', fcWeak:'Points Faibles', fcAdvice:'Recommandations',
+    fcForces:'Points Forts', fcWeak:'Points Faibles', fcAdvice:'Points d\'attention',
     actNew:'Nouvelle analyse', actPro:'Passer Premium',
     pwTitle:'Limite atteinte', pwSub:'Vous avez utilisé vos 3 analyses gratuites.<br>Passez à Premium pour des analyses illimitées.',
     pmName:'Mensuel', pyName:'Annuel', pyTop:'★ MEILLEURE OFFRE',
@@ -1591,8 +1595,8 @@ FORMAT DE RÉPONSE — JSON UNIQUEMENT, sans markdown, sans texte avant ou aprè
   "faiblesTags": ["tag1","tag2"],
   "recommandations": <4-5 actions précises et actionnables avec niveau de prix ou événement déclencheur, séparées par \n, numéro en début — QUOI surveiller, QUAND entrer, COMMENT gérer le trade si actif>,
   "verdict": "GO"|"ATTENDRE"|"NO-GO",
-  "verdictTitle": <verdict précis ex "ATTENDRE BOS LTF SUR 1H" ou "NO-GO · STRUCTURE HTF BAISSIÈRE">,
-  "verdictSub": <2 phrases max, directes et honnêtes — cite exactement CE QUI justifie le verdict, sans langue de bois>
+  "verdictTitle": <évaluation NEUTRE de la QUALITÉ du setup (pas un ordre d'achat/vente), ex "Structure solide · BOS LTF confirmé" ou "Setup fragile · structure HTF baissière". N'utilise JAMAIS "achetez/vendez/entrez maintenant">,
+  "verdictSub": <2 phrases max, factuelles et pédagogiques — décris CE QUI rend ce setup solide ou fragile et ce qu'il reste à surveiller, sans donner d'instruction d'achat ni de recommandation personnalisée>
 }
 Réponds en français.`
   },
@@ -1610,7 +1614,7 @@ Réponds en français.`
     steps:['EVALUATING CONFLUENCES','CALCULATING RISK','ANALYZING STRUCTURE','GENERATING FEEDBACK'],
     resTag:'ANALYSIS RESULT', mDirLbl:'Direction', mPairLbl:'Asset',
     crtLbl:'Submitted chart',
-    fcForces:'Strengths', fcWeak:'Weaknesses', fcAdvice:'Recommendations',
+    fcForces:'Strengths', fcWeak:'Weaknesses', fcAdvice:'Points to watch',
     actNew:'New analysis', actPro:'Go Premium',
     pwTitle:'Limit reached', pwSub:'You\'ve used your 3 free analyses.<br>Go Premium for unlimited analyses.',
     pmName:'Monthly', pyName:'Annual', pyTop:'★ BEST VALUE',
@@ -2068,9 +2072,9 @@ function render(r,rrv,tf,pair){
 
   const vb=document.getElementById('verdictBox'),vi=document.getElementById('v-badge'),verdict=r.verdict;
   vb.className='verdict';
-  if(verdict==='GO'){vb.classList.add('go');vi.textContent='✓ GO';}
-  else if(verdict==='NO-GO'){vb.classList.add('no');vi.textContent='✕ NO-GO';}
-  else{vb.classList.add('wait');vi.textContent=c().waitLabel;}
+  if(verdict==='GO'){vb.classList.add('go');vi.textContent=(lang==='en'?'Solid setup':'Setup solide');}
+  else if(verdict==='NO-GO'){vb.classList.add('no');vi.textContent=(lang==='en'?'Weak setup':'Setup fragile');}
+  else{vb.classList.add('wait');vi.textContent=(lang==='en'?'Setup to watch':'Setup à surveiller');}
   document.getElementById('v-title').textContent=r.verdictTitle||'';
   document.getElementById('v-sub').textContent=r.verdictSub||'';
   // Reset quick outcome widget
@@ -2867,6 +2871,7 @@ function renderReport(text, totalTrades, tradesTaken, winRate, avgRR){
     html+='<div style="font-size:13px;font-weight:700;color:'+meta.col+';margin-bottom:10px">'+meta.icon+' '+escapeHtml(title)+'</div>';
     html+=bodyHtml+'</div>';
   }
+  html+='<div style="display:flex;gap:9px;align-items:flex-start;margin-top:16px;padding:11px 13px;background:rgba(232,194,104,.06);border:1px solid rgba(232,194,104,.22);border-radius:10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span style="font-size:11px;line-height:1.55;color:#B59C64">Analyse pédagogique générée par IA, à but éducatif. Ce n\'est pas un conseil en investissement ni une recommandation personnalisée ; vous restez seul responsable de vos décisions.</span></div>';
   return html;
 }
 
@@ -3071,7 +3076,7 @@ function buildHistoryGrid(){
   historyData.forEach(function(item,idx){
     if(_deletedIds instanceof Set && _deletedIds.has(String(item && item.id))) return;
     var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
-    var vL=item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
+    var vL=item.verdict==='GO'?(lang==='en'?'Solid':'Solide'):item.verdict==='NO-GO'?(lang==='en'?'Weak':'Fragile'):(lang==='en'?'To watch':'À surveiller');
     var sc=parseFloat(item.score)||0;
     var col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
     var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
@@ -3355,7 +3360,7 @@ function renderHistory(){
   if(!historyData.length){list.innerHTML='<div class="history-empty">Aucune analyse encore<br>Lancez votre première analyse !</div>';return;}
   list.innerHTML=historyData.map(function(item,i){
     var vC=item.verdict==='GO'?'go':item.verdict==='NO-GO'?'no':'wait';
-    var vL=item.verdict==='GO'?'✓ GO':item.verdict==='NO-GO'?'✕ NO-GO':'⏸ ATTENDRE';
+    var vL=item.verdict==='GO'?(lang==='en'?'Solid':'Solide'):item.verdict==='NO-GO'?(lang==='en'?'Weak':'Fragile'):(lang==='en'?'To watch':'À surveiller');
     var sc=parseFloat(item.score)||0,col=sc>=7?'var(--green)':sc>=5?'var(--v2)':'var(--red)';
     var ds=new Date(item.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
     return '<div class="history-item" onclick="openHDetail('+i+')">'+
@@ -3379,7 +3384,7 @@ function openHDetail(i){
     '<div><div style="font-family:Inter,system-ui,-apple-system,sans-serif;font-size:18px;font-weight:700">'+(item.score_label||'')+'</div>'+
     '<div style="font-size:12px;color:var(--text2);margin-top:3px">'+(item.pair||'')+' · '+(item.direction||'')+' · '+(item.tf||'')+' · '+ds+'</div></div></div>'+
     (item.img_data?'<img src="'+item.img_data+'" style="width:100%;border-radius:10px;margin-bottom:14px;border:1px solid var(--border)">':'')+
-    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Recommandations',item.recommandations,'#7FB8E8')+
+    sec('Points Forts',item.forces,'var(--green)')+sec('Points Faibles',item.faiblesses,'var(--red)')+sec('Points d\'attention',item.recommandations,'#7FB8E8')+
     (item.macro?'<div style="background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.2);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--v2);margin-bottom:8px">MACRO</div><div style="font-size:13px;color:var(--text2);line-height:1.7">'+item.macro+'</div></div>':'');
   // Add outcome section
   content += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">' +

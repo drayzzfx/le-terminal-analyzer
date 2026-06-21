@@ -223,7 +223,7 @@
       <div class="pf-ov panel">
         <div class="pf-ov__head">
           <div class="pf-ov__val">
-            <span class="pf-ov__label">Valeur totale du portefeuille</span>
+            <span class="pf-ov__label">Valeur totale du portefeuille <span style="font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--neutral);border:1px solid rgba(232,194,104,.4);background:rgba(232,194,104,.07);border-radius:50px;padding:2px 8px;margin-left:8px;vertical-align:middle;white-space:nowrap">Exemple illustratif</span></span>
             <span class="pf-ov__total" id="pfTotal">0 €</span>
             <div id="pfPnl" class="pf-ov__pnl" style="display:none"></div>
           </div>
@@ -278,7 +278,7 @@
     <div class="pf-plans" id="pfPlans"></div>
     <div style="margin-top:8px;padding:14px 18px;border:1px solid rgba(232,194,104,.18);border-radius:8px;background:rgba(232,194,104,.04);display:flex;gap:12px;align-items:flex-start">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p style="margin:0;font-family:Inter,sans-serif;font-size:11.5px;line-height:1.6;color:rgba(232,194,104,.75)"><strong style="color:#E8C268;font-weight:600">Information importante —</strong> Les allocations présentées ne constituent pas un conseil en investissement. Elles sont établies sur la base de données historiques et d'une analyse assistée par intelligence artificielle. Les performances passées ne préjugent pas des performances futures. Tout investissement comporte un risque de perte en capital. Consultez un conseiller financier agréé avant toute décision.</p>
+      <p style="margin:0;font-family:Inter,sans-serif;font-size:11.5px;line-height:1.6;color:rgba(232,194,104,.75)"><strong style="color:#E8C268;font-weight:600">Information importante —</strong> Les allocations présentées ne constituent pas un conseil en investissement. <strong style="color:#E8C268;font-weight:600">Les objectifs de rendement affichés sont purement illustratifs et ne sont en aucun cas garantis.</strong> Elles sont établies sur la base de données historiques et d'une analyse assistée par intelligence artificielle. Les performances passées ne préjugent pas des performances futures. Tout investissement comporte un risque de perte en capital. Consultez un conseiller financier agréé avant toute décision.</p>
     </div>
   </div>
 
@@ -586,13 +586,14 @@
       var bar='<div class="pf-plan__mixbar">'+p.mix.map(function(m){ return '<span style="width:'+m[1]+'%;background:'+m[2]+'"></span>'; }).join('')+'</div>';
       var list='<ul class="pf-plan__mix">'+p.mix.map(function(m){ return '<li><span class="pf-plan__mixdot" style="background:'+m[2]+'"></span>'+m[1]+' % '+m[0]+'</li>'; }).join('')+'</ul>';
       return '<article class="pf-plan'+(p.featured?' is-featured':'')+'">'
-        +(p.featured?'<span class="pf-plan__flag">Recommandé</span>':'')
-        +'<div class="pf-plan__top"><h3 class="pf-plan__name">'+p.name+'</h3>'
-        +'<div class="pf-plan__risk">'+dots+'<span class="pf-plan__risklabel">Risque '+p.riskLabel+'</span></div></div>'
-        +'<div class="pf-plan__obj"><span class="pf-plan__objval">'+p.obj+'</span><span class="pf-plan__objcap">Objectif annualisé · Horizon '+p.horizon+'</span></div>'
-        +'<p class="pf-plan__desc">'+p.desc+'</p>'+bar+list
-        +'<a class="lt-btn '+(p.featured?'lt-btn--primary':'lt-btn--secondary')+'" style="width:100%" href="./patrimoine-plan.html?p='+p.key+'">Choisir ce plan</a>'
-        +'</article>';
+        + (p.featured?'<span class="pf-plan__flag">Notre sélection</span>':'')
+        + '<div class="pf-plan__top"><h3 class="pf-plan__name">'+p.name+'</h3>'
+        +   '<div class="pf-plan__risk">'+dots+'<span class="pf-plan__risklabel">Risque '+p.riskLabel+'</span></div></div>'
+        + '<div class="pf-plan__obj"><span class="pf-plan__objval">'+p.obj+'</span><span class="pf-plan__objcap">Objectif annualisé · Horizon '+p.horizon+'</span></div>'
+        + '<p class="pf-plan__desc">'+p.desc+'</p>'
+        + bar + list
+        + '<a class="lt-btn '+(p.featured?'lt-btn--primary':'lt-btn--secondary')+'" style="width:100%" href="./patrimoine-plan.html?p='+p.key+'">Choisir ce plan</a>'
+        + '</article>';
     }).join('');
   }
 
