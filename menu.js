@@ -253,29 +253,6 @@
     .lt-lang-btn.active {
       background: rgba(127,184,232,.2); color: #BFDCF5;
     }
-
-    /* ── BARRE MOBILE (pages sans appshell) : hamburger à gauche + logo centré ── */
-    .lt-nav__burger { display: none; }
-    @media (max-width: 860px) {
-      .lt-nav--mobilebar { position: relative; }
-      .lt-nav__burger {
-        display: inline-flex; flex-direction: column; gap: 4px;
-        align-items: center; justify-content: center;
-        width: 38px; height: 38px; flex-shrink: 0; padding: 0; margin: 0;
-        background: transparent; border: 1px solid var(--border-subtle, #1C212A);
-        border-radius: var(--r-md, 6px); cursor: pointer; z-index: 2;
-        transition: border-color .2s, background .2s;
-      }
-      .lt-nav__burger:hover { border-color: rgba(127,184,232,.45); background: rgba(127,184,232,.08); }
-      .lt-nav__burger span { display: block; width: 17px; height: 1.6px; background: var(--text-body, #C3CAD4); border-radius: 2px; }
-      /* Logo (marque + mot) centré dans la barre */
-      .lt-nav--mobilebar .lt-nav__brand {
-        position: absolute; left: 50%; top: 50%;
-        transform: translate(-50%, -50%); margin: 0; z-index: 1;
-      }
-      .lt-nav--mobilebar .lt-nav__word { display: inline !important; letter-spacing: .14em; font-size: 12.5px; }
-      .lt-nav--mobilebar .lt-nav__actions { position: relative; z-index: 2; }
-    }
   `;
   document.head.appendChild(style);
 
@@ -436,21 +413,6 @@
     var container = document.createElement('div');
     container.innerHTML = menuHTML;
     document.body.appendChild(container);
-
-    // Barre mobile : hamburger (gauche) ouvrant le tiroir #ltSideMenu + logo centré,
-    // comme sur les pages outils. Injecté dans .lt-nav des pages sans appshell
-    // (accueil, légal…) pour une navigation cohérente sur mobile.
-    var _navBar = document.querySelector('.lt-nav');
-    if (_navBar && !_navBar.querySelector('.lt-nav__burger')) {
-      var _hb = document.createElement('button');
-      _hb.className = 'lt-nav__burger';
-      _hb.type = 'button';
-      _hb.setAttribute('aria-label', 'Ouvrir le menu');
-      _hb.innerHTML = '<span></span><span></span><span></span>';
-      _hb.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if(window.ltOpenMenu) ltOpenMenu(); });
-      _navBar.insertBefore(_hb, _navBar.firstChild);
-      _navBar.classList.add('lt-nav--mobilebar');
-    }
   }
 
   // ── FUNCTIONS ──
