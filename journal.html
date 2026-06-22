@@ -3066,11 +3066,11 @@ async function importMt5Trades() {
 
   function render(){
     var m=compute(), s=sym();
-    if($('p2PF')){ $('p2PF').textContent = m.n ? (isFinite(m.pf)?m.pf.toFixed(2):'∞') : '—'; }
+    if($('p2PF')){ $('p2PF').textContent = m.n ? (isFinite(m.pf)?m.pf.toFixed(2):(m.nL===0?'Parfait':'—')) : '—'; }
     if($('p2DWin')){ $('p2DWin').textContent = m.days.length ? Math.round(m.dayWin)+'%' : '—'; }
     if($('p2DWinsub')){ $('p2DWinsub').textContent = m.days.length ? (m.wd+' gagnants · '+m.ld+' perdants') : ''; }
-    if($('p2WL')){ $('p2WL').textContent = m.n ? (isFinite(m.wl)?m.wl.toFixed(2):'∞') : '—'; }
-    if($('p2WLsub')){ $('p2WLsub').textContent = m.n ? ('+'+Math.round(m.avgW).toLocaleString('fr-FR')+' / -'+Math.round(m.avgL).toLocaleString('fr-FR')+' '+s) : ''; }
+    if($('p2WL')){ $('p2WL').textContent = m.n ? (isFinite(m.wl)?m.wl.toFixed(2):(m.nL===0?'—':'—')) : '—'; }
+    if($('p2WLsub')){ $('p2WLsub').textContent = m.n ? ('+'+Math.round(m.avgW).toLocaleString('fr-FR')+' / '+(m.nL?'-'+Math.round(m.avgL).toLocaleString('fr-FR')+' '+s:'aucune perte')) : ''; }
     var sc=score(m), arc=$('p2GaugeArc');
     if($('p2Score')) $('p2Score').textContent = sc==null ? '—' : String(sc);
     var col = sc==null ? 'var(--text-muted,#7E8794)' : (sc>=70?'#4ADE9C':(sc>=45?'#E8C268':'#F0647A'));
