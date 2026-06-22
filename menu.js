@@ -298,9 +298,13 @@
     fetch('/api/check-pro', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok }
-    }).then(function(r){ return r.json(); }).then(function(d) {
-      // Token expiré (Supabase renvoie error ou is_pro absent avec status 4xx)
-      if (d && d.error && d.error.indexOf && (d.error.indexOf('expired') !== -1 || d.error.indexOf('invalid') !== -1 || d.error === 'invalid_token')) {
+    }).then(function(r){
+      var status = r.status;
+      return r.json().then(function(d){ return { status: status, data: d }; });
+    }).then(function(resp) {
+      var status = resp.status, d = resp.data;
+      // Token invalide/expiré → tenter le refresh, ne pas toucher à lt_pro
+      if (status === 401 || (d && d.token_invalid)) {
         return _ltDoRefresh();
       }
       var serverPro = !!(d && d.is_pro);
