@@ -1234,6 +1234,7 @@ function renderStats() {
   for(var i = trades.length-1; i >= 0; i--) {
     var r = trades[i].result;
     if(r === 'be') continue;
+    if(r !== 'win' && r !== 'loss') continue; // ignorer les trades sans résultat
     if(streakType === null) { streakType = r; streak = 1; }
     else if(r === streakType) { streak++; }
     else break;
@@ -2996,7 +2997,7 @@ async function importMt5Trades() {
              nW:nW, nL:nL, nBE:nBE, gW:gW, gL:gL, maxWin:maxWin, maxLoss:maxLoss,
              stdWin:_std(winsP), stdLoss:_std(lossA),
              expectancy: arr.length ? net/arr.length : 0,
-             profitable: arr.length ? nW/arr.length*100 : 0 };
+             profitable: (nW+nL+nBE) ? nW/(nW+nL+nBE)*100 : 0 };
   }
 
   // Score composite /100 : moyenne pondérée de 4 sous-scores normalisés.
@@ -3093,7 +3094,7 @@ async function importMt5Trades() {
       setT('s3LMax', m.nL ? '-'+euro(m.maxLoss) : '—');
       setT('s3LAvg', m.nL ? '-'+euro(m.avgL) : '—');
       setT('s3LStd', m.nL ? euro(m.stdLoss) : '—');
-      var wp=m.nW/m.n*100, bp=m.nBE/m.n*100, lp=m.nL/m.n*100, pie=$('s3Pie');
+      var classified=m.nW+m.nL+m.nBE||1, wp=m.nW/classified*100, bp=m.nBE/classified*100, lp=m.nL/classified*100, pie=$('s3Pie');
       if(pie) pie.style.background='conic-gradient(#4ADE9C 0 '+wp+'%, #E8C268 '+wp+'% '+(wp+bp)+'%, #F0647A '+(wp+bp)+'% 100%)';
       setT('s3PieW', wp.toFixed(1)+'%'); setT('s3PieB', bp.toFixed(1)+'%'); setT('s3PieL', lp.toFixed(1)+'%');
     }
