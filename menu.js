@@ -291,23 +291,62 @@
 
   var isUserPro = localStorage.getItem('lt_pro') === '1';
 
+  // Renouvelle le token Supabase si expiré, puis vérifie le statut pro
+  function _ltRefreshAndVerify() {
+    var tok = localStorage.getItem('ta_token');
+    if (!tok) return;
+    fetch('/api/check-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok }
+    }).then(function(r){
+      var status = r.status;
+      return r.json().then(function(d){ return { status: status, data: d }; });
+    }).then(function(resp) {
+      var status = resp.status, d = resp.data;
+      // Token invalide/expiré → tenter le refresh, ne pas toucher à lt_pro
+      if (status === 401 || (d && d.token_invalid)) {
+        return _ltDoRefresh();
+      }
+      var serverPro = !!(d && d.is_pro);
+      var localPro  = localStorage.getItem('lt_pro') === '1';
+      if (serverPro && !localPro) { localStorage.setItem('lt_pro', '1'); location.reload(); }
+      else if (!serverPro && localPro) { localStorage.removeItem('lt_pro'); location.reload(); }
+    }).catch(function(){});
+  }
+
+  function _ltDoRefresh() {
+    var refreshTok = localStorage.getItem('ta_refresh');
+    if (!refreshTok) return;
+    fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'refresh', refresh_token: refreshTok })
+    }).then(function(r){ return r.json(); }).then(function(d) {
+      if (d && d.access_token) {
+        localStorage.setItem('ta_token', d.access_token);
+        if (d.refresh_token) localStorage.setItem('ta_refresh', d.refresh_token);
+        if (d.is_pro !== undefined) {
+          if (d.is_pro) localStorage.setItem('lt_pro', '1');
+          else localStorage.removeItem('lt_pro');
+        }
+        // Revérifier le statut pro avec le nouveau token
+        fetch('/api/check-pro', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + d.access_token }
+        }).then(function(r){ return r.json(); }).then(function(pd) {
+          var serverPro = !!(pd && pd.is_pro);
+          var localPro  = localStorage.getItem('lt_pro') === '1';
+          if (serverPro && !localPro) { localStorage.setItem('lt_pro', '1'); location.reload(); }
+          else if (!serverPro && localPro) { localStorage.removeItem('lt_pro'); location.reload(); }
+        }).catch(function(){});
+      }
+    }).catch(function(){});
+  }
+
   // Vérification serveur au chargement — évite que l'ancien flag lt_pro='1' persiste
   var _verifyToken = localStorage.getItem('ta_token');
   if (_verifyToken) {
-    fetch('/api/check-pro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _verifyToken }
-    }).then(function(r){ return r.json(); }).then(function(d) {
-      var serverPro = !!(d && d.is_pro);
-      var localPro  = localStorage.getItem('lt_pro') === '1';
-      if (serverPro && !localPro) {
-        localStorage.setItem('lt_pro', '1');
-        location.reload();
-      } else if (!serverPro && localPro) {
-        localStorage.removeItem('lt_pro');
-        location.reload();
-      }
-    }).catch(function(){});
+    _ltRefreshAndVerify();
   }
 
   var navItems = PAGES.map(function(p) {
@@ -494,6 +533,7 @@
 
   function _ltClearAllAccountData() {
     localStorage.removeItem('ta_token');
+    localStorage.removeItem('ta_refresh');
     localStorage.removeItem('ta_email');
     localStorage.removeItem('ta_user_id');
     localStorage.removeItem('lt_pro');
@@ -687,6 +727,7 @@
       var data = await res.json();
       if(data.access_token) {
         localStorage.setItem('ta_token', data.access_token);
+        if(data.refresh_token) localStorage.setItem('ta_refresh', data.refresh_token);
         localStorage.setItem('ta_email', (data.user && data.user.email) || email.trim());
         ltCloseAuthModal();
         ltSyncUser();
@@ -1104,6 +1145,8 @@
       if(!token || params.get('token_type') !== 'bearer') return;
       history.replaceState(null, '', window.location.pathname + window.location.search);
       localStorage.setItem('ta_token', token);
+      var refreshTok = params.get('refresh_token');
+      if(refreshTok) localStorage.setItem('ta_refresh', refreshTok);
       fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'user', token:token})})
         .then(function(r){ return r.json(); })
         .then(function(d){ if(d && d.email) localStorage.setItem('ta_email', d.email); })

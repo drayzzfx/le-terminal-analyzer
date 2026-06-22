@@ -54,6 +54,10 @@ module.exports = async function handler(req, res) {
       result = await supabaseRequest('POST', '/auth/v1/signup', { email, password }, ANON_KEY);
     } else if (action === 'login') {
       result = await supabaseRequest('POST', '/auth/v1/token?grant_type=password', { email, password }, ANON_KEY);
+    } else if (action === 'refresh') {
+      const { refresh_token } = req.body;
+      if (!refresh_token) return res.status(400).json({ error: 'refresh_token required' });
+      result = await supabaseRequest('POST', '/auth/v1/token?grant_type=refresh_token', { refresh_token }, ANON_KEY);
     } else if (action === 'logout') {
       result = await supabaseRequest('POST', '/auth/v1/logout', {}, ANON_KEY, token);
     } else if (action === 'user') {

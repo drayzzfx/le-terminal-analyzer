@@ -76,7 +76,7 @@ module.exports = async function handler(req, res) {
     const userId = userRes.body?.id;
     const userEmail = userRes.body?.email;
 
-    if (!userId || !userEmail) return res.status(200).json({ is_pro: false });
+    if (!userId || !userEmail) return res.status(401).json({ is_pro: false, token_invalid: true });
 
     // Check user_profiles table using SERVICE_KEY to bypass RLS
     const profileRes = await supabaseRequest(
@@ -125,7 +125,6 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ is_pro: false });
 
   } catch(err) {
-    console.error('Check-pro error:', err);
-    return res.status(200).json({ is_pro: false });
+    return res.status(500).json({ is_pro: false, token_invalid: true });
   }
 };
