@@ -439,6 +439,47 @@
     document.body.classList.remove('lt-menu-open');
   };
 
+  // ── SESSION (persistance + rafraîchissement du token) ──
+  // Stocke la session Supabase : token d'accès + refresh token + horodatage d'expiration.
+  // Le refresh token permet de rester connecté au-delà de ~1h sans devoir se reconnecter,
+  // quel que soit l'appareil.
+  function ltStoreSession(data, email) {
+    if(!data || !data.access_token) return;
+    localStorage.setItem('ta_token', data.access_token);
+    if(data.refresh_token) localStorage.setItem('ta_refresh', data.refresh_token);
+    // expires_in en secondes (défaut Supabase : 3600). On mémorise l'instant d'expiration absolu.
+    var ttl = parseInt(data.expires_in, 10);
+    if(!ttl || isNaN(ttl)) ttl = 3600;
+    localStorage.setItem('ta_exp', String(Date.now() + ttl * 1000));
+    if(email) localStorage.setItem('ta_email', email);
+    else if(data.user && data.user.email) localStorage.setItem('ta_email', data.user.email);
+  }
+  window.ltStoreSession = ltStoreSession;
+
+  // Rafraîchit le token d'accès s'il est expiré (ou sur le point de l'être) via le refresh token.
+  // Renvoie une promesse résolue avec le token courant (rafraîchi si possible).
+  // En cas d'échec réseau, on conserve le token existant (pas de déconnexion brutale).
+  var _ltRefreshing = null;
+  function ltEnsureSession() {
+    var token = localStorage.getItem('ta_token') || '';
+    var refresh = localStorage.getItem('ta_refresh') || '';
+    var exp = parseInt(localStorage.getItem('ta_exp') || '0', 10);
+    if(!token) return Promise.resolve('');
+    // Marge de 60s : on rafraîchit un peu avant l'expiration réelle.
+    if(!refresh || (exp && Date.now() < exp - 60000)) return Promise.resolve(token);
+    if(_ltRefreshing) return _ltRefreshing;
+    _ltRefreshing = fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'refresh', refresh_token:refresh})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d && d.access_token) { ltStoreSession(d); return d.access_token; }
+        return token; // refresh refusé → on garde le token existant, le check-pro tranchera
+      })
+      .catch(function(){ return token; })
+      .finally(function(){ _ltRefreshing = null; });
+    return _ltRefreshing;
+  }
+  window.ltEnsureSession = ltEnsureSession;
+
   // Sync user state from localStorage
   function ltSyncUser() {
     var email = localStorage.getItem('ta_email') || '';
@@ -534,6 +575,7 @@
   function _ltClearAllAccountData() {
     localStorage.removeItem('ta_token');
     localStorage.removeItem('ta_refresh');
+    localStorage.removeItem('ta_exp');
     localStorage.removeItem('ta_email');
     localStorage.removeItem('ta_user_id');
     localStorage.removeItem('lt_pro');
@@ -726,9 +768,7 @@
       var res = await fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:_ltAuthMode, email:email.trim(), password:password})});
       var data = await res.json();
       if(data.access_token) {
-        localStorage.setItem('ta_token', data.access_token);
-        if(data.refresh_token) localStorage.setItem('ta_refresh', data.refresh_token);
-        localStorage.setItem('ta_email', (data.user && data.user.email) || email.trim());
+        ltStoreSession(data, (data.user && data.user.email) || email.trim());
         ltCloseAuthModal();
         ltSyncUser();
         if(typeof updateUserUI === 'function') updateUserUI();
@@ -934,6 +974,8 @@
   window.ltRenderUserBar = ltRenderUserBar;
   ltSyncUser();
   ltRenderUserBar();
+  // Rafraîchit le token au démarrage si nécessaire (garde la session active entre appareils)
+  ltEnsureSession().then(function(){ ltSyncUser(); ltRenderUserBar(); });
   // Re-render after page auth logic runs (e.g. checkSession async)
   setTimeout(ltRenderUserBar, 800);
   setTimeout(ltRenderUserBar, 2000);
@@ -1144,9 +1186,7 @@
       var token = params.get('access_token');
       if(!token || params.get('token_type') !== 'bearer') return;
       history.replaceState(null, '', window.location.pathname + window.location.search);
-      localStorage.setItem('ta_token', token);
-      var refreshTok = params.get('refresh_token');
-      if(refreshTok) localStorage.setItem('ta_refresh', refreshTok);
+      ltStoreSession({ access_token: token, refresh_token: params.get('refresh_token'), expires_in: params.get('expires_in') });
       fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'user', token:token})})
         .then(function(r){ return r.json(); })
         .then(function(d){ if(d && d.email) localStorage.setItem('ta_email', d.email); })
