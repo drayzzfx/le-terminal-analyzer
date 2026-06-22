@@ -222,6 +222,11 @@
   .lt-ub-avatar { width: 26px; height: 26px; }
   /* Connexion (déconnecté) → bouton compact qui ne déborde pas */
   #loginBtn { padding: 8px 12px; }
+  /* Chip profil « early » (accueil, anti-flicker) → avatar seul sur mobile, ne déborde pas */
+  #ltUbChipEarly > span { display: none !important; }
+  #ltUbChipEarly { padding: 5px !important; }
+  /* Garde-fous anti-débordement : médias et tableaux ne dépassent jamais l'écran */
+  img, canvas, video, table, iframe { max-width: 100%; }
 }
 
 /* ---------- LEFT SIDE DOCK (fixed page menu, mobile bottom bar) ---------- */
@@ -249,7 +254,7 @@
    ============================================================ */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg-base); color: var(--text-body); font-family: var(--font-text); -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg-base); color: var(--text-body); font-family: var(--font-text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 a { color: inherit; text-decoration: none; }
 
 .app { display: grid; grid-template-columns: 256px 1fr; min-height: 100vh; padding-top: var(--chrome-h, 102px); }
