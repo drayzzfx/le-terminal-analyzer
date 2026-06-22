@@ -97,7 +97,13 @@
     'eco-archive.html':      { crumb: 'Calendrier Éco · Archive',       key: 'calendrier' },
     'profil.html':           { crumb: 'Mon compte',                     key: 'profil' },
     'compte.html':           { crumb: 'Mon compte',                     key: 'profil' },
-    'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' }
+    'eco-article.html':      { crumb: 'Calendrier Éco · Article',       key: 'calendrier' },
+    // Pages « marketing » : pas de barre latérale ni de fil d'ariane (on préserve
+    // leur mise en page). On n'y ajoute QUE la barre mobile (hamburger + nouveau
+    // tiroir de navigation), pour remplacer l'ancien menu « Le Terminal Hub ».
+    'index.html':            { crumb: 'Accueil', key: 'dashboard', chromeOnly: true },
+    'tarifs.html':           { crumb: 'Tarifs',  key: 'dashboard', chromeOnly: true },
+    'avis.html':             { crumb: 'Avis',    key: 'dashboard', chromeOnly: true }
   };
   var cfg = PAGES[path];
   // Repli : toute page éco non listée (eco-*.html) reçoit quand même l'AppShell,
@@ -294,6 +300,14 @@
       +   '.lt-mnav{display:block;position:fixed;top:0;left:0;bottom:0;z-index:1401;width:min(84vw,300px);background:linear-gradient(180deg,var(--bg-surface),var(--bg-base));border-right:1px solid var(--border-subtle);box-shadow:0 0 60px rgba(0,0,0,.6);transform:translateX(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);overflow-y:auto;-webkit-overflow-scrolling:touch}'
       +   '.lt-mnav.is-open{transform:none}'
       +   '.lt-mnav__inner{padding:16px 12px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}'
+      + '}'
+      // Pages marketing (.lt-nav--mobilebar) : logo centré une fois les liens texte
+      // masqués (≤860px), compte/connexion à droite.
+      + '@media (max-width:860px){'
+      +   '.lt-nav--mobilebar{position:relative}'
+      +   '.lt-nav--mobilebar .lt-nav__brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;z-index:1}'
+      +   '.lt-nav--mobilebar .lt-nav__word{display:inline!important;letter-spacing:.14em;font-size:12.5px}'
+      +   '.lt-nav--mobilebar .lt-nav__actions{position:relative;z-index:2}'
       + '}';
     document.head.appendChild(st);
   }
@@ -399,6 +413,52 @@
     document.addEventListener('click', function(e){ if(wrap && !wrap.contains(e.target)){ pop.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); } });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ pop.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); } });
     setInterval(refreshMkt, 30000);
+  }
+
+  // ── Tiroir de navigation mobile (hamburger + panneau « OUTILS » + carte compte) ──
+  // Construit à partir de buildSideInner(). Utilisé tel quel sur les pages marketing
+  // (chromeOnly) et — via le clone de la barre latérale — sur les pages outils.
+  function buildMobileDrawer(navEl, innerHTML) {
+    if (!navEl || document.querySelector('.lt-mnav')) return;
+    var burger = document.createElement('button');
+    burger.className = 'lt-burger';
+    burger.type = 'button';
+    burger.setAttribute('aria-label', 'Ouvrir le menu');
+    burger.innerHTML = '<span></span><span></span><span></span>';
+    navEl.insertBefore(burger, navEl.firstChild);
+    navEl.classList.add('lt-nav--mobilebar');
+
+    var bd = document.createElement('div'); bd.className = 'lt-mnav__bd';
+    var drawer = document.createElement('aside'); drawer.className = 'lt-mnav';
+    drawer.setAttribute('aria-label', 'Navigation');
+    drawer.innerHTML = '<div class="lt-mnav__inner">' + innerHTML + '</div>';
+    document.body.appendChild(bd);
+    document.body.appendChild(drawer);
+
+    var close = function () { drawer.classList.remove('is-open'); bd.classList.remove('is-open'); };
+    burger.addEventListener('click', function () { drawer.classList.add('is-open'); bd.classList.add('is-open'); });
+    bd.addEventListener('click', close);
+    drawer.addEventListener('click', function (e) {
+      var car = e.target.closest('.side__caret');
+      if (car) {
+        e.preventDefault();
+        var sub = car.closest('.side__row').nextElementSibling;
+        if (sub && sub.classList.contains('side__sub')) { sub.classList.toggle('is-open'); car.classList.toggle('is-open'); }
+        return;
+      }
+      if (e.target.closest('a.side__item, a.side__subitem')) close();
+    });
+    return drawer;
+  }
+
+  // ── Pages marketing (accueil, tarifs, avis) : on NE touche PAS à la mise en page
+  // (pas de barre latérale ni de fil d'ariane). On injecte uniquement la barre mobile
+  // (hamburger + nouveau tiroir), qui remplace l'ancien menu « Le Terminal Hub ».
+  if (cfg.chromeOnly) {
+    injectMktCss(); // styles .side__acct (carte compte du pied)
+    buildMobileDrawer(document.querySelector('.lt-nav'), buildSideInner());
+    refreshProFooter(); // reflète le statut Premium dans le pied du tiroir
+    return;
   }
 
   // ── PART 1 : enveloppe AppShell si absente (pages injectées) ──
