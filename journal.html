@@ -1191,6 +1191,8 @@ var authMode = 'login';
 try {
   var _t = localStorage.getItem('jnl_trades');
   if(_t) trades = JSON.parse(_t) || [];
+  // Normaliser result en minuscules (correction rétrocompatibilité)
+  trades.forEach(function(t){ if(t.result) t.result = t.result.toLowerCase(); });
 } catch(e) { trades = []; }
 try {
   var _c = localStorage.getItem('jnl_currency');
@@ -1980,7 +1982,7 @@ async function loadFromServer() {
           date: t.trade_date || '',
           session: t.session || '',
           setup: t.setup || '',
-          result: t.result || '',
+          result: (t.result || '').toLowerCase(),
           pnl: t.pnl != null ? parseFloat(t.pnl) : 0,
           rr: t.rr != null ? parseFloat(t.rr) : 0,
           fees: t.fees != null ? parseFloat(t.fees) : 0,
@@ -2845,7 +2847,7 @@ async function importMt5Trades() {
     var t = _mt5ParsedTrades[i];
     var tradeDate = t.date || new Date().toISOString().slice(0,10);
     var tradeDir  = t.direction || 'LONG';
-    var tradeRes  = (t.pnl != null ? (parseFloat(t.pnl) >= 0 ? 'WIN' : 'LOSS') : (t.result || 'WIN'));
+    var tradeRes  = (t.pnl != null ? (parseFloat(t.pnl) >= 0 ? 'win' : 'loss') : (t.result || 'win')).toLowerCase();
     var body = {
       date: tradeDate,
       pair: t.pair || '',
