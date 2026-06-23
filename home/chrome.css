@@ -3,6 +3,13 @@
 
 :root { --chrome-h: 64px; }
 
+/* Verrou anti-défilement horizontal : les lueurs/traînées décoratives débordent
+   volontairement (left:-50%, glows…). Sans clip à la racine, on peut « slider »
+   vers la droite et la barre fixe se décale (elle se cale sur le viewport élargi).
+   `overflow-x: clip` n'crée pas de conteneur de défilement → la barre fixe et le
+   sticky restent intacts (fallback `hidden` pour les vieux Safari). */
+html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
+
 .lt-chrome { position: fixed; top: 0; left: 0; right: 0; z-index: 80; }
 .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: inline-block; }
 
