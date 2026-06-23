@@ -311,7 +311,10 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg-base); color: var(--text-body); font-family: var(--font-text); -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative; }
+/* Verrou anti-défilement horizontal (lueurs décoratives qui débordent) : clip à la
+   racine pour qu'on ne puisse pas « slider » et que la barre fixe ne se décale pas. */
+html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
+body { margin: 0; background: var(--bg-base); color: var(--text-body); font-family: var(--font-text); -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-x: clip; position: relative; }
 
 /* ---------- GLOBAL ATMOSPHERIC BACKGROUND ---------- */
 body::before {
