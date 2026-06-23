@@ -291,62 +291,61 @@
 
   var isUserPro = localStorage.getItem('lt_pro') === '1';
 
-  // Renouvelle le token Supabase si expiré, puis vérifie le statut pro
-  function _ltRefreshAndVerify() {
+  // ── SYNCHRONISATION COMPLÈTE DU COMPTE (sans rechargement) ──
+  // Source de vérité unique : rafraîchit le token si besoin, puis récupère EN UNE
+  // FOIS le statut Premium (autoritatif via /api/check-pro : Supabase → activations
+  // en attente → Whop) ET le profil (pseudo, avatar, nom — avec repli sur les
+  // métadonnées Google). Met à jour le cache + l'UI en place. Appelé à la connexion
+  // (email + Google) et au chargement de chaque page → l'utilisateur est toujours à
+  // jour sans devoir cliquer ni recharger.
+  var _ltSyncing = false;
+  function ltSyncAccount() {
     var tok = localStorage.getItem('ta_token');
-    if (!tok) return;
-    fetch('/api/check-pro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok }
-    }).then(function(r){
-      var status = r.status;
-      return r.json().then(function(d){ return { status: status, data: d }; });
-    }).then(function(resp) {
-      var status = resp.status, d = resp.data;
-      // Token invalide/expiré → tenter le refresh, ne pas toucher à lt_pro
-      if (status === 401 || (d && d.token_invalid)) {
-        return _ltDoRefresh();
-      }
-      var serverPro = !!(d && d.is_pro);
-      var localPro  = localStorage.getItem('lt_pro') === '1';
-      if (serverPro && !localPro) { localStorage.setItem('lt_pro', '1'); location.reload(); }
-      else if (!serverPro && localPro) { localStorage.removeItem('lt_pro'); location.reload(); }
-    }).catch(function(){});
-  }
-
-  function _ltDoRefresh() {
-    var refreshTok = localStorage.getItem('ta_refresh');
-    if (!refreshTok) return;
-    fetch('/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'refresh', refresh_token: refreshTok })
-    }).then(function(r){ return r.json(); }).then(function(d) {
-      if (d && d.access_token) {
-        localStorage.setItem('ta_token', d.access_token);
-        if (d.refresh_token) localStorage.setItem('ta_refresh', d.refresh_token);
-        if (d.is_pro !== undefined) {
+    if (!tok || _ltSyncing) return Promise.resolve();
+    _ltSyncing = true;
+    return ltEnsureSession().then(function(token) {
+      token = token || localStorage.getItem('ta_token');
+      var authH = { 'Authorization': 'Bearer ' + token };
+      var proP = fetch('/api/check-pro', { method: 'POST', headers: Object.assign({ 'Content-Type': 'application/json' }, authH) })
+        .then(function(r){ return r.json(); }).catch(function(){ return null; });
+      var profP = fetch('/api/profile', { method: 'GET', headers: authH })
+        .then(function(r){ return r.json(); }).catch(function(){ return null; });
+      return Promise.all([proP, profP]).then(function(res) {
+        var d = res[0], p = res[1] || {};
+        // Premium : check-pro fait autorité ; repli sur le profil si check-pro échoue.
+        if (d && !d.token_invalid) {
           if (d.is_pro) localStorage.setItem('lt_pro', '1');
           else localStorage.removeItem('lt_pro');
+        } else if (p && p.is_pro) {
+          localStorage.setItem('lt_pro', '1');
         }
-        // Revérifier le statut pro avec le nouveau token
-        fetch('/api/check-pro', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + d.access_token }
-        }).then(function(r){ return r.json(); }).then(function(pd) {
-          var serverPro = !!(pd && pd.is_pro);
-          var localPro  = localStorage.getItem('lt_pro') === '1';
-          if (serverPro && !localPro) { localStorage.setItem('lt_pro', '1'); location.reload(); }
-          else if (!serverPro && localPro) { localStorage.removeItem('lt_pro'); location.reload(); }
-        }).catch(function(){});
-      }
-    }).catch(function(){});
+        // Profil : pseudo / avatar / nom (repli sur Google via auth_name / auth_avatar)
+        var pseudo = p.pseudo || p.auth_name || '';
+        var avatar = p.avatar_url || p.auth_avatar || '';
+        if (pseudo) localStorage.setItem('lt_pseudo', pseudo);
+        if (avatar) localStorage.setItem('lt_avatar', avatar);
+        if (p.first_name) localStorage.setItem('lt_first_name', p.first_name);
+        if (p.last_name)  localStorage.setItem('lt_last_name', p.last_name);
+        if (p.email) localStorage.setItem('ta_email', p.email);
+        _ltProfileFetched = true;
+        // UI en place — aucune rechargement de page.
+        ltSyncUser(); ltRenderUserBar();
+        if (window.ltRebuildAppFooter) { try { window.ltRebuildAppFooter(); } catch(e) {} }
+        // Signale aux pages (compte.html…) qu'elles peuvent rafraîchir leur affichage.
+        try {
+          document.dispatchEvent(new CustomEvent('lt:account-synced', { detail: {
+            is_pro: localStorage.getItem('lt_pro') === '1', pseudo: pseudo, avatar: avatar
+          }}));
+        } catch(e) {}
+      });
+    }).catch(function(){}).finally(function(){ _ltSyncing = false; });
   }
+  window.ltSyncAccount = ltSyncAccount;
 
-  // Vérification serveur au chargement — évite que l'ancien flag lt_pro='1' persiste
+  // Synchronisation serveur au chargement — Premium + profil toujours à jour.
   var _verifyToken = localStorage.getItem('ta_token');
   if (_verifyToken) {
-    _ltRefreshAndVerify();
+    ltSyncAccount();
   }
 
   var navItems = PAGES.map(function(p) {
@@ -771,13 +770,8 @@
         ltStoreSession(data, (data.user && data.user.email) || email.trim());
         ltCloseAuthModal();
         ltSyncUser();
-        if(typeof updateUserUI === 'function') updateUserUI();
-        // Check pro then redirect to app if on landing page
-        fetch('/api/check-pro', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+data.access_token}})
-          .then(function(r){return r.json();}).then(function(d){
-            if(d.is_pro) localStorage.setItem('lt_pro','1');
-            ltRenderUserBar();
-          }).catch(function(){});
+        // Synchronisation complète (Premium + profil) sans rechargement.
+        ltSyncAccount().then(function(){ if(typeof updateUserUI === 'function') updateUserUI(); });
       } else if(data.id) {
         if(errEl) { errEl.style.color='#4ADE9C'; errEl.textContent='Compte créé ! Vérifiez votre email.'; }
       } else {
@@ -974,8 +968,8 @@
   window.ltRenderUserBar = ltRenderUserBar;
   ltSyncUser();
   ltRenderUserBar();
-  // Rafraîchit le token au démarrage si nécessaire (garde la session active entre appareils)
-  ltEnsureSession().then(function(){ ltSyncUser(); ltRenderUserBar(); });
+  // La synchro complète (token + Premium + profil) est déjà lancée plus haut via
+  // ltSyncAccount() si un token est présent — elle met l'UI à jour sans rechargement.
   // Re-render after page auth logic runs (e.g. checkSession async)
   setTimeout(ltRenderUserBar, 800);
   setTimeout(ltRenderUserBar, 2000);
@@ -1187,16 +1181,14 @@
       if(!token || params.get('token_type') !== 'bearer') return;
       history.replaceState(null, '', window.location.pathname + window.location.search);
       ltStoreSession({ access_token: token, refresh_token: params.get('refresh_token'), expires_in: params.get('expires_in') });
-      fetch('/api/auth', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'user', token:token})})
-        .then(function(r){ return r.json(); })
-        .then(function(d){ if(d && d.email) localStorage.setItem('ta_email', d.email); })
-        .catch(function(){})
-        .finally(function(){
-          var dest = sessionStorage.getItem('lt_gate_redirect');
-          sessionStorage.removeItem('lt_gate_redirect');
-          if(dest) window.location.href = dest;
-          else { ltSyncUser(); ltRenderUserBar(); }
-        });
+      // Synchronisation COMPLÈTE avant toute redirection : Premium + photo + pseudo +
+      // nom à jour dès le retour de Google, sans clic ni rechargement supplémentaire.
+      ltSyncAccount().finally(function(){
+        var dest = sessionStorage.getItem('lt_gate_redirect');
+        sessionStorage.removeItem('lt_gate_redirect');
+        if(dest) window.location.replace(dest);
+        else { ltSyncUser(); ltRenderUserBar(); }
+      });
     })();
 
     document.addEventListener('click', function(e){
