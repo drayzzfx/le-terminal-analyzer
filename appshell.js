@@ -313,12 +313,14 @@
       +   '.lt-mnav.is-open{transform:none}'
       +   '.lt-mnav__inner{padding:16px 12px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}'
       + '}'
-      // Pages marketing (.lt-nav--mobilebar) : logo centré une fois les liens texte
-      // masqués (≤860px), compte/connexion à droite.
+      // Pages marketing (.lt-nav--mobilebar) : sur mobile/iPad on ne garde QUE le
+      // logo (la marque) centré — le mot « LE TERMINAL » est masqué. Compte/connexion
+      // à droite.
       + '@media (max-width:860px){'
       +   '.lt-nav--mobilebar{position:relative}'
       +   '.lt-nav--mobilebar .lt-nav__brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;z-index:1}'
-      +   '.lt-nav--mobilebar .lt-nav__word{display:inline!important;letter-spacing:.14em;font-size:12.5px}'
+      +   '.lt-nav--mobilebar .lt-nav__word{display:none!important}'
+      +   '.lt-nav--mobilebar .lt-nav__mark svg{width:24px;height:24px}'
       +   '.lt-nav--mobilebar .lt-nav__actions{position:relative;z-index:2}'
       + '}';
     document.head.appendChild(st);
