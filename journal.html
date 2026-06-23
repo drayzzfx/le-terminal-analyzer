@@ -360,9 +360,10 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
 @media(max-width:680px){
   .stats-row{grid-template-columns:1fr 1fr}
   .form-grid,.form-grid.three{grid-template-columns:1fr}
-  /* ── Calendrier mobile « clean » : grille 7 colonnes lisible, sans la colonne
-        « Sem. » (qui débordait sur le bord), cellules compactes carrées, en-tête
-        épuré (un seul libellé de mois centré entre les flèches). ── */
+  /* ── Calendrier mobile « clean » : grille 7 colonnes lisible, en-tête épuré (un
+        seul libellé de mois centré entre les flèches), cellules un peu plus grandes,
+        et le récap hebdo intégré en BARRE pleine largeur entre les semaines (au lieu
+        d'une 8e colonne qui débordait). ── */
   .calendar-section{padding:14px 12px;border-radius:16px}
   .cal-header{margin-bottom:14px;justify-content:center;gap:0}
   .cal-title{display:none}                 /* doublon : le mois est déjà dans la nav */
@@ -370,15 +371,28 @@ textarea{resize:none;height:72px;line-height:1.6;font-size:12px}
   .cal-nav-btn{width:34px;height:34px;font-size:16px}
   .cal-month{min-width:128px;font-size:13px!important}
   .cal-grid{grid-template-columns:repeat(7,1fr);gap:4px}
-  .cal-dow--wk,.cal-week{display:none}     /* récap hebdo retiré sur mobile */
+  .cal-dow--wk{display:none}               /* en-tête 8e colonne retiré */
   .cal-dow{font-size:9px;letter-spacing:.02em;padding:4px 0}
-  .cal-day{min-height:46px;padding:5px 2px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0}
-  .day-num{font-size:13px}
+  /* Cellules jour : un peu plus grandes, numéro centré en haut. */
+  .cal-day{min-height:56px;padding:7px 2px 6px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0}
+  .day-num{font-size:14px}
   .day-pnl{font-size:10px;margin-top:2px}
   .day-trades-count{display:none}          /* trop chargé dans une petite case */
   .day-dots{margin-top:3px;gap:2px;justify-content:center}
   .day-dot{width:5px;height:5px}
   .cal-day.today::after{bottom:3px;width:3px;height:3px}
+  /* Note : petit indicateur en bas à droite, ne recouvre plus le numéro.
+     (sélecteur .cal-day pour passer devant la règle de base définie plus bas) */
+  .cal-day .day-note-flag{width:16px;height:16px;top:auto;bottom:4px;right:4px;border-radius:5px}
+  .cal-day .day-note-flag svg{width:9px;height:9px}
+  /* Récap hebdo : barre pleine largeur (grid-column 1/-1) entre les semaines. */
+  .cal-week{
+    grid-column:1 / -1;display:flex;flex-direction:row;align-items:center;
+    justify-content:space-between;min-height:0;padding:8px 14px;margin:0;gap:10px;
+    text-align:left;border-radius:9px;
+  }
+  .cal-week__l{font-size:9px;letter-spacing:.14em}
+  .cal-week__v{font-size:14px}
 }
 </style>
 </head>
