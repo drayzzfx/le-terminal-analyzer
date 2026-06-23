@@ -888,10 +888,16 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
   function loadProfile(){
     fetch('/api/profile',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){ return r.ok?r.json():null; }).then(function(p){
       if(!p) return;
-      if(p.first_name) $('setFirst').value=p.first_name;
-      if(p.last_name) $('setLast').value=p.last_name;
-      if(p.pseudo) $('setPseudo').value=p.pseudo;
-      if(p.avatar_url){ avatarData=p.avatar_url; }
+      // Repli sur les infos Google (auth_name / auth_avatar) si le profil ne les a
+      // pas encore : photo + nom + pseudo à jour dès la 1re connexion.
+      var fn=p.first_name, ln=p.last_name;
+      if(!fn && !ln && p.auth_name){ var parts=String(p.auth_name).trim().split(/\s+/); fn=parts.shift()||''; ln=parts.join(' ')||''; }
+      if(fn) $('setFirst').value=fn;
+      if(ln) $('setLast').value=ln;
+      var pseudo=p.pseudo || p.auth_name || '';
+      if(pseudo) $('setPseudo').value=pseudo;
+      var av=p.avatar_url || p.auth_avatar || '';
+      if(av){ avatarData=av; }
       renderAvatarEls(); refreshIdentity(p);
     }).catch(function(){});
   }

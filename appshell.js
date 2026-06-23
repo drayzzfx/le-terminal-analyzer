@@ -236,6 +236,18 @@
       }).catch(function(){});
   }
 
+  // Reconstruit le pied de la barre latérale / du tiroir À PARTIR du cache local
+  // (sans appel réseau). Appelé par menu.js après une synchro de compte pour
+  // refléter immédiatement Premium / pseudo / avatar sans recharger la page.
+  window.ltRebuildAppFooter = function () {
+    var nodes = document.querySelectorAll('#sideFooter');
+    Array.prototype.forEach.call(nodes, function (f) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = buildFooter();
+      if (tmp.firstChild) f.replaceWith(tmp.firstChild);
+    });
+  };
+
   // ── CSS additionnel (sous-menus au style du design) ──
   if (!document.getElementById('appshell-css')) {
     var st = document.createElement('style');
