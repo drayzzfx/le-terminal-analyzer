@@ -63,6 +63,14 @@
 .bm-asset__name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bm-asset__chg{font-family:var(--font-mono);font-size:11px}
 @media(max-width:880px){.bm-layout{flex-direction:column}.bm-assets{width:auto;max-height:260px}}
+/* ── Mobile : on empile la carte à bulles (pleine largeur, plus haute → les bulles
+      respirent et ne se chevauchent plus) PUIS le panneau Performances en dessous,
+      pour qu'on voie tout sans rogner. ── */
+@media(max-width:880px){
+  .bm-split{flex-direction:column;gap:12px}
+  .bm-split>.bm-stage{flex:none !important;width:100%;height:62vh;min-height:420px}
+  .bm-perf{width:auto;align-self:stretch}
+}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
 
@@ -291,7 +299,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
         </div>
       </div>
     </div>
-    <div style="display:flex;gap:14px;align-items:stretch;margin-top:0">
+    <div class="bm-split" style="display:flex;gap:14px;align-items:stretch;margin-top:0">
       <div class="bm-stage panel" style="flex:1;min-width:0">
         <canvas class="bm-canvas" id="bmCanvas"></canvas>
         <span class="bm-tag" data-en="CRYPTO · FOREX · INDICES · COMMODITIES · 60S REFRESH">CRYPTO · FOREX · INDICES · MATIÈRES · MAJ 60 S</span>
