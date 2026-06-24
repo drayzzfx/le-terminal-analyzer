@@ -377,7 +377,7 @@
     <div class="lt-menu-overlay" id="ltMenuOverlay" onclick="ltCloseMenu()"></div>
     <div class="lt-side-menu" id="ltSideMenu">
       <div class="lt-menu-header">
-        <div class="lt-menu-brand"><img src="./image-1782173116658-removebg-preview.png" alt="Le Terminal" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1px solid rgba(127,184,232,.3);margin-right:8px;vertical-align:middle;mix-blend-mode:screen">Le Terminal <span>Hub</span></div>
+        <div class="lt-menu-brand"><img src="./photo_2026-06-24_01-04-12.jpg" alt="Le Terminal" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1px solid rgba(127,184,232,.3);margin-right:8px;vertical-align:middle;mix-blend-mode:screen">Le Terminal <span>Hub</span></div>
         <button class="lt-menu-close" onclick="ltCloseMenu()">✕</button>
       </div>
       <nav class="lt-menu-nav">
