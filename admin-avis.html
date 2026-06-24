@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Terminal — Modération des avis</title>
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-void);color:var(--text-body);font-family:var(--font-ui);min-height:100vh}
+
+/* AUTH GATE */
+#authGate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.ag-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:40px 36px;width:100%;max-width:380px;text-align:center}
+.ag-box h1{font-family:var(--font-display);font-size:22px;text-transform:uppercase;color:var(--text-title);letter-spacing:.06em;margin-bottom:6px}
+.ag-box p{font-size:13px;color:var(--text-muted);margin-bottom:24px}
+.ag-in{width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 14px;color:var(--text-title);font-family:var(--font-ui);font-size:14px;outline:none;margin-bottom:12px}
+.ag-in:focus{border-color:var(--accent)}
+.ag-err{font-size:12px;color:var(--bear);margin-top:8px;min-height:18px}
+
+/* MAIN */
+#admin{display:none;padding:32px 24px;max-width:1100px;margin:0 auto}
+.adm-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+.adm-head h1{font-family:var(--font-display);font-size:clamp(20px,3vw,28px);text-transform:uppercase;color:var(--text-title);letter-spacing:.06em}
+.adm-tabs{display:flex;gap:8px}
+.adm-tab{padding:7px 18px;border:1px solid var(--border);border-radius:var(--r-sm);background:transparent;color:var(--text-muted);font-family:var(--font-ui);font-size:13px;cursor:pointer;transition:all .2s}
+.adm-tab.active,.adm-tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(127,184,232,.07)}
+
+/* CARDS */
+.adm-grid{display:flex;flex-direction:column;gap:12px}
+.adm-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;transition:border-color .2s}
+.adm-card:hover{border-color:var(--border)}
+.adm-card__meta{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.adm-card__name{font-weight:600;font-size:14px;color:var(--text-title)}
+.adm-card__role{font-size:12px;color:var(--text-muted)}
+.adm-card__stars{display:flex;gap:3px;color:#E8C268}
+.adm-card__date{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-left:auto}
+.adm-card__email{font-family:var(--font-mono);font-size:11px;color:var(--text-muted)}
+.adm-card__body{font-size:13.5px;color:var(--text-body);line-height:1.6}
+.adm-card__actions{display:flex;flex-direction:column;gap:8px;min-width:110px}
+.btn-approve{padding:8px 14px;background:rgba(74,222,156,.1);border:1px solid rgba(74,222,156,.3);border-radius:var(--r-sm);color:#4ADE9C;font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
+.btn-approve:hover{background:rgba(74,222,156,.18);border-color:#4ADE9C}
+.btn-delete{padding:8px 14px;background:rgba(240,100,122,.08);border:1px solid rgba(240,100,122,.25);border-radius:var(--r-sm);color:#F0647A;font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
+.btn-delete:hover{background:rgba(240,100,122,.16);border-color:#F0647A}
+.btn-unapprove{padding:8px 14px;background:rgba(232,194,104,.08);border:1px solid rgba(232,194,104,.25);border-radius:var(--r-sm);color:#E8C268;font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
+.btn-unapprove:hover{background:rgba(232,194,104,.16);border-color:#E8C268}
+.adm-empty{text-align:center;padding:60px 24px;color:var(--text-muted);font-size:14px}
+.adm-count{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:14px}
+.adm-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:99px;background:var(--accent);color:#07090C;font-size:10px;font-weight:700;padding:0 5px;margin-left:6px;vertical-align:middle}
+.adm-loader{text-align:center;padding:40px;color:var(--text-muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- AUTH GATE -->
+<div id="authGate">
+  <div class="ag-box">
+    <h1>Modération</h1>
+    <p>Accès réservé à l'administrateur</p>
+    <input class="ag-in" id="agPass" type="password" placeholder="Mot de passe admin" autocomplete="current-password">
+    <button class="lt-btn lt-btn--primary" style="width:100%" id="agBtn">Accéder</button>
+    <div class="ag-err" id="agErr"></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin">
+  <div class="adm-head">
+    <h1>Avis — Modération</h1>
+    <div class="adm-tabs">
+      <button class="adm-tab active" id="tabPending" onclick="showTab('pending')">En attente <span id="badgePending" class="adm-badge" style="display:none"></span></button>
+      <button class="adm-tab" id="tabApproved" onclick="showTab('approved')">Publiés</button>
+    </div>
+  </div>
+  <div id="listArea"><div class="adm-loader">Chargement…</div></div>
+</div>
+
+<script>
+var ADMIN_PASS = 'leterminal-admin-2026';
+var API = '/api/admin-reviews';
+var adminToken = '';
+var allData = {pending:[], approved:[]};
+var curTab = 'pending';
+
+// ── Auth ──
+document.getElementById('agBtn').onclick = function(){
+  var p = document.getElementById('agPass').value.trim();
+  if(p !== ADMIN_PASS){ document.getElementById('agErr').textContent = 'Mot de passe incorrect.'; return; }
+  document.getElementById('authGate').style.display = 'none';
+  document.getElementById('admin').style.display = 'block';
+  adminToken = p;
+  load();
+};
+document.getElementById('agPass').onkeydown = function(e){ if(e.key==='Enter') document.getElementById('agBtn').click(); };
+
+function showTab(tab){
+  curTab = tab;
+  document.getElementById('tabPending').className = 'adm-tab'+(tab==='pending'?' active':'');
+  document.getElementById('tabApproved').className = 'adm-tab'+(tab==='approved'?' active':'');
+  render();
+}
+
+function stars(n){ var s=''; for(var i=0;i<5;i++){ s+='<svg viewBox="0 0 24 24" width="13" height="13" style="opacity:'+(i<n?1:.2)+'"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>'; } return s; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function frDate(iso){ try{ return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+
+function load(){
+  document.getElementById('listArea').innerHTML='<div class="adm-loader">Chargement…</div>';
+  fetch(API+'?all=1',{headers:{'X-Admin-Pass':adminToken}})
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    allData.pending = (d.reviews||[]).filter(function(r){ return !r.approved; });
+    allData.approved = (d.reviews||[]).filter(function(r){ return r.approved; });
+    var badge = document.getElementById('badgePending');
+    if(allData.pending.length>0){ badge.textContent=allData.pending.length; badge.style.display=''; }
+    else { badge.style.display='none'; }
+    render();
+  })
+  .catch(function(){ document.getElementById('listArea').innerHTML='<div class="adm-empty">Erreur de chargement.</div>'; });
+}
+
+function render(){
+  var rows = allData[curTab];
+  var area = document.getElementById('listArea');
+  if(!rows.length){
+    area.innerHTML='<div class="adm-empty">'+(curTab==='pending'?'Aucun avis en attente de modération.':'Aucun avis publié.')+'</div>';
+    return;
+  }
+  area.innerHTML = '<div class="adm-count">'+rows.length+' avis</div><div class="adm-grid">'+rows.map(function(rv){
+    return '<div class="adm-card" id="card-'+rv.id+'">'
+      +'<div>'
+      +'<div class="adm-card__meta">'
+      +'<span class="adm-card__name">'+esc(rv.author_name)+'</span>'
+      +(rv.role?'<span class="adm-card__role">'+esc(rv.role)+'</span>':'')
+      +'<span class="adm-card__stars">'+stars(rv.rating)+'</span>'
+      +'<span class="adm-card__date">'+frDate(rv.created_at)+'</span>'
+      +'</div>'
+      +(rv.user_email?'<div class="adm-card__email">'+esc(rv.user_email)+'</div>':'')
+      +'<div class="adm-card__body" style="margin-top:10px">'+esc(rv.body)+'</div>'
+      +'</div>'
+      +'<div class="adm-card__actions">'
+      +(curTab==='pending'
+        ? '<button class="btn-approve" onclick="approve(\''+rv.id+'\')">Approuver</button>'
+        : '<button class="btn-unapprove" onclick="unapprove(\''+rv.id+'\')">Retirer</button>')
+      +'<button class="btn-delete" onclick="del(\''+rv.id+'\')">Supprimer</button>'
+      +'</div>'
+      +'</div>';
+  }).join('')+'</div>';
+}
+
+function approve(id){
+  if(!confirm('Publier cet avis ?')) return;
+  fetch(API,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Pass':adminToken},body:JSON.stringify({id:id,approved:true})})
+  .then(function(r){ return r.json(); })
+  .then(function(d){ if(d.ok) load(); else alert('Erreur'); })
+  .catch(function(){ alert('Erreur réseau'); });
+}
+
+function unapprove(id){
+  if(!confirm('Retirer cet avis de la page publique ?')) return;
+  fetch(API,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Pass':adminToken},body:JSON.stringify({id:id,approved:false})})
+  .then(function(r){ return r.json(); })
+  .then(function(d){ if(d.ok) load(); else alert('Erreur'); })
+  .catch(function(){ alert('Erreur réseau'); });
+}
+
+function del(id){
+  if(!confirm('Supprimer définitivement cet avis ?')) return;
+  fetch(API,{method:'DELETE',headers:{'Content-Type':'application/json','X-Admin-Pass':adminToken},body:JSON.stringify({id:id})})
+  .then(function(r){ return r.json(); })
+  .then(function(d){ if(d.ok) load(); else alert('Erreur'); })
+  .catch(function(){ alert('Erreur réseau'); });
+}
+</script>
+</body>
+</html>
