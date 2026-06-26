@@ -964,6 +964,50 @@
     ltApplyI18n(_currentLang);
   }
 
+  // ── Sous-menus au survol dans le menu « Outils » (chrome desktop) ──
+  // Au survol d'un outil (Journal, Setup Analyzer, Calendrier, Patrimoine), un
+  // flyout propose « Présentation » + l'accès direct à l'outil. Injecté en JS pour
+  // s'appliquer sur toutes les pages sans toucher au HTML dupliqué de la nav.
+  function ltEnhanceToolsDropdown() {
+    var menu = document.querySelector('.lt-nav__menu');
+    if (!menu || menu.getAttribute('data-sub') === '1') return;
+    var SUBS = {
+      'journal-presentation.html':    [['Présentation','Overview','./journal-presentation.html'], ['Ouvrir le journal','Open the journal','./journal.html']],
+      'analyzer-presentation.html':   [['Présentation','Overview','./analyzer-presentation.html'], ["Ouvrir l'analyseur",'Open the analyzer','./app.html']],
+      'calendrier-presentation.html': [['Présentation','Overview','./calendrier-presentation.html'], ['Ouvrir le calendrier','Open the calendar','./calendrier.html'], ['Édition du jour','Daily edition','./eco-edition.html']],
+      'patrimoine-presentation.html': [['Présentation','Overview','./patrimoine-presentation.html'], ['Portefeuille','Portfolio','./patrimoine.html']]
+    };
+    if (!document.getElementById('ltNavSubCss')) {
+      var st = document.createElement('style'); st.id = 'ltNavSubCss';
+      st.textContent =
+        '.lt-nav__subwrap{position:relative}'
+        + '.lt-nav__menuitem.has-sub .lt-nav__menutop::after{content:"\\203A";margin-left:8px;color:var(--text-muted);font-size:15px;line-height:1}'
+        + '.lt-nav__submenu{position:absolute;top:-8px;left:100%;margin-left:6px;min-width:232px;padding:8px;background:rgba(12,15,20,0.98);border:1px solid var(--border-subtle);border-radius:var(--r-lg,12px);box-shadow:var(--shadow-lg,0 24px 60px rgba(0,0,0,.6));display:flex;flex-direction:column;gap:2px;opacity:0;visibility:hidden;transform:translateX(-6px);pointer-events:none;transition:opacity .18s var(--ease-out,ease),transform .18s var(--ease-out,ease),visibility 0s linear .18s;z-index:30}'
+        + '.lt-nav__submenu::before{content:"";position:absolute;top:0;left:-12px;width:12px;height:100%}'
+        + '.lt-nav__subwrap:hover .lt-nav__submenu{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .18s var(--ease-out,ease),transform .18s var(--ease-out,ease)}'
+        + '.lt-nav__subitem2{display:block;padding:9px 11px;border-radius:var(--r-md,8px);color:var(--text-body);text-decoration:none;font-family:var(--font-text,"Inter",sans-serif);font-size:13.5px;font-weight:500;transition:background .15s,color .15s}'
+        + '.lt-nav__subitem2:hover{background:var(--accent-glow-soft);color:var(--text-title)}';
+      document.head.appendChild(st);
+    }
+    var items = menu.querySelectorAll('.lt-nav__menuitem');
+    Array.prototype.forEach.call(items, function (a) {
+      var href = (a.getAttribute('href') || '').split('/').pop();
+      var sub = SUBS[href];
+      if (!sub) return;
+      var wrap = document.createElement('div'); wrap.className = 'lt-nav__subwrap';
+      a.parentNode.insertBefore(wrap, a);
+      a.classList.add('has-sub');
+      wrap.appendChild(a);
+      var fly = document.createElement('div'); fly.className = 'lt-nav__submenu';
+      fly.innerHTML = sub.map(function (s) {
+        return '<a class="lt-nav__subitem2" href="' + s[2] + '" data-en="' + s[1] + '">' + s[0] + '</a>';
+      }).join('');
+      wrap.appendChild(fly);
+    });
+    menu.setAttribute('data-sub', '1');
+  }
+  ltEnhanceToolsDropdown();
+
   // Init - run immediately and after checkSession completes
   window.ltRenderUserBar = ltRenderUserBar;
   ltSyncUser();
