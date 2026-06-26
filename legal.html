@@ -160,7 +160,9 @@
   .lg-footer a:hover { color: var(--accent); }
   .lg-footer__copy { margin-top: 16px; font-size: 12px; color: var(--border); }
 </style>
+<link rel="stylesheet" href="./design-system.css">
 <link rel="stylesheet" href="./fonts.css">
+  <link rel="canonical" href="https://www.leterminal.net/legal.html">
 </head>
 <body>
 <a id="top"></a>
@@ -170,7 +172,7 @@
 <div class="lt-chrome" id="ltChrome">
   <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
-      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__mark"><img src="./photo_2026-06-24_01-04-12.jpg" alt="Le Terminal" style="width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;"></span>
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </a>
     <nav class="lt-nav__links">
@@ -201,7 +203,9 @@
       <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="./tarifs.html"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
     </div>
   </header>
+</div>
 
+<main class="lg-wrap">
   <!-- ── TOC ── -->
   <nav class="lg-toc" aria-label="Sommaire">
     <p class="lg-toc__title">Sommaire</p>
@@ -315,9 +319,9 @@
       <h4>Processeur de paiement</h4>
       <p>Les paiements sont traités exclusivement par <strong>Whop</strong> (Whop Marketplace Inc., États-Unis), plateforme tierce sécurisée. L'éditeur de Le Terminal ne stocke ni ne traite directement vos données bancaires ou de carte de crédit. Les conditions d'utilisation de Whop s'appliquent conjointement aux présentes CGU pour tout ce qui concerne les transactions financières.</p>
       <h4>Renouvellement &amp; résiliation</h4>
-      <p>Les abonnements se renouvellent automatiquement à leur échéance. Vous pouvez annuler votre abonnement à tout moment depuis votre espace Whop. La résiliation prend effet à la fin de la période en cours déjà réglée ; aucun remboursement au prorata n'est accordé pour la période restante, sauf obligation légale contraire.</p>
-      <h4>Droit de rétractation</h4>
-      <p>Conformément à la directive européenne 2011/83/UE et à la réglementation maltaise applicable, vous disposez d'un droit de rétractation de <strong>14 jours</strong> à compter de la souscription pour les abonnements numériques, sous réserve que vous n'ayez pas commencé à utiliser le service. En accédant aux fonctionnalités Pro dès la souscription, vous reconnaissez expressément renoncer à ce droit de rétractation.</p>
+      <p>Les abonnements se renouvellent automatiquement à leur échéance. Vous pouvez annuler votre abonnement à tout moment depuis votre espace Whop. La résiliation prend effet à la fin de la période en cours déjà réglée.</p>
+      <h4>Absence de remboursement</h4>
+      <p>Aucun remboursement n'est accordé, quelle que soit la durée restante de l'abonnement. En souscrivant, vous reconnaissez expressément avoir pris connaissance de cette politique. Vous avez toutefois la possibilité d'annuler votre abonnement à tout moment afin de ne pas être prélevé lors du prochain renouvellement.</p>
       <h4>Litiges de facturation</h4>
       <p>Toute contestation relative à une facturation doit être adressée à <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a> dans un délai de 30 jours suivant la date du prélèvement contesté.</p>
     </div>
@@ -664,6 +668,8 @@
 </main>
 <script src="./cookies.js"></script>
 <script src="./onboarding.js"></script>
+<script src="./menu.js"></script>
 <script src="./lang.js"></script>
+<script src="./tracker.js"></script>
 </body>
 </html>

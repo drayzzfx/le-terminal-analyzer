@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){window.location.replace('/tarifs.html');},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){localStorage.setItem('lt_pro','1');document.documentElement.style.visibility='';}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);window.location.replace('/tarifs.html');});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){window.location.replace('/tarifs.html');},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);window.location.replace('/tarifs.html');});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
 <title>Le Terminal — Europe</title>
 <link rel="stylesheet" href="./fonts.css">
 <link rel="stylesheet" href="./design-system.css">
@@ -20,13 +20,14 @@
 .pr-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(127,184,232,.08),transparent);animation:prShimmer 1.4s ease infinite}
 @keyframes prShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 </style>
+  <link rel="canonical" href="https://www.leterminal.net/eco-europe.html">
 </head>
 <body class="eco-page">
 <div class="glow" aria-hidden="true"></div>
 <div class="lt-chrome" id="ltChrome">
   <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
-      <span class="lt-nav__mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7v10a1 1 0 0 0 1 1h6"/><path d="m13 18 3-6 3 6"/><path d="M14.2 15.5h3.6"/></svg></span>
+      <span class="lt-nav__mark"><img src="./photo_2026-06-24_01-04-12.jpg" alt="Le Terminal" style="width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;"></span>
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </a>
     <nav class="lt-nav__links">
@@ -215,5 +216,6 @@
 <script src="./cookies.js"></script>
 <script src="./onboarding.js"></script>
 <script src="./lang.js"></script>
+<script src="./tracker.js"></script>
 </body>
 </html>

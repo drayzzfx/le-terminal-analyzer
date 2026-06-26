@@ -72,17 +72,19 @@ module.exports = async function handler(req, res) {
       const lang = (b.lang === 'en') ? 'en' : 'fr';
       const role = clip(b.role, 60);
 
-      // Upsert (1 avis / utilisateur) ; toujours approved=false → modération.
+      // Delete existing review for this user (1 avis / utilisateur), then insert fresh.
+      await supabaseRequest('DELETE', `/rest/v1/reviews?user_id=eq.${userId}`, null, SERVICE_KEY);
+
       const up = await supabaseRequest('POST',
-        '/rest/v1/reviews?on_conflict=user_id',
+        '/rest/v1/reviews',
         {
           user_id: userId, user_email: userEmail, author_name: author,
           role: role || null, rating, body, lang, approved: false,
           created_at: new Date().toISOString()
         },
-        SERVICE_KEY, null, 'resolution=merge-duplicates,return=minimal');
+        SERVICE_KEY, null, 'return=minimal');
 
-      if (up.status >= 300) return res.status(up.status).json({ error: 'save_failed' });
+      if (up.status >= 300) return res.status(500).json({ error: 'save_failed' });
       return res.status(200).json({ ok: true });
     }
 
