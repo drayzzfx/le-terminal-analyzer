@@ -2267,7 +2267,7 @@ async function doAuth(){
   try{
     var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:authMode,email,password})});
     var data=await res.json();
-    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');closeAuth();await checkProStatus();updateUserUI();loadHistory();}
+    if(data.access_token){authToken=data.access_token;currentUser=data.user||{email};localStorage.setItem('ta_token',authToken);localStorage.setItem('ta_email',(data.user&&data.user.email)||email||'');if(data.refresh_token)localStorage.setItem('ta_refresh',data.refresh_token);if(data.expires_in)localStorage.setItem('ta_exp',String(Date.now()+parseInt(data.expires_in,10)*1000));closeAuth();await checkProStatus();updateUserUI();loadHistory();}
     else if(data.id){errEl.style.color='var(--green)';errEl.textContent='Compte créé ! Vérifiez votre email.';}
     else errEl.textContent=data.error_description||data.msg||data.message||'Erreur';
   }catch(e){errEl.textContent='Erreur réseau';}
@@ -2960,6 +2960,25 @@ async function checkProStatus(){
     if(data.is_pro){
       isPro=true;
       localStorage.setItem('lt_pro','1');
+    } else if(data.token_invalid){
+      // Token expiré — tenter un refresh silencieux
+      var rt=localStorage.getItem('ta_refresh');
+      if(rt){
+        try{
+          var rr=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})});
+          var rd=await rr.json();
+          if(rd&&rd.access_token){
+            authToken=rd.access_token;
+            localStorage.setItem('ta_token',rd.access_token);
+            if(rd.refresh_token)localStorage.setItem('ta_refresh',rd.refresh_token);
+            if(rd.expires_in)localStorage.setItem('ta_exp',String(Date.now()+parseInt(rd.expires_in,10)*1000));
+            // Re-vérifier avec le nouveau token
+            var res2=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
+            var data2=await res2.json();
+            if(data2.is_pro){isPro=true;localStorage.setItem('lt_pro','1');}
+          }
+        }catch(e2){}
+      }
     }
   }catch(e){ }
 }
@@ -3524,6 +3543,9 @@ window.doGoogleAuth = doGoogleAuth;
   // Authenticate
   authToken = accessToken;
   localStorage.setItem('ta_token', accessToken);
+  var _rt=params.get('refresh_token');var _ei=params.get('expires_in');
+  if(_rt)localStorage.setItem('ta_refresh',_rt);
+  if(_ei)localStorage.setItem('ta_exp',String(Date.now()+parseInt(_ei,10)*1000));
   fetch('/api/auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
