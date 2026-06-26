@@ -133,8 +133,12 @@
 
   var NAV = [
     { key: 'dashboard', label: 'Accueil', href: './index.html', icon: I.dashboard },
-    { key: 'journal', label: 'Journal de Trading', href: './journal.html', icon: I.journal, pro: true },
+    { key: 'journal', label: 'Journal de Trading', href: './journal.html', icon: I.journal, pro: true, children: [
+      { label: 'Présentation', href: './journal-presentation.html', icon: I.pres },
+      { label: 'Ouvrir le journal', href: './journal.html', icon: I.journal }
+    ] },
     { key: 'analyzer', label: 'Setup Analyzer', href: './app.html', icon: I.analyzer, pro: true, children: [
+      { label: 'Présentation', href: './analyzer-presentation.html', icon: I.pres },
       { label: 'Historique', href: './app.html#historique', icon: I.hist },
       { label: 'Perfs', href: './app.html#perfs', icon: I.perf }
     ] },
@@ -143,7 +147,8 @@
       { label: 'Portefeuille', href: './patrimoine.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>' }
     ] },
     { key: 'calendrier', label: 'Calendrier Éco', href: './calendrier.html', icon: I.calendrier, pro: true, children: [
-      { label: 'Présentation', href: './eco-edition.html', icon: I.pres, children: [
+      { label: 'Présentation', href: './calendrier-presentation.html', icon: I.pres },
+      { label: 'Édition du jour', href: './eco-edition.html', icon: I.pres, children: [
         { label: 'La sélection', href: './eco-selection.html' },
         { label: 'Europe', href: './eco-europe.html' },
         { label: 'Amériques', href: './eco-ameriques.html' },
