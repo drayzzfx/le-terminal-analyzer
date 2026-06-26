@@ -81,6 +81,9 @@
     'mur-des-trades.html': { crumb: 'Mur des Trades',   key: 'trades' },
     'patrimoine.html':            { crumb: 'Patrimoine · Portefeuille',   key: 'patrimoine' },
     'patrimoine-presentation.html': { crumb: 'Patrimoine · Présentation', key: 'patrimoine' },
+    'journal-presentation.html':    { crumb: 'Journal · Présentation',       key: 'journal' },
+    'calendrier-presentation.html': { crumb: 'Calendrier Éco · Présentation', key: 'calendrier' },
+    'analyzer-presentation.html':   { crumb: 'Setup Analyzer · Présentation', key: 'analyzer' },
     'patrimoine-plan.html':       { crumb: 'Patrimoine · Plan',           key: 'patrimoine' },
     // Pages Éco (anciennes pages d'actus) — rattachées à la branche Calendrier
     'eco-edition.html':      { crumb: 'Calendrier Éco · Présentation', key: 'calendrier' },
