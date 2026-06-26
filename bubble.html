@@ -67,6 +67,43 @@
           "item": "https://www.leterminal.net/bubble.html"
         }
       ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'une bubble map ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Une carte à bulles qui visualise des dizaines de marchés d'un coup d'œil : chaque bulle est un actif, sa couleur indique la variation sur 24 h et l'ensemble révèle où circule l'argent."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que représentent la couleur et la taille d'une bulle ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La couleur indique la performance sur 24 h (vert = hausse, rouge = baisse) et la taille reflète l'ampleur du mouvement. Survolez une bulle pour le détail."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels marchés sont couverts ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Crypto, forex, indices et matières premières, réunis sur la même carte."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Les données sont-elles en temps réel ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, les cotations sont rafraîchies environ toutes les 60 secondes."
+          }
+        }
+      ]
     }
   ]
 }
@@ -414,6 +451,35 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 
 </div>
 </div>
+
+<style>
+  .lts{max-width:900px;margin:36px auto 64px;padding:0 24px;font-family:var(--font-text)}
+  .lts__eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .lts__eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+  .lts h2{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.01em;font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.08;color:var(--text-title);margin:44px 0 16px}
+  .lts h2:first-of-type{margin-top:8px}
+  .lts p{font-size:15px;line-height:1.75;color:var(--text-body);margin:0 0 14px}
+  .lts a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+  .lts a:hover{border-bottom-color:var(--accent)}
+  .lts strong{color:var(--text-title);font-weight:600}
+  .lts__qa{border-top:1px solid var(--border-subtle);padding:16px 0}
+  .lts__qa:last-of-type{border-bottom:1px solid var(--border-subtle)}
+  .lts__qa b{display:block;color:var(--text-title);font-size:15px;margin-bottom:6px}
+  .lts__cta{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0}
+  .lts__disc{margin-top:34px;padding:14px 16px;border:1px solid rgba(232,194,104,.28);background:rgba(232,194,104,.06);border-radius:var(--r-md,8px);font-size:12.5px;line-height:1.6;color:var(--text-muted)}
+</style>
+<section class="lts" aria-label="Guide de la Bubble Map">
+  <span class="lts__eyebrow"><span class="lt-dot"></span><span data-en="Capital flows">Flux de capitaux</span></span>
+  <h2 data-en="Bubble Map: see capital flows in real time">Bubble Map : visualisez les flux de capitaux en temps réel</h2>
+  <p data-en="The <strong>bubble map</strong> turns dozens of markets into a single readable picture. Each bubble is an asset; its colour tells you the 24-hour change and its size the strength of the move. In seconds, you see where money is rotating — risk-on or risk-off — across crypto, forex, indices and commodities.">La <strong>bubble map</strong> transforme des dizaines de marchés en une seule image lisible. Chaque bulle est un actif ; sa couleur indique la variation sur 24 h et sa taille la force du mouvement. En quelques secondes, vous voyez où l'argent tourne — appétit ou aversion au risque — entre crypto, forex, indices et matières premières.</p>
+  <h2 data-en="How to read the map">Comment lire la carte</h2>
+  <p data-en="Green bubbles are rising, red ones are falling, and the bigger the bubble, the larger the 24-hour move. Filter by category (crypto, forex, indices, commodities) to focus on your markets, and hover any bubble for its exact change. It is a fast way to spot rotations between sectors before zooming into a single chart.">Les bulles vertes montent, les rouges baissent, et plus la bulle est grande, plus le mouvement sur 24 h est ample. Filtrez par catégorie (crypto, forex, indices, matières premières) pour vous concentrer sur vos marchés, et survolez une bulle pour sa variation exacte. C'est un moyen rapide de repérer les rotations entre secteurs avant de zoomer sur un graphique précis.</p>
+  <h2 data-en="From the big picture to your trade">De la vue d'ensemble à votre trade</h2>
+  <p data-en="Use the bubble map to read sentiment, then size your position with the <a href="./calculateur.html">pip calculator</a>, log the result in your <a href="./journal-presentation.html">trading journal</a> and check the <a href="./calendrier-presentation.html">economic calendar</a> for upcoming volatility.">Servez-vous de la bubble map pour lire le sentiment, puis dimensionnez votre position avec le <a href="./calculateur.html">calculateur de pips</a>, consignez le résultat dans votre <a href="./journal-presentation.html">journal de trading</a> et vérifiez le <a href="./calendrier-presentation.html">calendrier économique</a> pour la volatilité à venir.</p>
+  <h2 data-en="Frequently asked questions">Questions fréquentes</h2>
+  <div class="lts__qa"><b data-en="What is a bubble map?">Qu'est-ce qu'une bubble map ?</b><p data-en="A bubble chart that visualises dozens of markets at a glance: each bubble is an asset, its colour shows the 24h change and the whole picture reveals where money is flowing.">Une carte à bulles qui visualise des dizaines de marchés d'un coup d'œil : chaque bulle est un actif, sa couleur indique la variation sur 24 h et l'ensemble révèle où circule l'argent.</p></div><div class="lts__qa"><b data-en="What do a bubble&#x27;s colour and size mean?">Que représentent la couleur et la taille d'une bulle ?</b><p data-en="Colour shows the 24h performance (green = up, red = down) and size reflects the magnitude of the move. Hover a bubble for details.">La couleur indique la performance sur 24 h (vert = hausse, rouge = baisse) et la taille reflète l'ampleur du mouvement. Survolez une bulle pour le détail.</p></div><div class="lts__qa"><b data-en="Which markets are covered?">Quels marchés sont couverts ?</b><p data-en="Crypto, forex, indices and commodities, on a single map.">Crypto, forex, indices et matières premières, réunis sur la même carte.</p></div><div class="lts__qa"><b data-en="Is the data real-time?">Les données sont-elles en temps réel ?</b><p data-en="Yes, quotes are refreshed roughly every 60 seconds.">Oui, les cotations sont rafraîchies environ toutes les 60 secondes.</p></div>
+  <p class="lts__disc" data-en="Educational decision-support tool — not investment advice. Market data may be delayed; trading carries a high risk of capital loss.">Outil éducatif d'aide à la décision — pas un conseil en investissement. Les données de marché peuvent être différées ; le trading comporte un risque élevé de perte en capital.</p>
+</section>
 
 <script>
 var mkt = 'crypto', sz = 'market_cap_calc';
