@@ -634,12 +634,12 @@
   document.getElementById('shX').onclick=function(){
     var c=compute();
     var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';
-    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');
+    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://www.leterminal.net/mur-des-trades.html'),'_blank');
   };
   document.getElementById('shTg').onclick=function(){
     var c=compute();
     var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';
-    window.open('https://t.me/share/url?url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html')+'&text='+encodeURIComponent(text),'_blank');
+    window.open('https://t.me/share/url?url='+encodeURIComponent('https://www.leterminal.net/mur-des-trades.html')+'&text='+encodeURIComponent(text),'_blank');
   };
   document.getElementById('shLink').onclick=publishToWall;
 
