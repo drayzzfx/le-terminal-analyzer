@@ -159,16 +159,25 @@ module.exports = async function handler(req, res) {
 
   const article = r.body[0];
 
-  // Analyse en cache ?
+  // Analyse en cache ? (servie sans aucun appel IA)
   if (article.analysis) {
     try {
       const cached = JSON.parse(article.analysis);
       res.setHeader('Cache-Control', 's-maxage=3600');
       return res.status(200).json({ article, analysis: cached, cached: true });
-    } catch(e) { /* JSON corrompu, on régénère */ }
+    } catch(e) { /* JSON corrompu, on régénèrera à la demande */ }
   }
 
-  // Génère via Claude
+  // IA UNIQUEMENT à la demande explicite (?analyze=1) → clic utilisateur.
+  // Sans ce paramètre, on renvoie l'article seul (analysis:null) : ZÉRO crédit
+  // Anthropic à la simple ouverture de la page.
+  const wantAnalyze = req.query && (req.query.analyze === '1' || req.query.analyze === 'true');
+  if (!wantAnalyze) {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ article, analysis: null, cached: false, on_demand: true });
+  }
+
+  // Génère via Claude (déclenché par l'utilisateur)
   const analysis = await generateAnalysis(article);
 
   // Sauvegarde en cache Supabase (silencieux si erreur)

@@ -28,6 +28,26 @@ function sbReq(path) {
   });
 }
 
+// Upsert d'un rapport généré à la demande dans daily_summaries (colonnes
+// summary/summary_en, présentes partout → pas de migration requise).
+function sbUpsert(row) {
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  const url = new URL(SUPABASE_URL);
+  const payload = JSON.stringify(row);
+  return new Promise((resolve) => {
+    const r = https.request({
+      hostname: url.hostname, path: '/rest/v1/daily_summaries?on_conflict=day,zone', method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', 'apikey': KEY, 'Authorization': `Bearer ${KEY}`,
+        'Prefer': 'resolution=merge-duplicates,return=minimal', 'Content-Length': Buffer.byteLength(payload)
+      }
+    }, (res) => { res.resume(); resolve(res.statusCode); });
+    r.on('error', () => resolve(0));
+    r.write(payload); r.end();
+  });
+}
+
 // Bornes UTC d'une journée donnée en heure de Paris.
 function parisDayBounds(dayStr) {
   const probe = new Date(dayStr + 'T12:00:00Z');
@@ -174,14 +194,32 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count: 0, report_fr: '', report_en: '', bias: 'Neutre', items: [] });
     }
 
-    const bias = (sumRow && sumRow.top_sentiment) || 'Neutre';
+    let bias = (sumRow && sumRow.top_sentiment) || 'Neutre';
     const item_count = items.length || (sumRow && sumRow.item_count) || 0;
 
     // Réponse immédiate : rapport long stocké, sinon le bilan stocké. AUCUN appel
     // Claude au chargement (c'était la cause des pages vides / délais dépassés).
     // La longueur vient désormais de la génération (stockée), pas de l'affichage.
-    const report_fr = stored || (sumRow && sumRow.summary) || '';
-    const report_en = (repRow && repRow.report_en) || (sumRow && sumRow.summary_en) || '';
+    let report_fr = stored || (sumRow && sumRow.summary) || '';
+    let report_en = (repRow && repRow.report_en) || (sumRow && sumRow.summary_en) || '';
+
+    // ── GÉNÉRATION IA À LA DEMANDE (?generate=1) ──────────────────────────────
+    // Seul point où Claude est appelé pour l'archive, et uniquement sur clic
+    // utilisateur. Si un rapport existe déjà, on le renvoie sans rien régénérer.
+    const wantGenerate = req.query && (req.query.generate === '1' || req.query.deep === '1');
+    if (wantGenerate && !report_fr && items.length > 0) {
+      const synth = await claudeReport(ZONE_LABEL[zone], day, items);
+      if (synth && synth.fr) {
+        report_fr = synth.fr;
+        report_en = synth.en || synth.fr;
+        if (synth.bias && ['Positif', 'Négatif', 'Neutre'].indexOf(synth.bias) !== -1) bias = synth.bias;
+        // Mise en cache : la prochaine ouverture sera instantanée et gratuite.
+        sbUpsert({ day, zone, summary: report_fr, summary_en: report_en, item_count: items.length, top_sentiment: bias }).catch(() => {});
+      }
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count, report_fr, report_en, bias, items, generated: !!(synth && synth.fr) });
+    }
+
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     return res.status(200).json({ ok: true, day, zone, label: ZONE_LABEL[zone], item_count, report_fr, report_en, bias, items });
   } catch (e) {
