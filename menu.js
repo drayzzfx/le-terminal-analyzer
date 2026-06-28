@@ -327,6 +327,9 @@
         if (p.first_name) localStorage.setItem('lt_first_name', p.first_name);
         if (p.last_name)  localStorage.setItem('lt_last_name', p.last_name);
         if (p.email) localStorage.setItem('ta_email', p.email);
+        // Questionnaire d'onboarding : le compte l'a déjà rempli (serveur) → on
+        // mémorise pour ne plus jamais le reposer.
+        if (p.onboarded_at) { try { localStorage.setItem('lt_onboarded', '1'); } catch(e){} }
         _ltProfileFetched = true;
         // UI en place — aucune rechargement de page.
         ltSyncUser(); ltRenderUserBar();
@@ -587,6 +590,10 @@
     localStorage.removeItem('jnl_trades');
     localStorage.removeItem('lt_pseudo');
     localStorage.removeItem('lt_avatar');
+    // Flags d'onboarding : on les efface pour qu'un AUTRE compte soit réévalué
+    // contre le serveur (un questionnaire par compte, pas par appareil).
+    localStorage.removeItem('lt_survey');
+    localStorage.removeItem('lt_onboarded');
   }
 
   window.ltGlobalLogout = function() {
