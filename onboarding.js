@@ -12,7 +12,7 @@
   if (window._ltOnbInit) return; window._ltOnbInit = true;
 
   function tok() { try { return localStorage.getItem('ta_token') || ''; } catch (e) { return ''; } }
-  function isDone() { try { return !!localStorage.getItem('lt_survey'); } catch (e) { return true; } }
+  function isDone() { try { return !!(localStorage.getItem('lt_survey') || localStorage.getItem('lt_onboarded')); } catch (e) { return true; } }
   var EN = (function () { try { return localStorage.getItem('lt_lang') === 'en'; } catch (e) { return false; } })();
 
   // Pas connecté ou déjà répondu → rien à faire.
@@ -195,8 +195,22 @@
 
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
-  // Affiche après un court délai (laisse la page + l'auth se stabiliser).
-  function start() { if (!tok() || isDone()) return; render(); }
+  // Affiche après un court délai, mais UNIQUEMENT si le COMPTE n'a jamais répondu.
+  // Source de vérité = user_profiles.onboarded_at (serveur), pas le localStorage :
+  // ainsi on ne repose plus le questionnaire après un refresh ni sur un nouvel
+  // appareil. Un questionnaire par compte, à vie.
+  function start() {
+    var t = tok();
+    if (!t || isDone()) return;
+    fetch('/api/profile', { headers: { 'Authorization': 'Bearer ' + t } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (p) {
+        var done = !!(p && (p.onboarded_at || (p.survey && typeof p.survey === 'object' && Object.keys(p.survey).length)));
+        if (done) { try { localStorage.setItem('lt_onboarded', '1'); } catch (e) {} return; }
+        render(); // compte neuf, jamais répondu → on propose une seule fois
+      })
+      .catch(function () { /* réseau indisponible : on s'abstient pour ne pas reposer à tort */ });
+  }
   setTimeout(function () {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(start, 900); });
     else start();
