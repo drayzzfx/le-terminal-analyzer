@@ -461,9 +461,13 @@
   var _ltRefreshing = null;
   function ltEnsureSession() {
     var token = localStorage.getItem('ta_token') || '';
+    if(!token) return Promise.resolve('');
+    // Refresh mutualisé global (single-flight) : si le garde-fou de app.html a
+    // défini window.ltRefreshToken, on l'utilise pour qu'il n'y ait JAMAIS deux
+    // refresh concurrents sur le même refresh token Supabase (usage unique).
+    if(typeof window.ltRefreshToken === 'function') return window.ltRefreshToken(false);
     var refresh = localStorage.getItem('ta_refresh') || '';
     var exp = parseInt(localStorage.getItem('ta_exp') || '0', 10);
-    if(!token) return Promise.resolve('');
     // Marge de 60s : on rafraîchit un peu avant l'expiration réelle.
     if(!refresh || (exp && Date.now() < exp - 60000)) return Promise.resolve(token);
     if(_ltRefreshing) return _ltRefreshing;

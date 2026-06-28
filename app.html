@@ -2,7 +2,48 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){window.location.replace('/tarifs.html');},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);window.location.replace('/tarifs.html');});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<script>(function(){
+if((window.location.hash||'').indexOf('access_token')!==-1)return;
+var t=localStorage.getItem('ta_token');
+if(!t){window.location.replace('/tarifs.html');return;}
+document.documentElement.style.visibility='hidden';
+window.ltRefreshToken=function(force){
+  var rt=localStorage.getItem('ta_refresh')||'';
+  var tok=localStorage.getItem('ta_token')||'';
+  var exp=parseInt(localStorage.getItem('ta_exp')||'0',10);
+  if(!rt)return Promise.resolve(tok);
+  if(!force&&exp&&Date.now()<exp-60000)return Promise.resolve(tok);
+  if(window.__ltRefreshPromise)return window.__ltRefreshPromise;
+  window.__ltRefreshPromise=fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})})
+    .then(function(r){return r.json();})
+    .then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));return d.access_token;}return tok;})
+    .catch(function(){return tok;})
+    .finally(function(){window.__ltRefreshPromise=null;});
+  return window.__ltRefreshPromise;
+};
+var _to=setTimeout(function(){document.documentElement.style.visibility='';},9000);
+function chk(tok){
+  fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){
+    clearTimeout(_to);
+    if(d&&d.is_pro){
+      var wasCached=localStorage.getItem('lt_pro')==='1';
+      localStorage.setItem('lt_pro','1');
+      if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}
+    }else if(d&&d.token_invalid){
+      document.documentElement.style.visibility='';
+      if(localStorage.getItem('lt_pro')!=='1'){window.location.replace('/tarifs.html');}
+    }else{
+      localStorage.removeItem('lt_pro');
+      window.location.replace('/tarifs.html');
+    }
+  }).catch(function(){
+    clearTimeout(_to);
+    document.documentElement.style.visibility='';
+    if(localStorage.getItem('lt_pro')!=='1'){window.location.replace('/tarifs.html');}
+  });
+}
+window.ltRefreshToken(false).then(function(tok){chk(tok||t);});
+})();</script>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#7FB8E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2967,28 +3008,31 @@ window.saveRR=saveRR;
 window.saveNotes=saveNotes;
 window.requestIAFeedback=requestIAFeedback;
 
-// Rafraîchit le token d'accès via le refresh token Supabase.
-// Renvoie true si un nouveau token a été obtenu. Mutualisé (anti-doublon).
-var _refreshing=null;
+// Refresh mutualisé : délègue au single-flight global window.ltRefreshToken
+// (défini par le garde-fou en tête de page) pour ne JAMAIS lancer deux refresh
+// concurrents sur le même refresh token Supabase (à usage unique — c'était la
+// cause de la perte de Premium au retour sur le site). Renvoie true si un
+// nouveau token a été obtenu.
 async function _refreshSession(){
-  var rt=localStorage.getItem('ta_refresh');
-  if(!rt) return false;
-  if(_refreshing) return _refreshing;
-  _refreshing=(async function(){
+  if(!localStorage.getItem('ta_refresh')) return false;
+  var before=localStorage.getItem('ta_token');
+  var tok;
+  if(typeof window.ltRefreshToken==='function'){
+    tok=await window.ltRefreshToken(true);
+  }else{
     try{
-      var rr=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})});
+      var rr=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:localStorage.getItem('ta_refresh')})});
       var rd=await rr.json();
       if(rd&&rd.access_token){
-        authToken=rd.access_token;
         localStorage.setItem('ta_token',rd.access_token);
         if(rd.refresh_token)localStorage.setItem('ta_refresh',rd.refresh_token);
         if(rd.expires_in)localStorage.setItem('ta_exp',String(Date.now()+parseInt(rd.expires_in,10)*1000));
-        return true;
+        tok=rd.access_token;
       }
     }catch(e){}
-    return false;
-  })();
-  try{ return await _refreshing; } finally{ _refreshing=null; }
+  }
+  authToken=localStorage.getItem('ta_token')||tok||authToken;
+  return !!tok && tok!==before;
 }
 window._refreshSession=_refreshSession;
 
@@ -3028,8 +3072,19 @@ async function checkSession(){
       document.documentElement.style.visibility='';
       updateUserUI();loadHistory();
     } else {
-      // Toujours invalide après refresh → session réellement expirée (refresh token
-      // révoqué/absent). On nettoie et on redirige.
+      // Token mort ET refresh impossible (cas le plus courant : session ouverte
+      // AVANT l'ajout du refresh token). On NE rétrograde JAMAIS un compte déjà
+      // confirmé Premium : on garde l'accès via le cache lt_pro et on retente une
+      // revérification en arrière-plan (sans bloquer ni rediriger).
+      if(localStorage.getItem('lt_pro')==='1'){
+        isPro=true;
+        document.documentElement.style.visibility='';
+        updateUserUI();loadHistory();
+        // Tentative silencieuse de remise à niveau du token, plus tard, si possible.
+        setTimeout(function(){ _refreshSession().then(function(ok){ if(ok) checkProStatus(); }); }, 1500);
+        return;
+      }
+      // Jamais confirmé Premium → vraie session expirée : on nettoie et on redirige.
       authToken=null;currentUser=null;
       localStorage.removeItem('ta_token');
       localStorage.removeItem('ta_email');
