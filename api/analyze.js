@@ -29,6 +29,9 @@ function supabaseRequest(method, path, body, apiKey, authToken, prefer) {
 }
 
 const COST = { analyze: 1 }; // coût en tokens d'une analyse pour un compte gratuit
+// Admin : Premium à vie → analyses illimitées (email lu depuis le JWT vérifié).
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'obstetar.adrien@gmail.com')
+  .toLowerCase().split(',').map(function (s) { return s.trim(); }).filter(Boolean);
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -83,7 +86,7 @@ module.exports = async function handler(req, res) {
         profile = { tokens: 5, is_pro: false };
       }
 
-      const isPro = !!(profile && profile.is_pro);
+      const isPro = !!(profile && profile.is_pro) || ADMIN_EMAILS.includes((userEmail || '').toLowerCase());
       let tokens = (profile && profile.tokens != null) ? profile.tokens : 5;
 
       if (!isPro) {

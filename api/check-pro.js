@@ -1,5 +1,11 @@
 const https = require('https');
 
+// Liste blanche admin : ces comptes sont Premium à vie, quel que soit l'état de
+// la base ou de Whop. L'email est lu depuis le JWT Supabase vérifié (non usurpable).
+// Surchargeable via la variable d'env ADMIN_EMAILS (séparés par des virgules).
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'obstetar.adrien@gmail.com')
+  .toLowerCase().split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+
 function supabaseRequest(method, path, body, apiKey, authToken) {
   const url = new URL(process.env.SUPABASE_URL);
   return new Promise((resolve, reject) => {
@@ -77,6 +83,11 @@ module.exports = async function handler(req, res) {
     const userEmail = userRes.body?.email;
 
     if (!userId || !userEmail) return res.status(401).json({ is_pro: false, token_invalid: true });
+
+    // Admin → Premium permanent, sans dépendre de la base ni de Whop.
+    if (ADMIN_EMAILS.includes(userEmail.toLowerCase())) {
+      return res.status(200).json({ is_pro: true, source: 'admin' });
+    }
 
     // Check user_profiles table using SERVICE_KEY to bypass RLS
     const profileRes = await supabaseRequest(
