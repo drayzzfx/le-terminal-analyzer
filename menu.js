@@ -5,6 +5,8 @@
 
   // Détecte la page active
   var page = window.location.pathname.split('/').pop() || 'index.html';
+  // URLs propres (cleanUrls) : on rétablit .html pour le matching interne.
+  if (page && page.indexOf('.') === -1) page += '.html';
 
   var ICONS = {
     dashboard: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
@@ -982,11 +984,12 @@
   function ltEnhanceToolsDropdown() {
     var menu = document.querySelector('.lt-nav__menu');
     if (!menu || menu.getAttribute('data-sub') === '1') return;
+    // Clés par nom de page propre (sans .html) ; cibles des liens en URLs propres.
     var SUBS = {
-      'journal-presentation.html':    [['Présentation','Overview','./journal-presentation.html'], ['Ouvrir le journal','Open the journal','./journal.html']],
-      'analyzer-presentation.html':   [['Présentation','Overview','./analyzer-presentation.html'], ["Ouvrir l'analyseur",'Open the analyzer','./app.html']],
-      'calendrier-presentation.html': [['Présentation','Overview','./calendrier-presentation.html'], ['Ouvrir le calendrier','Open the calendar','./calendrier.html'], ['Édition du jour','Daily edition','./eco-edition.html']],
-      'patrimoine-presentation.html': [['Présentation','Overview','./patrimoine-presentation.html'], ['Portefeuille','Portfolio','./patrimoine.html']]
+      'journal-presentation':    [['Présentation','Overview','/journal-presentation'], ['Ouvrir le journal','Open the journal','/journal']],
+      'analyzer-presentation':   [['Présentation','Overview','/analyzer-presentation'], ["Ouvrir l'analyseur",'Open the analyzer','/app']],
+      'calendrier-presentation': [['Présentation','Overview','/calendrier-presentation'], ['Ouvrir le calendrier','Open the calendar','/calendrier'], ['Édition du jour','Daily edition','/eco-edition']],
+      'patrimoine-presentation': [['Présentation','Overview','/patrimoine-presentation'], ['Portefeuille','Portfolio','/patrimoine']]
     };
     if (!document.getElementById('ltNavSubCss')) {
       var st = document.createElement('style'); st.id = 'ltNavSubCss';
@@ -1002,7 +1005,7 @@
     }
     var items = menu.querySelectorAll('.lt-nav__menuitem');
     Array.prototype.forEach.call(items, function (a) {
-      var href = (a.getAttribute('href') || '').split('/').pop();
+      var href = (a.getAttribute('href') || '').split('/').pop().replace(/\.html$/, '');
       var sub = SUBS[href];
       if (!sub) return;
       var wrap = document.createElement('div'); wrap.className = 'lt-nav__subwrap';
