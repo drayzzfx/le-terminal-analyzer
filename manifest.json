@@ -8,15 +8,26 @@
   "description": "Votre hub de trading ICT/SMC",
   "icons": [
     {
-      "src": "./logo.jpg.webp",
+      "src": "./favicon-192.png",
       "sizes": "192x192",
-      "type": "image/webp"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "./logo.jpg.webp",
+      "src": "./favicon-512.png",
       "sizes": "512x512",
-      "type": "image/webp"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
-  "categories": ["finance", "productivity"]
+  "categories": [
+    "finance",
+    "productivity"
+  ]
 }
