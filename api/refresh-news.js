@@ -144,90 +144,51 @@ async function logFeedError(source, url, error) {
   return sbReq('POST', '/rest/v1/feed_errors', { source, url, error: String(error) });
 }
 
-// ── CLAUDE SUMMARY (FR + EN, 3 sentiments) ───────────────────────────────────
-// Pour la zone "flash" : champ supplémentaire market_moving (50+ pts SP500/DAX/Nasdaq)
-async function getSummaryAndSentiment(title, desc, zone) {
-  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) return { title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', market_moving: true, important: true };
+// ── CLASSIFICATION SANS IA (mots-clés, zéro crédit) ──────────────────────────
+// L'ingestion des annonces ne consomme AUCUN crédit Anthropic : on alimente le
+// calendrier/les flux à partir des RSS, et on classe sentiment + importance via
+// de simples heuristiques par mots-clés. L'analyse IA fine reste 100 % à la
+// demande (clic utilisateur), jamais en tâche de fond.
+const KW_IMPORTANT = [
+  'cpi','ppi','nfp','non-farm','nonfarm','pce','gdp','pib','inflation','taux',
+  'rate','rates','fomc','fed','federal reserve','powell','bce','ecb','lagarde',
+  'boj','boe','snb','central bank','banque centrale','unemployment','chômage',
+  'chomage','emploi','jobs','payroll','récession','recession','default','défaut',
+  'faillite','bankrupt','tariff','tarif','sanction','guerre','war','crise','crash',
+  'rally','plunge','surge','earnings','résultats','dividende','opep','opec','oil',
+  'pétrole','petrole','bitcoin','btc','ethereum','eth','halving','etf','treasury',
+  'obligations','yield','rendement','downgrade','upgrade','stimulus','relance'
+];
+const KW_POS = ['hausse','bond','rebond','record','croissance','accord','surge','rally','gain','beat','meilleur','optimis','soar','jump','rise','up ','strong','fort','expansion','reprise','positif'];
+const KW_NEG = ['baisse','chute','recul','crise','récession','recession','crash','plunge','default','défaut','faillite','bankrupt','conflit','guerre','war','sanction','miss','pire','worse','fear','craint','slump','drop','fall','weak','faible','contraction','licencie','layoff'];
 
-  const isFlash = zone === 'flash';
-  const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').slice(0, 400);
-
-  const flashExtra = isFlash ? `
-- "market_moving": true UNIQUEMENT si cette annonce est susceptible de faire bouger un indice majeur (SP500, DAX, Nasdaq, CAC40) de plus de 50 points à elle seule. Exemples qui passent : chiffre CPI/NFP très surprenant, décision de taux inattendue, faillite majeure, discours Powell hawkish/dovish fort, guerre/escalade géopolitique, tariff surprise. Exemples qui NE passent PAS : article d'opinion, analyse sans chiffre, news connue d'avance, rappel d'une décision déjà prise.` : '';
-
-  const flashField = isFlash ? `,
-  "market_moving": <true|false>` : '';
-
-  const prompt = `Tu es un trader institutionnel senior. Voici un article économique.
-
-Titre : ${title}
-Contenu : ${cleanDesc}
-Zone : ${zone}
-
-Réponds UNIQUEMENT en JSON strict, sans markdown :
-{
-  "title_fr": "<le titre traduit en FRANÇAIS naturel, fidèle et concis — pas de traduction mot-à-mot, garde les noms propres/tickers/sigles tels quels>",
-  "title_en": "<the headline in ENGLISH>",
-  "summary_fr": "<résumé factuel 1-2 phrases en FRANÇAIS>",
-  "summary_en": "<same 1-2 sentences in ENGLISH>",
-  "sentiment": "<Positif|Négatif|Neutre>",
-  "important": <true|false>${flashField}
+function _score(text, words) {
+  let n = 0;
+  for (const w of words) if (text.indexOf(w) !== -1) n++;
+  return n;
 }
 
-Règle titre : "title_fr" DOIT être en français correct, même si le titre d'origine est en anglais. Si le titre est déjà en français, recopie-le tel quel. "title_en" = la version anglaise du même titre.
-
-Règles sentiment :
-- Positif : données meilleures qu'attendu, hausse marchés, accord commercial, croissance, emploi fort
-- Négatif : données décevantes, baisse marchés, crise, récession, conflit, faillite
-- Neutre : statu quo, publication sans surprise, déclaration sans impact clair
-
-Règle "important" : true UNIQUEMENT si l'annonce est vraiment significative pour un trader (macro, banque centrale, donnée clé CPI/NFP/PIB/emploi/inflation, décision de taux, mouvement de marché notable, géopolitique à impact, résultats majeurs). false pour : opinion/édito, sujet de société, marronnier, contenu promo/sponsorisé, sujet déjà connu sans nouveauté, info mineure.${flashExtra}`;
-
-  const payload = JSON.stringify({
-    model: 'claude-haiku-4-5',
-    max_tokens: 300,
-    messages: [{ role: 'user', content: prompt }]
-  });
-
-  return new Promise((resolve) => {
-    const req = https.request({
-      hostname: 'api.anthropic.com',
-      path: '/v1/messages',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload),
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      }
-    }, (res) => {
-      let data = '';
-      res.on('data', c => data += c);
-      res.on('end', () => {
-        try {
-          const body = JSON.parse(data);
-          const text = body.content?.[0]?.text || '{}';
-          const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
-          // Normalise le sentiment vers 3 valeurs uniquement
-          let sentiment = parsed.sentiment || 'Neutre';
-          if (!['Positif','Négatif','Neutre'].includes(sentiment)) sentiment = 'Neutre';
-          resolve({
-            title_fr:     parsed.title_fr || '',
-            title_en:     parsed.title_en || '',
-            summary:      parsed.summary_fr || parsed.summary || '',
-            summary_en:   parsed.summary_en || '',
-            sentiment,
-            market_moving: parsed.market_moving !== false, // true par défaut pour zones non-flash
-            important: parsed.important !== false, // true par défaut si non précisé
-          });
-        } catch(e) { resolve({ title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', important: true }); }
-      });
-    });
-    req.on('error', () => resolve({ title_fr: '', title_en: '', summary: '', summary_en: '', sentiment: 'Neutre', important: true }));
-    req.write(payload);
-    req.end();
-  });
+// Renvoie la même forme que l'ancienne fonction IA, mais SANS appel réseau.
+function getSummaryAndSentiment(title, desc, zone) {
+  const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const hay = (title + ' ' + cleanDesc).toLowerCase();
+  const pos = _score(hay, KW_POS);
+  const neg = _score(hay, KW_NEG);
+  let sentiment = 'Neutre';
+  if (pos > neg) sentiment = 'Positif';
+  else if (neg > pos) sentiment = 'Négatif';
+  const important = _score(hay, KW_IMPORTANT) > 0;
+  return {
+    title_fr: '',                                   // pas de traduction IA à l'ingestion
+    title_en: '',
+    summary: cleanDesc.slice(0, 220),               // extrait brut du flux
+    summary_en: '',
+    sentiment,
+    // flash : on ne garde que les annonces à fort potentiel (mots-clés macro) ;
+    // autres zones : idem, on filtre le bruit éditorial.
+    market_moving: important,
+    important,
+  };
 }
 
 // ── MAIN HANDLER ─────────────────────────────────────────────────────────────

@@ -210,7 +210,7 @@
 <div class="lt-chrome" id="ltChrome">
   <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
-      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </a>
     <nav class="lt-nav__links">
@@ -638,12 +638,12 @@
   document.getElementById('shX').onclick=function(){
     var c=compute();
     var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';
-    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html'),'_blank');
+    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://www.leterminal.net/mur-des-trades.html'),'_blank');
   };
   document.getElementById('shTg').onclick=function(){
     var c=compute();
     var text=(document.getElementById('gPair').value||'')+' '+(side==='long'?'Long':'Short')+' '+(c.pct>=0?'+':'−')+Math.abs(Math.round(c.pct))+'% · Le Terminal';
-    window.open('https://t.me/share/url?url='+encodeURIComponent('https://le-terminal-analyzer.vercel.app/mur-des-trades.html')+'&text='+encodeURIComponent(text),'_blank');
+    window.open('https://t.me/share/url?url='+encodeURIComponent('https://www.leterminal.net/mur-des-trades.html')+'&text='+encodeURIComponent(text),'_blank');
   };
   document.getElementById('shLink').onclick=publishToWall;
 

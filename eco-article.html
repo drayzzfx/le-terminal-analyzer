@@ -317,7 +317,7 @@
 <div class="lt-chrome" id="ltChrome">
   <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
-      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </a>
     <nav class="lt-nav__links">
@@ -600,8 +600,17 @@
       // Conclusion
       html += '<div class="art-conclusion" style="animation:rise 0.5s 0.35s both">'+esc(a.conclusion)+'</div>';
     } else {
-      // Pas d'analyse — affiche le résumé
-      html += '<div class="art-conclusion">'+esc(sum || (l==='en'?'No analysis available.':'Analyse non disponible.'))+'</div>';
+      // Pas d'analyse IA encore générée → on affiche le résumé brut + un bouton
+      // qui déclenche l'analyse IA À LA DEMANDE (aucun crédit tant que non cliqué).
+      html += '<div class="art-conclusion">'+esc(sum || (l==='en'?'No summary available.':'Résumé non disponible.'))+'</div>';
+      html += '<div style="text-align:center;margin:24px 0">'
+        + '<button class="btn" id="artAnalyzeBtn" style="display:inline-flex;align-items:center;gap:9px;cursor:pointer">'
+        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/><circle cx="12" cy="12" r="4"/></svg>'
+        + (l==='en' ? 'Analyse this announcement with AI' : 'Analyser cette annonce avec l\'IA')
+        + '</button>'
+        + '<p style="margin-top:10px;font-size:11.5px;color:var(--muted,#8A93A0)">'
+        + (l==='en' ? 'On-demand AI analysis — generated only when you click.' : 'Analyse IA à la demande — générée uniquement à votre clic.')
+        + '</p></div>';
     }
 
     // CTA source
@@ -617,6 +626,32 @@
     html += '</div>'; // art-page
 
     root.innerHTML = html;
+
+    // Bouton « Analyser cette annonce » → génère l'analyse IA À LA DEMANDE.
+    var ab = document.getElementById('artAnalyzeBtn');
+    if (ab) {
+      ab.addEventListener('click', async function () {
+        var l2 = getLang();
+        ab.disabled = true;
+        ab.style.opacity = '0.6';
+        ab.style.cursor = 'wait';
+        ab.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>'
+          + (l2==='en' ? 'Analysing…' : 'Analyse en cours…');
+        try {
+          var rr = await fetch('/api/article?id=' + encodeURIComponent(id) + '&analyze=1&_t=' + Date.now());
+          var dd = await rr.json();
+          if (dd && dd.analysis) {
+            render(dd.article || article, dd.analysis, imageUrl);
+          } else {
+            ab.disabled = false; ab.style.opacity = '1'; ab.style.cursor = 'pointer';
+            ab.textContent = l2==='en' ? 'Analysis unavailable — retry' : 'Analyse indisponible — réessayer';
+          }
+        } catch (e) {
+          ab.disabled = false; ab.style.opacity = '1'; ab.style.cursor = 'pointer';
+          ab.textContent = l2==='en' ? 'Error — retry' : 'Erreur — réessayer';
+        }
+      });
+    }
   }
 
   function buildBiais(text) {
@@ -640,8 +675,8 @@
     var l = getLang();
     root.innerHTML = '<div class="art-loading">'
       + '<div class="art-spinner"></div>'
-      + '<p>'+(l==='en'?'Generating analysis…':'Génération de l\'analyse…')+'<br>'
-      + '<small>'+(l==='en'?'Le Terminal is analysing the article for you.':'Le Terminal analyse l\'article pour vous.')+'</small></p>'
+      + '<p>'+(l==='en'?'Loading…':'Chargement…')+'<br>'
+      + '<small>'+(l==='en'?'Le Terminal is loading the announcement.':'Le Terminal charge l\'annonce.')+'</small></p>'
       + '</div>';
   }
 

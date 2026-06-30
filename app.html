@@ -7,6 +7,48 @@
 <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){window.location.replace('/tarifs.html');},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);window.location.replace('/tarifs.html');});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<script>(function(){
+if((window.location.hash||'').indexOf('access_token')!==-1)return;
+var t=localStorage.getItem('ta_token');
+if(!t){window.location.replace('/tarifs.html');return;}
+document.documentElement.style.visibility='hidden';
+window.ltRefreshToken=function(force){
+  var rt=localStorage.getItem('ta_refresh')||'';
+  var tok=localStorage.getItem('ta_token')||'';
+  var exp=parseInt(localStorage.getItem('ta_exp')||'0',10);
+  if(!rt)return Promise.resolve(tok);
+  if(!force&&exp&&Date.now()<exp-60000)return Promise.resolve(tok);
+  if(window.__ltRefreshPromise)return window.__ltRefreshPromise;
+  window.__ltRefreshPromise=fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})})
+    .then(function(r){return r.json();})
+    .then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));return d.access_token;}return tok;})
+    .catch(function(){return tok;})
+    .finally(function(){window.__ltRefreshPromise=null;});
+  return window.__ltRefreshPromise;
+};
+var _to=setTimeout(function(){document.documentElement.style.visibility='';},9000);
+function chk(tok){
+  fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){
+    clearTimeout(_to);
+    if(d&&d.is_pro){
+      var wasCached=localStorage.getItem('lt_pro')==='1';
+      localStorage.setItem('lt_pro','1');
+      if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}
+    }else if(d&&d.token_invalid){
+      document.documentElement.style.visibility='';
+      if(localStorage.getItem('lt_pro')!=='1'){window.location.replace('/tarifs.html');}
+    }else{
+      localStorage.removeItem('lt_pro');
+      window.location.replace('/tarifs.html');
+    }
+  }).catch(function(){
+    clearTimeout(_to);
+    document.documentElement.style.visibility='';
+    if(localStorage.getItem('lt_pro')!=='1'){window.location.replace('/tarifs.html');}
+  });
+}
+window.ltRefreshToken(false).then(function(tok){chk(tok||t);});
+})();</script>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#7FB8E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1159,7 +1201,7 @@ textarea { resize: none; height: 80px; line-height: 1.6; font-size: 12px; }
   <div class="lt-chrome" id="ltChrome">
     <header class="lt-nav">
     <a class="lt-nav__brand" href="./index.html">
-      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
       <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
     </a>
     <nav class="lt-nav__links">
@@ -2970,6 +3012,34 @@ window.saveRR=saveRR;
 window.saveNotes=saveNotes;
 window.requestIAFeedback=requestIAFeedback;
 
+// Refresh mutualisé : délègue au single-flight global window.ltRefreshToken
+// (défini par le garde-fou en tête de page) pour ne JAMAIS lancer deux refresh
+// concurrents sur le même refresh token Supabase (à usage unique — c'était la
+// cause de la perte de Premium au retour sur le site). Renvoie true si un
+// nouveau token a été obtenu.
+async function _refreshSession(){
+  if(!localStorage.getItem('ta_refresh')) return false;
+  var before=localStorage.getItem('ta_token');
+  var tok;
+  if(typeof window.ltRefreshToken==='function'){
+    tok=await window.ltRefreshToken(true);
+  }else{
+    try{
+      var rr=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:localStorage.getItem('ta_refresh')})});
+      var rd=await rr.json();
+      if(rd&&rd.access_token){
+        localStorage.setItem('ta_token',rd.access_token);
+        if(rd.refresh_token)localStorage.setItem('ta_refresh',rd.refresh_token);
+        if(rd.expires_in)localStorage.setItem('ta_exp',String(Date.now()+parseInt(rd.expires_in,10)*1000));
+        tok=rd.access_token;
+      }
+    }catch(e){}
+  }
+  authToken=localStorage.getItem('ta_token')||tok||authToken;
+  return !!tok && tok!==before;
+}
+window._refreshSession=_refreshSession;
+
 async function checkSession(){
   var token=localStorage.getItem('ta_token');
   if(!token){window.location.href='./index.html?paywall=1';return;}
@@ -2978,9 +3048,22 @@ async function checkSession(){
   var savedEmail=localStorage.getItem('ta_email')||'';
   currentUser={email:savedEmail};
   updateUserUI();
+  // Rafraîchir le token de façon proactive s'il est expiré ou sur le point de l'être.
+  // Évite l'éjection en gratuit au retour sur le site après >1h (token périmé).
+  var _exp=parseInt(localStorage.getItem('ta_exp')||'0',10);
+  if(localStorage.getItem('ta_refresh') && (!_exp || Date.now() > _exp - 60000)){
+    if(await _refreshSession()) token=authToken;
+  }
   try{
-    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token})});
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token:token})});
     var data=await res.json();
+    // Token invalide/expiré → tenter un refresh silencieux puis réessayer UNE fois,
+    // avant toute redirection vers le gratuit.
+    if(!data.id && await _refreshSession()){
+      token=authToken;
+      res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'user',token:token})});
+      data=await res.json();
+    }
     if(data.id){
       currentUser=data;
       localStorage.setItem('ta_email', data.email||'');
@@ -2993,16 +3076,34 @@ async function checkSession(){
       document.documentElement.style.visibility='';
       updateUserUI();loadHistory();
     } else {
-      if(data.error){
-        authToken=null;currentUser=null;
-        localStorage.removeItem('ta_token');
-        localStorage.removeItem('ta_email');
-        window.location.replace('/tarifs.html');
+      // Token mort ET refresh impossible (cas le plus courant : session ouverte
+      // AVANT l'ajout du refresh token). On NE rétrograde JAMAIS un compte déjà
+      // confirmé Premium : on garde l'accès via le cache lt_pro et on retente une
+      // revérification en arrière-plan (sans bloquer ni rediriger).
+      if(localStorage.getItem('lt_pro')==='1'){
+        isPro=true;
+        document.documentElement.style.visibility='';
+        updateUserUI();loadHistory();
+        // Tentative silencieuse de remise à niveau du token, plus tard, si possible.
+        setTimeout(function(){ _refreshSession().then(function(ok){ if(ok) checkProStatus(); }); }, 1500);
         return;
       }
+      // Jamais confirmé Premium → vraie session expirée : on nettoie et on redirige.
+      authToken=null;currentUser=null;
+      localStorage.removeItem('ta_token');
+      localStorage.removeItem('ta_email');
+      window.location.replace('/tarifs.html');
+      return;
     }
   }catch(e){
-    // Network error — impossible de vérifier, rediriger par sécurité
+    // Erreur réseau — ne pas déconnecter brutalement : si le statut PRO était en cache,
+    // laisser l'utilisateur entrer (checkProStatus retentera). Sinon rediriger.
+    if(localStorage.getItem('lt_pro')==='1'){
+      isPro=true;
+      document.documentElement.style.visibility='';
+      updateUserUI();loadHistory();
+      return;
+    }
     window.location.replace('/tarifs.html');
     return;
   }
@@ -3010,40 +3111,34 @@ async function checkSession(){
 
 async function checkProStatus(){
   if(!authToken) return;
-  try{
+  async function _hit(){
     var controller=new AbortController();
     var _to=setTimeout(function(){controller.abort();},6000);
-    var res=await fetch('/api/check-pro',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      signal:controller.signal
-    });
-    clearTimeout(_to);
-    var data=await res.json();
-    if(data.is_pro){
-      isPro=true;
-      localStorage.setItem('lt_pro','1');
-    } else if(data.token_invalid){
-      // Token expiré — tenter un refresh silencieux
-      var rt=localStorage.getItem('ta_refresh');
-      if(rt){
-        try{
-          var rr=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})});
-          var rd=await rr.json();
-          if(rd&&rd.access_token){
-            authToken=rd.access_token;
-            localStorage.setItem('ta_token',rd.access_token);
-            if(rd.refresh_token)localStorage.setItem('ta_refresh',rd.refresh_token);
-            if(rd.expires_in)localStorage.setItem('ta_exp',String(Date.now()+parseInt(rd.expires_in,10)*1000));
-            // Re-vérifier avec le nouveau token
-            var res2=await fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken}});
-            var data2=await res2.json();
-            if(data2.is_pro){isPro=true;localStorage.setItem('lt_pro','1');}
-          }
-        }catch(e2){}
-      }
-    }
-  }catch(e){ }
+    try{
+      var res=await fetch('/api/check-pro',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+        signal:controller.signal
+      });
+      clearTimeout(_to);
+      return await res.json();
+    }catch(e){ clearTimeout(_to); return null; }
+  }
+  var data=await _hit();
+  // Token expiré → refresh silencieux mutualisé puis nouvelle tentative.
+  if(data && data.token_invalid && await _refreshSession()){
+    data=await _hit();
+  }
+  if(data && data.is_pro){
+    isPro=true;
+    localStorage.setItem('lt_pro','1');
+  } else if(data && !data.token_invalid && data.is_pro===false){
+    // Réponse autoritaire (token valide) : l'utilisateur n'est PAS pro → MAJ du cache.
+    isPro=false;
+    localStorage.removeItem('lt_pro');
+  }
+  // Sinon (réseau KO / token toujours invalide) : on NE touche PAS au cache lt_pro,
+  // pour ne pas rétrograder un compte pro à cause d'un échec transitoire.
 }
 var historyData=[];
 var _deletedIds = new Set();

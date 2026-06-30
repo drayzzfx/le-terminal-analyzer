@@ -5,6 +5,8 @@
     "api/archive-generate.js": { "maxDuration": 120 }
   },
   "routes": [
+    { "src": "/(.*)", "has": [{ "type": "host", "value": "le-terminal-analyzer.vercel.app" }], "status": 308, "headers": { "Location": "https://www.leterminal.net/$1" } },
+    { "src": "/(.*)", "has": [{ "type": "host", "value": "leterminal.net" }], "status": 308, "headers": { "Location": "https://www.leterminal.net/$1" } },
     { "src": "/.*\\.(html|js|css)$", "headers": { "cache-control": "public, max-age=0, must-revalidate" }, "continue": true },
     { "src": "/sitemap\\.xml", "dest": "/sitemap.xml", "headers": { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=3600" } },
     { "src": "/robots\\.txt", "dest": "/robots.txt", "headers": { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } },
@@ -22,10 +24,6 @@
     {
       "path": "/api/refresh-news",
       "schedule": "0 23,0,1,2,3,4,5 * * *"
-    },
-    {
-      "path": "/api/archive-generate",
-      "schedule": "0 21 * * *"
     }
   ]
 }

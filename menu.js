@@ -380,7 +380,7 @@
     <div class="lt-menu-overlay" id="ltMenuOverlay" onclick="ltCloseMenu()"></div>
     <div class="lt-side-menu" id="ltSideMenu">
       <div class="lt-menu-header">
-        <div class="lt-menu-brand"><img src="./photo_2026-06-24_01-04-12.jpg" alt="Le Terminal" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1px solid rgba(127,184,232,.3);margin-right:8px;vertical-align:middle;mix-blend-mode:screen">Le Terminal <span>Hub</span></div>
+        <div class="lt-menu-brand"><img src="./logo-nav.webp" alt="Le Terminal" style="width:42px;height:42px;border-radius:8px;object-fit:cover;border:1px solid rgba(127,184,232,.3);margin-right:8px;vertical-align:middle;">Le Terminal <span>Hub</span></div>
         <button class="lt-menu-close" onclick="ltCloseMenu()">✕</button>
       </div>
       <nav class="lt-menu-nav">
@@ -464,9 +464,13 @@
   var _ltRefreshing = null;
   function ltEnsureSession() {
     var token = localStorage.getItem('ta_token') || '';
+    if(!token) return Promise.resolve('');
+    // Refresh mutualisé global (single-flight) : si le garde-fou de app.html a
+    // défini window.ltRefreshToken, on l'utilise pour qu'il n'y ait JAMAIS deux
+    // refresh concurrents sur le même refresh token Supabase (usage unique).
+    if(typeof window.ltRefreshToken === 'function') return window.ltRefreshToken(false);
     var refresh = localStorage.getItem('ta_refresh') || '';
     var exp = parseInt(localStorage.getItem('ta_exp') || '0', 10);
-    if(!token) return Promise.resolve('');
     // Marge de 60s : on rafraîchit un peu avant l'expiration réelle.
     if(!refresh || (exp && Date.now() < exp - 60000)) return Promise.resolve(token);
     if(_ltRefreshing) return _ltRefreshing;
@@ -1146,62 +1150,10 @@
     document.addEventListener('mouseenter',function(){ el.classList.remove('off'); });
   })();
 
-  // ── BANNIÈRE COOKIES (toutes les pages, conformité RGPD) ──
-  (function(){
-    var KEY = 'lt_cookie_consent';
-    var existing;
-    try { existing = localStorage.getItem(KEY); } catch(e) { existing = null; }
-    if (existing === 'accepted' || existing === 'refused') return; // choix déjà fait
-
-    function inject(){
-      if (document.getElementById('ltCookieBar')) return;
-      var st = document.createElement('style');
-      st.textContent = [
-        '#ltCookieBar{position:fixed;left:0;right:0;bottom:0;z-index:100000;display:flex;justify-content:center;padding:16px;pointer-events:none;animation:ltCookieUp .4s ease}',
-        '@keyframes ltCookieUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}',
-        '#ltCookieBox{pointer-events:auto;max-width:680px;width:100%;background:rgba(16,20,27,.97);backdrop-filter:blur(18px);border:1px solid rgba(127,184,232,.25);border-radius:16px;padding:20px 22px;box-shadow:0 24px 60px rgba(0,0,0,.6);display:flex;flex-wrap:wrap;align-items:center;gap:16px}',
-        '#ltCookieBox .ltck-txt{flex:1;min-width:220px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;line-height:1.6;color:#C3CAD4}',
-        '#ltCookieBox .ltck-txt b{color:#F2F4F7;font-family:\'Inter\',system-ui,-apple-system,sans-serif;display:block;font-size:14px;margin-bottom:4px}',
-        '#ltCookieBox .ltck-txt a{color:#BFDCF5;text-decoration:underline}',
-        '#ltCookieBox .ltck-actions{display:flex;gap:10px;flex-shrink:0}',
-        '.ltck-btn{padding:10px 20px;border-radius:50px;font-family:\'Inter\',system-ui,-apple-system,sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .2s;white-space:nowrap}',
-        '.ltck-refuse{background:transparent;border-color:rgba(255,255,255,.18);color:#C3CAD4}',
-        '.ltck-refuse:hover{border-color:rgba(255,255,255,.4);color:#fff}',
-        '.ltck-accept{background:linear-gradient(135deg,#7FB8E8,#5A9BD4);color:#fff}',
-        '.ltck-accept:hover{opacity:.9}',
-        '@media(max-width:560px){#ltCookieBox{flex-direction:column;align-items:stretch}#ltCookieBox .ltck-actions{justify-content:stretch}.ltck-btn{flex:1;text-align:center}}'
-      ].join('');
-      document.head.appendChild(st);
-
-      var bar = document.createElement('div');
-      bar.id = 'ltCookieBar';
-      bar.innerHTML =
-        '<div id="ltCookieBox">'
-        + '<div class="ltck-txt"><b><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5Z"/><path d="M8.5 8.5h.01M15 9.5h.01M9.5 14h.01M14.5 14.5h.01"/></svg> Nous utilisons des cookies</b>'
-        + 'Le Terminal utilise des cookies pour assurer le bon fonctionnement du site (connexion, préférences) et mesurer son audience. '
-        + 'Vous pouvez accepter ou refuser les cookies non essentiels. '
-        + '<a href="./legal.html#cookies" style="color:#BFDCF5;text-decoration:underline">En savoir plus</a></div>'
-        + '<div class="ltck-actions">'
-        + '<button type="button" class="ltck-btn ltck-refuse" id="ltCookieRefuse">Refuser</button>'
-        + '<button type="button" class="ltck-btn ltck-accept" id="ltCookieAccept">Accepter</button>'
-        + '</div></div>';
-      document.body.appendChild(bar);
-
-      function choose(val){
-        try { localStorage.setItem(KEY, val); } catch(e) {}
-        bar.style.animation = 'ltCookieUp .3s ease reverse forwards';
-        setTimeout(function(){ if(bar.parentNode) bar.parentNode.removeChild(bar); }, 300);
-      }
-      document.getElementById('ltCookieAccept').addEventListener('click', function(){ choose('accepted'); });
-      document.getElementById('ltCookieRefuse').addEventListener('click', function(){ choose('refused'); });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', inject);
-    } else {
-      inject();
-    }
-  })();
+  // ── BANNIÈRE COOKIES ──
+  // Gérée exclusivement par le module isolé `cookies.js` (#ltCookie, clé `lt_consent`),
+  // conforme RGPD/ePrivacy (consentement révocable, gating TradingView). Ne PAS
+  // réintroduire de bannière ici : cela créerait un doublon à l'écran.
 
   // ── INTERCEPTEUR GLOBAL : pages protégées sans connexion ──
   (function(){

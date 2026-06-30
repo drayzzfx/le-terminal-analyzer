@@ -7,7 +7,7 @@ Le Terminal est un hub d'outils de trading. Cette bibliothèque encode son ident
 ## Sources
 - **Logo de référence** : `assets/le-terminal-logo.jpg` (fourni par le client — wordmark « LE TERMINAL » en métal brossé dans un hangar de jets privés, éclairage bleu froid).
 - Brief d'art direction « Cinematic Luxury » fourni par le client (palette, typographie, effets WOW).
-- **Produit réel** : https://le-terminal-analyzer.vercel.app (index.html + eco-selection.html). Le contenu de la page d'accueil (5 outils, stratégies, méthode en 4 étapes, communauté Telegram) est repris de ce site, puis **réhabillé** dans la direction « Cinematic Luxury » (zéro emoji → icônes SVG trait fin, métal brossé, bleu glacial).
+- **Produit réel** : https://www.leterminal.net (index.html + eco-selection.html). Le contenu de la page d'accueil (5 outils, stratégies, méthode en 4 étapes, communauté Telegram) est repris de ce site, puis **réhabillé** dans la direction « Cinematic Luxury » (zéro emoji → icônes SVG trait fin, métal brossé, bleu glacial).
 
 ---
 
