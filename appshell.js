@@ -42,6 +42,9 @@
   'use strict';
 
   var path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  // URLs propres (cleanUrls) : /journal, /tarifs… n'ont plus de .html → on le
+  // rétablit pour le matching interne (PAGES, item actif, traceur d'usage).
+  if (path && path.indexOf('.') === -1) path += '.html';
 
   // ── Traceur d'usage local (privé, jamais envoyé) : alimente « Où vous passez
   // votre temps » dans l'Espace Compte. Compte les visites et le temps actif par outil.
