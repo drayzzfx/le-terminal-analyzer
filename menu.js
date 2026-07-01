@@ -347,10 +347,68 @@
   }
   window.ltSyncAccount = ltSyncAccount;
 
-  // Synchronisation serveur au chargement — Premium + profil toujours à jour.
+  // ── PROGRESSION DU JOUEUR RATTACHÉE AU COMPTE (dashboard/gamification) ──
+  // Temps par outil, objectifs, notes, éco, devise : stockés côté serveur
+  // (/api/stats) → la progression suit le compte, sur tous les appareils, et
+  // ne se réinitialise plus à la déconnexion.
+  function _ltMergeUsage(local, server) {
+    var out = {}, k;
+    for (k in (local || {})) out[k] = local[k];
+    for (k in (server || {})) {
+      var a = out[k] || { ms: 0, visits: 0 }, b = server[k] || {};
+      out[k] = { ms: Math.max(+a.ms || 0, +b.ms || 0), visits: Math.max(+a.visits || 0, +b.visits || 0), last: b.last || a.last || null };
+    }
+    return out;
+  }
+  // Charge la progression du serveur et la fusionne dans le cache local.
+  function ltSyncStats() {
+    var tok = localStorage.getItem('ta_token'); if (!tok) return;
+    fetch('/api/stats', { headers: { 'Authorization': 'Bearer ' + tok } })
+      .then(function (r) { return r.json(); })
+      .then(function (s) {
+        if (!s || typeof s !== 'object') return;
+        var localU = {}; try { localU = JSON.parse(localStorage.getItem('lt_usage') || '{}'); } catch (e) {}
+        try { localStorage.setItem('lt_usage', JSON.stringify(_ltMergeUsage(localU, s.usage || {}))); } catch (e) {}
+        // Clés opaques : si le cache local est vide, on restaure la valeur du compte.
+        [['goals', 'lt_goals'], ['notes', 'jnl_notes'], ['eco_unlocked', 'eco_unlocked'], ['currency', 'jnl_currency']].forEach(function (p) {
+          var sv = s[p[0]]; if (sv === undefined || sv === null) return;
+          var loc = localStorage.getItem(p[1]);
+          if (loc === null || loc === '') { try { localStorage.setItem(p[1], typeof sv === 'string' ? sv : JSON.stringify(sv)); } catch (e) {} }
+        });
+        try { document.dispatchEvent(new CustomEvent('lt:stats-synced')); } catch (e) {}
+      }).catch(function () {});
+  }
+  window.ltSyncStats = ltSyncStats;
+  // Envoie la progression locale au serveur (fusion MAX côté serveur). keepalive
+  // pour que l'envoi aboutisse même au déchargement de la page / à la déconnexion.
+  function ltFlushStats() {
+    var tok = localStorage.getItem('ta_token'); if (!tok) return;
+    var usage = {}; try { usage = JSON.parse(localStorage.getItem('lt_usage') || '{}'); } catch (e) {}
+    var body = {
+      usage: usage,
+      goals: localStorage.getItem('lt_goals'),
+      notes: localStorage.getItem('jnl_notes'),
+      eco_unlocked: localStorage.getItem('eco_unlocked'),
+      currency: localStorage.getItem('jnl_currency')
+    };
+    try {
+      fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok }, body: JSON.stringify(body), keepalive: true })
+        .then(function (r) { return r.json(); })
+        .then(function (s) { if (s && s.usage) { try { localStorage.setItem('lt_usage', JSON.stringify(s.usage)); } catch (e) {} } })
+        .catch(function () {});
+    } catch (e) {}
+  }
+  window.ltFlushStats = ltFlushStats;
+  // Sauvegarde en continu : au masquage/déchargement de la page + périodiquement.
+  document.addEventListener('visibilitychange', function () { if (document.hidden) ltFlushStats(); });
+  window.addEventListener('pagehide', ltFlushStats);
+  setInterval(ltFlushStats, 60000);
+
+  // Synchronisation serveur au chargement — Premium + profil + progression.
   var _verifyToken = localStorage.getItem('ta_token');
   if (_verifyToken) {
     ltSyncAccount();
+    ltSyncStats();
   }
 
   var navItems = PAGES.map(function(p) {
@@ -581,6 +639,8 @@
   }
 
   function _ltClearAllAccountData() {
+    // Sauvegarde la progression sur le compte AVANT d'effacer le token (sinon perdu).
+    try { if (window.ltFlushStats) window.ltFlushStats(); } catch (e) {}
     localStorage.removeItem('ta_token');
     localStorage.removeItem('ta_refresh');
     localStorage.removeItem('ta_exp');
@@ -596,6 +656,14 @@
     // contre le serveur (un questionnaire par compte, pas par appareil).
     localStorage.removeItem('lt_survey');
     localStorage.removeItem('lt_onboarded');
+    // Progression (temps par outil, objectifs…) : effacée en local car rattachée
+    // au COMPTE (serveur) ; rechargée au prochain login. Évite le mélange entre
+    // deux comptes sur le même navigateur.
+    localStorage.removeItem('lt_usage');
+    localStorage.removeItem('lt_goals');
+    localStorage.removeItem('jnl_notes');
+    localStorage.removeItem('eco_unlocked');
+    localStorage.removeItem('jnl_currency');
   }
 
   window.ltGlobalLogout = function() {

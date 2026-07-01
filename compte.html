@@ -991,6 +991,19 @@ select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cur
     initSettings();
     // charge patrimoine en arrière-plan pour la tuile « valeur patrimoine » + badges
     if(TOKEN){ fetch('/api/portfolio',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){return r.ok?r.json():[];}).then(function(rows){ portfolioCache=Array.isArray(rows)?rows:[]; var tot=portfolioCache.reduce(function(a,b){return a+(parseFloat(b.amount)||0);},0); if(window.kPatriSet)window.kPatriSet(tot?nfFr(tot,0)+' €':'—'); }).catch(function(){}); }
+    // Rattachement au compte : recharge les analyses depuis le serveur (cross-appareil),
+    // fusion par id (sans img_data), puis on rafraîchit le dashboard.
+    if(TOKEN){ fetch('/api/history',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){return r.ok?r.json():[];}).then(function(d){
+      if(!Array.isArray(d)||!d.length) return;
+      var loc=readSetups(), ids={}; d.forEach(function(h){ ids[String(h.id)]=1; });
+      var svr=d.map(function(h){ var c={}; for(var k in h){ if(k!=='img_data') c[k]=h[k]; } return c; });
+      var merged=loc.filter(function(h){ return !ids[String(h.id)]; }).concat(svr);
+      try{ localStorage.setItem('lt_history', JSON.stringify(merged.slice(0,50))); }catch(e){}
+      renderAll();
+    }).catch(function(){}); }
+    // Progression (temps par outil / XP / objectifs) chargée par menu.js depuis le
+    // serveur → on rafraîchit le dashboard une fois qu'elle est disponible.
+    document.addEventListener('lt:stats-synced', renderAll);
     $('goalWeek').addEventListener('change',saveGoals); $('goalPnl').addEventListener('change',saveGoals);
     document.getElementById('acNav').addEventListener('click',function(e){ var b=e.target.closest('.ac-tab'); if(b) showTab(b.getAttribute('data-tab')); });
     // Ouverture des détails (badges + grades), clic et clavier
