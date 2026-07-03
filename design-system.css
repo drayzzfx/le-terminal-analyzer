@@ -335,3 +335,53 @@ select.calc-input { cursor: pointer; }
 .calc-result { display: flex; flex-direction: column; gap: 3px; }
 .calc-result__k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
 .calc-result__v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 18px; font-weight: 500; }
+
+/* ============================================================================
+   THÈME CLAIR — activé par data-theme="light" sur <html> (voir theme.js).
+   On redéfinit les tokens sémantiques + on donne un équivalent clair aux effets
+   pensés pour le sombre (métal, ombres, verre). Le sombre reste le défaut.
+   ============================================================================ */
+:root[data-theme="light"] {
+  --bg-void: #E9EEF5;
+  --bg-base: #F4F6FA;
+  --bg-surface: #EDF1F7;
+  --bg-elevated: #FFFFFF;
+
+  --accent: #2E77C2;
+  --accent-deep: #1E5A96;
+  --accent-bright: #5A9BD4;
+  --accent-glow: rgba(46, 119, 194, 0.22);
+  --accent-glow-soft: rgba(46, 119, 194, 0.08);
+
+  --text-title: #0C1119;
+  --text-body: #384252;
+  --text-muted: #6B7686;
+
+  --border: #CBD5E1;
+  --border-subtle: #E5EAF1;
+
+  --bull: #12A66B;
+  --bear: #DA3B57;
+  --neutral: #B9822A;
+  --bull-glow: rgba(18, 166, 107, 0.14);
+  --bear-glow: rgba(218, 59, 87, 0.14);
+  --neutral-glow: rgba(185, 130, 42, 0.14);
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 24px 64px rgba(15, 23, 42, 0.12);
+  --shadow-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  /* Titres « métal brossé » : dégradé sombre lisible sur fond clair */
+  --metal-gradient: linear-gradient(180deg, #1a2432 0%, #0b0e13 100%);
+}
+/* Fond de page global en clair */
+:root[data-theme="light"] body { background: var(--bg-base); color: var(--text-body); }
+
+/* ── Bouton bascule de thème (pastille dans la nav) ── */
+.lt-theme-pill { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border-subtle); border-radius: 50px; background: transparent; color: var(--text-muted); cursor: pointer; transition: color var(--dur-fast, .15s) var(--ease-out, ease), border-color var(--dur-fast, .15s) var(--ease-out, ease), background var(--dur-fast, .15s) var(--ease-out, ease); }
+.lt-theme-pill:hover { color: var(--text-title); border-color: var(--border); background: var(--accent-glow-soft); }
+.lt-theme-ic { display: inline-flex; }
+.lt-theme-ic--sun { display: none; }
+:root[data-theme="light"] .lt-theme-ic--moon { display: none; }
+:root[data-theme="light"] .lt-theme-ic--sun { display: inline-flex; }
