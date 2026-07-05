@@ -349,16 +349,19 @@ select.calc-input { cursor: pointer; }
 
   --accent: #2E77C2;
   --accent-deep: #1E5A96;
-  --accent-bright: #5A9BD4;
+  --accent-bright: #3D82C8; /* « bright » sert de texte accent : doit rester lisible sur blanc */
   --accent-glow: rgba(46, 119, 194, 0.22);
-  --accent-glow-soft: rgba(46, 119, 194, 0.08);
+  --accent-glow-soft: rgba(46, 119, 194, 0.07);
 
   --text-title: #0C1119;
   --text-body: #384252;
-  --text-muted: #6B7686;
+  --text-muted: #626E80;
 
-  --border: #CBD5E1;
-  --border-subtle: #E5EAF1;
+  --border: #C6D0DC;
+  --border-subtle: #E2E8F0;
+
+  --grain-opacity: 0.03;
+  --vignette: radial-gradient(ellipse 120% 90% at 50% 0%, transparent 45%, rgba(12, 18, 28, 0.08) 100%);
 
   --bull: #12A66B;
   --bear: #DA3B57;

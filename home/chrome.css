@@ -97,8 +97,4 @@ html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
   body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 }
 
-/* ── Thème clair (prototype) : surcharges de la nav/chrome de l'accueil dont les
-   couleurs sont codées en dur (le reste bascule via les tokens). ── */
-:root[data-theme="light"] .lt-nav { background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.62)); border-bottom-color: var(--border-subtle); }
-:root[data-theme="light"] .lt-chrome.is-scrolled .lt-nav { background: rgba(255,255,255,0.96); }
-:root[data-theme="light"] .lt-nav__word { color: var(--text-title); }
+/* ── Thème clair : toutes les surcharges vivent dans home/theme-light.css. ── */
