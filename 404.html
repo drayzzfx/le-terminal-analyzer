@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page introuvable (404) — Le Terminal</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<style>
+.nf-wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 24px; position: relative; }
+.nf-halo { position: absolute; left: 50%; top: 30%; width: 680px; height: 340px; transform: translate(-50%, -50%); pointer-events: none; background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(127,184,232,0.1), transparent 70%); filter: blur(8px); }
+.nf-code { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); border: 1px solid var(--accent-glow); border-radius: var(--r-sm); background: var(--accent-glow-soft); padding: 5px 12px; }
+.nf-title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(38px, 7vw, 84px); line-height: 1.02; margin: 22px 0 0; color: var(--text-title); }
+.nf-lede { max-width: 480px; margin: 18px auto 0; font-size: 15px; line-height: 1.7; color: var(--text-muted); }
+.nf-actions { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; justify-content: center; }
+.nf-links { display: flex; gap: 20px; margin-top: 34px; flex-wrap: wrap; justify-content: center; font-size: 13px; }
+.nf-links a { color: var(--text-muted); transition: color var(--dur-fast) var(--ease-out); }
+.nf-links a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<main class="nf-wrap">
+  <div class="nf-halo" aria-hidden="true"></div>
+  <span class="nf-code">ERREUR 404</span>
+  <h1 class="nf-title" data-en="Page not found">Page introuvable</h1>
+  <p class="nf-lede" data-en="This page does not exist or has moved. Nothing lost: every tool is one click away.">Cette page n'existe pas ou a été déplacée. Rien de perdu : tous les outils restent à un clic.</p>
+  <div class="nf-actions">
+    <a class="lt-btn lt-btn--primary" href="/" data-en="Back to home">Retour à l'accueil</a>
+    <a class="lt-btn lt-btn--ghost" href="/blog">Blog</a>
+  </div>
+  <nav class="nf-links" aria-label="Pages principales">
+    <a href="/analyzer-presentation">Setup Analyzer</a>
+    <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+    <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+    <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+    <a href="/tarifs" data-en="Pricing">Tarifs</a>
+  </nav>
+</main>
+<script src="/lang.js"></script>
+</body>
+</html>
