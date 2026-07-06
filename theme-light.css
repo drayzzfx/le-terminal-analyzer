@@ -1,12 +1,43 @@
 /* ═══════════════════════════════════════════════════════════════════
-   Le Terminal — THÈME CLAIR (accueil) — « Cinematic Luxury, plein jour »
-   Le hangar à minuit devient un hangar à l'aube : papier froid, hairlines
-   acier, un seul bleu glacial assombri pour rester lisible sur blanc.
+   Le Terminal — THÈME CLAIR GLOBAL — « Cinematic Luxury, plein jour »
+   Chargé par TOUTES les pages, après design-system.css.
    RÈGLE : ce fichier ne contient QUE des overrides :root[data-theme="light"].
    Le thème sombre (défaut) n'est jamais modifié ici.
-   Les tokens de base clairs vivent dans design-system.css ; ici on traite
-   toutes les couleurs codées en dur de la page d'accueil (home/*.css).
+   Contenu :
+     · tokens historiques (--bg-hangar, --ice-*, --steel-*, --signal-*…)
+       redéfinis en clair → les alias --card/--v/--text de eco.css,
+       app.html, journal.html, legal.html… se résolvent tout seuls ;
+     · chrome commun (nav, menus, dock, top bar) ;
+     · surcharges des couleurs codées en dur, par feuille/page.
    ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 0. TOKENS HISTORIQUES (eco.css / app / journal / legal) ── */
+:root[data-theme="light"] {
+  --bg-hangar: #F4F6FA;
+  --bg-panel: #FFFFFF;
+
+  --ice-100: #10304F;
+  --ice-300: #3D82C8;
+  --ice-500: #2E77C2;
+  --ice-600: #1E5A96;
+  --ice-glow: rgba(46, 119, 194, 0.22);
+
+  --steel-100: #0C1119;
+  --steel-300: #384252;
+  --steel-500: #626E80;
+  --steel-700: #C6D0DC;
+  --steel-900: #E2E8F0;
+
+  --signal-up: #12A66B;
+  --signal-down: #DA3B57;
+  --signal-warn: #B9822A;
+
+  --border-active: rgba(46, 119, 194, 0.4);
+  --vglow2: rgba(46, 119, 194, 0.07);
+}
+
+/* ── 0bis. SHELL DES OUTILS (design-system.css) ── */
+:root[data-theme="light"] .top { background: rgba(255,255,255,0.94); }
 
 /* ── 1. CHROME : nav, dropdown, dock ── */
 :root[data-theme="light"] .lt-nav { background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.55)); border-bottom-color: var(--border-subtle); }
@@ -156,3 +187,83 @@
 :root[data-theme="light"] .lt-proof__q { background: rgba(255,255,255,0.8); }
 :root[data-theme="light"] .lt-proof__q:hover { box-shadow: 0 18px 40px rgba(15,23,42,0.11); }
 :root[data-theme="light"] .lt-proof__ava { color: #FFFFFF; }
+
+
+/* ═══════════ SURCHARGES PAR FEUILLE / PAGE (hors accueil) ═══════════ */
+
+/* ── ECO.CSS (pages eco + présentations + outils qui la chargent) ── */
+:root[data-theme="light"] .lt-topbar { background: rgba(255,255,255,0.92); }
+:root[data-theme="light"] .eco-tabs { background: rgba(255,255,255,0.9); }
+:root[data-theme="light"] .pricebar { background: rgba(12,18,28,0.025); }
+:root[data-theme="light"] .intro__chips li,
+:root[data-theme="light"] .achip,
+:root[data-theme="light"] .hero__chrome { background: rgba(12,18,28,0.035); }
+:root[data-theme="light"] .intro__art { background: linear-gradient(180deg, rgba(46,119,194,0.07), rgba(12,18,28,0.02)); }
+:root[data-theme="light"] .flash__row:hover { background: rgba(12,18,28,0.03); }
+:root[data-theme="light"] .card:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px rgba(46,119,194,0.14); }
+:root[data-theme="light"] .eco-sel .card:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px rgba(185,130,42,0.14); }
+:root[data-theme="light"] .card--pick .btn,
+:root[data-theme="light"] .card--featured .btn { color: #FFFFFF; }
+:root[data-theme="light"] .card__skel-line { background: linear-gradient(90deg, var(--border) 25%, rgba(12,18,28,0.06) 50%, var(--border) 75%); }
+:root[data-theme="light"] .calcard { box-shadow: 0 18px 50px rgba(15,23,42,0.12); }
+
+/* ── PRESENTATION.CSS (pages -presentation + eco) ── */
+:root[data-theme="light"] .gp-card { background: linear-gradient(155deg, rgba(255,255,255,0.88), rgba(240,244,249,0.78)); box-shadow: 0 34px 70px rgba(15,23,42,0.14), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .pr-feat:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 60px rgba(15,23,42,0.13), 0 0 36px var(--accent-glow-soft); }
+:root[data-theme="light"] .pr-art:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px var(--neutral-glow); }
+:root[data-theme="light"] .pr-art--blue:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px var(--accent-glow); }
+:root[data-theme="light"] .pr-art__link,
+:root[data-theme="light"] .pr-edition__kicker { color: #FFFFFF; }
+
+/* ── Blocs « pm-* » des 4 pages -presentation ── */
+:root[data-theme="light"] .pm-btn--primary { color: #FFFFFF; }
+:root[data-theme="light"] .pm-card3d { box-shadow: var(--shadow-lg), 0 50px 90px rgba(15,23,42,0.16), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .pm-float { background: rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(15,23,42,0.12); }
+:root[data-theme="light"] .pm-connrow__ok { color: #FFFFFF; }
+
+/* ── TARIFS.CSS / pricing partagé ── */
+:root[data-theme="light"] .pr-why__item,
+:root[data-theme="light"] .pr-table,
+:root[data-theme="light"] .pr-faq__item { background: var(--bg-elevated); }
+
+/* ── AVIS (styles inline av-*) ── */
+:root[data-theme="light"] .av-rating { background: linear-gradient(165deg, rgba(185,130,42,0.08), rgba(255,255,255,0.85)); box-shadow: 0 30px 70px rgba(15,23,42,0.12); }
+:root[data-theme="light"] .av-card { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.85)); }
+:root[data-theme="light"] .av-card:hover { box-shadow: 0 30px 60px rgba(15,23,42,0.13), 0 0 40px var(--accent-glow); }
+:root[data-theme="light"] .av-note { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.8)); }
+:root[data-theme="light"] .av-card__ava,
+:root[data-theme="light"] .av-note__av { color: #FFFFFF; }
+
+/* ── BLOG (blog/blog.css) ── */
+:root[data-theme="light"] .bl-card { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.88)); }
+:root[data-theme="light"] .bl-card:hover { box-shadow: 0 30px 60px rgba(15,23,42,0.12), 0 0 40px var(--accent-glow); }
+:root[data-theme="light"] .bl-author { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.85)); }
+:root[data-theme="light"] .bl-author__ava { color: #FFFFFF; }
+
+/* ── LEGAL (nav propre lg-*) ── */
+:root[data-theme="light"] .lg-nav { background: rgba(255,255,255,0.92); }
+
+/* ── BUBBLE MAP ── */
+:root[data-theme="light"] .map,
+:root[data-theme="light"] .map-loader { background: var(--bg-surface); }
+:root[data-theme="light"] .foot { background: rgba(255,255,255,0.92); }
+:root[data-theme="light"] .bm-gate__submit { color: #FFFFFF; }
+
+/* ── CALCULATEUR ── */
+:root[data-theme="light"] #pairDropdown { background: rgba(255,255,255,0.98); }
+
+/* ── COMPTE / PROFIL / PATRIMOINE (avatars & badges sur fond accent) ── */
+:root[data-theme="light"] .ac-id__av,
+:root[data-theme="light"] .ac-badge.on .ac-badge__ic,
+:root[data-theme="light"] .ac-m__ic.on,
+:root[data-theme="light"] .pf-avatar,
+:root[data-theme="light"] .pf-plan__flag,
+:root[data-theme="light"] .pf-cat-badge { color: #FFFFFF; }
+:root[data-theme="light"] .pf-plan:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 54px rgba(15,23,42,0.13), 0 0 34px var(--accent-glow-soft); }
+
+/* ── Ombres génériques : toasts / pop-ups (hors overlays plein écran,
+   qui restent sombres volontairement dans les deux thèmes) ── */
+:root[data-theme="light"] .lt-toast { box-shadow: 0 8px 32px rgba(15,23,42,0.16); }
+
+/* ── MUR DES TRADES : titre métal argenté codé en dur → métal sombre ── */
+:root[data-theme="light"] .mt-title .pr-metal { background: linear-gradient(180deg, #1a2432 0%, #0b0e13 100%); -webkit-background-clip: text; background-clip: text; }

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
 <link rel="icon" href="./favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
@@ -119,6 +120,7 @@ window.ltRefreshToken(false).then(function(tok){chk(tok||t);});
 </script>
 <link rel="stylesheet" href="./fonts.css">
 <link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
 <style>#app>.topbar{display:none!important}#app{padding-top:var(--chrome-h,64px)}@media(min-width:761px){#app .analyzer-tabs{padding-left:74px}}</style>
 <style>
 
@@ -4401,6 +4403,7 @@ function quickSetResult(result){
 <script src="./cookies.js"></script>
 <script src="./onboarding.js"></script>
 <script src="./lang.js"></script>
+<script src="./theme.js"></script>
 <script src="./tracker.js"></script>
 </body>
 </html>
