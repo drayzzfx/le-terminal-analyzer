@@ -74,7 +74,7 @@ module.exports = async function handler(req, res) {
     // suivi (déjà rattachés à une analyse / au journal) ne décomptent rien ici.
     if (kind === 'analyze') {
       let profRes = await supabaseRequest('GET',
-        `/rest/v1/user_profiles?id=eq.${userId}&select=tokens,is_pro`, null, SERVICE_KEY);
+        `/rest/v1/user_profiles?id=eq.${userId}&select=tokens,is_pro,pro_until`, null, SERVICE_KEY);
       let profile = (profRes.body && profRes.body[0]) || null;
 
       // Crée le profil (5 tokens) s'il n'existe pas encore, sinon le PATCH de
@@ -86,7 +86,9 @@ module.exports = async function handler(req, res) {
         profile = { tokens: 5, is_pro: false };
       }
 
-      const isPro = !!(profile && profile.is_pro) || ADMIN_EMAILS.includes((userEmail || '').toLowerCase());
+      // Premium à durée limitée : pro_until NULL = permanent, sinon comparé à maintenant.
+      const proActive = !profile.pro_until || new Date(profile.pro_until).getTime() > Date.now();
+      const isPro = (!!(profile && profile.is_pro) && proActive) || ADMIN_EMAILS.includes((userEmail || '').toLowerCase());
       let tokens = (profile && profile.tokens != null) ? profile.tokens : 5;
 
       if (!isPro) {

@@ -201,7 +201,7 @@ module.exports = async function handler(req, res) {
         await supabaseRequest(
           'PATCH',
           `/rest/v1/user_profiles?id=eq.${userId}`,
-          { is_pro: true, whop_status: 'active', updated_at: new Date().toISOString() },
+          { is_pro: true, whop_status: 'active', pro_until: null, updated_at: new Date().toISOString() },
           ANON_KEY
         );
         console.log('Updated user to PRO:', userEmail);
@@ -214,6 +214,7 @@ module.exports = async function handler(req, res) {
             email: userEmail.toLowerCase(),
             is_pro: true,
             whop_status: 'active',
+            pro_until: null,
             created_at: new Date().toISOString()
           },
           ANON_KEY
