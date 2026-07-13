@@ -131,6 +131,27 @@ async function verifyWhopMembership(userEmail) {
   });
 }
 
+// Convertit une valeur de date Whop en millisecondes epoch. Gère les timestamps
+// unix en secondes (Whop) ou millisecondes, et les chaînes ISO. Renvoie null si illisible.
+function toMs(v) {
+  if (v == null) return null;
+  if (typeof v === 'number') return v < 1e12 ? v * 1000 : v; // secondes → ms
+  const t = Date.parse(v);
+  return isNaN(t) ? null : t;
+}
+
+// Fin de la période payée d'un abonnement Whop (mensuel ~1 mois, annuel ~1 an),
+// en ms. On essaie les champs connus de l'objet membership Whop, dans l'ordre.
+function membershipEndMs(m) {
+  if (!m || typeof m !== 'object') return null;
+  const cands = [
+    m.renewal_period_end, m.expires_at, m.current_period_end,
+    m.valid_until, m.expiration, m.renewal_period && m.renewal_period.end,
+  ];
+  for (const c of cands) { const ms = toMs(c); if (ms) return ms; }
+  return null;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -187,6 +208,17 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ received: true, note: 'no email' });
       }
 
+      // Échéance = vraie fin de période payée Whop (respecte mensuel vs annuel),
+      // + 2 j de marge pour absorber le délai de traitement du renouvellement.
+      // À chaque renouvellement, un nouveau webhook repousse l'échéance ; s'il
+      // n'arrive pas (non-paiement / annulation / webhook manqué), l'accès
+      // s'auto-coupe côté check-pro. Fail-open : période illisible → pro_until
+      // reste null (permanent, comme avant) pour ne JAMAIS couper un client payant.
+      let endMs = membershipEndMs(data);
+      if (!endMs) { endMs = membershipEndMs(await verifyWhopMembership(userEmail)); }
+      const proUntil = (endMs && endMs > Date.now()) ? new Date(endMs + 2 * 24 * 3600 * 1000).toISOString() : null;
+      console.log('Whop grant', userEmail, '→ pro_until', proUntil, '(endMs:', endMs, ')');
+
       // Update user in Supabase - set is_pro = true
       // First find the user by email in auth.users
       const findUser = await supabaseRequest(
@@ -201,7 +233,7 @@ module.exports = async function handler(req, res) {
         await supabaseRequest(
           'PATCH',
           `/rest/v1/user_profiles?id=eq.${userId}`,
-          { is_pro: true, whop_status: 'active', pro_until: null, updated_at: new Date().toISOString() },
+          { is_pro: true, whop_status: 'active', pro_until: proUntil, updated_at: new Date().toISOString() },
           ANON_KEY
         );
         console.log('Updated user to PRO:', userEmail);
@@ -214,7 +246,7 @@ module.exports = async function handler(req, res) {
             email: userEmail.toLowerCase(),
             is_pro: true,
             whop_status: 'active',
-            pro_until: null,
+            pro_until: proUntil,
             created_at: new Date().toISOString()
           },
           ANON_KEY
