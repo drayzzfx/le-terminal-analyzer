@@ -235,6 +235,19 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 .pm-cta__title { position: relative; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1; letter-spacing: 0.01em; margin: 0; }
 .pm-cta__lede { position: relative; max-width: 52ch; color: var(--text-body); font-size: 1.05rem; line-height: 1.6; margin: 0; }
 .pm-cta__btns { position: relative; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+
+/* --- Aperçu de l'outil (captures réelles) --- */
+.pm-preview__intro{max-width:760px;margin:6px auto 34px;text-align:center;font-size:16px;line-height:1.65;color:var(--text-body,#C3CAD4)}
+.pm-shots{display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:var(--container,1200px);margin:0 auto;padding:0 24px}
+@media(max-width:900px){.pm-shots{grid-template-columns:1fr;gap:22px}}
+.pm-shot{margin:0;border:1px solid var(--border-subtle,rgba(127,184,232,.16));border-radius:var(--r-lg,16px);overflow:hidden;background:var(--bg-surface,rgba(20,25,33,.6));box-shadow:var(--shadow-lg,0 24px 60px rgba(4,7,12,.4))}
+.pm-shot__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--bg-void,rgba(12,16,22,.7));border-bottom:1px solid var(--border-subtle,rgba(127,184,232,.12))}
+.pm-shot__bar i{width:10px;height:10px;border-radius:50%;background:#39414c;display:block;flex:none}
+.pm-shot__bar span{margin-left:8px;font-family:var(--font-mono,monospace);font-size:11px;letter-spacing:.04em;color:var(--text-muted,#8B95A2)}
+.pm-shot__img{display:block;width:100%;height:auto;border:0}
+.pm-shot figcaption{padding:15px 18px 17px}
+.pm-shot figcaption b{display:block;font-size:15px;color:var(--text-title,#EDF1F6);margin-bottom:5px}
+.pm-shot figcaption span{display:block;font-size:13.5px;line-height:1.5;color:var(--text-body,#98A2AE)}
 </style>
 </head>
 <body class="eco-page">
@@ -328,6 +341,11 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 
 
   <!-- ========== FEATURE ROWS ========== -->
+  <section class="pm-feats pm-preview" style="padding-top:0">
+    <div class="pm-feats__head" data-reveal><span class="pm-eyebrow"><span class="lt-dot"></span> <span data-en="A look inside">Aperçu de l'outil</span></span><h2 class="pm-h2" data-en="Your wealth, made clear">Votre patrimoine, en clair</h2></div>
+    <p class="pm-preview__intro" data-reveal data-en="Add your assets and see your portfolio projected over time, with ready-made allocations.">Ajoutez vos actifs et visualisez votre portefeuille projeté dans le temps, avec des allocations prêtes à l'emploi.</p>
+    <div class="pm-shots"><figure class="pm-shot" data-reveal><div class="pm-shot__bar"><i></i><i></i><i></i><span>leterminal.net/patrimoine</span></div><img class="pm-shot__img" src="/img/tools/patrimoine-portefeuille.webp" width="968" height="748" alt="Portefeuille : valeur totale, répartition et projection" loading="lazy"><figcaption><b data-en="Your consolidated portfolio">Votre portefeuille consolidé</b><span data-en="Total value, breakdown by asset class and a 5-to-30-year projection.">Valeur totale, répartition par classe d'actifs et projection de +5 à +30 ans.</span></figcaption></figure><figure class="pm-shot" data-reveal><div class="pm-shot__bar"><i></i><i></i><i></i><span>leterminal.net/patrimoine</span></div><img class="pm-shot__img" src="/img/tools/patrimoine-trajectoires.webp" width="968" height="585" alt="Trajectoires d'investissement : prudent, équilibré, dynamique" loading="lazy"><figcaption><b data-en="Ready-made trajectories">Des trajectoires clés en main</b><span data-en="Three allocations, from the most cautious to the most dynamic, adjustable anytime.">Trois allocations, du plus prudent au plus dynamique, ajustables à tout moment.</span></figcaption></figure></div>
+  </section>
   <section class="pm-feats" id="how">
     <div class="pm-feats__head" data-reveal>
       <span class="pm-eyebrow"><span class="lt-dot"></span> Comment ça marche</span>

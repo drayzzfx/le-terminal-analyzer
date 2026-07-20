@@ -266,6 +266,19 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 .pm-cta__btns { position: relative; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
 
 .pm-faq{max-width:760px;margin:0 auto}.pm-faq__qa{border-top:1px solid var(--border-subtle);padding:18px 0}.pm-faq__qa:last-child{border-bottom:1px solid var(--border-subtle)}.pm-faq__qa b{display:block;color:var(--text-title);font-size:1.02rem;margin-bottom:7px}.pm-faq__qa p{margin:0;color:var(--text-body);font-size:.95rem;line-height:1.65}.pm-disc{max-width:760px;margin:30px auto 0;padding:14px 16px;border:1px solid rgba(232,194,104,.28);background:rgba(232,194,104,.06);border-radius:var(--r-md,8px);font-size:12.5px;line-height:1.6;color:var(--text-muted);text-align:center}
+
+/* --- Aperçu de l'outil (captures réelles) --- */
+.pm-preview__intro{max-width:760px;margin:6px auto 34px;text-align:center;font-size:16px;line-height:1.65;color:var(--text-body,#C3CAD4)}
+.pm-shots{display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:var(--container,1200px);margin:0 auto;padding:0 24px}
+@media(max-width:900px){.pm-shots{grid-template-columns:1fr;gap:22px}}
+.pm-shot{margin:0;border:1px solid var(--border-subtle,rgba(127,184,232,.16));border-radius:var(--r-lg,16px);overflow:hidden;background:var(--bg-surface,rgba(20,25,33,.6));box-shadow:var(--shadow-lg,0 24px 60px rgba(4,7,12,.4))}
+.pm-shot__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--bg-void,rgba(12,16,22,.7));border-bottom:1px solid var(--border-subtle,rgba(127,184,232,.12))}
+.pm-shot__bar i{width:10px;height:10px;border-radius:50%;background:#39414c;display:block;flex:none}
+.pm-shot__bar span{margin-left:8px;font-family:var(--font-mono,monospace);font-size:11px;letter-spacing:.04em;color:var(--text-muted,#8B95A2)}
+.pm-shot__img{display:block;width:100%;height:auto;border:0}
+.pm-shot figcaption{padding:15px 18px 17px}
+.pm-shot figcaption b{display:block;font-size:15px;color:var(--text-title,#EDF1F6);margin-bottom:5px}
+.pm-shot figcaption span{display:block;font-size:13.5px;line-height:1.5;color:var(--text-body,#98A2AE)}
 </style>
 </head>
 <body class="eco-page">
@@ -334,6 +347,11 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
       </div>
     </div>
     <div class="pm-hero__scroll" data-step="3"><span></span></div>
+  </section>
+  <section class="pm-feats pm-preview" style="padding-top:0">
+    <div class="pm-feats__head" data-reveal><span class="pm-eyebrow"><span class="lt-dot"></span> <span data-en="A look inside">Aperçu de l'outil</span></span><h2 class="pm-h2" data-en="The journal, before you dive in">Le journal, avant de vous lancer</h2></div>
+    <p class="pm-preview__intro" data-reveal data-en="Every logged trade becomes clear stats and a visual calendar — here is what you get, without a single spreadsheet.">Chaque trade consigné devient des statistiques claires et un calendrier visuel — voici ce que vous obtenez, sans le moindre tableur.</p>
+    <div class="pm-shots"><figure class="pm-shot" data-reveal><div class="pm-shot__bar"><i></i><i></i><i></i><span>leterminal.net/journal</span></div><img class="pm-shot__img" src="/img/tools/journal-dashboard.webp" width="1408" height="643" alt="Tableau de bord du journal : P&amp;L, win rate, score et courbes" loading="lazy"><figcaption><b data-en="Your dashboard">Votre tableau de bord</b><span data-en="P&amp;L, win rate, average R:R, Terminal Score and curves — computed automatically on every trade.">P&amp;L, win rate, RR moyen, Score Terminal et courbes — calculés automatiquement à chaque trade.</span></figcaption></figure><figure class="pm-shot" data-reveal><div class="pm-shot__bar"><i></i><i></i><i></i><span>leterminal.net/journal</span></div><img class="pm-shot__img" src="/img/tools/journal-calendrier.webp" width="1408" height="883" alt="Calendrier P&amp;L mensuel avec courbe d'équité" loading="lazy"><figcaption><b data-en="The P&amp;L calendar">Le calendrier P&amp;L</b><span data-en="Each day coloured by your result, with the equity curve and one-click trade entry.">Chaque journée colorée selon votre résultat, avec la courbe d'équité et l'ajout de trade en un clic.</span></figcaption></figure></div>
   </section>
   <section class="pm-feats" id="how"><div class="pm-feats__head" data-reveal><span class="pm-eyebrow"><span class="lt-dot"></span> <span data-en="How it works">Comment ça marche</span></span><h2 class="pm-h2" data-en="Three steps to clarity">Trois piliers, une seule clarté</h2></div>
 <article class="pm-feat is-flip" data-reveal="left"><div class="pm-feat__txt"><span class="pm-feat__n">01</span><span class="pm-eyebrow" data-en="Equity curve">Courbe d'équité</span><h3 class="pm-feat__title" data-en="Track your progress">Suivez votre progression</h3><p class="pm-feat__desc" data-en="A clear curve, from the past month to your whole history. See the effect of your decisions over time, without a spreadsheet.">Une courbe claire, du mois écoulé à tout votre historique. Visualisez l'effet de vos décisions dans le temps, sans tableur ni calcul manuel.</p><ul class="pm-feat__points"><li data-en="1M / 6M / 1Y / Max selector">Sélecteur 1M / 6M / 1A / Max</li><li data-en="Gain in € and %">Plus-value en € et en %</li><li data-en="Full history kept">Historique complet conservé</li></ul></div><div class="pm-feat__viz"><div class="pm-viz pm-viz--evo"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="pmEvo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(127,184,232,0.3)"/><stop offset="1" stop-color="rgba(127,184,232,0)"/></linearGradient></defs><line x1="0" y1="40" x2="300" y2="40" stroke="rgba(58,65,76,0.3)"/><line x1="0" y1="80" x2="300" y2="80" stroke="rgba(58,65,76,0.3)"/><line x1="0" y1="120" x2="300" y2="120" stroke="rgba(58,65,76,0.3)"/><path d="M0,128 C50,120 80,90 130,82 C180,74 200,44 250,30 L300,18 L300,150 L0,150 Z" fill="url(#pmEvo)"/><path class="pm-evo__line" d="M0,128 C50,120 80,90 130,82 C180,74 200,44 250,30 L300,18" fill="none" stroke="var(--accent)" stroke-width="2.5"/></svg><div class="pm-evo__periods"><span class="">1M</span><span class="">6M</span><span class="is-on">1A</span><span class="">Max</span></div></div></div></article>
