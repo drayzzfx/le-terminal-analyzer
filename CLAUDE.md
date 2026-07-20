@@ -111,3 +111,28 @@ La bascule FR/EN est gérée **exclusivement** par **`lang.js`**, un module isol
 - La pastille de langue est un simple `<span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>` — **JAMAIS** d'`onclick` ni d'`addEventListener` local dessus (sinon double déclenchement). La délégation de `lang.js` suffit.
 - Le texte traduisible reste en FR dans le HTML, l'anglais dans l'attribut `data-en` (le FR d'origine est mémorisé dans `data-fr` au 1er passage).
 - Ne pas réintroduire de wiring de langue dans `menu.js`/inline : `lang.js` est la source de vérité.
+
+## Bannières d'articles de blog — GABARIT DE SÉRIE (obligatoire)
+
+Toutes les bannières héro des articles (`/blog/img/<slug>.webp`) suivent **un seul et même gabarit**. Toute nouvelle bannière (ou refonte) doit être **jumelle** des existantes (`gestion-risque-prop-firm`, `pourquoi-journal-trading`, `quest-ce-quun-setup`, `trader-avec-chatgpt`, `prompt-trading-ia`). Avant d'en créer une, **regarder ces images de référence** et reproduire le gabarit — ne pas réinventer.
+
+**Dimensions (identiques pour TOUTES) :** héro WebP **1600×900** (qualité 88), OG **1200×630** JPG (`resize((1200,675)).crop((0,22,1200,652))`, qualité 86). Mettre à jour `width="1600" height="900"` sur l'article ET la vignette du listing.
+
+**Composition du gabarit (à respecter au pixel près) :**
+- **Logo** : le VRAI logo chromé embarqué `<img src="/logo-nav.webp" width="50">` + `LE TERMINAL` (Inter 700, ~27px, `letter-spacing:0.2em`, blanc) + séparateur + `BLOG` (JetBrains Mono 700, ~19px, **bleu `#7FB8E8`**). **JAMAIS** un « T » dessiné à la main.
+- **Pas d'eyebrow/pastille « TRADING ». Pas de bandeau « règle d'or » en bas.** (La série n'en a pas.)
+- **Titre** : **Anton**, CAPITALES condensées, **~76–84px** (`line-height:0.96`), remplit la zone y≈175–430. Blanc métallique brillant `linear-gradient(178deg,#FFFFFF 8%,#EDF1F6 48%,#C4CDD8 82%,#9AA5B2 100%)` **+ un seul mot focal en bleu** `linear-gradient(178deg,#A9D2F5,#7FB8E8,#5A97CE)`.
+- **Barre** bleue courte (74×4) sous le titre, puis **sous-titre ~24px** (Inter, `#C4CCD6`, 2–3 lignes) **+ une ligne de clôture bleue** `#7FB8E8` en gras.
+- **Marque centrale** : grand **octogone métallique + chevron bleu** (~300px, motif récurrent), bien visible ; panneaux à droite.
+- **Panneaux droite** : fond `rgba(20,25,33,.94)`, radius 16, en-tête JetBrains Mono bleu `#8FB9E4`. Contenu propre spécifique à l'article.
+- **Piliers (bas, pleine largeur, 4–5)** : icône trait fin dans un **CERCLE** (`border-radius:50%`, ring 1.5px, sans fond) + **intitulé bleu `#7FB8E8`** + description grise. **Jamais** de carré arrondi ni d'intitulé doré.
+- Palette : bleu glacial dominant, or `#E8C268` avec parcimonie, sémantiques vert `#4ADE9C` / rouge `#F0647A`. Zéro emoji.
+
+**⚠️ PIÈGE CRITIQUE — police Anton au screenshot :** `fonts.css` charge Anton en `font-display:swap`, donc la capture Chromium headless part **avant** qu'Anton soit chargée → le titre sort dans une police de repli (sans-serif large et fade). **Solution obligatoire :** générer un CSS avec les `@font-face` **embarqués en base64** (Anton + Inter 400/600/700/800 + JetBrains Mono 400/700 depuis `fonts/*.woff2`), le lier dans le HTML temporaire, et rendre avec `--virtual-time-budget=6000`. **Toujours vérifier** sur le screenshot que le titre est bien condensé (Anton) avant de publier.
+
+**Workflow de fabrication (fichiers temporaires `__*.html`/`__fe.css` à supprimer avant commit) :**
+1. Écrire la bannière en HTML/CSS 1600×900 (`body{width:1600px;height:900px;overflow:hidden}`) + lier le CSS de polices base64.
+2. Servir `python3 -m http.server 8901` puis Chromium `--headless --window-size=1600,1000 --virtual-time-budget=6000 --screenshot`, puis **cropper (0,0,1600,900)** (contourne un bug d'ancrage du bandeau bas à 900px exact).
+3. Vérifier le rendu au screenshot (titre Anton, rien qui déborde), convertir WebP + OG, remplacer les fichiers, **supprimer les temporaires**, commit.
+
+Le texte des panneaux/piliers doit être **recopié fidèlement** depuis le visuel fourni par le client — ne pas reformuler ni abréger. Auteur des articles = **« Les fondateurs du Terminal »** (Adrien & Romain), JSON-LD `author` = Organization « Le Terminal ».
