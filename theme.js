@@ -3,10 +3,9 @@
    - Persiste dans localStorage ('lt_theme' = 'light' | 'dark').
    - Pose data-theme sur <html> ; le CSS clair vit dans design-system.css
      (tokens) + theme-light.css (surcharges des couleurs codées en dur).
-   - Bouton nav = pastille .lt-theme-pill injectée dans .lt-nav__actions.
-   - Bouton outils = rangée .lt-side-theme injectée EN BAS de la barre
-     latérale gauche (.side) remplie par appshell.js — avec retries car
-     appshell peut (re)construire la barre après nous.
+   - Bouton UNIQUEMENT dans la nav du haut : pastille .lt-theme-pill
+     injectée dans .lt-nav__actions. (Plus de bouton dans le dock/menu
+     latéral gauche ni sur mobile — retiré à la demande du client.)
    - Délégation globale (robuste), sur le modèle de lang.js. Ne casse aucun JS. */
 (function () {
   if (window._ltThemeInit) return; window._ltThemeInit = true;
@@ -39,41 +38,9 @@
     }
   }
 
-  /* Item en bas du dock vertical gauche des outils (.lt-dock) */
-  function injectDockItem() {
-    var docks = document.querySelectorAll('nav.lt-dock, .lt-dock');
-    Array.prototype.forEach.call(docks, function (dock) {
-      if (dock.querySelector('[data-theme-toggle]')) return;
-      var it = document.createElement('button');
-      it.className = 'lt-dock__item';
-      it.type = 'button';
-      it.setAttribute('data-theme-toggle', '');
-      it.setAttribute('aria-label', 'Changer de thème');
-      it.innerHTML = IC_MOON + IC_SUN
-        + '<span class="lt-dock__lbl" data-en="Theme">Thème</span>'
-        + '<span class="lt-dock__tip"><span class="lt-theme-lbl lt-theme-lbl--light" data-en="Light theme">Thème clair</span><span class="lt-theme-lbl lt-theme-lbl--dark" data-en="Dark theme">Thème sombre</span></span>';
-      dock.appendChild(it);
-    });
-  }
+  function injectAll() { injectNavPill(); apply(get()); }
 
-  /* Rangée en bas de la barre latérale gauche des outils (.side) */
-  function injectSideRow() {
-    var side = document.querySelector('.app > .side, aside.side');
-    if (!side || side.querySelector('.lt-side-theme')) return;
-    var row = document.createElement('button');
-    row.className = 'lt-side-theme';
-    row.type = 'button';
-    row.setAttribute('title', 'Changer de thème');
-    row.setAttribute('aria-label', 'Changer de thème');
-    row.innerHTML = IC_MOON + IC_SUN
-      + '<span class="lt-theme-lbl lt-theme-lbl--light" data-en="Light theme">Thème clair</span>'
-      + '<span class="lt-theme-lbl lt-theme-lbl--dark" data-en="Dark theme">Thème sombre</span>';
-    side.appendChild(row);
-  }
-
-  function injectAll() { injectNavPill(); injectDockItem(); injectSideRow(); apply(get()); }
-
-  /* appshell.js peut reconstruire la barre latérale (innerHTML) après nous :
+  /* La nav peut être (re)construite par menu.js/appshell après nous :
      on retente quelques fois, sans observer coûteux. */
   function boot() {
     injectAll();
