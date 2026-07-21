@@ -67,6 +67,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.leterminal.net/blog/regles-ftmo</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.leterminal.net/blog/reussir-challenge-prop-firm</loc>
     <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
