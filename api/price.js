@@ -56,6 +56,19 @@ const SYMBOL_MAP = {
   'BCHUSD': 'BCH-USD', 'BCH': 'BCH-USD',
   'XLMUSD': 'XLM-USD', 'XLM': 'XLM-USD',
   'NEARUSD': 'NEAR-USD', 'NEAR': 'NEAR-USD',
+  // ===== Panoplie élargie (symboles au prix live vérifié) =====
+  // Actions US
+  'JPM':'JPM','V':'V','MA':'MA','KO':'KO','PEP':'PEP','DIS':'DIS','INTC':'INTC','CRM':'CRM','ADBE':'ADBE','PYPL':'PYPL','UBER':'UBER','ORCL':'ORCL','CSCO':'CSCO','QCOM':'QCOM','TXN':'TXN','AVGO':'AVGO','COST':'COST','WMT':'WMT','HD':'HD','NKE':'NKE','MCD':'MCD','SBUX':'SBUX','BA':'BA','CAT':'CAT','GE':'GE','F':'F','GM':'GM','PFE':'PFE','JNJ':'JNJ','LLY':'LLY','MRK':'MRK','ABBV':'ABBV','UNH':'UNH','XOM':'XOM','CVX':'CVX','BAC':'BAC','WFC':'WFC','GS':'GS','C':'C','PLTR':'PLTR','COIN':'COIN','SHOP':'SHOP','SNAP':'SNAP','ABNB':'ABNB','RIVN':'RIVN','LCID':'LCID','MRNA':'MRNA','T':'T','VZ':'VZ','IBM':'IBM','DELL':'DELL','MU':'MU','BABA':'BABA','NIO':'NIO','SOFI':'SOFI','HOOD':'HOOD','SPOT':'SPOT','NET':'NET','CRWD':'CRWD','SNOW':'SNOW','DDOG':'DDOG','PANW':'PANW','SMCI':'SMCI','ARM':'ARM','MARA':'MARA','RIOT':'RIOT',
+  // ETF US
+  'SPY':'SPY','QQQ':'QQQ','VOO':'VOO','VTI':'VTI','IWM':'IWM','GLD':'GLD','SLV':'SLV','ARKK':'ARKK','DIA':'DIA','EEM':'EEM','TLT':'TLT',
+  // Actions EU (Yahoo avec suffixe bourse)
+  'LVMH':'MC.PA','LOREAL':'OR.PA','AIRBUS':'AIR.PA','TOTALENERGIES':'TTE.PA','SANOFI':'SAN.PA','BNPPARIBAS':'BNP.PA','AIRLIQUIDE':'AI.PA','VINCI':'DG.PA','SCHNEIDER':'SU.PA','HERMES':'RMS.PA','KERING':'KER.PA','ESSILOR':'EL.PA','AXA':'CS.PA','ASML':'ASML.AS','SAP':'SAP.DE','SIEMENS':'SIE.DE','ALLIANZ':'ALV.DE','BMW':'BMW.DE','VOLKSWAGEN':'VOW3.DE','ADIDAS':'ADS.DE','BASF':'BAS.DE','MERCEDES':'MBG.DE','NESTLE':'NESN.SW','NOVARTIS':'NOVN.SW','SHELL':'SHEL.L','ASTRAZENECA':'AZN.L','HSBC':'HSBA.L','BP':'BP.L','UNILEVER':'ULVR.L',
+  // Crypto
+  'SHIB':'SHIB-USD','UNI':'UNI-USD','ATOM':'ATOM-USD','ICP':'ICP-USD','FIL':'FIL-USD','APT':'APT-USD','ARB':'ARB-USD','OP':'OP-USD','INJ':'INJ-USD','IMX':'IMX-USD','RNDR':'RNDR-USD','SUI':'SUI-USD','SEI':'SEI-USD','TON':'TON-USD','HBAR':'HBAR-USD','VET':'VET-USD','ALGO':'ALGO-USD','AAVE':'AAVE-USD','MKR':'MKR-USD','GRT':'GRT-USD','SAND':'SAND-USD','MANA':'MANA-USD','AXS':'AXS-USD','PEPE':'PEPE-USD','TIA':'TIA-USD','STX':'STX-USD','RUNE':'RUNE-USD','FTM':'FTM-USD','THETA':'THETA-USD','CHZ':'CHZ-USD','ZEC':'ZEC-USD','XMR':'XMR-USD','EOS':'EOS-USD',
+  // Matières premières (or/argent via futures = prix live fiable, contrairement au spot =X)
+  'GOLDF':'GC=F','SILVERF':'SI=F','PALLADIUM':'PA=F','COFFEE':'KC=F','SUGAR':'SB=F','COCOA':'CC=F','COTTON':'CT=F','WHEAT':'ZW=F','CORN':'ZC=F','SOYBEAN':'ZS=F','ORANGEJUICE':'OJ=F',
+  // Indices
+  'RUSSELL2000':'^RUT','VIX':'^VIX','STOXX50':'^STOXX50E','SMI':'^SSMI','IBEX35':'^IBEX','AEX':'^AEX',
 };
 
 function fetchYahoo(yahooSym) {
