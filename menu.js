@@ -164,12 +164,12 @@
 
     /* ── USER BAR ── */
     #ltUserBar { display: flex; align-items: center; gap: 8px; position: relative; }
-    .lt-ub-tokens { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; background: rgba(127,184,232,.1); border: 1px solid rgba(127,184,232,.25); border-radius: 6px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; font-weight: 700; color: #7FB8E8; letter-spacing: .04em; white-space: nowrap; }
+    .lt-ub-tokens { display: inline-flex; align-items: center; box-sizing: border-box; height: 34px; gap: 4px; padding: 0 12px; background: rgba(127,184,232,.1); border: 1px solid rgba(127,184,232,.25); border-radius: 999px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; font-weight: 700; color: #7FB8E8; letter-spacing: .04em; white-space: nowrap; }
     .lt-ub-tokens--low { background: rgba(240,100,122,.1); border-color: rgba(240,100,122,.25); color: #F0647A; }
     .lt-ub-tokens--pro { background: rgba(232,194,104,.1); border-color: rgba(232,194,104,.25); color: #E8C268; }
-    .lt-ub-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); cursor: pointer; transition: all .2s; }
-    .lt-ub-chip:hover { border-color: rgba(127,184,232,.45); background: rgba(127,184,232,.08); }
-    .lt-ub-avatar { width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg,#7FB8E8,#BFDCF5); display: flex; align-items: center; justify-content: center; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #07090C; flex-shrink: 0; }
+    .lt-ub-chip { display: flex; align-items: center; box-sizing: border-box; height: 34px; gap: 8px; padding: 0 12px 0 5px; border-radius: 999px; border: 1px solid var(--border-subtle); background: var(--act-fill); cursor: pointer; transition: all .2s; }
+    .lt-ub-chip:hover { border-color: var(--border); background: var(--accent-glow-soft); }
+    .lt-ub-avatar { width: 24px; height: 24px; border-radius: 999px; background: linear-gradient(135deg,#7FB8E8,#BFDCF5); display: flex; align-items: center; justify-content: center; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #07090C; flex-shrink: 0; }
     .lt-ub-name { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #F2F4F7; }
     .lt-ub-caret { color: #7E8794; display: flex; transition: transform .2s; }
     .lt-ub-chip.open .lt-ub-caret { transform: rotate(180deg); }

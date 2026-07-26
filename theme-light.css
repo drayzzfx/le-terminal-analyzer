@@ -34,6 +34,8 @@
 
   --border-active: rgba(46, 119, 194, 0.4);
   --vglow2: rgba(46, 119, 194, 0.07);
+  /* Remplissage des contrôles de la barre d'actions, version claire */
+  --act-fill: rgba(12, 17, 25, 0.04);
 }
 
 /* ── 0bis. SHELL DES OUTILS (design-system.css) ── */

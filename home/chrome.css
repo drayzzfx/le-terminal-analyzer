@@ -48,7 +48,6 @@ html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
 /* Page courante : pastille accent (marquée par menu.js, .is-current). */
 .lt-nav__links > a.is-current, .lt-nav__drop.is-current .lt-nav__droptrigger { color: var(--accent-bright); background: var(--accent-glow-soft); box-shadow: inset 0 0 0 1px rgba(127,184,232,0.22); }
 .lt-nav__actions { display: flex; gap: 10px; align-items: center; flex: 1 1 0; justify-content: flex-end; }
-.lt-nav__actions .lt-btn { border-radius: 999px; }
 .lt-nav__pill { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 6px 11px; cursor: pointer; transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
 .lt-nav__pill:hover { color: var(--accent); border-color: var(--border); }
 
@@ -67,10 +66,32 @@ html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
 .lt-nav__menulabel { font-size: 14px; font-weight: 600; color: var(--text-title); }
 .lt-nav__menudesc { font-size: 12px; color: var(--text-muted); }
 
+/* ---------- BARRE D'ACTIONS — géométrie commune ----------
+   Thème, langue, connexion, profil et CTA Premium partagent la même hauteur,
+   le même rayon pilule et le même filet 1px. Seul le CTA garde un remplissage
+   accent : c'est la seule hiérarchie visuelle de la rangée. */
+.lt-theme-pill,
+.lt-nav__pill,
+.lt-nav__actions .lt-btn { box-sizing: border-box; height: 34px; border-radius: 999px; border: 1px solid var(--border-subtle); }
+.lt-theme-pill,
+.lt-nav__pill,
+.lt-nav__actions .lt-btn--ghost { background: var(--act-fill); color: var(--text-body); }
+.lt-theme-pill:hover,
+.lt-nav__pill:hover,
+.lt-nav__actions .lt-btn--ghost:hover { border-color: var(--border); background: var(--accent-glow-soft); color: var(--text-title); }
+.lt-theme-pill { width: 34px; padding: 0; }
+.lt-nav__pill { display: inline-flex; align-items: center; padding: 0 12px; }
+.lt-nav__actions .lt-btn { padding: 0 16px; }
+.lt-nav__actions .lt-btn--primary { border-color: var(--accent); box-shadow: 0 6px 20px var(--accent-glow); }
+/* Puce profil affichée avant hydratation (styles inline dans le HTML) :
+   alignée sur la même géométrie que le reste de la rangée. */
+#ltUbChipEarly { box-sizing: border-box; height: 34px !important; gap: 8px !important; padding: 0 12px 0 5px !important; border-radius: 999px !important; border: 1px solid var(--border-subtle) !important; background: var(--act-fill) !important; }
+#ltUbChipEarly > div:first-child { width: 24px !important; height: 24px !important; border-radius: 999px !important; }
+
 /* Sous 1000px, le CTA Premium passe en bouton-icône (même repli qu'en mobile)
    pour que le groupe de liens tienne sans chevaucher la marque. */
 @media (max-width: 1000px) {
-  .lt-nav__cta { padding: 0; width: 38px; height: 38px; border-radius: 999px; flex-shrink: 0; }
+  .lt-nav__actions .lt-nav__cta { padding: 0; width: 34px; height: 34px; border-radius: 999px; flex-shrink: 0; }
   .lt-nav__cta-txt { display: none; }
   .lt-nav__cta-ic { display: inline-flex; }
 }
