@@ -181,7 +181,7 @@
     .lt-ub-logout:hover { background: rgba(240,100,122,.12); }
     .lt-ub-link { width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: none; border-radius: 6px; color: #F2F4F7; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; text-decoration: none; margin-bottom: 4px; }
     .lt-ub-link:hover { background: rgba(127,184,232,.12); color: #BFDCF5; }
-    .lt-ub-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: block; }
+    .lt-ub-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; display: block; }
 
     .lt-subnav-item {
       display: flex; align-items: center; gap: 10px;
