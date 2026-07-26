@@ -119,20 +119,20 @@ function LiveChartBand() {
       t++;
       if (t % 4 === 0) { v += (Math.random() - 0.49) * 0.05; v = Math.max(0.14, Math.min(0.86, v)); data.push(v); data.shift(); }
       ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(127,184,232,0.07)'; ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(59, 125, 255,0.07)'; ctx.lineWidth = 1;
       for (let y = 1; y < 4; y++) { ctx.beginPath(); ctx.moveTo(0, h * y / 4); ctx.lineTo(w, h * y / 4); ctx.stroke(); }
       const px = (i) => (i / (N - 1)) * w, py = (val) => h * (1 - val) * 0.86 + h * 0.07;
       ctx.beginPath();
       data.forEach((d, i) => { if (i) ctx.lineTo(px(i), py(d)); else ctx.moveTo(px(i), py(d)); });
-      ctx.strokeStyle = 'rgba(127,184,232,0.9)'; ctx.lineWidth = 1.6;
-      ctx.shadowColor = 'rgba(127,184,232,0.45)'; ctx.shadowBlur = 12; ctx.stroke(); ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(59, 125, 255,0.9)'; ctx.lineWidth = 1.6;
+      ctx.shadowColor = 'rgba(59, 125, 255,0.45)'; ctx.shadowBlur = 12; ctx.stroke(); ctx.shadowBlur = 0;
       ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
       const g = ctx.createLinearGradient(0, 0, 0, h);
-      g.addColorStop(0, 'rgba(127,184,232,0.13)'); g.addColorStop(1, 'rgba(127,184,232,0)');
+      g.addColorStop(0, 'rgba(59, 125, 255,0.13)'); g.addColorStop(1, 'rgba(59, 125, 255,0)');
       ctx.fillStyle = g; ctx.fill();
       const lx = px(N - 1), ly = py(data[N - 1]);
       ctx.beginPath(); ctx.arc(lx - 2, ly, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#BFDCF5'; ctx.shadowColor = 'rgba(127,184,232,0.8)'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.fillStyle = '#8FBAFF'; ctx.shadowColor = 'rgba(59, 125, 255,0.8)'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
       if (!reduced) raf = requestAnimationFrame(draw);
     };
     draw();

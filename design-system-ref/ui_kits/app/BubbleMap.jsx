@@ -87,7 +87,7 @@ function BubbleMap() {
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       // faint grid
-      ctx.strokeStyle = 'rgba(127,184,232,0.05)'; ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(59, 125, 255,0.05)'; ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 64) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
       for (let y = 0; y < h; y += 64) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
       let hovered = null;

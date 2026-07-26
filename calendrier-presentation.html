@@ -122,7 +122,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 
 /* buttons */
 .pm-btn { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-text); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 24px; border-radius: var(--r-sm); border: 1px solid transparent; cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
-.pm-btn--primary { background: var(--accent); color: #07090C; box-shadow: 0 0 0 1px var(--accent-glow), 0 10px 30px var(--accent-glow); }
+.pm-btn--primary { background: var(--accent); color: #04060B; box-shadow: 0 0 0 1px var(--accent-glow), 0 10px 30px var(--accent-glow); }
 .pm-btn--primary:hover { background: var(--accent-bright); transform: translateY(-2px); }
 .pm-btn--ghost { color: var(--text-body); border-color: var(--border); }
 .pm-btn--ghost:hover { border-color: var(--accent); color: var(--accent-bright); }
@@ -131,9 +131,9 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 /* ---------- HERO ---------- */
 .pm-hero { position: relative; min-height: calc(100vh - var(--chrome-h, 64px) - 56px); display: flex; align-items: center; overflow: hidden; background: var(--bg-void); border-radius: var(--r-lg); }
 .pm-hero__aurora { position: absolute; inset: -20% -10% 0; pointer-events: none; background:
-  radial-gradient(50% 45% at 22% 18%, rgba(127,184,232,0.22), transparent 60%),
+  radial-gradient(50% 45% at 22% 18%, rgba(59, 125, 255,0.22), transparent 60%),
   radial-gradient(45% 40% at 82% 30%, rgba(74,222,156,0.12), transparent 60%),
-  radial-gradient(60% 50% at 60% 90%, rgba(90,155,212,0.14), transparent 65%); filter: blur(20px); animation: pm-aurora 16s ease-in-out infinite alternate; }
+  radial-gradient(60% 50% at 60% 90%, rgba(30, 91, 224,0.14), transparent 65%); filter: blur(20px); animation: pm-aurora 16s ease-in-out infinite alternate; }
 @keyframes pm-aurora { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-20px,18px) scale(1.06); } }
 .pm-hero__grid-bg { position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
   background-image: linear-gradient(rgba(58,65,76,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(58,65,76,0.16) 1px, transparent 1px);
@@ -159,7 +159,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 .pm-card3d { position: relative; width: 100%; max-width: 420px; padding: 26px; border: 1px solid var(--border); border-radius: var(--r-lg); background: linear-gradient(165deg, var(--bg-surface), var(--bg-void)); box-shadow: var(--shadow-lg), 0 50px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05); transform-style: preserve-3d; transition: transform var(--dur-base) var(--ease-out); animation: pm-cardfloat 7s ease-in-out infinite; }
 @keyframes pm-cardfloat { 0%,100% { translate: 0 -8px; } 50% { translate: 0 10px; } }
 @media (prefers-reduced-motion: reduce) { .pm-card3d { animation: none; } }
-.pm-card3d__glow { position: absolute; inset: 0; border-radius: var(--r-lg); pointer-events: none; background: radial-gradient(120% 80% at 50% 0%, rgba(127,184,232,0.12), transparent 60%); }
+.pm-card3d__glow { position: absolute; inset: 0; border-radius: var(--r-lg); pointer-events: none; background: radial-gradient(120% 80% at 50% 0%, rgba(59, 125, 255,0.12), transparent 60%); }
 .pm-card3d__head { display: flex; align-items: center; justify-content: space-between; }
 .pm-card3d__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
 .pm-card3d__live { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bull); }
@@ -167,7 +167,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 @keyframes pm-blink { 50% { opacity: 0.3; } }
 .pm-card3d__val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 700; color: var(--text-title); line-height: 1; margin-top: 14px; }
 .pm-card3d__pnl { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 15px; color: var(--bull); margin-top: 8px; }
-.pm-card3d__pnl em { font-style: normal; color: #07090C; background: var(--bull); border-radius: var(--r-sm); padding: 2px 8px; margin-left: 6px; font-size: 13px; }
+.pm-card3d__pnl em { font-style: normal; color: #04060B; background: var(--bull); border-radius: var(--r-sm); padding: 2px 8px; margin-left: 6px; font-size: 13px; }
 .pm-card3d__spark { width: 100%; height: 90px; display: block; margin: 16px 0; }
 .pm-card3d__line { stroke-dasharray: 700; stroke-dashoffset: 700; animation: pm-draw 2s var(--ease-out) forwards 0.4s; filter: drop-shadow(0 0 5px rgba(74,222,156,0.4)); }
 @keyframes pm-draw { to { stroke-dashoffset: 0; } }
@@ -175,7 +175,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 .pm-card3d__alloc { display: flex; flex-wrap: wrap; gap: 6px; }
 .pm-card3d__chip { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 10.5px; color: var(--text-body); border: 1px solid var(--border-subtle); border-radius: var(--r-pill); padding: 4px 9px; }
 .pm-card3d__chip i { width: 7px; height: 7px; border-radius: 2px; }
-.pm-float { position: absolute; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent-bright); background: rgba(11,14,19,0.85); border: 1px solid var(--accent-glow); border-radius: var(--r-pill); padding: 8px 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(6px); animation: pm-cardfloat 5s ease-in-out infinite; }
+.pm-float { position: absolute; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent-bright); background: rgba(7, 10, 17,0.85); border: 1px solid var(--accent-glow); border-radius: var(--r-pill); padding: 8px 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(6px); animation: pm-cardfloat 5s ease-in-out infinite; }
 .pm-float--1 { top: 8%; right: -2%; color: var(--bull); border-color: rgba(74,222,156,0.4); animation-delay: 0.5s; }
 .pm-float--2 { bottom: 10%; left: -4%; animation-delay: 1.2s; }
 @media (max-width: 540px) { .pm-float { display: none; } }
@@ -233,7 +233,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 @keyframes pm-connin { 0%, 20% { border-color: var(--border-subtle); } 35%, 100% { border-color: rgba(74,222,156,0.5); } }
 .pm-connrow__mk { width: 38px; height: 38px; border-radius: var(--r-sm); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--text-title); background: var(--bg-void); }
 .pm-connrow__nm { font-size: 14px; font-weight: 600; color: var(--text-title); }
-.pm-connrow__ok { margin-left: auto; width: 26px; height: 26px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #07090C; background: var(--bull); box-shadow: 0 0 12px var(--bull-glow); }
+.pm-connrow__ok { margin-left: auto; width: 26px; height: 26px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #04060B; background: var(--bull); box-shadow: 0 0 12px var(--bull-glow); }
 @media (prefers-reduced-motion: reduce) { .pm-connrow { animation: none; border-color: rgba(74,222,156,0.5); } }
 
 /* evolution viz */
@@ -259,7 +259,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 .pm-planrow__dots i { width: 9px; height: 9px; border-radius: 999px; }
 
 /* ---------- CTA ---------- */
-.pm-cta { position: relative; max-width: var(--container); margin: 0 auto var(--sp-9); padding: var(--sp-9) 40px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: radial-gradient(120% 100% at 50% 0%, rgba(127,184,232,0.08), var(--bg-elevated) 60%); overflow: hidden; }
+.pm-cta { position: relative; max-width: var(--container); margin: 0 auto var(--sp-9); padding: var(--sp-9) 40px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: radial-gradient(120% 100% at 50% 0%, rgba(59, 125, 255,0.08), var(--bg-elevated) 60%); overflow: hidden; }
 .pm-cta__glow { position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(circle, var(--accent-glow), transparent 65%); filter: blur(40px); pointer-events: none; }
 .pm-cta__title { position: relative; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1; letter-spacing: 0.01em; margin: 0; }
 .pm-cta__lede { position: relative; max-width: 52ch; color: var(--text-body); font-size: 1.05rem; line-height: 1.6; margin: 0; }
@@ -271,8 +271,8 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
 .pm-preview__intro{max-width:760px;margin:6px auto 34px;text-align:center;font-size:16px;line-height:1.65;color:var(--text-body,#C3CAD4)}
 .pm-shots{display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:var(--container,1200px);margin:0 auto;padding:0 24px}
 @media(max-width:900px){.pm-shots{grid-template-columns:1fr;gap:22px}}
-.pm-shot{margin:0;border:1px solid var(--border-subtle,rgba(127,184,232,.16));border-radius:var(--r-lg,16px);overflow:hidden;background:var(--bg-surface,rgba(20,25,33,.6));box-shadow:var(--shadow-lg,0 24px 60px rgba(4,7,12,.4))}
-.pm-shot__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--bg-void,rgba(12,16,22,.7));border-bottom:1px solid var(--border-subtle,rgba(127,184,232,.12))}
+.pm-shot{margin:0;border:1px solid var(--border-subtle,rgba(59, 125, 255,.16));border-radius:var(--r-lg,16px);overflow:hidden;background:var(--bg-surface,rgba(20,25,33,.6));box-shadow:var(--shadow-lg,0 24px 60px rgba(4,7,12,.4))}
+.pm-shot__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--bg-void,rgba(12,16,22,.7));border-bottom:1px solid var(--border-subtle,rgba(59, 125, 255,.12))}
 .pm-shot__bar i{width:10px;height:10px;border-radius:50%;background:#39414c;display:block;flex:none}
 .pm-shot__bar span{margin-left:8px;font-family:var(--font-mono,monospace);font-size:11px;letter-spacing:.04em;color:var(--text-muted,#8B95A2)}
 .pm-shot__img{display:block;width:100%;height:auto;border:0}
@@ -356,7 +356,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
   <section class="pm-feats" id="how"><div class="pm-feats__head" data-reveal><span class="pm-eyebrow"><span class="lt-dot"></span> <span data-en="How it works">Comment ça marche</span></span><h2 class="pm-h2" data-en="The releases that count">Les rendez-vous qui comptent</h2></div>
 <article class="pm-feat is-flip" data-reveal="left"><div class="pm-feat__txt"><span class="pm-feat__n">01</span><span class="pm-eyebrow" data-en="The releases">Les annonces</span><h3 class="pm-feat__title" data-en="NFP, CPI, FOMC, ECB…">NFP, CPI, FOMC, BCE…</h3><p class="pm-feat__desc" data-en="Every market-moving event, from the US jobs report to central-bank decisions, with forecast and previous figures.">Tous les événements qui déplacent les marchés, du rapport sur l'emploi américain aux décisions des banques centrales, avec la prévision et le précédent.</p><ul class="pm-feat__points"><li data-en="Jobs, inflation, rates">Emploi, inflation, taux</li><li data-en="Forecast vs previous">Prévision vs précédent</li><li data-en="Continuously updated">Mise à jour en continu</li></ul></div><div class="pm-feat__viz"><div class="pm-viz pm-viz--connect"><div class="pm-connrow"><span class="pm-connrow__mk">US</span><span class="pm-connrow__nm">NFP · Emploi américain</span><span class="pm-connrow__ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div><div class="pm-connrow"><span class="pm-connrow__mk">US</span><span class="pm-connrow__nm">CPI · Inflation</span><span class="pm-connrow__ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div><div class="pm-connrow"><span class="pm-connrow__mk">US</span><span class="pm-connrow__nm">FOMC · Décision Fed</span><span class="pm-connrow__ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div></div></div></article>
 <article class="pm-feat" data-reveal="right"><div class="pm-feat__txt"><span class="pm-feat__n">02</span><span class="pm-eyebrow" data-en="Impact">Impact</span><h3 class="pm-feat__title" data-en="Keep only what matters">Ne gardez que ce qui compte</h3><p class="pm-feat__desc" data-en="Filter by impact level and currency to see only the releases that affect your pairs. No more noise before the session.">Filtrez par niveau d'impact et par devise pour ne voir que les annonces qui concernent vos paires. Plus de bruit inutile avant la séance.</p><ul class="pm-feat__points"><li data-en="High / medium / low impact">Impact élevé / moyen / faible</li><li data-en="Filter by currency">Filtre par devise</li><li data-en="Focus on your markets">Focus sur vos marchés</li></ul></div><div class="pm-feat__viz"><div class="pm-viz pm-viz--plans"><div class="pm-planrow" style="animation-delay:0.0s"><span class="pm-planrow__n">Élevé</span><span class="pm-planrow__dots"><i style="background:var(--bear)"></i><i style="background:var(--bear)"></i><i style="background:var(--bear)"></i></span></div><div class="pm-planrow" style="animation-delay:0.4s"><span class="pm-planrow__n">Moyen</span><span class="pm-planrow__dots"><i style="background:var(--neutral)"></i><i style="background:var(--neutral)"></i><i style="background:var(--border)"></i></span></div><div class="pm-planrow" style="animation-delay:0.8s"><span class="pm-planrow__n">Faible</span><span class="pm-planrow__dots"><i style="background:var(--bull)"></i><i style="background:var(--border)"></i><i style="background:var(--border)"></i></span></div></div></div></article>
-<article class="pm-feat is-flip" data-reveal="left"><div class="pm-feat__txt"><span class="pm-feat__n">03</span><span class="pm-eyebrow" data-en="Organisation">Organisation</span><h3 class="pm-feat__title" data-en="Your local time, no maths">À l'heure de Paris, sans calcul</h3><p class="pm-feat__desc" data-en="Every time is shown in your timezone: no more conversion mistakes. Spot your day&#x27;s volatility window at a glance.">Chaque horaire est affiché à votre fuseau : plus d'erreur de conversion. Repérez d'un coup d'œil la fenêtre de volatilité de votre journée.</p><ul class="pm-feat__points"><li data-en="Automatic local time">Heure locale automatique</li><li data-en="Week-at-a-glance agenda">Agenda de la semaine</li><li data-en="Plan your sessions">Préparez vos séances</li></ul></div><div class="pm-feat__viz"><div class="pm-viz pm-viz--evo"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="pmEvo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(127,184,232,0.3)"/><stop offset="1" stop-color="rgba(127,184,232,0)"/></linearGradient></defs><line x1="0" y1="40" x2="300" y2="40" stroke="rgba(58,65,76,0.3)"/><line x1="0" y1="80" x2="300" y2="80" stroke="rgba(58,65,76,0.3)"/><line x1="0" y1="120" x2="300" y2="120" stroke="rgba(58,65,76,0.3)"/><path d="M0,128 C50,120 80,90 130,82 C180,74 200,44 250,30 L300,18 L300,150 L0,150 Z" fill="url(#pmEvo)"/><path class="pm-evo__line" d="M0,128 C50,120 80,90 130,82 C180,74 200,44 250,30 L300,18" fill="none" stroke="var(--accent)" stroke-width="2.5"/></svg><div class="pm-evo__periods"><span class="">Lun</span><span class="">Mar</span><span class="is-on">Mer</span><span class="">Jeu</span></div></div></div></article>
+<article class="pm-feat is-flip" data-reveal="left"><div class="pm-feat__txt"><span class="pm-feat__n">03</span><span class="pm-eyebrow" data-en="Organisation">Organisation</span><h3 class="pm-feat__title" data-en="Your local time, no maths">À l'heure de Paris, sans calcul</h3><p class="pm-feat__desc" data-en="Every time is shown in your timezone: no more conversion mistakes. Spot your day&#x27;s volatility window at a glance.">Chaque horaire est affiché à votre fuseau : plus d'erreur de conversion. Repérez d'un coup d'œil la fenêtre de volatilité de votre journée.</p><ul class="pm-feat__points"><li data-en="Automatic local time">Heure locale automatique</li><li data-en="Week-at-a-glance agenda">Agenda de la semaine</li><li data-en="Plan your sessions">Préparez vos séances</li></ul></div><div class="pm-feat__viz"><div class="pm-viz pm-viz--evo"><svg viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="pmEvo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(59, 125, 255,0.3)"/><stop offset="1" stop-color="rgba(59, 125, 255,0)"/></linearGradient></defs><line x1="0" y1="40" x2="300" y2="40" stroke="rgba(58,65,76,0.3)"/><line x1="0" y1="80" x2="300" y2="80" stroke="rgba(58,65,76,0.3)"/><line x1="0" y1="120" x2="300" y2="120" stroke="rgba(58,65,76,0.3)"/><path d="M0,128 C50,120 80,90 130,82 C180,74 200,44 250,30 L300,18 L300,150 L0,150 Z" fill="url(#pmEvo)"/><path class="pm-evo__line" d="M0,128 C50,120 80,90 130,82 C180,74 200,44 250,30 L300,18" fill="none" stroke="var(--accent)" stroke-width="2.5"/></svg><div class="pm-evo__periods"><span class="">Lun</span><span class="">Mar</span><span class="is-on">Mer</span><span class="">Jeu</span></div></div></div></article>
   </section>
   <section class="pm-feats" style="padding-top:0">
     <div class="pm-feats__head" data-reveal><span class="pm-eyebrow"><span class="lt-dot"></span> <span data-en="FAQ">FAQ</span></span><h2 class="pm-h2" data-en="Frequently asked questions">Questions fréquentes</h2></div>
@@ -385,7 +385,7 @@ body.eco-page .app > main.wrap { gap: 0 !important; }
   (function(){
     var svg = document.getElementById('pmAllocSvg'); if(!svg) return;
     var R = 52, C = 2*Math.PI*R, acc = 0;
-    var segs = [['#7FB8E8',42],['#4ADE9C',28],['#E8C268',14],['#C3CAD4',9],['#F0647A',7]];
+    var segs = [['#3B7DFF',42],['#4ADE9C',28],['#E8C268',14],['#C3CAD4',9],['#F0647A',7]];
     var html = '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--bg-surface)" stroke-width="15"/>';
     segs.forEach(function(s){
       var len = s[1]/100*C;

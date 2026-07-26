@@ -30,7 +30,7 @@ function Journal() {
     const min = Math.min(...series), max = Math.max(...series);
     const px = (i) => (i / (series.length - 1)) * (w - 16) + 8;
     const py = (v) => h - 14 - ((v - min) / Math.max(1, max - min)) * (h - 28);
-    ctx.strokeStyle = 'rgba(127,184,232,0.08)';
+    ctx.strokeStyle = 'rgba(59, 125, 255,0.08)';
     for (let y = 1; y < 3; y++) { ctx.beginPath(); ctx.moveTo(0, h * y / 3); ctx.lineTo(w, h * y / 3); ctx.stroke(); }
     ctx.beginPath();
     series.forEach((v, i) => { if (i) ctx.lineTo(px(i), py(v)); else ctx.moveTo(px(i), py(v)); });

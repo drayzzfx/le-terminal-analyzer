@@ -54,11 +54,11 @@ function ScreensSection() {
           <div className="lt-scr__bar"><i /><i /><i /><span>Setup Analyzer</span><em>87/100</em></div>
           <div className="lt-scr__pbody">
             <svg className="lt-scr__chart" viewBox="0 0 260 110" preserveAspectRatio="none">
-              <defs><linearGradient id="scrFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="rgba(127,184,232,0.3)"/><stop offset="1" stopColor="rgba(127,184,232,0)"/></linearGradient></defs>
+              <defs><linearGradient id="scrFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="rgba(59, 125, 255,0.3)"/><stop offset="1" stopColor="rgba(59, 125, 255,0)"/></linearGradient></defs>
               {[28,56,84].map((y)=><line key={y} x1="0" y1={y} x2="260" y2={y} stroke="rgba(58,65,76,0.3)"/>)}
               <path d="M0,86 C40,80 60,64 95,66 C130,68 145,40 185,34 C220,29 240,16 260,12 L260,110 L0,110 Z" fill="url(#scrFill)"/>
               <path d="M0,86 C40,80 60,64 95,66 C130,68 145,40 185,34 C220,29 240,16 260,12" fill="none" stroke="var(--accent)" strokeWidth="2"/>
-              <rect x="92" y="40" width="46" height="26" fill="none" stroke="rgba(127,184,232,0.5)" strokeDasharray="3 3"/>
+              <rect x="92" y="40" width="46" height="26" fill="none" stroke="rgba(59, 125, 255,0.5)" strokeDasharray="3 3"/>
             </svg>
             <div className="lt-scr__verdict"><span className="lt-scr__go">GO</span> Order Block H4 · R:R 1:2.6</div>
           </div>

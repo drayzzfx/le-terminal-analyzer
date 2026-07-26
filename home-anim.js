@@ -153,7 +153,7 @@
           var beam = 1 - Math.min(1, Math.abs(p.x - w / 2) / (w * 0.4)) * (p.y / h);
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(191,220,245,' + (p.a * beam * 0.6) + ')';
+          ctx.fillStyle = 'rgba(143, 186, 255,' + (p.a * beam * 0.6) + ')';
           ctx.fill();
         }
         raf = (visible && !document.hidden) ? requestAnimationFrame(draw) : 0;
@@ -409,10 +409,10 @@
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         if (p.bright) {
-          ctx.fillStyle = 'rgba(191,220,245,' + p.a + ')';
-          ctx.shadowColor = 'rgba(127,184,232,0.8)'; ctx.shadowBlur = 8;
+          ctx.fillStyle = 'rgba(143, 186, 255,' + p.a + ')';
+          ctx.shadowColor = 'rgba(59, 125, 255,0.8)'; ctx.shadowBlur = 8;
         } else {
-          ctx.fillStyle = 'rgba(127,184,232,' + (p.a * 0.6) + ')'; ctx.shadowBlur = 0;
+          ctx.fillStyle = 'rgba(59, 125, 255,' + (p.a * 0.6) + ')'; ctx.shadowBlur = 0;
         }
         ctx.fill();
       }
@@ -620,7 +620,7 @@
         data.push(v); data.shift();
       }
       ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(127,184,232,0.07)';
+      ctx.strokeStyle = 'rgba(59, 125, 255,0.07)';
       ctx.lineWidth = 1;
       for (var y = 1; y < 4; y++) {
         ctx.beginPath(); ctx.moveTo(0, h * y / 4); ctx.lineTo(w, h * y / 4); ctx.stroke();
@@ -631,19 +631,19 @@
       data.forEach(function (d, i) {
         if (i) ctx.lineTo(px(i), py(d)); else ctx.moveTo(px(i), py(d));
       });
-      ctx.strokeStyle = 'rgba(127,184,232,0.9)';
+      ctx.strokeStyle = 'rgba(59, 125, 255,0.9)';
       ctx.lineWidth = 1.6;
-      ctx.shadowColor = 'rgba(127,184,232,0.45)';
+      ctx.shadowColor = 'rgba(59, 125, 255,0.45)';
       ctx.shadowBlur = 12; ctx.stroke(); ctx.shadowBlur = 0;
       ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
       var g = ctx.createLinearGradient(0, 0, 0, h);
-      g.addColorStop(0, 'rgba(127,184,232,0.13)');
-      g.addColorStop(1, 'rgba(127,184,232,0)');
+      g.addColorStop(0, 'rgba(59, 125, 255,0.13)');
+      g.addColorStop(1, 'rgba(59, 125, 255,0)');
       ctx.fillStyle = g; ctx.fill();
       var lx = px(N - 1), ly = py(data[N - 1]);
       ctx.beginPath(); ctx.arc(lx - 2, ly, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#BFDCF5';
-      ctx.shadowColor = 'rgba(127,184,232,0.8)';
+      ctx.fillStyle = '#8FBAFF';
+      ctx.shadowColor = 'rgba(59, 125, 255,0.8)';
       ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
       if (!reduced && visible && !document.hidden) raf = requestAnimationFrame(draw); else raf = 0;
     }

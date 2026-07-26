@@ -13,7 +13,7 @@ La référence complète (tokens, guidelines, composants, UI kits) est versionn�
 
 **Essentiel à respecter :**
 - **Esthétique** : salle des marchés privée, à minuit, dans un hangar de jets. Froid, précis, retenu.
-- **Palette** : 4 noirs (`#07090C` → `#161B24`) ; **un seul** accent bleu glacial `#7FB8E8`, employé avec parcimonie (CTA, liens, lueurs). Sémantique marché : haussier `#4ADE9C`, baissier `#F0647A`, neutre `#E8C268`. **Pas de violet, pas de néon, pas de dégradé bleu-mauve.**
+- **Palette** : 4 noirs (`#04060B` → `#101724`) ; **un seul** accent bleu électrique `#3B7DFF`, employé avec parcimonie (CTA, liens, lueurs). Sémantique marché : haussier `#4ADE9C`, baissier `#F0647A`, neutre `#E8C268`. **Pas de violet, pas de néon, pas de dégradé bleu-mauve.**
 - **Typo** : Anton (display, CAPITALES massives, métal brossé via `background-clip:text`), Inter (texte), JetBrains Mono (TOUS les chiffres, tabulaires). Titres display en CAPITALES ; eyebrows/labels en capitales interlettrées.
 - **Icônes** : SVG trait fin (`stroke-width:1.5`, `fill:none`) uniquement. **JAMAIS d'emoji.**
 - **Copy** : français, ton direct/feutré, on **vouvoie** le client (« vous », jamais « tu ») — partout et à chaque fois, y compris pour toute nouvelle page/texte. Chiffres format français (`68 412,50`).
@@ -26,7 +26,7 @@ NB : le code de production utilise `design-system.css` + `eco.css` (noms de vari
 Pour **toute page existante** ET **toute nouvelle page/écran**, présente ou future, se baser **par défaut** sur ce design system — l'utilisateur n'a pas à le redemander. Concrètement :
 - **Avant** de créer/modifier une page : lire `design-system-ref/readme.md` + les tokens, et réutiliser les variables CSS existantes (`design-system.css` / `eco.css`).
 - **Polices** : uniquement Anton (titres display, CAPITALES) / Inter (UI, corps) / JetBrains Mono (chiffres). **Bannir `Bricolage Grotesque`** et toute autre police.
-- **Couleurs** : uniquement la palette ci-dessus (4 noirs + accent `#7FB8E8`/`#5A9BD4`/`#BFDCF5` + sémantiques `#4ADE9C`/`#F0647A`/`#E8C268` + gris steel). **Aucun hex hors-palette** (pas de bleu vif, violet, orange, vert/rouge approximatifs). Seule exception tolérée : un logo de marque tierce (ex. « G » Google).
+- **Couleurs** : uniquement la palette ci-dessus (4 noirs + accent `#3B7DFF`/`#1E5BE0`/`#8FBAFF` + sémantiques `#4ADE9C`/`#F0647A`/`#E8C268` + gris steel). **Aucun hex hors-palette** (pas de violet, orange, vert/rouge approximatifs — le bleu vif de la palette est l'accent, et lui seul). Seule exception tolérée : un logo de marque tierce (ex. « G » Google).
 - **Zéro emoji** : remplacer par une icône SVG trait fin (`viewBox 0 0 24 24`, `fill:none`, `stroke:currentColor`). Glyphes tolérés : `→ ← ↗ ★ ✓ ✕ ▲ ▼ —`.
 - **Ne jamais casser le fonctionnel** : ne toucher qu'au design (CSS/markup présentationnel), jamais la logique/JS/API/IDs.
 
@@ -119,14 +119,14 @@ Toutes les bannières héro des articles (`/blog/img/<slug>.webp`) suivent **un 
 **Dimensions (identiques pour TOUTES) :** héro WebP **1600×900** (qualité 88), OG **1200×630** JPG (`resize((1200,675)).crop((0,22,1200,652))`, qualité 86). Mettre à jour `width="1600" height="900"` sur l'article ET la vignette du listing.
 
 **Composition du gabarit (à respecter au pixel près) :**
-- **Logo** : le VRAI logo chromé embarqué `<img src="/logo-nav.webp" width="50">` + `LE TERMINAL` (Inter 700, ~27px, `letter-spacing:0.2em`, blanc) + séparateur + `BLOG` (JetBrains Mono 700, ~19px, **bleu `#7FB8E8`**). **JAMAIS** un « T » dessiné à la main.
+- **Logo** : le VRAI logo chromé embarqué `<img src="/logo-nav.webp" width="50">` + `LE TERMINAL` (Inter 700, ~27px, `letter-spacing:0.2em`, blanc) + séparateur + `BLOG` (JetBrains Mono 700, ~19px, **bleu `#3B7DFF`**). **JAMAIS** un « T » dessiné à la main.
 - **Pas d'eyebrow/pastille « TRADING ». Pas de bandeau « règle d'or » en bas.** (La série n'en a pas.)
-- **Titre** : **Anton**, CAPITALES condensées, **~76–84px** (`line-height:0.96`), remplit la zone y≈175–430. Blanc métallique brillant `linear-gradient(178deg,#FFFFFF 8%,#EDF1F6 48%,#C4CDD8 82%,#9AA5B2 100%)` **+ un seul mot focal en bleu** `linear-gradient(178deg,#A9D2F5,#7FB8E8,#5A97CE)`.
+- **Titre** : **Anton**, CAPITALES condensées, **~76–84px** (`line-height:0.96`), remplit la zone y≈175–430. Blanc métallique brillant `linear-gradient(178deg,#FFFFFF 8%,#EDF1F6 48%,#C4CDD8 82%,#9AA5B2 100%)` **+ un seul mot focal en bleu** `linear-gradient(178deg,#8FBAFF,#3B7DFF,#1E5BE0)`.
 - **Barre** bleue courte (74×4) sous le titre, puis **sous-titre ~24px** (Inter, `#C4CCD6`, 2–3 lignes) **+ une ligne de clôture bleue** `#7FB8E8` en gras.
 - **Marque centrale** : grand **octogone métallique + chevron bleu** (~300px, motif récurrent), bien visible ; panneaux à droite.
-- **Panneaux droite** : fond `rgba(20,25,33,.94)`, radius 16, en-tête JetBrains Mono bleu `#8FB9E4`. Contenu propre spécifique à l'article.
-- **Piliers (bas, pleine largeur, 4–5)** : icône trait fin dans un **CERCLE** (`border-radius:50%`, ring 1.5px, sans fond) + **intitulé bleu `#7FB8E8`** + description grise. **Jamais** de carré arrondi ni d'intitulé doré.
-- Palette : bleu glacial dominant, or `#E8C268` avec parcimonie, sémantiques vert `#4ADE9C` / rouge `#F0647A`. Zéro emoji.
+- **Panneaux droite** : fond `rgba(20,25,33,.94)`, radius 16, en-tête JetBrains Mono bleu `#8FBAFF`. Contenu propre spécifique à l'article.
+- **Piliers (bas, pleine largeur, 4–5)** : icône trait fin dans un **CERCLE** (`border-radius:50%`, ring 1.5px, sans fond) + **intitulé bleu `#3B7DFF`** + description grise. **Jamais** de carré arrondi ni d'intitulé doré.
+- Palette : bleu électrique dominant, or `#E8C268` avec parcimonie, sémantiques vert `#4ADE9C` / rouge `#F0647A`. Zéro emoji.
 
 **⚠️ PIÈGE CRITIQUE — police Anton au screenshot :** `fonts.css` charge Anton en `font-display:swap`, donc la capture Chromium headless part **avant** qu'Anton soit chargée → le titre sort dans une police de repli (sans-serif large et fade). **Solution obligatoire :** générer un CSS avec les `@font-face` **embarqués en base64** (Anton + Inter 400/600/700/800 + JetBrains Mono 400/700 depuis `fonts/*.woff2`), le lier dans le HTML temporaire, et rendre avec `--virtual-time-budget=6000`. **Toujours vérifier** sur le screenshot que le titre est bien condensé (Anton) avant de publier.
 

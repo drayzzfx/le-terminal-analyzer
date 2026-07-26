@@ -10,17 +10,17 @@
    ============================================================ */
 :root {
   /* ---- Backgrounds (deepest → raised surface) ---- */
-  --bg-void: #07090C;
-  --bg-base: #0B0E13;
-  --bg-surface: #10141B;
-  --bg-elevated: #161B24;
+  --bg-void: #04060B;
+  --bg-base: #070A11;
+  --bg-surface: #0B1018;
+  --bg-elevated: #101724;
 
   /* ---- Glacial blue accent (used SPARINGLY) ---- */
-  --accent: #7FB8E8;
-  --accent-deep: #5A9BD4;
-  --accent-bright: #BFDCF5;
-  --accent-glow: rgba(127, 184, 232, 0.35);
-  --accent-glow-soft: rgba(127, 184, 232, 0.12);
+  --accent: #3B7DFF;
+  --accent-deep: #1E5BE0;
+  --accent-bright: #8FBAFF;
+  --accent-glow: rgba(59, 125, 255, 0.35);
+  --accent-glow-soft: rgba(59, 125, 255, 0.12);
 
   /* ---- Text ---- */
   --text-title: #F2F4F7;
@@ -51,10 +51,10 @@
      Utilisé par index/app/journal/calendrier/bubble/landing & eco.css.
      Source unique pour éviter les tokens non définis. ---- */
   --bg-panel: var(--bg-surface);
-  --ice-100: #EAF4FF;
-  --ice-300: var(--accent-bright);   /* #BFDCF5 */
-  --ice-500: var(--accent);          /* #7FB8E8 */
-  --ice-600: var(--accent-deep);     /* #5A9BD4 */
+  --ice-100: #E6F0FF;
+  --ice-300: var(--accent-bright);   /* #8FBAFF */
+  --ice-500: var(--accent);          /* #3B7DFF */
+  --ice-600: var(--accent-deep);     /* #1E5BE0 */
   --ice-glow: var(--accent-glow);
   --steel-100: var(--text-title);    /* #F2F4F7 */
   --steel-300: var(--text-body);     /* #C3CAD4 */
@@ -142,7 +142,7 @@
 .lt-btn { font-family: var(--font-text); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; border-radius: var(--r-sm); border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; transition: all var(--dur-fast) var(--ease-out); padding: 12px 22px; font-size: 14px; }
 .lt-btn--sm { padding: 8px 14px; font-size: 13px; gap: 6px; }
 .lt-btn--lg { padding: 16px 30px; font-size: 16px; gap: 10px; }
-.lt-btn--primary { background: var(--accent); color: #07090C; box-shadow: 0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow); }
+.lt-btn--primary { background: var(--accent); color: #04060B; box-shadow: 0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow); }
 .lt-btn--primary:hover { background: var(--accent-bright); transform: translateY(-1px); }
 .lt-btn--secondary { background: var(--bg-elevated); color: var(--text-title); border-color: var(--border); }
 .lt-btn--secondary:hover { border-color: var(--accent); color: var(--accent-bright); }
@@ -180,7 +180,7 @@
 @keyframes lt-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ---------- MAIN NAV — capsule flottante, fixe au scroll ---------- */
-.lt-nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; max-width: 1200px; margin: 0 auto; padding: 9px 9px 9px 18px; border-radius: 999px; border: 1px solid var(--border-subtle); background: rgba(11,14,19,0.74); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); box-shadow: 0 18px 44px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.045); transition: padding var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.lt-nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; max-width: 1200px; margin: 0 auto; padding: 9px 9px 9px 18px; border-radius: 999px; border: 1px solid var(--border-subtle); background: rgba(7, 10, 17,0.74); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); box-shadow: 0 18px 44px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.045); transition: padding var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
 .lt-chrome.is-scrolled .lt-nav { padding: 7px 7px 7px 16px; background: rgba(8,11,16,0.92); border-color: var(--border); box-shadow: 0 22px 52px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
 .lt-nav__brand { display: flex; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; }
 .lt-nav__mark { color: var(--accent); display: inline-flex; }
@@ -189,7 +189,7 @@
 .lt-nav__links > a { display: inline-flex; align-items: center; font-size: 13px; color: var(--text-muted); letter-spacing: 0.04em; padding: 8px 15px; border-radius: 999px; white-space: nowrap; transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out); }
 .lt-nav__links > a:hover { color: var(--text-title); background: rgba(255,255,255,0.055); }
 /* Page courante : pastille accent (marquée par menu.js, .is-current). */
-.lt-nav__links > a.is-current, .lt-nav__drop.is-current .lt-nav__droptrigger { color: var(--accent-bright); background: var(--accent-glow-soft); box-shadow: inset 0 0 0 1px rgba(127,184,232,0.22); }
+.lt-nav__links > a.is-current, .lt-nav__drop.is-current .lt-nav__droptrigger { color: var(--accent-bright); background: var(--accent-glow-soft); box-shadow: inset 0 0 0 1px rgba(59, 125, 255,0.22); }
 .lt-nav__actions { display: flex; gap: 10px; align-items: center; flex: 1 1 0; justify-content: flex-end; }
 .lt-nav__cta-ic { display: none; }  /* icône premium : visible seulement en mobile (voir media ≤560) */
 .lt-nav__pill { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 6px 11px; cursor: pointer; transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
@@ -308,7 +308,7 @@ body { margin: 0; background: var(--bg-base); color: var(--text-body); font-fami
 a { color: inherit; text-decoration: none; }
 
 .app { display: grid; grid-template-columns: 256px 1fr; min-height: 100vh; padding-top: var(--chrome-h, 102px); }
-.app::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(closest-side, rgba(127,184,232,0.06), transparent 70%); background-size: 60% 60%; background-position: 80% 0; background-repeat: no-repeat; filter: blur(30px); }
+.app::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(closest-side, rgba(59, 125, 255,0.06), transparent 70%); background-size: 60% 60%; background-position: 80% 0; background-repeat: no-repeat; filter: blur(30px); }
 
 /* ---------- SIDEBAR ---------- */
 .side { position: sticky; top: var(--chrome-h, 102px); height: calc(100vh - var(--chrome-h, 102px)); z-index: 2; background: linear-gradient(180deg, var(--bg-surface), var(--bg-base)); border-right: 1px solid var(--border-subtle); padding: 20px 14px; display: flex; flex-direction: column; gap: 8px; }
@@ -324,7 +324,7 @@ a { color: inherit; text-decoration: none; }
 .side__item.is-active .side__ic, .side__item:hover .side__ic { color: var(--accent); }
 .side__tag { margin-left: auto; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--neutral); border: 1px solid rgba(232,194,104,0.4); border-radius: var(--r-sm); padding: 2px 5px; }
 .side__spacer { flex: 1; }
-.side__pro { margin-top: auto; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; background: rgba(127,184,232,0.05); display: flex; flex-direction: column; gap: 10px; }
+.side__pro { margin-top: auto; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; background: rgba(59, 125, 255,0.05); display: flex; flex-direction: column; gap: 10px; }
 .side__pro h4 { margin: 0; font-size: 13px; color: var(--text-title); }
 .side__pro p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
 
@@ -396,11 +396,11 @@ select.calc-input { cursor: pointer; }
   --bg-surface: #EDF1F7;
   --bg-elevated: #FFFFFF;
 
-  --accent: #2E77C2;
-  --accent-deep: #1E5A96;
-  --accent-bright: #3D82C8; /* « bright » sert de texte accent : doit rester lisible sur blanc */
-  --accent-glow: rgba(46, 119, 194, 0.22);
-  --accent-glow-soft: rgba(46, 119, 194, 0.07);
+  --accent: #1D5FE8;
+  --accent-deep: #1544B0;
+  --accent-bright: #2F6BFF; /* « bright » sert de texte accent : doit rester lisible sur blanc */
+  --accent-glow: rgba(29, 95, 232, 0.22);
+  --accent-glow-soft: rgba(29, 95, 232, 0.07);
 
   --text-title: #0C1119;
   --text-body: #384252;
@@ -425,7 +425,7 @@ select.calc-input { cursor: pointer; }
   --shadow-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
   /* Titres « métal brossé » : dégradé sombre lisible sur fond clair */
-  --metal-gradient: linear-gradient(180deg, #1a2432 0%, #0b0e13 100%);
+  --metal-gradient: linear-gradient(180deg, #1a2432 0%, #070A11 100%);
 }
 /* Fond de page global en clair */
 :root[data-theme="light"] body { background: var(--bg-base); color: var(--text-body); }

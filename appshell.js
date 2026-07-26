@@ -13,12 +13,12 @@
     '#lt-c {' +
     '  position: fixed; top: 0; left: 0; z-index: 999999;' +
     '  width: 10px; height: 10px; border-radius: 50%;' +
-    '  background: #7FB8E8;' +
-    '  box-shadow: 0 0 8px 2px #7FB8E8, 0 0 18px 4px rgba(127,184,232,.5);' +
+    '  background: #3B7DFF;' +
+    '  box-shadow: 0 0 8px 2px #3B7DFF, 0 0 18px 4px rgba(59, 125, 255,.5);' +
     '  pointer-events: none; transform: translate(-50%,-50%); will-change: transform;' +
     '  transition: opacity .2s, width .15s, height .15s, box-shadow .15s;' +
     '}' +
-    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #7FB8E8, 0 0 28px 8px rgba(127,184,232,.5); }' +
+    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #3B7DFF, 0 0 28px 8px rgba(59, 125, 255,.5); }' +
     '#lt-c.off { opacity: 0; }';
   document.head.appendChild(style);
 
@@ -291,11 +291,11 @@
       + '.side__ic{flex-shrink:0;display:inline-flex;align-items:center}'
       + '.side__lbl{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
       + '.side__pro-tag{margin-left:auto;flex-shrink:0;white-space:nowrap;line-height:1.5;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:#E8C268;background:rgba(232,194,104,.12);border:1px solid rgba(232,194,104,.35);border-radius:50px;padding:3px 8px}'
-      + '.side{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(127,184,232,.35) transparent}'
+      + '.side{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(59, 125, 255,.35) transparent}'
       + '.side::-webkit-scrollbar{width:8px}'
       + '.side::-webkit-scrollbar-track{background:transparent}'
-      + '.side::-webkit-scrollbar-thumb{background:rgba(127,184,232,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}'
-      + '.side::-webkit-scrollbar-thumb:hover{background:rgba(127,184,232,.5);background-clip:padding-box}'
+      + '.side::-webkit-scrollbar-thumb{background:rgba(59, 125, 255,.28);border-radius:8px;border:2px solid transparent;background-clip:padding-box}'
+      + '.side::-webkit-scrollbar-thumb:hover{background:rgba(59, 125, 255,.5);background-clip:padding-box}'
       // Pages éco : <main class="wrap"> est centré + étroit via eco.css. Une fois
       // intégré dans .app, on le fait se comporter comme .main (pleine largeur,
       // aligné à gauche) pour que le fil d'ariane (.top) couvre toute la largeur
@@ -311,14 +311,14 @@
       + 'body.eco-page .calcard__frame{width:100%}'
       // Le fil d'ariane est « sticky » : son fond doit être opaque + flouté, sinon
       // le contenu qui défile dessous transparaît (effet de chevauchement).
-      + '.top{background:var(--bg-base,#07090C);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}'
+      + '.top{background:var(--bg-base,#04060B);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}'
       // ── Mobile / iPad (≤880px) : hamburger + tiroir de navigation complet ──
       + '.lt-burger{display:none}.lt-mnav,.lt-mnav__bd{display:none}'
       + '@media (max-width:880px){'
       +   'body{overflow-x:hidden}'
       +   '.lt-burger{display:inline-flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:38px;height:38px;margin-right:10px;background:transparent;border:1px solid var(--border-subtle);border-radius:var(--r-md,6px);cursor:pointer;flex-shrink:0;padding:0}'
       +   '.lt-burger span{display:block;width:17px;height:1.6px;background:var(--text-body);border-radius:2px}'
-      +   '.lt-mnav__bd{display:block;position:fixed;inset:0;z-index:1400;background:rgba(7,9,12,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}'
+      +   '.lt-mnav__bd{display:block;position:fixed;inset:0;z-index:1400;background:rgba(4, 6, 11,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}'
       +   '.lt-mnav__bd.is-open{opacity:1;visibility:visible}'
       +   '.lt-mnav{display:block;position:fixed;top:0;left:0;bottom:0;z-index:1401;width:min(84vw,300px);background:linear-gradient(180deg,var(--bg-surface),var(--bg-base));border-right:1px solid var(--border-subtle);box-shadow:0 0 60px rgba(0,0,0,.6);transform:translateX(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);overflow-y:auto;-webkit-overflow-scrolling:touch}'
       +   '.lt-mnav.is-open{transform:none}'
@@ -406,7 +406,7 @@
       + '.top__status.mkt--closed{color:var(--text-muted,#7E8794)}'
       + '.top__status.mkt--closed .lt-dot{background:var(--bear,#F0647A);box-shadow:0 0 0 3px rgba(240,100,122,.18)}'
       + '.mkt{position:relative;display:inline-flex}'
-      + '.mkt-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:min(252px,82vw);background:var(--bg-elevated,#161B24);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-md,6px);box-shadow:0 18px 48px rgba(0,0,0,.55);padding:12px 13px;animation:mktPop .18s cubic-bezier(.16,1,.3,1)}'
+      + '.mkt-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:min(252px,82vw);background:var(--bg-elevated,#101724);border:1px solid var(--border-subtle,#1C212A);border-radius:var(--r-md,6px);box-shadow:0 18px 48px rgba(0,0,0,.55);padding:12px 13px;animation:mktPop .18s cubic-bezier(.16,1,.3,1)}'
       + '@keyframes mktPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}'
       + '.mkt-pop__h{font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted,#7E8794);margin-bottom:8px}'
       + '.mkt-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-top:1px solid var(--border-subtle,#1C212A)}'
@@ -421,7 +421,7 @@
       + '.mkt-row__s.on{color:var(--bull,#4ADE9C)}.mkt-row__s.off{color:var(--bear,#F0647A)}'
       + '.mkt-pop__f{margin-top:9px;padding-top:9px;border-top:1px solid var(--border-subtle,#1C212A);font-family:var(--font-mono,"JetBrains Mono",monospace);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#7E8794)}'
       + 'a.side__acct{cursor:pointer;text-decoration:none;border-radius:var(--r-md,8px);transition:background .15s}'
-      + 'a.side__acct:hover{background:var(--bg-elevated,#161B24)}';
+      + 'a.side__acct:hover{background:var(--bg-elevated,#101724)}';
     document.head.appendChild(s);
   }
   function initMarketStatus(){

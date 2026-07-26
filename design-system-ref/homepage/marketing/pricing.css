@@ -5,9 +5,9 @@
 @media (max-width: 760px) { .pr-grid { grid-template-columns: 1fr; } }
 .pr-card { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 32px 30px 28px; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); box-shadow: var(--shadow-md); transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
 .pr-card:hover { transform: translateY(-3px); border-color: var(--border); }
-.pr-card.is-pro { background: linear-gradient(180deg, rgba(127,184,232,0.07), var(--bg-elevated) 45%); border-color: var(--accent-glow); box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 64px rgba(0,0,0,0.6), 0 0 44px var(--accent-glow-soft); }
+.pr-card.is-pro { background: linear-gradient(180deg, rgba(59, 125, 255,0.07), var(--bg-elevated) 45%); border-color: var(--accent-glow); box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 64px rgba(0,0,0,0.6), 0 0 44px var(--accent-glow-soft); }
 .pr-card.is-pro:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 28px 70px rgba(0,0,0,0.65), 0 0 54px var(--accent-glow); }
-.pr-card__flag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #07090C; background: var(--accent); padding: 4px 12px; border-radius: var(--r-pill); box-shadow: 0 0 18px var(--accent-glow); white-space: nowrap; }
+.pr-card__flag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #04060B; background: var(--accent); padding: 4px 12px; border-radius: var(--r-pill); box-shadow: 0 0 18px var(--accent-glow); white-space: nowrap; }
 .pr-card__head { display: flex; flex-direction: column; gap: 4px; }
 .pr-card__name { font-family: var(--font-display); text-transform: uppercase; font-size: 1.6rem; color: var(--text-title); letter-spacing: 0.02em; line-height: 1; }
 .is-pro .pr-card__name { color: var(--accent-bright); }
@@ -40,8 +40,8 @@
 .pr-toggle { position: relative; display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--border-subtle); border-radius: var(--r-pill); background: var(--bg-surface); margin-top: 8px; }
 .pr-toggle__opt { font-family: var(--font-text); font-size: 13px; font-weight: 600; color: var(--text-muted); background: transparent; border: none; border-radius: var(--r-pill); padding: 9px 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; transition: all var(--dur-fast) var(--ease-out); }
 .pr-toggle__opt em { font-style: normal; font-family: var(--font-mono); font-size: 10.5px; color: var(--bull); }
-.pr-toggle__opt.is-on { color: #07090C; background: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
-.pr-toggle__opt.is-on em { color: rgba(7,9,12,0.75); }
+.pr-toggle__opt.is-on { color: #04060B; background: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
+.pr-toggle__opt.is-on em { color: rgba(4, 6, 11,0.75); }
 .pr-plans { padding: 30px 40px var(--sp-8); }
 
 .pr-why { max-width: var(--container); margin: 0 auto; padding: 0 40px var(--sp-8); display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
@@ -58,7 +58,7 @@
 .pr-table__row:last-child { border-bottom: none; }
 .pr-table__row--head { background: var(--bg-void); font-family: var(--font-display); text-transform: uppercase; font-size: 1rem; letter-spacing: 0.04em; color: var(--text-title); padding: 16px 22px; }
 .pr-table__row--head .pr-table__pro { color: var(--accent-bright); }
-.pr-table__group { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); padding: 14px 22px 10px; border-bottom: 1px solid var(--border-subtle); background: rgba(127,184,232,0.04); }
+.pr-table__group { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); padding: 14px 22px 10px; border-bottom: 1px solid var(--border-subtle); background: rgba(59, 125, 255,0.04); }
 .pr-table__feat { font-size: 14px; color: var(--text-body); }
 .pr-table__cell { text-align: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-body); font-variant-numeric: tabular-nums; }
 .pr-table__cell.pr-table__pro { color: var(--text-title); font-weight: 600; }

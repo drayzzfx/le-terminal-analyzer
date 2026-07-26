@@ -43,8 +43,8 @@ Un **aperçu hors ligne autonome** (`Le Terminal — Accueil (apercu hors ligne)
 
 ## Design Tokens (`tokens/`, repris tels quels)
 **Couleurs**
-- Fonds : `--bg-void #07090C` · `--bg-base #0B0E13` · `--bg-surface #10141B` · `--bg-elevated #161B24`
-- Accent glacial (RARE — CTA, liens actifs, lueurs) : `--accent #7FB8E8` · `--accent-deep #5A9BD4` · `--accent-bright #BFDCF5` · `--accent-glow rgba(127,184,232,0.35)` · `--accent-glow-soft rgba(127,184,232,0.12)`
+- Fonds : `--bg-void #04060B` · `--bg-base #070A11` · `--bg-surface #0B1018` · `--bg-elevated #101724`
+- Accent glacial (RARE — CTA, liens actifs, lueurs) : `--accent #3B7DFF` · `--accent-deep #1E5BE0` · `--accent-bright #8FBAFF` · `--accent-glow rgba(59, 125, 255,0.35)` · `--accent-glow-soft rgba(59, 125, 255,0.12)`
 - Texte : `--text-title #F2F4F7` · `--text-body #C3CAD4` · `--text-muted #7E8794`
 - Bordures : `--border #3A414C` · `--border-subtle #1C212A`
 - Marché : `--bull #4ADE9C` · `--bear #F0647A` · `--neutral #E8C268` (+ variantes `*-glow`)
@@ -84,7 +84,7 @@ Un **aperçu hors ligne autonome** (`Le Terminal — Accueil (apercu hors ligne)
 - **Responsive** : nav compacte ≤560px (Connexion masqué), dock → barre d'onglets bas ≤760px, bentos et écrans 3D s'empilent.
 
 ## Composants à fournir par ton design system
-- **Button** — variants `primary` (fond `--accent`, texte `#07090C`, lueur — un seul par vue), `secondary` (fond `--bg-elevated`, bordure `--border` → accent au survol), `ghost` (transparent, bordure `--border-subtle`). Tailles `sm/md/lg`. Capitales, `letter-spacing:.04em`, `border-radius var(--r-sm)`. Accepte `icon` / `iconRight` (SVG trait fin).
+- **Button** — variants `primary` (fond `--accent`, texte `#04060B`, lueur — un seul par vue), `secondary` (fond `--bg-elevated`, bordure `--border` → accent au survol), `ghost` (transparent, bordure `--border-subtle`). Tailles `sm/md/lg`. Capitales, `letter-spacing:.04em`, `border-radius var(--r-sm)`. Accepte `icon` / `iconRight` (SVG trait fin).
 - **Badge** — pastille mono capitales, tons `bull/bear/neutral/accent/mute`, `dot` optionnel (point lumineux). `border-radius var(--r-sm)`.
 
 ## Assets & icônes

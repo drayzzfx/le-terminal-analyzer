@@ -119,8 +119,8 @@ function LiveCockpit() {
                 <svg viewBox="0 0 520 200" preserveAspectRatio="none" className="lt-ck__svg">
                   <defs>
                     <linearGradient id="ckFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stopColor="rgba(127,184,232,0.32)" />
-                      <stop offset="1" stopColor="rgba(127,184,232,0)" />
+                      <stop offset="0" stopColor="rgba(59, 125, 255,0.32)" />
+                      <stop offset="1" stopColor="rgba(59, 125, 255,0)" />
                     </linearGradient>
                   </defs>
                   {[40, 80, 120, 160].map((y) => <line key={y} x1="0" y1={y} x2="520" y2={y} stroke="rgba(58,65,76,0.3)" />)}

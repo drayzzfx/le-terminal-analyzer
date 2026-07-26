@@ -31,7 +31,7 @@ Le Terminal est un hub d'outils de trading. Cette bibliothèque encode son ident
 
 ## VISUAL FOUNDATIONS
 
-**Palette** — quatre noirs (`#07090C` void → `#161B24` elevated) forment la profondeur. Un seul accent : le **bleu glacial `#7FB8E8`**, employé avec parcimonie (CTA, liens actifs, lueurs, focus). Sémantique de marché : `#4ADE9C` haussier, `#F0647A` baissier, `#E8C268` neutre. **Pas de violet, pas de néon, pas de dégradés bleu-mauve.**
+**Palette** — quatre noirs (`#04060B` void → `#101724` elevated) forment la profondeur. Un seul accent : le **bleu glacial `#3B7DFF`**, employé avec parcimonie (CTA, liens actifs, lueurs, focus). Sémantique de marché : `#4ADE9C` haussier, `#F0647A` baissier, `#E8C268` neutre. **Pas de violet, pas de néon, pas de dégradés bleu-mauve.**
 
 **Typographie** — trois familles :
 - **Anton** (display) : capitales massives, effet métal brossé via `background-clip: text` + `--metal-gradient` (dégradé argenté vertical). Hero en `clamp(3.5rem → 7rem)`.

@@ -12,7 +12,7 @@ If the user invokes this skill without any other guidance, ask them what they wa
 
 ## Essentials
 - **Aesthetic**: "Cinematic Luxury" — midnight private trading floor in a jet hangar. Cold, precise, restrained.
-- **Palette**: four dark backgrounds (`#07090C`→`#161B24`); ONE rare glacial-blue accent `#7FB8E8` (CTAs/links/glows only); market semantics `#4ADE9C`/`#F0647A`/`#E8C268`. No purple, no neon, no blue-purple gradients.
+- **Palette**: four dark backgrounds (`#04060B`→`#101724`); ONE rare glacial-blue accent `#3B7DFF` (CTAs/links/glows only); market semantics `#4ADE9C`/`#F0647A`/`#E8C268`. No purple, no neon, no blue-purple gradients.
 - **Type**: Anton (massive uppercase display, brushed-metal `background-clip:text`), Inter (text), JetBrains Mono (all numerals, tabular).
 - **Motion**: cinematic ease-out, sequenced hero entrance, scroll reveals (once), animated counters, mouse spotlight, ≤3° card tilt. Always honor `prefers-reduced-motion`.
 - **Icons**: thin-stroke SVG (1.5px) only. NO emoji.
