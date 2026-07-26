@@ -141,13 +141,13 @@
 .gen__bg{width:56px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border-subtle);overflow:hidden;cursor:pointer;background-size:cover;background-position:center;transition:border-color .2s,box-shadow .2s}
 .gen__bg:hover{border-color:var(--accent)}
 .gen__bg.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
-.gen__bg--none{background:linear-gradient(150deg,#11161f,#07090c)}
+.gen__bg--none{background:linear-gradient(150deg,#11161f,#04060B)}
 
 /* ── Carte de trade (preview + export) ── */
 .tc{position:relative;width:100%;max-width:360px;margin:0 auto;aspect-ratio:4/5;border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden;background:#0a0d12;box-shadow:0 30px 70px rgba(0,0,0,.55)}
-.tc__bg{position:absolute;inset:0;background:linear-gradient(150deg,#11161f,#07090c 70%);background-size:cover;background-position:center 60%}
-.tc__bg::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 22% 112%,rgba(74,222,156,.22),transparent 60%),linear-gradient(180deg,rgba(7,9,12,.25),rgba(7,9,12,.82))}
-.tc.is-loss .tc__bg::after{background:radial-gradient(60% 60% at 22% 112%,rgba(240,100,122,.22),transparent 60%),linear-gradient(180deg,rgba(7,9,12,.25),rgba(7,9,12,.82))}
+.tc__bg{position:absolute;inset:0;background:linear-gradient(150deg,#11161f,#04060B 70%);background-size:cover;background-position:center 60%}
+.tc__bg::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 22% 112%,rgba(74,222,156,.22),transparent 60%),linear-gradient(180deg,rgba(4, 6, 11,.25),rgba(4, 6, 11,.82))}
+.tc.is-loss .tc__bg::after{background:radial-gradient(60% 60% at 22% 112%,rgba(240,100,122,.22),transparent 60%),linear-gradient(180deg,rgba(4, 6, 11,.25),rgba(4, 6, 11,.82))}
 .tc__in{position:relative;height:100%;display:flex;flex-direction:column;padding:26px}
 .tc__top{display:flex;align-items:flex-start;justify-content:space-between}
 .tc__brand{display:flex;align-items:center;gap:10px;color:var(--text-title)}
@@ -167,7 +167,7 @@
 .tc.is-loss .tc__pct{color:var(--bear);text-shadow:0 0 34px rgba(240,100,122,.4)}
 .tc__amt{font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:var(--text-title)}
 .tc__cap{font-family:var(--font-text);font-size:13px;color:var(--text-muted);margin-top:4px}
-.tc__sep{height:1px;background:rgba(127,184,232,.18);margin:18px 0}
+.tc__sep{height:1px;background:rgba(59, 125, 255,.18);margin:18px 0}
 .tc__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .tc__stats>div{display:flex;flex-direction:column;gap:4px}
 .tc__stats small{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
@@ -188,7 +188,7 @@
 .sc{position:relative;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:var(--bg-elevated);padding:18px 20px;transition:border-color .2s,transform .2s}
 .sc:hover{border-color:var(--accent-glow);transform:translateY(-2px)}
 .sc__top{display:flex;align-items:center;gap:11px;margin-bottom:16px}
-.sc__av{width:38px;height:38px;border-radius:999px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;font-weight:700;color:#07090c}
+.sc__av{width:38px;height:38px;border-radius:999px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;font-weight:700;color:#04060B}
 .sc__id{display:flex;flex-direction:column;line-height:1.2;min-width:0}
 .sc__id b{font-family:var(--font-text);font-weight:700;font-size:14px;color:var(--text-title)}
 .sc__id small{font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
@@ -262,15 +262,15 @@
       <!-- ÉTAPE 1 : upload screenshot -->
       <div class="fld">
         <label>Screenshot de votre trade (MT5, TradingView, Binance…)</label>
-        <div id="gUploadZone" style="border:1.5px dashed rgba(127,184,232,.35);border-radius:8px;padding:22px 16px;text-align:center;cursor:pointer;transition:border-color .2s;background:rgba(127,184,232,.04);" onclick="document.getElementById('gScreenFile').click()">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7FB8E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <div style="font-family:Inter,sans-serif;font-size:13px;color:#7FB8E8;font-weight:600">Déposez votre screenshot ici</div>
+        <div id="gUploadZone" style="border:1.5px dashed rgba(59, 125, 255,.35);border-radius:8px;padding:22px 16px;text-align:center;cursor:pointer;transition:border-color .2s;background:rgba(59, 125, 255,.04);" onclick="document.getElementById('gScreenFile').click()">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B7DFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-family:Inter,sans-serif;font-size:13px;color:#3B7DFF;font-weight:600">Déposez votre screenshot ici</div>
           <div style="font-family:Inter,sans-serif;font-size:11px;color:#5a6472;margin-top:4px">PNG, JPG · Cliquez ou glissez</div>
         </div>
         <input type="file" id="gScreenFile" accept="image/*" style="display:none">
         <div id="gScreenPreview" style="display:none;margin-top:10px;position:relative;">
           <img id="gScreenImg" style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.08);max-height:220px;object-fit:contain;background:#0d1117;" alt="Screenshot">
-          <button id="gScreenRemove" style="position:absolute;top:6px;right:6px;background:rgba(7,9,12,.8);border:1px solid rgba(255,255,255,.15);border-radius:4px;color:#7E8794;font-size:11px;padding:3px 8px;cursor:pointer;font-family:Inter,sans-serif;">✕ Retirer</button>
+          <button id="gScreenRemove" style="position:absolute;top:6px;right:6px;background:rgba(4, 6, 11,.8);border:1px solid rgba(255,255,255,.15);border-radius:4px;color:#7E8794;font-size:11px;padding:3px 8px;cursor:pointer;font-family:Inter,sans-serif;">✕ Retirer</button>
         </div>
         <div id="gExtractState" style="display:none;margin-top:10px;"></div>
       </div>
@@ -459,10 +459,10 @@
   var uploadZone=document.getElementById('gUploadZone');
   var fileIn=document.getElementById('gScreenFile');
 
-  uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.style.borderColor='rgba(127,184,232,.7)';});
-  uploadZone.addEventListener('dragleave',function(){uploadZone.style.borderColor='rgba(127,184,232,.35)';});
+  uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.style.borderColor='rgba(59, 125, 255,.7)';});
+  uploadZone.addEventListener('dragleave',function(){uploadZone.style.borderColor='rgba(59, 125, 255,.35)';});
   uploadZone.addEventListener('drop',function(e){
-    e.preventDefault();uploadZone.style.borderColor='rgba(127,184,232,.35)';
+    e.preventDefault();uploadZone.style.borderColor='rgba(59, 125, 255,.35)';
     var f=e.dataTransfer.files[0]; if(f&&f.type.startsWith('image/')) loadScreenFile(f);
   });
   fileIn.addEventListener('change',function(){if(this.files[0]) loadScreenFile(this.files[0]);});
@@ -489,7 +489,7 @@
   function extractTradeData(){
     var state=document.getElementById('gExtractState');
     state.style.display='block';
-    state.innerHTML='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(127,184,232,.06);border:1px solid rgba(127,184,232,.15);border-radius:6px;font-family:Inter,sans-serif;font-size:12px;color:#7FB8E8;">'
+    state.innerHTML='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(59, 125, 255,.06);border:1px solid rgba(59, 125, 255,.15);border-radius:6px;font-family:Inter,sans-serif;font-size:12px;color:#3B7DFF;">'
       +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>'
       +'Analyse du screenshot en cours…</div>';
     document.getElementById('gExtracted').style.display='none';
@@ -575,9 +575,9 @@
     function draw(bg){
       // fond
       if(bg){var r=Math.max(W/bg.width,H/bg.height);var w=bg.width*r,h=bg.height*r;x.drawImage(bg,(W-w)/2,(H-h)/2,w,h);}
-      else{var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#11161f');g.addColorStop(1,'#07090c');x.fillStyle=g;x.fillRect(0,0,W,H);}
+      else{var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#11161f');g.addColorStop(1,'#04060B');x.fillStyle=g;x.fillRect(0,0,W,H);}
       // voile
-      var gg=x.createLinearGradient(0,0,0,H);gg.addColorStop(0,'rgba(7,9,12,.35)');gg.addColorStop(1,'rgba(7,9,12,.85)');x.fillStyle=gg;x.fillRect(0,0,W,H);
+      var gg=x.createLinearGradient(0,0,0,H);gg.addColorStop(0,'rgba(4, 6, 11,.35)');gg.addColorStop(1,'rgba(4, 6, 11,.85)');x.fillStyle=gg;x.fillRect(0,0,W,H);
       var col=win?'#4ADE9C':'#F0647A';
       x.fillStyle='#F2F4F7';x.font='700 30px Anton, sans-serif';x.fillText('LE TERMINAL',150,80);
       x.fillStyle='#8b97a6';x.font='700 16px "JetBrains Mono", monospace';x.fillText('RÉSULTAT DE TRADE',150,108);
@@ -592,7 +592,7 @@
       x.fillText('ENTRÉE',90,1270);x.fillText('SORTIE',430,1270);x.fillText('R:R',770,1270);
       x.fillStyle='#F2F4F7';x.font='600 34px "JetBrains Mono", monospace';
       x.fillText(nb(c.entry),90,1310);x.fillText(nb(c.exit),430,1310);x.fillText('1 : '+c.rr.toFixed(1),770,1310);
-      x.fillStyle='#BFDCF5';x.font='700 30px Inter, sans-serif';x.fillText(document.getElementById('gHandle').value||'@trader',90,60);
+      x.fillStyle='#8FBAFF';x.font='700 30px Inter, sans-serif';x.fillText(document.getElementById('gHandle').value||'@trader',90,60);
       var url=cv.toDataURL('image/png');
       var a=document.createElement('a');a.href=url;a.download='le-terminal-trade.png';a.click();
     }
@@ -601,7 +601,7 @@
     img.onload=function(){draw(img);}; img.onerror=function(){draw(null);}; img.src=currentBg;
   }
   // ── Export image (canvas) + Publier sur le mur ──
-  var AV=['#7FB8E8','#4ADE9C','#4ADE9C','#E8C268','#4ADE9C','#9fb0c4','#E8C268','#F0647A'];
+  var AV=['#3B7DFF','#4ADE9C','#4ADE9C','#E8C268','#4ADE9C','#9fb0c4','#E8C268','#F0647A'];
 
   function buildCanvas(callback){
     var c=compute(), win=c.gain>=0, W=1080, H=1350;
@@ -609,8 +609,8 @@
     var x=cv.getContext('2d');
     function draw(bg){
       if(bg){var r=Math.max(W/bg.width,H/bg.height);var w=bg.width*r,h=bg.height*r;x.drawImage(bg,(W-w)/2,(H-h)/2,w,h);}
-      else{var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#11161f');g.addColorStop(1,'#07090c');x.fillStyle=g;x.fillRect(0,0,W,H);}
-      var gg=x.createLinearGradient(0,0,0,H);gg.addColorStop(0,'rgba(7,9,12,.35)');gg.addColorStop(1,'rgba(7,9,12,.85)');x.fillStyle=gg;x.fillRect(0,0,W,H);
+      else{var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#11161f');g.addColorStop(1,'#04060B');x.fillStyle=g;x.fillRect(0,0,W,H);}
+      var gg=x.createLinearGradient(0,0,0,H);gg.addColorStop(0,'rgba(4, 6, 11,.35)');gg.addColorStop(1,'rgba(4, 6, 11,.85)');x.fillStyle=gg;x.fillRect(0,0,W,H);
       var col=win?'#4ADE9C':'#F0647A';
       x.fillStyle='#F2F4F7';x.font='700 30px Anton, sans-serif';x.fillText('LE TERMINAL',150,80);
       x.fillStyle='#8b97a6';x.font='700 16px "JetBrains Mono", monospace';x.fillText('RÉSULTAT DE TRADE · SCREENSHOT VÉRIFIÉ',150,108);
@@ -622,7 +622,7 @@
       x.fillText('ENTRÉE',90,1270);x.fillText('SORTIE',430,1270);x.fillText('R:R',770,1270);
       x.fillStyle='#F2F4F7';x.font='600 34px "JetBrains Mono", monospace';
       var rr=c.rr; x.fillText(nb(c.entry),90,1310);x.fillText(nb(c.exit),430,1310);x.fillText('1 : '+rr.toFixed(1),770,1310);
-      x.fillStyle='#BFDCF5';x.font='700 30px Inter, sans-serif';x.fillText(document.getElementById('gHandle').value||'@trader',90,60);
+      x.fillStyle='#8FBAFF';x.font='700 30px Inter, sans-serif';x.fillText(document.getElementById('gHandle').value||'@trader',90,60);
       callback(cv);
     }
     if(!currentBg){draw(null);return;}

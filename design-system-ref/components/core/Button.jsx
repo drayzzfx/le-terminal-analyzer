@@ -43,7 +43,7 @@ export function Button({
   const variants = {
     primary: {
       background: 'var(--accent)',
-      color: '#07090C',
+      color: '#04060B',
       boxShadow: '0 0 0 1px var(--accent-glow), 0 8px 28px var(--accent-glow)',
     },
     secondary: {

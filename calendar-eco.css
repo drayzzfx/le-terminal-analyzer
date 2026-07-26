@@ -25,18 +25,18 @@
 .panel { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 22px; }
 
 .eco-group { padding: 0; overflow: hidden; margin-bottom: 18px; }
-.eco-group__day { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); padding: 14px 20px; border-bottom: 1px solid var(--border-subtle); background: rgba(127, 184, 232, 0.04); }
+.eco-group__day { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); padding: 14px 20px; border-bottom: 1px solid var(--border-subtle); background: rgba(59, 125, 255, 0.04); }
 .eco-rows { display: flex; flex-direction: column; }
 .eco-row { display: grid; grid-template-columns: 54px 44px 1.4fr 56px 90px 90px 90px; gap: 12px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--border-subtle); transition: background var(--dur-fast) var(--ease-out); }
 .eco-row:last-child { border-bottom: none; }
-.eco-row:hover { background: rgba(127, 184, 232, 0.04); }
+.eco-row:hover { background: rgba(59, 125, 255, 0.04); }
 .eco-row.is-hot { background: linear-gradient(90deg, rgba(240, 100, 122, 0.05), transparent 40%); }
 .eco-row__t { font-family: var(--font-mono); font-size: 13px; color: var(--text-title); font-variant-numeric: tabular-nums; }
 .eco-row__cur { font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-align: center; padding: 4px 0; border-radius: var(--r-sm); border: 1px solid var(--border); color: var(--text-body); }
 .eco-row__cur--usd { color: var(--accent-bright); border-color: var(--accent-glow); }
 .eco-row__cur--eur { color: var(--neutral); border-color: rgba(232, 194, 104, 0.4); }
 .eco-row__cur--gbp { color: var(--bull); border-color: rgba(74, 222, 156, 0.4); }
-.eco-row__cur--jpy { color: var(--accent); border-color: rgba(127, 184, 232, 0.4); }
+.eco-row__cur--jpy { color: var(--accent); border-color: rgba(59, 125, 255, 0.4); }
 .eco-row__ev { font-size: 14px; color: var(--text-title); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .eco-imp { display: inline-flex; gap: 3px; }
 .eco-imp i { width: 7px; height: 7px; border-radius: 999px; display: inline-block; }

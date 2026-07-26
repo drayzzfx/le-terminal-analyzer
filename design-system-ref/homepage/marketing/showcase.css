@@ -37,9 +37,9 @@
 .shx-candle { flex: 1; min-width: 5px; border-radius: 1px; align-self: flex-start; }
 .shx-candle.is-up { background: rgba(74,222,156,0.75); }
 .shx-candle.is-down { background: rgba(240,100,122,0.7); }
-.shx-zone { position: absolute; left: 8%; right: 8%; top: 30%; height: 17%; border: 1px dashed rgba(127,184,232,0.5); background: rgba(127,184,232,0.08); border-radius: 3px; }
+.shx-zone { position: absolute; left: 8%; right: 8%; top: 30%; height: 17%; border: 1px dashed rgba(59, 125, 255,0.5); background: rgba(59, 125, 255,0.08); border-radius: 3px; }
 .shx-annot { position: absolute; top: 32%; right: 11%; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--accent-bright); }
-.shx-score { position: relative; width: 38%; border-left: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: rgba(7,9,12,0.5); }
+.shx-score { position: relative; width: 38%; border-left: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: rgba(4, 6, 11,0.5); }
 .shx-ring { position: absolute; width: 110px; height: 110px; transform: rotate(-90deg); }
 .shx-ring__bg { fill: none; stroke: var(--border-subtle); stroke-width: 5; }
 .shx-ring__val { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 213.6; stroke-dashoffset: 27.8; filter: drop-shadow(0 0 6px var(--accent-glow)); }

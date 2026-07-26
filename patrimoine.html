@@ -108,8 +108,8 @@
 @media (max-width: 940px) { .pf-plans { grid-template-columns: 1fr; } }
 .pf-plan { position: relative; display: flex; flex-direction: column; gap: 20px; padding: 30px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: var(--bg-elevated); box-shadow: var(--shadow-md); transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
 .pf-plan:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 54px rgba(0,0,0,0.5), 0 0 34px var(--accent-glow-soft); }
-.pf-plan.is-featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 0 40px var(--accent-glow-soft); background: radial-gradient(120% 90% at 50% 0%, rgba(127,184,232,0.08), var(--bg-elevated) 60%); }
-.pf-plan__flag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #07090C; background: var(--accent); padding: 4px 14px; border-radius: var(--r-pill); box-shadow: 0 4px 14px var(--accent-glow); }
+.pf-plan.is-featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 0 40px var(--accent-glow-soft); background: radial-gradient(120% 90% at 50% 0%, rgba(59, 125, 255,0.08), var(--bg-elevated) 60%); }
+.pf-plan__flag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #04060B; background: var(--accent); padding: 4px 14px; border-radius: var(--r-pill); box-shadow: 0 4px 14px var(--accent-glow); }
 .pf-plan__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .pf-plan__name { font-family: var(--font-display); text-transform: uppercase; font-size: 1.5rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
 .pf-plan__risk { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
@@ -151,11 +151,11 @@
 .pf-asset-list::-webkit-scrollbar { width:3px; }
 .pf-asset-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 /* accordéon catégories */
-.pf-cat-header { display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-void); border-bottom:1px solid var(--border-subtle); cursor:pointer; user-select:none; transition:background var(--dur-fast) var(--ease-out); border-left:3px solid var(--cat-col,#7FB8E8); }
-.pf-cat-header:hover { background:rgba(127,184,232,0.06); }
+.pf-cat-header { display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-void); border-bottom:1px solid var(--border-subtle); cursor:pointer; user-select:none; transition:background var(--dur-fast) var(--ease-out); border-left:3px solid var(--cat-col,#3B7DFF); }
+.pf-cat-header:hover { background:rgba(59, 125, 255,0.06); }
 .pf-cat-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
 .pf-cat-label { font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-body); flex:1; }
-.pf-cat-badge { font-family:var(--font-mono); font-size:10px; font-weight:700; color:#07090C; background:var(--accent); border-radius:999px; padding:1px 6px; }
+.pf-cat-badge { font-family:var(--font-mono); font-size:10px; font-weight:700; color:#04060B; background:var(--accent); border-radius:999px; padding:1px 6px; }
 .pf-cat-arrow { color:var(--text-muted); transition:transform var(--dur-fast) var(--ease-out); flex-shrink:0; }
 .pf-cat-header.is-open .pf-cat-arrow { transform:rotate(180deg); }
 .pf-cat-body { display:none; }
@@ -163,8 +163,8 @@
 .pf-asset-cat { font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:6px 11px 4px; background:var(--bg-void); position:sticky; top:0; z-index:1; border-bottom:1px solid var(--border-subtle); border-left:3px solid transparent; }
 .pf-asset-item { display:flex; align-items:center; gap:9px; padding:7px 11px; border-bottom:1px solid var(--border-subtle); transition:background var(--dur-fast) var(--ease-out); }
 .pf-asset-item:last-child { border-bottom:none; }
-.pf-asset-item:hover { background:rgba(127,184,232,0.04); }
-.pf-asset-item.is-checked { background:rgba(127,184,232,0.05); }
+.pf-asset-item:hover { background:rgba(59, 125, 255,0.04); }
+.pf-asset-item.is-checked { background:rgba(59, 125, 255,0.05); }
 .pf-asset-item input[type=checkbox] { width:14px; height:14px; accent-color:var(--accent); cursor:pointer; flex-shrink:0; }
 .pf-asset-item__name { flex:1; font-size:12.5px; color:var(--text-body); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .pf-asset-item__ticker { font-family:var(--font-mono); font-size:10px; color:var(--text-muted); }
@@ -309,7 +309,7 @@
   var pfPortfolio = SAVED.assets || {};   // { assetId: montant€ }
   var currentPeriod = '1A';
 
-  var CAT_COL = { 'ETF':'#7FB8E8', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidites':'#C3CAD4', 'Crypto':'#F0647A' };
+  var CAT_COL = { 'ETF':'#3B7DFF', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidites':'#C3CAD4', 'Crypto':'#F0647A' };
   var CAT_LABEL = { 'ETF':'ETF', 'Action':'Actions', 'Crypto':'Crypto', 'Obligation':'Obligations', 'Liquidites':'Liquidites' };
 
   // ── Catalogue Trade Republic ──
@@ -442,7 +442,7 @@
     TR_ASSETS.forEach(function(a){ var v=pfPortfolio[a.id]||0; if(v>0){ totals[a.cat]=(totals[a.cat]||0)+v; grand+=v; } });
     if(!grand) return [];
     return Object.keys(totals)
-      .map(function(c){ return { k:CAT_LABEL[c]||c, cat:c, pct:Math.round(totals[c]/grand*100), val:totals[c], col:CAT_COL[c]||'#7FB8E8' }; })
+      .map(function(c){ return { k:CAT_LABEL[c]||c, cat:c, pct:Math.round(totals[c]/grand*100), val:totals[c], col:CAT_COL[c]||'#3B7DFF' }; })
       .sort(function(a,b){ return b.pct-a.pct; });
   }
 
@@ -484,12 +484,12 @@
       '<defs>'
       +'<linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(74,222,156,0.22)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient>'
       +'</defs>'
-      +'<polygon points="'+zonePoints+'" fill="rgba(127,184,232,0.07)"/>'
-      +'<path d="'+linePess+'" fill="none" stroke="rgba(127,184,232,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
+      +'<polygon points="'+zonePoints+'" fill="rgba(59, 125, 255,0.07)"/>'
+      +'<path d="'+linePess+'" fill="none" stroke="rgba(59, 125, 255,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
       +'<path d="'+lineOpt+'" fill="none" stroke="rgba(74,222,156,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
       +'<path d="'+lineBase+' L'+xi(base.length-1).toFixed(1)+','+H+' L'+xi(0).toFixed(1)+','+H+' Z" fill="url(#pfFill)"/>'
       +'<path d="'+lineBase+'" fill="none" stroke="var(--bull)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px rgba(74,222,156,0.4))"/>'
-      +'<circle cx="'+xi(base.length-1).toFixed(1)+'" cy="'+yv(finalVal).toFixed(1)+'" r="4.5" fill="var(--bull)" stroke="#07090C" stroke-width="2"/>';
+      +'<circle cx="'+xi(base.length-1).toFixed(1)+'" cy="'+yv(finalVal).toFixed(1)+'" r="4.5" fill="var(--bull)" stroke="#04060B" stroke-width="2"/>';
     var lbls={'5Y':'5 ans','10Y':'10 ans','20Y':'20 ans','30Y':'30 ans'};
     document.getElementById('pfFootPeriod').textContent=lbls[period]||period;
     document.getElementById('pfFootRate').textContent='+'+(r*100).toFixed(1).replace('.',',')+' % / an';
@@ -556,7 +556,7 @@
       var items=TR_ASSETS.filter(function(a){ return a.cat===cat&&(!q||a.name.toLowerCase().indexOf(q)>=0||a.ticker.toLowerCase().indexOf(q)>=0); });
       if(!items.length) return;
       anyResult=true;
-      var col=CAT_COL[cat]||'#7FB8E8';
+      var col=CAT_COL[cat]||'#3B7DFF';
       var label=CAT_LABEL[cat]||cat;
       var checkedCount=items.filter(function(a){ return pfPortfolio[a.id]!==undefined; }).length;
       var isOpen=openCats[cat]||(q.length>0);
@@ -585,9 +585,9 @@
 
   // ── Plans (intouchables) ──
   var PLANS = [
-    { name:'Prudent',   key:'prudent',   risk:1, riskLabel:'Faible', obj:'+3 à 5 % / an',   horizon:'3 ans +', desc:'Préservation du capital, volatilité minimale.',         mix:[['Obligations',70,'#E8C268'],['ETF monde',25,'#7FB8E8'],['Liquidités',5,'#C3CAD4']] },
+    { name:'Prudent',   key:'prudent',   risk:1, riskLabel:'Faible', obj:'+3 à 5 % / an',   horizon:'3 ans +', desc:'Préservation du capital, volatilité minimale.',         mix:[['Obligations',70,'#E8C268'],['ETF monde',25,'#3B7DFF'],['Liquidités',5,'#C3CAD4']] },
     { name:'Équilibré', key:'equilibre', risk:2, riskLabel:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', featured:true, desc:'Le compromis croissance / sécurité le plus choisi.', mix:[['Actions',60,'#4ADE9C'],['Obligations',35,'#E8C268'],['Liquidités',5,'#C3CAD4']] },
-    { name:'Dynamique', key:'dynamique', risk:3, riskLabel:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', desc:'Forte croissance, forte volatilité. Pour le long terme.',  mix:[['Actions croissance',75,'#4ADE9C'],['ETF tech',15,'#7FB8E8'],['Crypto',10,'#F0647A']] }
+    { name:'Dynamique', key:'dynamique', risk:3, riskLabel:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', desc:'Forte croissance, forte volatilité. Pour le long terme.',  mix:[['Actions croissance',75,'#4ADE9C'],['ETF tech',15,'#3B7DFF'],['Crypto',10,'#F0647A']] }
   ];
   function drawPlans(){
     document.getElementById('pfPlans').innerHTML=PLANS.map(function(p){

@@ -59,8 +59,8 @@ function HeroChart() {
       <svg className="pr-chart__svg" viewBox="0 0 480 200" preserveAspectRatio="none">
         <defs>
           <linearGradient id="prFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="rgba(127,184,232,0.35)" />
-            <stop offset="1" stopColor="rgba(127,184,232,0)" />
+            <stop offset="0" stopColor="rgba(59, 125, 255,0.35)" />
+            <stop offset="1" stopColor="rgba(59, 125, 255,0)" />
           </linearGradient>
         </defs>
         {[40, 80, 120, 160].map((y) => <line key={y} x1="0" y1={y} x2="480" y2={y} stroke="rgba(58,65,76,0.35)" strokeWidth="1" />)}

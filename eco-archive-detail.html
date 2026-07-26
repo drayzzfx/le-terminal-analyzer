@@ -27,13 +27,13 @@
 .ad-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12.5px;font-weight:600;color:var(--text-muted);text-decoration:none;margin-bottom:18px;transition:color .2s}
 .ad-back:hover{color:var(--accent)}
 /* ── Document « rapport » ── */
-.ad-doc{position:relative;max-width:900px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.85),rgba(9,12,17,.94));box-shadow:0 26px 64px rgba(0,0,0,.45),inset 0 1px 0 rgba(127,184,232,.08);overflow:hidden}
+.ad-doc{position:relative;max-width:900px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(16, 23, 36,.85),rgba(9,12,17,.94));box-shadow:0 26px 64px rgba(0,0,0,.45),inset 0 1px 0 rgba(59, 125, 255,.08);overflow:hidden}
 .ad-doc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-bright))}
 .ad-doc.b-up::before{background:linear-gradient(90deg,#2fae7a,var(--bull))}
 .ad-doc.b-down::before{background:linear-gradient(90deg,#c14a5e,var(--bear))}
 .ad-doc.b-flat::before{background:linear-gradient(90deg,#caa84e,var(--neutral))}
 .ad-cover{position:relative;display:flex;align-items:center;gap:16px;padding:24px 30px;border-bottom:1px solid var(--border-subtle)}
-.ad-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 120% at 90% 0%,rgba(127,184,232,.10),transparent 60%);pointer-events:none}
+.ad-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 120% at 90% 0%,rgba(59, 125, 255,.10),transparent 60%);pointer-events:none}
 .ad-cover__ic{width:48px;height:48px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);flex-shrink:0}
 .ad-cover__ic svg{width:24px;height:24px}
 .ad-cover__main{min-width:0}
@@ -51,7 +51,7 @@
 .ad-ul li{position:relative;padding-left:22px;font-family:var(--font-text);font-size:.97rem;line-height:1.6;color:var(--text-body);margin-bottom:9px}
 .ad-ul li::before{content:"";position:absolute;left:5px;top:9px;width:6px;height:6px;border-radius:2px;background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
 .ad-msg{padding:40px 24px;text-align:center;color:var(--text-muted);font-size:13px}
-.ad-skel{height:1em;border-radius:6px;background:linear-gradient(90deg,var(--bg-elevated),rgba(127,184,232,.07),var(--bg-elevated));background-size:200% 100%;animation:adsh 1.4s ease infinite}
+.ad-skel{height:1em;border-radius:6px;background:linear-gradient(90deg,var(--bg-elevated),rgba(59, 125, 255,.07),var(--bg-elevated));background-size:200% 100%;animation:adsh 1.4s ease infinite}
 .ad-deep{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--accent);padding:14px 30px 0}
 .ad-deep .lt-dot{width:7px;height:7px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:adpulse 1.2s ease-in-out infinite}
 @keyframes adpulse{0%,100%{opacity:.35}50%{opacity:1}}

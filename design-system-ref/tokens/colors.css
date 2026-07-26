@@ -5,17 +5,17 @@
 
 :root {
   /* ---- Backgrounds (deepest → raised surface) ---- */
-  --bg-void: #07090C;       /* page floor, deepest black */
-  --bg-base: #0B0E13;       /* default page background */
-  --bg-surface: #10141B;    /* raised panels, sections */
-  --bg-elevated: #161B24;   /* cards, modals, popovers */
+  --bg-void: #04060B;       /* page floor, deepest black */
+  --bg-base: #070A11;       /* default page background */
+  --bg-surface: #0B1018;    /* raised panels, sections */
+  --bg-elevated: #101724;   /* cards, modals, popovers */
 
   /* ---- Glacial blue accent (used SPARINGLY) ---- */
-  --accent: #7FB8E8;        /* primary accent — CTA, active links */
-  --accent-deep: #5A9BD4;   /* pressed / darker accent */
-  --accent-bright: #BFDCF5; /* highlight, hover sheen */
-  --accent-glow: rgba(127, 184, 232, 0.35); /* halos, glows */
-  --accent-glow-soft: rgba(127, 184, 232, 0.12);
+  --accent: #3B7DFF;        /* primary accent — CTA, active links */
+  --accent-deep: #1E5BE0;   /* pressed / darker accent */
+  --accent-bright: #8FBAFF; /* highlight, hover sheen */
+  --accent-glow: rgba(59, 125, 255, 0.35); /* halos, glows */
+  --accent-glow-soft: rgba(59, 125, 255, 0.12);
 
   /* ---- Text ---- */
   --text-title: #F2F4F7;    /* headings, high emphasis */

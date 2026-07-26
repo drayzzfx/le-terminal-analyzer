@@ -33,7 +33,7 @@
 .lt-scr__stage:not(.is-in) .lt-scr__panel--r { transform: translateZ(-260px) translateY(-60px) scale(0.85); }
 @media (prefers-reduced-motion: reduce) { .lt-scr__panel { animation: none !important; opacity: 1 !important; } }
 
-.lt-scr__bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--border-subtle); background: linear-gradient(180deg, rgba(22,27,36,0.9), rgba(11,14,19,0.9)); }
+.lt-scr__bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--border-subtle); background: linear-gradient(180deg, rgba(16, 23, 36,0.9), rgba(7, 10, 17,0.9)); }
 .lt-scr__bar i { width: 8px; height: 8px; border-radius: 999px; background: var(--border); }
 .lt-scr__bar i:nth-child(1){ background: #F0647A; } .lt-scr__bar i:nth-child(2){ background: #E8C268; } .lt-scr__bar i:nth-child(3){ background: #4ADE9C; }
 .lt-scr__bar span { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-left: 4px; }
@@ -43,7 +43,7 @@
 /* center chart */
 .lt-scr__chart { width: 100%; height: 120px; display: block; }
 .lt-scr__verdict { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-body); }
-.lt-scr__go { font-weight: 700; color: #07090C; background: var(--bull); border-radius: 3px; padding: 2px 8px; letter-spacing: 0.1em; }
+.lt-scr__go { font-weight: 700; color: #04060B; background: var(--bull); border-radius: 3px; padding: 2px 8px; letter-spacing: 0.1em; }
 
 /* journal calendar */
 .lt-scr__cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }

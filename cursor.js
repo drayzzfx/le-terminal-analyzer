@@ -10,12 +10,12 @@
     '#lt-c {' +
     '  position: fixed; top: 0; left: 0; z-index: 999999;' +
     '  width: 10px; height: 10px; border-radius: 50%;' +
-    '  background: #7FB8E8;' +
-    '  box-shadow: 0 0 8px 2px #7FB8E8, 0 0 18px 4px rgba(127,184,232,.5);' +
+    '  background: #3B7DFF;' +
+    '  box-shadow: 0 0 8px 2px #3B7DFF, 0 0 18px 4px rgba(59, 125, 255,.5);' +
     '  pointer-events: none; will-change: transform;' +
     '  transition: opacity .2s, width .15s, height .15s, box-shadow .15s;' +
     '}' +
-    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #7FB8E8, 0 0 28px 8px rgba(127,184,232,.5); }' +
+    '#lt-c.h { width: 14px; height: 14px; box-shadow: 0 0 12px 4px #3B7DFF, 0 0 28px 8px rgba(59, 125, 255,.5); }' +
     '#lt-c.off { opacity: 0; }';
   document.head.appendChild(style);
 

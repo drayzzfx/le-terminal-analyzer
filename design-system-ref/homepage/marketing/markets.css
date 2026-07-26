@@ -6,7 +6,7 @@
 .lt-mk__field { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 .lt-mk::before { /* cold central glow */
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: radial-gradient(60% 70% at 50% 42%, rgba(127,184,232,0.10), transparent 70%);
+  background: radial-gradient(60% 70% at 50% 42%, rgba(59, 125, 255,0.10), transparent 70%);
 }
 
 .lt-mk__head { max-width: var(--container); margin: 0 auto var(--sp-7); padding: 0 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
@@ -35,7 +35,7 @@
   display: flex; align-items: center; gap: 11px;
   padding: 13px 20px; border-radius: var(--r-pill);
   border: 1px solid var(--border-subtle);
-  background: linear-gradient(180deg, rgba(22,27,36,0.92), rgba(11,14,19,0.92));
+  background: linear-gradient(180deg, rgba(16, 23, 36,0.92), rgba(7, 10, 17,0.92));
   backdrop-filter: blur(6px);
   box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.04);
   white-space: nowrap; flex-shrink: 0;

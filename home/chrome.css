@@ -37,7 +37,7 @@ html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
 @keyframes lt-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ---------- MAIN NAV — capsule flottante, fixe au scroll ---------- */
-.lt-nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; max-width: 1200px; margin: 0 auto; padding: 9px 9px 9px 18px; border-radius: 999px; border: 1px solid var(--border-subtle); background: rgba(11,14,19,0.74); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); box-shadow: 0 18px 44px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.045); transition: padding var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.lt-nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; max-width: 1200px; margin: 0 auto; padding: 9px 9px 9px 18px; border-radius: 999px; border: 1px solid var(--border-subtle); background: rgba(7, 10, 17,0.74); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); box-shadow: 0 18px 44px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.045); transition: padding var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
 .lt-chrome.is-scrolled .lt-nav { padding: 7px 7px 7px 16px; background: rgba(8,11,16,0.92); border-color: var(--border); box-shadow: 0 22px 52px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
 .lt-nav__brand { display: flex; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; }
 .lt-nav__mark { color: var(--accent); display: inline-flex; }
@@ -46,7 +46,7 @@ html, body { overflow-x: hidden; overflow-x: clip; max-width: 100%; }
 .lt-nav__links > a { display: inline-flex; align-items: center; font-size: 13px; color: var(--text-muted); letter-spacing: 0.04em; padding: 8px 15px; border-radius: 999px; white-space: nowrap; transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out); }
 .lt-nav__links > a:hover { color: var(--text-title); background: rgba(255,255,255,0.055); }
 /* Page courante : pastille accent (marquée par menu.js, .is-current). */
-.lt-nav__links > a.is-current, .lt-nav__drop.is-current .lt-nav__droptrigger { color: var(--accent-bright); background: var(--accent-glow-soft); box-shadow: inset 0 0 0 1px rgba(127,184,232,0.22); }
+.lt-nav__links > a.is-current, .lt-nav__drop.is-current .lt-nav__droptrigger { color: var(--accent-bright); background: var(--accent-glow-soft); box-shadow: inset 0 0 0 1px rgba(59, 125, 255,0.22); }
 .lt-nav__actions { display: flex; gap: 10px; align-items: center; flex: 1 1 0; justify-content: flex-end; }
 .lt-nav__pill { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 6px 11px; cursor: pointer; transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
 .lt-nav__pill:hover { color: var(--accent); border-color: var(--border); }

@@ -32,10 +32,10 @@ function ParticleField() {
         if (p.y < -10) p.y = h + 10; if (p.y > h + 10) p.y = -10;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         if (p.bright) {
-          ctx.fillStyle = `rgba(191,220,245,${p.a})`;
-          ctx.shadowColor = 'rgba(127,184,232,0.8)'; ctx.shadowBlur = 8;
+          ctx.fillStyle = `rgba(143, 186, 255,${p.a})`;
+          ctx.shadowColor = 'rgba(59, 125, 255,0.8)'; ctx.shadowBlur = 8;
         } else {
-          ctx.fillStyle = `rgba(127,184,232,${p.a * 0.6})`; ctx.shadowBlur = 0;
+          ctx.fillStyle = `rgba(59, 125, 255,${p.a * 0.6})`; ctx.shadowBlur = 0;
         }
         ctx.fill();
       }

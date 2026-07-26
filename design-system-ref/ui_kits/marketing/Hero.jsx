@@ -65,7 +65,7 @@ function Hero() {
         if (p.y > h) { p.y = -5; p.x = Math.random() * w; }
         const beam = 1 - Math.min(1, Math.abs(p.x - w / 2) / (w * 0.4)) * (p.y / h);
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(191,220,245,${p.a * beam * 0.6})`; ctx.fill();
+        ctx.fillStyle = `rgba(143, 186, 255,${p.a * beam * 0.6})`; ctx.fill();
       }
       raf = requestAnimationFrame(draw);
     };
