@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avis des traders sur Le Terminal — Témoignages</title>
+<meta name="description" content="Ce que les traders pensent du cockpit Le Terminal : retours sur le Setup Analyzer, le journal et les outils. Lisez les avis et partagez le vôtre.">
+<link rel="canonical" href="https://www.leterminal.net/avis">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Avis des traders sur Le Terminal — Témoignages">
+<meta property="og:description" content="Ce que les traders pensent du cockpit Le Terminal : retours sur le Setup Analyzer, le journal et les outils. Lisez les avis et partagez le vôtre.">
+<meta property="og:url" content="https://www.leterminal.net/avis">
+<meta property="og:image" content="https://www.leterminal.net/og-banner.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Le Terminal — hub de trading IA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Avis des traders sur Le Terminal — Témoignages">
+<meta name="twitter:description" content="Ce que les traders pensent du cockpit Le Terminal : retours sur le Setup Analyzer, le journal et les outils. Lisez les avis et partagez le vôtre.">
+<meta name="twitter:image" content="https://www.leterminal.net/og-banner.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.leterminal.net/#organization",
+      "name": "Le Terminal",
+      "url": "https://www.leterminal.net/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.leterminal.net/logo.png"
+      },
+      "description": "Hub de trading propulsé par l'IA : analyse de setups, journal de trading, calendrier économique et gestion du risque, réunis dans un seul cockpit.",
+      "sameAs": [
+        "https://t.me/leterminalfx"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://www.leterminal.net/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Avis",
+          "item": "https://www.leterminal.net/avis"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="manifest" href="./manifest.json">
+<link rel="preload" as="font" type="font/woff2" href="./fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./home.css">
+<style>
+.av-wrap{max-width:1180px;margin:0 auto;padding:116px 24px 0}
+/* HERO */
+.av-hero{position:relative;text-align:center;padding:24px 0 8px}
+.av-hero__halo{position:absolute;left:50%;top:-40px;width:680px;height:340px;transform:translateX(-50%);pointer-events:none;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(127,184,232,.12),transparent 70%);filter:blur(8px)}
+.av-rating{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:10px;margin-top:18px;padding:30px 46px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(165deg,rgba(232,194,104,.1),rgba(22,27,36,.6));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.av-rating__score{font-family:var(--font-mono);font-weight:700;font-size:60px;line-height:1;color:var(--text-title)}
+.av-rating__score span{font-size:24px;color:var(--text-muted)}
+.av-stars{display:inline-flex;gap:4px;color:#E8C268}
+.av-rating__sub{font-size:13px;color:var(--text-muted)}
+.av-rating__tp{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--bull);margin-top:2px}
+/* DISTRIBUTION */
+.av-dist{max-width:460px;margin:26px auto 0;display:flex;flex-direction:column;gap:8px}
+.av-dist__row{display:flex;align-items:center;gap:12px}
+.av-dist__k{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);width:34px;text-align:right}
+.av-dist__bar{flex:1;height:7px;border-radius:999px;background:var(--bg-elevated);overflow:hidden}
+.av-dist__fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-bright))}
+.av-dist__p{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);width:42px}
+/* GRID */
+.av-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:44px 0 0}
+.av-card{display:flex;flex-direction:column;gap:12px;background:linear-gradient(165deg,rgba(127,184,232,.05),rgba(22,27,36,.55));border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:24px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .4s}
+.av-card:hover{transform:perspective(1000px) translateY(-7px) rotateX(4deg);border-color:var(--accent-glow);box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px var(--accent-glow)}
+.av-card__top{display:flex;align-items:center;justify-content:space-between}
+.av-card__stars{display:inline-flex;gap:2px;color:#E8C268}
+.av-card__verif{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:.04em;color:var(--bull)}
+.av-card__txt{font-size:14px;line-height:1.62;color:var(--text-body);margin:0;flex:1}
+.av-card__foot{display:flex;align-items:center;gap:11px;border-top:1px solid var(--border-subtle);padding-top:14px}
+.av-card__ava{width:38px;height:38px;border-radius:50%;background:linear-gradient(150deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;font-family:var(--font-text);font-weight:700;font-size:14px;color:#07090C;flex-shrink:0}
+.av-card__name{font-size:13.5px;font-weight:600;color:var(--text-title)}
+.av-card__meta{font-size:11px;color:var(--text-muted)}
+.av-card__date{margin-left:auto;font-family:var(--font-mono);font-size:10.5px;color:var(--text-muted)}
+/* CTA */
+.av-cta{text-align:center;margin:54px 0 10px;padding:40px 24px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:radial-gradient(ellipse 80% 120% at 50% 0,rgba(127,184,232,.08),transparent 70%)}
+.av-cta h2{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(22px,3vw,34px);margin:0 0 10px;color:var(--text-title)}
+.av-cta p{color:var(--text-muted);font-size:14px;margin:0 0 22px}
+@media(max-width:900px){.av-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.av-grid{grid-template-columns:1fr}.av-rating{padding:26px 28px}}
+/* preuve factuelle vérifiable */
+.av-vp{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:38px 0 0}
+.av-vp__c{text-align:center;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:22px 16px}
+.av-vp__n{font-family:var(--font-mono);font-weight:700;font-size:28px;color:var(--accent-bright);line-height:1}
+.av-vp__l{font-size:12px;color:var(--text-muted);margin-top:7px;line-height:1.4}
+@media(max-width:760px){.av-vp{grid-template-columns:1fr 1fr}}
+/* note des fondateurs */
+.av-note{margin:40px 0 0;background:linear-gradient(165deg,rgba(127,184,232,.06),rgba(22,27,36,.5));border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:26px 28px}
+.av-note__q{font-size:15px;line-height:1.7;color:var(--text-body);margin:0}
+.av-note__sig{display:flex;align-items:center;gap:11px;margin-top:16px}
+.av-note__av{width:38px;height:38px;border-radius:50%;background:linear-gradient(150deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;color:#07090C;font-weight:700;font-size:14px}
+.av-note__name{font-size:13px;font-weight:600;color:var(--text-title)}
+.av-note__role{font-size:11px;color:var(--text-muted)}
+/* en-tête section avis */
+.av-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:54px 0 18px}
+.av-head__t{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(20px,3vw,28px);color:var(--text-title);margin:0}
+/* état vide */
+.av-empty{grid-column:1/-1;text-align:center;padding:46px 24px;border:1px dashed var(--border);border-radius:var(--r-lg);color:var(--text-muted)}
+.av-empty svg{width:30px;height:30px;opacity:.5;margin-bottom:12px}
+.av-empty strong{display:block;color:var(--text-title);font-size:15px;margin-bottom:6px;font-weight:600}
+.av-transp{margin:18px 0 0;font-size:11.5px;color:var(--text-muted);line-height:1.6;text-align:center}
+/* modal formulaire */
+.av-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(7,9,12,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.av-modal.show{display:flex}
+.av-modal__box{position:relative;width:100%;max-width:480px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:28px 26px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.av-modal__x{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1}
+.av-modal__t{font-family:var(--font-display);text-transform:uppercase;font-size:20px;color:var(--text-title);margin:0 0 16px}
+.av-fld{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
+.av-fld label{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.av-in{background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--r-sm);color:var(--text-title);padding:11px 13px;font-family:var(--font-text);font-size:14px;outline:none;width:100%;box-sizing:border-box}
+.av-in:focus{border-color:var(--accent)}
+textarea.av-in{min-height:96px;resize:vertical;line-height:1.6}
+.av-starin{display:inline-flex;gap:5px}
+.av-starin button{background:transparent;border:none;cursor:pointer;color:#E8C268;padding:2px;opacity:.3;transition:opacity .15s}
+.av-starin button.on{opacity:1}
+.av-consent{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--text-body);line-height:1.5;margin:4px 0 14px}
+.av-consent input{margin-top:2px;flex:none}
+.av-msg{font-size:12.5px;margin-top:10px}.av-msg.ok{color:var(--bull)}.av-msg.err{color:var(--bear)}
+</style>
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<!-- DOCK -->
+<nav class="lt-dock" aria-label="Pages">
+  <a class="lt-dock__item" href="/v2">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg>
+    <span class="lt-dock__lbl" data-en="Home">Accueil</span>
+    <span class="lt-dock__tip" data-en="Home">Accueil</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/journal">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg>
+    <span class="lt-dock__lbl">Journal</span>
+    <span class="lt-dock__tip">Journal de Trading</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/app">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg>
+    <span class="lt-dock__lbl">Analyzer</span>
+    <span class="lt-dock__tip">Setup Analyzer</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/patrimoine-presentation">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>
+    <span class="lt-dock__lbl">Patrim.</span>
+    <span class="lt-dock__tip">Patrimoine</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/calendrier">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg>
+    <span class="lt-dock__lbl">Éco</span>
+    <span class="lt-dock__tip">Calendrier Éco</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/bubble">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg>
+    <span class="lt-dock__lbl">Bubble</span>
+    <span class="lt-dock__tip">Bubble Map</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/calculateur">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
+    <span class="lt-dock__lbl">Pips</span>
+    <span class="lt-dock__tip">Calculateur de Pips</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/mur-des-trades">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>
+    <span class="lt-dock__lbl">Trades</span>
+    <span class="lt-dock__tip">Mur des Trades</span>
+  </a>
+</nav>
+
+<main class="av-wrap">
+  <!-- HERO -->
+  <section class="av-hero" data-reveal>
+    <div class="av-hero__halo" aria-hidden="true"></div>
+    <span class="lt-eyebrow"><span class="lt-dot"></span> <span data-en="Community reviews">Avis de la communauté</span></span>
+    <h1 class="pr-hero__title" style="margin:10px 0 0"><span class="lt-metal" data-en="What traders say">Ce que disent les traders</span></h1>
+    <div id="avRatingWrap"></div>
+  </section>
+
+  <!-- PREUVE FACTUELLE (vérifiable) -->
+  <section class="av-vp" data-reveal>
+    <div class="av-vp__c"><div class="av-vp__n">7</div><div class="av-vp__l" data-en="Tools in one terminal">Outils dans un seul terminal</div></div>
+    <div class="av-vp__c"><div class="av-vp__n">IA</div><div class="av-vp__l" data-en="Setup analysis &amp; coaching">Analyse de setup &amp; coaching</div></div>
+    <div class="av-vp__c"><div class="av-vp__n">FR · EN</div><div class="av-vp__l" data-en="Bilingual interface">Interface bilingue</div></div>
+    <div class="av-vp__c"><div class="av-vp__n">0 €</div><div class="av-vp__l" data-en="Free to start">Pour commencer</div></div>
+  </section>
+
+  <!-- NOTE DES FONDATEURS -->
+  <section class="av-note" data-reveal>
+    <p class="av-note__q" data-en="&laquo; Le Terminal has just launched. Rather than displaying made-up reviews, we'd rather let our first users speak &mdash; real, verified reviews, week after week. Try it for free, then tell us what you think. &raquo;">« Le Terminal vient d'ouvrir. Plutôt que d'afficher des avis inventés, nous préférons laisser parler nos premiers utilisateurs — de vrais avis, vérifiés, au fil des semaines. Essayez gratuitement, puis dites-nous ce que vous en pensez. »</p>
+    <div class="av-note__sig"><span class="av-note__av">LT</span><span><span class="av-note__name">L'équipe Le Terminal</span><br><span class="av-note__role" data-en="Founders">Fondateurs</span></span></div>
+  </section>
+
+  <!-- AVIS RÉELS (membres) -->
+  <div class="av-head" data-reveal>
+    <h2 class="av-head__t" data-en="Member reviews">Avis des membres</h2>
+    <button class="lt-btn lt-btn--secondary lt-btn--sm" type="button" id="avLeave" data-en="Leave a review">Laisser un avis</button>
+  </div>
+  <section class="av-grid" id="avGrid" data-stagger></section>
+  <p class="av-transp" data-en="Reviews are submitted by signed-in members and published after verification. We do not remove negative reviews.">Les avis sont déposés par des membres connectés et publiés après vérification. Nous ne supprimons pas les avis négatifs.</p>
+
+  <!-- CTA -->
+  <section class="av-cta" data-reveal>
+    <h2 data-en="Five tools, one terminal">Cinq outils, un terminal</h2>
+    <p data-en="Start free, go Premium when you're ready.">Commencez gratuitement, passez en Premium quand vous voulez.</p>
+    <a class="lt-btn lt-btn--primary lt-btn--lg" href="/v2/tarifs" data-en="See pricing">Voir les tarifs</a>
+  </section>
+</main>
+
+<!-- MODAL : laisser un avis -->
+<div class="av-modal" id="avModal" role="dialog" aria-label="Laisser un avis">
+  <div class="av-modal__box">
+    <button class="av-modal__x" id="avModalX" type="button" aria-label="Fermer">✕</button>
+    <h3 class="av-modal__t" data-en="Leave a review">Laisser un avis</h3>
+    <div id="avFormWrap">
+      <div class="av-fld"><label data-en="Your name / handle">Votre nom / pseudo</label><input class="av-in" id="avName" maxlength="40" placeholder="Ex. Thomas R."></div>
+      <div class="av-fld"><label data-en="Your profile (optional)">Votre profil (facultatif)</label><input class="av-in" id="avRole" maxlength="60" placeholder="Ex. Day trader · Forex"></div>
+      <div class="av-fld"><label data-en="Rating">Note</label><div class="av-starin" id="avStarIn"></div></div>
+      <div class="av-fld"><label data-en="Your review">Votre avis</label><textarea class="av-in" id="avBody" maxlength="1000" placeholder="Votre expérience avec Le Terminal…"></textarea></div>
+      <label class="av-consent"><input type="checkbox" id="avConsent"><span data-en="I authorize the publication of my review (name/handle, profile, rating, text) on the site.">J'autorise la publication de mon avis (nom/pseudo, profil, note, texte) sur le site.</span></label>
+      <button class="lt-btn lt-btn--primary" type="button" id="avSubmit" style="width:100%" data-en="Submit">Envoyer</button>
+      <div class="av-msg" id="avMsg"></div>
+    </div>
+    <div id="avGate" style="display:none;text-align:center;padding:8px 0">
+      <p style="color:var(--text-body);font-size:13.5px" data-en="Sign in to leave a review.">Connectez-vous pour laisser un avis.</p>
+      <button class="lt-btn lt-btn--primary" style="margin-top:10px" onclick="window.ltOpenLogin&&ltOpenLogin()" data-en="Sign in">Connexion</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  function getLang(){ return localStorage.getItem('lt_lang')||'fr'; }
+  function stars(n){ var s=''; for(var i=0;i<5;i++){ s+='<svg viewBox="0 0 24 24" width="15" height="15" style="opacity:'+(i<n?1:.2)+'"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>'; } return s; }
+
+  var API='/api/reviews';
+  function tok(){ try{return localStorage.getItem('ta_token')||'';}catch(e){return '';} }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function frDate(iso){ try{ var d=new Date(iso); if(isNaN(d))return ''; return d.toLocaleDateString(getLang()==='en'?'en-GB':'fr-FR',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+
+  var DATA={reviews:[],count:0,average:0};
+
+  function renderHero(){
+    var l=getLang(), w=document.getElementById('avRatingWrap'); if(!w) return;
+    if(DATA.count>0){
+      w.innerHTML='<div class="av-rating"><div class="av-rating__score">'+String(DATA.average).replace('.',',')+'<span>/5</span></div>'
+        +'<div class="av-stars">'+stars(Math.round(DATA.average))+'</div>'
+        +'<div class="av-rating__sub">'+(l==='en'?('Based on '+DATA.count+' member review'+(DATA.count>1?'s':'')):('Sur la base de '+DATA.count+' avis membre'+(DATA.count>1?'s':'')))+'</div></div>';
+    } else {
+      w.innerHTML='<p class="av-rating__sub" style="margin-top:16px">'+(l==='en'?'Be among the first to share your experience.':'Soyez parmi les premiers à partager votre expérience.')+'</p>';
+    }
+  }
+  function renderGrid(){
+    var l=getLang(), grid=document.getElementById('avGrid'); if(!grid) return;
+    if(!DATA.reviews.length){
+      grid.innerHTML='<div class="av-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+        +'<strong>'+(l==='en'?'No reviews yet':'Pas encore d\'avis')+'</strong>'
+        +(l==='en'?'Real member reviews will appear here. Want to be the first?':'Les vrais avis des membres apparaîtront ici. Envie d\'être le premier ?')+'</div>';
+      return;
+    }
+    grid.innerHTML=DATA.reviews.map(function(rv){
+      var initial=esc((rv.author_name||'?').charAt(0).toUpperCase());
+      return '<article class="av-card">'
+        +'<div class="av-card__top"><span class="av-card__stars">'+stars(rv.rating)+'</span>'
+        +'<span class="av-card__verif"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'+(l==='en'?'Verified member':'Membre vérifié')+'</span></div>'
+        +'<p class="av-card__txt">'+esc(rv.body)+'</p>'
+        +'<div class="av-card__foot"><span class="av-card__ava">'+initial+'</span>'
+        +'<span><span class="av-card__name">'+esc(rv.author_name)+'</span><br><span class="av-card__meta">'+esc(rv.role||'')+'</span></span>'
+        +'<span class="av-card__date">'+frDate(rv.created_at)+'</span></div>'
+        +'</article>';
+    }).join('');
+  }
+  function render(){ renderHero(); renderGrid(); }
+  window.ecoReloadNews=render; // re-render au changement de langue
+
+  function load(){
+    fetch(API).then(function(r){return r.ok?r.json():null;}).then(function(d){
+      if(d){ DATA.reviews=Array.isArray(d.reviews)?d.reviews:[]; DATA.count=d.count||0; DATA.average=d.average||0; }
+      render();
+    }).catch(function(){ render(); });
+  }
+
+  // ── Formulaire « Laisser un avis » (membre connecté) ──
+  var curRating=5;
+  function paintStarIn(){ var c=document.getElementById('avStarIn'); if(!c) return; c.innerHTML='';
+    for(var i=1;i<=5;i++){ (function(v){ var b=document.createElement('button'); b.type='button'; b.className=(v<=curRating?'on':''); b.setAttribute('aria-label',v+'/5');
+      b.innerHTML='<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>';
+      b.addEventListener('click',function(){ curRating=v; paintStarIn(); }); c.appendChild(b); })(i); } }
+  function openModal(){
+    var m=document.getElementById('avModal'); if(!m) return; var logged=!!tok();
+    document.getElementById('avFormWrap').style.display=logged?'':'none';
+    document.getElementById('avGate').style.display=logged?'none':'';
+    if(logged){ curRating=5; paintStarIn(); var msg=document.getElementById('avMsg'); if(msg){msg.textContent='';msg.className='av-msg';} }
+    m.classList.add('show');
+  }
+  function closeModal(){ var m=document.getElementById('avModal'); if(m) m.classList.remove('show'); }
+  function submit(){
+    var l=getLang(), msg=document.getElementById('avMsg');
+    var name=(document.getElementById('avName').value||'').trim();
+    var role=(document.getElementById('avRole').value||'').trim();
+    var body=(document.getElementById('avBody').value||'').trim();
+    var consent=document.getElementById('avConsent').checked;
+    function err(t){ msg.textContent=t; msg.className='av-msg err'; }
+    if(name.length<2) return err(l==='en'?'Please enter your name.':'Indiquez votre nom.');
+    if(body.length<10) return err(l==='en'?'Your review is too short.':'Votre avis est trop court.');
+    if(!consent) return err(l==='en'?'Please confirm the publication consent.':"Veuillez confirmer l'autorisation de publication.");
+    var btn=document.getElementById('avSubmit'); btn.disabled=true; msg.textContent=l==='en'?'Sending…':'Envoi…'; msg.className='av-msg';
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok()},
+      body:JSON.stringify({author_name:name,role:role,rating:curRating,body:body,lang:l,consent:true})})
+    .then(function(r){ return r.json().then(function(d){ return {s:r.status,d:d||{}}; }); })
+    .then(function(o){
+      btn.disabled=false;
+      if(o.s===401){ if(window.ltOpenLogin) ltOpenLogin(); return err(l==='en'?'Please sign in again.':'Reconnectez-vous.'); }
+      if(o.s!==200 || !o.d.ok){ return err(l==='en'?'Could not submit. Please try again.':"Échec de l'envoi. Réessayez."); }
+      msg.textContent=l==='en'?'Thank you! Your review will be published after verification.':'Merci ! Votre avis sera publié après vérification.';
+      msg.className='av-msg ok'; setTimeout(closeModal,2200);
+    }).catch(function(){ btn.disabled=false; err(l==='en'?'Network error.':'Erreur réseau.'); });
+  }
+
+  function init(){
+    load();
+    var lv=document.getElementById('avLeave'); if(lv) lv.addEventListener('click',openModal);
+    var x=document.getElementById('avModalX'); if(x) x.addEventListener('click',closeModal);
+    var sb=document.getElementById('avSubmit'); if(sb) sb.addEventListener('click',submit);
+    var m=document.getElementById('avModal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeModal(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); },{threshold:0.08}); document.querySelectorAll('[data-reveal]').forEach(function(el){ io.observe(el); }); }
+  else { document.querySelectorAll('[data-reveal]').forEach(function(el){ el.classList.add('is-in'); }); }
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script src="./cursor.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/v2/analyzer-presentation">Setup Analyzer</a>
+        <a href="/v2/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/v2/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/v2/bubble">Bubble Map</a>
+        <a href="/v2/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/v2/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/v2/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/v2/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/v2/eco-flash">Flash Info</a>
+        <a href="/v2/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/v2/eco-crypto">Crypto</a>
+        <a href="/v2/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/v2/#method" data-en="Method">Méthode</a>
+        <a href="/v2/#strategies" data-en="Strategies">Stratégies</a>
+        <a href="/v2/#community" data-en="Community">Communauté</a>
+        <a href="/v2/avis" data-en="Reviews">Avis</a>
+        <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/v2/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/v2/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/v2/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/v2/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

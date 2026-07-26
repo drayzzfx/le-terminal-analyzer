@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/v2/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/v2/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/v2/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompts d'analyse trading IA : 12 modèles à copier | Le Terminal</title>
+<meta name="description" content="12 prompts d'analyse trading avec l'IA à copier : analyser un setup, bâtir un plan, débriefer un trade, gérer le risque. Prompts prêts + limites à connaître.">
+<link rel="canonical" href="https://www.leterminal.net/blog/prompt-trading-ia">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Prompts d'analyse trading IA : 12 modèles à copier | Le Terminal">
+<meta property="og:description" content="12 prompts d'analyse trading avec l'IA à copier : analyser un setup, bâtir un plan, débriefer un trade, gérer le risque. Prompts prêts + limites à connaître.">
+<meta property="og:url" content="https://www.leterminal.net/blog/prompt-trading-ia">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/prompt-trading-ia-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Prompts d'analyse trading avec l'IA : 12 modèles à copier — Le Terminal">
+<meta property="article:published_time" content="2026-07-05">
+<meta property="article:modified_time" content="2026-07-05">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prompts d'analyse trading IA : 12 modèles à copier | Le Terminal">
+<meta name="twitter:description" content="La bibliothèque de prompts trading à copier-coller : setup, plan, débrief, risque, psychologie.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/prompt-trading-ia-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Prompts d'analyse trading avec l'IA : la bibliothèque à copier-coller",
+      "description": "Bibliothèque de 12 prompts d'analyse trading avec l'IA : analyser un setup, bâtir un plan, débriefer un trade, gérer le risque. Prompts copiables et limites à connaître.",
+      "datePublished": "2026-07-05",
+      "dateModified": "2026-07-05",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/prompt-trading-ia-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/prompt-trading-ia" },
+      "keywords": "prompt analyse trading IA, prompt ChatGPT trading, prompt trading, meilleurs prompts trading ChatGPT, prompt analyse technique"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quel prompt pour analyser un graphique de trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Utilisez un prompt de structure de marché ou de notation de setup en donnant à l'IA vos niveaux relevés et en lui interdisant d'en inventer. Le prompt structure votre lecture, il ne fournit pas de signal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ChatGPT peut-il lire une capture d'écran de graphique ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Techniquement oui via la vision multimodale, mais l'interprétation reste peu fiable et les prix lus sont souvent inexacts. Un outil dédié comme l'analyse de setup de Le Terminal est plus adapté."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Les prompts donnent-ils des signaux de trading fiables ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Aucun prompt ne produit de signal fiable : l'IA n'a pas les données de marché en direct et peut halluciner. Les prompts améliorent la méthode et la discipline, la décision reste celle du trader."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il ChatGPT gratuit ou payant pour ces prompts ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La version gratuite suffit pour bâtir un plan, débriefer un trade ou créer une checklist. Aucune version ne comble l'absence de données temps réel ni le besoin d'un suivi de vos trades."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Prompts d'analyse trading avec l'IA", "item": "https://www.leterminal.net/blog/prompt-trading-ia" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/v2/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/v2/fonts.css">
+<link rel="stylesheet" href="/v2/design-system.css">
+<link rel="stylesheet" href="/v2/theme-light.css">
+<link rel="stylesheet" href="/v2/home.css">
+<link rel="stylesheet" href="/v2/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/v2" data-en="Home">Accueil</a><span class="sep">→</span><a href="/v2/blog">Blog</a><span class="sep">→</span><span class="cur">Prompts d'analyse trading IA</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Prompts &amp; méthode</span>
+  <h1 class="bl-art__title">Prompts d'analyse trading avec l'IA : la bibliothèque à copier-coller</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published July 5, 2026">Publié le 5 juillet 2026</span>
+    <span>·</span>
+    <span data-en="10 min read">10 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/v2/blog/img/prompt-trading-ia.webp" width="1600" height="900" alt="Prompts d'analyse trading avec l'IA : un prompt prêt à coller, le résultat attendu et le suivi dans le journal" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un prompt d'analyse trading IA est une consigne structurée donnée à un modèle comme ChatGPT pour l'aider à raisonner sur un setup, un plan ou un journal. Un bon prompt repose sur quatre blocs : un <strong>rôle</strong>, un <strong>contexte</strong> (vos données), une <strong>contrainte</strong> de méthode et un <strong>format</strong> de sortie. Il sert la réflexion, jamais la décision automatique.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Vous cherchez des <strong>prompts d'analyse trading avec l'IA</strong> prêts à coller, pas une énième théorie ? Cette page est une bibliothèque : 12 prompts testés, classés par usage (analyse de setup, plan de trading, débrief, risque, psychologie), chacun avec le résultat attendu et sa limite. Copiez, adaptez à votre style, gardez le contrôle de la décision.</p>
+    <p>Un rappel d'entrée de jeu, parce qu'on est sur un sujet d'argent : ChatGPT n'a <strong>aucune donnée de marché en temps réel</strong> et peut inventer des niveaux de prix. Ces prompts musclent votre <strong>méthode</strong> et votre discipline. Ils ne remplacent ni un flux de données fiable, ni un outil branché sur vos trades. Pour comprendre où s'arrête l'IA générative, lisez d'abord notre guide <a href="/v2/blog/trader-avec-chatgpt">trader avec ChatGPT : ce que l'IA peut vraiment faire</a>.</p>
+
+    <div class="bl-note">
+      <p><strong>Contenu éducatif, pas un conseil en investissement.</strong> Le trading comporte un risque de perte en capital.</p>
+    </div>
+
+    <h2>Comment écrire un bon prompt de trading (la structure en 4 blocs)</h2>
+    <p>La différence entre un prompt qui produit une bouillie générique et un prompt qui vous fait progresser tient à quatre blocs. Retenez-les, ils rendent n'importe quel <strong>prompt ChatGPT trading</strong> exploitable.</p>
+    <ol>
+      <li><strong>Le rôle</strong> : à qui parlez-vous ? « Agis comme un trader discipliné spécialisé en price action et gestion du risque. »</li>
+      <li><strong>Le contexte</strong> : vos données réelles. Actif, unité de temps, biais de tendance, niveaux que <em>vous</em> avez relevés, votre plan. Sans contexte, l'IA improvise.</li>
+      <li><strong>La contrainte</strong> : la méthode imposée. « Ne propose aucun niveau que je ne t'ai pas donné », « raisonne étape par étape », « pas de conseil d'achat/vente ».</li>
+      <li><strong>Le format</strong> : la forme de sortie. Tableau, checklist, note sur 10, liste de risques. Un format clair rend la réponse réutilisable dans votre journal.</li>
+    </ol>
+    <p>Astuce transversale : demandez toujours à l'IA de <strong>justifier</strong> et de signaler ce qu'elle ne peut pas savoir. Un bon prompt d'analyse technique se termine souvent par « indique ton niveau de confiance et ce qui invaliderait ton raisonnement ».</p>
+
+    <h3>Objectif → prompt → résultat attendu</h3>
+    <div class="bl-tablewrap">
+      <table>
+        <thead>
+          <tr><th>Objectif</th><th>Prompt à utiliser</th><th>Résultat attendu</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Lire une structure de marché</td><td>Prompt 1</td><td>Synthèse tendance + niveaux à surveiller</td></tr>
+          <tr><td>Noter un setup</td><td>Prompt 2</td><td>Checklist + score de qualité argumenté</td></tr>
+          <tr><td>Avoir un contre-avis</td><td>Prompt 4</td><td>Arguments contre votre thèse</td></tr>
+          <tr><td>Construire un plan</td><td>Prompt 5</td><td>Plan écrit, règles chiffrées par vous</td></tr>
+          <tr><td>Débriefer un trade</td><td>Prompt 8</td><td>Analyse à froid + leçon actionnable</td></tr>
+          <tr><td>Repérer vos erreurs récurrentes</td><td>Prompt 9</td><td>Patterns d'erreurs sur N trades</td></tr>
+          <tr><td>Contrôler le risque</td><td>Prompt 11</td><td>Vérification de cohérence du risque</td></tr>
+          <tr><td>Détecter un biais émotionnel</td><td>Prompt 12</td><td>Biais identifiés + garde-fous</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Prompts pour analyser un setup ou un graphique</h2>
+    <p>Ces prompts vous aident à <strong>verbaliser</strong> ce que vous voyez. L'IA ne « regarde » pas le marché : elle travaille sur les niveaux et le contexte que vous lui donnez. Pour revoir le vocabulaire, notre article <a href="/v2/blog/quest-ce-quun-setup">qu'est-ce qu'un setup de trading</a> vous servira de base.</p>
+
+    <h3>Prompt 1 — Analyser une structure de marché</h3>
+    <pre class="bl-code">Agis comme un trader price action rigoureux.
+Voici les données que j'ai relevées sur [ACTIF] en [UNITÉ DE TEMPS] :
+- Tendance perçue : [haussière/baissière/range]
+- Derniers sommets/creux : [niveaux]
+- Support/résistance clés : [niveaux]
+- Contexte : [news, séance, volatilité]
+
+Analyse la structure de marché à partir de CES niveaux uniquement.
+N'invente aucun prix. Indique : le biais dominant, les zones à surveiller,
+et ce qui invaliderait ce biais. Termine par ton niveau de confiance (faible/moyen/élevé).</pre>
+
+    <h3>Prompt 2 — Noter la qualité d'un setup (checklist)</h3>
+    <pre class="bl-code">Agis comme un mentor de trading exigeant.
+Voici mon setup : [ACTIF, UT, type de setup, point d'entrée envisagé,
+invalidation, cible, confluence(s) que j'observe].
+
+Évalue ce setup avec une checklist en 6 critères : tendance, niveau clé,
+confluence, ratio risque/rendement (calculé à partir de MES niveaux),
+timing, clarté de l'invalidation.
+Donne une note /10 par critère + une note globale, et justifie chaque note.
+Ne me dis pas d'acheter ou de vendre : évalue la qualité, pas la décision.</pre>
+
+    <h3>Prompt 3 — Identifier les zones clés à surveiller</h3>
+    <pre class="bl-code">À partir des niveaux que je te donne pour [ACTIF] ([liste de prix]),
+classe-les en zones de décision : supports, résistances, zones de liquidité
+probables, niveaux psychologiques.
+Pour chaque zone, explique pourquoi elle compte et quel comportement de prix
+la confirmerait ou l'invaliderait. Utilise uniquement mes niveaux.</pre>
+
+    <h3>Prompt 4 — L'avocat du diable (contre-avis)</h3>
+    <pre class="bl-code">Je pense prendre une position [longue/courte] sur [ACTIF] parce que [ta thèse].
+Joue l'avocat du diable. Donne-moi les 5 meilleurs arguments CONTRE ce trade,
+les scénarios où j'ai tort, et les signaux qui devraient me faire renoncer.
+Ne me rassure pas : cherche activement les failles de mon raisonnement.</pre>
+    <p>Le prompt 4 est le plus sous-estimé : il force à confronter votre biais de confirmation avant d'engager du capital.</p>
+
+    <h2>Prompts pour bâtir et challenger un plan de trading</h2>
+    <p>Un plan écrit vaut mieux qu'un plan « dans la tête ». L'IA excelle à structurer et à trouver les trous d'un plan — à condition que les règles chiffrées viennent de <strong>vous</strong>. Rassemblez ensuite tout dans votre <a href="/v2/journal-presentation">journal de trading</a> pour le suivre dans la durée.</p>
+
+    <h3>Prompt 5 — Bâtir un plan de trading</h3>
+    <pre class="bl-code">Aide-moi à formaliser mon plan de trading à partir de ces éléments :
+- Style : [scalping/day/swing]
+- Marchés : [actifs]
+- Horaires de trading : [plages]
+- Setup(s) que je trade : [description]
+- Règle de risque par trade : [ex. 1% du capital]
+- Objectif et limite de perte journalière : [chiffres]
+
+Structure un plan clair en sections : marchés, conditions d'entrée,
+gestion du risque, gestion de sortie, règles de non-trading, routine de revue.
+Ne fixe aucun chiffre à ma place : reprends les miens et signale ceux qui manquent.</pre>
+
+    <h3>Prompt 6 — Stress-tester un plan existant</h3>
+    <pre class="bl-code">Voici mon plan de trading : [colle ton plan].
+Cherche ses points faibles : règles floues, contradictions, situations non couvertes
+(gaps, news, séance calme, série de pertes). Pose-moi 5 questions dont les réponses
+manquent au plan. Ne réécris pas le plan : aide-moi à le durcir.</pre>
+
+    <h3>Prompt 7 — Créer une checklist pré-trade</h3>
+    <pre class="bl-code">À partir de mon plan et de mon setup principal ([description]), génère une
+checklist pré-trade de 8 points maximum, en questions oui/non, que je dois valider
+AVANT toute entrée. Inclus une ligne "risque défini et invalidation placée ?".
+Format : liste à cocher, courte et opérationnelle.</pre>
+
+    <h2>Prompts pour débriefer un trade et son journal</h2>
+    <p>C'est là que l'IA est la plus utile : la revue à froid. Elle ne juge pas, elle structure. Le débrief régulier est le cœur d'un journal utile — voir notre <a href="/v2/journal-presentation">journal de trading</a> et son coach IA qui automatise ce travail sur vos trades réels.</p>
+
+    <h3>Prompt 8 — Débriefer un trade à froid</h3>
+    <pre class="bl-code">Agis comme un coach de trading neutre et factuel.
+Voici un trade clos : [actif, sens, entrée, sortie, raison d'entrée, raison de sortie,
+émotion ressentie, résultat en R]. Ne me juge pas.
+Analyse : la décision d'entrée était-elle cohérente avec MON plan ? La sortie ?
+Qu'est-ce qui relevait de la méthode, qu'est-ce qui relevait de l'émotion ?
+Donne UNE leçon actionnable pour le prochain trade.</pre>
+
+    <h3>Prompt 9 — Repérer mes erreurs récurrentes sur plusieurs trades</h3>
+    <pre class="bl-code">Voici un extrait de mon journal (10 derniers trades) :
+[colle : actif, sens, R, setup, note émotionnelle pour chaque ligne].
+Identifie les patterns récurrents : erreurs répétées, moments où je performe le mieux,
+types de setups les plus/moins rentables, lien entre émotion et résultat.
+Présente ça en 3 forces et 3 axes de progrès. Base-toi uniquement sur mes données.</pre>
+
+    <h3>Prompt 10 — Rédiger une entrée de journal propre</h3>
+    <pre class="bl-code">Transforme mes notes brutes en une entrée de journal structurée.
+Notes : [ce que j'ai fait et pensé, en vrac].
+Format de sortie : Contexte | Setup | Décision | Gestion | Résultat (R) | Émotion | Leçon.
+Reste factuel, ne romance pas, garde mes chiffres tels quels.</pre>
+
+    <h2>Prompts pour la gestion du risque et la psychologie</h2>
+    <p>L'IA ne calcule pas votre risque à votre place de façon fiable si vous ne lui donnez pas les bons chiffres — et elle peut se tromper dans un calcul. Traitez ses résultats comme un brouillon à vérifier, jamais comme une vérité. Pour un calcul déterministe, utilisez plutôt notre <a href="/v2/calculateur">calculateur de pips et de taille de position</a>.</p>
+
+    <h3>Prompt 11 — Vérifier la cohérence du risque d'un trade</h3>
+    <pre class="bl-code">Aide-moi à contrôler la cohérence du risque de ce trade (sans me dire de le prendre) :
+- Capital : [montant]
+- Risque max par trade que je m'autorise : [ex. 1%]
+- Distance entrée → stop : [en points/pips]
+- Valeur du point/pip : [valeur]
+- Taille de position envisagée : [taille]
+
+Vérifie si la perte potentielle respecte ma règle de risque. Montre le calcul étape
+par étape et signale toute incohérence. Rappelle-moi de revérifier manuellement.</pre>
+
+    <h3>Prompt 12 — Détecter mes biais émotionnels</h3>
+    <pre class="bl-code">Agis comme un psychologue du trading bienveillant mais lucide.
+Voici comment je me sens et ce que j'ai envie de faire là : [décris ton état :
+revanche après une perte, FOMO, sur-confiance après des gains, hésitation...].
+Identifie le ou les biais cognitifs à l'œuvre (revenge trading, FOMO, biais de
+confirmation, aversion à la perte...). Pour chacun, donne un garde-fou concret
+à appliquer maintenant. Ne me pousse pas à trader : aide-moi à décider à froid.</pre>
+    <p>Ces deux derniers prompts adressent la première cause de comptes détruits : l'exécution émotionnelle. Un coach IA branché sur votre historique — comme celui du <a href="/v2/journal-presentation">journal de trading du Terminal</a> — va plus loin, car il repère les biais dans vos trades <em>réels</em>, pas dans votre récit.</p>
+
+    <h2>Les limites de ces prompts (et quand passer à un outil natif)</h2>
+    <p>Soyons clairs, parce que sur un sujet financier l'honnêteté prime :</p>
+    <ul>
+      <li><strong>Pas de données temps réel.</strong> ChatGPT ne connaît pas le prix actuel de votre actif. Toute analyse repose sur ce que <em>vous</em> saisissez.</li>
+      <li><strong>Risque d'hallucination.</strong> Le modèle peut inventer des niveaux, des figures ou un calcul faux avec un ton parfaitement assuré. Vérifiez tout.</li>
+      <li><strong>Lecture d'image limitée.</strong> Même avec la vision, l'interprétation d'une capture de graphique reste approximative et non fiable pour décider : les prix lus sont souvent inexacts. Détails dans <a href="/v2/blog/trader-avec-chatgpt">notre analyse des limites de ChatGPT en trading</a>.</li>
+      <li><strong>Aucune mémoire de votre historique.</strong> Un chatbot généraliste ne suit pas vos trades dans le temps ni vos statistiques.</li>
+    </ul>
+    <p>C'est exactement la frontière où un outil métier prend le relais. Notre <a href="/v2/analyzer-presentation">analyse de setup par IA</a> travaille sur l'image que vous importez, produit un <strong>score de setup</strong> structuré et un débrief, puis renvoie le tout vers votre journal — ce qu'un prompt copié-collé ne fera jamais de façon suivie.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Plutôt que de coller des prompts</p>
+    <p>Obtenez un score de setup et un débrief automatiques : importez votre graphique, recevez une note argumentée, gardez la trace dans votre journal.</p>
+    <a class="lt-btn lt-btn--primary" href="/v2/analyzer-presentation">Découvrir l'analyse de setup par IA</a>
+  </section>
+
+  <div class="bl-prose">
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Quel prompt pour analyser un graphique de trading ?</h3>
+        <p>Utilisez le Prompt 1 (structure de marché) ou le Prompt 2 (notation de setup) de cette page. La clé : donner à l'IA vos niveaux relevés et lui interdire d'en inventer. Le prompt sert à structurer votre lecture, pas à obtenir un signal.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>ChatGPT peut-il lire une capture d'écran de graphique ?</h3>
+        <p>Techniquement oui, via la vision multimodale, mais l'interprétation reste peu fiable : les prix lus sont souvent inexacts. Pour une lecture d'image exploitable, un outil dédié comme le <a href="/v2/analyzer-presentation">Setup Analyzer de Le Terminal</a> est plus adapté.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Les prompts donnent-ils des signaux de trading fiables ?</h3>
+        <p>Non. Aucun prompt ne produit de signal fiable : l'IA n'a pas les données de marché en direct et peut halluciner. Ces prompts améliorent votre méthode, votre plan et votre discipline — la décision reste la vôtre.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il ChatGPT gratuit ou payant pour ces prompts ?</h3>
+        <p>La version gratuite suffit pour l'essentiel (plan, débrief, checklist). La qualité de raisonnement s'améliore avec les modèles récents, mais aucune version ne comble l'absence de données temps réel ni le besoin d'un suivi de vos trades.</p>
+      </div>
+    </div>
+
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Cet article est un contenu éducatif et ne constitue pas un conseil en investissement. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier. Les prompts présentés aident à structurer une réflexion ; ils ne prédisent aucun mouvement de marché et ne remplacent ni des données fiables, ni votre propre jugement. Ne tradez que le capital que vous pouvez vous permettre de perdre.</p>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : <a href="https://help.openai.com/fr-fr/articles/6825453-chatgpt-notes-de-version" target="_blank" rel="noopener">OpenAI — Notes de version ChatGPT</a> · <a href="https://rankia.fr/guide-de-trading-avec-chatgpt/" target="_blank" rel="noopener">Rankia — Guide de trading avec ChatGPT (2026)</a>. Publié le 5 juillet 2026 · Mis à jour le 5 juillet 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/v2/blog/quest-ce-quun-setup"><span class="t">Qu'est-ce qu'un setup de trading ?</span><span class="d">Définition, exemples annotés et grille de notation</span></a>
+        <a href="/v2/blog/trader-avec-chatgpt"><span class="t">Trader avec ChatGPT</span><span class="d">Ce que l'IA peut (et ne peut pas) faire</span></a>
+        <a href="/v2/analyzer-presentation"><span class="t">Setup Analyzer IA</span><span class="d">Votre setup noté sur 100, avec une lecture argumentée</span></a>
+        <a href="/v2/journal-presentation"><span class="t">Journal de Trading</span><span class="d">Calendrier P&amp;L, win rate et coach IA</span></a>
+        <a href="/v2/calculateur"><span class="t">Calculateur de Pips</span><span class="d">Position, risque et R:R en quelques secondes</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/v2/appshell.js"></script>
+<script src="/v2/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/v2/analyzer-presentation">Setup Analyzer</a>
+        <a href="/v2/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/v2/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/v2/bubble">Bubble Map</a>
+        <a href="/v2/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/v2/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/v2/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/v2/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/v2/eco-flash">Flash Info</a>
+        <a href="/v2/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/v2/eco-crypto">Crypto</a>
+        <a href="/v2/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/v2/blog">Blog</a>
+        <a href="/v2/#method" data-en="Method">Méthode</a>
+        <a href="/v2/#community" data-en="Community">Communauté</a>
+        <a href="/v2/avis" data-en="Reviews">Avis</a>
+        <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/v2/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/v2/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/v2/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/v2/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/v2/cookies.js"></script>
+<script src="/v2/lang.js"></script>
+<script src="/v2/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* calendar-eco.css — Design « Calendrier Éco » partagé (extrait de design-system-ref/ui_kits/app/app.css).
+   Tableau d'événements macro groupés par jour, filtres devise + toggle impact fort.
+   S'appuie sur les tokens de design-system.css (--accent, --bear, --neutral, --r-md, --font-mono, etc.). */
+
+/* En-tête de page */
+.page-head { display: flex; flex-direction: column; gap: 8px; }
+.page-head h1 { font-family: var(--font-display); text-transform: uppercase; font-size: 2rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
+.page-head p { margin: 0; color: var(--text-body); font-size: 0.98rem; max-width: 70ch; }
+.page-head .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: var(--ls-caps); color: var(--accent); }
+.page-head .eyebrow .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: inline-block; }
+
+/* Barre de filtres */
+.bm-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 22px 0 16px; }
+.bm-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.bm-filter { font-family: var(--font-text); font-size: 13px; font-weight: 500; color: var(--text-muted); background: transparent; border: 1px solid var(--border-subtle); border-radius: var(--r-pill); padding: 8px 16px; cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
+.bm-filter:hover { color: var(--text-title); border-color: var(--border); }
+.bm-filter.is-on { color: var(--accent-bright); border-color: var(--accent); background: var(--accent-glow-soft); }
+
+.eco-imptoggle { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-text); font-size: 13px; color: var(--text-muted); background: transparent; border: 1px solid var(--border-subtle); border-radius: var(--r-pill); padding: 8px 16px; cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
+.eco-imptoggle__dot { width: 8px; height: 8px; border-radius: 999px; background: var(--border); transition: all var(--dur-fast) var(--ease-out); display: inline-block; }
+.eco-imptoggle.is-on { color: var(--bear); border-color: rgba(240, 100, 122, 0.45); }
+.eco-imptoggle.is-on .eco-imptoggle__dot { background: var(--bear); box-shadow: 0 0 8px var(--bear-glow); }
+
+/* Panneau réutilisé (groupe de jour) */
+.panel { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 22px; }
+
+.eco-group { padding: 0; overflow: hidden; margin-bottom: 18px; }
+.eco-group__day { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); padding: 14px 20px; border-bottom: 1px solid var(--border-subtle); background: rgba(127, 184, 232, 0.04); }
+.eco-rows { display: flex; flex-direction: column; }
+.eco-row { display: grid; grid-template-columns: 54px 44px 1.4fr 56px 90px 90px 90px; gap: 12px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--border-subtle); transition: background var(--dur-fast) var(--ease-out); }
+.eco-row:last-child { border-bottom: none; }
+.eco-row:hover { background: rgba(127, 184, 232, 0.04); }
+.eco-row.is-hot { background: linear-gradient(90deg, rgba(240, 100, 122, 0.05), transparent 40%); }
+.eco-row__t { font-family: var(--font-mono); font-size: 13px; color: var(--text-title); font-variant-numeric: tabular-nums; }
+.eco-row__cur { font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-align: center; padding: 4px 0; border-radius: var(--r-sm); border: 1px solid var(--border); color: var(--text-body); }
+.eco-row__cur--usd { color: var(--accent-bright); border-color: var(--accent-glow); }
+.eco-row__cur--eur { color: var(--neutral); border-color: rgba(232, 194, 104, 0.4); }
+.eco-row__cur--gbp { color: var(--bull); border-color: rgba(74, 222, 156, 0.4); }
+.eco-row__cur--jpy { color: var(--accent); border-color: rgba(127, 184, 232, 0.4); }
+.eco-row__ev { font-size: 14px; color: var(--text-title); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eco-imp { display: inline-flex; gap: 3px; }
+.eco-imp i { width: 7px; height: 7px; border-radius: 999px; display: inline-block; }
+.eco-row__val { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text-body); }
+.eco-row__val b { font-weight: 400; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+.eco-row__val--act { color: var(--text-title); font-weight: 600; }
+
+/* État vide / chargement / erreur */
+.eco-state { padding: 30px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+/* Bannière Flash Info */
+.eco-note { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border: 1px solid var(--accent-glow); border-radius: var(--r-lg); background: var(--accent-glow-soft); margin-top: 4px; }
+.eco-note p { margin: 0; font-size: 13.5px; color: var(--text-body); line-height: 1.5; }
+.eco-note__badge { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-bright); border: 1px solid var(--accent-glow); border-radius: var(--r-pill); padding: 5px 12px; }
+.eco-note__badge .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: inline-block; }
+
+@media (max-width: 920px) {
+  .eco-row { grid-template-columns: 50px 42px 1fr 54px; }
+  .eco-row__val { display: none; }
+}

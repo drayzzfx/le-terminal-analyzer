@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Mon compte</title>
+<meta name="robots" content="noindex,follow">
+<script>/* Le profil est désormais intégré à l'Espace Compte. */try{location.replace('/v2/compte#settings');}catch(e){location.href='/v2/compte#settings';}</script>
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.pf-wrap{max-width:760px}
+.pf-card{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:28px}
+.pf-card + .pf-card{margin-top:18px}
+.pf-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.pf-avatar{width:96px;height:96px;border-radius:var(--r-lg);overflow:hidden;flex-shrink:0;background:linear-gradient(150deg,var(--accent-deep),var(--bg-elevated));border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-text);font-weight:700;font-size:34px;color:#07090C}
+.pf-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-avatar-actions{display:flex;flex-direction:column;gap:8px}
+.pf-hint{font-size:12px;color:var(--text-muted);line-height:1.5;margin:6px 0 0}
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.pf-field{display:flex;flex-direction:column;gap:7px}
+.pf-field.full{grid-column:1/-1}
+.pf-label{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.pf-input{background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--r-sm);color:var(--text-title);padding:11px 14px;font-family:var(--font-text);font-size:14px;outline:none;transition:border-color var(--dur-fast) var(--ease-out),background var(--dur-fast) var(--ease-out);width:100%;box-sizing:border-box}
+.pf-input:focus{border-color:var(--accent);background:var(--accent-glow-soft)}
+.pf-input[readonly]{color:var(--text-muted);cursor:default}
+.pf-foot{display:flex;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+.pf-status{font-size:13px;color:var(--text-muted)}
+.pf-status.ok{color:var(--bull)}
+.pf-status.err{color:var(--bear)}
+.pf-gate{text-align:center;padding:48px 24px;color:var(--text-muted)}
+@media(max-width:560px){.pf-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr pf-wrap">
+
+  <section class="pr-head" style="margin-bottom:24px">
+    <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="My account">Mon compte</span></span>
+    <h1 class="pr-head__title" data-en="My profile">Mon profil</h1>
+  </section>
+
+  <!-- État non connecté -->
+  <div class="pf-card" id="pfGate" style="display:none">
+    <div class="pf-gate">
+      <p data-en="Sign in to manage your profile.">Connectez-vous pour gérer votre profil.</p>
+      <button class="lt-btn lt-btn--primary" style="margin-top:14px" onclick="window.ltOpenLogin&&ltOpenLogin()" data-en="Sign in">Connexion</button>
+    </div>
+  </div>
+
+  <!-- Formulaire profil -->
+  <div id="pfForm" style="display:none">
+    <div class="pf-card">
+      <div class="pf-row">
+        <div class="pf-avatar" id="pfAvatar">—</div>
+        <div class="pf-avatar-actions">
+          <button class="lt-btn lt-btn--secondary lt-btn--sm" type="button" id="pfPhotoBtn" data-en="Change photo">Changer la photo</button>
+          <button class="lt-btn lt-btn--ghost lt-btn--sm" type="button" id="pfPhotoRm" data-en="Remove">Retirer</button>
+          <input type="file" id="pfPhotoInput" accept="image/*" style="display:none">
+        </div>
+      </div>
+      <p class="pf-hint" data-en="JPG or PNG. The image is resized automatically (square, 256px).">JPG ou PNG. L'image est redimensionnée automatiquement (carrée, 256px).</p>
+    </div>
+
+    <div class="pf-card">
+      <div class="pf-grid">
+        <div class="pf-field">
+          <label class="pf-label" for="pfFirst" data-en="First name">Prénom</label>
+          <input class="pf-input" type="text" id="pfFirst" maxlength="60" placeholder="—">
+        </div>
+        <div class="pf-field">
+          <label class="pf-label" for="pfLast" data-en="Last name">Nom</label>
+          <input class="pf-input" type="text" id="pfLast" maxlength="60" placeholder="—">
+        </div>
+        <div class="pf-field full">
+          <label class="pf-label" for="pfPseudo" data-en="Username (display name)">Pseudo (nom affiché)</label>
+          <input class="pf-input" type="text" id="pfPseudo" maxlength="40" placeholder="—">
+          <p class="pf-hint" data-en="If set, your username is shown across the site instead of your first/last name.">S'il est renseigné, votre pseudo est affiché partout sur le site à la place du nom/prénom.</p>
+        </div>
+        <div class="pf-field full">
+          <label class="pf-label" for="pfEmail" data-en="Email">E-mail</label>
+          <input class="pf-input" type="text" id="pfEmail" readonly>
+        </div>
+      </div>
+      <div class="pf-foot">
+        <button class="lt-btn lt-btn--primary" type="button" id="pfSave" data-en="Save">Enregistrer</button>
+        <span class="pf-status" id="pfStatus"></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function () {
+  'use strict';
+  var TOKEN = localStorage.getItem('ta_token') || '';
+  var EMAIL = localStorage.getItem('ta_email') || '';
+  var avatarData = '';
+
+  function getLang(){ return localStorage.getItem('lt_lang') || 'fr'; }
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function renderAvatar(){
+    var el = $('pfAvatar');
+    if(avatarData){ el.innerHTML = '<img src="' + esc(avatarData) + '" alt="">'; }
+    else { el.textContent = (EMAIL.charAt(0) || '?').toUpperCase(); }
+    var rm = $('pfPhotoRm'); if(rm) rm.style.display = avatarData ? '' : 'none';
+  }
+
+  function setStatus(msg, cls){
+    var s = $('pfStatus'); if(!s) return;
+    s.textContent = msg; s.className = 'pf-status' + (cls ? ' ' + cls : '');
+  }
+
+  // Redimensionne l'image en carré 256px (JPEG) côté client
+  function resizeImage(file, cb){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var S = 256, c = document.createElement('canvas');
+        c.width = S; c.height = S;
+        var ctx = c.getContext('2d');
+        var side = Math.min(img.width, img.height);
+        var sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, S, S);
+        cb(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = function(){ cb(null); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function(){ cb(null); };
+    reader.readAsDataURL(file);
+  }
+
+  async function loadProfile(){
+    try {
+      var r = await fetch('/api/profile', { headers: { 'Authorization': 'Bearer ' + TOKEN } });
+      if(r.status === 401){ setStatus(getLang()==='en' ? 'Session expired — please sign in again to edit your profile.' : 'Session expirée — reconnectez-vous pour modifier votre profil.', 'err'); return; }
+      if(!r.ok) return;
+      var p = await r.json();
+      if(p.first_name) $('pfFirst').value = p.first_name;
+      if(p.last_name)  $('pfLast').value  = p.last_name;
+      if(p.pseudo)     $('pfPseudo').value = p.pseudo;
+      if(p.avatar_url){ avatarData = p.avatar_url; renderAvatar(); }
+    } catch(e){ /* silencieux */ }
+  }
+
+  async function save(){
+    var btn = $('pfSave');
+    btn.disabled = true;
+    setStatus(getLang()==='en' ? 'Saving…' : 'Enregistrement…', '');
+    var body = {
+      first_name: $('pfFirst').value.trim() || null,
+      last_name:  $('pfLast').value.trim()  || null,
+      pseudo:     $('pfPseudo').value.trim() || null,
+      avatar_url: avatarData || null
+    };
+    try {
+      var r = await fetch('/api/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+        body: JSON.stringify(body)
+      });
+      if(r.status === 401){ throw new Error('SESSION_EXPIRED'); }
+      if(!r.ok){
+        var ej = await r.json().catch(function(){ return {}; });
+        var d = ej && ej.detail;
+        var msg = d ? (d.message || (typeof d === 'string' ? d : JSON.stringify(d))) : ('HTTP ' + r.status);
+        throw new Error(msg);
+      }
+      // Reflète le pseudo + avatar dans le chip du compte (toutes les pages)
+      if(body.pseudo) localStorage.setItem('lt_pseudo', body.pseudo); else localStorage.removeItem('lt_pseudo');
+      if(body.avatar_url) localStorage.setItem('lt_avatar', body.avatar_url); else localStorage.removeItem('lt_avatar');
+      if(window.ltRenderUserBar) window.ltRenderUserBar();
+      setStatus(getLang()==='en' ? 'Profile saved.' : 'Profil enregistré.', 'ok');
+    } catch(e){
+      if(e.message === 'SESSION_EXPIRED'){
+        setStatus(getLang()==='en' ? 'Session expired — please sign in again.' : 'Session expirée — reconnectez-vous.', 'err');
+        if(window.ltOpenLogin) ltOpenLogin();
+      } else {
+        setStatus((getLang()==='en' ? 'Save failed: ' : 'Échec : ') + (e.message || ''), 'err');
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function init(){
+    if(!TOKEN || !EMAIL){ $('pfGate').style.display = ''; return; }
+    $('pfForm').style.display = '';
+    $('pfEmail').value = EMAIL;
+    renderAvatar();
+    loadProfile();
+
+    $('pfPhotoBtn').addEventListener('click', function(){ $('pfPhotoInput').click(); });
+    $('pfPhotoInput').addEventListener('change', function(e){
+      var f = e.target.files && e.target.files[0];
+      if(!f) return;
+      resizeImage(f, function(data){
+        if(data){ avatarData = data; renderAvatar(); setStatus('', ''); }
+        else setStatus(getLang()==='en' ? 'Could not read the image.' : 'Image illisible.', 'err');
+      });
+    });
+    $('pfPhotoRm').addEventListener('click', function(){ avatarData = ''; renderAvatar(); });
+    $('pfSave').addEventListener('click', save);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

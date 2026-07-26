@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/v2/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/v2/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/v2/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyse de setup de trading : la méthode et le scoring | Le Terminal</title>
+<meta name="description" content="Analysez et notez vos setups de trading avec une grille en 7 critères (structure, confluence, RR). Méthode reproductible + scoring automatisé.">
+<link rel="canonical" href="https://www.leterminal.net/blog/analyse-de-setup-trading">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Analyse de setup de trading : la méthode et le scoring | Le Terminal">
+<meta property="og:description" content="Analysez et notez vos setups de trading avec une grille en 7 critères (structure, confluence, RR). Méthode reproductible + scoring automatisé.">
+<meta property="og:url" content="https://www.leterminal.net/blog/analyse-de-setup-trading">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/analyse-de-setup-trading-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Analyse de setup de trading : score 82/100 et grille en 7 critères — Le Terminal">
+<meta property="article:published_time" content="2026-07-18">
+<meta property="article:modified_time" content="2026-07-18">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Analyse de setup de trading : la méthode et le scoring | Le Terminal">
+<meta name="twitter:description" content="Une grille de scoring en 7 critères pour noter vos setups avant d'entrer : méthode reproductible + exemple chiffré.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/analyse-de-setup-trading-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Analyse de setup de trading : la méthode et le scoring",
+      "description": "Analysez et notez vos setups de trading avec une grille en 7 critères (structure, confluence, RR). Méthode reproductible et scoring automatisé.",
+      "datePublished": "2026-07-18",
+      "dateModified": "2026-07-18",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/analyse-de-setup-trading-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/analyse-de-setup-trading" },
+      "keywords": "analyse de setup trading, noter son setup trading, score de setup trading, checklist setup"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment noter un setup de trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On note un setup en appliquant une grille de critères objectifs — tendance/structure, confluence, zone de valeur, ratio risque/rendement, invalidation, timing et contexte macro — et en attribuant un nombre de points à chacun. La somme donne un score, par exemple sur 100. On fixe ensuite un seuil minimal sous lequel on ne prend pas le trade, en utilisant toujours la même grille."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels critères pour un bon score de setup ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les critères les plus prédictifs sont l'alignement avec la structure de marché, la densité de confluence, la qualité de la zone de valeur, le ratio risque/rendement (viser au moins 1:2) et la clarté de l'invalidation. Le timing du déclencheur et le contexte macro affinent la note. Un bon score cumule plusieurs de ces éléments."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il une IA pour analyser un setup de trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non, la grille se pratique très bien à la main. Une IA de scoring devient utile pour la reproductibilité et le gain de temps : elle applique votre méthode de façon constante, sans se laisser influencer par la fatigue ou l'émotion, mais elle ne remplace pas votre décision finale."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel score minimum pour prendre un trade ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Il n'existe pas de seuil universel : il dépend de votre grille, de votre style et de ce que votre journal révèle. Beaucoup de traders commencent autour de 60 à 70 sur 100, puis ajustent. L'important n'est pas le chiffre absolu mais sa constance : gardez le même seuil sur une série de trades, mesurez le résultat et relevez-le si vos entrées à faible score plombent votre performance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Où consigner le score de mes setups ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dans un journal de trading. En archivant chaque score à côté du résultat réel, vous découvrez après quelques dizaines de trades quels critères prédisent vos gains et lesquels sont du bruit. Sans cette confrontation, un score reste une opinion ; avec elle, il devient un outil d'amélioration."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Analyse de setup de trading", "item": "https://www.leterminal.net/blog/analyse-de-setup-trading" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/v2/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/v2/fonts.css">
+<link rel="stylesheet" href="/v2/design-system.css">
+<link rel="stylesheet" href="/v2/theme-light.css">
+<link rel="stylesheet" href="/v2/home.css">
+<link rel="stylesheet" href="/v2/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/v2" data-en="Home">Accueil</a><span class="sep">→</span><a href="/v2/blog">Blog</a><span class="sep">→</span><span class="cur">Analyse de setup de trading</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Analyse de setup</span>
+  <h1 class="bl-art__title">Analyse de setup de trading : la méthode et le scoring</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published July 18, 2026">Publié le 18 juillet 2026</span>
+    <span>·</span>
+    <span data-en="9 min read">9 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/v2/blog/img/analyse-de-setup-trading.webp" width="1600" height="900" alt="Analyse de setup de trading : score 82/100, grille en 7 critères et graphique annoté" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> L'analyse de setup de trading consiste à noter une configuration avant d'entrer, à l'aide d'une grille de critères objectifs : alignement avec la tendance, structure de marché, confluence, zone de valeur, ratio risque/rendement, invalidation claire et timing. Chaque critère vaut un nombre de points ; la somme donne un score sur 100 qui décide (ou non) de la prise de position. L'intérêt : la décision devient reproductible et comparable d'un trade à l'autre, au lieu de reposer sur le ressenti.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Vous savez déjà repérer une configuration à l'écran. La question n'est plus « qu'est-ce qu'un setup ? » mais « celui-ci vaut-il vraiment le risque ? ». C'est là qu'une <strong>analyse de setup trading</strong> structurée change tout : au lieu de trancher à l'instinct, vous appliquez la même grille à chaque opportunité et vous obtenez une note comparable. Cet article vous donne une checklist de scoring en 7 critères, applicable manuellement dès aujourd'hui, puis vous montre comment l'automatiser.</p>
+    <p>Si la notion même de configuration reste floue, commencez par notre article <a href="/v2/blog/quest-ce-quun-setup">qu'est-ce qu'un setup de trading</a> avant de revenir ici.</p>
+
+    <h2>Pourquoi scorer ses setups avant d'entrer</h2>
+    <p>La plupart des pertes évitables ne viennent pas d'un mauvais graphique, mais d'une <strong>décision prise sans critère stable</strong>. Un jour on entre parce que « ça semble beau », le lendemain on hésite sur une configuration pourtant identique. Cette incohérence est l'ennemie de la rentabilité sur la durée.</p>
+    <p>Noter son setup de trading force à répondre, à chaque fois, aux mêmes questions. Vous transformez une intuition en un <strong>score chiffré</strong> que vous pouvez lire, comparer et challenger. Un setup à 82/100 n'a pas le même poids qu'un setup à 54/100, et votre taille de position peut en tenir compte.</p>
+    <p>Le scoring apporte trois bénéfices concrets :</p>
+    <ul>
+      <li><strong>Cohérence.</strong> La même situation reçoit la même note, quelle que soit votre humeur du jour.</li>
+      <li><strong>Filtrage.</strong> Vous fixez un seuil minimal (par exemple 65/100) sous lequel vous ne tradez pas. Fini les entrées médiocres prises par ennui.</li>
+      <li><strong>Apprentissage.</strong> En consignant le score de chaque trade dans un <a href="/v2/journal-presentation">journal de trading</a>, vous découvrez après quelques dizaines d'opérations quels critères prédisent réellement vos gains — et lesquels ne servent à rien.</li>
+    </ul>
+    <p>Ce dernier point est le plus puissant. Un score n'a de valeur que s'il est <strong>archivé et confronté au résultat</strong>. C'est ce feedback qui affine votre grille avec le temps.</p>
+
+    <h2>La grille d'analyse en 7 critères</h2>
+    <p>Voici la trame que vous pouvez adopter telle quelle, puis ajuster à votre style. Sept critères, chacun noté, dont voici les trois piliers détaillés ci-dessous. Les quatre autres — zone de valeur, timing/déclencheur, contexte macro et qualité de l'invalidation — complètent l'évaluation.</p>
+    <p>L'idée n'est pas d'avoir « raison » sur chaque critère, mais de mesurer la <strong>quantité de confluence</strong> en faveur du trade. Plus les éléments convergent, plus la probabilité est en votre faveur, ce qui permet souvent un stop plus serré et donc un meilleur ratio.</p>
+
+    <h3>Alignement avec la tendance / structure de marché</h3>
+    <p>Premier réflexe : le setup va-t-il <strong>dans le sens de la structure</strong> ou contre elle ? Un achat sur une succession de plus hauts et plus bas ascendants est un contexte porteur ; le même achat sous une résistance majeure, en pleine tendance baissière, est une contre-tendance à haut risque.</p>
+    <p>Concrètement, on vérifie la structure sur au moins deux unités de temps : celle de l'entrée et une supérieure pour le contexte. Une cassure de structure (BOS) confirmée dans le sens du trade rapporte le maximum de points ; un range indécis ou une divergence de structure entre unités de temps en retire.</p>
+
+    <h3>Confluence et zone de valeur</h3>
+    <p>La <strong>confluence</strong> est le cœur d'un bon score. Il s'agit du nombre de facteurs techniques indépendants qui pointent vers la même zone : un support horizontal historique, un retracement de Fibonacci, une moyenne mobile clé, un order block, une zone de liquidité.</p>
+    <p>Un seul argument = configuration fragile. Trois ou quatre arguments alignés au même prix = <strong>zone de valeur à haute probabilité</strong>. La règle est simple : plus la confluence est dense, plus vous pouvez resserrer votre stop juste sous la zone, et plus votre ratio s'améliore mécaniquement.</p>
+    <p>Attention au piège inverse : empiler dix indicateurs qui disent tous la même chose n'est pas de la confluence, c'est de la redondance. On cherche des signaux <strong>de natures différentes</strong> qui se recoupent.</p>
+
+    <h3>Ratio risque/rendement et invalidation</h3>
+    <p>Un beau setup sans bon ratio ne vaut rien. Le <strong>ratio risque/rendement</strong> (RR) compare votre perte maximale acceptée à votre gain visé jusqu'à la prochaine zone logique. La référence communément admise est de viser au minimum 1:2. L'avantage est mathématique : avec un ratio de 1:2, le seuil de rentabilité théorique se situe autour de 33 % de trades gagnants, ce qui vous laisse rentable dès un taux de réussite d'environ 40 %. Autrement dit, un bon ratio absorbe les séries de pertes inévitables sans exiger que vous ayez « raison » sur la majorité de vos trades.</p>
+    <p>Mais le RR n'a de sens qu'avec une <strong>invalidation claire</strong>. Votre stop doit être placé à un niveau qui, s'il est atteint, prouve que votre scénario est faux — pas à une distance arbitraire choisie pour « laisser respirer » le trade. Un stop logique, serré grâce à la confluence, est ce qui fait grimper à la fois la note d'invalidation et celle du ratio.</p>
+    <p>Dans la grille, on note séparément : la qualité de l'invalidation (le niveau a-t-il un sens ?) et la valeur du RR (1:1 = faible, 1:2 = correct, 1:3+ = excellent).</p>
+
+    <h2>Attribuer un score (exemple chiffré)</h2>
+    <p>Passons du concept au chiffre. Voici une pondération de départ sur 100 points — à ajuster selon ce que votre journal vous révélera :</p>
+    <div class="bl-tablewrap">
+      <table>
+        <thead>
+          <tr><th>Critère</th><th>Points max</th><th>Ce qui donne le maximum</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tendance / structure</td><td>20</td><td>Setup dans le sens d'une structure claire, confirmée</td></tr>
+          <tr><td>Confluence</td><td>20</td><td>3+ facteurs indépendants alignés sur la zone</td></tr>
+          <tr><td>Zone de valeur</td><td>15</td><td>Entrée sur une zone premium/discount nette</td></tr>
+          <tr><td>Ratio risque/rendement</td><td>15</td><td>RR ≥ 1:3 vers la cible logique</td></tr>
+          <tr><td>Qualité de l'invalidation</td><td>10</td><td>Stop à un niveau qui invalide vraiment le scénario</td></tr>
+          <tr><td>Timing / déclencheur</td><td>10</td><td>Signal de confirmation présent (rejet, cassure)</td></tr>
+          <tr><td>Contexte macro / news</td><td>10</td><td>Aucune annonce à risque imminente contre le trade</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Exemple concret.</strong> Achat de l'EUR/USD en tendance haussière propre (structure : 18/20), sur un retracement où se recoupent un support, un Fibonacci 0,618 et un order block (confluence : 17/20 ; zone de valeur : 13/15). Le stop se loge sous l'order block, cible au dernier sommet : RR de 1:2,8 (ratio : 13/15 ; invalidation : 9/10). Une bougie de rejet valide l'entrée (timing : 9/10). Aucune annonce majeure dans l'heure (macro : 8/10).</p>
+    <p><strong>Total : 87/100.</strong> Au-dessus du seuil de 65, c'est un feu vert, et un score élevé peut justifier une taille de position pleine plutôt que réduite.</p>
+    <p>À l'inverse, si la confluence tombait à un seul argument et le RR à 1:1, la note chuterait sous 50 : le trade serait écarté sans regret. C'est exactement le rôle d'une <strong>checklist de setup</strong> : rendre le « non » aussi facile et objectif que le « oui ».</p>
+
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Un score élevé n'est jamais une garantie de gain : il mesure une probabilité, pas une certitude. Le trading comporte un risque de perte en capital.</p>
+    </div>
+
+    <h2>Automatiser l'analyse avec une IA de scoring</h2>
+    <p>Appliquer cette grille à la main est formateur, mais lent et sujet à la subjectivité : votre note du soir, fatigué, n'égale pas celle du matin. C'est précisément là qu'une <strong>IA de scoring</strong> apporte de la valeur — non pas pour décider à votre place, mais pour appliquer la même grille, de la même façon, à chaque fois.</p>
+    <p>C'est la logique du <a href="/v2/analyzer-presentation">Setup Analyzer de Le Terminal</a> : vous importez la capture de votre graphique, l'IA lit la structure, repère les zones de confluence et évalue le ratio, puis renvoie un <strong>score de setup sur 100</strong> accompagné d'une lecture argumentée, critère par critère. Contrairement à une notation manuelle ou à un chatbot généraliste, le résultat est <strong>reproductible</strong> : la même configuration donne la même note.</p>
+    <p>Le gain principal n'est pas la vitesse, c'est la <strong>cohérence</strong>. Le score produit est directement rattachable à votre <a href="/v2/journal-presentation">journal de trading</a>, ce qui permet de confronter, dans la durée, vos scores à vos résultats réels et d'affiner la pondération de chaque critère. Si vous vous demandez pourquoi un chatbot généraliste ne suffit pas pour cette tâche, notre article <a href="/v2/blog/trader-avec-chatgpt">trader avec ChatGPT : ce que l'IA peut vraiment faire</a> détaille les limites d'un modèle non spécialisé face à un scoring reproductible.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Laissez l'IA scorer vos setups selon cette grille</p>
+    <p>Importez votre graphique, obtenez un score de setup sur 100 et une analyse détaillée en quelques secondes.</p>
+    <a class="lt-btn lt-btn--primary" href="/v2/analyzer-presentation">Découvrir le Setup Analyzer</a>
+  </section>
+
+  <div class="bl-prose">
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Comment noter un setup de trading ?</h3>
+        <p>On note un setup en appliquant une grille de critères objectifs — tendance/structure, confluence, zone de valeur, ratio risque/rendement, invalidation, timing et contexte macro — et en attribuant un nombre de points à chacun. La somme donne un score, par exemple sur 100. On fixe ensuite un seuil minimal (souvent 60 à 70) sous lequel on ne prend pas le trade. L'essentiel est d'utiliser toujours la même grille pour que les notes soient comparables.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quels critères pour un bon score de setup ?</h3>
+        <p>Les critères les plus prédictifs sont : l'alignement avec la structure de marché, la densité de confluence (plusieurs facteurs indépendants sur la même zone), la qualité de la zone de valeur, le ratio risque/rendement (viser au moins 1:2) et la clarté de l'invalidation. Le timing du déclencheur et le contexte macro affinent la note. Un bon score cumule plusieurs de ces éléments plutôt que d'en maximiser un seul.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il une IA pour analyser un setup de trading ?</h3>
+        <p>Non, la grille se pratique très bien à la main et c'est même formateur. Une IA de scoring devient utile pour deux raisons : la reproductibilité (même configuration, même note) et le gain de temps sur des séries de graphiques. Elle applique votre méthode de façon constante, sans se laisser influencer par la fatigue ou l'émotion, mais elle ne remplace pas votre décision finale.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quel score minimum pour prendre un trade ?</h3>
+        <p>Il n'existe pas de seuil universel : il dépend de votre grille, de votre style et surtout de ce que votre journal révèle. Beaucoup de traders commencent autour de 60 à 70 sur 100, puis ajustent. L'important n'est pas le chiffre absolu mais sa constance : gardez le même seuil sur une série de trades, mesurez le résultat, et relevez-le si vous constatez que vos entrées à faible score plombent votre performance.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Où consigner le score de mes setups ?</h3>
+        <p>Dans un <a href="/v2/journal-presentation">journal de trading</a>. C'est ce qui donne toute sa valeur au scoring : en archivant chaque score à côté du résultat réel, vous découvrez après quelques dizaines de trades quels critères prédisent vos gains et lesquels sont du bruit. Sans cette confrontation, un score reste une opinion ; avec elle, il devient un outil d'amélioration.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : ressources spécialisées sur la construction de setups, la confluence et le ratio risque/rendement (Impact Trading, Cercle PPM, FXTribune, 2026). Pour les cours et prix, référez-vous toujours à votre broker ou à une plateforme de données de marché officielle. Publié le 18 juillet 2026 · Mis à jour le 18 juillet 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/v2/analyzer-presentation"><span class="t">Setup Analyzer IA</span><span class="d">Votre setup noté sur 100, avec une lecture argumentée</span></a>
+        <a href="/v2/blog/quest-ce-quun-setup"><span class="t">Qu'est-ce qu'un setup de trading ?</span><span class="d">Définition, exemples annotés et grille de notation</span></a>
+        <a href="/v2/blog/prompt-trading-ia"><span class="t">Prompts d'analyse trading avec l'IA</span><span class="d">12 modèles à copier, classés par usage</span></a>
+        <a href="/v2/journal-presentation"><span class="t">Journal de Trading</span><span class="d">Archivez vos scores et confrontez-les aux résultats</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/v2/appshell.js"></script>
+<script src="/v2/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/v2/analyzer-presentation">Setup Analyzer</a>
+        <a href="/v2/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/v2/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/v2/bubble">Bubble Map</a>
+        <a href="/v2/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/v2/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/v2/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/v2/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/v2/eco-flash">Flash Info</a>
+        <a href="/v2/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/v2/eco-crypto">Crypto</a>
+        <a href="/v2/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/v2/blog">Blog</a>
+        <a href="/v2/#method" data-en="Method">Méthode</a>
+        <a href="/v2/#community" data-en="Community">Communauté</a>
+        <a href="/v2/avis" data-en="Reviews">Avis</a>
+        <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/v2/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/v2/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/v2/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/v2/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/v2/cookies.js"></script>
+<script src="/v2/lang.js"></script>
+<script src="/v2/theme.js"></script>
+</body>
+</html>

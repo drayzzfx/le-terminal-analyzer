@@ -1,0 +1,290 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Le Terminal — THÈME CLAIR GLOBAL — « Cinematic Luxury, plein jour »
+   Chargé par TOUTES les pages, après design-system.css.
+   RÈGLE : ce fichier ne contient QUE des overrides :root[data-theme="light"].
+   Le thème sombre (défaut) n'est jamais modifié ici.
+   Contenu :
+     · tokens historiques (--bg-hangar, --ice-*, --steel-*, --signal-*…)
+       redéfinis en clair → les alias --card/--v/--text de eco.css,
+       app.html, journal.html, legal.html… se résolvent tout seuls ;
+     · chrome commun (nav, menus, dock, top bar) ;
+     · surcharges des couleurs codées en dur, par feuille/page.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 0. TOKENS HISTORIQUES (eco.css / app / journal / legal) ── */
+:root[data-theme="light"] {
+  --bg-hangar: #F4F6FA;
+  --bg-panel: #FFFFFF;
+
+  --ice-100: #10304F;
+  --ice-300: #3D82C8;
+  --ice-500: #2E77C2;
+  --ice-600: #1E5A96;
+  --ice-glow: rgba(46, 119, 194, 0.22);
+
+  --steel-100: #0C1119;
+  --steel-300: #384252;
+  --steel-500: #626E80;
+  --steel-700: #C6D0DC;
+  --steel-900: #E2E8F0;
+
+  --signal-up: #12A66B;
+  --signal-down: #DA3B57;
+  --signal-warn: #B9822A;
+
+  --border-active: rgba(46, 119, 194, 0.4);
+  --vglow2: rgba(46, 119, 194, 0.07);
+}
+
+/* ── 0bis. SHELL DES OUTILS (design-system.css) ── */
+:root[data-theme="light"] .top { background: rgba(255,255,255,0.94); }
+
+/* ── 1. CHROME : nav, dropdown, dock ── */
+:root[data-theme="light"] .lt-nav { background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.55)); border-bottom-color: var(--border-subtle); }
+:root[data-theme="light"] .lt-chrome.is-scrolled .lt-nav { background: rgba(255,255,255,0.94); }
+:root[data-theme="light"] .lt-nav__menu { background: rgba(255,255,255,0.98); box-shadow: 0 24px 64px rgba(15,23,42,0.14), 0 0 0 1px rgba(15,23,42,0.03); }
+/* Flyout des sous-menus Outils (Présentation / Ouvrir…) injecté par menu.js — fond noir en dur */
+:root[data-theme="light"] .lt-nav__submenu { background: rgba(255,255,255,0.98); box-shadow: 0 24px 60px rgba(15,23,42,0.16); }
+:root[data-theme="light"] .lt-dock { background: rgba(255,255,255,0.92); box-shadow: 0 8px 24px rgba(15,23,42,0.1); }
+:root[data-theme="light"] .lt-dock__tip { background: rgba(255,255,255,0.98); box-shadow: 0 8px 20px rgba(15,23,42,0.12); }
+@media (max-width: 760px) {
+  :root[data-theme="light"] .lt-dock { background: rgba(255,255,255,0.96); box-shadow: 0 -10px 30px rgba(15,23,42,0.1); }
+}
+:root[data-theme="light"] .lt-live { background: linear-gradient(180deg, #FFFFFF, var(--bg-base)); }
+
+/* ── 2. BOUTONS : texte blanc sur bleu profond (le noir ne contraste plus) ── */
+:root[data-theme="light"] .lt-btn--primary,
+:root[data-theme="light"] .lt-btn[data-variant="primary"] { color: #FFFFFF !important; }
+:root[data-theme="light"] .lt-btn--primary:hover { background: var(--accent-deep); }
+
+/* ── 3. ATMOSPHÈRE GLOBALE : grille + halos plus denses pour exister sur clair ── */
+:root[data-theme="light"] body::before {
+  background-image:
+    linear-gradient(rgba(46,119,194,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46,119,194,0.06) 1px, transparent 1px);
+}
+:root[data-theme="light"] body::after {
+  background:
+    radial-gradient(closest-side, rgba(46,119,194,0.10), transparent 70%),
+    radial-gradient(closest-side, rgba(30,90,150,0.08), transparent 70%),
+    radial-gradient(closest-side, rgba(46,119,194,0.06), transparent 70%);
+  background-size: 60% 60%, 50% 50%, 45% 45%;
+  background-position: 12% 8%, 85% 35%, 55% 85%;
+  background-repeat: no-repeat;
+}
+
+/* ── 4. HERO : la piste au lever du jour ── */
+:root[data-theme="light"] .lt-aurora {
+  background:
+    radial-gradient(closest-side, rgba(46,119,194,0.12), transparent 70%),
+    radial-gradient(closest-side, rgba(30,90,150,0.09), transparent 70%);
+  background-size: 55% 55%, 45% 45%;
+  background-position: 30% 18%, 72% 30%;
+  background-repeat: no-repeat;
+}
+:root[data-theme="light"] .lt-runway__floor {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(46,119,194,0.42) 0 26px, transparent 26px 78px),
+    repeating-linear-gradient(0deg, rgba(46,119,194,0.16) 0 1px, transparent 1px 90px),
+    repeating-linear-gradient(90deg, rgba(46,119,194,0.13) 0 1px, transparent 1px 160px);
+}
+:root[data-theme="light"] .lt-runway__horizon { background: linear-gradient(90deg, transparent, rgba(46,119,194,0.55), transparent); }
+:root[data-theme="light"] .lt-hero__spotlight { background: radial-gradient(circle 420px at var(--mx) var(--my), rgba(46,119,194,0.06), transparent 70%); }
+:root[data-theme="light"] .lt-chip { background: rgba(255,255,255,0.82); }
+/* la bande spéculaire du titre : reflet froid subtil sur le métal sombre */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-theme="light"] .lt-hero__title .lt-metal {
+    background-image: var(--metal-gradient), linear-gradient(100deg, transparent 38%, rgba(120,170,220,0.55) 50%, transparent 62%);
+  }
+}
+
+/* ── 5. TABLEAU DES DÉPARTS : balayage lumineux compatible fond clair ── */
+:root[data-theme="light"] .lt-board__sweep { mix-blend-mode: multiply; opacity: 0.7; }
+:root[data-theme="light"] .lt-board__row:hover .lt-board__go { color: #FFFFFF; }
+:root[data-theme="light"] .lt-board__row:hover .lt-board__nametxt { background: linear-gradient(100deg, var(--accent) 0%, #0C1119 18%, var(--accent) 36%, var(--accent) 100%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; }
+
+/* ── 6. MARCHÉS (marquee) : tuiles porcelaine ── */
+:root[data-theme="light"] .lt-mk::before { background: radial-gradient(60% 70% at 50% 42%, rgba(46,119,194,0.09), transparent 70%); }
+:root[data-theme="light"] .lt-mk__tile { background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(244,246,250,0.94)); box-shadow: 0 8px 24px rgba(15,23,42,0.07), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .lt-mk__tile:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 16px 40px rgba(15,23,42,0.13), 0 0 30px var(--accent-glow); }
+
+/* ── 7. LEVEL UPS (bento) : ombres froides adoucies ── */
+:root[data-theme="light"] .lu__cell:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 26px 60px rgba(15,23,42,0.13), 0 0 40px var(--accent-glow-soft); }
+:root[data-theme="light"] .lu__cell--hero { background: radial-gradient(120% 120% at 0% 100%, rgba(46,119,194,0.08), transparent 55%), var(--bg-elevated); }
+:root[data-theme="light"] .lu-viz--cal span.is-up { border-color: rgba(18,166,107,0.5); }
+:root[data-theme="light"] .lu-viz--cal span.is-down { border-color: rgba(218,59,87,0.5); }
+
+/* ── 8. PANNEAUX 3D (lt-scr) : fenêtres claires, barre de titre porcelaine ── */
+:root[data-theme="light"] .lt-scr__bar { background: linear-gradient(180deg, #F7F9FC, #EDF1F7); }
+:root[data-theme="light"] .lt-scr__panel { box-shadow: 0 24px 64px rgba(15,23,42,0.14), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .lt-scr__cal span.up { border-color: rgba(18,166,107,0.45); }
+:root[data-theme="light"] .lt-scr__cal span.down { border-color: rgba(218,59,87,0.45); }
+:root[data-theme="light"] .lt-scr__bubbles .up { border-color: rgba(18,166,107,0.6); background: radial-gradient(circle at 35% 30%, rgba(18,166,107,0.14), rgba(18,166,107,0.03)); }
+:root[data-theme="light"] .lt-scr__bubbles .down { border-color: rgba(218,59,87,0.6); background: radial-gradient(circle at 35% 30%, rgba(218,59,87,0.14), rgba(218,59,87,0.03)); }
+:root[data-theme="light"] .lt-scr__go { color: #FFFFFF; }
+
+/* ── 9. COCKPIT LIVE : fenêtre d'app claire ── */
+:root[data-theme="light"] .lt-ck { box-shadow: var(--shadow-lg), 0 50px 90px rgba(15,23,42,0.16), 0 0 0 1px rgba(46,119,194,0.08), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .lt-ck__bar { background: linear-gradient(180deg, #F7F9FC, #EDF1F7); }
+:root[data-theme="light"] .lt-ck__chart { background: linear-gradient(180deg, rgba(244,246,250,0.7), rgba(233,238,245,0.7)); }
+:root[data-theme="light"] .lt-ck__signal { border-color: rgba(18,166,107,0.4); }
+:root[data-theme="light"] .lt-ck__sig-pulse { animation-name: lt-ck-ring-light; }
+@keyframes lt-ck-ring-light { 0% { box-shadow: 0 0 0 0 rgba(18,166,107,0.45); } 100% { box-shadow: 0 0 0 9px rgba(18,166,107,0); } }
+:root[data-theme="light"] .lt-ck__sig-go { color: #FFFFFF; }
+:root[data-theme="light"] .lt-ck__spark span { background: linear-gradient(180deg, var(--accent), rgba(46,119,194,0.18)); }
+
+/* ── 10. BANDE GRAPHIQUE « le marché ne dort jamais » : île sombre assumée.
+   Le canvas est dessiné en bleu glacial sur nuit — on garde l'écran de nuit
+   au milieu du jour (écran produit), avec le titre argenté d'origine. ── */
+:root[data-theme="light"] .lt-chartband { background: #07090C; border-top-color: rgba(255,255,255,0.08); border-bottom-color: rgba(255,255,255,0.08); }
+:root[data-theme="light"] .lt-chartband .lt-metal { background: linear-gradient(180deg, #FBFCFE 0%, #C9CFD8 18%, #8A929E 42%, #EEF2F7 52%, #9AA2AE 64%, #6E7682 88%, #B7BEC9 100%); -webkit-background-clip: text; background-clip: text; }
+:root[data-theme="light"] .lt-chartband__sub { color: #C3CAD4; }
+:root[data-theme="light"] .lt-chartband__tag { color: #7E8794; }
+
+/* ── 11. STRATÉGIES / PLAN DE VOL / CARTE D'EMBARQUEMENT ── */
+:root[data-theme="light"] .lt-pass__stub { background: rgba(12,18,28,0.035); }
+
+/* ── 12. SHOWCASE (visite guidée) ── */
+:root[data-theme="light"] .shx-row:hover .shx-viz { box-shadow: 0 24px 64px rgba(15,23,42,0.14), 0 0 36px var(--accent-glow-soft), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .shx-viz { box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .shx-candle.is-up { background: rgba(13,146,94,0.85); }
+:root[data-theme="light"] .shx-candle.is-down { background: rgba(203,48,74,0.8); }
+:root[data-theme="light"] .shx-zone { border-color: rgba(46,119,194,0.5); background: rgba(46,119,194,0.08); }
+:root[data-theme="light"] .shx-score { background: rgba(244,246,250,0.65); }
+:root[data-theme="light"] .shx-score__go { border-color: rgba(18,166,107,0.4); }
+:root[data-theme="light"] .shx-jr__cell.is-up { border-color: rgba(18,166,107,0.45); box-shadow: inset 0 0 12px rgba(18,166,107,0.1); }
+:root[data-theme="light"] .shx-jr__cell.is-down { border-color: rgba(218,59,87,0.45); }
+:root[data-theme="light"] .shx-eco__row.is-hot { border-color: rgba(218,59,87,0.45); background: linear-gradient(90deg, rgba(218,59,87,0.06), var(--bg-elevated) 55%); }
+:root[data-theme="light"] .shx-eco__cur--eur { border-color: rgba(185,130,42,0.4); }
+:root[data-theme="light"] .shx-bub.is-up { border-color: rgba(18,166,107,0.6); background: radial-gradient(circle at 35% 30%, rgba(18,166,107,0.12), rgba(18,166,107,0.03)); box-shadow: 0 0 24px rgba(18,166,107,0.08); }
+:root[data-theme="light"] .shx-bub.is-down { border-color: rgba(218,59,87,0.6); background: radial-gradient(circle at 35% 30%, rgba(218,59,87,0.12), rgba(218,59,87,0.03)); box-shadow: 0 0 24px rgba(218,59,87,0.08); }
+:root[data-theme="light"] .shx-calc__val { text-shadow: none; }
+:root[data-theme="light"] .shx-pm__bar { background: var(--bg-surface); }
+
+/* ── 13. PRICING (bande accueil) ── */
+:root[data-theme="light"] .pr-card.is-pro { background: linear-gradient(180deg, rgba(46,119,194,0.05), var(--bg-elevated) 45%); box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 64px rgba(15,23,42,0.12), 0 0 44px var(--accent-glow-soft); }
+:root[data-theme="light"] .pr-card.is-pro:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 28px 70px rgba(15,23,42,0.16), 0 0 54px var(--accent-glow); }
+:root[data-theme="light"] .pr-card__flag { color: #FFFFFF; }
+:root[data-theme="light"] .pr-toggle__opt.is-on { color: #FFFFFF; }
+:root[data-theme="light"] .pr-toggle__opt.is-on em { color: rgba(255,255,255,0.85); }
+:root[data-theme="light"] .pr-table__group { background: rgba(46,119,194,0.05); }
+
+/* ── 14. PASTILLE UTILISATEUR (script inline « early » du header) ── */
+:root[data-theme="light"] #ltUbChipEarly { border-color: rgba(12,17,25,0.14) !important; background: rgba(12,17,25,0.04) !important; }
+:root[data-theme="light"] #ltUbChipEarly span { color: #0C1119 !important; }
+
+/* ── 15. INTRO CINÉMATIQUE (1re visite) : shutters clairs ── */
+:root[data-theme="light"] .lt-intro__shutter--top { border-bottom-color: rgba(46,119,194,0.25); }
+:root[data-theme="light"] .lt-intro__shutter--bot { border-top-color: rgba(46,119,194,0.25); }
+
+/* ── 16. CANVAS décoratifs (poussière du hero, galaxie marchés) :
+   dessinés en bleu glacial semi-transparent — on les densifie légèrement
+   par filtre pour rester perceptibles sur fond clair, sans toucher au JS. ── */
+:root[data-theme="light"] .lt-hero__dust,
+:root[data-theme="light"] .lt-mk__field { filter: saturate(1.6) brightness(0.62); opacity: 0.8; }
+
+/* ── 17. SOCIAL PROOF (« Ce que disent les traders ») : cartes porcelaine ── */
+:root[data-theme="light"] .lt-proof__card { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.85)); }
+:root[data-theme="light"] .lt-proof__card:hover { box-shadow: 0 28px 56px rgba(15,23,42,0.13), 0 0 38px var(--accent-glow); }
+:root[data-theme="light"] .lt-proof__q { background: rgba(255,255,255,0.8); }
+:root[data-theme="light"] .lt-proof__q:hover { box-shadow: 0 18px 40px rgba(15,23,42,0.11); }
+:root[data-theme="light"] .lt-proof__ava { color: #FFFFFF; }
+
+
+/* ═══════════ SURCHARGES PAR FEUILLE / PAGE (hors accueil) ═══════════ */
+
+/* ── ECO.CSS (pages eco + présentations + outils qui la chargent) ── */
+:root[data-theme="light"] .lt-topbar { background: rgba(255,255,255,0.92); }
+:root[data-theme="light"] .eco-tabs { background: rgba(255,255,255,0.9); }
+:root[data-theme="light"] .pricebar { background: rgba(12,18,28,0.025); }
+:root[data-theme="light"] .intro__chips li,
+:root[data-theme="light"] .achip,
+:root[data-theme="light"] .hero__chrome { background: rgba(12,18,28,0.035); }
+:root[data-theme="light"] .intro__art { background: linear-gradient(180deg, rgba(46,119,194,0.07), rgba(12,18,28,0.02)); }
+:root[data-theme="light"] .flash__row:hover { background: rgba(12,18,28,0.03); }
+:root[data-theme="light"] .card:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px rgba(46,119,194,0.14); }
+:root[data-theme="light"] .eco-sel .card:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px rgba(185,130,42,0.14); }
+:root[data-theme="light"] .card--pick .btn,
+:root[data-theme="light"] .card--featured .btn { color: #FFFFFF; }
+:root[data-theme="light"] .card__skel-line { background: linear-gradient(90deg, var(--border) 25%, rgba(12,18,28,0.06) 50%, var(--border) 75%); }
+:root[data-theme="light"] .calcard { box-shadow: 0 18px 50px rgba(15,23,42,0.12); }
+
+/* ── PRESENTATION.CSS (pages -presentation + eco) ── */
+:root[data-theme="light"] .gp-card { background: linear-gradient(155deg, rgba(255,255,255,0.88), rgba(240,244,249,0.78)); box-shadow: 0 34px 70px rgba(15,23,42,0.14), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .pr-feat:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 60px rgba(15,23,42,0.13), 0 0 36px var(--accent-glow-soft); }
+:root[data-theme="light"] .pr-art:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px var(--neutral-glow); }
+:root[data-theme="light"] .pr-art--blue:hover { box-shadow: 0 18px 48px rgba(15,23,42,0.13), 0 0 28px var(--accent-glow); }
+:root[data-theme="light"] .pr-art__link,
+:root[data-theme="light"] .pr-edition__kicker { color: #FFFFFF; }
+
+/* ── Blocs « pm-* » des 4 pages -presentation ── */
+:root[data-theme="light"] .pm-btn--primary { color: #FFFFFF; }
+:root[data-theme="light"] .pm-card3d { box-shadow: var(--shadow-lg), 0 50px 90px rgba(15,23,42,0.16), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .pm-float { background: rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(15,23,42,0.12); }
+:root[data-theme="light"] .pm-connrow__ok { color: #FFFFFF; }
+
+/* ── TARIFS.CSS / pricing partagé ── */
+:root[data-theme="light"] .pr-why__item,
+:root[data-theme="light"] .pr-table,
+:root[data-theme="light"] .pr-faq__item { background: var(--bg-elevated); }
+
+/* ── AVIS (styles inline av-*) ── */
+:root[data-theme="light"] .av-rating { background: linear-gradient(165deg, rgba(185,130,42,0.08), rgba(255,255,255,0.85)); box-shadow: 0 30px 70px rgba(15,23,42,0.12); }
+:root[data-theme="light"] .av-card { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.85)); }
+:root[data-theme="light"] .av-card:hover { box-shadow: 0 30px 60px rgba(15,23,42,0.13), 0 0 40px var(--accent-glow); }
+:root[data-theme="light"] .av-note { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.8)); }
+:root[data-theme="light"] .av-card__ava,
+:root[data-theme="light"] .av-note__av { color: #FFFFFF; }
+
+/* ── BLOG (blog/blog.css) ── */
+:root[data-theme="light"] .bl-card { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.88)); }
+:root[data-theme="light"] .bl-card:hover { box-shadow: 0 30px 60px rgba(15,23,42,0.12), 0 0 40px var(--accent-glow); }
+:root[data-theme="light"] .bl-author { background: linear-gradient(165deg, rgba(46,119,194,0.05), rgba(255,255,255,0.85)); }
+:root[data-theme="light"] .bl-author__ava { color: #FFFFFF; }
+
+/* ── LEGAL (nav propre lg-*) ── */
+:root[data-theme="light"] .lg-nav { background: rgba(255,255,255,0.92); }
+
+/* ── BUBBLE MAP ── */
+:root[data-theme="light"] .map,
+:root[data-theme="light"] .map-loader { background: var(--bg-surface); }
+:root[data-theme="light"] .foot { background: rgba(255,255,255,0.92); }
+:root[data-theme="light"] .bm-gate__submit { color: #FFFFFF; }
+
+/* ── CALCULATEUR ── */
+:root[data-theme="light"] #pairDropdown { background: rgba(255,255,255,0.98); }
+
+/* ── COMPTE / PROFIL / PATRIMOINE (avatars & badges sur fond accent) ── */
+:root[data-theme="light"] .ac-id__av,
+:root[data-theme="light"] .ac-badge.on .ac-badge__ic,
+:root[data-theme="light"] .ac-m__ic.on,
+:root[data-theme="light"] .pf-avatar,
+:root[data-theme="light"] .pf-plan__flag,
+:root[data-theme="light"] .pf-cat-badge { color: #FFFFFF; }
+:root[data-theme="light"] .pf-plan:hover { box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 54px rgba(15,23,42,0.13), 0 0 34px var(--accent-glow-soft); }
+
+/* ── Ombres génériques : toasts / pop-ups (hors overlays plein écran,
+   qui restent sombres volontairement dans les deux thèmes) ── */
+:root[data-theme="light"] .lt-toast { box-shadow: 0 8px 32px rgba(15,23,42,0.16); }
+
+/* ── MUR DES TRADES : titre métal argenté codé en dur → métal sombre ── */
+:root[data-theme="light"] .mt-title .pr-metal { background: linear-gradient(180deg, #1a2432 0%, #0b0e13 100%); -webkit-background-clip: text; background-clip: text; }
+
+/* ── PASTILLE PROFIL & MENU UTILISATEUR (injectés par menu.js) ──
+   Les couleurs sont codées en dur côté JS pour le sombre ; on les
+   surclasse ici (spécificité supérieure, ordre d'injection indifférent). */
+:root[data-theme="light"] .lt-ub-chip { border-color: rgba(12,17,25,0.14); background: rgba(12,17,25,0.04); }
+:root[data-theme="light"] .lt-ub-chip:hover { border-color: rgba(46,119,194,0.45); background: rgba(46,119,194,0.07); }
+:root[data-theme="light"] .lt-ub-name { color: #0C1119; }
+:root[data-theme="light"] .lt-ub-caret { color: #626E80; }
+:root[data-theme="light"] .lt-ub-menu { background: rgba(255,255,255,0.98); border-color: rgba(12,17,25,0.12); box-shadow: 0 24px 60px rgba(15,23,42,0.16); }
+:root[data-theme="light"] .lt-ub-menu__mail { color: #626E80; border-bottom-color: rgba(12,17,25,0.08); }
+:root[data-theme="light"] .lt-ub-menu__badge { color: #2E77C2; }
+:root[data-theme="light"] .lt-ub-link { color: #0C1119; }
+:root[data-theme="light"] .lt-ub-link:hover { background: rgba(46,119,194,0.1); color: #1E5A96; }
+:root[data-theme="light"] .lt-ub-menu a[style] { color: #0C1119 !important; }
+:root[data-theme="light"] .lt-ub-logout { color: #DA3B57; }
+:root[data-theme="light"] .lt-ub-logout:hover { background: rgba(218,59,87,0.1); }
+:root[data-theme="light"] .lt-ub-tokens { background: rgba(46,119,194,0.08); border-color: rgba(46,119,194,0.3); color: #2E77C2; }
+:root[data-theme="light"] .lt-ub-tokens--low { background: rgba(218,59,87,0.08); border-color: rgba(218,59,87,0.3); color: #DA3B57; }
+:root[data-theme="light"] .lt-ub-tokens--pro { background: rgba(185,130,42,0.1); border-color: rgba(185,130,42,0.35); color: #B9822A; }

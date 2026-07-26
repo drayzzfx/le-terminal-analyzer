@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/v2/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/v2/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/v2/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestion du risque en prop firm : les règles clés | Le Terminal</title>
+<meta name="description" content="Gestion du risque en prop firm : respecter le drawdown journalier et total, calculer son risque par trade, survivre aux séries de pertes. Guide + calculateur.">
+<link rel="canonical" href="https://www.leterminal.net/blog/gestion-risque-prop-firm">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Gestion du risque en prop firm : les règles clés | Le Terminal">
+<meta property="og:description" content="Gestion du risque en prop firm : respecter le drawdown journalier et total, calculer son risque par trade, survivre aux séries de pertes. Guide + calculateur.">
+<meta property="og:url" content="https://www.leterminal.net/blog/gestion-risque-prop-firm">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/gestion-risque-prop-firm-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gestion du risque en prop firm : les règles clés — Le Terminal">
+<meta property="article:published_time" content="2026-07-17">
+<meta property="article:modified_time" content="2026-07-17">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gestion du risque en prop firm : les règles clés | Le Terminal">
+<meta name="twitter:description" content="Drawdown journalier et total, risque par trade, séries de pertes : les nombres à respecter au trade près pour ne pas casser son compte.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/gestion-risque-prop-firm-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Gestion du risque en prop firm : les règles clés",
+      "description": "Respecter le drawdown journalier et total, calculer son risque par trade, survivre aux séries de pertes en prop firm. Règles chiffrées et outils.",
+      "datePublished": "2026-07-17",
+      "dateModified": "2026-07-17",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/gestion-risque-prop-firm-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/gestion-risque-prop-firm" },
+      "keywords": "gestion du risque prop firm, règles gestion risque prop firm, drawdown prop firm, risque par trade prop firm"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quel risque par trade en prop firm ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La plupart des traders qui passent les challenges risquent entre 0,5 % et 1 % de leur capital par trade. Ce niveau permet d'encaisser une série de pertes sans toucher le drawdown journalier. Au-delà de 1 %, une série de 3 à 5 trades perdants peut suffire à faire sauter le compte. Le chiffre exact doit être calculé à partir du drawdown journalier."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle est la différence entre drawdown journalier et total ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le drawdown journalier plafonne la perte sur une seule journée (souvent 5 % du solde) et se réinitialise chaque jour. Le drawdown total mesure la perte maximale sur toute l'évaluation depuis le pic (souvent 10 %) et ne se remet pas à zéro. Franchir l'un ou l'autre entraîne généralement l'élimination immédiate du compte."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que se passe-t-il si je dépasse le drawdown en prop firm ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dans la quasi-totalité des cas, le compte se ferme immédiatement. En phase challenge, on perd l'évaluation et les frais payés. En phase funded, on perd l'accès au trading et les paiements en attente sont annulés. Il est donc conseillé de se fixer un stop personnel plus strict que la limite officielle."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il un outil pour gérer le risque en prop firm ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ce n'est pas obligatoire, mais fortement recommandé. Le calcul manuel de taille de position en pleine session est source d'erreurs coûteuses. Un calculateur de risque et un journal qui suit le drawdown en temps réel éliminent l'incertitude et alertent avant de franchir un seuil."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Gestion du risque en prop firm", "item": "https://www.leterminal.net/blog/gestion-risque-prop-firm" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/v2/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/v2/fonts.css">
+<link rel="stylesheet" href="/v2/design-system.css">
+<link rel="stylesheet" href="/v2/theme-light.css">
+<link rel="stylesheet" href="/v2/home.css">
+<link rel="stylesheet" href="/v2/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/v2" data-en="Home">Accueil</a><span class="sep">→</span><a href="/v2/blog">Blog</a><span class="sep">→</span><span class="cur">Gestion du risque en prop firm</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Prop firm</span>
+  <h1 class="bl-art__title">Gestion du risque en prop firm : les règles clés</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published July 17, 2026">Publié le 17 juillet 2026</span>
+    <span>·</span>
+    <span data-en="8 min read">8 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/v2/blog/img/gestion-risque-prop-firm.webp" width="1600" height="900" alt="Gestion du risque en prop firm : drawdown journalier 5 %, drawdown total 10 %, risque par trade 0,5 à 1 %" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> La gestion du risque en prop firm repose sur deux garde-fous à ne jamais franchir : le drawdown journalier (souvent 5 % du solde) et le drawdown total (souvent 10 %). La règle d'or : risquer une fraction assez petite par trade — généralement 0,5 % à 1 % — pour qu'une série de pertes consécutives ne touche jamais la limite journalière. Ce n'est pas votre stratégie qui vous fait échouer au challenge, c'est votre taille de position.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>La plupart des traders qui échouent à un challenge ne perdent pas parce qu'ils analysent mal le marché. Ils perdent parce qu'ils violent une limite chiffrée. La <strong>gestion du risque prop firm</strong> n'est pas une option de confort : c'est le cadre exact qui décide si votre compte survit ou saute. Cet article traite les règles concrètes — pas la méthode globale pour réussir un challenge, mais les nombres à respecter au trade près. Objectif : que vous puissiez calculer, avant chaque position, combien vous avez le droit de perdre.</p>
+
+    <h2>Drawdown journalier vs drawdown total : les deux limites</h2>
+    <p>Toute prop firm sérieuse impose deux plafonds distincts. Les confondre, c'est la cause d'élimination numéro un. Comprendre le <strong>drawdown prop firm</strong> commence par séparer nettement ces deux notions.</p>
+
+    <h3>Le drawdown journalier : la limite qui se remet à zéro</h3>
+    <p>Le drawdown journalier plafonne ce que vous pouvez perdre sur une seule journée de trading. Chez la plupart des firmes, il se situe entre 4 % et 5 % du solde de départ de la journée. Sur un compte de 100 000 €, une règle à 5 % vous interdit de descendre de plus de 5 000 € sur la journée.</p>
+    <p>Point crucial : cette limite se réinitialise à l'ouverture de la session suivante (généralement à minuit heure serveur). Une mauvaise journée ne condamne pas le compte — à condition de ne pas franchir le seuil ce jour-là.</p>
+    <p>Attention au mode de calcul. Deux méthodes coexistent :</p>
+    <ul>
+      <li><strong>Basé sur le solde</strong> : référence figée au solde d'ouverture de la journée.</li>
+      <li><strong>Basé sur l'équité</strong> : référence prise sur le plus haut entre le solde d'ouverture et votre pic d'équité du jour. Ce mode est plus strict, car il intègre vos pertes latentes (positions ouvertes), pas seulement les trades clôturés.</li>
+    </ul>
+
+    <h3>Le drawdown total : la limite qui peut vous éliminer définitivement</h3>
+    <p>Le drawdown total (ou maximum) mesure la perte depuis votre pic jusqu'à votre point le plus bas sur toute l'évaluation. La plupart des firmes le fixent entre 8 % et 12 %, avec 10 % comme valeur de référence très répandue.</p>
+    <p>Il existe deux structures :</p>
+    <ul>
+      <li><strong>Statique</strong> : le seuil de rupture ne bouge jamais. Plus clément sur vos journées gagnantes.</li>
+      <li><strong>Trailing (glissant)</strong> : le seuil suit votre pic d'équité, souvent d'un montant fixe, jusqu'à atteindre un certain profit. Fréquent chez les firmes orientées futures. Redoutable, car vos gains font monter la limite avec vous.</li>
+    </ul>
+    <p>En cas de franchissement de l'une ou l'autre limite, la sanction est presque toujours immédiate : le compte se ferme, le challenge est perdu et les frais forfaitaires perdus avec. Sur un compte funded, cela annule aussi les paiements en attente.</p>
+
+    <h2>Calculer un risque par trade compatible avec le drawdown</h2>
+    <p>Voici le cœur du sujet. Votre <strong>risque par trade prop firm</strong> ne doit pas être choisi au feeling : il doit découler mathématiquement de vos deux limites.</p>
+    <p>Le raisonnement est simple. Posez-vous la question : « Combien de pertes d'affilée puis-je encaisser sans toucher ma limite journalière ? » La réponse doit être confortable, jamais serrée.</p>
+    <p>Prenons un compte de 100 000 € avec un drawdown journalier de 5 % (soit 5 000 €) :</p>
+    <ul>
+      <li><strong>Risque de 1 % par trade</strong> (1 000 €) : 5 pertes consécutives et vous êtes à la limite. Trop juste.</li>
+      <li><strong>Risque de 0,5 % par trade</strong> (500 €) : il faut 10 pertes d'affilée pour toucher le seuil. Bien plus sûr.</li>
+    </ul>
+    <p>C'est pourquoi la plupart des traders qui passent les challenges risquent moins de 1 % par trade. Un trader qui risque 2 à 3 % épuise sa marge journalière en 2 à 5 mauvais trades — statistiquement inévitable sur la durée.</p>
+
+    <h3>La formule de base</h3>
+    <p>Pour une taille de position compatible :</p>
+    <div class="bl-note">
+      <p><strong>Risque en euros</strong> = Capital × % de risque par trade</p>
+    </div>
+    <p>Puis vous ajustez le nombre de lots pour que la distance entre votre entrée et votre stop, multipliée par la valeur du point, égale ce montant. La logique est celle du dimensionnement de position classique, mais avec une contrainte supplémentaire : le plafond journalier de la firme prime toujours sur votre règle personnelle.</p>
+    <p>Ne faites pas ce calcul à la main dans le feu de l'action, où l'erreur d'un facteur dix est vite arrivée. Un outil déterministe est indispensable.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Calculez le risque exact autorisé par votre prop firm</p>
+    <p>Entrez votre solde, votre drawdown journalier et votre stop : obtenez la taille de position à ne pas dépasser.</p>
+    <a class="lt-btn lt-btn--primary" href="/v2/calculateur">Ouvrir le calculateur de risque</a>
+  </section>
+
+  <div class="bl-prose">
+    <h2>Gérer une série de pertes sans casser le compte</h2>
+    <p>Une série de pertes n'est pas un accident : c'est une certitude statistique. Même une stratégie gagnante à 55 % produit régulièrement 4, 5 ou 6 pertes d'affilée. Les <strong>règles de gestion du risque en prop firm</strong> doivent intégrer cette réalité, pas l'ignorer.</p>
+    <p>Trois principes protègent votre compte face à une mauvaise série :</p>
+    <ul>
+      <li><strong>Fixez un stop journalier personnel plus strict que celui de la firme.</strong> Si la firme autorise 5 % de perte par jour, arrêtez-vous à 3 %. Cette marge de sécurité absorbe le slippage et vous laisse revenir le lendemain.</li>
+      <li><strong>Plafonnez le nombre de trades perdants par jour.</strong> Par exemple : après 3 pertes consécutives, vous coupez l'écran. La discipline vaut mieux que la conviction de « se refaire ».</li>
+      <li><strong>Ne remontez jamais la taille pour compenser.</strong> Le martingale (doubler après une perte) est le moyen le plus rapide de franchir le drawdown total. Votre risque par trade reste constant, quelle que soit la série.</li>
+    </ul>
+    <p>L'objectif n'est pas de gagner tous les jours. Il est de rester dans le jeu assez longtemps pour que votre espérance positive s'exprime. Un trader éliminé n'a plus d'espérance du tout. Pour transformer cette discipline en habitude, tenir un <a href="/v2/blog/pourquoi-journal-trading">journal de trading</a> rend visibles vos entorses au plan avant qu'elles ne coûtent le compte.</p>
+
+    <h2>Phase challenge vs phase funded : adapter son risque</h2>
+    <p>Beaucoup de traders traitent la phase d'évaluation et la phase financée de la même manière. C'est une erreur, car les objectifs changent.</p>
+    <p><strong>En phase challenge</strong>, vous avez une cible de profit à atteindre (souvent 8 % à 10 %) dans un cadre de drawdown serré. La tentation est d'augmenter le risque pour aller plus vite. Résistez : mieux vaut viser la cible en plus de jours avec un risque de 0,5 % que la manquer par élimination. Le temps est votre allié, pas votre ennemi.</p>
+    <p><strong>En phase funded</strong>, deux logiques s'affrontent selon votre profil :</p>
+    <ul>
+      <li><strong>Profil prudent</strong> : gardez un risque bas et régulier. Votre priorité devient la protection des paiements, pas la performance maximale. Un compte funded qui survit 12 mois rapporte plus qu'un compte agressif éliminé en 3 semaines.</li>
+      <li><strong>Profil dynamique</strong> : certains augmentent légèrement leur risque après avoir constitué un coussin de profit au-dessus du seuil de départ. C'est acceptable uniquement si le drawdown est statique — avec un drawdown trailing, ce coussin peut disparaître dès que le marché se retourne.</li>
+    </ul>
+    <p>Dans tous les cas, la règle d'or reste : votre risque par trade doit toujours être calculé à partir de la limite active du moment, pas d'une habitude prise il y a trois semaines.</p>
+
+    <h2>Automatiser le suivi de ses limites</h2>
+    <p>Suivre son drawdown de tête, en pleine session, est le meilleur moyen de se tromper. La charge mentale du trading suffit déjà — ajouter un calcul de risque manuel augmente le taux d'erreur au pire moment.</p>
+    <p>Deux automatisations changent tout :</p>
+    <ul>
+      <li><strong>Le calcul de position en amont.</strong> Avant chaque trade, l'outil vous donne la taille maximale autorisée compte tenu de votre solde du jour et de la limite de la firme. Zéro ambiguïté. C'est exactement le rôle du <a href="/v2/calculateur">calculateur de risque</a>.</li>
+      <li><strong>Le suivi de drawdown en temps réel.</strong> Un journal dédié affiche votre distance à la limite journalière et à la limite totale, à chaque instant. Vous savez toujours combien de « munitions » il vous reste avant l'élimination.</li>
+    </ul>
+    <p>C'est précisément ce que propose le <a href="/v2/journal-presentation">journal de trading de Le Terminal</a> : il rattache chaque trade à vos règles de firme, calcule votre drawdown consommé et vous alerte avant que vous n'approchiez d'un seuil critique. La différence entre un trader éliminé et un trader financé tient souvent à cette visibilité.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Suivez votre drawdown en temps réel</p>
+    <p>Rattachez chaque trade à vos règles de prop firm : le journal calcule votre drawdown consommé et vous alerte avant le seuil critique.</p>
+    <a class="lt-btn lt-btn--primary" href="/v2/journal-presentation">Découvrir le journal de trading</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Le trading comporte un risque de perte en capital. Les règles chiffrées citées ici sont des ordres de grandeur courants : vérifiez toujours les conditions exactes de votre prop firm, qui font foi. Aucune méthode ne garantit la réussite d'un challenge.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Quel risque par trade en prop firm ?</h3>
+        <p>La plupart des traders qui passent les challenges risquent entre 0,5 % et 1 % de leur capital par trade. Ce niveau permet d'encaisser une série de pertes sans toucher le drawdown journalier. Au-delà de 1 %, une simple série de 3 à 5 trades perdants peut suffire à faire sauter le compte. Le chiffre exact doit être calculé à partir de votre drawdown journalier, pas choisi au hasard.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle est la différence entre drawdown journalier et total ?</h3>
+        <p>Le drawdown journalier plafonne votre perte sur une seule journée (souvent 5 % du solde) et se réinitialise chaque jour. Le drawdown total mesure votre perte maximale sur toute l'évaluation depuis votre pic (souvent 10 %) et, lui, ne se remet pas à zéro. Franchir l'un ou l'autre entraîne généralement l'élimination immédiate du compte.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Que se passe-t-il si je dépasse le drawdown en prop firm ?</h3>
+        <p>Dans la quasi-totalité des cas, le compte se ferme immédiatement. En phase challenge, vous perdez l'évaluation et les frais payés. En phase funded, vous perdez l'accès au trading et vos paiements en attente sont annulés. C'est pourquoi il faut se fixer un stop personnel plus strict que la limite officielle.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il un outil pour gérer le risque en prop firm ?</h3>
+        <p>Ce n'est pas obligatoire, mais fortement recommandé. Le calcul manuel de taille de position en pleine session est source d'erreurs coûteuses. Un <a href="/v2/calculateur">calculateur de risque</a> et un journal qui suit votre drawdown en temps réel éliminent l'incertitude et vous alertent avant de franchir un seuil.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : règles publiques des principales prop firms et guides spécialisés sur le drawdown (FTMO, The5ers, ThinkCapital, Maven Trading, 2026). Les seuils chiffrés sont des ordres de grandeur courants ; référez-vous toujours aux conditions officielles de votre firme. Publié le 17 juillet 2026 · Mis à jour le 17 juillet 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/v2/calculateur"><span class="t">Calculateur de risque</span><span class="d">Position, risque et R:R en quelques secondes</span></a>
+        <a href="/v2/journal-presentation"><span class="t">Journal de Trading</span><span class="d">Suivi du drawdown, win rate et expectancy</span></a>
+        <a href="/v2/blog/pourquoi-journal-trading"><span class="t">Pourquoi tenir un journal de trading ?</span><span class="d">Les 5 bénéfices concrets, chiffres à l'appui</span></a>
+        <a href="/v2/blog/quest-ce-quun-setup"><span class="t">Qu'est-ce qu'un setup de trading ?</span><span class="d">Définition, exemples annotés et grille de notation</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/v2/appshell.js"></script>
+<script src="/v2/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/v2/analyzer-presentation">Setup Analyzer</a>
+        <a href="/v2/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/v2/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/v2/bubble">Bubble Map</a>
+        <a href="/v2/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/v2/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/v2/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/v2/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/v2/eco-flash">Flash Info</a>
+        <a href="/v2/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/v2/eco-crypto">Crypto</a>
+        <a href="/v2/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/v2/blog">Blog</a>
+        <a href="/v2/#method" data-en="Method">Méthode</a>
+        <a href="/v2/#community" data-en="Community">Communauté</a>
+        <a href="/v2/avis" data-en="Reviews">Avis</a>
+        <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/v2/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/v2/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/v2/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/v2/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/v2/cookies.js"></script>
+<script src="/v2/lang.js"></script>
+<script src="/v2/theme.js"></script>
+</body>
+</html>
