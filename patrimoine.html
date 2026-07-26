@@ -175,6 +175,68 @@
 .pf-asset-item__amt input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
 .pf-asset-item__amt input[type=number]:focus { border-color:var(--accent); }
 .pf-asset-item__amt span { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); }
+
+/* ============================================================
+   Simulation en direct — portefeuille fictif valorisé aux prix réels.
+   Additif : n'altère pas le simulateur de projection existant.
+   ============================================================ */
+.pf-modes { display:inline-flex; gap:4px; padding:4px; border:1px solid var(--border-subtle); border-radius:var(--r-md); background:var(--bg-void); }
+.pf-mode { padding:9px 20px; border:none; background:transparent; color:var(--text-muted); font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:0.04em; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-fast) var(--ease-out); }
+.pf-mode:hover { color:var(--text-title); }
+.pf-mode.is-on { background:var(--accent-glow-soft); color:var(--accent-bright); box-shadow:inset 0 0 0 1px var(--accent-glow); }
+
+.pfsim-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+@media (max-width:620px){ .pfsim-stats { grid-template-columns:repeat(2,1fr); } }
+.pfsim-stat { background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:var(--r-lg); padding:16px 18px; display:flex; flex-direction:column; gap:8px; }
+.pfsim-stat .k { font-family:var(--font-mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); }
+.pfsim-stat .v { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:1.5rem; font-weight:700; color:var(--text-title); line-height:1; }
+
+.pfr-head { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+.pfr-refresh { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; color:var(--text-muted); background:transparent; border:1px solid var(--border-subtle); border-radius:var(--r-pill); padding:6px 13px; cursor:pointer; transition:all var(--dur-fast) var(--ease-out); }
+.pfr-refresh:hover { border-color:var(--accent); color:var(--accent-bright); }
+.pfr-refresh svg { transition:transform .5s var(--ease-out); }
+.pfr-refresh.spin svg { transform:rotate(360deg); }
+
+.pfr-form { display:flex; flex-direction:column; gap:14px; }
+.pfr-field label { display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+.pfr-input, .pfr-select { width:100%; box-sizing:border-box; background:var(--bg-void); border:1px solid var(--border-subtle); border-radius:var(--r-md); padding:10px 12px; font-family:Inter,sans-serif; font-size:13.5px; color:var(--text-body); outline:none; transition:border-color var(--dur-fast) var(--ease-out); }
+.pfr-input:focus, .pfr-select:focus { border-color:var(--accent); }
+.pfr-input[type=number] { font-family:var(--font-mono); -moz-appearance:textfield; }
+.pfr-input[type=number]::-webkit-outer-spin-button, .pfr-input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+.pfr-select { appearance:none; -webkit-appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237E8794' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:34px; }
+.pfr-wrap { position:relative; }
+.pfr-wrap .sfx { position:absolute; right:12px; top:50%; transform:translateY(-50%); font-family:var(--font-mono); font-size:12px; color:var(--text-muted); pointer-events:none; }
+.pfr-wrap .pfr-input { padding-right:30px; }
+.pfr-add { width:100%; background:var(--accent); color:#07090C; border:none; border-radius:var(--r-sm); padding:12px; font-family:var(--font-text),Inter,sans-serif; font-size:14px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:filter var(--dur-fast) var(--ease-out); }
+.pfr-add:hover { filter:brightness(1.08); }
+.pfr-add:disabled { opacity:.55; cursor:not-allowed; }
+.pfr-msg { font-size:12px; min-height:15px; font-weight:500; }
+.pfr-note { font-size:11px; color:var(--text-muted); line-height:1.55; }
+
+.pfr-list { display:flex; flex-direction:column; gap:10px; }
+.pfr-row { display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:14px 16px; border:1px solid var(--border-subtle); border-radius:var(--r-md); background:var(--bg-surface); transition:border-color var(--dur-fast) var(--ease-out); }
+.pfr-row:hover { border-color:var(--accent-glow); }
+.pfr-row.loading .pfr-now, .pfr-row.loading .pfr-pnl { opacity:.35; }
+.pfr-row__top { display:flex; align-items:center; gap:9px; }
+.pfr-row__sym { font-family:var(--font-mono); font-weight:700; font-size:14px; color:var(--text-title); }
+.pfr-row__name { font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pfr-row__cat { font-family:var(--font-mono); font-size:9px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); border:1px solid var(--border-subtle); border-radius:var(--r-pill); padding:2px 8px; flex-shrink:0; }
+.pfr-meta { display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; }
+.pfr-cell .k { font-family:var(--font-mono); font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); display:block; margin-bottom:2px; }
+.pfr-cell .v { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:12.5px; color:var(--text-body); }
+.pfr-row__r { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+.pfr-now { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:17px; font-weight:700; color:var(--text-title); line-height:1; }
+.pfr-pnl { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:12.5px; font-weight:600; }
+.pfr-pct { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:11px; font-weight:600; padding:2px 7px; border-radius:var(--r-pill); }
+.pfr-del { background:transparent; border:none; color:var(--text-muted); cursor:pointer; padding:3px; border-radius:var(--r-sm); margin-top:3px; transition:color var(--dur-fast) var(--ease-out); }
+.pfr-del:hover { color:var(--bear); }
+.pfr-up { color:var(--bull); } .pfr-down { color:var(--bear); } .pfr-fl { color:var(--neutral); }
+.pfr-pct.pfr-up { background:var(--bull-glow); } .pfr-pct.pfr-down { background:var(--bear-glow); } .pfr-pct.pfr-fl { background:rgba(232,194,104,0.12); }
+.pfr-empty { padding:40px 22px; text-align:center; color:var(--text-muted); border:1px dashed var(--border-subtle); border-radius:var(--r-md); }
+.pfr-empty svg { opacity:.6; margin-bottom:12px; }
+.pfr-empty b { display:block; color:var(--text-body); font-size:14px; margin-bottom:5px; font-weight:600; }
+.pfr-empty span { font-size:12.5px; line-height:1.5; }
+@media (max-width:620px){ .pfr-row { grid-template-columns:1fr; } .pfr-row__r { align-items:flex-start; } }
 </style>
   <link rel="canonical" href="https://www.leterminal.net/patrimoine">
 </head>
@@ -224,6 +286,11 @@
     <span class="eyebrow"><span class="lt-dot"></span> Investissement long terme</span>
     <h1>Mon Portefeuille</h1>
     <p>Suivez votre patrimoine investi en un coup d'œil.</p>
+  </div>
+
+  <div class="pf-modes" id="pfModes">
+    <button type="button" class="pf-mode is-on" data-mode="projection">Projection</button>
+    <button type="button" class="pf-mode" data-mode="sim">Simulation en direct</button>
   </div>
 
   <div id="pfMain">
@@ -288,6 +355,53 @@
     <div style="margin-top:8px;padding:14px 18px;border:1px solid rgba(232,194,104,.18);border-radius:8px;background:rgba(232,194,104,.04);display:flex;gap:12px;align-items:flex-start">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <p style="margin:0;font-family:Inter,sans-serif;font-size:11.5px;line-height:1.6;color:rgba(232,194,104,.75)"><strong style="color:#E8C268;font-weight:600">Information importante —</strong> Les allocations présentées ne constituent pas un conseil en investissement. <strong style="color:#E8C268;font-weight:600">Les objectifs de rendement affichés sont purement illustratifs et ne sont en aucun cas garantis.</strong> Elles sont établies sur la base de données historiques et d'une analyse assistée par intelligence artificielle. Les performances passées ne préjugent pas des performances futures. Tout investissement comporte un risque de perte en capital. Consultez un conseiller financier agréé avant toute décision.</p>
+    </div>
+  </div>
+
+  <div id="pfSim" style="display:none">
+    <div class="pfsim-stats">
+      <div class="pfsim-stat"><span class="k">Valeur actuelle</span><span class="v" id="psVal">—</span></div>
+      <div class="pfsim-stat"><span class="k">Investi</span><span class="v" id="psInv">—</span></div>
+      <div class="pfsim-stat"><span class="k">Plus / moins-value</span><span class="v" id="psPnl">—</span></div>
+      <div class="pfsim-stat"><span class="k">Performance</span><span class="v" id="psPct">—</span></div>
+    </div>
+
+    <div class="pf-grid" style="margin-top:20px">
+      <!-- Positions -->
+      <div class="pf-ov panel">
+        <div class="pfr-head">
+          <h3 class="panel__title" style="margin:0">Mes positions</h3>
+          <button type="button" class="pfr-refresh" id="psRefresh">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            Actualiser
+          </button>
+        </div>
+        <div id="psList" class="pfr-list"></div>
+      </div>
+
+      <!-- Ajouter -->
+      <div class="pf-alloc panel">
+        <h3 class="panel__title">Ajouter une position</h3>
+        <div class="pfr-form">
+          <div class="pfr-field">
+            <label for="psAsset">Actif</label>
+            <select class="pfr-select" id="psAsset"></select>
+          </div>
+          <div class="pfr-field">
+            <label for="psAmount">Montant investi</label>
+            <div class="pfr-wrap">
+              <input class="pfr-input" type="number" id="psAmount" min="1" step="any" placeholder="100" inputmode="decimal">
+              <span class="sfx">€</span>
+            </div>
+          </div>
+          <button type="button" class="pfr-add" id="psAdd">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            <span id="psAddLbl">Ajouter au portefeuille</span>
+          </button>
+          <div class="pfr-msg" id="psMsg"></div>
+          <div class="pfr-note">Le prix d'entrée est le cours réel de l'actif au moment où vous l'ajoutez. La valeur est ensuite réévaluée en direct à chaque visite. Simulation fictive, sans argent réel — ne constitue pas un conseil en investissement.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -642,6 +756,157 @@
   }
 
   window.ecoReloadNews=function(){};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script>
+(function(){
+  'use strict';
+  // ══ Simulation en direct — portefeuille fictif valorisé aux prix réels (additif) ══
+  var LS='lt_pf_sim';
+  var positions=[];
+
+  var ASSETS=[
+    {g:'Actions US',items:[['NVDA','Nvidia'],['AAPL','Apple'],['TSLA','Tesla'],['MSFT','Microsoft'],['AMZN','Amazon'],['META','Meta'],['GOOGL','Alphabet'],['AMD','AMD'],['NFLX','Netflix']]},
+    {g:'Crypto',items:[['BTC','Bitcoin'],['ETH','Ethereum'],['SOL','Solana'],['XRP','XRP'],['BNB','BNB'],['DOGE','Dogecoin'],['ADA','Cardano'],['AVAX','Avalanche'],['LINK','Chainlink'],['DOT','Polkadot'],['LTC','Litecoin'],['MATIC','Polygon'],['TRX','Tron'],['BCH','Bitcoin Cash'],['XLM','Stellar'],['NEAR','Near']]},
+    {g:'Indices',items:[['SP500','S&P 500'],['NAS100','Nasdaq 100'],['US30','Dow Jones'],['DAX','DAX 40'],['CAC40','CAC 40'],['UK100','FTSE 100'],['JP225','Nikkei 225'],['HK50','Hang Seng'],['AUS200','ASX 200']]},
+    {g:'Matières premières',items:[['USOIL','Pétrole WTI'],['BRENT','Brent'],['NATGAS','Gaz naturel'],['COPPER','Cuivre'],['PLATINUM','Platine']]},
+    {g:'Forex',items:[['EURUSD','EUR / USD'],['GBPUSD','GBP / USD'],['USDJPY','USD / JPY'],['AUDUSD','AUD / USD'],['USDCAD','USD / CAD'],['USDCHF','USD / CHF'],['NZDUSD','NZD / USD'],['EURGBP','EUR / GBP'],['EURJPY','EUR / JPY'],['GBPJPY','GBP / JPY']]}
+  ];
+  var CAT_OF={},NAME_OF={};
+  ASSETS.forEach(function(g){g.items.forEach(function(it){CAT_OF[it[0]]=g.g;NAME_OF[it[0]]=it[1];});});
+
+  var fmtEur=new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2});
+  function money(n){return isFinite(n)?fmtEur.format(n):'—';}
+  function num(n,d){return isFinite(n)?new Intl.NumberFormat('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}).format(n):'—';}
+  function price(n){ if(!isFinite(n))return '—'; var d=Math.abs(n)>=1?2:(Math.abs(n)>=0.01?4:6); return num(n,d); }
+  function pct(p){return (p>=0?'+':'')+num(p,2)+' %';}
+  function dt(d){try{return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;}}
+  function cls(n){return n>0.0001?'pfr-up':(n<-0.0001?'pfr-down':'pfr-fl');}
+  function arrow(n){return n>0.0001?'▲':(n<-0.0001?'▼':'—');}
+
+  function load(){try{positions=JSON.parse(localStorage.getItem(LS)||'[]');if(!Array.isArray(positions))positions=[];}catch(e){positions=[];}}
+  function save(){try{localStorage.setItem(LS,JSON.stringify(positions));}catch(e){}}
+  var $=function(id){return document.getElementById(id);};
+
+  function buildSelect(){
+    var sel=$('psAsset'),html='';
+    ASSETS.forEach(function(g){
+      html+='<optgroup label="'+g.g+'">';
+      g.items.forEach(function(it){html+='<option value="'+it[0]+'">'+it[0]+' — '+it[1]+'</option>';});
+      html+='</optgroup>';
+    });
+    sel.innerHTML=html;
+  }
+
+  async function livePrice(sym){
+    var r=await fetch('/api/price?symbol='+encodeURIComponent(sym));
+    var j=await r.json();
+    if(!r.ok||!(j.price>0)) throw new Error((j&&j.error)||'prix indisponible');
+    return j;
+  }
+
+  async function add(){
+    var msg=$('psMsg'),btn=$('psAdd'),lbl=$('psAddLbl');
+    var sym=$('psAsset').value, amount=parseFloat($('psAmount').value);
+    msg.textContent=''; msg.className='pfr-msg';
+    if(!(amount>0)){ msg.textContent='Entrez un montant valide.'; msg.className='pfr-msg pfr-down'; return; }
+    btn.disabled=true; lbl.textContent='Récupération du cours…';
+    try{
+      var live=await livePrice(sym);
+      var now=new Date();
+      var pos={ id:(now.getTime().toString(36)+Math.random().toString(36).slice(2,7)),
+        symbol:sym, name:NAME_OF[sym]||sym, cat:CAT_OF[sym]||'',
+        date:now.toISOString(), entry:live.price, amount:amount, qty:amount/live.price,
+        last:live.price, lastChange:live.change };
+      positions.unshift(pos); save(); render();
+      msg.textContent='Position ajoutée — entrée à '+price(live.price)+'.'; msg.className='pfr-msg pfr-up';
+      $('psAmount').value='';
+    }catch(e){ msg.textContent='Erreur : '+e.message; msg.className='pfr-msg pfr-down'; }
+    finally{ btn.disabled=false; lbl.textContent='Ajouter au portefeuille'; }
+  }
+
+  window.pfSimDelete=function(id){ positions=positions.filter(function(p){return p.id!==id;}); save(); render(); };
+
+  var refreshing=false;
+  async function refresh(spin){
+    if(refreshing||!positions.length) return;
+    refreshing=true;
+    var rb=$('psRefresh'); if(spin&&rb) rb.classList.add('spin');
+    Array.prototype.forEach.call(document.querySelectorAll('#psList .pfr-row'),function(el){el.classList.add('loading');});
+    var syms={}; positions.forEach(function(p){syms[p.symbol]=1;});
+    await Promise.all(Object.keys(syms).map(async function(s){
+      try{ var live=await livePrice(s); positions.forEach(function(p){if(p.symbol===s){p.last=live.price;p.lastChange=live.change;}}); }catch(e){}
+    }));
+    save(); render(); refreshing=false;
+    if(rb) setTimeout(function(){rb.classList.remove('spin');},200);
+  }
+
+  function render(){
+    var list=$('psList'); if(!list) return;
+    if(!positions.length){
+      list.innerHTML='<div class="pfr-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-4 3 3 5-7"/></svg><b>Aucune position pour l\'instant</b><span>Choisissez un actif et un montant à droite. Le suivi démarre au cours du jour.</span></div>';
+      stats(); return;
+    }
+    list.innerHTML=positions.map(function(p){
+      var has=p.last!=null&&isFinite(p.last);
+      var val=has?p.qty*p.last:null, pnl=has?val-p.amount:null, pc=has?(p.last/p.entry-1)*100:null;
+      var sc=has?cls(pnl):'pfr-fl';
+      return '<div class="pfr-row'+(has?'':' loading')+'">'
+        +'<div><div class="pfr-row__top"><span class="pfr-row__sym">'+p.symbol+'</span><span class="pfr-row__name">'+p.name+'</span><span class="pfr-row__cat">'+p.cat+'</span></div>'
+        +'<div class="pfr-meta">'
+        +'<div class="pfr-cell"><span class="k">Ajouté le</span><span class="v">'+dt(p.date)+'</span></div>'
+        +'<div class="pfr-cell"><span class="k">Prix d\'entrée</span><span class="v">'+price(p.entry)+'</span></div>'
+        +'<div class="pfr-cell"><span class="k">Prix actuel</span><span class="v">'+(has?price(p.last):'…')+'</span></div>'
+        +'<div class="pfr-cell"><span class="k">Investi</span><span class="v">'+money(p.amount)+'</span></div>'
+        +'</div></div>'
+        +'<div class="pfr-row__r">'
+        +'<div class="pfr-now">'+(has?money(val):'…')+'</div>'
+        +'<div class="pfr-pnl '+sc+'">'+(has?(arrow(pnl)+' '+money(pnl)):'')+'</div>'
+        +'<div class="pfr-pct '+sc+'">'+(has?pct(pc):'—')+'</div>'
+        +'<button class="pfr-del" title="Supprimer" onclick="pfSimDelete(\''+p.id+'\')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>'
+        +'</div></div>';
+    }).join('');
+    stats();
+  }
+
+  function stats(){
+    var inv=0,val=0,has=false;
+    positions.forEach(function(p){ inv+=p.amount; if(p.last!=null&&isFinite(p.last)){has=true;val+=p.qty*p.last;}else{val+=p.amount;} });
+    var pnl=val-inv, pc=inv>0?pnl/inv*100:0;
+    $('psInv').textContent=positions.length?money(inv):'—';
+    if(positions.length&&has){
+      $('psVal').textContent=money(val);
+      var e=$('psPnl'); e.textContent=(pnl>=0?'+':'')+money(pnl); e.className='v '+cls(pnl);
+      var e2=$('psPct'); e2.textContent=pct(pc); e2.className='v '+cls(pnl);
+    }else{
+      $('psVal').textContent=positions.length?'…':'—';
+      $('psPnl').textContent=positions.length?'…':'—'; $('psPnl').className='v';
+      $('psPct').textContent='—'; $('psPct').className='v';
+    }
+  }
+
+  function setMode(mode){
+    var proj=mode!=='sim';
+    $('pfMain').style.display=proj?'':'none';
+    $('pfSim').style.display=proj?'none':'';
+    Array.prototype.forEach.call(document.querySelectorAll('#pfModes .pf-mode'),function(b){
+      b.classList.toggle('is-on', b.getAttribute('data-mode')===(proj?'projection':'sim'));
+    });
+    if(!proj && positions.length) refresh(false);
+  }
+
+  function init(){
+    if(!$('pfModes')||!$('psAsset')) return;
+    buildSelect(); load(); render();
+    $('psAdd').addEventListener('click',add);
+    $('psAmount').addEventListener('keydown',function(e){ if(e.key==='Enter') add(); });
+    $('psRefresh').addEventListener('click',function(){ refresh(true); });
+    $('pfModes').addEventListener('click',function(e){
+      var b=e.target.closest('.pf-mode'); if(!b) return; setMode(b.getAttribute('data-mode'));
+    });
+    setInterval(function(){ if($('pfSim')&&$('pfSim').style.display!=='none' && positions.length && !document.hidden) refresh(false); }, 60000);
+  }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
