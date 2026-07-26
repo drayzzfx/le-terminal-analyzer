@@ -131,6 +131,9 @@
 
   /* ---- Fixed chrome height (nav) ---- */
   --chrome-h: 70px;
+
+  /* ---- Remplissage commun des contrôles de la barre d'actions ---- */
+  --act-fill: rgba(255, 255, 255, 0.04);
 }
 
 /* ============================================================
@@ -189,7 +192,6 @@
 .lt-nav__links > a.is-current, .lt-nav__drop.is-current .lt-nav__droptrigger { color: var(--accent-bright); background: var(--accent-glow-soft); box-shadow: inset 0 0 0 1px rgba(127,184,232,0.22); }
 .lt-nav__actions { display: flex; gap: 10px; align-items: center; flex: 1 1 0; justify-content: flex-end; }
 .lt-nav__cta-ic { display: none; }  /* icône premium : visible seulement en mobile (voir media ≤560) */
-.lt-nav__actions .lt-btn { border-radius: 999px; }
 .lt-nav__pill { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 6px 11px; cursor: pointer; transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
 .lt-nav__pill:hover { color: var(--accent); border-color: var(--border); }
 
@@ -208,10 +210,32 @@
 .lt-nav__menulabel { font-size: 14px; font-weight: 600; color: var(--text-title); }
 .lt-nav__menudesc { font-size: 12px; color: var(--text-muted); }
 
+/* ---------- BARRE D'ACTIONS — géométrie commune ----------
+   Thème, langue, connexion, profil et CTA Premium partagent la même hauteur,
+   le même rayon pilule et le même filet 1px. Seul le CTA garde un remplissage
+   accent : c'est la seule hiérarchie visuelle de la rangée. */
+.lt-theme-pill,
+.lt-nav__pill,
+.lt-nav__actions .lt-btn { box-sizing: border-box; height: 34px; border-radius: 999px; border: 1px solid var(--border-subtle); }
+.lt-theme-pill,
+.lt-nav__pill,
+.lt-nav__actions .lt-btn--ghost { background: var(--act-fill); color: var(--text-body); }
+.lt-theme-pill:hover,
+.lt-nav__pill:hover,
+.lt-nav__actions .lt-btn--ghost:hover { border-color: var(--border); background: var(--accent-glow-soft); color: var(--text-title); }
+.lt-theme-pill { width: 34px; padding: 0; }
+.lt-nav__pill { display: inline-flex; align-items: center; padding: 0 12px; }
+.lt-nav__actions .lt-btn { padding: 0 16px; }
+.lt-nav__actions .lt-btn--primary { border-color: var(--accent); box-shadow: 0 6px 20px var(--accent-glow); }
+/* Puce profil affichée avant hydratation (styles inline dans le HTML) :
+   alignée sur la même géométrie que le reste de la rangée. */
+#ltUbChipEarly { box-sizing: border-box; height: 34px !important; gap: 8px !important; padding: 0 12px 0 5px !important; border-radius: 999px !important; border: 1px solid var(--border-subtle) !important; background: var(--act-fill) !important; }
+#ltUbChipEarly > div:first-child { width: 24px !important; height: 24px !important; border-radius: 999px !important; }
+
 /* Sous 1000px, le CTA Premium passe en bouton-icône (même repli qu'en mobile)
    pour que le groupe de liens tienne sans chevaucher la marque. */
 @media (max-width: 1000px) {
-  .lt-nav__cta { padding: 0; width: 38px; height: 38px; border-radius: 999px; flex-shrink: 0; }
+  .lt-nav__actions .lt-nav__cta { padding: 0; width: 34px; height: 34px; border-radius: 999px; flex-shrink: 0; }
   .lt-nav__cta-txt { display: none; }
   .lt-nav__cta-ic { display: inline-flex; }
 }
@@ -238,19 +262,19 @@
   .lt-nav__pill { display: none; }
   .lt-nav__actions { gap: 8px; }
   /* Premium → bouton carré à icône (texte masqué) */
-  .lt-nav__cta { padding: 0; width: 38px; height: 38px; border-radius: 999px; flex-shrink: 0; }
+  .lt-nav__actions .lt-nav__cta { padding: 0; width: 34px; height: 34px; border-radius: 999px; flex-shrink: 0; }
   .lt-nav__cta-txt { display: none; }
   .lt-nav__cta-ic { display: inline-flex; }
   /* Profil → puce carrée (avatar seul, sans nom ni chevron) */
   .lt-ub-name, .lt-ub-caret { display: none !important; }
-  .lt-ub-chip { padding: 0 !important; width: 38px; height: 38px; justify-content: center; }
-  .lt-ub-avatar { width: 26px; height: 26px; }
+  .lt-ub-chip { padding: 0 !important; width: 34px; height: 34px; justify-content: center; }
+  .lt-ub-avatar { width: 24px; height: 24px; }
   /* Connexion (déconnecté) → bouton ICÔNE carré, toujours visible en haut à droite */
-  #loginBtn { width: 38px; height: 38px; padding: 0; font-size: 0; color: transparent; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  #loginBtn { width: 34px; height: 34px; padding: 0; font-size: 0; color: transparent; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   #loginBtn::before { content: ''; width: 18px; height: 18px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23C3CAD4' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E") center/18px no-repeat; }
   /* Chip profil « early » (accueil, anti-flicker) → avatar seul sur mobile, ne déborde pas */
   #ltUbChipEarly > span { display: none !important; }
-  #ltUbChipEarly { padding: 5px !important; }
+  #ltUbChipEarly { padding: 0 !important; width: 34px; justify-content: center; }
   /* Garde-fous anti-débordement : médias et tableaux ne dépassent jamais l'écran */
   img, canvas, video, table, iframe { max-width: 100%; }
 }
