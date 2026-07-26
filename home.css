@@ -313,6 +313,12 @@
 }
 @media (max-width: 860px) {
   .lt-nav__links { display: none; }
+  /* Petit écran : les liens disparaissent, la marque se recentre dans la
+     capsule (les actions restant à droite, un centrage en flex la décalerait
+     — d'où le positionnement absolu). Même rendu sur toutes les pages. */
+  .lt-nav { position: relative; }
+  .lt-nav__brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); flex: 0 0 auto; }
+  .lt-nav__actions { margin-left: auto; }
   .lt-chrome { padding: 10px 16px 0; }
   .lt-chrome.is-scrolled { padding-top: 8px; }
   .lt-nav, .lt-chrome.is-scrolled .lt-nav { padding: 8px 8px 8px 14px; }
