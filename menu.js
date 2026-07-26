@@ -1301,3 +1301,48 @@
   })();
 
 })();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NAV FLOTTANTE — pastille « page courante »
+   Purement visuel : pose .is-current sur le lien du menu correspondant à
+   l'URL affichée (et sur le groupe « Outils » si la page vient de son
+   sous-menu). Aucune incidence sur la navigation ni sur lang.js.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function norm(p){
+    p = (p || '').split('#')[0].split('?')[0];
+    p = p.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+    if (p.length > 1) p = p.replace(/\/+$/, '');
+    return p || '/';
+  }
+  function pathOf(href){
+    if (!href || href.charAt(0) === '#') return null;
+    try { return norm(new URL(href, location.href).pathname); } catch(e){ return null; }
+  }
+  function mark(){
+    var links = document.querySelector('.lt-nav__links');
+    if (!links) return;
+    var here = norm(location.pathname), hit = false;
+
+    Array.prototype.forEach.call(links.children, function(el){
+      if (el.tagName !== 'A') return;
+      var p = pathOf(el.getAttribute('href'));
+      if (!p) return;
+      if (p === here || (p !== '/' && here.indexOf(p + '/') === 0)) {
+        el.classList.add('is-current');
+        hit = true;
+      }
+    });
+    if (hit) return;
+
+    // Repli : la page vient du menu déroulant « Outils »
+    var drop = links.querySelector('.lt-nav__drop');
+    if (!drop) return;
+    var items = drop.querySelectorAll('.lt-nav__menuitem, .lt-nav__subitem2');
+    for (var i = 0; i < items.length; i++) {
+      if (pathOf(items[i].getAttribute('href')) === here) { drop.classList.add('is-current'); return; }
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mark);
+  else mark();
+})();
