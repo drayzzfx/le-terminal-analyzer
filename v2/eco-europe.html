@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<title>Actu économique Europe : BCE, indices, marchés | Le Terminal</title>
+<meta name="description" content="L'actualité économique européenne décryptée : décisions de la BCE, indices boursiers, inflation et politique monétaire — analyse Le Terminal.">
+<meta name="robots" content="noindex,follow">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.pr-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-sm);border:1px solid}
+.pr-badge--accent{color:var(--accent);background:var(--accent-glow-soft);border-color:var(--accent-glow)}
+.pr-badge--neutral{color:var(--neutral);background:rgba(232,194,104,.1);border-color:rgba(232,194,104,.35)}
+.pr-badge--up{color:var(--bull);background:rgba(74,222,156,.1);border-color:rgba(74,222,156,.35)}
+.pr-badge--down{color:var(--bear);background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.35)}
+.pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor;box-shadow:none}
+.pr-skel{position:relative;overflow:hidden;background:var(--bg-elevated);border-radius:6px}
+.pr-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(127,184,232,.08),transparent);animation:prShimmer 1.4s ease infinite}
+@keyframes prShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+</style>
+  <link rel="canonical" href="https://www.leterminal.net/eco-europe">
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr">
+
+  <section class="pr-hero">
+    <div class="pr-hero__halo" aria-hidden="true"></div>
+    <div class="pr-hero__txt">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Zone · Europe">Zone · Europe</span></span>
+      <h1 class="pr-hero__title" data-en="The European economy<br><span class='pr-metal'>without the noise.</span>">L'économie européenne<br><span class="pr-metal">sans le bruit.</span></h1>
+      <p class="pr-hero__lede" data-en="<b>The Europe Terminal</b> gathers the essentials of European economic news — ECB, euro area, growth, energy, debt — aggregated, summarized and dated. Front page: what really matters."><b>Le Terminal Europe</b> rassemble l'essentiel de l'actualité économique européenne — BCE, zone euro, croissance, énergie, dette — agrégé, résumé et daté. À la une : ce qui compte vraiment.</p>
+      <div class="pr-chips">
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/><circle cx="12" cy="12" r="9"/></svg> <span data-en="ECB">BCE</span></span>
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17l9 5 9-5"/></svg> <span data-en="Euro area">Zone euro</span></span>
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> <span data-en="Growth">Croissance</span></span>
+        <span class="pr-chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg> <span data-en="Energy">Énergie</span></span>
+      </div>
+      <div class="pr-hero__cta">
+        <a class="lt-btn lt-btn--primary" id="prHeroUne" href="#edition"><span data-en="Read the headline">Lire l'à la une</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a class="lt-btn lt-btn--secondary" href="/v2/eco-flash" data-en="Live flash feed">Fil Flash</a>
+      </div>
+    </div>
+    <div class="pr-chart" aria-hidden="true">
+      <div class="pr-stack"><div class="gp-card gp-main"><div class="gp-hd"><span class="lt-dot"></span> Zone euro <span class="gp-hd__chg up">▲ +0.18%</span></div><div class="gp-metric"><b>1.0842</b><span>EUR / USD</span></div><svg class="gp-spark" viewBox="0 0 300 92" preserveAspectRatio="none"><defs><linearGradient id="sp_europe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".34"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs><path d="M0,78 L50,68 L100,58 L150,62 L200,44 L250,34 L300,22 L300,92 L0,92 Z" fill="url(#sp_europe)"/><path d="M0,78 L50,68 L100,58 L150,62 L200,44 L250,34 L300,22" fill="none" stroke="var(--accent)" stroke-width="2.4" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 4px var(--accent))"/><circle cx="300" cy="22" r="3" fill="var(--accent-bright)"/></svg></div><div class="gp-card gp-side"><div class="gp-hd"><span class="lt-dot"></span> <span class="gp-side__sub">Tendance du jour</span></div><div class="gp-ringwrap"><svg width="92" height="92" viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="none" stroke="rgba(127,184,232,.14)" stroke-width="6"/><circle cx="32" cy="32" r="27" fill="none" stroke="var(--bull)" stroke-width="6" stroke-linecap="round" stroke-dasharray="98.4 71.3" transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 5px rgba(74,222,156,.5))"/></svg><div class="gp-ringwrap__v"><b>58%</b><span>Haussier</span></div></div><div class="gp-row"><span class="gp-row__l">CAC 40</span><span class="gp-row__v">+0.6%</span><span class="gp-row__bar"><i class="g" style="width:78%"></i></span></div><div class="gp-row"><span class="gp-row__l">DAX</span><span class="gp-row__v">+0.4%</span><span class="gp-row__bar"><i class="g" style="width:70%"></i></span></div><div class="gp-row"><span class="gp-row__l">Bund 10Y</span><span class="gp-row__v">-2 pb</span><span class="gp-row__bar"><i class="r" style="width:54%"></i></span></div></div></div>
+    </div>
+  </section>
+
+  <section class="pr-edition" id="edition">
+    <div class="pr-edition__bar">
+      <span class="pr-edition__dots"><i style="background:#F0647A"></i><i style="background:#E8C268"></i><i style="background:#4ADE9C"></i></span>
+      <span class="pr-edition__name"><span class="js-term">Europe</span> · <span data-en="Edition">Édition</span></span>
+      <span class="pr-edition__live"><span class="pr-badge pr-badge--accent"><span class="lt-dot"></span> Live</span></span>
+    </div>
+    <div class="pr-edition__body">
+      <div>
+        <div class="pr-edition__meta">
+          <span class="pr-edition__kicker" data-en="Top story">À la une</span>
+          <span class="pr-edition__src" id="prEdSrc"></span>
+          <span class="pr-badge pr-badge--neutral" id="prEdBias">Neutre</span>
+          <span class="pr-edition__time" id="prEdTime"></span>
+        </div>
+        <h2 class="pr-edition__title" id="prEdTitle"><span class="pr-skel" style="display:block;height:1.1em;width:80%"></span><span class="pr-skel" style="display:block;height:1.1em;width:55%;margin-top:10px"></span></h2>
+        <p class="pr-edition__excerpt" id="prEdExcerpt"><span class="pr-skel" style="display:block;height:1em;width:90%"></span></p>
+      </div>
+      <a class="lt-btn lt-btn--primary" id="prEdBtn" href="#"><span data-en="Read the summary">Lire le résumé</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </section>
+
+  <section class="pr-sel" id="prTopSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="The selection">La sélection</span> · <span id="prTopCount" data-en="3 high-impact">3 à fort impact</span></span>
+      <h2 class="pr-head__title" data-en="The 3 to watch">Les 3 à suivre</h2>
+    </div>
+    <div class="pr-sel__grid" id="prTopGrid"></div>
+  </section>
+
+  <section class="pr-sel">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Europe">Europe</span> · <span id="prSelCount" data-en="auto-selection">sélection automatique</span></span>
+      <h2 class="pr-head__title" data-en="What's moving in Europe">Ce qui bouge en Europe</h2>
+    </div>
+    <div class="pr-sel__grid" id="prSelGrid">
+      <article class="pr-art"><div class="pr-art__top"><span class="pr-skel" style="width:30px;height:10px"></span></div><div class="pr-skel" style="height:1em;width:90%"></div><div class="pr-skel" style="height:.8em;width:70%;margin-top:8px"></div></article>
+      <article class="pr-art"><div class="pr-art__top"><span class="pr-skel" style="width:30px;height:10px"></span></div><div class="pr-skel" style="height:1em;width:90%"></div><div class="pr-skel" style="height:.8em;width:70%;margin-top:8px"></div></article>
+      <article class="pr-art"><div class="pr-art__top"><span class="pr-skel" style="width:30px;height:10px"></span></div><div class="pr-skel" style="height:1em;width:90%"></div><div class="pr-skel" style="height:.8em;width:70%;margin-top:8px"></div></article>
+    </div>
+  </section>
+
+  <section class="pr-mission">
+    <div>
+      <div class="pr-head">
+        <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="About · Europe">À propos · Europe</span></span>
+        <h2 class="pr-head__title" data-en="The essentials, without the noise">L'essentiel, sans le bruit</h2>
+      </div>
+      <div class="pr-mission__prose">
+        <p class="pr-lead" data-en="Economic news moves fast — and so does the noise: alarmist headlines, articles that repeat each other, rumours. Here, the news is gathered, de-duplicated and dated, then the most relevant story is surfaced at the top.">L'info éco va vite — et le bruit avec : titres alarmistes, articles qui se répètent, rumeurs. Ici, l'actualité est rassemblée, dédupliquée et datée, puis l'annonce la plus pertinente est mise en avant tout en haut.</p>
+        <p data-en="Every item is summarized, timestamped and linked back to its original source — always credited. One screen to grasp what matters.">Chaque annonce est résumée, horodatée et reliée à sa source d'origine — toujours créditée. Un seul écran pour saisir ce qui compte.</p>
+      </div>
+    </div>
+    <div class="pr-benefits">
+      <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></svg></span><div><h4 data-en="The best story up top">La meilleure en haut</h4><p data-en="The most relevant announcement is featured as the front-page story.">L'annonce la plus pertinente est mise en avant en « à la une ».</p></div></div>
+      <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h4 data-en="Live, dated">En direct, daté</h4><p data-en="Aggregated continuously, newest first, each item timestamped.">Agrégé en continu, du plus récent au plus ancien, chaque annonce horodatée.</p></div></div>
+      <div class="pr-benefit"><span class="pr-benefit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h4 data-en="Credited sources">Sources créditées</h4><p data-en="Every announcement links back to the original article. You read the real source.">Chaque annonce mène à l'article d'origine. Vous lisez la vraie source.</p></div></div>
+    </div>
+  </section>
+
+  <section class="pr-sel" id="prPrevSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="Europe">Europe</span> · <span id="prPrevCount" data-en="archive">archive</span></span>
+      <h2 class="pr-head__title" data-en="Earlier announcements">Annonces précédentes</h2>
+    </div>
+    <div class="pr-prevlist" id="prPrevList"></div>
+  </section>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js?v=3"></script>
+<script>
+(function () {
+  'use strict';
+  var SENTIMENT_MAP = {
+    'Positif':{cls:'pr-badge--up',fr:'Positif',en:'Positive'},'Négatif':{cls:'pr-badge--down',fr:'Négatif',en:'Negative'},'Neutre':{cls:'pr-badge--neutral',fr:'Neutre',en:'Neutral'},
+    'Risk-on':{cls:'pr-badge--up',fr:'Confiance',en:'Confidence'},'Risk-off':{cls:'pr-badge--down',fr:'Prudence',en:'Caution'},'Hawkish':{cls:'pr-badge--up',fr:'Restrictif',en:'Tightening'},'Dovish':{cls:'pr-badge--down',fr:'Accommodant',en:'Easing'}
+  };
+  function getLang(){return localStorage.getItem('lt_lang')||'fr';}
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function fmt(iso){try{return new Date(iso).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function relTime(iso){try{var m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return "À l'instant";if(m<60)return 'Il y a '+m+' min';var h=Math.floor(m/60);if(h<24)return 'Il y a '+h+'h';return 'Il y a '+Math.floor(h/24)+'j';}catch(e){return '';}}
+  function articleUrl(item){if(!item.id)return item.url||'#';var u='/v2/eco-article?id='+encodeURIComponent(item.id);if(item.url)u+='&src='+encodeURIComponent(item.url);return u;}
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleDateString(en?'en-GB':'fr-FR',{day:'2-digit',month:'short'})+' · '+d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function isToday(iso){try{var tz='Europe/Paris',f=new Intl.DateTimeFormat('en-CA',{timeZone:tz});return f.format(new Date(iso))===f.format(new Date());}catch(e){return true;}}
+  function buildPrevRow(item){var url=articleUrl(item);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(item.published_at)+'</span><span class="pr-prevrow__src">'+esc(item.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(item))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
+  function getTitle(item){var l=getLang();return (l==='en'&&item.title_en?item.title_en:item.title)||'';}
+  function getSummary(item){var l=getLang();return (l==='en'&&item.summary_en?item.summary_en:item.summary)||'';}
+  function getSentiment(item){return SENTIMENT_MAP[item.sentiment]||SENTIMENT_MAP['Neutre'];}
+  function renderEdition(item){
+    var s=getSentiment(item),l=getLang(),url=articleUrl(item);
+    var set=function(id,v){var el=document.getElementById(id);if(el)el.textContent=v;};
+    set('prEdSrc',item.source||'');set('prEdTime',fmt(item.published_at));
+    var bias=document.getElementById('prEdBias');if(bias){bias.className='pr-badge '+s.cls;bias.textContent=l==='en'?s.en:s.fr;}
+    var t=document.getElementById('prEdTitle');if(t)t.textContent=getTitle(item);
+    var ex=document.getElementById('prEdExcerpt');if(ex)ex.textContent=getSummary(item);
+    var btn=document.getElementById('prEdBtn');if(btn)btn.href=url;
+    var une=document.getElementById('prHeroUne');if(une)une.href=url;
+  }
+  function buildArt(item,hot){var l=getLang(),url=articleUrl(item);var flag=hot?'<span class="pr-art__flag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'+(l==='en'?'High impact':'Fort impact')+'</span>':'';return '<article class="pr-art'+(hot?'':' pr-art--blue')+'"><div class="pr-art__top"><span class="pr-art__cat js-term">Europe</span>'+flag+'<span class="pr-art__src">'+esc(item.source||'')+'</span><span class="pr-art__time" title="'+esc(relTime(item.published_at))+'">'+fmt(item.published_at)+'</span></div><h3 class="pr-art__title">'+esc(getTitle(item))+'</h3><p class="pr-art__excerpt">'+esc(getSummary(item))+'</p><a class="pr-art__link" href="'+url+'">'+(l==='en'?'Read summary':'Lire le résumé')+' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></article>';  }
+  function selectTop(items){var P={'Positif':3,'Négatif':3,'Risk-on':3,'Risk-off':3,'Hawkish':3,'Dovish':3,'Neutre':0};return items.filter(function(i){return (P[i.sentiment]||0)>=3;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});}
+  var ZKW=['bce','ecb','lagarde','zone euro','euro','allemagne','france','italie','bund','pmi','récession'],UKW=['taux','inflation','cpi','pib','gdp','emploi','chômage','récession','crise','guerre','défaut','fomc','nfp','banque centrale','bce','fed','powell','lagarde','sanction'];
+  function impactScore(it){var sc=0,strong={'Positif':1,'Négatif':1,'Risk-on':1,'Risk-off':1,'Hawkish':1,'Dovish':1};if(strong[it.sentiment])sc+=45;var txt=((it.title||'')+' '+(it.summary||'')).toLowerCase();UKW.forEach(function(k){if(txt.indexOf(k)>-1)sc+=9;});ZKW.forEach(function(k){if(txt.indexOf(k)>-1)sc+=7;});var src=(it.source||'').toLowerCase();['reuters','bloomberg','financial times','wsj','les echos','banque','central'].forEach(function(b){if(src.indexOf(b)>-1)sc+=10;});var ageH=(Date.now()-new Date(it.published_at).getTime())/3600000;if(!isNaN(ageH))sc+=Math.max(0,36-ageH);return sc;}
+  async function loadZone(){
+    var grid=document.getElementById('prSelGrid');var items=[];
+    try{var resp=await fetch('/api/news?zone=europe&limit=60');if(resp.ok){var data=await resp.json();items=data.items||[];}}catch(e){}
+    items=items.filter(function(i){return isToday(i.published_at);}); // jour courant uniquement — l'historique vit dans Archives
+    if(items.length===0){if(grid)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">Aucune annonce disponible pour l\'instant.</div>';return;}
+    var sorted=items.slice().sort(function(a,b){return impactScore(b)-impactScore(a);});var featured=sorted[0];
+    renderEdition(featured);
+    var top3=sorted.slice(1,4);
+    var restByDate=items.filter(function(i){return i!==featured&&top3.indexOf(i)===-1;}).sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
+    var recent=restByDate.slice(0,6),older=restByDate.slice(6).filter(isToday);
+    var topSec=document.getElementById('prTopSec'),topGrid=document.getElementById('prTopGrid');
+    if(topSec&&topGrid){if(top3.length>0){topSec.style.display='';topGrid.innerHTML=top3.map(function(it){return buildArt(it,true);}).join('');}else{topSec.style.display='none';}}
+    if(grid)grid.innerHTML=recent.length>0?recent.map(function(it){return buildArt(it,false);}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:13px">En attente des nouvelles annonces.</div>';
+    var sub=document.getElementById('prSelCount');
+    if(sub){var n=recent.length;sub.textContent=getLang()==='en'?n+' article'+(n>1?'s':''):n+' annonce'+(n>1?'s':'');sub.removeAttribute('data-en');}
+    var prevSec=document.getElementById('prPrevSec'),prevList=document.getElementById('prPrevList'),prevCnt=document.getElementById('prPrevCount');
+    if(prevSec&&prevList){if(older.length>0){prevSec.style.display='';prevList.innerHTML=older.map(buildPrevRow).join('');if(prevCnt){prevCnt.textContent=getLang()==='en'?older.length+' archived':older.length+' archivée'+(older.length>1?'s':'');prevCnt.removeAttribute('data-en');}}else{prevSec.style.display='none';}}
+  }
+  window.ecoReloadNews=loadZone;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadZone);else loadZone();
+  setInterval(loadZone,5*60*1000);
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

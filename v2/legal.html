@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mentions légales, CGU &amp; Politique de confidentialité — Le Terminal</title>
+<meta name="description" content="Conditions générales d'utilisation, mentions légales, politique de confidentialité et politique cookies de Le Terminal.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-void: #07090C;
+    --bg-base: #0B0E13;
+    --bg-surface: #10141B;
+    --bg-elevated: #161B24;
+    --accent: #7FB8E8;
+    --accent-deep: #5A9BD4;
+    --text-title: #F2F4F7;
+    --text-body: #C3CAD4;
+    --text-muted: #7E8794;
+    --border: #3A414C;
+    --border-subtle: #1C212A;
+    --neutral: #E8C268;
+    --bull: #4ADE9C;
+    --bear: #F0647A;
+  }
+
+  html { background: var(--bg-base); color: var(--text-body); font-family: Inter, sans-serif; font-size: 15px; line-height: 1.7; scroll-behavior: smooth; }
+  body { min-height: 100vh; }
+
+  /* ── Nav ── */
+  .lg-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,9,12,.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .lg-nav__brand {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: var(--text-title);
+    font-family: Anton, sans-serif; font-size: 16px; letter-spacing: .06em;
+  }
+  .lg-nav__back {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--text-muted); text-decoration: none;
+    transition: color .2s;
+  }
+  .lg-nav__back:hover { color: var(--accent); }
+
+  /* ── Layout ── */
+  .lg-wrap { max-width: 860px; margin: 0 auto; padding: 64px 24px 120px; }
+
+  /* ── Hero ── */
+  .lg-hero { margin-bottom: 56px; }
+  .lg-hero__eyebrow {
+    font-family: Inter, sans-serif; font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  .lg-hero__title {
+    font-family: Anton, sans-serif; font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05; text-transform: uppercase; color: var(--text-title); margin-bottom: 20px;
+  }
+  .lg-hero__meta {
+    font-size: 13px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .lg-hero__meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── TOC ── */
+  .lg-toc {
+    background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+    border-radius: 6px; padding: 24px 28px; margin-bottom: 56px;
+  }
+  .lg-toc__title {
+    font-family: Inter, sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;
+  }
+  .lg-toc__list { list-style: none; column-count: 2; column-gap: 32px; }
+  @media (max-width: 600px) { .lg-toc__list { column-count: 1; } }
+  .lg-toc__list li { margin-bottom: 6px; break-inside: avoid; }
+  .lg-toc__list a {
+    font-size: 13px; color: var(--text-muted); text-decoration: none;
+    display: flex; align-items: baseline; gap: 8px; transition: color .15s;
+  }
+  .lg-toc__list a:hover { color: var(--accent); }
+  .lg-toc__list a .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--border); min-width: 20px; }
+
+  /* ── Sections ── */
+  .lg-section { padding-top: 48px; scroll-margin-top: 72px; }
+  .lg-section + .lg-section { border-top: 1px solid var(--border-subtle); }
+  .lg-section__label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent);
+    letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lg-section__label::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+  .lg-section__title {
+    font-family: Anton, sans-serif; font-size: 24px; text-transform: uppercase;
+    color: var(--text-title); margin-bottom: 20px; letter-spacing: .03em;
+  }
+
+  /* ── Prose ── */
+  .lg-prose p { margin-bottom: 14px; color: var(--text-body); font-size: 14.5px; }
+  .lg-prose p:last-child { margin-bottom: 0; }
+  .lg-prose h4 {
+    font-family: Inter, sans-serif; font-size: 13px; font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--text-title); margin: 22px 0 8px;
+  }
+  .lg-prose ul, .lg-prose ol { padding-left: 20px; margin-bottom: 14px; }
+  .lg-prose li { font-size: 14.5px; color: var(--text-body); margin-bottom: 5px; }
+  .lg-prose a { color: var(--accent); text-decoration: none; }
+  .lg-prose a:hover { text-decoration: underline; }
+  .lg-prose strong { color: var(--text-title); font-weight: 600; }
+  .lg-prose code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+    background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+    border-radius: 3px; padding: 1px 5px; color: var(--accent);
+  }
+
+  /* ── Callout ── */
+  .lg-callout {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px 20px; border-radius: 6px; margin: 20px 0; border: 1px solid;
+  }
+  .lg-callout--warn { background: rgba(232,194,104,.05); border-color: rgba(232,194,104,.22); }
+  .lg-callout--info { background: rgba(127,184,232,.05); border-color: rgba(127,184,232,.22); }
+  .lg-callout__icon { flex-shrink: 0; margin-top: 2px; }
+  .lg-callout__text { font-size: 13.5px; line-height: 1.65; color: var(--text-body); }
+  .lg-callout--warn .lg-callout__text strong { color: var(--neutral); }
+  .lg-callout--info .lg-callout__text strong { color: var(--accent); }
+
+  /* ── Table ── */
+  .lg-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13.5px; overflow-x: auto; display: block; }
+  .lg-table th {
+    font-family: Inter, sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted);
+    text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .lg-table td { padding: 10px 14px; color: var(--text-body); border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+  .lg-table tr:last-child td { border-bottom: none; }
+  .lg-table td:first-child { color: var(--text-title); font-weight: 500; }
+
+  /* ── Contact card ── */
+  .lg-contact {
+    background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+    border-radius: 6px; padding: 22px 24px; margin-top: 20px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  @media (max-width: 600px) { .lg-contact { grid-template-columns: 1fr; } }
+  .lg-contact__item { display: flex; flex-direction: column; gap: 4px; }
+  .lg-contact__label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); font-weight: 500; }
+  .lg-contact__value { font-size: 14px; color: var(--text-title); }
+  .lg-contact__value a { color: var(--accent); text-decoration: none; }
+  .lg-contact__value a:hover { text-decoration: underline; }
+
+  /* ── Footer ── */
+  .lg-footer { text-align: center; padding: 48px 0 0; border-top: 1px solid var(--border-subtle); margin-top: 48px; }
+  .lg-footer a { color: var(--text-muted); font-size: 13px; text-decoration: none; }
+  .lg-footer a:hover { color: var(--accent); }
+  .lg-footer__copy { margin-top: 16px; font-size: 12px; color: var(--border); }
+</style>
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./fonts.css">
+  <link rel="canonical" href="https://www.leterminal.net/legal">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="lg-wrap">
+  <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Mentions légales, CGU &amp; Politique de confidentialité — Le Terminal</h1>
+  <!-- ── TOC ── -->
+  <nav class="lg-toc" aria-label="Sommaire">
+    <p class="lg-toc__title">Sommaire</p>
+    <ol class="lg-toc__list">
+      <li><a href="#editeur"><span class="num">01</span>Éditeur &amp; hébergement</a></li>
+      <li><a href="#objet"><span class="num">02</span>Objet du service</a></li>
+      <li><a href="#disclaimer"><span class="num">03</span>Avertissement investissement</a></li>
+      <li><a href="#acces"><span class="num">04</span>Accès &amp; comptes utilisateurs</a></li>
+      <li><a href="#abonnements"><span class="num">05</span>Abonnements &amp; paiements</a></li>
+      <li><a href="#ia"><span class="num">06</span>Fonctionnalités IA</a></li>
+      <li><a href="#rgpd"><span class="num">07</span>Données personnelles (RGPD)</a></li>
+      <li><a href="#hebergement"><span class="num">08</span>Stockage &amp; hébergement</a></li>
+      <li><a href="#cookies"><span class="num">09</span>Politique cookies</a></li>
+      <li><a href="#pi"><span class="num">10</span>Propriété intellectuelle</a></li>
+      <li><a href="#responsabilite"><span class="num">11</span>Limitation de responsabilité</a></li>
+      <li><a href="#conduite"><span class="num">12</span>Règles de conduite</a></li>
+      <li><a href="#resiliation"><span class="num">13</span>Suspension &amp; résiliation</a></li>
+      <li><a href="#modifications"><span class="num">14</span>Modifications des CGU</a></li>
+      <li><a href="#droit"><span class="num">15</span>Droit applicable &amp; litiges</a></li>
+      <li><a href="#contact"><span class="num">16</span>Contact</a></li>
+    </ol>
+  </nav>
+
+  <!-- ── 01 Éditeur ── -->
+  <section class="lg-section" id="editeur">
+    <p class="lg-section__label">01</p>
+    <h2 class="lg-section__title">Éditeur &amp; hébergement</h2>
+    <div class="lg-prose">
+      <h4>Éditeur du site</h4>
+      <p>Le site <strong>Le Terminal</strong> est édité à titre personnel par un particulier résidant à Malte (Union européenne). Le service est exploité en tant qu'activité indépendante, sans structure juridique enregistrée à ce jour.</p>
+      <div class="lg-contact">
+        <div class="lg-contact__item">
+          <span class="lg-contact__label">Éditeur</span>
+          <span class="lg-contact__value">Le Terminal (particulier, résidant à Malte)</span>
+        </div>
+        <div class="lg-contact__item">
+          <span class="lg-contact__label">Juridiction</span>
+          <span class="lg-contact__value">Malte (UE)</span>
+        </div>
+        <div class="lg-contact__item">
+          <span class="lg-contact__label">Contact</span>
+          <span class="lg-contact__value"><a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a></span>
+        </div>
+        <div class="lg-contact__item">
+          <span class="lg-contact__label">Téléphone</span>
+          <span class="lg-contact__value">+356 77 06 53 75</span>
+        </div>
+      </div>
+      <h4>Hébergement</h4>
+      <p>Le site est hébergé par <strong>Vercel Inc.</strong> (440 N Barranca Ave #4133, Covina, CA 91723, États-Unis) via son réseau CDN mondial. Les fichiers statiques sont distribués depuis les points de présence les plus proches de l'utilisateur.</p>
+    </div>
+  </section>
+
+  <!-- ── 02 Objet ── -->
+  <section class="lg-section" id="objet">
+    <p class="lg-section__label">02</p>
+    <h2 class="lg-section__title">Objet du service</h2>
+    <div class="lg-prose">
+      <p><strong>Le Terminal</strong> est un outil technologique destiné aux traders et investisseurs particuliers souhaitant :</p>
+      <ul>
+        <li>Analyser des graphiques boursiers à l'aide de l'intelligence artificielle ;</li>
+        <li>Tenir un journal de trading et suivre leurs propres performances historiques ;</li>
+        <li>Consulter un calendrier économique et des données de marché en direct ;</li>
+        <li>Visualiser la répartition de leur patrimoine et simuler des allocations ;</li>
+        <li>Accéder à une carte des marchés multi-actifs (crypto, forex, indices, matières premières).</li>
+      </ul>
+      <p>Le Terminal est un <strong>outil de suivi, d'analyse et de journalisation</strong> — il ne constitue en aucun cas un service d'investissement agréé, un conseiller en investissement, un gestionnaire de portefeuille, ni un prestataire de services financiers réglementés au sens de la directive MiFID II ou de toute réglementation équivalente.</p>
+    </div>
+  </section>
+
+  <!-- ── 03 Disclaimer ── -->
+  <section class="lg-section" id="disclaimer">
+    <p class="lg-section__label">03</p>
+    <h2 class="lg-section__title">Avertissement investissement</h2>
+    <div class="lg-prose">
+      <div class="lg-callout lg-callout--warn">
+        <span class="lg-callout__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </span>
+        <p class="lg-callout__text"><strong>Information importante — ce site ne fournit pas de conseils en investissement.</strong> Tout le contenu généré, y compris les analyses de graphiques produites par l'IA, les allocations patrimoniales simulées et les données de marché affichées, est fourni à titre <strong>informatif et éducatif uniquement</strong>. Ces informations ne constituent pas une recommandation personnalisée, un conseil en investissement, une offre ou une sollicitation d'achat ou de vente de valeurs mobilières ou d'instruments financiers.</p>
+      </div>
+      <p>Les marchés financiers sont volatils et comportent des risques significatifs. <strong>Les performances passées ne préjugent pas des performances futures.</strong> Tout investissement peut entraîner une perte partielle ou totale du capital investi.</p>
+      <p>Les analyses générées par notre système d'intelligence artificielle sont basées sur des données historiques et des modèles statistiques. Elles peuvent être incomplètes, erronées ou inadaptées à votre situation personnelle. La plateforme ne prend pas en compte votre profil de risque, vos objectifs financiers, votre horizon d'investissement ni votre situation fiscale.</p>
+      <p><strong>Avant toute décision d'investissement, nous vous recommandons vivement de consulter un conseiller en investissement agréé.</strong> En France, vous pouvez vérifier l'agrément d'un conseiller sur le registre de l'AMF (<a href="https://www.regafi.fr" target="_blank" rel="noopener">regafi.fr</a>). À Malte, auprès de la Malta Financial Services Authority (<a href="https://www.mfsa.mt" target="_blank" rel="noopener">mfsa.mt</a>).</p>
+      <p>En utilisant Le Terminal, vous reconnaissez et acceptez que vous êtes seul responsable de vos décisions d'investissement et que l'éditeur de Le Terminal ne saurait être tenu responsable des pertes financières résultant de l'utilisation des informations disponibles sur la plateforme.</p>
+    </div>
+  </section>
+
+  <!-- ── 04 Accès ── -->
+  <section class="lg-section" id="acces">
+    <p class="lg-section__label">04</p>
+    <h2 class="lg-section__title">Accès &amp; comptes utilisateurs</h2>
+    <div class="lg-prose">
+      <h4>Conditions d'accès</h4>
+      <p>L'accès au service est ouvert à toute personne physique majeure (18 ans ou plus) ou personne morale dûment représentée, disposant d'une connexion internet. L'utilisation du service est soumise à l'acceptation pleine et entière des présentes CGU.</p>
+      <h4>Création de compte</h4>
+      <p>Pour accéder aux fonctionnalités complètes, vous devez créer un compte en fournissant une adresse e-mail valide et un mot de passe. Vous vous engagez à fournir des informations exactes et à les maintenir à jour. Un seul compte par personne est autorisé.</p>
+      <p>Vous êtes responsable de la confidentialité de vos identifiants de connexion. Toute activité réalisée depuis votre compte vous est imputée. En cas de compromission, vous devez nous en informer sans délai à <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a>.</p>
+      <h4>Compte gratuit</h4>
+      <p>Un accès gratuit est disponible, limité à un nombre restreint d'analyses IA par période (le quota exact est affiché dans l'application). Les fonctionnalités avancées nécessitent un abonnement payant.</p>
+    </div>
+  </section>
+
+  <!-- ── 05 Abonnements ── -->
+  <section class="lg-section" id="abonnements">
+    <p class="lg-section__label">05</p>
+    <h2 class="lg-section__title">Abonnements &amp; paiements</h2>
+    <div class="lg-prose">
+      <h4>Offres payantes</h4>
+      <p>Le Terminal propose des abonnements payants (mensuels ou annuels) donnant accès à l'ensemble des fonctionnalités Pro. Les tarifs en vigueur sont affichés sur la page de tarification du site et peuvent évoluer.</p>
+      <h4>Processeur de paiement</h4>
+      <p>Les paiements sont traités exclusivement par <strong>Whop</strong> (Whop Marketplace Inc., États-Unis), plateforme tierce sécurisée. L'éditeur de Le Terminal ne stocke ni ne traite directement vos données bancaires ou de carte de crédit. Les conditions d'utilisation de Whop s'appliquent conjointement aux présentes CGU pour tout ce qui concerne les transactions financières.</p>
+      <h4>Renouvellement &amp; résiliation</h4>
+      <p>Les abonnements se renouvellent automatiquement à leur échéance. Vous pouvez annuler votre abonnement à tout moment depuis votre espace Whop. La résiliation prend effet à la fin de la période en cours déjà réglée.</p>
+      <h4>Absence de remboursement</h4>
+      <p>Aucun remboursement n'est accordé, quelle que soit la durée restante de l'abonnement. En souscrivant, vous reconnaissez expressément avoir pris connaissance de cette politique. Vous avez toutefois la possibilité d'annuler votre abonnement à tout moment afin de ne pas être prélevé lors du prochain renouvellement.</p>
+      <h4>Litiges de facturation</h4>
+      <p>Toute contestation relative à une facturation doit être adressée à <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a> dans un délai de 30 jours suivant la date du prélèvement contesté.</p>
+    </div>
+  </section>
+
+  <!-- ── 06 IA ── -->
+  <section class="lg-section" id="ia">
+    <p class="lg-section__label">06</p>
+    <h2 class="lg-section__title">Fonctionnalités IA</h2>
+    <div class="lg-prose">
+      <p>Le Terminal utilise les modèles d'intelligence artificielle d'<strong>Anthropic</strong> (Claude) pour générer des analyses de graphiques boursiers. Lorsque vous soumettez une image de graphique, celle-ci est transmise à l'API Anthropic (serveurs situés aux États-Unis) pour traitement. Les résultats sont retournés en temps réel et, si vous êtes connecté, enregistrés dans votre historique.</p>
+      <div class="lg-callout lg-callout--info">
+        <span class="lg-callout__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7FB8E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </span>
+        <p class="lg-callout__text"><strong>Limites de l'IA :</strong> Les analyses générées sont automatiques et n'ont pas été vérifiées par un expert humain. Elles peuvent contenir des erreurs, des approximations ou des interprétations inexactes. Ne prenez jamais de décision financière sur la seule base d'une analyse IA.</p>
+      </div>
+      <p>Les images soumises peuvent être temporairement traitées par Anthropic conformément à leur politique de confidentialité. Nous vous déconseillons de soumettre des images contenant des informations personnelles identifiables ou des données sensibles.</p>
+    </div>
+  </section>
+
+  <!-- ── 07 RGPD ── -->
+  <section class="lg-section" id="rgpd">
+    <p class="lg-section__label">07</p>
+    <h2 class="lg-section__title">Données personnelles (RGPD)</h2>
+    <div class="lg-prose">
+      <p>L'éditeur de Le Terminal est soumis au <strong>Règlement Général sur la Protection des Données (RGPD)</strong> (UE) 2016/679 en tant que personne physique résidant dans l'Union européenne (Malte). En tant que responsable de traitement, nous nous engageons à protéger vos données personnelles.</p>
+      <h4>Données collectées</h4>
+      <table class="lg-table">
+        <thead>
+          <tr><th>Catégorie</th><th>Données</th><th>Finalité</th><th>Base légale</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Compte</td>
+            <td>Adresse e-mail, mot de passe (haché)</td>
+            <td>Authentification, communication</td>
+            <td>Exécution du contrat</td>
+          </tr>
+          <tr>
+            <td>Abonnement</td>
+            <td>Statut Pro, identifiant Whop</td>
+            <td>Gestion des accès</td>
+            <td>Exécution du contrat</td>
+          </tr>
+          <tr>
+            <td>Analyses</td>
+            <td>Images de graphiques, résultats IA, notes de trading</td>
+            <td>Fonctionnement du service, historique</td>
+            <td>Exécution du contrat</td>
+          </tr>
+          <tr>
+            <td>Technique</td>
+            <td>Adresse IP, logs de connexion, user-agent</td>
+            <td>Sécurité, débogage</td>
+            <td>Intérêt légitime</td>
+          </tr>
+          <tr>
+            <td>Cookies</td>
+            <td>Voir section 09</td>
+            <td>Fonctionnement, préférences</td>
+            <td>Consentement / intérêt légitime</td>
+          </tr>
+        </tbody>
+      </table>
+      <h4>Durée de conservation</h4>
+      <ul>
+        <li><strong>Données de compte :</strong> conservées pendant toute la durée de vie du compte, puis 3 ans après la suppression (obligation légale comptable).</li>
+        <li><strong>Analyses et historique :</strong> conservés jusqu'à la suppression du compte ou demande de l'utilisateur.</li>
+        <li><strong>Logs techniques :</strong> 12 mois maximum.</li>
+        <li><strong>Données de paiement :</strong> gérées par Whop selon leurs propres politiques ; Le Terminal ne conserve que le statut d'abonnement.</li>
+      </ul>
+      <h4>Vos droits RGPD</h4>
+      <p>Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :</p>
+      <ul>
+        <li><strong>Droit d'accès</strong> (art. 15) — obtenir une copie de vos données ;</li>
+        <li><strong>Droit de rectification</strong> (art. 16) — corriger des données inexactes ;</li>
+        <li><strong>Droit à l'effacement</strong> (art. 17) — demander la suppression de vos données ;</li>
+        <li><strong>Droit à la limitation</strong> (art. 18) — restreindre le traitement dans certains cas ;</li>
+        <li><strong>Droit à la portabilité</strong> (art. 20) — recevoir vos données dans un format structuré ;</li>
+        <li><strong>Droit d'opposition</strong> (art. 21) — vous opposer à certains traitements fondés sur l'intérêt légitime ;</li>
+        <li><strong>Droit de retirer votre consentement</strong> à tout moment, sans préjudice des traitements antérieurs.</li>
+      </ul>
+      <p>Pour exercer ces droits, adressez votre demande à <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a>. Nous répondrons dans un délai maximum de 30 jours. En cas de litige, vous pouvez introduire une réclamation auprès de l'<strong>Information and Data Protection Commissioner (IDPC) maltais</strong> (<a href="https://idpc.org.mt" target="_blank" rel="noopener">idpc.org.mt</a>) ou de la CNIL si vous résidez en France (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
+      <h4>Transferts hors UE</h4>
+      <p>Certains sous-traitants (Anthropic, Vercel, Whop) sont établis aux États-Unis. Ces transferts sont encadrés par les mécanismes appropriés prévus par le RGPD (clauses contractuelles types de la Commission européenne, cadre EU-U.S. Data Privacy Framework le cas échéant).</p>
+    </div>
+  </section>
+
+  <!-- ── 08 Stockage ── -->
+  <section class="lg-section" id="hebergement">
+    <p class="lg-section__label">08</p>
+    <h2 class="lg-section__title">Stockage &amp; hébergement des données</h2>
+    <div class="lg-prose">
+      <p>Vos données sont réparties entre plusieurs infrastructures selon leur nature :</p>
+      <table class="lg-table">
+        <thead>
+          <tr><th>Service</th><th>Prestataire</th><th>Localisation</th><th>Données concernées</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Base de données</td>
+            <td>Supabase (PostgreSQL)</td>
+            <td>Francfort, Allemagne (UE)</td>
+            <td>Comptes, analyses, historique, profils</td>
+          </tr>
+          <tr>
+            <td>Authentification</td>
+            <td>Supabase Auth</td>
+            <td>Francfort, Allemagne (UE)</td>
+            <td>E-mail, hash de mot de passe, tokens JWT</td>
+          </tr>
+          <tr>
+            <td>Hébergement web</td>
+            <td>Vercel CDN</td>
+            <td>Mondial (point de présence le plus proche)</td>
+            <td>Fichiers statiques, fonctions serverless</td>
+          </tr>
+          <tr>
+            <td>Traitement IA</td>
+            <td>Anthropic (Claude API)</td>
+            <td>États-Unis</td>
+            <td>Images de graphiques soumises à l'analyse</td>
+          </tr>
+          <tr>
+            <td>Paiements &amp; abonnements</td>
+            <td>Whop Marketplace</td>
+            <td>États-Unis</td>
+            <td>Statut d'abonnement, identifiants de membre</td>
+          </tr>
+          <tr>
+            <td>Stockage local</td>
+            <td>localStorage (navigateur)</td>
+            <td>Votre appareil uniquement</td>
+            <td>Historique local (50 dernières analyses sans image), préférences de langue</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Le Terminal ne dispose d'aucun serveur propre. L'architecture est entièrement serverless et cloud-native. Les données de base de données (Supabase) sont hébergées en Union européenne (Francfort), garantissant leur soumission au RGPD sans transfert primaire hors UE pour les données sensibles.</p>
+    </div>
+  </section>
+
+  <!-- ── 09 Cookies ── -->
+  <section class="lg-section" id="cookies">
+    <p class="lg-section__label">09</p>
+    <h2 class="lg-section__title">Politique cookies</h2>
+    <div class="lg-prose">
+      <p>Le Terminal utilise un nombre minimal de technologies de stockage local. Notre approche vise à ne collecter que le strict nécessaire au bon fonctionnement du service.</p>
+      <h4>Cookies et stockage utilisés</h4>
+      <table class="lg-table">
+        <thead>
+          <tr><th>Nom / Clé</th><th>Type</th><th>Durée</th><th>Finalité</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ta_token</code></td>
+            <td>localStorage (JWT)</td>
+            <td>Session + expiration token</td>
+            <td>Maintien de la session authentifiée — strictement nécessaire</td>
+          </tr>
+          <tr>
+            <td><code>ta_email</code></td>
+            <td>localStorage</td>
+            <td>Session</td>
+            <td>Affichage de l'e-mail dans l'interface — strictement nécessaire</td>
+          </tr>
+          <tr>
+            <td><code>lt_history</code></td>
+            <td>localStorage</td>
+            <td>Persistant</td>
+            <td>Historique local des 50 dernières analyses — strictement nécessaire</td>
+          </tr>
+          <tr>
+            <td><code>lt_lang</code></td>
+            <td>localStorage</td>
+            <td>Persistant</td>
+            <td>Préférence de langue (fr/en) — fonctionnel</td>
+          </tr>
+          <tr>
+            <td><code>lt_intro_seen</code></td>
+            <td>sessionStorage</td>
+            <td>Session</td>
+            <td>Éviter la répétition de l'animation d'intro — fonctionnel</td>
+          </tr>
+          <tr>
+            <td><code>lt_consent</code></td>
+            <td>localStorage</td>
+            <td>Persistant</td>
+            <td>Mémorise votre choix de consentement aux services tiers — strictement nécessaire</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Le Terminal <strong>n'utilise aucun cookie publicitaire</strong>, de profilage ou de suivi comportemental intersites, et <strong>aucun outil d'analytics tiers</strong> (Google Analytics, Meta Pixel, etc.).</p>
+
+      <h4>Services tiers et consentement</h4>
+      <p>Certaines fonctionnalités optionnelles s'appuient sur des services tiers susceptibles de déposer leurs propres cookies ou de recevoir votre adresse IP :</p>
+      <ul>
+        <li><strong>TradingView</strong> (heatmap interactive de la page Bubble Map) — service tiers pouvant déposer des cookies. Ce widget <strong>n'est chargé qu'après votre consentement explicite</strong> (« Tout accepter » sur la bannière, ou bouton « Charger TradingView »). Tant que vous ne l'avez pas accepté, il n'est pas chargé.</li>
+        <li><strong>Polices d'affichage</strong> — les polices (Anton, Inter, JetBrains Mono) sont <strong>auto-hébergées</strong> sur notre serveur. Aucune requête n'est envoyée à Google Fonts et <strong>aucune adresse IP n'est transmise à un tiers</strong> pour le chargement des polices.</li>
+        <li><strong>Whop</strong> (paiement) et <strong>Supabase</strong> (authentification, stockage) — prestataires nécessaires au fonctionnement du compte et des abonnements, traités dans la section « Sous-traitants » ci-dessous.</li>
+      </ul>
+      <p>Lors de votre première visite, une <strong>bannière de consentement</strong> vous permet d'accepter ces services tiers (« Tout accepter ») ou de vous limiter au strict nécessaire (« Essentiels uniquement »). Votre choix est conservé dans <code>lt_consent</code> et <strong>reste modifiable à tout moment</strong> via le bouton ci-dessous (ou via le lien « Gérer les cookies » du pied de page).</p>
+      <p style="margin-top:12px"><button type="button" data-cookie-settings style="font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#07090C;background:var(--accent);border:none;border-radius:4px;padding:9px 18px;cursor:pointer">Gérer mes cookies</button></p>
+      <h4>Gestion des cookies</h4>
+      <p>Les données stockées en <code>localStorage</code> et <code>sessionStorage</code> sont strictement nécessaires au fonctionnement du service et ne nécessitent pas de consentement préalable (exemption « cookies strictement nécessaires » au titre de la directive ePrivacy et de l'article 82 de la loi Informatique et Libertés).</p>
+      <p>Vous pouvez supprimer ces données à tout moment depuis les outils développeur de votre navigateur (Paramètres → Confidentialité → Effacer les données de navigation → Stockage local). Cela entraînera votre déconnexion et la suppression de votre historique local.</p>
+    </div>
+  </section>
+
+  <!-- ── 10 PI ── -->
+  <section class="lg-section" id="pi">
+    <p class="lg-section__label">10</p>
+    <h2 class="lg-section__title">Propriété intellectuelle</h2>
+    <div class="lg-prose">
+      <p>L'ensemble du contenu de la plateforme — code source, design, graphismes, logos, textes, algorithmes, interfaces, documentation — est la propriété exclusive de <strong>l'éditeur de Le Terminal</strong> ou de ses concédants de licence, et est protégé par les lois maltaises et européennes relatives à la propriété intellectuelle ainsi que par les conventions internationales applicables.</p>
+      <p>Il vous est accordé un droit d'utilisation personnel, non exclusif, non transférable et révocable de la plateforme, dans le cadre strict de l'usage prévu par les présentes CGU. Toute reproduction, redistribution, modification, décompilation, ingénierie inverse, revente ou exploitation commerciale de tout ou partie de la plateforme sans autorisation écrite préalable de l'éditeur de Le Terminal est strictement interdite.</p>
+      <p>Les analyses générées par l'IA à partir de vos graphiques restent votre propriété. Vous nous accordez une licence non exclusive pour stocker et afficher ces analyses dans le cadre du service.</p>
+    </div>
+  </section>
+
+  <!-- ── 11 Responsabilité ── -->
+  <section class="lg-section" id="responsabilite">
+    <p class="lg-section__label">11</p>
+    <h2 class="lg-section__title">Limitation de responsabilité</h2>
+    <div class="lg-prose">
+      <div class="lg-callout lg-callout--warn">
+        <span class="lg-callout__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </span>
+        <p class="lg-callout__text"><strong>Le Terminal est fourni « en l'état » (as-is), sans garantie d'aucune sorte.</strong> Dans toute la mesure permise par la loi applicable, L'éditeur de Le Terminal exclut toute garantie expresse ou implicite, y compris les garanties de qualité marchande, d'aptitude à un usage particulier et d'absence de contrefaçon.</p>
+      </div>
+      <h4>Exclusions de responsabilité</h4>
+      <p>L'éditeur de Le Terminal ne saurait être tenu responsable :</p>
+      <ul>
+        <li>Des pertes financières résultant de l'utilisation des analyses IA ou des données affichées ;</li>
+        <li>Des erreurs, inexactitudes ou omissions dans les données de marché provenant de sources tierces ;</li>
+        <li>Des interruptions de service, défaillances techniques ou indisponibilités, quel qu'en soit le motif ;</li>
+        <li>Des pertes de données résultant d'une défaillance des infrastructures tierces (Supabase, Vercel, etc.) ;</li>
+        <li>Des actions ou omissions de prestataires tiers (Anthropic, Whop, Yahoo Finance, CoinGecko, etc.) ;</li>
+        <li>De l'utilisation du service en violation des présentes CGU ou de la législation applicable ;</li>
+        <li>Des dommages indirects, consécutifs, spéciaux, punitifs ou exemplaires, même si l'éditeur de Le Terminal avait été informé de leur éventualité.</li>
+      </ul>
+      <h4>Plafond de responsabilité</h4>
+      <p>Dans les cas où la responsabilité de l'éditeur de Le Terminal ne peut être totalement exclue par la loi applicable, elle est limitée au montant total payé par l'utilisateur au titre de son abonnement au cours des <strong>3 mois précédant</strong> l'événement ayant donné lieu au dommage.</p>
+      <h4>Force majeure</h4>
+      <p>L'éditeur de Le Terminal ne saurait être tenu responsable des retards ou défaillances d'exécution résultant de causes indépendantes de sa volonté (catastrophes naturelles, pannes d'infrastructure réseau, cyberattaques, conflits armés, décisions gouvernementales, etc.).</p>
+    </div>
+  </section>
+
+  <!-- ── 12 Conduite ── -->
+  <section class="lg-section" id="conduite">
+    <p class="lg-section__label">12</p>
+    <h2 class="lg-section__title">Règles de conduite</h2>
+    <div class="lg-prose">
+      <p>En utilisant Le Terminal, vous vous engagez à ne pas :</p>
+      <ul>
+        <li>Contourner ou tenter de contourner les mécanismes d'authentification ou de contrôle d'accès ;</li>
+        <li>Utiliser des bots, scripts ou outils automatisés pour accéder au service de manière non autorisée ou surcharger les serveurs ;</li>
+        <li>Partager vos identifiants de connexion ou accorder l'accès à votre compte à des tiers ;</li>
+        <li>Tenter de décompiler, désassembler ou procéder à de l'ingénierie inverse de tout ou partie du service ;</li>
+        <li>Soumettre à l'analyse IA des contenus illicites, malveillants, ou portant atteinte aux droits de tiers ;</li>
+        <li>Utiliser le service à des fins frauduleuses, de manipulation de marché ou d'activités illégales ;</li>
+        <li>Revendre, sous-licencier ou exploiter commercialement le service sans autorisation écrite préalable ;</li>
+        <li>Tenter d'accéder aux données d'autres utilisateurs.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── 13 Résiliation ── -->
+  <section class="lg-section" id="resiliation">
+    <p class="lg-section__label">13</p>
+    <h2 class="lg-section__title">Suspension &amp; résiliation</h2>
+    <div class="lg-prose">
+      <h4>Par l'utilisateur</h4>
+      <p>Vous pouvez supprimer votre compte à tout moment en nous contactant à <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a>. La suppression entraîne la résiliation immédiate de votre accès et la suppression de vos données personnelles dans les délais légaux applicables.</p>
+      <h4>Par Le Terminal</h4>
+      <p>Nous nous réservons le droit de suspendre ou de résilier votre accès, avec ou sans préavis selon la gravité, en cas de :</p>
+      <ul>
+        <li>Violation des présentes CGU ;</li>
+        <li>Non-paiement de l'abonnement ;</li>
+        <li>Activité frauduleuse ou comportement nuisible au service ou à d'autres utilisateurs ;</li>
+        <li>Obligation légale ou décision judiciaire ;</li>
+        <li>Cessation du service (préavis de 30 jours minimum dans ce cas).</li>
+      </ul>
+      <p>En cas de suspension contestée, vous pouvez adresser votre réclamation à <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a>.</p>
+    </div>
+  </section>
+
+  <!-- ── 14 Modifications CGU ── -->
+  <section class="lg-section" id="modifications">
+    <p class="lg-section__label">14</p>
+    <h2 class="lg-section__title">Modifications des CGU</h2>
+    <div class="lg-prose">
+      <p>L'éditeur de Le Terminal se réserve le droit de modifier les présentes CGU à tout moment. En cas de modification substantielle, vous serez informé par e-mail au moins <strong>15 jours avant</strong> l'entrée en vigueur des nouvelles conditions.</p>
+      <p>La date de dernière mise à jour est toujours indiquée en haut du présent document. La poursuite de l'utilisation du service après l'entrée en vigueur des nouvelles CGU vaut acceptation de celles-ci. Si vous n'acceptez pas les modifications, vous devez cesser d'utiliser le service et pouvez demander la suppression de votre compte.</p>
+      <p>Les modifications mineures (corrections orthographiques, reformulations sans impact juridique, mises à jour de coordonnées) peuvent être effectuées sans notification préalable.</p>
+    </div>
+  </section>
+
+  <!-- ── 15 Droit applicable ── -->
+  <section class="lg-section" id="droit">
+    <p class="lg-section__label">15</p>
+    <h2 class="lg-section__title">Droit applicable &amp; litiges</h2>
+    <div class="lg-prose">
+      <p>Les présentes CGU sont régies et interprétées conformément au <strong>droit maltais</strong> et, le cas échéant, au droit de l'Union européenne directement applicable.</p>
+      <p>En cas de litige relatif à l'interprétation ou à l'exécution des présentes CGU, les parties s'efforceront de trouver une solution amiable dans un délai de 30 jours à compter de la notification du litige par lettre recommandée ou e-mail avec accusé de réception.</p>
+      <p>À défaut de résolution amiable, tout litige sera soumis à la compétence exclusive des <strong>juridictions compétentes de Malte</strong> (tribunaux de La Valette), sous réserve des dispositions impératives de protection des consommateurs qui vous seraient applicables en vertu du droit de votre pays de résidence au sein de l'Union européenne.</p>
+      <h4>Médiation et règlement en ligne des litiges (UE)</h4>
+      <p>Conformément au Règlement (UE) N°524/2013, vous pouvez avoir recours à la plateforme européenne de règlement en ligne des litiges (RLL) disponible à l'adresse : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>. Notre adresse e-mail de contact pour ce dispositif : <a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a>.</p>
+      <h4>Divisibilité</h4>
+      <p>Si une clause des présentes CGU est déclarée nulle ou inapplicable, les autres clauses demeurent pleinement en vigueur.</p>
+    </div>
+  </section>
+
+  <!-- ── 16 Contact ── -->
+  <section class="lg-section" id="contact">
+    <p class="lg-section__label">16</p>
+    <h2 class="lg-section__title">Contact</h2>
+    <div class="lg-prose">
+      <p>Pour toute question relative aux présentes CGU, à vos données personnelles, à votre abonnement ou au fonctionnement du service :</p>
+      <div class="lg-contact">
+        <div class="lg-contact__item">
+          <span class="lg-contact__label">E-mail</span>
+          <span class="lg-contact__value"><a href="mailto:leterminalapp@outlook.com">leterminalapp@outlook.com</a></span>
+        </div>
+        <div class="lg-contact__item">
+          <span class="lg-contact__label">Téléphone</span>
+          <span class="lg-contact__value">+356 77 06 53 75</span>
+        </div>
+      </div>
+      <p style="margin-top:16px">Nous nous engageons à répondre à toute demande dans un délai de <strong>5 jours ouvrables</strong>.</p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="lg-footer">
+    <a href="#top">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      Retour en haut
+    </a>
+    <p class="lg-footer__copy">&copy; 2026 Le Terminal — Tous droits réservés</p>
+  </footer>
+
+</main>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./menu.js?v=3"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

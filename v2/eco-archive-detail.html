@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<title>Archive : le détail d'une journée de marché | Le Terminal</title>
+<meta name="description" content="Le détail d'une journée de marché archivée : annonces, réactions et bilan, par Le Terminal.">
+<meta name="robots" content="noindex,follow">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.pr-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-sm);border:1px solid}
+.pr-badge--accent{color:var(--accent);background:var(--accent-glow-soft);border-color:var(--accent-glow)}
+.pr-badge--neutral{color:var(--neutral);background:rgba(232,194,104,.1);border-color:rgba(232,194,104,.35)}
+.pr-badge--up{color:var(--bull);background:rgba(74,222,156,.1);border-color:rgba(74,222,156,.35)}
+.pr-badge--down{color:var(--bear);background:rgba(240,100,122,.1);border-color:rgba(240,100,122,.35)}
+.pr-badge .lt-dot{width:6px;height:6px;border-radius:999px;background:currentColor;box-shadow:none}
+.ad-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12.5px;font-weight:600;color:var(--text-muted);text-decoration:none;margin-bottom:18px;transition:color .2s}
+.ad-back:hover{color:var(--accent)}
+/* ── Document « rapport » ── */
+.ad-doc{position:relative;max-width:900px;border:1px solid var(--border-subtle);border-radius:var(--r-lg);background:linear-gradient(168deg,rgba(22,27,36,.85),rgba(9,12,17,.94));box-shadow:0 26px 64px rgba(0,0,0,.45),inset 0 1px 0 rgba(127,184,232,.08);overflow:hidden}
+.ad-doc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-bright))}
+.ad-doc.b-up::before{background:linear-gradient(90deg,#2fae7a,var(--bull))}
+.ad-doc.b-down::before{background:linear-gradient(90deg,#c14a5e,var(--bear))}
+.ad-doc.b-flat::before{background:linear-gradient(90deg,#caa84e,var(--neutral))}
+.ad-cover{position:relative;display:flex;align-items:center;gap:16px;padding:24px 30px;border-bottom:1px solid var(--border-subtle)}
+.ad-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 120% at 90% 0%,rgba(127,184,232,.10),transparent 60%);pointer-events:none}
+.ad-cover__ic{width:48px;height:48px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);flex-shrink:0}
+.ad-cover__ic svg{width:24px;height:24px}
+.ad-cover__main{min-width:0}
+.ad-cover__title{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.04;letter-spacing:.01em;color:var(--text-title);margin:0}
+.ad-cover__meta{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.ad-cover__count{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--text-muted)}
+.ad-report{counter-reset:adsec;padding:6px 30px 30px}
+.ad-sec{padding:22px 0;border-top:1px solid var(--border-subtle)}
+.ad-sec:first-child{border-top:none;padding-top:18px}
+.ad-h{counter-increment:adsec;display:flex;align-items:center;gap:12px;font-family:var(--font-text);font-weight:700;font-size:1.12rem;color:var(--text-title);margin:0 0 14px;letter-spacing:.01em}
+.ad-h::before{content:counter(adsec,decimal-leading-zero);font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:var(--r-sm);padding:5px 9px;letter-spacing:.05em}
+.ad-p{font-family:var(--font-text);font-size:.97rem;line-height:1.74;color:var(--text-body);margin:0 0 12px}
+.ad-sec:first-child .ad-p:first-child{font-size:1.06rem;line-height:1.7;color:var(--text-title)}
+.ad-ul{list-style:none;margin:4px 0 8px;padding:0}
+.ad-ul li{position:relative;padding-left:22px;font-family:var(--font-text);font-size:.97rem;line-height:1.6;color:var(--text-body);margin-bottom:9px}
+.ad-ul li::before{content:"";position:absolute;left:5px;top:9px;width:6px;height:6px;border-radius:2px;background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
+.ad-msg{padding:40px 24px;text-align:center;color:var(--text-muted);font-size:13px}
+.ad-skel{height:1em;border-radius:6px;background:linear-gradient(90deg,var(--bg-elevated),rgba(127,184,232,.07),var(--bg-elevated));background-size:200% 100%;animation:adsh 1.4s ease infinite}
+.ad-deep{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--accent);padding:14px 30px 0}
+.ad-deep .lt-dot{width:7px;height:7px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:adpulse 1.2s ease-in-out infinite}
+@keyframes adpulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes adsh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr">
+
+  <section class="pr-sel" style="padding-top:8px">
+    <span class="pr-eyebrow" style="display:inline-flex;margin-bottom:18px"><span class="lt-dot"></span> <span data-en="Archive · In-depth report">Archive · Rapport approfondi</span> · <span id="adDate">—</span></span>
+    <article class="ad-doc" id="adDoc">
+      <header class="ad-cover">
+        <span class="ad-cover__ic" id="adIcon"></span>
+        <div class="ad-cover__main">
+          <h2 class="ad-cover__title" id="adTitle">—</h2>
+          <div class="ad-cover__meta">
+            <span class="pr-badge pr-badge--neutral" id="adBias" style="display:none"></span>
+            <span class="ad-cover__count" id="adCount" style="display:none"></span>
+          </div>
+        </div>
+      </header>
+      <div id="adDeep" class="ad-deep" style="display:none"><span class="lt-dot"></span> <span data-en="Generating the in-depth report…">Génération du rapport approfondi…</span></div>
+      <div class="ad-report" id="adReport">
+        <div class="ad-sec"><div class="ad-skel" style="width:40%;height:1.1em;margin-bottom:14px"></div><div class="ad-skel" style="width:96%;margin-bottom:8px"></div><div class="ad-skel" style="width:90%;margin-bottom:8px"></div><div class="ad-skel" style="width:70%"></div></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="pr-sel" id="adListSec" style="display:none">
+    <div class="pr-head">
+      <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="The day's announcements">Les annonces du jour</span> · <span id="adListCount">—</span></span>
+      <h2 class="pr-head__title" data-en="Everything that was published">Tout ce qui a été publié</h2>
+    </div>
+    <div class="pr-prevlist" id="adList"></div>
+  </section>
+
+  <section class="pr-sel" style="text-align:center;padding-top:8px">
+    <a class="lt-btn lt-btn--secondary lt-btn--sm" href="/v2/eco-archive"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-en="Back to the archive">Retour à l'archive</span></a>
+  </section>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js?v=3"></script>
+<script>
+(function () {
+  'use strict';
+  var ZONES = {
+    europe:{fr:'Europe',en:'Europe',ic:'<path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/><circle cx="12" cy="12" r="9"/>'},
+    ameriques:{fr:'Amériques',en:'Americas',ic:'<circle cx="12" cy="12" r="9"/><path d="M8 4.5C6 7 6 9 8.5 10.5S12 13 11 16s-3 3-3 4"/>'},
+    asie:{fr:'Asie',en:'Asia',ic:'<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/>'},
+    marches:{fr:'Marchés',en:'Markets',ic:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>'},
+    institutions:{fr:'Institutions',en:'Institutions',ic:'<path d="M3.5 9.5 12 4l8.5 5.5"/><path d="M5.5 10v8M9.5 10v8M14.5 10v8M18.5 10v8"/><path d="M3 20.5h18"/>'},
+    international:{fr:'International',en:'International',ic:'<circle cx="12" cy="12" r="9"/><path d="M3 9h18M3 15h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/>'},
+    crypto:{fr:'Crypto',en:'Crypto',ic:'<circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4.2a2.4 2.4 0 0 1 0 4.8H9.5m0 0h4.6a2.4 2.4 0 0 1 0 4.7H9.5m0-9.5V17m1.8-9.5V6m0 12.5V17"/>'},
+    flash:{fr:'Flash Info',en:'Flash Info',ic:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'}
+  };
+  var SENT = {
+    'Positif':{cls:'pr-badge--up',fr:'Positif',en:'Positive'},'Négatif':{cls:'pr-badge--down',fr:'Négatif',en:'Negative'},'Neutre':{cls:'pr-badge--neutral',fr:'Neutre',en:'Neutral'},
+    'Risk-on':{cls:'pr-badge--up',fr:'Confiance',en:'Confidence'},'Risk-off':{cls:'pr-badge--down',fr:'Prudence',en:'Caution'},'Hawkish':{cls:'pr-badge--up',fr:'Restrictif',en:'Tightening'},'Dovish':{cls:'pr-badge--down',fr:'Accommodant',en:'Easing'}
+  };
+  function getLang(){return localStorage.getItem('lt_lang')||'fr';}
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function qp(k){try{return new URLSearchParams(location.search).get(k);}catch(e){return null;}}
+  function svg(inner){return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>';}
+  function dayLabel(iso){try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString(getLang()==='en'?'en-GB':'fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}catch(e){return iso;}}
+  function fmtD(iso){try{var d=new Date(iso),en=getLang()==='en';return d.toLocaleTimeString(en?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function getTitle(it){var l=getLang();return (l==='en'&&it.title_en?it.title_en:it.title)||'';}
+  function articleUrl(it){if(!it.id)return it.url||'#';var u='/v2/eco-article?id='+encodeURIComponent(it.id);if(it.url)u+='&src='+encodeURIComponent(it.url);return u;}
+
+  var DAY=qp('day'), ZONE=qp('zone'), DATA=null;
+
+  // Transforme un rapport texte (sections « ## ») en HTML structuré.
+  // Découpe un long bloc de texte en paragraphes lisibles (~2 phrases).
+  function paragraphize(text){
+    var sents=text.replace(/\s+/g,' ').match(/[^.!?]+[.!?]+["»)\]]?(?:\s|$)/g);
+    if(!sents||sents.length<2)return [text.trim()];
+    var out=[],buf=[];
+    sents.forEach(function(s){buf.push(s.trim());if(buf.length>=2){out.push(buf.join(' '));buf=[];}});
+    if(buf.length)out.push(buf.join(' '));
+    return out;
+  }
+  function renderReport(txt){
+    if(!txt){return '<div class="ad-msg" data-en="No in-depth report for this day.">Pas de rapport approfondi pour ce jour.</div>';}
+    txt=txt.trim();
+    // Cas 1 : rapport structuré (sections « ## »)
+    if(txt.indexOf('## ')!==-1){
+      var lines=txt.split(/\n/), html='', open=false, inUl=false;
+      function closeUl(){if(inUl){html+='</ul>';inUl=false;}}
+      lines.forEach(function(raw){
+        var line=raw.trim();
+        if(!line)return;
+        if(line.indexOf('## ')===0){
+          closeUl(); if(open)html+='</div>'; open=true;
+          html+='<div class="ad-sec"><h3 class="ad-h">'+esc(line.slice(3).trim())+'</h3>';
+        } else if(line.indexOf('- ')===0 || line.indexOf('• ')===0){
+          if(!open){html+='<div class="ad-sec">';open=true;}
+          if(!inUl){html+='<ul class="ad-ul">';inUl=true;}
+          html+='<li>'+esc(line.slice(2).trim())+'</li>';
+        } else {
+          closeUl();
+          if(!open){html+='<div class="ad-sec">';open=true;}
+          html+='<p class="ad-p">'+esc(line)+'</p>';
+        }
+      });
+      closeUl(); if(open)html+='</div>';
+      return html||'<div class="ad-msg">—</div>';
+    }
+    // Cas 2 : texte brut (bilan d'un bloc) → 3-4 sections TITRÉES
+    var blocks=txt.split(/\n{1,}/).map(function(b){return b.trim();}).filter(Boolean);
+    var paras=[];
+    blocks.forEach(function(b){ if(b.length>200){paras=paras.concat(paragraphize(b));}else{paras.push(b);} });
+    if(paras.length===0)return '<div class="ad-msg">—</div>';
+    var l=getLang();
+    var nSec=Math.min(4,paras.length);
+    var pool=l==='en'?['Overview','Key points','Drivers']:["Vue d'ensemble","Les points clés","Les moteurs"];
+    var last=l==='en'?'Takeaway':'À retenir';
+    var heads=[];
+    if(nSec===1){heads=[pool[0]];}
+    else{for(var i=0;i<nSec-1;i++)heads.push(pool[Math.min(i,pool.length-1)]);heads.push(last);}
+    var html='';
+    for(var s=0;s<nSec;s++){
+      var a=Math.floor(s*paras.length/nSec), b2=Math.floor((s+1)*paras.length/nSec);
+      var body=paras.slice(a,b2).map(function(p){return '<p class="ad-p">'+esc(p)+'</p>';}).join('');
+      html+='<div class="ad-sec"><h3 class="ad-h">'+esc(heads[s])+'</h3>'+body+'</div>';
+    }
+    return html;
+  }
+
+  function buildRow(it){var url=articleUrl(it);return '<a class="pr-prevrow" href="'+url+'"><span class="pr-prevrow__time">'+fmtD(it.published_at)+'</span><span class="pr-prevrow__src">'+esc(it.source||'')+'</span><span class="pr-prevrow__title">'+esc(getTitle(it))+'</span><svg class="pr-prevrow__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';}
+
+  function render(){
+    var l=getLang(), z=ZONES[ZONE];
+    document.title='Le Terminal — '+(z?(l==='en'?z.en:z.fr):'Archive')+' · '+(DAY||'');
+    var dEl=document.getElementById('adDate'); if(dEl){dEl.textContent=dayLabel(DAY);dEl.removeAttribute('data-en');}
+    var icEl=document.getElementById('adIcon'); if(icEl)icEl.innerHTML=z?svg(z.ic):'';
+    var tEl=document.getElementById('adTitle'); if(tEl)tEl.textContent=z?(l==='en'?z.en:z.fr):'—';
+
+    if(!DATA){return;}
+    var rep=(l==='en'&&DATA.report_en?DATA.report_en:DATA.report_fr)||'';
+    var repEl=document.getElementById('adReport');
+    if(!rep && (DATA.items||[]).length>0){
+      // Pas de rapport encore généré → bouton de génération IA À LA DEMANDE
+      // (aucun crédit Anthropic tant que l'utilisateur ne clique pas).
+      repEl.innerHTML='<div style="text-align:center;padding:18px 0">'
+        +'<button class="btn" id="adGenBtn" style="display:inline-flex;align-items:center;gap:9px;cursor:pointer">'
+        +'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/><circle cx="12" cy="12" r="4"/></svg>'
+        +(l==='en'?'Generate the AI report for this day':'Générer le rapport IA de cette journée')
+        +'</button>'
+        +'<p style="margin-top:10px;font-size:11.5px;color:var(--muted,#8A93A0)">'
+        +(l==='en'?'On-demand — generated only when you click.':'À la demande — généré uniquement à votre clic.')
+        +'</p></div>';
+      var gb=document.getElementById('adGenBtn');
+      if(gb)gb.addEventListener('click',async function(){
+        gb.disabled=true;gb.style.opacity='0.6';gb.style.cursor='wait';
+        gb.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>'+(l==='en'?'Generating…':'Génération en cours…');
+        try{
+          var rr=await fetch('/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE)+'&generate=1&_t='+Date.now());
+          if(rr.ok){DATA=await rr.json();render();}
+          else{gb.disabled=false;gb.style.opacity='1';gb.style.cursor='pointer';gb.textContent=l==='en'?'Error — retry':'Erreur — réessayer';}
+        }catch(e){gb.disabled=false;gb.style.opacity='1';gb.style.cursor='pointer';gb.textContent=l==='en'?'Error — retry':'Erreur — réessayer';}
+      });
+    } else {
+      repEl.innerHTML=renderReport(rep);
+    }
+
+    var bias=document.getElementById('adBias');
+    if(bias&&DATA.bias&&SENT[DATA.bias]){bias.style.display='';bias.className='pr-badge '+SENT[DATA.bias].cls;bias.textContent=l==='en'?SENT[DATA.bias].en:SENT[DATA.bias].fr;}
+    var doc=document.getElementById('adDoc');
+    if(doc){var bc={'pr-badge--up':'b-up','pr-badge--down':'b-down','pr-badge--neutral':'b-flat'};doc.className='ad-doc'+(DATA.bias&&SENT[DATA.bias]?' '+(bc[SENT[DATA.bias].cls]||''):'');}
+    var cnt=document.getElementById('adCount');
+    if(cnt){var n=DATA.item_count||0;cnt.style.display='';cnt.textContent=n+' '+(l==='en'?'item'+(n>1?'s':''):'annonce'+(n>1?'s':''));}
+
+    var listSec=document.getElementById('adListSec'), list=document.getElementById('adList'), lc=document.getElementById('adListCount');
+    if((DATA.items||[]).length>0){
+      listSec.style.display='';
+      list.innerHTML=DATA.items.slice().sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);}).map(buildRow).join('');
+      if(lc){lc.textContent=DATA.items.length+' '+(l==='en'?'items':'annonces');lc.removeAttribute('data-en');}
+    } else { listSec.style.display='none'; }
+  }
+
+  async function init(){
+    if(!DAY||!ZONE||!ZONES[ZONE]){
+      document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Invalid link.">Lien invalide.</div>';
+      return;
+    }
+    render(); // en-tête + skeleton
+    try{ var r=await fetch('/api/archive-detail?day='+encodeURIComponent(DAY)+'&zone='+encodeURIComponent(ZONE)); if(r.ok){DATA=await r.json();} }catch(e){}
+    if(!DATA){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="Report unavailable.">Rapport indisponible pour le moment.</div>';return;}
+    if(!DATA.report_fr && (!DATA.items || DATA.items.length===0)){document.getElementById('adReport').innerHTML='<div class="ad-msg" data-en="No announcement was recorded that day for this zone.">Aucune annonce enregistrée ce jour-là pour cette zone.</div>';return;}
+    render();
+  }
+  window.ecoReloadNews=render; // re-localise au changement de langue
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

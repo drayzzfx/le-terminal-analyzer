@@ -1,0 +1,105 @@
+/* Le Terminal — Blog (listing + articles). Design system « Cinematic Luxury » :
+   tokens de design-system.css uniquement, rayons nets, hairlines, zéro emoji. */
+
+.bl-wrap { max-width: 1180px; margin: 0 auto; padding: 116px 24px 60px; }
+
+/* ── Fil d'Ariane ── */
+.bl-crumb { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 26px; flex-wrap: wrap; }
+.bl-crumb a { color: var(--text-muted); transition: color var(--dur-fast) var(--ease-out); }
+.bl-crumb a:hover { color: var(--accent); }
+.bl-crumb .sep { color: var(--border); }
+.bl-crumb .cur { color: var(--text-body); }
+
+/* ── HERO listing ── */
+.bl-hero { position: relative; text-align: center; padding: 20px 0 14px; }
+.bl-hero__halo { position: absolute; left: 50%; top: -40px; width: 680px; height: 320px; transform: translateX(-50%); pointer-events: none; background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(127,184,232,0.12), transparent 70%); filter: blur(8px); }
+.bl-hero__title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(38px, 6vw, 72px); line-height: 1.02; margin: 14px 0 0; color: var(--text-title); }
+.bl-hero__lede { max-width: 620px; margin: 18px auto 0; font-size: 15px; line-height: 1.7; color: var(--text-muted); }
+
+/* ── Cartes articles ── */
+.bl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin: 46px 0 0; }
+.bl-card { display: flex; flex-direction: column; gap: 13px; background: linear-gradient(165deg, rgba(127,184,232,0.05), rgba(22,27,36,0.55)); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 26px; transition: transform 0.4s var(--ease-out), border-color 0.3s, box-shadow 0.4s; }
+.bl-card:hover { transform: translateY(-6px); border-color: var(--accent-glow); box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px var(--accent-glow); }
+.bl-card__tag { display: inline-flex; align-self: flex-start; font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); background: var(--accent-glow-soft); border: 1px solid var(--accent-glow); border-radius: var(--r-sm); padding: 4px 9px; }
+.bl-card__title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(19px, 2.2vw, 24px); line-height: 1.14; margin: 0; color: var(--text-title); }
+.bl-card__title a { color: inherit; }
+.bl-card__title a:hover { color: var(--accent-bright); }
+.bl-card__exc { font-size: 14px; line-height: 1.65; color: var(--text-body); margin: 0; flex: 1; }
+.bl-card__meta { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 14px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); flex-wrap: wrap; }
+.bl-card__link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.bl-card__link:hover { color: var(--accent-bright); }
+@media (max-width: 760px) { .bl-grid { grid-template-columns: 1fr; } }
+
+/* ── Article ── */
+.bl-art { max-width: 780px; margin: 0 auto; }
+.bl-art__title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(28px, 4.4vw, 52px); line-height: 1.05; margin: 6px 0 0; color: var(--text-title); }
+.bl-art__meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 20px 0 0; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em; color: var(--text-muted); }
+.bl-art__meta .lt-dot { flex-shrink: 0; }
+
+/* Chapeau citable (bloc GEO) */
+.bl-lead { margin: 30px 0 0; padding: 20px 24px; border-left: 2px solid var(--accent); border-radius: 0 var(--r-md) var(--r-md) 0; background: linear-gradient(165deg, var(--accent-glow-soft), rgba(22,27,36,0.5)); }
+.bl-lead p { margin: 0; font-size: 15.5px; line-height: 1.7; color: var(--text-body); }
+.bl-lead strong { color: var(--text-title); }
+
+/* Prose */
+.bl-prose { margin-top: 34px; }
+.bl-prose h2 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(20px, 2.6vw, 30px); line-height: 1.12; color: var(--text-title); margin: 46px 0 14px; }
+.bl-prose h3 { font-size: 16.5px; font-weight: 700; color: var(--text-title); margin: 30px 0 10px; letter-spacing: 0.01em; }
+.bl-prose p { font-size: 15px; line-height: 1.75; color: var(--text-body); margin: 0 0 16px; }
+.bl-prose a { color: var(--accent); border-bottom: 1px solid var(--accent-glow); transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
+.bl-prose a:hover { color: var(--accent-bright); border-color: var(--accent-bright); }
+.bl-prose ul, .bl-prose ol { margin: 0 0 16px; padding-left: 22px; }
+.bl-prose li { font-size: 15px; line-height: 1.7; color: var(--text-body); margin: 0 0 8px; }
+.bl-prose strong { color: var(--text-title); }
+
+/* Tableaux */
+.bl-tablewrap { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); }
+.bl-prose table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.bl-prose th { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-align: left; color: var(--text-muted); background: var(--bg-elevated); padding: 11px 14px; border-bottom: 1px solid var(--border-subtle); white-space: nowrap; }
+.bl-prose td { padding: 11px 14px; border-bottom: 1px solid var(--border-subtle); color: var(--text-body); line-height: 1.55; }
+.bl-prose tr:last-child td { border-bottom: none; }
+.bl-ok { color: var(--bull); font-weight: 700; }
+.bl-ko { color: var(--bear); font-weight: 700; }
+
+/* Blocs prompt (code) */
+.bl-code { position: relative; margin: 0 0 18px; padding: 18px 20px; background: var(--bg-void); border: 1px solid var(--border-subtle); border-radius: var(--r-md); font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--text-body); white-space: pre-wrap; word-break: break-word; }
+.bl-code::before { content: 'PROMPT'; position: absolute; top: -9px; left: 14px; font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); background: var(--bg-base); padding: 1px 7px; border: 1px solid var(--accent-glow); border-radius: var(--r-sm); }
+
+/* Avertissement risque */
+.bl-note { margin: 26px 0; padding: 16px 20px; border: 1px solid rgba(232,194,104,0.35); border-radius: var(--r-md); background: rgba(232,194,104,0.07); }
+.bl-note p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--text-body); }
+.bl-note strong { color: var(--neutral); }
+
+/* CTA produit */
+.bl-cta { text-align: center; margin: 44px 0; padding: 36px 26px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: radial-gradient(ellipse 80% 120% at 50% 0, rgba(127,184,232,0.09), transparent 70%); }
+.bl-cta h2, .bl-cta .bl-cta__t { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(20px, 2.6vw, 30px); margin: 0 0 10px; color: var(--text-title); }
+.bl-cta p { color: var(--text-muted); font-size: 14px; line-height: 1.65; margin: 0 auto 22px; max-width: 520px; }
+
+/* FAQ */
+.bl-faq { margin-top: 10px; }
+.bl-faq__item { border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 18px 20px; margin: 0 0 12px; background: var(--bg-surface); }
+.bl-faq__item h3 { margin: 0 0 8px; font-size: 15px; }
+.bl-faq__item p { margin: 0; font-size: 14px; }
+
+/* Auteur */
+.bl-author { display: flex; gap: 14px; align-items: flex-start; margin: 40px 0 0; padding: 22px 24px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: linear-gradient(165deg, rgba(127,184,232,0.05), rgba(22,27,36,0.5)); }
+.bl-author__ava { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(150deg, var(--accent), var(--accent-deep)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; color: #07090C; flex-shrink: 0; }
+.bl-author__name { font-size: 14px; font-weight: 700; color: var(--text-title); margin: 0 0 3px; }
+.bl-author__bio { font-size: 13px; line-height: 1.6; color: var(--text-muted); margin: 0; }
+
+/* Sources / pour aller plus loin */
+.bl-src { margin: 26px 0 0; padding-top: 18px; border-top: 1px solid var(--border-subtle); font-size: 12.5px; line-height: 1.7; color: var(--text-muted); }
+.bl-more { margin: 40px 0 0; }
+.bl-more h2 { font-family: var(--font-display); text-transform: uppercase; font-size: 20px; color: var(--text-title); margin: 0 0 14px; }
+.bl-more__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.bl-more__grid a { display: flex; flex-direction: column; gap: 4px; padding: 15px 17px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-surface); transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out); }
+.bl-more__grid a:hover { border-color: var(--accent-glow); background: var(--accent-glow-soft); }
+.bl-more__grid .t { font-size: 13.5px; font-weight: 600; color: var(--text-title); }
+.bl-more__grid .d { font-size: 12px; color: var(--text-muted); }
+@media (max-width: 620px) { .bl-more__grid { grid-template-columns: 1fr; } .bl-wrap { padding-top: 104px; } }
+
+/* ── Image de tête d'article + vignette de carte (listing) ── */
+.bl-art__hero { margin: 28px 0 0; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+.bl-art__hero img { display: block; width: 100%; height: auto; }
+.bl-card__thumb { margin: -26px -26px 0; border-bottom: 1px solid var(--border-subtle); border-radius: var(--r-lg) var(--r-lg) 0 0; overflow: hidden; }
+.bl-card__thumb img { display: block; width: 100%; height: auto; }

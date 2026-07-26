@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!-- v3 — design "Le Terminal" (nouveau design system) -->
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#07090C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Le Terminal">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculateur de Pips & taille de position forex | Le Terminal</title>
+<meta name="description" content="Calculez votre taille de lot, la valeur du pip, le risque en euros et le R:R selon votre capital et votre stop. Gratuit, sans inscription.">
+<link rel="canonical" href="https://www.leterminal.net/calculateur">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Calculateur de Pips &amp; taille de position forex | Le Terminal">
+<meta property="og:description" content="Calculez votre taille de lot, la valeur du pip, le risque en euros et le R:R selon votre capital et votre stop. Gratuit, sans inscription.">
+<meta property="og:url" content="https://www.leterminal.net/calculateur">
+<meta property="og:image" content="https://www.leterminal.net/og-banner.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Le Terminal — hub de trading IA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calculateur de Pips &amp; taille de position forex | Le Terminal">
+<meta name="twitter:description" content="Calculez votre taille de lot, la valeur du pip, le risque en euros et le R:R selon votre capital et votre stop. Gratuit, sans inscription.">
+<meta name="twitter:image" content="https://www.leterminal.net/og-banner.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculateur de Pips",
+      "url": "https://www.leterminal.net/calculateur",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "fr-FR",
+      "description": "Calculez votre taille de lot, la valeur du pip, le risque en euros et le R:R selon votre capital et votre stop. Gratuit, sans inscription.",
+      "isPartOf": {
+        "@id": "https://www.leterminal.net/#website"
+      },
+      "publisher": {
+        "@id": "https://www.leterminal.net/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://www.leterminal.net/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Calculateur de Pips",
+          "item": "https://www.leterminal.net/calculateur"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment calculer la taille de lot en forex ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Divisez le montant que vous acceptez de risquer (par ex. 1 % de votre capital) par la distance de votre stop en pips multipliée par la valeur du pip de la paire. Le calculateur le fait instantanément pour plus de 30 marchés."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien vaut un pip ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sur les grandes paires forex en dollar, environ 10 $ par pip et par lot standard, 1 $ par mini-lot et 0,10 $ par micro-lot. Sur les indices, l'or, le pétrole et la crypto, la valeur diffère — le calculateur applique la bonne valeur pour chaque instrument."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel risque prendre par trade ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Une règle répandue est de 1 à 2 % de votre capital par trade ; beaucoup de professionnels restent sous 1 %. C'est un choix de gestion du risque, pas une promesse de gain."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Le calculateur est-il gratuit ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, entièrement gratuit et sans compte. Les autres outils de Le Terminal (journal, calendrier économique, Setup Analyzer) sont accessibles avec un plan gratuit et une option Premium."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<style>
+  /* Alias des anciennes variables → tokens du design system
+     (pour que les styles inline générés par le JS restent cohérents). */
+  :root {
+    --v: var(--accent); --v2: var(--accent-bright);
+    --text: var(--text-title); --text2: var(--text-body); --text3: var(--text-muted);
+    --green: var(--bull); --red: var(--bear); --amber: var(--neutral);
+  }
+
+  /* ---- Sélecteur de paire ---- */
+  .pair-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+  .pair-btn { padding: 9px 6px; background: var(--bg-void); border: 1px solid var(--border-subtle); border-radius: var(--r-sm); font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-muted); cursor: pointer; transition: all var(--dur-fast) var(--ease-out); text-align: center; }
+  .pair-btn:hover { border-color: var(--border); color: var(--text-body); background: var(--accent-glow-soft); }
+  .pair-btn.active { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-glow-soft); }
+
+  /* ---- Autocomplete paire perso ---- */
+  .custom-pair-input { width: 100%; background: var(--bg-void); border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text-title); padding: 11px 14px; font-family: var(--font-mono); font-size: 13px; outline: none; transition: all var(--dur-fast) var(--ease-out); }
+  .custom-pair-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow-soft); }
+  .custom-pair-input::placeholder { color: var(--text-muted); }
+  #pairDropdown { display: none; position: fixed; background: rgba(12,15,20,0.98); border: 1px solid var(--border); border-radius: var(--r-md); z-index: 9999; overflow: hidden; box-shadow: var(--shadow-lg); min-width: 220px; }
+
+  /* ---- Slider de risque ---- */
+  .risk-display { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
+  .risk-val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 30px; font-weight: 700; color: var(--accent-bright); line-height: 1; }
+  .risk-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+  input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 50px; outline: none; cursor: pointer; background: linear-gradient(90deg, var(--accent) var(--pct,50%), var(--border-subtle) var(--pct,50%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--text-title); box-shadow: 0 0 0 3px var(--accent), 0 4px 12px var(--accent-glow); cursor: pointer; transition: transform .15s; }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%; background: var(--text-title); box-shadow: 0 0 0 3px var(--accent); cursor: pointer; }
+  .risk-presets { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+  .risk-preset { padding: 5px 13px; background: transparent; border: 1px solid var(--border-subtle); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
+  .risk-preset:hover { border-color: var(--border); color: var(--text-body); }
+  .risk-preset.on { background: var(--accent-glow-soft); border-color: var(--accent); color: var(--accent-bright); }
+
+  /* ---- Toggle direction (long/short) ---- */
+  .dir-toggle { display: flex; gap: 4px; }
+  .dir-btn { flex: 1; padding: 9px; border-radius: var(--r-sm); border: 1px solid var(--border); background: transparent; font-family: var(--font-text); font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all var(--dur-fast) var(--ease-out); letter-spacing: 0.03em; }
+  .dir-btn.long.active { background: var(--bull-glow); border-color: rgba(74,222,156,0.5); color: var(--bull); }
+  .dir-btn.short.active { background: var(--bear-glow); border-color: rgba(240,100,122,0.5); color: var(--bear); }
+  .dir-btn:hover:not(.active) { border-color: var(--border); color: var(--text-body); }
+
+  /* ---- R:R + warnings ---- */
+  .rr-display { display: none; align-items: center; flex-wrap: wrap; gap: 10px; padding: 11px 14px; background: var(--bg-void); border-radius: var(--r-md); border: 1px solid var(--border-subtle); }
+  .rr-badge { font-family: var(--font-mono); font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: var(--r-pill); letter-spacing: 0.03em; }
+  .rr-green { background: var(--bull-glow); color: var(--bull); border: 1px solid rgba(74,222,156,0.4); }
+  .rr-orange { background: var(--neutral-glow); color: var(--neutral); border: 1px solid rgba(232,194,104,0.4); }
+  .rr-red { background: var(--bear-glow); color: var(--bear); border: 1px solid rgba(240,100,122,0.4); }
+  .rr-warn { font-size: 12px; color: var(--neutral); background: var(--neutral-glow); border: 1px solid rgba(232,194,104,0.35); border-radius: var(--r-md); padding: 9px 13px; margin-top: 10px; }
+
+  /* ---- Sortie : résultat ---- */
+  #resultCard { display: none; }
+  #resultCard.show { display: flex; }
+  .calc-results { margin-top: 4px; }
+  .risk-bar-wrap { margin-top: 4px; }
+  .risk-bar-label { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+  .risk-bar-track { height: 6px; background: var(--border-subtle); border-radius: 50px; overflow: hidden; }
+  .risk-bar-fill { height: 100%; border-radius: 50px; transition: width .6s cubic-bezier(.4,0,.2,1); }
+
+  /* ---- Tips ---- */
+  .tips-title { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; }
+  .tip-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-body); line-height: 1.6; }
+  .tip-item:last-child { border: none; }
+  .tip-icon { flex-shrink: 0; }
+
+  /* ---- divers ---- */
+  .field-mini-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  #ltUserBar { display: inline-flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ============ GLOBAL CHROME : NAV ============ -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<!-- ============ MOBILE DOCK ============ -->
+<nav class="lt-dock" aria-label="Pages">
+  <a class="lt-dock__item" href="/v2">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg>
+    <span class="lt-dock__lbl" data-en="Home">Accueil</span>
+    <span class="lt-dock__tip" data-en="Home">Accueil</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/journal">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg>
+    <span class="lt-dock__lbl">Journal</span>
+    <span class="lt-dock__tip">Journal de Trading</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/app">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg>
+    <span class="lt-dock__lbl">Analyzer</span>
+    <span class="lt-dock__tip">Setup Analyzer</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/patrimoine-presentation">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>
+    <span class="lt-dock__lbl">Patrim.</span>
+    <span class="lt-dock__tip">Patrimoine</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/calendrier">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg>
+    <span class="lt-dock__lbl">Éco</span>
+    <span class="lt-dock__tip">Calendrier Éco</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/bubble">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg>
+    <span class="lt-dock__lbl">Bubble</span>
+    <span class="lt-dock__tip">Bubble Map</span>
+  </a>
+  <a class="lt-dock__item is-active" href="/v2/calculateur">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
+    <span class="lt-dock__lbl">Pips</span>
+    <span class="lt-dock__tip">Calculateur de Pips</span>
+  </a>
+  <a class="lt-dock__item" href="/v2/mur-des-trades">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>
+    <span class="lt-dock__lbl">Trades</span>
+    <span class="lt-dock__tip">Mur des Trades</span>
+  </a>
+</nav>
+
+<!-- ============ APP SHELL ============ -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <span class="side__label" data-en="Tools">Outils</span>
+    <a class="side__item" href="/v2/journal"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg></span>Journal</a>
+    <a class="side__item" href="/v2/calendrier"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg></span>Calendrier Éco</a>
+    <a class="side__item" href="/v2/app"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg></span>Setup Analyzer</a>
+    <a class="side__item" href="/v2/bubble"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg></span>Bubble Map</a>
+    <a class="side__item is-active" href="/v2/calculateur"><span class="side__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg></span>Calculateur</a>
+    <div class="side__spacer"></div>
+    <div class="side__pro">
+      <h4 data-en="Premium Access">Accès Premium</h4>
+      <p data-en="Unlimited analyses, full journal and live macro alerts.">Analyses illimitées, journal complet et alertes macro en direct.</p>
+      <button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href='/v2/tarifs'" data-en="Go Premium">Passer Premium</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top">
+      <div class="top__crumb"><span>Le Terminal</span><span class="sep">/</span><b data-en="Pip Calculator">Calculateur de Pips</b></div>
+      <div class="top__right">
+        <span class="top__status" data-en="<span class='lt-dot'></span> Market open"><span class="lt-dot"></span> Marché ouvert</span>
+        <span class="top__avatar">TR</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- PAGE HEAD -->
+      <div class="page-head">
+        <span class="eyebrow" data-en="<span class='lt-dot'></span> Risk management"><span class="lt-dot"></span> Gestion du risque</span>
+        <h1 data-en="Pip Calculator">Calculateur de Pips</h1>
+        <p data-en="Exact position size, pip value, currency risk and R:R — computed live from your inputs. 30+ pairs, autocomplete, target simulator and breakeven.">Taille de position exacte, valeur du pip, risque en devise et R:R — calculé en direct depuis vos paramètres. 30+ paires, autocomplete, simulateur d'objectif et breakeven.</p>
+      </div>
+
+      <div class="calc-grid">
+        <!-- ============ COLONNE FORMULAIRE ============ -->
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <!-- Paramètres -->
+          <div class="panel calc-form">
+            <span class="panel__title" data-en="Parameters">Paramètres</span>
+
+            <div>
+              <span class="field-mini-label" data-en="Pair / Asset">Paire / Actif</span>
+              <div class="pair-grid" id="pairGrid">
+                <button class="pair-btn active" onclick="selectPair('XAUUSD')">XAUUSD</button>
+                <button class="pair-btn" onclick="selectPair('EURUSD')">EURUSD</button>
+                <button class="pair-btn" onclick="selectPair('GBPUSD')">GBPUSD</button>
+                <button class="pair-btn" onclick="selectPair('NAS100')">NAS100</button>
+                <button class="pair-btn" onclick="selectPair('US30')">US30</button>
+                <button class="pair-btn" onclick="selectPair('BTCUSD')">BTCUSD</button>
+                <button class="pair-btn" onclick="selectPair('USDJPY')">USDJPY</button>
+                <button class="pair-btn" onclick="selectPair('GBPJPY')">GBPJPY</button>
+                <button class="pair-btn" onclick="selectPair('ETHUSD')">ETHUSD</button>
+              </div>
+            </div>
+
+            <div class="custom-pair-wrap" style="position:relative">
+              <input class="custom-pair-input" id="customPair" type="text" placeholder="Ou tapez une paire personnalisée…" autocomplete="off"
+                oninput="onCustomPairInput(this.value)" onfocus="onCustomPairInput(this.value)" onblur="setTimeout(hidePairDropdown,200)">
+            </div>
+
+            <div class="calc-row">
+              <label class="calc-field">
+                <span class="calc-field__label" data-en="Account size">Taille du compte</span>
+                <div class="calc-field__wrap">
+                  <input class="calc-input" id="accountSize" type="number" value="10000" min="1" oninput="calculate()">
+                  <span class="calc-field__suffix" id="curUnit">€</span>
+                </div>
+              </label>
+              <label class="calc-field">
+                <span class="calc-field__label" data-en="SL in pips">SL en pips</span>
+                <div class="calc-field__wrap">
+                  <input class="calc-input" id="slPips" type="number" value="20" min="1" oninput="calculate()">
+                  <span class="calc-field__suffix">pips</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="risk-wrap">
+              <div class="risk-display">
+                <div>
+                  <div class="risk-val" id="riskDisplay">1%</div>
+                  <div class="risk-label" data-en="of capital">du capital</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:22px;font-weight:600;color:var(--text-body)" id="riskAmount">—</div>
+                  <div class="risk-label" data-en="at risk">risqué</div>
+                </div>
+              </div>
+              <input type="range" id="riskSlider" min="0.1" max="5" step="0.1" value="1" oninput="onRiskSlide(this.value)">
+              <div class="risk-presets">
+                <button class="risk-preset on" onclick="setRisk(0.5)">0.5%</button>
+                <button class="risk-preset" onclick="setRisk(1)">1%</button>
+                <button class="risk-preset" onclick="setRisk(1.5)">1.5%</button>
+                <button class="risk-preset" onclick="setRisk(2)">2%</button>
+                <button class="risk-preset" onclick="setRisk(3)">3%</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calcul par prix -->
+          <div class="panel calc-form">
+            <span class="panel__title" data-en="Price-based calculation (optional)">Calcul par prix (optionnel)</span>
+            <div class="dir-toggle">
+              <button class="dir-btn long active" id="dirLong" onclick="setDir('long')">▲ LONG</button>
+              <button class="dir-btn short" id="dirShort" onclick="setDir('short')">▼ SHORT</button>
+            </div>
+            <div class="calc-row">
+              <label class="calc-field"><span class="calc-field__label" data-en="Entry price">Prix d'entrée</span>
+                <div class="calc-field__wrap"><input class="calc-input" id="entryPrice" type="number" placeholder="1.08500" step="any" autocomplete="off" oninput="calcPriceToSL()"></div>
+              </label>
+              <label class="calc-field"><span class="calc-field__label" data-en="Stop Loss price">Stop Loss prix</span>
+                <div class="calc-field__wrap"><input class="calc-input" id="slPrice" type="number" placeholder="1.08200" step="any" autocomplete="off" oninput="calcPriceToSL()"></div>
+              </label>
+              <label class="calc-field"><span class="calc-field__label" data-en="Take Profit price">Take Profit prix</span>
+                <div class="calc-field__wrap"><input class="calc-input" id="tpPrice" type="number" placeholder="1.09100" step="any" autocomplete="off" oninput="calcRR()"></div>
+              </label>
+            </div>
+            <div id="rrDisplay" class="rr-display"></div>
+            <div id="rrWarn" class="rr-warn" style="display:none"></div>
+          </div>
+
+          <!-- Breakeven & Simulateur -->
+          <div class="panel calc-form" id="breakevenSection">
+            <span class="panel__title" data-en="Breakeven &amp; Simulator">Breakeven &amp; Simulateur</span>
+            <div class="calc-row">
+              <label class="calc-field"><span class="calc-field__label" data-en="Trades / week">Nb de trades / semaine</span>
+                <div class="calc-field__wrap"><input class="calc-input" id="simTrades" type="number" placeholder="5" min="1" autocomplete="off" oninput="runSimulator()"></div>
+              </label>
+              <label class="calc-field"><span class="calc-field__label" data-en="Target (€ or R)">Objectif (€ ou R)</span>
+                <div class="calc-field__wrap"><input class="calc-input" id="simTarget" type="number" placeholder="500" min="1" autocomplete="off" oninput="runSimulator()"><span class="calc-field__suffix" id="simUnit">€</span></div>
+              </label>
+            </div>
+            <div id="simResult" style="display:none;background:var(--accent-glow-soft);border:1px solid var(--accent-glow);border-radius:var(--r-md);padding:12px;font-size:13px;line-height:1.7;color:var(--text-body)"></div>
+            <div style="margin-top:4px">
+              <span class="field-mini-label" data-en="Breakeven (profitability threshold)">Breakeven (seuil de rentabilité)</span>
+              <div id="breakevenResult" style="background:var(--neutral-glow);border:1px solid rgba(232,194,104,0.3);border-radius:var(--r-md);padding:12px;font-size:13px;color:var(--text-body);line-height:1.7"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ COLONNE SORTIE ============ -->
+        <div class="calc-out">
+          <div class="panel" id="resultCard" style="flex-direction:column;gap:18px">
+            <span class="panel__title" data-en="Recommended position">Position recommandée</span>
+            <div>
+              <div class="calc-lots">
+                <span class="calc-lots__val" id="resLot">—</span>
+                <span class="calc-lots__unit" id="resLotType">lots</span>
+              </div>
+              <span class="calc-lots__sub" id="resPair2"></span>
+            </div>
+            <div class="calc-results">
+              <div class="calc-result">
+                <span class="calc-result__k" data-en="Amount at risk">Montant risqué</span>
+                <span class="calc-result__v" id="resMontant" style="color:var(--bear)">—</span>
+                <span style="font-size:10px;color:var(--text-muted)" id="resMontantSub" data-en="on this trade">sur ce trade</span>
+              </div>
+              <div class="calc-result">
+                <span class="calc-result__k" data-en="Pip value">Valeur pip</span>
+                <span class="calc-result__v" id="resPipVal">—</span>
+                <span style="font-size:10px;color:var(--text-muted)" id="resPipNote"></span>
+              </div>
+              <div class="calc-result">
+                <span class="calc-result__k" data-en="Pair">Paire</span>
+                <span class="calc-result__v" id="resPair">—</span>
+              </div>
+              <div class="calc-result">
+                <span class="calc-result__k" data-en="SL distance">Distance SL</span>
+                <span class="calc-result__v" id="resSL">—</span>
+              </div>
+            </div>
+            <div class="risk-bar-wrap">
+              <div class="risk-bar-label"><span data-en="Capital at risk">Risque capital</span><span id="resRiskPct">—</span></div>
+              <div class="risk-bar-track"><div class="risk-bar-fill" id="riskBarFill" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <!-- Tips -->
+          <div class="panel">
+            <div class="tips-title" data-en="Risk management rules">Règles de gestion du risque</div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><span data-en="Never risk more than <strong>1-2%</strong> of your capital per trade. Pros often stay under 1%.">Ne risquez jamais plus de <strong>1-2%</strong> de votre capital par trade. Les pros restent souvent sous 1%.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 20h18L3 4z"/><path d="M7 16h2M9.5 12h1.5"/></svg></span><span data-en="Place your SL beyond a logical level (support/resistance, swing, recent high or low) — never an arbitrary fixed pip amount.">Placez votre SL au-delà d'un niveau logique (support/résistance, swing, plus haut ou bas récent) — jamais un montant fixe arbitraire en pips.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span data-en="For a minimum 2:1 RR, your TP must be worth at least 2× the SL distance. The basis of a positive expectancy.">Pour un RR de 2:1 minimum, votre TP doit valoir au moins 2× la distance du SL. Base d'une espérance positive.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span><span data-en="Always size your position from the SL — the lot follows the risk, never the other way around.">Ajustez toujours votre taille de position en fonction du SL — le lot découle du risque, jamais l'inverse.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 2 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span><span data-en="Set a max daily loss (e.g. 3%) and stop trading once you hit it — protect your capital and your mindset.">Fixez une perte maximale par jour (ex. 3%) et arrêtez de trader une fois atteinte — protégez votre capital et votre mental.</span></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></span><span data-en="Never widen your stop to avoid a loss: accept the risk you defined at entry. No revenge trading.">Ne déplacez jamais votre stop pour éviter une perte : acceptez le risque défini à l'entrée. Pas de revenge trading.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CONTENU SEO (pilier : « calculateur de pips / taille de position ») ============ -->
+<style>
+  .lts{max-width:900px;margin:4px auto 72px;padding:0 24px;font-family:var(--font-text)}
+  .lts__eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .lts__eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+  .lts h2{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.01em;font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.08;color:var(--text-title);margin:48px 0 16px}
+  .lts h2:first-of-type{margin-top:8px}
+  .lts h3{font-size:1.05rem;font-weight:600;color:var(--text-title);margin:26px 0 8px}
+  .lts p{font-size:15px;line-height:1.75;color:var(--text-body);margin:0 0 14px}
+  .lts a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+  .lts a:hover{border-bottom-color:var(--accent)}
+  .lts strong{color:var(--text-title);font-weight:600}
+  .lts__steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0 8px}
+  @media(max-width:680px){.lts__steps{grid-template-columns:1fr}}
+  .lts__step{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg,12px);padding:18px 18px 20px}
+  .lts__num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--accent-glow-soft);border:1px solid var(--accent-glow);color:var(--accent);font-family:var(--font-mono);font-weight:700;font-size:14px;margin-bottom:12px}
+  .lts__step b{display:block;color:var(--text-title);font-size:14px;margin-bottom:6px}
+  .lts__step span{font-size:13.5px;line-height:1.6;color:var(--text-muted)}
+  .lts__formula{font-family:var(--font-mono);font-size:14px;color:var(--text-title);background:var(--bg-void);border:1px solid var(--border-subtle);border-left:3px solid var(--accent);border-radius:var(--r-md,8px);padding:14px 16px;margin:8px 0 18px;line-height:1.7;overflow-x:auto}
+  .lts__faq{margin-top:8px}
+  .lts__qa{border-top:1px solid var(--border-subtle);padding:16px 0}
+  .lts__qa:last-child{border-bottom:1px solid var(--border-subtle)}
+  .lts__qa b{display:block;color:var(--text-title);font-size:15px;margin-bottom:6px}
+  .lts__cta{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0}
+  .lts__disc{margin-top:34px;padding:14px 16px;border:1px solid rgba(232,194,104,.28);background:rgba(232,194,104,.06);border-radius:var(--r-md,8px);font-size:12.5px;line-height:1.6;color:var(--text-muted)}
+</style>
+<section class="lts" aria-label="Guide du calculateur de pips">
+  <span class="lts__eyebrow"><span class="lt-dot"></span><span data-en="Position sizing guide">Guide du dimensionnement</span></span>
+  <h2 data-en="Forex position size calculator: the #1 money-management tool">Calculateur de taille de position forex : l'outil n°1 du money management</h2>
+  <p data-en="A trade well taken starts with the right lot size. This <strong>pip calculator</strong> turns three inputs — your capital, your risk percentage and your stop-loss distance — into the exact lot size to use, the pip value and your risk-to-reward ratio. It works on 30+ pairs: forex majors, indices, gold, oil and crypto. Free and no sign-up required.">Un trade bien pris commence par la bonne taille de lot. Ce <strong>calculateur de pips</strong> transforme trois paramètres — votre capital, votre pourcentage de risque et la distance de votre stop-loss — en taille de position exacte, valeur du pip et ratio rendement/risque. Il fonctionne sur plus de 30 marchés : paires forex majeures, indices, or, pétrole et crypto. Gratuit et sans inscription.</p>
+
+  <h2 data-en="How to calculate your position size in 3 steps">Comment calculer votre taille de position en 3 étapes</h2>
+  <div class="lts__steps">
+    <div class="lts__step"><span class="lts__num">1</span><b data-en="Set your risk">Fixez votre risque</b><span data-en="Decide what share of your capital you accept to lose on this trade — generally 1 to 2%. On a €10,000 account at 1%, that is €100 at risk.">Décidez quelle part de votre capital vous acceptez de perdre sur ce trade — en général 1 à 2 %. Sur un compte de 10 000 € à 1 %, cela fait 100 € risqués.</span></div>
+    <div class="lts__step"><span class="lts__num">2</span><b data-en="Measure your stop">Mesurez votre stop</b><span data-en="Place your stop-loss at a logical level (support, resistance, swing) and read the distance in pips between your entry and your stop.">Placez votre stop-loss à un niveau logique (support, résistance, swing) et relevez la distance en pips entre votre entrée et votre stop.</span></div>
+    <div class="lts__step"><span class="lts__num">3</span><b data-en="Read your lot size">Lisez votre lot</b><span data-en="The calculator deduces the exact lot from your risk, the stop distance and the pip value of the pair. The lot follows the risk — never the reverse.">Le calculateur déduit le lot exact à partir de votre risque, de la distance du stop et de la valeur du pip de la paire. Le lot découle du risque — jamais l'inverse.</span></div>
+  </div>
+  <p class="lts__formula" data-en="Lot size = Amount at risk (€) ÷ (Stop distance in pips × Pip value per lot)">Taille de lot = Montant risqué (€) ÷ (Distance du stop en pips × Valeur du pip par lot)</p>
+
+  <h2 data-en="What is a pip and the pip value?">Qu'est-ce qu'un pip et la valeur du pip ?</h2>
+  <p data-en="A <strong>pip</strong> is the smallest standard price increment of a pair. On most forex pairs it is the 4th decimal (0.0001); on pairs quoted in yen, it is the 2nd decimal (0.01). The <strong>pip value</strong> is how much one pip is worth for your position size: roughly $10 per pip and per standard lot on the major USD pairs, and it varies on indices, metals and crypto. Knowing it is what lets you convert a stop distance into a precise amount of money — and therefore into a lot size.">Un <strong>pip</strong> est le plus petit incrément de prix standard d'une paire. Sur la plupart des paires forex, c'est la 4ᵉ décimale (0,0001) ; sur les paires en yen, c'est la 2ᵉ décimale (0,01). La <strong>valeur du pip</strong> correspond à ce que vaut un pip pour votre taille de position : environ 10 $ par pip et par lot standard sur les grandes paires en dollar, et elle varie sur les indices, les métaux et la crypto. La connaître, c'est ce qui permet de convertir une distance de stop en un montant précis — et donc en une taille de lot.</p>
+
+  <h2 data-en="Always size from the stop, never the other way around">Dimensionnez depuis le stop, jamais l'inverse</h2>
+  <p data-en="The most common beginner mistake is choosing a lot size first, then placing the stop wherever is left. Do the opposite: your stop is defined by the chart, your risk is defined by your rules, and the lot is simply the result. This single habit keeps every loss within the limit you chose in advance and protects your account from a single bad trade. Track those trades in your <a href='/v2/journal'>trading journal</a> to verify your real risk over time, and score a setup before entering with the <a href='/v2/app'>Setup Analyzer</a>.">L'erreur la plus fréquente du débutant est de choisir d'abord une taille de lot, puis de placer le stop là où il reste de la place. Faites l'inverse : votre stop est défini par le graphique, votre risque est défini par vos règles, et le lot n'est que le résultat. Cette seule habitude maintient chaque perte dans la limite choisie à l'avance et protège votre compte d'un trade malheureux. Suivez ces trades dans votre <a href="/v2/journal">journal de trading</a> pour vérifier votre risque réel dans le temps, et notez un setup avant d'entrer avec le <a href="/v2/analyzer-presentation">Setup Analyzer</a>.</p>
+
+  <h2 data-en="Frequently asked questions">Questions fréquentes</h2>
+  <div class="lts__faq">
+    <div class="lts__qa"><b data-en="How do I calculate lot size in forex?">Comment calculer la taille de lot en forex ?</b><p data-en="Divide the amount you accept to risk (e.g. 1% of your capital) by your stop distance in pips multiplied by the pip value of the pair. The calculator above does it instantly for 30+ markets.">Divisez le montant que vous acceptez de risquer (par ex. 1 % de votre capital) par la distance de votre stop en pips multipliée par la valeur du pip de la paire. Le calculateur ci-dessus le fait instantanément pour plus de 30 marchés.</p></div>
+    <div class="lts__qa"><b data-en="How much is one pip worth?">Combien vaut un pip ?</b><p data-en="On the major USD forex pairs, about $10 per pip per standard lot, $1 per mini-lot and $0.10 per micro-lot. On indices, gold, oil and crypto the value differs — the calculator uses the right value for each instrument.">Sur les grandes paires forex en dollar, environ 10 $ par pip et par lot standard, 1 $ par mini-lot et 0,10 $ par micro-lot. Sur les indices, l'or, le pétrole et la crypto, la valeur diffère — le calculateur applique la bonne valeur pour chaque instrument.</p></div>
+    <div class="lts__qa"><b data-en="What risk should I take per trade?">Quel risque prendre par trade ?</b><p data-en="A widely used rule is 1 to 2% of your capital per trade; many professionals stay below 1%. It is a risk-management choice, not a profit promise.">Une règle répandue est de 1 à 2 % de votre capital par trade ; beaucoup de professionnels restent sous 1 %. C'est un choix de gestion du risque, pas une promesse de gain.</p></div>
+    <div class="lts__qa"><b data-en="Is the calculator free?">Le calculateur est-il gratuit ?</b><p data-en="Yes, entirely free and without an account. The other Le Terminal tools (journal, economic calendar, Setup Analyzer) are available with a free plan and a Premium option.">Oui, entièrement gratuit et sans compte. Les autres outils de Le Terminal (journal, calendrier économique, Setup Analyzer) sont accessibles avec un plan gratuit et une option Premium.</p></div>
+  </div>
+
+  <div class="lts__cta">
+    <a class="lt-btn lt-btn--primary lt-btn--sm" href="/v2/journal" data-en="Open the trading journal">Ouvrir le journal de trading</a>
+    <a class="lt-btn lt-btn--ghost lt-btn--sm" href="/v2/tarifs" data-en="See the plans">Voir les offres</a>
+  </div>
+
+  <p class="lts__disc" data-en="Educational decision-support tool — not investment advice. Trading carries a high risk of capital loss; past or simulated results do not guarantee future performance.">Outil éducatif d'aide à la décision — pas un conseil en investissement. Le trading comporte un risque élevé de perte en capital ; des résultats passés ou simulés ne préjugent pas des performances futures.</p>
+</section>
+
+<!-- PAIR DROPDOWN (body level) -->
+<div id="pairDropdown"></div>
+
+<script>
+// ── STATE ──
+var selectedPair = 'XAUUSD';
+var riskPct = 1;
+var currency = 'EUR';
+
+// Pip value per lot (in USD) for common pairs
+var PIP_DATA = {
+  'EURUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'GBPUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'AUDUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'NZDUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = 0.0001' },
+  'USDCAD': { pipVal: 7.7,  unit: 'lot', note: '1 pip = 0.0001' },
+  'USDCHF': { pipVal: 9.2,  unit: 'lot', note: '1 pip = 0.0001' },
+  'USDJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'EURJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'GBPJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'CADJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'CHFJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'AUDJPY': { pipVal: 6.8,  unit: 'lot', note: '1 pip = 0.01' },
+  'EURGBP': { pipVal: 12.5, unit: 'lot', note: '1 pip = 0.0001' },
+  'EURAUD': { pipVal: 6.5,  unit: 'lot', note: '1 pip = 0.0001' },
+  'GBPAUD': { pipVal: 6.5,  unit: 'lot', note: '1 pip = 0.0001' },
+  'EURCHF': { pipVal: 9.2,  unit: 'lot', note: '1 pip = 0.0001' },
+  'XAUUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $0.01 · 100oz/lot' },
+  'XAGUSD': { pipVal: 5,    unit: 'lot', note: '1 pip = $0.001 · 5000oz/lot' },
+  'NAS100': { pipVal: 20,   unit: 'contrat', note: '1 point = $20/contrat' },
+  'US30':   { pipVal: 5,    unit: 'contrat', note: '1 point = $5/contrat' },
+  'SP500':  { pipVal: 50,   unit: 'contrat', note: '1 point = $50/contrat' },
+  'DAX':    { pipVal: 25,   unit: 'contrat', note: '1 point = €25/contrat' },
+  'UK100':  { pipVal: 10,   unit: 'contrat', note: '1 point = £10/contrat' },
+  'BTCUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $1 · 1BTC/lot' },
+  'ETHUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $1 · 1ETH/lot' },
+  'SOLUSD': { pipVal: 1,    unit: 'lot', note: '1 pip = $0.01' },
+  'XRPUSD': { pipVal: 10,   unit: 'lot', note: '1 pip = $0.0001' },
+  'USOIL':  { pipVal: 10,   unit: 'lot', note: '1 pip = $0.01 · 1000bbl/lot' },
+  'UKOIL':  { pipVal: 10,   unit: 'lot', note: '1 pip = $0.01 · 1000bbl/lot' },
+};
+
+var ALL_PAIRS = Object.keys(PIP_DATA).concat([
+  'GBPCAD','GBPCHF','EURCAD','AUDCAD','AUDCHF','AUDNZD',
+  'CADCHF','NZDCAD','NZDCHF','NZDJPY',
+  'US500','JP225','AU200','CAC40',
+  'SOLUSD','XRPUSD','BNBUSD'
+]);
+
+var EUR_USD = 1.08;
+
+// ── CURRENCY ──
+function setCurrency(c) {
+  currency = c;
+  document.querySelectorAll('.cur-btn').forEach(function(b){ b.classList.remove('on'); });
+  var t = document.querySelector('.cur-btn:' + (c==='EUR'?'first':'last') + '-child');
+  if (t) t.classList.add('on');
+  document.getElementById('curUnit').textContent = c==='EUR'?'€':'$';
+  calculate();
+}
+
+function curSym() { return currency === 'EUR' ? '€' : '$'; }
+function toUSD(amount) { return currency === 'EUR' ? amount * EUR_USD : amount; }
+function fromUSD(amount) { return currency === 'EUR' ? amount / EUR_USD : amount; }
+
+// ── PAIR SELECTION ──
+function selectPair(p) {
+  selectedPair = p.toUpperCase();
+  document.querySelectorAll('.pair-btn').forEach(function(b){
+    b.classList.toggle('active', b.textContent === selectedPair);
+  });
+  document.getElementById('customPair').value = '';
+  hidePairDropdown();
+  document.getElementById('resultCard').classList.remove('show');
+  calculate();
+}
+
+// ── RISK SLIDER ──
+function onRiskSlide(val) {
+  riskPct = parseFloat(val);
+  updateSliderStyle();
+  updatePresetBtns();
+  updateRiskAmount();
+  calculate();
+}
+
+function setRisk(val) {
+  riskPct = val;
+  document.getElementById('riskSlider').value = val;
+  updateSliderStyle();
+  updatePresetBtns();
+  calculate();
+}
+
+// ── DIRECTION LONG/SHORT ──
+var calcDir = 'long';
+function setDir(d){
+  calcDir = d;
+  document.getElementById('dirLong').classList.toggle('active', d==='long');
+  document.getElementById('dirShort').classList.toggle('active', d==='short');
+  calcPriceToSL();
+}
+
+// ── PRICE / RR FUNCTIONS ──
+function getPipMult(pair) {
+  if (!pair) return 10000;
+  var p = pair.toUpperCase();
+  if (['EURUSD','GBPUSD','AUDUSD','NZDUSD','EURGBP','EURAUD','GBPAUD'].indexOf(p) > -1) return 10000;
+  if (['USDJPY','EURJPY','GBPJPY','CADJPY','AUDJPY'].indexOf(p) > -1) return 100;
+  if (p === 'XAUUSD') return 100;
+  if (['NAS100','US30','SP500','DAX'].indexOf(p) > -1) return 1;
+  if (['BTCUSD','ETHUSD'].indexOf(p) > -1) return 1;
+  if (['USOIL','UKOIL'].indexOf(p) > -1) return 100;
+  return 10000;
+}
+
+function calcPriceToSL() {
+  var entry = parseFloat(document.getElementById('entryPrice').value);
+  var sl    = parseFloat(document.getElementById('slPrice').value);
+  var warn  = document.getElementById('rrWarn');
+  if (isNaN(entry) || isNaN(sl)) { calcRR(); return; }
+
+  if (warn) {
+    if (calcDir === 'long' && sl >= entry) {
+      warn.textContent = 'En LONG, le Stop Loss doit être SOUS le prix d\'entrée.';
+      warn.style.display = 'block';
+    } else if (calcDir === 'short' && sl <= entry) {
+      warn.textContent = 'En SHORT, le Stop Loss doit être AU-DESSUS du prix d\'entrée.';
+      warn.style.display = 'block';
+    } else {
+      warn.style.display = 'none';
+    }
+  }
+
+  var mult = getPipMult(selectedPair);
+  var pips = Math.abs(entry - sl) * mult;
+  var slPipsField = document.getElementById('slPips');
+  if (slPipsField) {
+    slPipsField.value = Math.round(pips * 10) / 10;
+    calculate();
+  }
+  calcRR();
+}
+
+function calcRR() {
+  var entry     = parseFloat(document.getElementById('entryPrice').value);
+  var sl        = parseFloat(document.getElementById('slPrice').value);
+  var tp        = parseFloat(document.getElementById('tpPrice').value);
+  var rrDisplay = document.getElementById('rrDisplay');
+  var warn      = document.getElementById('rrWarn');
+  if (isNaN(entry) || isNaN(sl) || isNaN(tp)) { rrDisplay.style.display = 'none'; return; }
+
+  var tpWrong = (calcDir === 'long' && tp <= entry) || (calcDir === 'short' && tp >= entry);
+  if (tpWrong) {
+    if (warn) {
+      warn.textContent = calcDir === 'long'
+        ? 'En LONG, le Take Profit doit être AU-DESSUS du prix d\'entrée.'
+        : 'En SHORT, le Take Profit doit être SOUS le prix d\'entrée.';
+      warn.style.display = 'block';
+    }
+    rrDisplay.style.display = 'none'; return;
+  }
+
+  var mult   = getPipMult(selectedPair);
+  var slPips = Math.abs(entry - sl) * mult;
+  var tpPips = Math.abs(tp - entry) * mult;
+  if (slPips === 0) { rrDisplay.style.display = 'none'; return; }
+
+  var slWrong = (calcDir === 'long' && sl >= entry) || (calcDir === 'short' && sl <= entry);
+  if (slWrong) { rrDisplay.style.display = 'none'; return; }
+
+  if (warn) warn.style.display = 'none';
+
+  var ratio = tpPips / slPips;
+  var riskEur = null;
+  var riskField = document.getElementById('riskAmount');
+  if (riskField) { var v = parseFloat(riskField.textContent); if (!isNaN(v)) riskEur = v; }
+  var colorClass = ratio >= 2 ? 'rr-green' : ratio >= 1 ? 'rr-orange' : 'rr-red';
+  var dirLabel = calcDir === 'long' ? '▲ LONG' : '▼ SHORT';
+  var profitHtml = '';
+  if (riskEur !== null) {
+    var profitVal = (riskEur * ratio).toFixed(2);
+    profitHtml = '<span style="margin-left:12px;font-size:.9em;color:var(--text-body)">Profit attendu : <strong style="color:'+(ratio>=1?'var(--bull)':'var(--bear)')+'">' + profitVal + curSym() + '</strong></span>';
+  }
+  rrDisplay.style.display = 'flex';
+  rrDisplay.innerHTML =
+    '<span style="font-size:.8em;color:var(--text-muted);margin-right:4px">' + dirLabel + '</span>' +
+    '<span class="rr-badge ' + colorClass + '">RR 1:' + ratio.toFixed(2) + '</span>' +
+    profitHtml;
+}
+
+function updateSliderStyle() {
+  var slider = document.getElementById('riskSlider');
+  var pct = ((riskPct - 0.1) / (5 - 0.1)) * 100;
+  slider.style.setProperty('--pct', pct + '%');
+  document.getElementById('riskDisplay').textContent = riskPct + '%';
+}
+
+function updatePresetBtns() {
+  document.querySelectorAll('.risk-preset').forEach(function(b){
+    b.classList.toggle('on', parseFloat(b.textContent) === riskPct);
+  });
+}
+
+function updateRiskAmount() {
+  var size = parseFloat(document.getElementById('accountSize').value) || 0;
+  if(size > 0) {
+    var amount = (size * riskPct / 100).toFixed(2);
+    document.getElementById('riskAmount').textContent = amount + curSym();
+  } else {
+    document.getElementById('riskAmount').textContent = '—';
+  }
+}
+
+// ── CALCULATE ──
+function calculate() {
+  updateRiskAmount();
+  var size = parseFloat(document.getElementById('accountSize').value);
+  var sl   = parseFloat(document.getElementById('slPips').value);
+  if(!size || !sl || sl <= 0) {
+    document.getElementById('resultCard').classList.remove('show');
+    return;
+  }
+
+  var pip = PIP_DATA[selectedPair];
+  var pipValUSD = pip ? pip.pipVal : 10;
+
+  var riskAmount = size * riskPct / 100;
+  var riskAmountUSD = toUSD(riskAmount);
+  var lotSize = riskAmountUSD / (sl * pipValUSD);
+
+  var unit = pip ? (pip.unit || 'lot') : 'lot';
+  var displayLot, lotType;
+  if(lotSize >= 1) {
+    displayLot = lotSize.toFixed(2);
+    lotType = unit === 'contrat' ? 'contrats' : 'lots';
+  } else if(lotSize >= 0.1) {
+    displayLot = (Math.round(lotSize * 10) / 10).toFixed(1);
+    lotType = unit === 'contrat' ? 'contrats' : 'mini-lots';
+  } else {
+    displayLot = (Math.round(lotSize * 100) / 100).toFixed(2);
+    lotType = unit === 'contrat' ? 'contrats' : 'micro-lots';
+  }
+  var pipNote = pip ? pip.note : '1 pip = $0.0001';
+  var pipValForLot = fromUSD(lotSize * pipValUSD);
+
+  var barColor = riskPct <= 1 ? 'var(--bull)' : riskPct <= 2 ? 'var(--neutral)' : 'var(--bear)';
+  var barWidth = Math.min(riskPct / 5 * 100, 100);
+
+  var card = document.getElementById('resultCard');
+  card.classList.add('show');
+
+  document.getElementById('resLot').textContent = displayLot;
+  document.getElementById('resLotType').textContent = lotType;
+  document.getElementById('resMontant').textContent = riskAmount.toFixed(2) + curSym();
+  document.getElementById('resMontantSub').textContent = riskPct + '% du capital';
+  document.getElementById('resPipVal').textContent = pipValForLot.toFixed(2) + curSym();
+  var noteEl = document.getElementById('resPipNote');
+  if(noteEl && pipNote) noteEl.textContent = pipNote;
+  document.getElementById('resPair').textContent = selectedPair;
+  var p2 = document.getElementById('resPair2');
+  if (p2) p2.textContent = selectedPair + ' · ' + lotType;
+  document.getElementById('resSL').textContent = sl + ' pips';
+  document.getElementById('resRiskPct').textContent = riskPct + '%';
+  document.getElementById('riskBarFill').style.width = barWidth + '%';
+  document.getElementById('riskBarFill').style.background = barColor;
+
+  var lotColor = parseFloat(displayLot) >= 1 ? 'var(--text-title)' :
+                 parseFloat(displayLot) >= 0.1 ? 'var(--accent-bright)' : 'var(--bull)';
+  document.getElementById('resLot').style.color = lotColor;
+
+  runSimulator();
+}
+
+// ── AUTOCOMPLETE ──
+function onCustomPairInput(val) {
+  var box = document.getElementById('pairDropdown');
+  var inp = document.getElementById('customPair');
+  if(!val || val.length < 1) { box.style.display='none'; return; }
+  var v = val.toUpperCase();
+  var matches = ALL_PAIRS.filter(function(p){ return p.startsWith(v) || p.includes(v); }).slice(0,7);
+  if(!matches.length) { box.style.display='none'; return; }
+  box.innerHTML = matches.map(function(p){
+    var hasPip = PIP_DATA[p];
+    return '<div onclick="chooseCustomPair(\''+p+'\')" style="padding:10px 14px;cursor:pointer;font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--text-body);transition:background .15s;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between" onmouseover="this.style.background=\'var(--accent-glow-soft)\';this.style.color=\'var(--text-title)\'" onmouseout="this.style.background=\'\';this.style.color=\'var(--text-body)\'">' +
+      '<span>'+(p===v?'<strong style=\'color:var(--accent-bright)\'>'+p+'</strong>':p)+'</span>' +
+      (hasPip?'<span style=\'font-size:10px;color:var(--text-muted)\'>'+hasPip.pipVal+'$/lot</span>':'') +
+    '</div>';
+  }).join('');
+  var rect = inp.getBoundingClientRect();
+  box.style.top = (rect.bottom + 4) + 'px';
+  box.style.left = rect.left + 'px';
+  box.style.width = rect.width + 'px';
+  box.style.display = 'block';
+  if(PIP_DATA[v]) { selectedPair = v; calculate(); }
+}
+
+function chooseCustomPair(p) {
+  selectedPair = p.toUpperCase();
+  document.getElementById('customPair').value = p;
+  hidePairDropdown();
+  document.querySelectorAll('.pair-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('resultCard').classList.remove('show');
+  calculate();
+}
+
+function hidePairDropdown() {
+  document.getElementById('pairDropdown').style.display = 'none';
+}
+
+window.onCustomPairInput = onCustomPairInput;
+window.chooseCustomPair = chooseCustomPair;
+window.hidePairDropdown = hidePairDropdown;
+window.selectPair = selectPair;
+
+function runSimulator(){
+  var tradesPerWeek = parseFloat(document.getElementById('simTrades').value);
+  var target = parseFloat(document.getElementById('simTarget').value);
+  var simRes = document.getElementById('simResult');
+  var bkRes = document.getElementById('breakevenResult');
+
+  var account = parseFloat(document.getElementById('accountSize').value)||0;
+  var risk = riskPct/100;
+  var riskAmt = account * risk;
+  if(account > 0 && riskAmt > 0){
+    var beLines = [1,1.5,2,2.5,3].map(function(rr){
+      var beWR = Math.round((1/(1+rr))*100);
+      return 'RR 1:'+rr+' → win rate minimum : <strong>'+beWR+'%</strong>';
+    });
+    bkRes.innerHTML = beLines.join('<br>') + '<br><span style="color:var(--text-muted);font-size:11px">En dessous de ce seuil vous perdez de l\'argent sur le long terme</span>';
+  } else {
+    bkRes.innerHTML = '<span style="color:var(--text-muted)">Entrez votre taille de compte pour calculer le breakeven.</span>';
+  }
+
+  if(isNaN(tradesPerWeek)||isNaN(target)||tradesPerWeek<=0||target<=0||riskAmt<=0){
+    if(simRes) simRes.style.display='none'; return;
+  }
+
+  var defaultExpectancy = 0.20;
+  var tradesNeeded = Math.ceil(target / (riskAmt * defaultExpectancy));
+  var weeksNeeded = Math.ceil(tradesNeeded / tradesPerWeek);
+  var monthsNeeded = (weeksNeeded/4.33).toFixed(1);
+
+  simRes.style.display='block';
+  simRes.innerHTML =
+    'Pour atteindre <strong>'+target+curSym()+'</strong> à <strong>'+tradesPerWeek+' trades/semaine</strong> :<br>' +
+    '→ <strong style="color:var(--accent-bright)">'+(weeksNeeded<=52?weeksNeeded+' semaines':monthsNeeded+' mois')+'</strong> (hypothèse : 60% WR, RR 1.5)<br>' +
+    '→ Gain moyen par trade : <strong>'+(riskAmt*defaultExpectancy).toFixed(2)+curSym()+'</strong><br>' +
+    '<span style="font-size:11px;color:var(--text-muted)">Simulation conservative — vos résultats réels varieront selon votre edge</span>';
+}
+
+// ── NAV scroll effect ──
+window.addEventListener('scroll', function(){
+  var c = document.getElementById('ltChrome');
+  if (c) c.classList.toggle('is-scrolled', window.scrollY > 24);
+});
+
+// ── INIT ──
+updateSliderStyle();
+calculate();
+</script>
+
+<script src="./appshell.js"></script>
+<script src="./menu.js?v=3"></script>
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(function(){}); }</script>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

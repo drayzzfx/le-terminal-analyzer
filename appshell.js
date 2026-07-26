@@ -228,23 +228,45 @@
       + buildFooter();
   }
 
-  // Vérifie le statut PRO côté serveur (les pages hors analyseur ne le font pas),
-  // met à jour lt_pro puis rafraîchit le pied de la barre latérale.
+  // ── Contrôle Premium MUTUALISÉ + garde-fou NON DESTRUCTIF ──
+  // Une seule requête /api/check-pro par chargement de page : la promesse est mise
+  // en cache dans window._ltProPromise et partagée entre tous les appelants (pied
+  // de la barre latérale appelé plusieurs fois, journal.html…), au lieu d'un appel
+  // /api/check-pro dupliqué par script.
+  // Garde-fou : seul un verdict serveur SAIN (HTTP 2xx) peut poser (is_pro=true) ou
+  // retirer (is_pro=false) lt_pro. Sur erreur réseau/HTTP, on conserve le cache —
+  // un aléa transitoire ne doit jamais « déclasser » un abonné Premium.
+  function ltReadPro() { try { return localStorage.getItem('lt_pro') === '1'; } catch(e) { return false; } }
+  window.ltRefreshPro = function () {
+    if (window._ltProPromise) return window._ltProPromise;
+    var token;
+    try { token = localStorage.getItem('ta_token'); } catch(e) {}
+    if (!token) return Promise.resolve(ltReadPro());
+    window._ltProPromise = fetch('/api/check-pro', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } })
+      .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function(d){
+        if (d && d.is_pro) { try { localStorage.setItem('lt_pro', '1'); } catch(e) {} return true; }
+        try { localStorage.removeItem('lt_pro'); } catch(e) {} // verdict serveur explicite : non-pro
+        return false;
+      })
+      .catch(function(){ return ltReadPro(); }); // garde-fou : réseau/HTTP KO → on garde le cache
+    return window._ltProPromise;
+  };
+
+  // Vérifie le statut PRO côté serveur via le contrôle mutualisé, puis rafraîchit
+  // le pied de la barre latérale à partir du cache mis à jour.
   function refreshProFooter() {
     var token;
     try { token = localStorage.getItem('ta_token'); } catch(e) {}
     if (!token) return;
-    fetch('/api/check-pro', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } })
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if (d && d.is_pro) { try { localStorage.setItem('lt_pro', '1'); } catch(e) {} }
-        var f = document.getElementById('sideFooter');
-        if (f) {
-          var tmp = document.createElement('div');
-          tmp.innerHTML = buildFooter();
-          f.replaceWith(tmp.firstChild);
-        }
-      }).catch(function(){});
+    window.ltRefreshPro().then(function(){
+      var f = document.getElementById('sideFooter');
+      if (f) {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = buildFooter();
+        f.replaceWith(tmp.firstChild);
+      }
+    }).catch(function(){});
   }
 
   // Reconstruit le pied de la barre latérale / du tiroir À PARTIR du cache local

@@ -30,6 +30,7 @@ module.exports = async function handler(req, res) {
   if (!SK || !SU) return res.status(500).json({ error: 'Not configured' });
 
   const now5m  = new Date(Date.now() -  5 * 60000).toISOString();
+  const now24h = new Date(Date.now() - 24 * 3600e3).toISOString();
   const now7d  = new Date(Date.now() -  7 * 864e5).toISOString();
   const now30d = new Date(Date.now() - 30 * 864e5).toISOString();
   const now14d = new Date(Date.now() - 14 * 864e5).toISOString();
@@ -137,6 +138,7 @@ module.exports = async function handler(req, res) {
         total: users.length,
         pro: pro.length,
         free: users.length - pro.length,
+        new_24h: users.filter(u => u.created_at && u.created_at >= now24h).length,
         recent: recentUsers,
       },
       content: {

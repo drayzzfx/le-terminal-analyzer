@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<title>Le Terminal — Patrimoine · Portefeuille</title>
+<meta name="robots" content="noindex,follow">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./eco.css">
+<style>
+/* ============================================================
+   Patrimoine — Portefeuille (repris de Claude Design, habillé
+   avec le design system du site).
+   ============================================================ */
+.pf-page { display: flex; flex-direction: column; gap: 24px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); }
+.eyebrow .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: inline-block; }
+.page-head { display: flex; flex-direction: column; gap: 8px; }
+.page-head h1 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 2.6rem); letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
+.page-head p { margin: 0; color: var(--text-body); font-size: 0.98rem; max-width: 70ch; line-height: 1.6; }
+.panel { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 22px; }
+.panel__title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0 0 16px; font-family: var(--font-mono); }
+
+.pf-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 9px; border-radius: var(--r-sm); border: 1px solid; }
+.pf-badge--bull { color: var(--bull); background: var(--bull-glow); border-color: rgba(74,222,156,0.35); }
+.pf-badge .lt-dot { width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+
+/* buttons : on réutilise .lt-btn du design system */
+.lt-btn svg { width: 16px; height: 16px; }
+
+/* ---------- connection module ---------- */
+.pf-conn { display: flex; flex-direction: column; gap: 18px; }
+.pf-conn__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.pf-conn__title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 0.01em; color: var(--text-title); margin: 10px 0 8px; }
+.pf-conn__lede { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--text-body); max-width: 60ch; }
+.pf-brokers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (max-width: 560px) { .pf-brokers { grid-template-columns: 1fr; } }
+.pf-broker { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-surface); cursor: pointer; text-align: left; transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out); }
+.pf-broker:hover { border-color: var(--accent); transform: translateY(-2px); background: var(--accent-glow-soft); }
+.pf-broker__mark { flex-shrink: 0; width: 42px; height: 42px; border-radius: var(--r-sm); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 14px; font-weight: 700; background: var(--bg-void); }
+.pf-broker__name { font-size: 14.5px; font-weight: 600; color: var(--text-title); }
+.pf-broker__tag { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent-glow); border-radius: var(--r-sm); padding: 3px 7px; }
+.pf-broker__go { margin-left: auto; color: var(--text-muted); display: inline-flex; transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+.pf-broker:hover .pf-broker__go { color: var(--accent); transform: translateX(3px); }
+.pf-brokers__note { grid-column: 1 / -1; display: flex; align-items: center; gap: 9px; margin: 4px 0 0; font-size: 12px; color: var(--text-muted); }
+.pf-brokers__note svg { color: var(--accent); }
+.pf-conn--ok { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.pf-conn__okleft { display: flex; align-items: center; gap: 16px; }
+.pf-conn__okmeta { display: flex; flex-direction: column; gap: 6px; }
+.pf-conn__okrow { display: flex; align-items: center; gap: 12px; }
+.pf-conn__okrow b { font-size: 1.1rem; color: var(--text-title); }
+.pf-conn__sync { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.pf-conn__sync svg { color: var(--bull); }
+.pf-conn__okact { display: flex; gap: 10px; }
+
+/* ---------- overview + chart ---------- */
+.pf-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 1040px) { .pf-grid { grid-template-columns: 1fr; } }
+.pf-ov { display: flex; flex-direction: column; gap: 22px; }
+.pf-ov__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.pf-ov__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+.pf-ov__total { display: block; font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: clamp(2.4rem, 4vw, 3.4rem); font-weight: 700; color: var(--text-title); line-height: 1.05; margin-top: 6px; }
+.pf-ov__pnl { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.pf-ov__pnlmain { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.05rem; font-weight: 600; }
+.pf-ov__pnlsub { font-size: 12.5px; color: var(--text-muted); }
+.pf-period { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: var(--bg-void); }
+.pf-period__btn { padding: 7px 16px; border: none; background: transparent; color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; border-radius: var(--r-sm); cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
+.pf-period__btn:hover { color: var(--text-title); }
+.pf-period__btn.is-on { background: var(--accent-glow-soft); color: var(--accent-bright); box-shadow: inset 0 0 0 1px var(--accent-glow); }
+.pf-chart { display: flex; flex-direction: column; gap: 10px; }
+.pf-chart__svg { width: 100%; height: 240px; display: block; }
+.pf-chart__foot { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.pf-chart__foot b { color: var(--text-body); font-weight: 600; }
+.pf-ov__sub { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; border-top: 1px solid var(--border-subtle); padding-top: 18px; }
+@media (max-width: 620px) { .pf-ov__sub { grid-template-columns: repeat(2, 1fr); } }
+.pf-substat { display: flex; flex-direction: column; gap: 5px; }
+.pf-substat__k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.pf-substat__v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.15rem; font-weight: 600; color: var(--text-title); }
+
+/* ---------- allocation donut ---------- */
+.pf-alloc { display: flex; flex-direction: column; }
+.pf-alloc__body { display: flex; flex-direction: column; gap: 22px; align-items: center; }
+.pf-donut { width: 180px; flex-shrink: 0; }
+.pf-donut svg { width: 100%; height: auto; }
+.pf-donut__big { font-family: var(--font-mono); font-size: 26px; font-weight: 700; fill: var(--text-title); }
+.pf-donut__cap { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; fill: var(--text-muted); }
+.pf-alloc__legend { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.pf-leg { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 10px; align-items: center; padding-bottom: 11px; border-bottom: 1px solid var(--border-subtle); }
+.pf-leg:last-child { border-bottom: none; padding-bottom: 0; }
+.pf-leg__dot { width: 10px; height: 10px; border-radius: 3px; }
+.pf-leg__k { font-size: 13px; color: var(--text-body); }
+.pf-leg__pct { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; color: var(--text-title); }
+.pf-leg__val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--text-muted); min-width: 64px; text-align: right; }
+
+/* ---------- plans ---------- */
+.pf-plans-head { display: flex; flex-direction: column; gap: 10px; margin-top: 48px; }
+.pf-h2 { font-family: var(--font-display); text-transform: uppercase; font-size: 1.7rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
+.pf-plans-head p { margin: 0; color: var(--text-body); font-size: 0.95rem; }
+.pf-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; align-items: stretch; margin-top: 28px; }
+@media (max-width: 940px) { .pf-plans { grid-template-columns: 1fr; } }
+.pf-plan { position: relative; display: flex; flex-direction: column; gap: 20px; padding: 30px; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: var(--bg-elevated); box-shadow: var(--shadow-md); transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.pf-plan:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 24px 54px rgba(0,0,0,0.5), 0 0 34px var(--accent-glow-soft); }
+.pf-plan.is-featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 0 40px var(--accent-glow-soft); background: radial-gradient(120% 90% at 50% 0%, rgba(127,184,232,0.08), var(--bg-elevated) 60%); }
+.pf-plan__flag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #07090C; background: var(--accent); padding: 4px 14px; border-radius: var(--r-pill); box-shadow: 0 4px 14px var(--accent-glow); }
+.pf-plan__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.pf-plan__name { font-family: var(--font-display); text-transform: uppercase; font-size: 1.5rem; letter-spacing: 0.01em; color: var(--text-title); margin: 0; }
+.pf-plan__risk { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.pf-risk { display: inline-flex; gap: 4px; }
+.pf-risk__dot { width: 8px; height: 8px; border-radius: 999px; background: var(--border); }
+.pf-risk__dot.is-on.lvl1 { background: var(--bull); box-shadow: 0 0 8px var(--bull-glow); }
+.pf-risk__dot.is-on.lvl2 { background: var(--neutral); box-shadow: 0 0 8px var(--neutral-glow); }
+.pf-risk__dot.is-on.lvl3 { background: var(--bear); box-shadow: 0 0 8px var(--bear-glow); }
+.pf-plan__risklabel { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.pf-plan__obj { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+.pf-plan__objval { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.6rem; font-weight: 700; color: var(--accent-bright); }
+.pf-plan__objcap { font-size: 11.5px; color: var(--text-muted); }
+.pf-plan__desc { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--text-body); flex: 1; }
+.pf-plan__mixbar { display: flex; height: 8px; border-radius: 999px; overflow: hidden; gap: 2px; background: var(--bg-void); }
+.pf-plan__mixbar span { display: block; }
+.pf-plan__mix { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pf-plan__mix li { display: flex; align-items: center; gap: 9px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-body); font-variant-numeric: tabular-nums; }
+.pf-plan__mixdot { width: 9px; height: 9px; border-radius: 2px; }
+/* CTA des cartes de plan : on garde le bouton standard du design system
+   (.lt-btn--secondary / --primary), on ne touche qu'à la mise en page. */
+.pf-plan .lt-btn { width: 100%; margin-top: auto; }
+@media (prefers-reduced-motion: reduce) { .pf-plan, .pf-broker { transition: none; } }
+
+/* ---------- saisie capital ---------- */
+.pf-capital-row { display:flex; align-items:center; gap:10px; margin-top:12px; padding:10px 14px; background:var(--bg-void); border:1px solid var(--border-subtle); border-radius:var(--r-md); }
+.pf-capital-row label { font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); white-space:nowrap; cursor:pointer; }
+.pf-capital-row input[type=number] { flex:1; background:transparent; border:none; font-family:var(--font-mono); font-size:1rem; font-weight:600; color:var(--text-title); text-align:right; outline:none; min-width:0; -moz-appearance:textfield; }
+.pf-capital-row input[type=number]::-webkit-outer-spin-button,
+.pf-capital-row input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+.pf-capital-row span { font-family:var(--font-mono); font-size:1rem; color:var(--text-muted); }
+
+/* ---------- liste d'actifs (panneau droit) ---------- */
+.pf-asset-search { position:relative; margin-bottom:10px; }
+.pf-asset-search input { width:100%; box-sizing:border-box; background:var(--bg-void); border:1px solid var(--border-subtle); border-radius:var(--r-md); padding:8px 11px 8px 34px; font-family:Inter,sans-serif; font-size:13px; color:var(--text-body); outline:none; transition:border-color var(--dur-fast) var(--ease-out); }
+.pf-asset-search input::placeholder { color:var(--text-muted); }
+.pf-asset-search input:focus { border-color:var(--accent); }
+.pf-asset-search svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; }
+.pf-asset-list { max-height:220px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--r-md); margin-bottom:16px; }
+.pf-asset-list::-webkit-scrollbar { width:3px; }
+.pf-asset-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+/* accordéon catégories */
+.pf-cat-header { display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-void); border-bottom:1px solid var(--border-subtle); cursor:pointer; user-select:none; transition:background var(--dur-fast) var(--ease-out); border-left:3px solid var(--cat-col,#7FB8E8); }
+.pf-cat-header:hover { background:rgba(127,184,232,0.06); }
+.pf-cat-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+.pf-cat-label { font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-body); flex:1; }
+.pf-cat-badge { font-family:var(--font-mono); font-size:10px; font-weight:700; color:#07090C; background:var(--accent); border-radius:999px; padding:1px 6px; }
+.pf-cat-arrow { color:var(--text-muted); transition:transform var(--dur-fast) var(--ease-out); flex-shrink:0; }
+.pf-cat-header.is-open .pf-cat-arrow { transform:rotate(180deg); }
+.pf-cat-body { display:none; }
+.pf-cat-body.is-open { display:block; }
+.pf-asset-cat { font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:6px 11px 4px; background:var(--bg-void); position:sticky; top:0; z-index:1; border-bottom:1px solid var(--border-subtle); border-left:3px solid transparent; }
+.pf-asset-item { display:flex; align-items:center; gap:9px; padding:7px 11px; border-bottom:1px solid var(--border-subtle); transition:background var(--dur-fast) var(--ease-out); }
+.pf-asset-item:last-child { border-bottom:none; }
+.pf-asset-item:hover { background:rgba(127,184,232,0.04); }
+.pf-asset-item.is-checked { background:rgba(127,184,232,0.05); }
+.pf-asset-item input[type=checkbox] { width:14px; height:14px; accent-color:var(--accent); cursor:pointer; flex-shrink:0; }
+.pf-asset-item__name { flex:1; font-size:12.5px; color:var(--text-body); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pf-asset-item__ticker { font-family:var(--font-mono); font-size:10px; color:var(--text-muted); }
+.pf-asset-item__amt { display:none; align-items:center; gap:4px; flex-shrink:0; }
+.pf-asset-item.is-checked .pf-asset-item__amt { display:flex; }
+.pf-asset-item__amt input[type=number] { width:74px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--r-sm); padding:3px 7px; font-family:var(--font-mono); font-size:12px; color:var(--text-title); text-align:right; outline:none; -moz-appearance:textfield; }
+.pf-asset-item__amt input[type=number]::-webkit-outer-spin-button,
+.pf-asset-item__amt input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+.pf-asset-item__amt input[type=number]:focus { border-color:var(--accent); }
+.pf-asset-item__amt span { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); }
+</style>
+  <link rel="canonical" href="https://www.leterminal.net/patrimoine">
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pf-page">
+
+  <div class="page-head">
+    <span class="eyebrow"><span class="lt-dot"></span> Investissement long terme</span>
+    <h1>Mon Portefeuille</h1>
+    <p>Suivez votre patrimoine investi en un coup d'œil.</p>
+  </div>
+
+  <div id="pfMain">
+    <div class="pf-grid">
+      <!-- Vue d'ensemble + courbe -->
+      <div class="pf-ov panel">
+        <div class="pf-ov__head">
+          <div class="pf-ov__val">
+            <span class="pf-ov__label">Valeur totale du portefeuille <span style="font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--neutral);border:1px solid rgba(232,194,104,.4);background:rgba(232,194,104,.07);border-radius:50px;padding:2px 8px;margin-left:8px;vertical-align:middle;white-space:nowrap">Exemple illustratif</span></span>
+            <span class="pf-ov__total" id="pfTotal">0 €</span>
+            <div id="pfPnl" class="pf-ov__pnl" style="display:none"></div>
+          </div>
+          <div class="pf-period" id="pfPeriod">
+            <button class="pf-period__btn is-on" data-p="5Y">5 ans</button>
+            <button class="pf-period__btn" data-p="10Y">10 ans</button>
+            <button class="pf-period__btn" data-p="20Y">20 ans</button>
+            <button class="pf-period__btn" data-p="30Y">30 ans</button>
+          </div>
+        </div>
+        <div class="pf-chart" id="pfChartWrap">
+          <div id="pfChartEmpty" style="height:240px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-muted)">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 16 4-8 4 6 3-4"/></svg>
+            <span style="font-size:13px">Ajoutez des actifs pour voir la projection</span>
+          </div>
+          <svg class="pf-chart__svg" id="pfChart" viewBox="0 0 720 240" preserveAspectRatio="none" style="display:none"></svg>
+          <div class="pf-chart__foot" id="pfChartFoot" style="display:none">
+            <span>Projection sur <b id="pfFootPeriod">5 ans</b> · rendement attendu <b id="pfFootRate"></b></span>
+            <span id="pfFootChange" style="color:var(--bull)"></span>
+          </div>
+        </div>
+        <div class="pf-ov__sub">
+          <div class="pf-substat"><span class="pf-substat__k">Capital investi</span><span class="pf-substat__v" id="pfStatInvested">—</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Gain potentiel</span><span class="pf-substat__v" id="pfStatGain" style="color:var(--bull)">—</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Valeur finale</span><span class="pf-substat__v" id="pfStatFinal">—</span></div>
+          <div class="pf-substat"><span class="pf-substat__k">Rendement attendu</span><span class="pf-substat__v" id="pfStatRate" style="color:var(--bull)">—</span></div>
+        </div>
+      </div>
+
+      <!-- Répartition -->
+      <div class="pf-alloc panel">
+        <h3 class="panel__title">Répartition des actifs</h3>
+        <div class="pf-asset-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="pfAssetSearch" placeholder="Rechercher un actif…">
+        </div>
+        <div class="pf-asset-list" id="pfAssetList"></div>
+        <div class="pf-alloc__body">
+          <div class="pf-donut">
+            <svg viewBox="0 0 140 140" id="pfDonut"></svg>
+          </div>
+          <div class="pf-alloc__legend" id="pfLegend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pf-plans-head">
+      <span class="eyebrow"><span class="lt-dot"></span> Plans d'investissement</span>
+      <h2 class="pf-h2">Choisissez votre trajectoire</h2>
+      <p>Trois allocations clés en main, du plus prudent au plus dynamique. Ajustables à tout moment.</p>
+    </div>
+    <div class="pf-plans" id="pfPlans"></div>
+    <div style="margin-top:8px;padding:14px 18px;border:1px solid rgba(232,194,104,.18);border-radius:8px;background:rgba(232,194,104,.04);display:flex;gap:12px;align-items:flex-start">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C268" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p style="margin:0;font-family:Inter,sans-serif;font-size:11.5px;line-height:1.6;color:rgba(232,194,104,.75)"><strong style="color:#E8C268;font-weight:600">Information importante —</strong> Les allocations présentées ne constituent pas un conseil en investissement. <strong style="color:#E8C268;font-weight:600">Les objectifs de rendement affichés sont purement illustratifs et ne sont en aucun cas garantis.</strong> Elles sont établies sur la base de données historiques et d'une analyse assistée par intelligence artificielle. Les performances passées ne préjugent pas des performances futures. Tout investissement comporte un risque de perte en capital. Consultez un conseiller financier agréé avant toute décision.</p>
+    </div>
+  </div>
+
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js?v=3"></script>
+<script>
+(function(){
+  'use strict';
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fmtEur0 = function(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; };
+
+  // ── État persisté ──
+  var SAVED = (function(){ try{ return JSON.parse(localStorage.getItem('lt_pf_state')||'{}'); }catch(e){ return {}; } })();
+  var TOTAL = SAVED.total || 48250;
+  var pfPortfolio = SAVED.assets || {};   // { assetId: montant€ }
+  var currentPeriod = '1A';
+
+  var CAT_COL = { 'ETF':'#7FB8E8', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidites':'#C3CAD4', 'Crypto':'#F0647A' };
+  var CAT_LABEL = { 'ETF':'ETF', 'Action':'Actions', 'Crypto':'Crypto', 'Obligation':'Obligations', 'Liquidites':'Liquidites' };
+
+  // ── Catalogue Trade Republic ──
+  var TR_ASSETS = [
+    // ETFs
+    { id:'vwce',   name:'FTSE All-World ETF',          cat:'ETF',        ticker:'VWCE'   },
+    { id:'iwda',   name:'MSCI World ETF',               cat:'ETF',        ticker:'IWDA'   },
+    { id:'sxr8',   name:'S&P 500 ETF',                  cat:'ETF',        ticker:'SXR8'   },
+    { id:'sxrv',   name:'NASDAQ 100 ETF',               cat:'ETF',        ticker:'SXRV'   },
+    { id:'iema',   name:'Marches emergents ETF',        cat:'ETF',        ticker:'IEMA'   },
+    { id:'xesc',   name:'Euro Stoxx 50 ETF',            cat:'ETF',        ticker:'XESC'   },
+    { id:'exs1',   name:'DAX ETF',                      cat:'ETF',        ticker:'EXS1'   },
+    { id:'c40',    name:'CAC 40 ETF',                   cat:'ETF',        ticker:'C40'    },
+    { id:'paeem',  name:'MSCI Em. Markets ETF',         cat:'ETF',        ticker:'PAEEM'  },
+    { id:'isac',   name:'MSCI ACWI ETF',                cat:'ETF',        ticker:'ISAC'   },
+    { id:'exxt',   name:'NASDAQ-100 ETF (iShares)',     cat:'ETF',        ticker:'EXXT'   },
+    { id:'vusa',   name:'S&P 500 ETF (Vanguard)',       cat:'ETF',        ticker:'VUSA'   },
+    { id:'smci',   name:'MSCI Small Cap ETF',           cat:'ETF',        ticker:'WSML'   },
+    { id:'eqqq',   name:'NASDAQ 100 ETF (Invesco)',     cat:'ETF',        ticker:'EQQQ'   },
+    { id:'qdve',   name:'S&P 500 IT Sector ETF',        cat:'ETF',        ticker:'QDVE'   },
+    { id:'cspx',   name:'S&P 500 ETF (iShares acc.)',   cat:'ETF',        ticker:'CSPX'   },
+    { id:'veur',   name:'FTSE Developed Europe ETF',    cat:'ETF',        ticker:'VEUR'   },
+    { id:'verx',   name:'FTSE Dev. Europe ex-UK ETF',   cat:'ETF',        ticker:'VERX'   },
+    // Actions US
+    { id:'aapl',   name:'Apple',                        cat:'Action',     ticker:'AAPL'   },
+    { id:'msft',   name:'Microsoft',                    cat:'Action',     ticker:'MSFT'   },
+    { id:'nvda',   name:'Nvidia',                       cat:'Action',     ticker:'NVDA'   },
+    { id:'amzn',   name:'Amazon',                       cat:'Action',     ticker:'AMZN'   },
+    { id:'googl',  name:'Alphabet',                     cat:'Action',     ticker:'GOOGL'  },
+    { id:'meta',   name:'Meta Platforms',               cat:'Action',     ticker:'META'   },
+    { id:'tsla',   name:'Tesla',                        cat:'Action',     ticker:'TSLA'   },
+    { id:'jpm',    name:'JPMorgan Chase',               cat:'Action',     ticker:'JPM'    },
+    { id:'v',      name:'Visa',                         cat:'Action',     ticker:'V'      },
+    { id:'ko',     name:'Coca-Cola',                    cat:'Action',     ticker:'KO'     },
+    { id:'xom',    name:'ExxonMobil',                   cat:'Action',     ticker:'XOM'    },
+    { id:'dis',    name:'Disney',                       cat:'Action',     ticker:'DIS'    },
+    { id:'unh',    name:'UnitedHealth',                 cat:'Action',     ticker:'UNH'    },
+    { id:'brkb',   name:'Berkshire Hathaway',           cat:'Action',     ticker:'BRK.B'  },
+    { id:'ma',     name:'Mastercard',                   cat:'Action',     ticker:'MA'     },
+    { id:'pep',    name:'PepsiCo',                      cat:'Action',     ticker:'PEP'    },
+    { id:'jnj',    name:'Johnson & Johnson',            cat:'Action',     ticker:'JNJ'    },
+    { id:'pg',     name:'Procter & Gamble',             cat:'Action',     ticker:'PG'     },
+    { id:'hd',     name:'Home Depot',                   cat:'Action',     ticker:'HD'     },
+    { id:'abbv',   name:'AbbVie',                       cat:'Action',     ticker:'ABBV'   },
+    { id:'mrk',    name:'Merck',                        cat:'Action',     ticker:'MRK'    },
+    { id:'cvx',    name:'Chevron',                      cat:'Action',     ticker:'CVX'    },
+    { id:'lly',    name:'Eli Lilly',                    cat:'Action',     ticker:'LLY'    },
+    { id:'avgo',   name:'Broadcom',                     cat:'Action',     ticker:'AVGO'   },
+    { id:'orcl',   name:'Oracle',                       cat:'Action',     ticker:'ORCL'   },
+    { id:'nflx',   name:'Netflix',                      cat:'Action',     ticker:'NFLX'   },
+    { id:'amd',    name:'AMD',                          cat:'Action',     ticker:'AMD'    },
+    { id:'intc',   name:'Intel',                        cat:'Action',     ticker:'INTC'   },
+    { id:'crm',    name:'Salesforce',                   cat:'Action',     ticker:'CRM'    },
+    { id:'adbe',   name:'Adobe',                        cat:'Action',     ticker:'ADBE'   },
+    { id:'pypl',   name:'PayPal',                       cat:'Action',     ticker:'PYPL'   },
+    { id:'uber',   name:'Uber',                         cat:'Action',     ticker:'UBER'   },
+    { id:'spot',   name:'Spotify',                      cat:'Action',     ticker:'SPOT'   },
+    { id:'shop',   name:'Shopify',                      cat:'Action',     ticker:'SHOP'   },
+    { id:'sq',     name:'Block (ex-Square)',            cat:'Action',     ticker:'SQ'     },
+    { id:'coin',   name:'Coinbase',                     cat:'Action',     ticker:'COIN'   },
+    { id:'pltr',   name:'Palantir',                     cat:'Action',     ticker:'PLTR'   },
+    { id:'rivn',   name:'Rivian',                       cat:'Action',     ticker:'RIVN'   },
+    // Actions EU
+    { id:'mc',     name:'LVMH',                         cat:'Action',     ticker:'MC'     },
+    { id:'asml',   name:'ASML Holding',                 cat:'Action',     ticker:'ASML'   },
+    { id:'air',    name:'Airbus',                       cat:'Action',     ticker:'AIR'    },
+    { id:'tte',    name:'TotalEnergies',                cat:'Action',     ticker:'TTE'    },
+    { id:'sap',    name:'SAP',                          cat:'Action',     ticker:'SAP'    },
+    { id:'novo',   name:'Novo Nordisk',                 cat:'Action',     ticker:'NOVO'   },
+    { id:'sie',    name:'Siemens',                      cat:'Action',     ticker:'SIE'    },
+    { id:'rms',    name:'Hermes',                       cat:'Action',     ticker:'RMS'    },
+    { id:'or',     name:'L\'Oreal',                     cat:'Action',     ticker:'OR'     },
+    { id:'race',   name:'Ferrari',                      cat:'Action',     ticker:'RACE'   },
+    { id:'bnp',    name:'BNP Paribas',                  cat:'Action',     ticker:'BNP'    },
+    { id:'nesn',   name:'Nestle',                       cat:'Action',     ticker:'NESN'   },
+    { id:'rog',    name:'Roche Holding',                cat:'Action',     ticker:'ROG'    },
+    { id:'novn',   name:'Novartis',                     cat:'Action',     ticker:'NOVN'   },
+    { id:'abbn',   name:'ABB',                          cat:'Action',     ticker:'ABBN'   },
+    { id:'ads',    name:'Adidas',                       cat:'Action',     ticker:'ADS'    },
+    { id:'bmw',    name:'BMW',                          cat:'Action',     ticker:'BMW'    },
+    { id:'vow',    name:'Volkswagen',                   cat:'Action',     ticker:'VOW'    },
+    { id:'muc',    name:'Munich Re',                    cat:'Action',     ticker:'MUV2'   },
+    { id:'alv',    name:'Allianz',                      cat:'Action',     ticker:'ALV'    },
+    { id:'eni',    name:'ENI',                          cat:'Action',     ticker:'ENI'    },
+    { id:'san',    name:'Banco Santander',              cat:'Action',     ticker:'SAN'    },
+    { id:'iber',   name:'Iberdrola',                    cat:'Action',     ticker:'IBE'    },
+    { id:'kering', name:'Kering',                       cat:'Action',     ticker:'KER'    },
+    { id:'stmn',   name:'STMicroelectronics',           cat:'Action',     ticker:'STM'    },
+    { id:'cap',    name:'Capgemini',                    cat:'Action',     ticker:'CAP'    },
+    { id:'ai',     name:'Air Liquide',                  cat:'Action',     ticker:'AI'     },
+    // Crypto (ETPs/ETCs)
+    { id:'btc',    name:'Bitcoin (ETP)',                cat:'Crypto',     ticker:'BTCE'   },
+    { id:'eth',    name:'Ethereum (ETP)',               cat:'Crypto',     ticker:'ZETH'   },
+    { id:'sol',    name:'Solana (ETP)',                 cat:'Crypto',     ticker:'GSOL'   },
+    { id:'xrp',    name:'XRP (ETP)',                    cat:'Crypto',     ticker:'XRPH'   },
+    { id:'ada',    name:'Cardano (ETP)',                cat:'Crypto',     ticker:'AADA'   },
+    { id:'dot',    name:'Polkadot (ETP)',               cat:'Crypto',     ticker:'PDOT'   },
+    { id:'link',   name:'Chainlink (ETP)',              cat:'Crypto',     ticker:'LNKC'   },
+    // Obligations
+    { id:'ibgx',   name:'Oblig. Etat EUR ETF',         cat:'Obligation', ticker:'IBGX'   },
+    { id:'ibtm',   name:'US Treasury ETF',             cat:'Obligation', ticker:'IBTM'   },
+    { id:'ieac',   name:'Corp. EUR IG ETF',            cat:'Obligation', ticker:'IEAC'   },
+    { id:'ihyg',   name:'High Yield EUR ETF',          cat:'Obligation', ticker:'IHYG'   },
+    { id:'ibts',   name:'Oblig. Etat EUR 1-3 ans ETF', cat:'Obligation', ticker:'IBTS'   },
+    { id:'xgsh',   name:'Oblig. Etat All. Court terme',cat:'Obligation', ticker:'XGSH'   },
+    // Liquidites
+    { id:'xeon',   name:'Fonds monetaire EUR',         cat:'Liquidites', ticker:'XEON'   },
+    { id:'ern0',   name:'Fonds monetaire EUR (Amundi)',cat:'Liquidites', ticker:'ERN0'   },
+    { id:'cash',   name:'Liquidites / Cash',           cat:'Liquidites', ticker:'-'      }
+  ];
+
+  var CAT_ORDER = ['ETF','Action','Crypto','Obligation','Liquidites'];
+  var openCats = {};
+
+  function saveState(){
+    try{ localStorage.setItem('lt_pf_state', JSON.stringify({ total:TOTAL, assets:pfPortfolio })); }catch(e){}
+  }
+
+  // Rendement annuel attendu par catégorie (hypothèse prudente)
+  var CAT_RETURN = { ETF:0.08, Action:0.09, Obligation:0.03, Liquidites:0.02, Crypto:0.14 };
+
+  function portfolioTotal(){
+    var s=0;
+    TR_ASSETS.forEach(function(a){ s+=(pfPortfolio[a.id]||0); });
+    return s;
+  }
+
+  function computeAlloc(){
+    var totals={}, grand=0;
+    TR_ASSETS.forEach(function(a){ var v=pfPortfolio[a.id]||0; if(v>0){ totals[a.cat]=(totals[a.cat]||0)+v; grand+=v; } });
+    if(!grand) return [];
+    return Object.keys(totals)
+      .map(function(c){ return { k:CAT_LABEL[c]||c, cat:c, pct:Math.round(totals[c]/grand*100), val:totals[c], col:CAT_COL[c]||'#7FB8E8' }; })
+      .sort(function(a,b){ return b.pct-a.pct; });
+  }
+
+  function expectedReturn(){
+    var grand=0, weighted=0;
+    TR_ASSETS.forEach(function(a){ var v=pfPortfolio[a.id]||0; if(v>0){ weighted+=v*(CAT_RETURN[a.cat]||0.05); grand+=v; } });
+    return grand>0 ? weighted/grand : 0;
+  }
+
+  // ── Projection ──
+  function projectionSeries(years, r){
+    var n=years*12+1, pts=[];
+    for(var i=0;i<n;i++) pts.push(TOTAL*Math.pow(1+r/12,i));
+    return pts;
+  }
+  function drawChart(period){
+    currentPeriod=period;
+    if(!TOTAL){ return; }
+    var years={'5Y':5,'10Y':10,'20Y':20,'30Y':30}[period]||10;
+    var r=expectedReturn();
+    var rPess=Math.max(0,r-0.03), rOpt=r+0.035;
+    var base=projectionSeries(years,r);
+    var pess=projectionSeries(years,rPess);
+    var opt=projectionSeries(years,rOpt);
+    var W=720,H=240,pad=10;
+    var allVals=base.concat(opt,pess);
+    var mn=Math.min.apply(null,allVals)*0.98, mx=Math.max.apply(null,allVals)*1.01;
+    var xi=function(i){ return pad+(i/(base.length-1))*(W-pad*2); };
+    var yv=function(v){ return H-pad-((v-mn)/(mx-mn))*(H-pad*2); };
+    var pathFor=function(arr){ return arr.map(function(v,i){ return (i===0?'M':'L')+xi(i).toFixed(1)+','+yv(v).toFixed(1); }).join(' '); };
+    var lineBase=pathFor(base), lineOpt=pathFor(opt), linePess=pathFor(pess);
+    var areaOpt=lineOpt+' '+pathFor(pess).replace('M','L').split('').reverse().join('')+' Z';
+    // zone entre opt et pess
+    var zonePoints=opt.map(function(v,i){ return xi(i).toFixed(1)+','+yv(v).toFixed(1); }).join(' ')
+      +' '+pess.slice().reverse().map(function(v,i){ return xi(base.length-1-i).toFixed(1)+','+yv(v).toFixed(1); }).join(' ');
+    var finalVal=base[base.length-1], gain=finalVal-TOTAL, gainPct=(gain/TOTAL)*100;
+    var svg=document.getElementById('pfChart');
+    svg.innerHTML=
+      '<defs>'
+      +'<linearGradient id="pfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(74,222,156,0.22)"/><stop offset="1" stop-color="rgba(74,222,156,0)"/></linearGradient>'
+      +'</defs>'
+      +'<polygon points="'+zonePoints+'" fill="rgba(127,184,232,0.07)"/>'
+      +'<path d="'+linePess+'" fill="none" stroke="rgba(127,184,232,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
+      +'<path d="'+lineOpt+'" fill="none" stroke="rgba(74,222,156,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>'
+      +'<path d="'+lineBase+' L'+xi(base.length-1).toFixed(1)+','+H+' L'+xi(0).toFixed(1)+','+H+' Z" fill="url(#pfFill)"/>'
+      +'<path d="'+lineBase+'" fill="none" stroke="var(--bull)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 6px rgba(74,222,156,0.4))"/>'
+      +'<circle cx="'+xi(base.length-1).toFixed(1)+'" cy="'+yv(finalVal).toFixed(1)+'" r="4.5" fill="var(--bull)" stroke="#07090C" stroke-width="2"/>';
+    var lbls={'5Y':'5 ans','10Y':'10 ans','20Y':'20 ans','30Y':'30 ans'};
+    document.getElementById('pfFootPeriod').textContent=lbls[period]||period;
+    document.getElementById('pfFootRate').textContent='+'+(r*100).toFixed(1).replace('.',',')+' % / an';
+    var fc=document.getElementById('pfFootChange');
+    fc.textContent='+'+(gainPct).toFixed(0)+' % soit +'+Math.round(gain).toLocaleString('fr-FR')+' €';
+    fc.style.color='var(--bull)';
+    // substats
+    document.getElementById('pfStatInvested').textContent=fmtEur0(TOTAL);
+    document.getElementById('pfStatGain').textContent='+'+fmtEur0(gain);
+    document.getElementById('pfStatFinal').textContent=fmtEur0(finalVal);
+    document.getElementById('pfStatRate').textContent='+'+(r*100).toFixed(1).replace('.',',')+' % / an';
+    // show/hide
+    document.getElementById('pfChartEmpty').style.display='none';
+    svg.style.display='block';
+    document.getElementById('pfChartFoot').style.display='flex';
+  }
+  document.getElementById('pfPeriod').addEventListener('click',function(e){
+    var b=e.target.closest('.pf-period__btn'); if(!b) return;
+    Array.prototype.forEach.call(this.children,function(x){ x.classList.toggle('is-on',x===b); });
+    drawChart(b.getAttribute('data-p'));
+  });
+
+  function resetChart(){
+    document.getElementById('pfChartEmpty').style.display='';
+    document.getElementById('pfChart').style.display='none';
+    document.getElementById('pfChartFoot').style.display='none';
+    document.getElementById('pfStatInvested').textContent='—';
+    document.getElementById('pfStatGain').textContent='—';
+    document.getElementById('pfStatFinal').textContent='—';
+    document.getElementById('pfStatRate').textContent='—';
+  }
+
+  // ── Donut ──
+  function drawDonut(){
+    var alloc=computeAlloc();
+    var R=56, C=2*Math.PI*R, acc=0;
+    if(!alloc.length){
+      document.getElementById('pfDonut').innerHTML='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--border-subtle)" stroke-width="16"/><text x="70" y="68" text-anchor="middle" class="pf-donut__cap">Aucun</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">actif</text>';
+      document.getElementById('pfLegend').innerHTML='<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:8px 0">Selectionnez des actifs<br>et renseignez un montant</div>';
+      document.getElementById('pfTotal').textContent='— €';
+      resetChart();
+      return;
+    }
+    var html='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="var(--bg-surface)" stroke-width="16"/>';
+    alloc.forEach(function(a){ var len=a.pct/100*C; html+='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+a.col+'" stroke-width="16" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-acc)+'" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s var(--ease-out)"/>'; acc+=len; });
+    html+='<text x="70" y="64" text-anchor="middle" class="pf-donut__big">'+alloc.length+'</text><text x="70" y="84" text-anchor="middle" class="pf-donut__cap">classes</text>';
+    document.getElementById('pfDonut').innerHTML=html;
+    document.getElementById('pfLegend').innerHTML=alloc.map(function(a){
+      return '<div class="pf-leg"><span class="pf-leg__dot" style="background:'+a.col+'"></span><span class="pf-leg__k">'+a.k+'</span><span class="pf-leg__pct">'+a.pct+' %</span><span class="pf-leg__val">'+fmtEur0(a.val)+'</span></div>';
+    }).join('');
+    // total depuis les actifs
+    TOTAL=portfolioTotal();
+    document.getElementById('pfTotal').textContent=fmtEur0(TOTAL);
+    drawChart(currentPeriod);
+  }
+
+  // ── Liste d'actifs (accordéon par catégorie) ──
+  var searchQ='';
+  function renderAssets(){
+    var q=searchQ.toLowerCase();
+    var html='';
+    var anyResult=false;
+    CAT_ORDER.forEach(function(cat){
+      var items=TR_ASSETS.filter(function(a){ return a.cat===cat&&(!q||a.name.toLowerCase().indexOf(q)>=0||a.ticker.toLowerCase().indexOf(q)>=0); });
+      if(!items.length) return;
+      anyResult=true;
+      var col=CAT_COL[cat]||'#7FB8E8';
+      var label=CAT_LABEL[cat]||cat;
+      var checkedCount=items.filter(function(a){ return pfPortfolio[a.id]!==undefined; }).length;
+      var isOpen=openCats[cat]||(q.length>0);
+      var badge=checkedCount?'<span class="pf-cat-badge">'+checkedCount+'</span>':'';
+      html+='<div class="pf-cat-header'+(isOpen?' is-open':'')+'" data-cat="'+cat+'" style="--cat-col:'+col+'">'
+        +'<span class="pf-cat-dot" style="background:'+col+'"></span>'
+        +'<span class="pf-cat-label">'+label+'</span>'
+        +badge
+        +'<svg class="pf-cat-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+        +'</div>';
+      html+='<div class="pf-cat-body'+(isOpen?' is-open':'')+'" data-cat-body="'+cat+'">';
+      items.forEach(function(a){
+        var checked=pfPortfolio[a.id]!==undefined;
+        var amt=pfPortfolio[a.id]||'';
+        html+='<div class="pf-asset-item'+(checked?' is-checked':'')+'">'
+          +'<input type="checkbox" class="pf-cb" data-id="'+a.id+'"'+(checked?' checked':'')+'>'
+          +'<span class="pf-asset-item__name">'+a.name+' <span class="pf-asset-item__ticker">'+a.ticker+'</span></span>'
+          +'<div class="pf-asset-item__amt"><input type="number" class="pf-amt" data-id="'+a.id+'" min="0" step="100" placeholder="0"'+(amt!==''?' value="'+amt+'"':'')+'><span>€</span></div>'
+          +'</div>';
+      });
+      html+='</div>';
+    });
+    if(!anyResult) html='<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:13px">Aucun résultat</div>';
+    document.getElementById('pfAssetList').innerHTML=html;
+  }
+
+  // ── Plans (intouchables) ──
+  var PLANS = [
+    { name:'Prudent',   key:'prudent',   risk:1, riskLabel:'Faible', obj:'+3 à 5 % / an',   horizon:'3 ans +', desc:'Préservation du capital, volatilité minimale.',         mix:[['Obligations',70,'#E8C268'],['ETF monde',25,'#7FB8E8'],['Liquidités',5,'#C3CAD4']] },
+    { name:'Équilibré', key:'equilibre', risk:2, riskLabel:'Modéré', obj:'+6 à 9 % / an', horizon:'5 ans +', featured:true, desc:'Le compromis croissance / sécurité le plus choisi.', mix:[['Actions',60,'#4ADE9C'],['Obligations',35,'#E8C268'],['Liquidités',5,'#C3CAD4']] },
+    { name:'Dynamique', key:'dynamique', risk:3, riskLabel:'Élevé', obj:'+10 à 15 % / an', horizon:'8 ans +', desc:'Forte croissance, forte volatilité. Pour le long terme.',  mix:[['Actions croissance',75,'#4ADE9C'],['ETF tech',15,'#7FB8E8'],['Crypto',10,'#F0647A']] }
+  ];
+  function drawPlans(){
+    document.getElementById('pfPlans').innerHTML=PLANS.map(function(p){
+      var dots='<span class="pf-risk">'+[1,2,3].map(function(i){ return '<span class="pf-risk__dot'+(i<=p.risk?' is-on lvl'+p.risk:'')+'"></span>'; }).join('')+'</span>';
+      var bar='<div class="pf-plan__mixbar">'+p.mix.map(function(m){ return '<span style="width:'+m[1]+'%;background:'+m[2]+'"></span>'; }).join('')+'</div>';
+      var list='<ul class="pf-plan__mix">'+p.mix.map(function(m){ return '<li><span class="pf-plan__mixdot" style="background:'+m[2]+'"></span>'+m[1]+' % '+m[0]+'</li>'; }).join('')+'</ul>';
+      return '<article class="pf-plan'+(p.featured?' is-featured':'')+'">'
+        + (p.featured?'<span class="pf-plan__flag">Notre sélection</span>':'')
+        + '<div class="pf-plan__top"><h3 class="pf-plan__name">'+p.name+'</h3>'
+        +   '<div class="pf-plan__risk">'+dots+'<span class="pf-plan__risklabel">Risque '+p.riskLabel+'</span></div></div>'
+        + '<div class="pf-plan__obj"><span class="pf-plan__objval">'+p.obj+'</span><span class="pf-plan__objcap">Objectif annualisé · Horizon '+p.horizon+'</span></div>'
+        + '<p class="pf-plan__desc">'+p.desc+'</p>'
+        + bar + list
+        + '<a class="lt-btn '+(p.featured?'lt-btn--primary':'lt-btn--secondary')+'" style="width:100%" href="/v2/patrimoine-plan?p='+p.key+'">Choisir ce plan</a>'
+        + '</article>';
+    }).join('');
+  }
+
+  function init(){
+
+    // Recherche actifs
+    document.getElementById('pfAssetSearch').addEventListener('input',function(){
+      searchQ=this.value; renderAssets();
+    });
+
+    // Accordéon catégories + checkboxes — délégation unique
+    document.getElementById('pfAssetList').addEventListener('click',function(e){
+      var hdr=e.target.closest('.pf-cat-header');
+      if(hdr){
+        var cat=hdr.getAttribute('data-cat');
+        openCats[cat]=!openCats[cat];
+        hdr.classList.toggle('is-open', openCats[cat]);
+        var body=document.querySelector('[data-cat-body="'+cat+'"]');
+        if(body) body.classList.toggle('is-open', openCats[cat]);
+      }
+    });
+
+    // Liste actifs — délégation
+    document.getElementById('pfAssetList').addEventListener('change',function(e){
+      var id=e.target.getAttribute('data-id'); if(!id) return;
+      if(e.target.classList.contains('pf-cb')){
+        var item=e.target.closest('.pf-asset-item');
+        if(e.target.checked){ pfPortfolio[id]=0; item.classList.add('is-checked'); }
+        else { delete pfPortfolio[id]; item.classList.remove('is-checked'); }
+      } else if(e.target.classList.contains('pf-amt')){
+        var v2=parseFloat(e.target.value); pfPortfolio[id]=isNaN(v2)?0:v2;
+      }
+      drawDonut(); saveState();
+    });
+
+    drawDonut(); drawPlans(); renderAssets();
+  }
+
+  window.ecoReloadNews=function(){};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Terminal — Mon compte</title>
+<meta name="robots" content="noindex,follow">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./eco.css">
+<link rel="stylesheet" href="./presentation.css">
+<style>
+.ac-wrap{max-width:1100px}
+.ac{display:block}
+/* ── sous-navigation : barre de pastilles horizontale ── */
+.ac-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border-subtle)}
+.ac-tab{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border-radius:50px;border:1px solid var(--border-subtle);background:var(--bg-elevated);color:var(--text-body);font-family:var(--font-text);font-size:13px;font-weight:600;letter-spacing:.01em;cursor:pointer;transition:background var(--dur-fast) var(--ease-out),color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out)}
+.ac-tab svg{width:16px;height:16px;flex:none;opacity:.8}
+.ac-tab:hover{border-color:var(--border);color:var(--text-title)}
+.ac-tab.is-on{background:var(--accent-glow-soft);border-color:var(--accent);color:var(--text-title)}
+.ac-tab.is-on svg{opacity:1;color:var(--accent)}
+.ac-tab__pro{font-family:var(--font-mono);font-size:8.5px;font-weight:700;letter-spacing:.1em;color:var(--neutral);border:1px solid rgba(232,194,104,.4);border-radius:3px;padding:1px 4px}
+/* ── panneaux ── */
+.ac-panel{display:none;animation:acFade .3s var(--ease-out)}
+.ac-panel.is-on{display:block}
+@keyframes acFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ac-card{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:22px}
+/* Rythme vertical homogène : tout bloc qui suit un autre est espacé (plus aucun chevauchement) */
+.ac-panel > * + *,
+#patBody > * + *,
+.ac-card + .ac-card{margin-top:16px}
+.ac-card__title{font-family:var(--font-display);text-transform:uppercase;font-size:15px;letter-spacing:.02em;color:var(--text-title);margin:0 0 16px}
+.ac-card__title.mt{margin-top:0}
+.ac-eyebrow{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:0 0 14px}
+/* ── carte d'identité ── */
+.ac-id{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.ac-id__av{width:74px;height:74px;border-radius:var(--r-lg);overflow:hidden;flex:none;background:linear-gradient(150deg,var(--accent),var(--bg-elevated));display:flex;align-items:center;justify-content:center;font-family:var(--font-text);font-weight:700;font-size:28px;color:#07090C}
+.ac-id__av img{width:100%;height:100%;object-fit:cover;display:block}
+.ac-id__name{font-family:var(--font-display);text-transform:uppercase;font-size:26px;letter-spacing:.01em;color:var(--text-title);line-height:1.05;margin:0}
+.ac-id__email{font-size:13px;color:var(--text-muted);margin:5px 0 0}
+.ac-chip{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:50px}
+.ac-chip svg{width:12px;height:12px}
+.ac-chip--pro{color:var(--neutral);border:1px solid rgba(232,194,104,.45);background:rgba(232,194,104,.08)}
+.ac-chip--free{color:var(--text-muted);border:1px solid var(--border)}
+.ac-id__since{margin-left:auto;text-align:right;font-size:12px;color:var(--text-muted)}
+.ac-id__since b{display:block;font-family:var(--font-mono);font-size:14px;color:var(--text-body);font-weight:600}
+/* ── tuiles de stats ── */
+.ac-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:16px}
+.ac-tile{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:16px 17px}
+.ac-tile__ic{color:var(--accent);margin-bottom:9px}.ac-tile__ic svg{width:18px;height:18px}
+.ac-tile__n{font-family:var(--font-mono);font-size:24px;font-weight:700;color:var(--text-title);font-variant-numeric:tabular-nums;line-height:1}
+.ac-tile__l{font-size:11px;color:var(--text-muted);margin-top:6px;letter-spacing:.02em}
+.ac-tile__n.bull{color:var(--bull)}.ac-tile__n.bear{color:var(--bear)}
+/* ── grille deux colonnes ── */
+.ac-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.ac-2{grid-template-columns:1fr}}
+/* ── anneau usage ── */
+.ac-ring-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.ac-ring{width:128px;height:128px;border-radius:50%;flex:none;position:relative;background:conic-gradient(var(--border) 0 100%)}
+.ac-ring::after{content:'';position:absolute;inset:16px;border-radius:50%;background:var(--bg-elevated)}
+.ac-ring__c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1}
+.ac-ring__c b{font-family:var(--font-mono);font-size:18px;color:var(--text-title)}
+.ac-ring__c span{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.ac-leg{flex:1;min-width:180px;display:flex;flex-direction:column;gap:9px}
+.ac-leg__row{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.ac-leg__dot{width:9px;height:9px;border-radius:2px;flex:none}
+.ac-leg__name{color:var(--text-body)}
+.ac-leg__val{margin-left:auto;font-family:var(--font-mono);font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+/* ── barres (verdicts / sessions) ── */
+.ac-bar{margin-bottom:12px}
+.ac-bar__top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.ac-bar__top b{font-family:var(--font-mono);color:var(--text-body);font-weight:600}
+.ac-bar__top span{color:var(--text-muted)}
+.ac-bar__track{height:8px;border-radius:50px;background:var(--bg-base);overflow:hidden}
+.ac-bar__fill{height:100%;border-radius:50px;transition:width .6s var(--ease-out)}
+/* ── timeline ── */
+.ac-tl{list-style:none;margin:0;padding:0}
+.ac-tl__item{display:flex;gap:13px;padding:11px 0;border-top:1px solid var(--border-subtle)}
+.ac-tl__item:first-child{border-top:none}
+.ac-tl__ic{width:30px;height:30px;border-radius:var(--r-sm);flex:none;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border:1px solid var(--border-subtle);color:var(--accent)}
+.ac-tl__ic svg{width:15px;height:15px}
+.ac-tl__b{flex:1;min-width:0}
+.ac-tl__t{font-size:13px;color:var(--text-title);font-weight:600}
+.ac-tl__s{font-size:11.5px;color:var(--text-muted);margin-top:2px}
+.ac-tl__d{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);white-space:nowrap}
+/* ── heatmap ── */
+.ac-heat{display:grid;grid-template-rows:repeat(7,11px);grid-auto-flow:column;grid-auto-columns:11px;gap:3px;overflow-x:auto;padding-bottom:4px}
+.ac-heat__c{width:11px;height:11px;border-radius:2px;background:var(--bg-base);border:1px solid var(--border-subtle)}
+.ac-heat__c.l1{background:rgba(127,184,232,.25);border-color:transparent}
+.ac-heat__c.l2{background:rgba(127,184,232,.5);border-color:transparent}
+.ac-heat__c.l3{background:rgba(127,184,232,.78);border-color:transparent}
+.ac-heat__c.l4{background:var(--accent-bright);border-color:transparent}
+.ac-heat-legend{display:flex;align-items:center;gap:6px;justify-content:flex-end;margin-top:10px;font-size:10px;color:var(--text-muted)}
+.ac-heat-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+/* ── galerie setups ── */
+.ac-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.ac-gal{grid-template-columns:1fr 1fr}}
+.ac-gcard{border:1px solid var(--border-subtle);border-radius:var(--r-md);overflow:hidden;background:var(--bg-base)}
+.ac-gcard__img{height:96px;background:var(--bg-surface) center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:var(--text-muted)}
+.ac-gcard__b{padding:9px 11px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ac-gcard__pair{font-family:var(--font-mono);font-size:12px;color:var(--text-title);font-weight:600}
+.ac-gcard__sc{font-family:var(--font-mono);font-size:13px;font-weight:700}
+.ac-vchip{font-family:var(--font-mono);font-size:8.5px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:50px}
+.ac-vchip.go{color:var(--bull);background:rgba(74,222,156,.14)}
+.ac-vchip.wait{color:var(--neutral);background:rgba(232,194,104,.12)}
+.ac-vchip.no{color:var(--bear);background:rgba(240,100,122,.14)}
+/* ── donut patrimoine (réutilise conic) ── */
+.ac-spark{width:100%;height:54px;display:block}
+.ac-spark path,.ac-spark polyline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* ── badges ── */
+.ac-badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:13px}
+.ac-badge{border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:15px;text-align:center;background:var(--bg-base);opacity:.42;filter:grayscale(.6);transition:opacity .25s,filter .25s,border-color .25s}
+.ac-badge.on{opacity:1;filter:none;border-color:var(--accent)}
+.ac-badge__ic{width:42px;height:42px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:var(--accent-glow-soft);color:var(--accent)}
+.ac-badge.on .ac-badge__ic{background:var(--accent);color:#07090C}
+.ac-badge__ic svg{width:21px;height:21px}
+.ac-badge__t{font-size:12.5px;font-weight:600;color:var(--text-title)}
+.ac-badge__d{font-size:10.5px;color:var(--text-muted);margin-top:3px;line-height:1.4}
+.ac-xp{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.ac-xp__lvl{width:54px;height:54px;border-radius:50%;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid var(--accent);color:var(--accent)}
+.ac-xp__lvl b{font-family:var(--font-mono);font-size:18px;line-height:1}
+.ac-xp__lvl span{font-size:7px;letter-spacing:.1em;text-transform:uppercase}
+.ac-xp__b{flex:1}
+.ac-xp__b .ac-bar__track{height:10px}
+/* ── Niveau d'activité : barre néon + grades ── */
+.ac-rank{display:flex;align-items:center;gap:18px}
+.ac-rank__medal{width:60px;height:60px;flex:none;color:var(--accent-bright);filter:drop-shadow(0 0 9px var(--accent-glow))}
+.ac-rank__medal svg{width:100%;height:100%}
+.ac-rank__b{flex:1;min-width:0}
+.ac-rank__top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+.ac-rank__grade{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.02em;font-size:18px;color:var(--text-title)}
+.ac-rank__xp{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-variant-numeric:tabular-nums}
+.ac-rank__next{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:7px}
+.ac-xpbar{height:15px;border-radius:50px;background:var(--bg-base);border:1px solid var(--border-subtle);overflow:hidden;position:relative}
+.ac-xpbar__fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#5A9BD4,var(--accent),var(--accent-bright));box-shadow:0 0 10px rgba(127,184,232,.85),0 0 22px rgba(127,184,232,.5),inset 0 1px 0 rgba(255,255,255,.55);transition:width .9s var(--ease-out);position:relative;min-width:0}
+.ac-xpbar__fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:translateX(-100%);animation:acShine 2.8s var(--ease-out) infinite}
+@keyframes acShine{0%{transform:translateX(-100%)}55%,100%{transform:translateX(120%)}}
+.ac-xpbreak{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.ac-xpchip{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;color:var(--text-body);background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:50px;padding:6px 12px}
+.ac-xpchip i{width:7px;height:7px;border-radius:2px;background:var(--accent);flex:none}
+.ac-xpchip b{font-family:var(--font-mono);color:var(--accent);font-size:11px;font-weight:600}
+.ac-grades{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.ac-grade{flex:1 1 86px;min-width:86px;text-align:center;border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:13px 8px;background:var(--bg-base);opacity:.42;filter:grayscale(.55);transition:opacity .25s var(--ease-out),filter .25s var(--ease-out),border-color .25s var(--ease-out),box-shadow .25s var(--ease-out)}
+.ac-grade.on{opacity:1;filter:none;border-color:var(--accent)}
+.ac-grade.cur{opacity:1;filter:none;border-color:var(--accent-bright);box-shadow:0 0 0 1px var(--accent),0 0 18px var(--accent-glow)}
+.ac-grade__m{width:34px;height:34px;margin:0 auto 7px;color:var(--accent)}
+.ac-grade.on .ac-grade__m,.ac-grade.cur .ac-grade__m{color:var(--accent-bright)}
+.ac-grade__m svg{width:100%;height:100%}
+.ac-grade__n{font-size:11.5px;font-weight:600;color:var(--text-title)}
+.ac-grade__x{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);margin-top:3px;letter-spacing:.04em}
+@media(prefers-reduced-motion:reduce){.ac-xpbar__fill::after{animation:none}}
+.ac-badge,.ac-grade{cursor:pointer}
+.ac-badge:focus-visible,.ac-grade:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* ── modal détail badge / grade ── */
+.ac-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(7,9,12,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ac-modal.show{display:flex;animation:acFade .25s var(--ease-out)}
+.ac-modal__box{position:relative;width:100%;max-width:420px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:32px 26px 26px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04)}
+.ac-modal__box::before{content:'';position:absolute;top:0;left:40px;right:40px;height:1px;background:linear-gradient(90deg,transparent,var(--accent-glow),transparent)}
+.ac-modal__x{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:4px;transition:color .2s}
+.ac-modal__x:hover{color:var(--text-title)}
+.ac-m__ic{width:74px;height:74px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border:1px solid var(--border-subtle);color:var(--text-muted)}
+.ac-m__ic.on{background:var(--accent);color:#07090C;border-color:transparent;box-shadow:0 0 20px var(--accent-glow)}
+.ac-m__ic svg{width:36px;height:36px}
+.ac-m__t{font-family:var(--font-display);text-transform:uppercase;font-size:21px;letter-spacing:.02em;color:var(--text-title);margin-bottom:9px}
+.ac-mst{display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 11px;border-radius:50px;border:1px solid var(--border);color:var(--text-muted)}
+.ac-mst.ok{color:var(--bull);border-color:rgba(74,222,156,.4);background:rgba(74,222,156,.08)}
+.ac-m__d{font-size:13.5px;color:var(--text-body);line-height:1.6;margin:14px 0 0}
+.ac-m__how{margin-top:16px;padding-top:15px;border-top:1px solid var(--border-subtle);text-align:left;font-size:12.5px;color:var(--text-body);line-height:1.6}
+.ac-m__howlbl{display:block;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.ac-m__prog{margin-top:9px;font-family:var(--font-mono);font-size:11.5px;color:var(--accent)}
+/* ── objectifs ── */
+.ac-goal{margin-bottom:16px}
+.ac-goal__top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.ac-goal__top label{font-size:12.5px;color:var(--text-body);font-weight:600}
+.ac-goal__in{width:96px;margin-left:auto;background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--r-sm);color:var(--text-title);padding:6px 9px;font-family:var(--font-mono);font-size:12px;text-align:right}
+.ac-goal__in:focus{border-color:var(--accent);outline:none}
+.ac-goal__cur{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:5px}
+/* ── paramètres ── */
+.ac-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.ac-grid .full{grid-column:1/-1}
+@media(max-width:560px){.ac-grid{grid-template-columns:1fr}}
+.ac-field{display:flex;flex-direction:column;gap:6px}
+.ac-label{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.ac-input{background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--r-sm);color:var(--text-title);padding:11px 14px;font-family:var(--font-text);font-size:14px;outline:none;transition:border-color var(--dur-fast) var(--ease-out),background var(--dur-fast) var(--ease-out);width:100%;box-sizing:border-box}
+.ac-input:focus{border-color:var(--accent);background:var(--accent-glow-soft)}
+.ac-input[readonly]{color:var(--text-muted)}
+/* selects : caret custom + liste déroulante lisible (sinon options blanc sur blanc) */
+select.ac-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer;padding-right:38px;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237E8794' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
+.ac-input option{background:var(--bg-elevated);color:var(--text-title)}
+.ac-hint{font-size:11.5px;color:var(--text-muted);line-height:1.5;margin:6px 0 0}
+.ac-foot{display:flex;align-items:center;gap:16px;margin-top:18px;flex-wrap:wrap}
+.ac-status{font-size:13px;color:var(--text-muted)}.ac-status.ok{color:var(--bull)}.ac-status.err{color:var(--bear)}
+.ac-avrow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+.ac-danger{border-color:rgba(240,100,122,.35)}
+.ac-danger .ac-card__title{color:var(--bear)}
+.ac-empty{text-align:center;padding:34px 18px;color:var(--text-muted);font-size:13px}
+.ac-empty svg{width:30px;height:30px;opacity:.5;margin-bottom:10px}
+.ac-link{color:var(--accent);text-decoration:none;font-weight:600;font-size:13px}
+.ac-link:hover{color:var(--accent-bright)}
+/* ── responsive ── */
+@media(max-width:780px){
+  .ac-nav{flex-wrap:nowrap;overflow-x:auto;gap:6px;scrollbar-width:none}
+  .ac-nav::-webkit-scrollbar{display:none}
+  .ac-tab{white-space:nowrap;flex:none}
+}
+@media(max-width:520px){.ac-tiles{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body class="eco-page">
+<div class="glow" aria-hidden="true"></div>
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="wrap">
+<div class="pr ac-wrap">
+
+  <section class="pr-head" style="margin-bottom:22px">
+    <span class="pr-eyebrow"><span class="lt-dot"></span> <span data-en="My account">Mon compte</span></span>
+    <h1 class="pr-head__title" id="acHeadTitle" data-en="My account">Mon compte</h1>
+  </section>
+
+  <div class="ac">
+    <!-- Sous-navigation -->
+    <nav class="ac-nav" id="acNav">
+      <button class="ac-tab is-on" data-tab="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg><span data-en="Dashboard">Tableau de bord</span></button>
+      <button class="ac-tab" data-tab="setups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg><span>Mes setups</span></button>
+      <button class="ac-tab" data-tab="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg><span data-en="My journal">Mon journal</span></button>
+      <button class="ac-tab" data-tab="patrimoine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg><span>Patrimoine</span></button>
+      <button class="ac-tab" data-tab="badges"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 7 21l5-2.5L17 21l-1.5-8.5"/></svg><span data-en="Badges">Accomplissements</span></button>
+      <button class="ac-tab" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-en="Settings">Paramètres</span></button>
+      <button class="ac-tab" data-tab="subscription"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span data-en="Subscription">Abonnement</span><span class="ac-tab__pro" id="acPlanTag">—</span></button>
+    </nav>
+
+    <!-- Contenu -->
+    <div class="ac-main">
+
+      <!-- ░ TABLEAU DE BORD ░ -->
+      <section class="ac-panel is-on" id="tab-dashboard">
+        <div class="ac-card">
+          <div class="ac-id">
+            <div class="ac-id__av" id="acAvatar">—</div>
+            <div>
+              <h2 class="ac-id__name" id="acName">—</h2>
+              <p class="ac-id__email" id="acEmail">—</p>
+              <span class="ac-chip ac-chip--free" id="acPlanChip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> <span data-en="Free plan">Version gratuite</span></span>
+            </div>
+            <div class="ac-id__since" id="acSince"></div>
+          </div>
+          <div class="ac-tiles">
+            <div class="ac-tile"><div class="ac-tile__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14l3-3 2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div><div class="ac-tile__n" id="kSetups">0</div><div class="ac-tile__l" data-en="Setups analyzed">Setups analysés</div></div>
+            <div class="ac-tile"><div class="ac-tile__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="ac-tile__n" id="kScore">—</div><div class="ac-tile__l" data-en="Avg AI score">Score IA moyen</div></div>
+            <div class="ac-tile"><div class="ac-tile__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18"/></svg></div><div class="ac-tile__n" id="kTrades">0</div><div class="ac-tile__l" data-en="Logged trades">Trades journalisés</div></div>
+            <div class="ac-tile"><div class="ac-tile__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><div class="ac-tile__n" id="kPatri">—</div><div class="ac-tile__l" data-en="Portfolio value">Valeur patrimoine</div></div>
+          </div>
+        </div>
+
+        <div class="ac-2">
+          <div class="ac-card">
+            <h3 class="ac-card__title mt" data-en="Where you spend your time">Où vous passez votre temps</h3>
+            <div id="acUsage"></div>
+          </div>
+          <div class="ac-card">
+            <h3 class="ac-card__title mt" data-en="Recent activity">Activité récente</h3>
+            <ul class="ac-tl" id="acTimeline"></ul>
+          </div>
+        </div>
+
+        <div class="ac-card">
+          <h3 class="ac-card__title mt" data-en="Activity over the year">Votre activité sur l'année</h3>
+          <div class="ac-heat" id="acHeat"></div>
+          <div class="ac-heat-legend"><span data-en="Less">Moins</span><i class="ac-heat__c"></i><i class="ac-heat__c l1"></i><i class="ac-heat__c l2"></i><i class="ac-heat__c l3"></i><i class="ac-heat__c l4"></i><span data-en="More">Plus</span></div>
+        </div>
+      </section>
+
+      <!-- ░ MES SETUPS ░ -->
+      <section class="ac-panel" id="tab-setups">
+        <div class="ac-tiles" style="margin-top:0">
+          <div class="ac-tile"><div class="ac-tile__n" id="sN">0</div><div class="ac-tile__l" data-en="Analyzed">Analysés</div></div>
+          <div class="ac-tile"><div class="ac-tile__n" id="sAvg">—</div><div class="ac-tile__l" data-en="Avg score">Score moyen</div></div>
+          <div class="ac-tile"><div class="ac-tile__n" id="sTaken">0</div><div class="ac-tile__l" data-en="Trades taken">Trades pris</div></div>
+          <div class="ac-tile"><div class="ac-tile__n" id="sWin">—</div><div class="ac-tile__l" data-en="Win rate (taken)">Réussite (pris)</div></div>
+        </div>
+        <div class="ac-2">
+          <div class="ac-card">
+            <h3 class="ac-card__title mt" data-en="Verdict breakdown">Répartition des verdicts</h3>
+            <div id="sVerdicts"></div>
+          </div>
+          <div class="ac-card">
+            <h3 class="ac-card__title mt" data-en="Most analyzed pairs">Paires les plus analysées</h3>
+            <div id="sPairs"></div>
+          </div>
+        </div>
+        <div class="ac-card">
+          <h3 class="ac-card__title mt" data-en="Latest setups">Derniers setups</h3>
+          <div id="sGallery"></div>
+        </div>
+      </section>
+
+      <!-- ░ MON JOURNAL ░ -->
+      <section class="ac-panel" id="tab-journal">
+        <div class="ac-tiles" style="margin-top:0">
+          <div class="ac-tile"><div class="ac-tile__n" id="jPnl">—</div><div class="ac-tile__l">P&amp;L net</div></div>
+          <div class="ac-tile"><div class="ac-tile__n" id="jWin">—</div><div class="ac-tile__l">Win rate</div></div>
+          <div class="ac-tile"><div class="ac-tile__n" id="jPf">—</div><div class="ac-tile__l">Profit factor</div></div>
+          <div class="ac-tile"><div class="ac-tile__n" id="jN">0</div><div class="ac-tile__l" data-en="Trades">Trades</div></div>
+        </div>
+        <div class="ac-2">
+          <div class="ac-card">
+            <h3 class="ac-card__title mt" data-en="Equity curve">Courbe d'équité</h3>
+            <div id="jEquity"></div>
+          </div>
+          <div class="ac-card">
+            <h3 class="ac-card__title mt" data-en="Your strengths">Vos points forts</h3>
+            <div id="jBest"></div>
+          </div>
+        </div>
+        <div class="ac-card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <span style="font-size:13px;color:var(--text-body)" data-en="See the full journal, calendar and AI coach.">Consultez le journal complet, le calendrier et le coach IA.</span>
+          <a class="lt-btn lt-btn--secondary lt-btn--sm" href="/v2/journal" data-en="Open the journal">Ouvrir le journal →</a>
+        </div>
+      </section>
+
+      <!-- ░ PATRIMOINE ░ -->
+      <section class="ac-panel" id="tab-patrimoine">
+        <div id="patBody"></div>
+      </section>
+
+      <!-- ░ ACCOMPLISSEMENTS ░ -->
+      <section class="ac-panel" id="tab-badges">
+        <div class="ac-card">
+          <h3 class="ac-card__title" data-en="Activity level">Niveau d'activité</h3>
+          <p class="ac-hint" style="margin:-8px 0 18px" data-en="Earn XP by using the cockpit: time spent, logged trades, analyzed setups, portfolio, economic reads and the trade wall.">Gagnez de l'XP en utilisant le cockpit : temps passé, trades journalisés, setups analysés, patrimoine, lectures éco et mur des trades.</p>
+          <div class="ac-rank">
+            <div class="ac-rank__medal" id="actMedal"></div>
+            <div class="ac-rank__b">
+              <div class="ac-rank__top"><span class="ac-rank__grade" id="actGrade">Recrue</span><span class="ac-rank__xp" id="actXp">0 XP</span></div>
+              <div class="ac-xpbar"><div class="ac-xpbar__fill" id="actFill" style="width:0"></div></div>
+              <div class="ac-rank__next" id="actNext">—</div>
+            </div>
+          </div>
+          <div class="ac-xpbreak" id="actBreak"></div>
+          <div class="ac-grades" id="actGrades"></div>
+          <p class="ac-hint" style="margin-top:16px" data-en="To climb the ranks: analyze setups (+15 XP), log your trades (+20 XP), build your portfolio (+12 XP/holding) and read the eco calendar — time spent on the cockpit earns XP too. Tap a grade to see the next milestone.">Pour grimper en grade : analysez des setups (+15 XP), journalisez vos trades (+20 XP), étoffez votre patrimoine (+12 XP/ligne) et lisez le calendrier éco — le temps passé sur le cockpit rapporte aussi de l'XP. Cliquez sur un grade pour voir le palier suivant.</p>
+        </div>
+        <div class="ac-card">
+          <div class="ac-xp">
+            <div class="ac-xp__lvl"><b id="xpLvl">1</b><span data-en="Level">Niveau</span></div>
+            <div class="ac-xp__b">
+              <div class="ac-bar__top"><b id="xpName">Apprenti</b><span id="xpNext">— XP</span></div>
+              <div class="ac-xpbar"><div class="ac-xpbar__fill" id="xpFill" style="width:0"></div></div>
+            </div>
+          </div>
+          <h3 class="ac-card__title" data-en="Unlocked badges">Badges débloqués</h3>
+          <div class="ac-badges" id="acBadges"></div>
+        </div>
+        <div class="ac-card">
+          <h3 class="ac-card__title mt" data-en="Your goals">Vos objectifs</h3>
+          <p class="ac-hint" style="margin:-8px 0 18px" data-en="Set your targets — progress updates automatically from your activity.">Fixez vos cibles — la progression se met à jour automatiquement selon votre activité.</p>
+          <div class="ac-goal">
+            <div class="ac-goal__top"><label data-en="Analyses per week">Analyses par semaine</label><input class="ac-goal__in" type="number" id="goalWeek" min="0" placeholder="5"></div>
+            <div class="ac-bar__track"><div class="ac-bar__fill" id="goalWeekFill" style="width:0;background:var(--accent)"></div></div>
+            <div class="ac-goal__cur" id="goalWeekCur">—</div>
+          </div>
+          <div class="ac-goal">
+            <div class="ac-goal__top"><label data-en="Monthly P&L target">Objectif P&amp;L mensuel</label><input class="ac-goal__in" type="number" id="goalPnl" placeholder="1000"></div>
+            <div class="ac-bar__track"><div class="ac-bar__fill" id="goalPnlFill" style="width:0;background:var(--bull)"></div></div>
+            <div class="ac-goal__cur" id="goalPnlCur">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░ PARAMÈTRES ░ -->
+      <section class="ac-panel" id="tab-settings">
+        <div id="setGate" class="ac-card" style="display:none">
+          <div class="ac-empty">
+            <p data-en="Sign in to edit your profile.">Connectez-vous pour modifier votre profil.</p>
+            <button class="lt-btn lt-btn--primary" style="margin-top:12px" onclick="window.ltOpenLogin&&ltOpenLogin()" data-en="Sign in">Connexion</button>
+          </div>
+        </div>
+        <div id="setForm" style="display:none">
+          <div class="ac-card">
+            <h3 class="ac-card__title" data-en="Identity">Identité</h3>
+            <div class="ac-avrow">
+              <div class="ac-id__av" id="setAvatar" style="width:64px;height:64px;font-size:24px">—</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <button class="lt-btn lt-btn--secondary lt-btn--sm" type="button" id="setPhotoBtn" data-en="Change photo">Changer la photo</button>
+                <button class="lt-btn lt-btn--ghost lt-btn--sm" type="button" id="setPhotoRm" data-en="Remove">Retirer</button>
+                <input type="file" id="setPhotoInput" accept="image/*" style="display:none">
+              </div>
+            </div>
+            <div class="ac-grid">
+              <div class="ac-field"><label class="ac-label" for="setFirst" data-en="First name">Prénom</label><input class="ac-input" type="text" id="setFirst" maxlength="60" placeholder="—"></div>
+              <div class="ac-field"><label class="ac-label" for="setLast" data-en="Last name">Nom</label><input class="ac-input" type="text" id="setLast" maxlength="60" placeholder="—"></div>
+              <div class="ac-field full"><label class="ac-label" for="setPseudo" data-en="Username (display name)">Pseudo (nom affiché)</label><input class="ac-input" type="text" id="setPseudo" maxlength="40" placeholder="—"><p class="ac-hint" data-en="If set, your username is shown across the site.">S'il est renseigné, votre pseudo est affiché partout sur le site.</p></div>
+              <div class="ac-field full"><label class="ac-label" for="setEmail" data-en="Email">E-mail</label><input class="ac-input" type="text" id="setEmail" readonly></div>
+            </div>
+            <div class="ac-foot">
+              <button class="lt-btn lt-btn--primary" type="button" id="setSave" data-en="Save">Enregistrer</button>
+              <span class="ac-status" id="setStatus"></span>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <h3 class="ac-card__title" data-en="Preferences">Préférences</h3>
+            <div class="ac-grid">
+              <div class="ac-field"><label class="ac-label" data-en="Language">Langue</label>
+                <select class="ac-input" id="prefLang"><option value="fr">Français</option><option value="en">English</option></select></div>
+              <div class="ac-field"><label class="ac-label" data-en="Journal currency">Devise du journal</label>
+                <select class="ac-input" id="prefCur"><option value="€">Euro (€)</option><option value="$">Dollar ($)</option><option value="£">Livre (£)</option></select></div>
+            </div>
+            <p class="ac-hint" data-en="Saved instantly on your device.">Enregistré instantanément sur votre appareil.</p>
+          </div>
+
+          <div class="ac-card">
+            <h3 class="ac-card__title" data-en="Your data">Vos données</h3>
+            <p class="ac-hint" style="margin:-8px 0 14px" data-en="Export everything stored locally (setups, trades, notes) as a JSON file.">Exportez tout ce qui est stocké localement (setups, trades, notes) dans un fichier JSON.</p>
+            <button class="lt-btn lt-btn--secondary lt-btn--sm" type="button" id="setExport" data-en="Export my data (JSON)">Exporter mes données (JSON)</button>
+          </div>
+
+          <div class="ac-card ac-danger">
+            <h3 class="ac-card__title" data-en="Danger zone">Zone sensible</h3>
+            <p class="ac-hint" style="margin:-8px 0 14px" data-en="Permanently delete your local data on this device (setups, trades, notes). Your online account is not affected.">Supprimer définitivement vos données locales sur cet appareil (setups, trades, notes). Votre compte en ligne n'est pas affecté.</p>
+            <button class="lt-btn lt-btn--ghost lt-btn--sm" type="button" id="setWipe" style="border-color:rgba(240,100,122,.4);color:var(--bear)" data-en="Delete my local data">Supprimer mes données locales</button>
+            <span class="ac-status" id="wipeStatus" style="margin-left:12px"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░ ABONNEMENT ░ -->
+      <section class="ac-panel" id="tab-subscription">
+        <div class="ac-card" id="subBody"></div>
+      </section>
+
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- Modal détail badge / grade -->
+<div class="ac-modal" id="acModal">
+  <div class="ac-modal__box">
+    <button class="ac-modal__x" id="acModalX" type="button" aria-label="Fermer">✕</button>
+    <div id="acmBody"></div>
+  </div>
+</div>
+
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./eco.js"></script>
+<script src="./appshell.js"></script>
+<script src="./menu.js?v=3"></script>
+<script>
+(function(){
+  'use strict';
+  var TOKEN = localStorage.getItem('ta_token') || '';
+  var EMAIL = localStorage.getItem('ta_email') || '';
+  var avatarData = '';
+  var curBadges = [], lastActXp = 0;
+  function $(id){ return document.getElementById(id); }
+  function getLang(){ return localStorage.getItem('lt_lang') || 'fr'; }
+  function EN(){ return getLang()==='en'; }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function nfFr(n,d){ return (Number(n)||0).toLocaleString('fr-FR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}); }
+
+  /* ── Lecteurs de données ── */
+  function readSetups(){ try{ var a=JSON.parse(localStorage.getItem('lt_history')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function readTrades(){ try{ var a=JSON.parse(localStorage.getItem('jnl_trades')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function readUsage(){ try{ return JSON.parse(localStorage.getItem('lt_usage')||'{}')||{}; }catch(e){ return {}; } }
+  function readGoals(){ try{ return JSON.parse(localStorage.getItem('lt_goals')||'{}')||{}; }catch(e){ return {}; } }
+  function curSym(){ return localStorage.getItem('jnl_currency') || '€'; }
+  function isPro(){ return localStorage.getItem('lt_pro')==='1' || localStorage.getItem('lt_pro')==='true'; }
+
+  /* ── Mini sparkline SVG ── */
+  function spark(values, color){
+    if(!values || values.length<2) return '<div class="ac-empty" style="padding:18px">'+(EN()?'Not enough data yet.':'Pas encore assez de données.')+'</div>';
+    var w=300,h=54,min=Math.min.apply(null,values),max=Math.max.apply(null,values),rng=(max-min)||1;
+    var pts=values.map(function(v,i){ var x=(i/(values.length-1))*w; var y=h-4-((v-min)/rng)*(h-8); return x.toFixed(1)+','+y.toFixed(1); }).join(' ');
+    return '<svg class="ac-spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" style="stroke:'+(color||'var(--accent)')+'"/></svg>';
+  }
+  function bar(label, val, total, color){
+    var pct = total ? Math.round(val/total*100) : 0;
+    return '<div class="ac-bar"><div class="ac-bar__top"><b>'+esc(label)+'</b><span>'+val+' · '+pct+'%</span></div><div class="ac-bar__track"><div class="ac-bar__fill" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
+  }
+  function fmtDur(ms){
+    var m=Math.round(ms/60000); if(m<1) return '<1 min'; if(m<60) return m+' min';
+    var h=Math.floor(m/60), r=m%60; return h+' h'+(r?(' '+r):''); }
+
+  /* ── TABLEAU DE BORD ── */
+  function renderDashboard(){
+    var S=readSetups(), T=readTrades();
+    var scores=S.map(function(x){return parseFloat(x.score)||0;}).filter(function(v){return v>0;});
+    var avg=scores.length? (scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+    $('kSetups').textContent=S.length;
+    $('kScore').textContent=scores.length? avg.toFixed(1):'—';
+    $('kTrades').textContent=T.length;
+    // valeur patrimoine remplie par loadPortfolio()
+
+    // Anneau d'usage
+    var u=readUsage(), names=Object.keys(u);
+    var colors=['var(--accent)','var(--bull)','var(--neutral)','#5A9BD4','var(--bear)','#8A93A0'];
+    var data=names.map(function(n,i){ return {n:n, ms:(u[n].ms||0), v:(u[n].visits||0), c:colors[i%colors.length]}; })
+                  .sort(function(a,b){ return b.ms-a.ms; });
+    var totMs=data.reduce(function(a,b){return a+b.ms;},0);
+    var box=$('acUsage');
+    if(!totMs){ box.innerHTML='<div class="ac-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div>'+(EN()?'Browse the tools — your usage will appear here.':'Naviguez dans les outils — votre usage apparaîtra ici.')+'</div></div>'; return; }
+    var acc=0, segs=data.map(function(d){ var s=acc/totMs*100; acc+=d.ms; var e=acc/totMs*100; return d.c+' '+s.toFixed(1)+'% '+e.toFixed(1)+'%'; }).join(', ');
+    var top=data[0];
+    var leg=data.map(function(d){ return '<div class="ac-leg__row"><span class="ac-leg__dot" style="background:'+d.c+'"></span><span class="ac-leg__name">'+esc(d.n)+'</span><span class="ac-leg__val">'+fmtDur(d.ms)+'</span></div>'; }).join('');
+    box.innerHTML='<div class="ac-ring-row"><div class="ac-ring" style="background:conic-gradient('+segs+')"><div class="ac-ring__c"><b>'+esc(top.n.split(' ')[0])+'</b><span>'+(EN()?'top tool':'outil n°1')+'</span></div></div><div class="ac-leg">'+leg+'</div></div>';
+
+    // Timeline d'activité récente (setups + trades fusionnés)
+    var ev=[];
+    S.slice(0,8).forEach(function(s){ ev.push({ t:(EN()?'Setup analyzed':'Setup analysé')+' · '+(s.pair||'—'), s:(s.verdict||'')+(s.score?(' · '+(EN()?'score ':'score ')+s.score):''), d:s.created_at||s.id, ic:'setup' }); });
+    T.slice(-8).forEach(function(tr){ var r=(tr.result==='win'?(EN()?'Win':'Gagnant'):tr.result==='loss'?(EN()?'Loss':'Perdant'):'BE'); ev.push({ t:(EN()?'Trade logged':'Trade journalisé')+' · '+(tr.pair||'—'), s:r+(tr.pnl!=null?(' · '+(tr.pnl>0?'+':'')+nfFr(tr.pnl,2)+' '+curSym()):''), d:tr.date, ic:'trade' }); });
+    ev.sort(function(a,b){ return new Date(b.d||0)-new Date(a.d||0); });
+    var tl=$('acTimeline');
+    if(!ev.length){ tl.innerHTML='<div class="ac-empty">'+(EN()?'No activity yet.':'Aucune activité pour le moment.')+'</div>'; }
+    else { tl.innerHTML=ev.slice(0,7).map(function(e){
+      var ic = e.ic==='setup'
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 14l3-3 2 2 4-4"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18"/></svg>';
+      var dt=e.d?new Date(e.d):null; var ds=dt&&!isNaN(dt)?dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}):'';
+      return '<li class="ac-tl__item"><span class="ac-tl__ic">'+ic+'</span><div class="ac-tl__b"><div class="ac-tl__t">'+esc(e.t)+'</div><div class="ac-tl__s">'+esc(e.s)+'</div></div><span class="ac-tl__d">'+ds+'</span></li>';
+    }).join(''); }
+
+    renderHeatmap(S,T);
+  }
+
+  function renderHeatmap(S,T){
+    var counts={}; function add(d){ if(!d) return; var dt=new Date(d); if(isNaN(dt)) return; var k=dt.toISOString().slice(0,10); counts[k]=(counts[k]||0)+1; }
+    S.forEach(function(s){ add(s.created_at||(s.id?new Date(s.id).toISOString():null)); });
+    T.forEach(function(t){ add(t.date); });
+    var today=new Date(); today.setHours(0,0,0,0);
+    // démarre un dimanche, ~26 semaines en arrière
+    var start=new Date(today); start.setDate(start.getDate()-181); start.setDate(start.getDate()-start.getDay());
+    var html='';
+    for(var d=new Date(start); d<=today; d.setDate(d.getDate()+1)){
+      var k=d.toISOString().slice(0,10), c=counts[k]||0;
+      var lvl = c===0?'':c===1?'l1':c<=2?'l2':c<=4?'l3':'l4';
+      html+='<div class="ac-heat__c '+lvl+'" title="'+k+' · '+c+'"></div>';
+    }
+    $('acHeat').innerHTML=html;
+  }
+
+  /* ── MES SETUPS ── */
+  function vClass(v){ v=(v||'').toUpperCase(); if(v==='GO') return 'go'; if(v==='NO-GO'||v==='NO GO') return 'no'; return 'wait'; }
+  function renderSetups(){
+    var S=readSetups();
+    var scores=S.map(function(x){return parseFloat(x.score)||0;}).filter(function(v){return v>0;});
+    var avg=scores.length?(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+    var taken=S.filter(function(s){ return s.trade_result || s.trade_taken; });
+    var wins=taken.filter(function(s){ return (s.trade_result||'').toLowerCase()==='win'; }).length;
+    var decided=taken.filter(function(s){ var r=(s.trade_result||'').toLowerCase(); return r==='win'||r==='loss'; }).length;
+    $('sN').textContent=S.length;
+    $('sAvg').textContent=scores.length?avg.toFixed(1):'—';
+    $('sTaken').textContent=taken.length;
+    $('sWin').textContent=decided?Math.round(wins/decided*100)+'%':'—';
+    // verdicts
+    var go=0,wait=0,no=0; S.forEach(function(s){ var c=vClass(s.verdict); if(c==='go')go++; else if(c==='no')no++; else wait++; });
+    $('sVerdicts').innerHTML = S.length
+      ? bar(EN()?'GO':'GO',go,S.length,'var(--bull)')+bar(EN()?'WAIT':'ATTENDRE',wait,S.length,'var(--neutral)')+bar('NO-GO',no,S.length,'var(--bear)')
+      : '<div class="ac-empty">'+(EN()?'No setup analyzed yet.':'Aucun setup analysé.')+'</div>';
+    // paires
+    var pc={}; S.forEach(function(s){ var p=(s.pair||'—').toUpperCase(); pc[p]=(pc[p]||0)+1; });
+    var top=Object.keys(pc).map(function(p){return {p:p,n:pc[p]};}).sort(function(a,b){return b.n-a.n;}).slice(0,5);
+    $('sPairs').innerHTML = top.length
+      ? top.map(function(t){ return bar(t.p,t.n,S.length,'var(--accent)'); }).join('')
+      : '<div class="ac-empty">—</div>';
+    // galerie
+    var g=$('sGallery');
+    if(!S.length){ g.className=''; g.innerHTML='<div class="ac-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 14l3-3 2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg><div>'+(EN()?'Analyze a setup to see it here.':'Analysez un setup pour le voir ici.')+'</div></div>'; }
+    else { g.className='ac-gal'; g.innerHTML=S.slice(0,6).map(function(s){
+      var img=s.img_data?('<div class="ac-gcard__img" style="background-image:url('+esc(s.img_data)+')"></div>')
+        :'<div class="ac-gcard__img"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></div>';
+      var sc=parseFloat(s.score)||0, col=sc>=7?'var(--bull)':sc>=5?'var(--neutral)':'var(--bear)';
+      return '<div class="ac-gcard">'+img+'<div class="ac-gcard__b"><span class="ac-gcard__pair">'+esc(s.pair||'—')+'</span><span class="ac-vchip '+vClass(s.verdict)+'">'+esc(s.verdict||'—')+'</span><span class="ac-gcard__sc" style="color:'+col+'">'+(sc?sc:'—')+'</span></div></div>';
+    }).join(''); }
+  }
+
+  /* ── MON JOURNAL ── */
+  function renderJournal(){
+    var T=readTrades(), sym=curSym();
+    var net=T.reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0);
+    var wins=T.filter(function(t){return t.result==='win';}), losses=T.filter(function(t){return t.result==='loss';});
+    var gW=wins.reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0);
+    var gL=Math.abs(losses.reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0));
+    var dec=wins.length+losses.length;
+    $('jN').textContent=T.length;
+    $('jPnl').textContent=(net>0?'+':'')+nfFr(net,0)+' '+sym; $('jPnl').className='ac-tile__n '+(net>0?'bull':net<0?'bear':'');
+    $('jWin').textContent=dec?Math.round(wins.length/dec*100)+'%':'—';
+    $('jPf').textContent=gL?(gW/gL).toFixed(2):(gW>0?'∞':'—');
+    // equity
+    var sorted=T.slice().sort(function(a,b){ return new Date(a.date||0)-new Date(b.date||0); });
+    var cum=0, eq=sorted.map(function(t){ cum+=parseFloat(t.pnl)||0; return cum; });
+    $('jEquity').innerHTML = spark(eq, net>=0?'var(--bull)':'var(--bear)');
+    // meilleurs
+    function bestBy(key){ var m={}; T.forEach(function(t){ var k=t[key]||'—'; m[k]=(m[k]||0)+(parseFloat(t.pnl)||0); }); var arr=Object.keys(m).map(function(k){return {k:k,v:m[k]};}).sort(function(a,b){return b.v-a.v;}); return arr[0]; }
+    var bs=bestBy('session'), bse=bestBy('setup');
+    if(!T.length){ $('jBest').innerHTML='<div class="ac-empty">'+(EN()?'Log trades in the journal to see your strengths.':'Journalisez des trades pour voir vos points forts.')+'</div>'; }
+    else {
+      $('jBest').innerHTML =
+        '<div class="ac-tl__item" style="border:none;padding-top:0"><span class="ac-tl__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="ac-tl__b"><div class="ac-tl__t">'+(EN()?'Best session':'Meilleure session')+' · '+esc(bs?bs.k:'—')+'</div><div class="ac-tl__s">'+(bs?((bs.v>0?'+':'')+nfFr(bs.v,0)+' '+sym):'—')+'</div></div></div>'+
+        '<div class="ac-tl__item"><span class="ac-tl__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2v20M5 9l7-7 7 7"/></svg></span><div class="ac-tl__b"><div class="ac-tl__t">'+(EN()?'Best setup':'Meilleur setup')+' · '+esc(bse?bse.k:'—')+'</div><div class="ac-tl__s">'+(bse?((bse.v>0?'+':'')+nfFr(bse.v,0)+' '+sym):'—')+'</div></div></div>';
+    }
+  }
+
+  /* ── PATRIMOINE ── */
+  var portfolioCache=null;
+  function renderPatrimoine(){
+    var box=$('patBody');
+    if(!TOKEN){ box.innerHTML='<div class="ac-card"><div class="ac-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><div>'+(EN()?'Sign in to see your portfolio.':'Connectez-vous pour voir votre patrimoine.')+'</div><button class="lt-btn lt-btn--primary lt-btn--sm" style="margin-top:12px" onclick="window.ltOpenLogin&&ltOpenLogin()" data-en="Sign in">Connexion</button></div></div>'; return; }
+    box.innerHTML='<div class="ac-card"><div class="ac-empty">'+(EN()?'Loading…':'Chargement…')+'</div></div>';
+    fetch('/api/portfolio',{headers:{'Authorization':'Bearer '+TOKEN}})
+      .then(function(r){ return r.ok?r.json():[]; })
+      .then(function(rows){ portfolioCache=Array.isArray(rows)?rows:[]; paintPatrimoine(); })
+      .catch(function(){ box.innerHTML='<div class="ac-card"><div class="ac-empty">'+(EN()?'Could not load your portfolio.':'Impossible de charger votre patrimoine.')+'</div></div>'; });
+  }
+  function paintPatrimoine(){
+    var rows=portfolioCache||[], box=$('patBody');
+    var TYPES={etf:{l:'ETF',c:'var(--accent)'},action:{l:(EN()?'Stocks':'Actions'),c:'var(--bull)'},crypto:{l:'Crypto',c:'var(--neutral)'},obligation:{l:(EN()?'Bonds':'Obligations'),c:'#5A9BD4'},liquidites:{l:(EN()?'Cash':'Liquidités'),c:'#8A93A0'}};
+    var total=rows.reduce(function(a,b){return a+(parseFloat(b.amount)||0);},0);
+    if(!rows.length || !total){ box.innerHTML='<div class="ac-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><div>'+(EN()?'No holdings yet. Build your plan in the Portfolio.':'Aucune ligne pour l\'instant. Construisez votre plan dans le Portefeuille.')+'</div><a class="lt-btn lt-btn--secondary lt-btn--sm" style="margin-top:12px" href="/v2/patrimoine" data-en="Open portfolio">Ouvrir le portefeuille →</a></div>'; if(window.kPatriSet)window.kPatriSet('—'); return; }
+    var byType={}; rows.forEach(function(r){ var t=r.asset_type||'etf'; byType[t]=(byType[t]||0)+(parseFloat(r.amount)||0); });
+    var keys=Object.keys(byType).sort(function(a,b){return byType[b]-byType[a];});
+    var acc=0, segs=keys.map(function(k){ var s=acc/total*100; acc+=byType[k]; var e=acc/total*100; return (TYPES[k]?TYPES[k].c:'var(--border)')+' '+s.toFixed(1)+'% '+e.toFixed(1)+'%'; }).join(', ');
+    var leg=keys.map(function(k){ var T=TYPES[k]||{l:k,c:'var(--border)'}; return '<div class="ac-leg__row"><span class="ac-leg__dot" style="background:'+T.c+'"></span><span class="ac-leg__name">'+esc(T.l)+'</span><span class="ac-leg__val">'+nfFr(byType[k],0)+' € · '+Math.round(byType[k]/total*100)+'%</span></div>'; }).join('');
+    box.innerHTML=
+      '<div class="ac-tiles" style="margin-top:0">'+
+        '<div class="ac-tile"><div class="ac-tile__n">'+nfFr(total,0)+' €</div><div class="ac-tile__l" data-en="Total invested">Total investi</div></div>'+
+        '<div class="ac-tile"><div class="ac-tile__n">'+rows.length+'</div><div class="ac-tile__l" data-en="Holdings">Lignes</div></div>'+
+        '<div class="ac-tile"><div class="ac-tile__n">'+keys.length+'</div><div class="ac-tile__l" data-en="Asset classes">Classes d\'actifs</div></div>'+
+      '</div>'+
+      '<div class="ac-card"><h3 class="ac-card__title mt" data-en="Allocation">Répartition</h3>'+
+        '<div class="ac-ring-row"><div class="ac-ring" style="background:conic-gradient('+segs+')"><div class="ac-ring__c"><b>'+keys.length+'</b><span data-en="classes">classes</span></div></div><div class="ac-leg">'+leg+'</div></div>'+
+      '</div>'+
+      '<div class="ac-card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><span style="font-size:13px;color:var(--text-body)" data-en="Manage your holdings and plans.">Gérez vos lignes et vos plans d\'investissement.</span><a class="lt-btn lt-btn--secondary lt-btn--sm" href="/v2/patrimoine" data-en="Open portfolio">Ouvrir le portefeuille →</a></div>';
+    if(window.kPatriSet)window.kPatriSet(nfFr(total,0)+' €');
+  }
+
+  /* ── ACCOMPLISSEMENTS ── */
+  function renderBadges(){
+    var S=readSetups(), T=readTrades();
+    var prof = (localStorage.getItem('lt_pseudo')||'') && avatarData;
+    var streak=computeStreak(S,T);
+    var classes=portfolioCache?Object.keys(portfolioCache.reduce(function(a,r){a[r.asset_type||'etf']=1;return a;},{})).length:0;
+    var net=T.reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0);
+    var wins=T.filter(function(t){return t.result==='win';}).length, losses=T.filter(function(t){return t.result==='loss';}).length;
+    var pf = losses? (T.filter(function(t){return t.result==='win';}).reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0) / Math.abs(T.filter(function(t){return t.result==='loss';}).reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0))) : 0;
+
+    // métriques complémentaires
+    var scores=S.map(function(x){return parseFloat(x.score)||0;}).filter(function(v){return v>0;});
+    var avgScore=scores.length?(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+    var dec=wins+losses, winRate=dec?(wins/dec*100):0;
+    var holdings=portfolioCache?portfolioCache.length:0;
+    var totalVal=portfolioCache?portfolioCache.reduce(function(a,b){return a+(parseFloat(b.amount)||0);},0):0;
+    var sessions=Object.keys(T.reduce(function(a,t){ if(t.session)a[t.session]=1; return a; },{})).length;
+    var usage=readUsage(), toolsUsed=Object.keys(usage).filter(function(k){return usage[k]&&usage[k].visits;}).length;
+
+    var ic={
+      star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l3-3 2 2 4-5"/></svg>',
+      book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18"/></svg>',
+      books:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5v14M8 5v14"/><rect x="11" y="4" width="4" height="16" rx="1"/><path d="M17 6l3 13"/></svg>',
+      flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2s4 4 4 8a4 4 0 0 1-8 0c0-1 .5-2 1-2.5C9 8 12 6 12 2z"/></svg>',
+      crown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l4 5 5-7 5 7 4-5v11H3z"/></svg>',
+      user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      pie:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>',
+      target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>',
+      medal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="5"/><path d="M8.5 13l-1.5 8 5-3 5 3-1.5-8"/></svg>',
+      gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 16a8 8 0 1 1 16 0"/><line x1="12" y1="16" x2="16" y2="10.5"/></svg>',
+      shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+      bricks:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M3 15h18M8.5 4v6M14 10v5M9.5 15v5"/></svg>',
+      compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 10.5 10.5 8.5 15.5 13.5 13.5"/></svg>',
+      coins:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M15 11.6c2.4.3 6 1.2 6 3.4 0 1.7-2.7 3-6 3-1.2 0-2.3-.15-3.2-.4"/></svg>',
+      globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>'
+    };
+    function P(cur,tgt,unit){ return Math.min(cur,tgt)+' / '+tgt+(unit?(' '+unit):''); }
+    var defs=[
+      {on:S.length>=1,  ic:ic.star,   t:(EN()?'First setup':'Premier setup'),      d:(EN()?'You ran your first AI analysis.':'Vous avez lancé votre première analyse IA.'),                 how:(EN()?'Analyze 1 setup in the Setup Analyzer.':'Analysez 1 setup dans le Setup Analyzer.'),         prog:P(S.length,1,'setup')},
+      {on:S.length>=10, ic:ic.chart,  t:(EN()?'Diligent analyst':'Analyste assidu'),d:(EN()?'Ten setups analyzed. Consistency pays.':'Dix setups analysés. La régularité paie.'),                how:(EN()?'Analyze 10 setups.':'Analysez 10 setups.'),                                                prog:P(S.length,10,'setups')},
+      {on:S.length>=50, ic:ic.medal,  t:'Centurion',                                d:(EN()?'Fifty setups in the books.':'Cinquante setups au compteur.'),                                          how:(EN()?'Analyze 50 setups.':'Analysez 50 setups.'),                                                prog:P(S.length,50,'setups')},
+      {on:scores.length>=10&&avgScore>=7, ic:ic.gauge, t:(EN()?'Sharp eye':'Œil affûté'),d:(EN()?'Your average AI score is 7+ over 10 setups.':'Votre score IA moyen dépasse 7 sur 10 setups.'),    how:(EN()?'Keep an average score ≥ 7 over 10+ setups.':'Gardez un score moyen ≥ 7 sur 10+ setups.'), prog:(EN()?'avg ':'moy ')+(scores.length?avgScore.toFixed(1):'—')+' / 7'},
+      {on:T.length>=1,  ic:ic.book,   t:(EN()?'First trade':'Premier trade'),       d:(EN()?'Your trading journal is open.':'Votre journal de trading est ouvert.'),                              how:(EN()?'Log 1 trade in the journal.':'Journalisez 1 trade dans le journal.'),                       prog:P(T.length,1,'trade')},
+      {on:T.length>=10, ic:ic.books,  t:(EN()?'Full journal':'Carnet rempli'),      d:(EN()?'Ten trades logged. Your stats come alive.':'Dix trades journalisés. Vos stats prennent vie.'),     how:(EN()?'Log 10 trades.':'Journalisez 10 trades.'),                                                 prog:P(T.length,10,'trades')},
+      {on:dec>=20&&winRate>=50, ic:ic.shield, t:(EN()?'Disciplined':'Discipliné'),  d:(EN()?'20+ decided trades with a 50%+ win rate.':'20+ trades décidés avec 50%+ de réussite.'),           how:(EN()?'Reach 20 decided trades and ≥ 50% win rate.':'Atteignez 20 trades décidés et ≥ 50% de réussite.'), prog:dec+' '+(EN()?'trades · ':'trades · ')+Math.round(winRate)+'%'},
+      {on:dec>=10&&pf>=1.5, ic:ic.target, t:(EN()?'Strategist':'Stratège'),         d:(EN()?'A profit factor of 1.5+ over 10 trades.':'Un profit factor de 1,5+ sur 10 trades.'),             how:(EN()?'Reach a profit factor ≥ 1.5 over 10+ trades.':'Atteignez un profit factor ≥ 1,5 sur 10+ trades.'), prog:(EN()?'PF ':'PF ')+(dec?pf.toFixed(2):'—')+' / 1,5'},
+      {on:T.length>=5&&net>0, ic:ic.coins, t:(EN()?'In the green':'Dans le vert'),  d:(EN()?'Your cumulative P&L is positive.':'Votre P&L cumulé est positif.'),                                  how:(EN()?'Keep a positive net P&L over 5+ trades.':'Gardez un P&L net positif sur 5+ trades.'),       prog:(net>0?'+':'')+nfFr(net,0)+' '+curSym()},
+      {on:sessions>=3,  ic:ic.globe,  t:(EN()?'Versatile':'Polyvalent'),            d:(EN()?'You trade across 3+ sessions.':'Vous tradez sur 3+ sessions.'),                                        how:(EN()?'Log trades in 3 different sessions (London, NY…).':'Journalisez des trades sur 3 sessions différentes (London, NY…).'), prog:P(sessions,3,'sessions')},
+      {on:!!prof,       ic:ic.user,   t:(EN()?'Complete profile':'Profil complet'), d:(EN()?'Username and photo set.':'Pseudo et photo renseignés.'),                                              how:(EN()?'Add a username and a profile photo in Settings.':'Ajoutez un pseudo et une photo dans Paramètres.'), prog:''},
+      {on:isPro(),      ic:ic.crown,  t:'Premium',                                  d:(EN()?'Full access to the cockpit.':'Accès complet au cockpit.'),                                            how:(EN()?'Activate a Premium membership.':'Activez un abonnement Premium.'),                          prog:''},
+      {on:streak>=7,    ic:ic.flame,  t:(EN()?'7-day streak':'Série de 7 jours'),   d:(EN()?'Seven active days in a row.':'Sept jours actifs d\'affilée.'),                                         how:(EN()?'Be active 7 days in a row.':'Soyez actif 7 jours d\'affilée.'),                             prog:P(streak,7,EN()?'days':'jours')},
+      {on:streak>=30,   ic:ic.flame,  t:(EN()?'Marathon':'Marathon'),               d:(EN()?'Thirty active days in a row. Iron habit.':'Trente jours actifs d\'affilée. Habitude de fer.'),       how:(EN()?'Be active 30 days in a row.':'Soyez actif 30 jours d\'affilée.'),                           prog:P(streak,30,EN()?'days':'jours')},
+      {on:classes>=3,   ic:ic.pie,    t:(EN()?'Diversified':'Patrimoine diversifié'),d:(EN()?'Three or more asset classes.':'Trois classes d\'actifs ou plus.'),                                    how:(EN()?'Hold 3+ asset classes in your portfolio.':'Détenez 3+ classes d\'actifs dans votre portefeuille.'), prog:P(classes,3,'classes')},
+      {on:holdings>=5,  ic:ic.bricks, t:(EN()?'Builder':'Bâtisseur'),               d:(EN()?'Five or more holdings in your portfolio.':'Cinq lignes ou plus dans votre portefeuille.'),         how:(EN()?'Add 5 holdings to your portfolio.':'Ajoutez 5 lignes à votre portefeuille.'),              prog:P(holdings,5,EN()?'holdings':'lignes')},
+      {on:toolsUsed>=4, ic:ic.compass,t:(EN()?'Explorer':'Explorateur'),            d:(EN()?'You roamed across 4+ tools of the cockpit.':'Vous avez exploré 4+ outils du cockpit.'),            how:(EN()?'Use at least 4 different tools.':'Utilisez au moins 4 outils différents.'),                prog:P(toolsUsed,4,EN()?'tools':'outils')}
+    ];
+    curBadges=defs;
+    $('acBadges').innerHTML=defs.map(function(b,i){ return '<div class="ac-badge'+(b.on?' on':'')+'" data-i="'+i+'" role="button" tabindex="0"><div class="ac-badge__ic">'+b.ic+'</div><div class="ac-badge__t">'+esc(b.t)+'</div><div class="ac-badge__d">'+esc(b.on?b.d:b.how)+'</div></div>'; }).join('');
+
+    // Niveau / XP
+    var xp=S.length*10 + T.length*15 + classes*8 + (isPro()?120:0) + (prof?40:0);
+    var lvl=Math.floor(xp/200)+1, into=xp%200, names=['Apprenti','Initié','Opérateur','Tacticien','Stratège','Vétéran','Maître'];
+    $('xpLvl').textContent=lvl;
+    $('xpName').textContent=names[Math.min(lvl-1,names.length-1)];
+    $('xpNext').textContent=into+' / 200 XP';
+    $('xpFill').style.width=(into/200*100)+'%';
+
+    renderActivity();
+    renderGoals(S,T);
+  }
+
+  /* ── Niveau d'activité (XP évolutive : temps + fonctionnalités) ── */
+  var GRADES=[
+    {n:'Recrue',    en:'Recruit',  min:0,     d:'Vos premiers pas sur le cockpit. Tout commence ici.',                      de:'Your first steps on the cockpit. It all starts here.'},
+    {n:'Trader',    en:'Trader',   min:250,   d:'Vous prenez vos marques : premiers setups et premiers trades journalisés.', de:'Finding your footing: first setups and first logged trades.'},
+    {n:'Analyste',  en:'Analyst',  min:600,   d:'Vous analysez avec méthode et consultez le marché régulièrement.',         de:'You analyze methodically and follow the market regularly.'},
+    {n:'Opérateur', en:'Operator', min:1200,  d:'Le cockpit est votre poste de pilotage quotidien.',                         de:'The cockpit is your daily trading desk.'},
+    {n:'Expert',    en:'Expert',   min:2500,  d:'Usage intensif et constant de tous les outils du terminal.',                de:'Intensive, consistent use of every tool in the terminal.'},
+    {n:'Élite',     en:'Elite',    min:5000,  d:'Vous faites partie des opérateurs les plus assidus.',                       de:'You are among the most dedicated operators.'},
+    {n:'Légende',   en:'Legend',   min:10000, d:'Maîtrise totale. Le grade ultime du cockpit.',                              de:'Total mastery. The ultimate cockpit rank.'}
+  ];
+  // Insignes orientés trading (bougie → tendance → loupe → terminal → cible → trophée → couronne)
+  var GRADE_ICONS=[
+    '<rect x="10" y="8" width="4" height="8" rx="1"/><line x1="12" y1="4" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="20"/>',
+    '<polyline points="3 16 9 10 13 14 21 6"/><polyline points="15 6 21 6 21 12"/>',
+    '<circle cx="10.5" cy="10.5" r="6"/><line x1="15" y1="15" x2="20" y2="20"/><polyline points="7.5 11.5 9.5 9 11.5 10.5 13.5 7.5"/>',
+    '<rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M7 13l3-3 2 2 4-4"/><line x1="9" y1="20.5" x2="15" y2="20.5"/><line x1="12" y1="17" x2="12" y2="20.5"/>',
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>',
+    '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v.8a3 3 0 0 0 3 3M17 6h2.5v.8a3 3 0 0 1-3 3"/><line x1="12" y1="13" x2="12" y2="16.5"/><path d="M8.5 20.5h7M9.5 20.5v-1a2.5 2.5 0 0 1 5 0v1"/>',
+    '<path d="M4 9l3.2 3 4.8-6 4.8 6 3.2-3v9H4z"/><path d="M11 13.6l1 1.9 1-1.9" fill="none"/><circle cx="12" cy="14.5" r="1.1" fill="currentColor" stroke="none"/>'
+  ];
+  function gradeSvg(tier){
+    var p=GRADE_ICONS[Math.max(0,Math.min(tier-1,GRADE_ICONS.length-1))];
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+  }
+  function activityStats(){
+    var u=readUsage(), totMs=0; Object.keys(u).forEach(function(k){ totMs+=(u[k].ms||0); });
+    var mins=Math.floor(totMs/60000);
+    function visits(t){ return u[t]&&u[t].visits?u[t].visits:0; }
+    var S=readSetups().length, T=readTrades().length;
+    var holdings=portfolioCache?portfolioCache.length:0;
+    var ecoReads=(function(){ try{ var e=JSON.parse(localStorage.getItem('eco_unlocked')||'[]'); return Array.isArray(e)?e.length:0; }catch(_){ return 0; } })();
+    var parts=[
+      {k:'time',       label:(EN()?'Time spent':'Temps passé'),      xp:Math.min(mins*2,1500),                 meta:(mins?fmtDur(totMs):'—')},
+      {k:'journal',    label:'Journal',                              xp:T*20,                                  meta:T+(EN()?' trades':' trades')},
+      {k:'analyzer',   label:'Setup Analyzer',                       xp:S*15,                                  meta:S+(EN()?' setups':' setups')},
+      {k:'patrimoine', label:'Patrimoine',                           xp:holdings*12,                           meta:holdings+(EN()?' holdings':' lignes')},
+      {k:'calendar',   label:(EN()?'Eco calendar':'Calendrier éco'), xp:Math.min(visits('Calendrier Éco')*5,400)+ecoReads*15, meta:(visits('Calendrier Éco')+(EN()?' visits':' visites'))},
+      {k:'wall',       label:(EN()?'Trade wall':'Mur des Trades'),   xp:Math.min(visits('Mur des Trades')*6,300), meta:(visits('Mur des Trades')+(EN()?' visits':' visites'))}
+    ];
+    var total=parts.reduce(function(a,b){return a+b.xp;},0);
+    return {total:total,parts:parts};
+  }
+  function renderActivity(){
+    var st=activityStats(), xp=st.total; lastActXp=xp;
+    var ti=0; for(var i=0;i<GRADES.length;i++){ if(xp>=GRADES[i].min) ti=i; }
+    var cur=GRADES[ti], next=GRADES[ti+1]||null;
+    var gName=EN()?cur.en:cur.n;
+    $('actMedal').innerHTML=gradeSvg(ti+1);
+    $('actGrade').textContent=gName;
+    $('actXp').textContent=nfFr(xp,0)+' XP';
+    var pct = next ? Math.max(3,Math.min(100,(xp-cur.min)/(next.min-cur.min)*100)) : 100;
+    $('actFill').style.width=pct+'%';
+    $('actNext').textContent = next
+      ? (EN()?('Next: '+next.en+' · '+nfFr(next.min-xp,0)+' XP to go'):('Prochain : '+next.n+' · '+nfFr(next.min-xp,0)+' XP restants'))
+      : (EN()?'Top grade reached.':'Grade maximal atteint.');
+    // détail de l'XP
+    $('actBreak').innerHTML=st.parts.filter(function(p){return p.xp>0;})
+      .sort(function(a,b){return b.xp-a.xp;})
+      .map(function(p){ return '<span class="ac-xpchip"><i></i>'+esc(p.label)+' <b>'+nfFr(p.xp,0)+' XP</b></span>'; }).join('')
+      || '<span class="ac-xpchip"><i></i>'+(EN()?'Start using the cockpit to earn XP.':'Commencez à utiliser le cockpit pour gagner de l\'XP.')+'</span>';
+    // badges de grade (cliquables)
+    $('actGrades').innerHTML=GRADES.map(function(g,idx){
+      var on=xp>=g.min, isCur=idx===ti;
+      return '<div class="ac-grade'+(isCur?' cur':(on?' on':''))+'" data-i="'+idx+'" role="button" tabindex="0"><div class="ac-grade__m">'+gradeSvg(idx+1)+'</div><div class="ac-grade__n">'+esc(EN()?g.en:g.n)+'</div><div class="ac-grade__x">'+(g.min?nfFr(g.min,0)+' XP':'0 XP')+'</div></div>';
+    }).join('');
+  }
+  /* ── Modal détail (badge ou grade) ── */
+  function openModal(html){ var m=$('acModal'); if(!m) return; $('acmBody').innerHTML=html; m.classList.add('show'); }
+  function closeModal(){ var m=$('acModal'); if(m) m.classList.remove('show'); }
+  function showBadge(i){
+    var b=curBadges[i]; if(!b) return;
+    var st = b.on ? '<span class="ac-mst ok">'+(EN()?'Unlocked':'Débloqué')+'</span>' : '<span class="ac-mst">'+(EN()?'Locked':'Verrouillé')+'</span>';
+    openModal('<div class="ac-m__ic'+(b.on?' on':'')+'">'+b.ic+'</div><div class="ac-m__t">'+esc(b.t)+'</div>'+st+
+      '<p class="ac-m__d">'+esc(b.d)+'</p>'+
+      '<div class="ac-m__how"><span class="ac-m__howlbl">'+(EN()?'How to unlock':'Comment l\'obtenir')+'</span>'+esc(b.how)+
+      (b.prog?'<div class="ac-m__prog">'+esc(b.prog)+'</div>':'')+'</div>');
+  }
+  function showGrade(i){
+    var g=GRADES[i]; if(!g) return; var on=lastActXp>=g.min;
+    var st = on ? '<span class="ac-mst ok">'+(EN()?'Reached':'Atteint')+'</span>' : '<span class="ac-mst">'+(EN()?'To reach':'À atteindre')+'</span>';
+    var how = on
+      ? (EN()?'Grade reached. Keep using the cockpit to climb higher.':'Grade atteint. Continuez à utiliser le cockpit pour grimper.')
+      : (EN()?('Reach '+nfFr(g.min,0)+' XP to unlock this grade — '+nfFr(g.min-lastActXp,0)+' XP to go.'):('Atteignez '+nfFr(g.min,0)+' XP pour débloquer ce grade — '+nfFr(g.min-lastActXp,0)+' XP restants.'));
+    openModal('<div class="ac-m__ic'+(on?' on':'')+'">'+gradeSvg(i+1)+'</div><div class="ac-m__t">'+esc(EN()?g.en:g.n)+'</div>'+st+
+      '<p class="ac-m__d">'+esc(EN()?g.de:g.d)+'</p>'+
+      '<div class="ac-m__how"><span class="ac-m__howlbl">'+(EN()?'How to reach it':'Comment l\'atteindre')+'</span>'+esc(how)+'</div>');
+  }
+  function computeStreak(S,T){
+    var set={}; function add(d){ if(!d)return; var dt=new Date(d); if(isNaN(dt))return; set[dt.toISOString().slice(0,10)]=1; }
+    S.forEach(function(s){ add(s.created_at||(s.id?new Date(s.id).toISOString():null)); }); T.forEach(function(t){ add(t.date); });
+    var streak=0, d=new Date(); d.setHours(0,0,0,0);
+    // tolère que today soit vide : on part d'aujourd'hui ou hier
+    if(!set[d.toISOString().slice(0,10)]) d.setDate(d.getDate()-1);
+    while(set[d.toISOString().slice(0,10)]){ streak++; d.setDate(d.getDate()-1); }
+    return streak;
+  }
+  function renderGoals(S,T){
+    var g=readGoals();
+    if($('goalWeek').value==='') $('goalWeek').value=g.week||'';
+    if($('goalPnl').value==='') $('goalPnl').value=g.pnl||'';
+    // analyses cette semaine
+    var now=new Date(), wk=new Date(now); wk.setDate(wk.getDate()-7);
+    var aWeek=S.filter(function(s){ var d=new Date(s.created_at||s.id); return !isNaN(d)&&d>=wk; }).length;
+    var gw=parseFloat(g.week)||0;
+    $('goalWeekCur').textContent=aWeek+' '+(EN()?'this week':'cette semaine')+(gw?(' · '+(EN()?'target ':'objectif ')+gw):'');
+    $('goalWeekFill').style.width=(gw?Math.min(100,aWeek/gw*100):0)+'%';
+    // pnl ce mois
+    var m0=new Date(now.getFullYear(),now.getMonth(),1);
+    var pnlM=T.filter(function(t){ var d=new Date(t.date); return !isNaN(d)&&d>=m0; }).reduce(function(a,b){return a+(parseFloat(b.pnl)||0);},0);
+    var gp=parseFloat(g.pnl)||0;
+    $('goalPnlCur').textContent=(pnlM>0?'+':'')+nfFr(pnlM,0)+' '+curSym()+(gp?(' · '+(EN()?'target ':'objectif ')+nfFr(gp,0)+' '+curSym()):'');
+    $('goalPnlFill').style.width=(gp>0?Math.min(100,Math.max(0,pnlM/gp*100)):0)+'%';
+  }
+  function saveGoals(){ var g={week:$('goalWeek').value||'',pnl:$('goalPnl').value||''}; try{ localStorage.setItem('lt_goals',JSON.stringify(g)); }catch(e){} renderGoals(readSetups(),readTrades()); }
+
+  /* ── ABONNEMENT ── */
+  function renderSubscription(){
+    var pro=isPro();
+    $('acPlanTag').textContent = pro?'PRO':'FREE';
+    $('subBody').innerHTML = pro
+      ? '<h3 class="ac-card__title" data-en="Subscription">Abonnement</h3>'+
+        '<div class="ac-id" style="gap:14px"><span class="ac-chip ac-chip--pro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Premium</span></div>'+
+        '<p class="ac-hint" style="margin-top:14px" data-en="Your Premium access is active. You have full access to all the tools of the cockpit.">Votre accès Premium est actif. Vous disposez de tous les outils du cockpit.</p>'+
+        '<div class="ac-foot"><a class="lt-btn lt-btn--secondary lt-btn--sm" href="/v2/tarifs" data-en="Manage my plan">Gérer mon offre</a></div>'
+      : '<h3 class="ac-card__title" data-en="Subscription">Abonnement</h3>'+
+        '<div class="ac-id" style="gap:14px"><span class="ac-chip ac-chip--free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> <span data-en="Free plan">Version gratuite</span></span></div>'+
+        '<p class="ac-hint" style="margin-top:14px" data-en="Unlock the journal, Setup Analyzer, Patrimoine and the full cockpit with Premium.">Débloquez le journal, le Setup Analyzer, le Patrimoine et tout le cockpit avec Premium.</p>'+
+        '<div class="ac-foot"><a class="lt-btn lt-btn--primary lt-btn--sm" href="/v2/tarifs" data-en="Go Premium">Passer Premium →</a></div>';
+  }
+
+  /* ── PARAMÈTRES (profil) ── */
+  function renderAvatarEls(){
+    var letter=((localStorage.getItem('lt_pseudo')||EMAIL||'?').charAt(0)||'?').toUpperCase();
+    [['acAvatar'],['setAvatar']].forEach(function(p){ var el=$(p[0]); if(!el)return; if(avatarData) el.innerHTML='<img src="'+esc(avatarData)+'" alt="">'; else el.textContent=letter; });
+    var rm=$('setPhotoRm'); if(rm) rm.style.display=avatarData?'':'none';
+  }
+  function setStatus(msg,cls){ var s=$('setStatus'); if(s){ s.textContent=msg; s.className='ac-status'+(cls?' '+cls:''); } }
+  function resizeImage(file,cb){
+    var rd=new FileReader(); rd.onload=function(e){ var img=new Image(); img.onload=function(){
+      var Sz=256,c=document.createElement('canvas'); c.width=Sz; c.height=Sz; var ctx=c.getContext('2d');
+      var side=Math.min(img.width,img.height), sx=(img.width-side)/2, sy=(img.height-side)/2;
+      ctx.drawImage(img,sx,sy,side,side,0,0,Sz,Sz); cb(c.toDataURL('image/jpeg',0.85));
+    }; img.onerror=function(){cb(null);}; img.src=e.target.result; }; rd.onerror=function(){cb(null);}; rd.readAsDataURL(file);
+  }
+  function loadProfile(){
+    fetch('/api/profile',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){ return r.ok?r.json():null; }).then(function(p){
+      if(!p) return;
+      // Repli sur les infos Google (auth_name / auth_avatar) si le profil ne les a
+      // pas encore : photo + nom + pseudo à jour dès la 1re connexion.
+      var fn=p.first_name, ln=p.last_name;
+      if(!fn && !ln && p.auth_name){ var parts=String(p.auth_name).trim().split(/\s+/); fn=parts.shift()||''; ln=parts.join(' ')||''; }
+      if(fn) $('setFirst').value=fn;
+      if(ln) $('setLast').value=ln;
+      var pseudo=p.pseudo || p.auth_name || '';
+      if(pseudo) $('setPseudo').value=pseudo;
+      var av=p.avatar_url || p.auth_avatar || '';
+      if(av){ avatarData=av; }
+      renderAvatarEls(); refreshIdentity(p);
+    }).catch(function(){});
+  }
+  function saveProfile(){
+    var btn=$('setSave'); btn.disabled=true; setStatus(EN()?'Saving…':'Enregistrement…','');
+    var body={ first_name:$('setFirst').value.trim()||null, last_name:$('setLast').value.trim()||null, pseudo:$('setPseudo').value.trim()||null, avatar_url:avatarData||null };
+    fetch('/api/profile',{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},body:JSON.stringify(body)})
+      .then(function(r){ if(r.status===401) throw new Error('SESSION'); if(!r.ok) throw new Error('HTTP '+r.status); return r.json().catch(function(){return{};}); })
+      .then(function(){
+        if(body.pseudo) localStorage.setItem('lt_pseudo',body.pseudo); else localStorage.removeItem('lt_pseudo');
+        if(body.avatar_url) localStorage.setItem('lt_avatar',body.avatar_url); else localStorage.removeItem('lt_avatar');
+        if(window.ltRenderUserBar) window.ltRenderUserBar();
+        setStatus(EN()?'Profile saved.':'Profil enregistré.','ok'); renderAvatarEls(); refreshIdentity(null);
+      })
+      .catch(function(e){ if(e.message==='SESSION'){ setStatus(EN()?'Session expired — sign in again.':'Session expirée — reconnectez-vous.','err'); if(window.ltOpenLogin)ltOpenLogin(); } else setStatus((EN()?'Save failed: ':'Échec : ')+(e.message||''),'err'); })
+      .finally(function(){ btn.disabled=false; });
+  }
+  function refreshIdentity(p){
+    var pseudo=localStorage.getItem('lt_pseudo')||'';
+    var first=p&&p.first_name?p.first_name:'', last=p&&p.last_name?p.last_name:'';
+    var name = pseudo || ((first||last)?((first+' '+last).trim()):'') || (EMAIL? EMAIL.split('@')[0] : (EN()?'My account':'Mon compte'));
+    $('acName').textContent=name; $('acHeadTitle').textContent=name;
+    $('acEmail').textContent=EMAIL||'—';
+    var pro=isPro();
+    var chip=$('acPlanChip');
+    chip.className='ac-chip '+(pro?'ac-chip--pro':'ac-chip--free');
+    chip.innerHTML = pro
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Premium'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg> '+(EN()?'Free plan':'Version gratuite');
+    renderAvatarEls();
+  }
+  window.kPatriSet=function(v){ var e=$('kPatri'); if(e) e.textContent=v; };
+
+  function initSettings(){
+    if(!TOKEN||!EMAIL){ $('setGate').style.display=''; return; }
+    $('setForm').style.display=''; $('setEmail').value=EMAIL;
+    $('prefLang').value=getLang(); $('prefCur').value=curSym();
+    loadProfile();
+    $('setPhotoBtn').addEventListener('click',function(){ $('setPhotoInput').click(); });
+    $('setPhotoInput').addEventListener('change',function(e){ var f=e.target.files&&e.target.files[0]; if(!f)return; resizeImage(f,function(d){ if(d){ avatarData=d; renderAvatarEls(); setStatus('',''); } else setStatus(EN()?'Could not read the image.':'Image illisible.','err'); }); });
+    $('setPhotoRm').addEventListener('click',function(){ avatarData=''; renderAvatarEls(); });
+    $('setSave').addEventListener('click',saveProfile);
+    $('prefCur').addEventListener('change',function(){ localStorage.setItem('jnl_currency',this.value); renderJournal(); });
+    $('prefLang').addEventListener('change',function(){ localStorage.setItem('lt_lang',this.value); location.reload(); });
+    $('setExport').addEventListener('click',function(){
+      var data={ exported_at:new Date().toISOString(), email:EMAIL, setups:readSetups(), trades:readTrades(), notes:(function(){try{return JSON.parse(localStorage.getItem('jnl_notes')||'{}');}catch(e){return{};}})(), usage:readUsage(), goals:readGoals() };
+      var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); var a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download='le-terminal-donnees-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+    });
+    $('setWipe').addEventListener('click',function(){
+      var ws=$('wipeStatus');
+      if(this.dataset.armed!=='1'){ this.dataset.armed='1'; this.textContent=(EN()?'Click again to confirm':'Cliquez à nouveau pour confirmer'); ws.textContent=''; var b=this; setTimeout(function(){ b.dataset.armed='0'; b.textContent=(EN()?'Delete my local data':'Supprimer mes données locales'); },4000); return; }
+      ['lt_history','jnl_trades','jnl_notes','lt_usage','lt_goals'].forEach(function(k){ localStorage.removeItem(k); });
+      this.dataset.armed='0'; this.textContent=(EN()?'Delete my local data':'Supprimer mes données locales');
+      ws.textContent=(EN()?'Local data deleted.':'Données locales supprimées.'); ws.className='ac-status ok';
+      renderAll();
+    });
+  }
+
+  /* ── Navigation par onglets ── */
+  var TABS=['dashboard','setups','journal','patrimoine','badges','settings','subscription'];
+  var loaded={};
+  function showTab(t){
+    if(TABS.indexOf(t)<0) t='dashboard';
+    TABS.forEach(function(x){ var p=$('tab-'+x); if(p) p.classList.toggle('is-on',x===t); });
+    Array.prototype.forEach.call(document.querySelectorAll('.ac-tab'),function(b){ b.classList.toggle('is-on',b.getAttribute('data-tab')===t); });
+    if(!loaded[t]){ loaded[t]=true; lazyRender(t); }
+    if(history.replaceState) history.replaceState(null,'','#'+t);
+  }
+  function lazyRender(t){
+    if(t==='setups') renderSetups();
+    else if(t==='journal') renderJournal();
+    else if(t==='patrimoine') renderPatrimoine();
+    else if(t==='badges') renderBadges();
+    else if(t==='subscription') renderSubscription();
+  }
+  function renderAll(){
+    refreshIdentity(null); renderDashboard(); renderSubscription();
+    // recharge les onglets déjà ouverts
+    Object.keys(loaded).forEach(function(t){ if(t!=='dashboard') lazyRender(t); });
+  }
+
+  function init(){
+    refreshIdentity(null);
+    renderDashboard();
+    renderSubscription();
+    initSettings();
+    // charge patrimoine en arrière-plan pour la tuile « valeur patrimoine » + badges
+    if(TOKEN){ fetch('/api/portfolio',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){return r.ok?r.json():[];}).then(function(rows){ portfolioCache=Array.isArray(rows)?rows:[]; var tot=portfolioCache.reduce(function(a,b){return a+(parseFloat(b.amount)||0);},0); if(window.kPatriSet)window.kPatriSet(tot?nfFr(tot,0)+' €':'—'); }).catch(function(){}); }
+    // Rattachement au compte : recharge les analyses depuis le serveur (cross-appareil),
+    // fusion par id (sans img_data), puis on rafraîchit le dashboard.
+    if(TOKEN){ fetch('/api/history',{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){return r.ok?r.json():[];}).then(function(d){
+      if(!Array.isArray(d)||!d.length) return;
+      var loc=readSetups(), ids={}; d.forEach(function(h){ ids[String(h.id)]=1; });
+      var svr=d.map(function(h){ var c={}; for(var k in h){ if(k!=='img_data') c[k]=h[k]; } return c; });
+      var merged=loc.filter(function(h){ return !ids[String(h.id)]; }).concat(svr);
+      try{ localStorage.setItem('lt_history', JSON.stringify(merged.slice(0,50))); }catch(e){}
+      renderAll();
+    }).catch(function(){}); }
+    // Progression (temps par outil / XP / objectifs) chargée par menu.js depuis le
+    // serveur → on rafraîchit le dashboard une fois qu'elle est disponible.
+    document.addEventListener('lt:stats-synced', renderAll);
+    $('goalWeek').addEventListener('change',saveGoals); $('goalPnl').addEventListener('change',saveGoals);
+    document.getElementById('acNav').addEventListener('click',function(e){ var b=e.target.closest('.ac-tab'); if(b) showTab(b.getAttribute('data-tab')); });
+    // Ouverture des détails (badges + grades), clic et clavier
+    $('acBadges').addEventListener('click',function(e){ var el=e.target.closest('.ac-badge'); if(el) showBadge(+el.getAttribute('data-i')); });
+    $('actGrades').addEventListener('click',function(e){ var el=e.target.closest('.ac-grade'); if(el) showGrade(+el.getAttribute('data-i')); });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){ closeModal(); return; }
+      if((e.key==='Enter'||e.key===' ')){ var t=e.target;
+        if(t&&t.classList&&t.classList.contains('ac-badge')){ e.preventDefault(); showBadge(+t.getAttribute('data-i')); }
+        else if(t&&t.classList&&t.classList.contains('ac-grade')){ e.preventDefault(); showGrade(+t.getAttribute('data-i')); }
+      }
+    });
+    $('acModalX').addEventListener('click',closeModal);
+    $('acModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+    var h=(location.hash||'').replace('#',''); showTab(h||'dashboard');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./onboarding.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>

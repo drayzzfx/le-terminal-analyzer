@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="/v2/_v2gate.js"></script>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/v2/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/v2/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/v2/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qu'est-ce qu'un setup de trading ? Définition et exemples | Le Terminal</title>
+<meta name="description" content="Setup de trading : définition claire, composants (déclencheur, confluence, invalidation, RR) et exemples annotés pour reconnaître un bon setup.">
+<link rel="canonical" href="https://www.leterminal.net/blog/quest-ce-quun-setup">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Qu'est-ce qu'un setup de trading ? Définition et exemples | Le Terminal">
+<meta property="og:description" content="Setup de trading : définition claire, composants (déclencheur, confluence, invalidation, RR) et exemples annotés pour reconnaître un bon setup.">
+<meta property="og:url" content="https://www.leterminal.net/blog/quest-ce-quun-setup">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/quest-ce-quun-setup-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Qu'est-ce qu'un setup de trading ? — Le Terminal">
+<meta property="article:published_time" content="2026-07-15">
+<meta property="article:modified_time" content="2026-07-15">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Qu'est-ce qu'un setup de trading ? Définition et exemples | Le Terminal">
+<meta name="twitter:description" content="Déclencheur, confluence, invalidation, ratio risque/rendement : l'anatomie complète d'un setup, avec 3 exemples annotés et une grille de notation.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/quest-ce-quun-setup-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Qu'est-ce qu'un setup de trading ? (définition + exemples)",
+      "description": "Setup de trading : définition claire, composants (déclencheur, confluence, invalidation, RR) et exemples annotés pour reconnaître un bon setup.",
+      "datePublished": "2026-07-15",
+      "dateModified": "2026-07-15",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/quest-ce-quun-setup-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/quest-ce-quun-setup" },
+      "keywords": "qu'est-ce qu'un setup de trading, setup de trading définition, exemple de setup, éléments d'un bon setup"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre un setup et un signal ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le setup est l'ensemble des conditions à réunir (contexte, confluence, invalidation, objectif). Le signal est le déclencheur ponctuel à l'intérieur de ce setup : la bougie qui clôture ou le croisement qui se produit. Un signal sans setup autour de lui est un déclencheur sans contexte, à éviter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un bon setup de trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un bon setup réunit une confluence de plusieurs facteurs indépendants, un déclencheur net et binaire, une invalidation logique proche de l'entrée et un ratio risque/rendement favorable (idéalement supérieur à 2 pour 1). Il est surtout reproductible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Un setup garantit-il un trade gagnant ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Un setup améliore la probabilité de succès sur une série de trades, mais chaque opération individuelle reste incertaine. C'est l'espérance de gain sur le long terme, combinée à une gestion du risque rigoureuse, qui fait la différence."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien de setups faut-il maîtriser ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mieux vaut maîtriser un ou deux setups à fond que d'en survoler dix. Un trader cohérent connaît parfaitement les conditions de ses configurations favorites, ce qui lui permet de les reconnaître vite et de les exécuter sans hésitation."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Qu'est-ce qu'un setup de trading ?", "item": "https://www.leterminal.net/blog/quest-ce-quun-setup" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/v2/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/v2/fonts.css">
+<link rel="stylesheet" href="/v2/design-system.css">
+<link rel="stylesheet" href="/v2/theme-light.css">
+<link rel="stylesheet" href="/v2/home.css">
+<link rel="stylesheet" href="/v2/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/v2">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/v2"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/v2/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/v2/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/v2/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/v2/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/v2/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/v2/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/v2/#method" data-en="Method">Méthode</a>
+      <a href="/v2/#community" data-en="Community">Communauté</a>
+      <a href="/v2/avis" data-en="Reviews">Avis</a>
+      <a href="/v2/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/v2/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/v2" data-en="Home">Accueil</a><span class="sep">→</span><a href="/v2/blog">Blog</a><span class="sep">→</span><span class="cur">Qu'est-ce qu'un setup de trading ?</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Méthode &amp; setups</span>
+  <h1 class="bl-art__title">Qu'est-ce qu'un setup de trading ? (définition + exemples)</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published July 15, 2026">Publié le 15 juillet 2026</span>
+    <span>·</span>
+    <span data-en="9 min read">9 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/v2/blog/img/quest-ce-quun-setup.webp" width="1600" height="900" alt="Qu'est-ce qu'un setup de trading — déclencheur, confluence, invalidation et objectif (RR)" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un setup de trading est un ensemble de conditions objectives, définies à l'avance, qui doivent toutes être réunies pour justifier une prise de position. Un bon setup articule quatre éléments : un <strong>déclencheur</strong> (le signal d'entrée), une <strong>confluence</strong> (plusieurs facteurs qui pointent dans le même sens), une <strong>invalidation</strong> (le niveau où l'idée est fausse, donc où placer le stop) et un <strong>objectif</strong> chiffré via le ratio risque/rendement.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Quand on débute, on entend partout parler de « setup » sans jamais que personne ne prenne le temps de définir le mot. Posons-le clairement : qu'est-ce qu'un setup de trading ? C'est votre liste de conditions à remplir avant d'appuyer sur le bouton — pas une intuition, pas un « ça sent bon », mais un cadre reproductible. Sa vraie valeur ? Transformer une décision émotionnelle en processus logique. Quand vos règles sont explicites, les trades impulsifs se raréfient et votre exécution gagne en cohérence.</p>
+    <p>Cet article détaille l'anatomie d'un setup, le distingue d'une stratégie et d'un signal, puis l'illustre par trois exemples annotés et une méthode de notation.</p>
+
+    <h2>Les composants d'un setup de trading</h2>
+    <p>Un setup n'est pas un objet unique : c'est un assemblage. Pour bien cerner sa <strong>définition</strong>, il faut décomposer les briques qui le constituent. Retirez-en une, et vous n'avez plus un setup mais un pari.</p>
+
+    <h3>Le déclencheur (trigger)</h3>
+    <p>Le déclencheur est l'événement précis qui vous autorise à entrer. C'est le « feu vert » — pas la zone où vous surveillez, mais l'instant où vous agissez.</p>
+    <p>Exemples concrets de déclencheurs :</p>
+    <ul>
+      <li>la clôture d'une bougie au-dessus d'une résistance cassée ;</li>
+      <li>le rejet d'un niveau avec une mèche marquée (pin bar) ;</li>
+      <li>le retour du prix sur un support après un premier test.</li>
+    </ul>
+    <p>Un bon déclencheur est <strong>binaire</strong> : soit la condition est remplie, soit elle ne l'est pas. Si vous hésitez à savoir si votre signal s'est déclenché, c'est qu'il est mal défini.</p>
+
+    <h3>La confluence</h3>
+    <p>La confluence, c'est le point où plusieurs facteurs indépendants s'alignent au même endroit pour renforcer une même idée. Un support seul est faible ; un support qui coïncide avec une moyenne mobile, un niveau de Fibonacci et une divergence haussière devient une zone à forte probabilité.</p>
+    <p>L'intérêt est statistique : chaque facteur ajoute un argument. Plus les arguments convergent, plus le contexte joue en votre faveur. Attention toutefois à ne pas empiler dix indicateurs redondants — trois signaux réellement indépendants valent mieux que dix variantes du même.</p>
+
+    <h3>L'invalidation (stop) et l'objectif (RR)</h3>
+    <p>Chaque bon setup répond à une question simple : <strong>où ai-je tort ?</strong> Le niveau d'invalidation est le prix qui, s'il est atteint, détruit votre scénario. C'est là — juste au-delà — que se place votre stop-loss. Pas selon un montant en euros arbitraire, mais selon la structure du marché.</p>
+    <p>Vient ensuite l'objectif. La distance entre votre entrée et votre invalidation définit votre risque ; la distance entre votre entrée et votre cible définit votre gain potentiel. Le rapport entre les deux est le <strong>ratio risque/rendement (RR)</strong>. Un exemple chiffré rend l'idée concrète : vous entrez à 100, votre invalidation est à 98 (soit 2 de risque) et votre cible raisonnable est à 106 (soit 6 de gain) ; le RR est alors de 3 pour 1. Un setup dont le RR est inférieur à 1 mérite rarement d'être pris, car il faut alors gagner beaucoup plus souvent qu'on ne perd pour rester rentable. Notre <a href="/v2/calculateur">calculateur de pips et de position</a> vous donne ce ratio automatiquement à partir de vos niveaux.</p>
+
+    <h2>Setup vs stratégie vs signal : ne pas confondre</h2>
+    <p>Ces trois mots sont souvent employés comme synonymes, à tort. Les distinguer clarifie tout.</p>
+    <ul>
+      <li><strong>La stratégie</strong> est le cadre global : votre style (scalping, swing), les marchés que vous tradez, votre gestion du capital. C'est la constitution.</li>
+      <li><strong>Le setup</strong> est une configuration précise, prévue par votre stratégie, avec ses conditions d'entrée, d'invalidation et de sortie. C'est la loi appliquée à un cas.</li>
+      <li><strong>Le signal</strong> est le déclencheur ponctuel à l'intérieur du setup : la bougie qui clôture, le croisement qui se produit. C'est le juge qui dit « maintenant ».</li>
+    </ul>
+    <p>Autrement dit : une stratégie contient plusieurs setups ; un setup se conclut par un signal. Prenons un cas concret : une stratégie de suivi de tendance peut prévoir un setup de « pullback sur moyenne mobile », dont le signal sera la bougie de rejet qui clôture au-dessus de cette moyenne. Confondre les trois niveaux mène à trader des signaux isolés, sans contexte — la première cause de sur-trading chez le débutant.</p>
+
+    <h2>3 exemples de setups annotés</h2>
+    <p>Voici trois <strong>exemples de setup</strong> classiques, décomposés selon les quatre composants vus plus haut. Ils sont pédagogiques, non prescriptifs.</p>
+
+    <h3>1. Pullback sur tendance haussière</h3>
+    <ul>
+      <li><em>Contexte / confluence</em> : tendance de fond haussière, prix qui revient sur une moyenne mobile 50 coïncidant avec un ancien support.</li>
+      <li><em>Déclencheur</em> : bougie de rejet (mèche basse) qui clôture au-dessus de la moyenne mobile.</li>
+      <li><em>Invalidation</em> : clôture nette sous le support, ce qui casserait la structure haussière.</li>
+      <li><em>Objectif / RR</em> : le précédent sommet, visant un RR d'au moins 2 pour 1.</li>
+    </ul>
+
+    <h3>2. Cassure de range avec retest</h3>
+    <ul>
+      <li><em>Confluence</em> : consolidation horizontale longue, volume qui s'assèche, cassure appuyée par un volume en hausse.</li>
+      <li><em>Déclencheur</em> : retour du prix sur le niveau cassé (retest) qui tient et repart.</li>
+      <li><em>Invalidation</em> : réintégration franche à l'intérieur du range.</li>
+      <li><em>Objectif / RR</em> : projection de la hauteur du range, RR souvent supérieur à 3 pour 1.</li>
+    </ul>
+
+    <h3>3. Rejet de résistance en range</h3>
+    <ul>
+      <li><em>Confluence</em> : borne haute d'un range clair, divergence baissière du RSI, mèche de rejet.</li>
+      <li><em>Déclencheur</em> : bougie baissière qui clôture sous le plus bas de la bougie de rejet.</li>
+      <li><em>Invalidation</em> : clôture au-dessus de la résistance.</li>
+      <li><em>Objectif / RR</em> : borne basse du range.</li>
+    </ul>
+    <p>Remarquez que dans chaque cas, les quatre briques sont présentes et objectives. C'est ce qui sépare un setup d'un simple ressenti.</p>
+
+    <h2>Comment évaluer la qualité d'un setup (scoring)</h2>
+    <p>Tous les setups ne se valent pas. Deux configurations peuvent respecter vos règles tout en offrant des probabilités très différentes. D'où l'intérêt de <strong>noter</strong> chaque setup avant d'entrer, plutôt que de tout traiter à l'identique.</p>
+    <p>Une grille de scoring simple repose sur les critères qui font un bon setup :</p>
+    <ol>
+      <li><strong>Force de la confluence</strong> : combien de facteurs <em>indépendants</em> s'alignent ? (1 point par facteur réel)</li>
+      <li><strong>Netteté du déclencheur</strong> : le signal est-il franc ou ambigu ?</li>
+      <li><strong>Clarté de l'invalidation</strong> : le stop est-il logique et serré, ou large et flou ?</li>
+      <li><strong>Qualité du RR</strong> : le rapport gain/risque dépasse-t-il votre seuil minimal ?</li>
+      <li><strong>Alignement avec la tendance</strong> : tradez-vous dans le sens du contexte dominant ?</li>
+    </ol>
+    <p>En attribuant une note à chaque critère, vous obtenez un score global qui vous force à comparer objectivement vos opportunités — et à écarter les setups médiocres qui « passaient » quand même. Concrètement, un trade qui coche cinq critères sur cinq mérite une taille de position normale, tandis qu'un setup à trois sur cinq gagne à être allégé, voire ignoré.</p>
+    <p>Le problème du scoring manuel, c'est sa subjectivité : le même graphique noté deux jours différents peut recevoir deux notes distinctes selon votre humeur. C'est précisément là qu'un outil automatisé apporte de la constance. Le <a href="/v2/analyzer-presentation">Setup Analyzer de Le Terminal</a> applique la même grille à chaque capture et renvoie un score reproductible, argumenté sur la structure, l'invalidation et le risque/rendement.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Notez la qualité de vos setups automatiquement</p>
+    <p>Importez votre graphique, obtenez un score de setup sur 100 et une lecture argumentée en quelques secondes.</p>
+    <a class="lt-btn lt-btn--primary" href="/v2/analyzer-presentation">Découvrir le Setup Analyzer</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Le trading comporte un risque de perte en capital. Aucun setup, aussi bien noté soit-il, ne garantit un gain : il ne fait qu'améliorer la probabilité sur un grand nombre de trades.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre un setup et un signal ?</h3>
+        <p>Le setup est l'ensemble des conditions à réunir (contexte, confluence, invalidation, objectif). Le signal est le déclencheur ponctuel à l'intérieur de ce setup : la bougie qui clôture ou le croisement qui se produit. Un signal sans setup autour de lui, c'est un déclencheur sans contexte — à éviter.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un bon setup de trading ?</h3>
+        <p>Un bon setup réunit une confluence de plusieurs facteurs indépendants, un déclencheur net et binaire, une invalidation logique proche de l'entrée et un ratio risque/rendement favorable (idéalement supérieur à 2 pour 1). Il est surtout reproductible : vous devez pouvoir le reconnaître et l'exécuter de la même manière à chaque fois.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Un setup garantit-il un trade gagnant ?</h3>
+        <p>Non. Un setup améliore la probabilité de succès sur une série de trades, mais chaque opération individuelle reste incertaine. C'est l'espérance de gain sur le long terme, combinée à une gestion du risque rigoureuse, qui fait la différence — pas un trade isolé. Votre <a href="/v2/journal-presentation">journal de trading</a> est l'outil qui mesure cette espérance dans la durée.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Combien de setups faut-il maîtriser ?</h3>
+        <p>Mieux vaut maîtriser un ou deux setups à fond que d'en survoler dix. Un trader cohérent connaît parfaitement les conditions de ses configurations favorites, ce qui lui permet de les reconnaître vite et de les exécuter sans hésitation.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : documentation pédagogique sur les setups, la confluence et les points d'invalidation (Aron Groups, ChartGuru, EliteCurrenSea, Babypips, 2026). Pour les cours et prix, référez-vous toujours à votre broker ou à une plateforme de données de marché officielle. Publié le 15 juillet 2026 · Mis à jour le 15 juillet 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/v2/analyzer-presentation"><span class="t">Setup Analyzer IA</span><span class="d">Votre setup noté sur 100, avec une lecture argumentée</span></a>
+        <a href="/v2/blog/analyse-de-setup-trading"><span class="t">Analyse de setup : méthode &amp; scoring</span><span class="d">La grille en 7 critères pour noter vos setups</span></a>
+        <a href="/v2/blog/trader-avec-chatgpt"><span class="t">Trader avec ChatGPT</span><span class="d">Ce que l'IA peut (et ne peut pas) faire</span></a>
+        <a href="/v2/blog/pourquoi-journal-trading"><span class="t">Pourquoi tenir un journal de trading ?</span><span class="d">Les 5 bénéfices concrets, chiffres à l'appui</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/v2/appshell.js"></script>
+<script src="/v2/menu.js?v=3"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/v2/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/v2/analyzer-presentation">Setup Analyzer</a>
+        <a href="/v2/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/v2/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/v2/bubble">Bubble Map</a>
+        <a href="/v2/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/v2/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/v2/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/v2/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/v2/eco-flash">Flash Info</a>
+        <a href="/v2/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/v2/eco-crypto">Crypto</a>
+        <a href="/v2/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/v2/blog">Blog</a>
+        <a href="/v2/#method" data-en="Method">Méthode</a>
+        <a href="/v2/#community" data-en="Community">Communauté</a>
+        <a href="/v2/avis" data-en="Reviews">Avis</a>
+        <a href="/v2/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/v2/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/v2/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/v2/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/v2/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/v2/cookies.js"></script>
+<script src="/v2/lang.js"></script>
+<script src="/v2/theme.js"></script>
+</body>
+</html>

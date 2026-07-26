@@ -33,7 +33,11 @@ module.exports = async function handler(req, res) {
   if (!SERVICE_KEY || !SUPABASE_URL) return res.status(200).end();
 
   try {
-    const b = req.body || {};
+    let b = req.body || {};
+    // navigator.sendBeacon() envoie le corps en text/plain : Vercel ne le parse
+    // alors PAS en JSON et req.body arrive sous forme de chaîne → sans ce parse,
+    // chaque événement était silencieusement ignoré (page_events restait vide).
+    if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = {}; } }
     const allowed = ['pageview', 'session_end'];
     if (!allowed.includes(b.event_type)) return res.status(200).end();
 

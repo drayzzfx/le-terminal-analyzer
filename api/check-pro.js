@@ -6,7 +6,7 @@ const https = require('https');
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'obstetar.adrien@gmail.com')
   .toLowerCase().split(',').map(function (s) { return s.trim(); }).filter(Boolean);
 
-function supabaseRequest(method, path, body, apiKey, authToken) {
+function supabaseRequest(method, path, body, apiKey, authToken, prefer) {
   const url = new URL(process.env.SUPABASE_URL);
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
@@ -15,6 +15,7 @@ function supabaseRequest(method, path, body, apiKey, authToken) {
       'apikey': apiKey,
       'Authorization': `Bearer ${authToken || apiKey}`,
     };
+    if (prefer) headers['Prefer'] = prefer;
     if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
     const options = { hostname: url.hostname, path, method, headers };
     const req = https.request(options, (res) => {
@@ -89,34 +90,61 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ is_pro: true, source: 'admin' });
     }
 
+    // Premium à durée limitée : pro_until NULL = permanent (Whop/admin/manuel à
+    // vie), sinon on compare la date d'échéance à l'heure courante.
+    function notExpired(proUntil) {
+      return !proUntil || new Date(proUntil).getTime() > Date.now();
+    }
+
     // Check user_profiles table using SERVICE_KEY to bypass RLS
     const profileRes = await supabaseRequest(
       'GET',
-      `/rest/v1/user_profiles?id=eq.${userId}&select=is_pro,whop_status`,
+      `/rest/v1/user_profiles?id=eq.${userId}&select=is_pro,whop_status,pro_until`,
       null,
       SERVICE_KEY
     );
+    const profile = profileRes.body && profileRes.body[0];
 
-    if (profileRes.body && profileRes.body.length > 0 && profileRes.body[0].is_pro) {
-      return res.status(200).json({ is_pro: true, source: 'supabase' });
+    if (profile && profile.is_pro) {
+      if (notExpired(profile.pro_until)) {
+        return res.status(200).json({ is_pro: true, source: 'supabase', pro_until: profile.pro_until || null });
+      }
+      // Échéance dépassée → on repasse le profil en free (nettoyage). On ne sort
+      // pas : une nouvelle activation ou un abonnement Whop peut re-accorder l'accès.
+      await supabaseRequest(
+        'PATCH',
+        `/rest/v1/user_profiles?id=eq.${userId}`,
+        { is_pro: false, whop_status: 'free' },
+        SERVICE_KEY, null, 'return=minimal'
+      );
     }
 
     // Also check pending_activations (in case webhook came before registration)
     const pendingRes = await supabaseRequest(
       'GET',
-      `/rest/v1/pending_activations?email=eq.${encodeURIComponent(userEmail.toLowerCase())}&is_pro=eq.true`,
+      `/rest/v1/pending_activations?email=eq.${encodeURIComponent(userEmail.toLowerCase())}&is_pro=eq.true&select=pro_until`,
       null,
       SERVICE_KEY
     );
+    const pending = pendingRes.body && pendingRes.body[0];
 
-    if (pendingRes.body && pendingRes.body.length > 0) {
+    if (pending) {
+      if (notExpired(pending.pro_until)) {
+        await supabaseRequest(
+          'POST',
+          '/rest/v1/user_profiles',
+          { id: userId, email: userEmail, is_pro: true, whop_status: 'active', pro_until: pending.pro_until || null },
+          SERVICE_KEY, null, 'resolution=merge-duplicates'
+        );
+        return res.status(200).json({ is_pro: true, source: 'pending_activation', pro_until: pending.pro_until || null });
+      }
+      // Activation expirée → on retire la ligne obsolète pour éviter toute
+      // « résurrection » du Premium au prochain contrôle.
       await supabaseRequest(
-        'POST',
-        '/rest/v1/user_profiles',
-        { id: userId, email: userEmail, is_pro: true, whop_status: 'active' },
-        SERVICE_KEY
+        'DELETE',
+        `/rest/v1/pending_activations?email=eq.${encodeURIComponent(userEmail.toLowerCase())}`,
+        null, SERVICE_KEY, null, 'return=minimal'
       );
-      return res.status(200).json({ is_pro: true, source: 'pending_activation' });
     }
 
     // Last resort: check Whop API directly
@@ -126,8 +154,8 @@ module.exports = async function handler(req, res) {
         await supabaseRequest(
           'POST',
           '/rest/v1/user_profiles',
-          { id: userId, email: userEmail, is_pro: true, whop_status: 'active' },
-          SERVICE_KEY
+          { id: userId, email: userEmail, is_pro: true, whop_status: 'active', pro_until: null },
+          SERVICE_KEY, null, 'resolution=merge-duplicates'
         );
         return res.status(200).json({ is_pro: true, source: 'whop_api' });
       }

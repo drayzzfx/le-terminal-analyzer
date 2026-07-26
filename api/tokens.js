@@ -55,7 +55,7 @@ module.exports = async function handler(req, res) {
 
     // Lit le profil (service key → bypass RLS)
     let profRes = await supabaseRequest('GET',
-      `/rest/v1/user_profiles?id=eq.${userId}&select=tokens,journal_slots,is_pro`,
+      `/rest/v1/user_profiles?id=eq.${userId}&select=tokens,journal_slots,is_pro,pro_until`,
       null, SERVICE_KEY);
     let profile = (profRes.body && profRes.body[0]) || null;
 
@@ -67,7 +67,9 @@ module.exports = async function handler(req, res) {
       profile = { tokens: 5, journal_slots: 0, is_pro: false };
     }
 
-    const isPro = !!profile.is_pro;
+    // Premium à durée limitée : pro_until NULL = permanent, sinon comparé à maintenant.
+    const proActive = !profile.pro_until || new Date(profile.pro_until).getTime() > Date.now();
+    const isPro = !!profile.is_pro && proActive;
     let tokens = (profile.tokens == null) ? 5 : profile.tokens;
     let slots = (profile.journal_slots == null) ? 0 : profile.journal_slots;
 

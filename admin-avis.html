@@ -8,10 +8,15 @@
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Le Terminal — Admin</title>
-<meta name="robots" content="noindex,follow">
+<meta name="robots" content="noindex,nofollow">
 <link rel="stylesheet" href="./fonts.css">
-<link rel="stylesheet" href="./design-system.css">
 <style>
+:root{
+  --bg:#07090C; --panel:#0E1219; --panel2:#0B0E13; --line:#1B2029; --line2:#262C37;
+  --txt:#C3CAD4; --title:#F2F4F7; --muted:#7E8794; --dim:#5A616C;
+  --accent:#7FB8E8; --green:#4ADE9C; --red:#F0647A; --gold:#E8C268;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
 
@@ -151,7 +156,6 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="authGate">
   <div class="ag-box">
     <div class="ag-logo">Le Terminal</div>
@@ -162,15 +166,19 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
   </div>
 </div>
 
-<!-- ADMIN -->
 <div id="admin">
-  <nav class="adm-nav">
-    <span class="adm-nav-logo">Admin</span>
-    <button class="adm-tab active" id="tabStats"   onclick="showTab('stats')">Statistiques</button>
-    <button class="adm-tab"        id="tabPending" onclick="showTab('pending')">En attente <span id="badgePending" class="adm-badge" style="display:none"></span></button>
-    <button class="adm-tab"        id="tabApproved"onclick="showTab('approved')">Publiés</button>
+  <nav class="nav">
+    <span class="nav__logo">Admin</span>
+    <button class="tab active" id="tabStats"    onclick="showTab('stats')">Tableau de bord</button>
+    <button class="tab"        id="tabPending"  onclick="showTab('pending')">Avis en attente <span id="badgePending" class="tab__badge" style="display:none"></span></button>
+    <button class="tab"        id="tabApproved" onclick="showTab('approved')">Avis publiés</button>
+    <div class="nav__live">
+      <span class="nav__dot" id="liveDot"></span>
+      <span id="liveTxt">connexion…</span>
+      <button class="nav__refresh" onclick="manualRefresh()">Actualiser</button>
+    </div>
   </nav>
-  <div class="adm-body">
+  <div class="body">
     <div id="panelStats"></div>
     <div id="panelPending"  style="display:none"></div>
     <div id="panelApproved" style="display:none"></div>
@@ -181,153 +189,93 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 var ADMIN_PASS  = 'leterminal-admin-2026';
 var STATS_API   = '/api/admin-stats';
 var REVIEWS_API = '/api/admin-reviews';
-var curTab      = 'stats';
-var reviewData  = { pending: [], approved: [] };
-var refreshTimer, refreshCountdown, countdownInterval;
-var REFRESH_INTERVAL = 30; // seconds
-var svgCtr = 0;
-var lastStatsData = null;
+var REFRESH_MS  = 12000;
+var curTab = 'stats';
+var reviewData = { pending: [], approved: [] };
+var lastStats = null, prevTotal = null, prevActive = null;
+var seenEvents = {};          // signatures d'événements déjà affichés (pour "fresh")
+var seenUsers = {};           // emails déjà vus (pour flash nouveaux inscrits)
+var firstRender = true;
+var svgCtr = 0, lastOkTs = 0, tickTimer = null;
 
-// ── Auth ──────────────────────────────────────────────
-document.getElementById('agBtn').onclick = function() {
+// ── Auth ──
+document.getElementById('agBtn').onclick = function(){
   var p = document.getElementById('agPass').value.trim();
-  if (p !== ADMIN_PASS) { document.getElementById('agErr').textContent = 'Mot de passe incorrect.'; return; }
+  if (p !== ADMIN_PASS){ document.getElementById('agErr').textContent = 'Mot de passe incorrect.'; return; }
   document.getElementById('authGate').style.display = 'none';
   document.getElementById('admin').style.display = 'block';
-  loadAll();
-  startAutoRefresh();
+  loadStats(); loadReviews();
+  startLoop();
 };
-document.getElementById('agPass').onkeydown = function(e) { if (e.key === 'Enter') document.getElementById('agBtn').click(); };
+document.getElementById('agPass').onkeydown = function(e){ if (e.key==='Enter') document.getElementById('agBtn').click(); };
 
-function showTab(tab) {
+function showTab(tab){
   curTab = tab;
-  ['stats','pending','approved'].forEach(function(t) {
-    var T = t.charAt(0).toUpperCase() + t.slice(1);
-    document.getElementById('tab'+T).className = 'adm-tab' + (t===tab?' active':'');
+  ['stats','pending','approved'].forEach(function(t){
+    var T = t.charAt(0).toUpperCase()+t.slice(1);
+    document.getElementById('tab'+T).className = 'tab'+(t===tab?' active':'');
     document.getElementById('panel'+T).style.display = t===tab ? '' : 'none';
   });
 }
 
-function loadAll() { loadStats(); loadReviews(); }
-
-// ── Auto-refresh ──────────────────────────────────────
-function startAutoRefresh() {
-  clearTimeout(refreshTimer);
-  clearInterval(countdownInterval);
-  refreshCountdown = REFRESH_INTERVAL;
-  updateCountdown();
-  countdownInterval = setInterval(function() {
-    refreshCountdown--;
-    updateCountdown();
-    if (refreshCountdown <= 0) {
-      refreshCountdown = REFRESH_INTERVAL;
-      loadStats();
-    }
+// ── Boucle temps réel (pause si onglet caché, refresh immédiat au retour) ──
+function startLoop(){
+  clearInterval(tickTimer);
+  tickTimer = setInterval(function(){
+    updateLiveLabel();
+    if (document.hidden) return;
+    if (Date.now() - lastOkTs >= REFRESH_MS){ loadStats(); if (curTab!=='stats') loadReviews(); }
   }, 1000);
 }
-
-function updateCountdown() {
-  var el = document.getElementById('liveCountdown');
-  if (el) el.textContent = 'Actualisation dans ' + refreshCountdown + 's';
+document.addEventListener('visibilitychange', function(){
+  if (!document.hidden && document.getElementById('admin').style.display==='block'){ loadStats(); loadReviews(); }
+});
+function manualRefresh(){ loadStats(); loadReviews(); }
+function updateLiveLabel(){
+  var dot = document.getElementById('liveDot'), txt = document.getElementById('liveTxt');
+  if (!dot || !lastOkTs) return;
+  var s = Math.round((Date.now()-lastOkTs)/1000);
+  dot.className = 'nav__dot' + (s>REFRESH_MS/1000+8 ? ' stale' : '');
+  txt.textContent = s<3 ? 'à jour' : 'actualisé il y a '+s+'s';
 }
 
-function manualRefresh() {
-  refreshCountdown = REFRESH_INTERVAL;
-  loadStats();
+// ── Helpers ──
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDur(s){ if(!s) return '—'; if(s<60) return s+'s'; return Math.floor(s/60)+'m '+(s%60)+'s'; }
+function fmtDate(iso){ try{ return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+function frDateT(iso){ try{ return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+function relTime(iso){
+  if(!iso) return '—';
+  var d = Math.floor((Date.now()-new Date(iso))/1000);
+  if(d<5) return "à l'instant"; if(d<60) return 'il y a '+d+'s';
+  if(d<3600) return 'il y a '+Math.floor(d/60)+'min'; return 'il y a '+Math.floor(d/3600)+'h';
 }
+function isMobile(ua){ return ua && /Mobile|Android|iPhone/i.test(ua); }
+function deviceSvg(ua){
+  return isMobile(ua)
+    ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17.5" r=".8" fill="currentColor" stroke="none"/></svg>'
+    : '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>';
+}
+function stars(n){ var s=''; for(var i=0;i<5;i++) s+='<svg viewBox="0 0 24 24" width="12" height="12" style="opacity:'+(i<n?1:.18)+'"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>'; return s; }
 
-// ── Helpers ───────────────────────────────────────────
-function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ── SVG charts ──
+function svgLine(data,color,h){
+  h=h||120; var W=600,padL=4,padR=4,padT=12,padB=22,pw=W-padL-padR,ph=h-padT-padB;
+  var max=Math.max.apply(null,data.map(function(d){return d.count||0;}))||1, n=data.length;
+  if(n<2) return '<div style="height:'+h+'px;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:12px">Pas encore de données</div>';
+  var pts=data.map(function(d,i){ return [padL+(i/(n-1))*pw, padT+ph-((d.count||0)/max)*ph]; });
+  var path=pts.reduce(function(a,p,i){ if(i===0) return 'M'+p[0].toFixed(1)+','+p[1].toFixed(1); var pr=pts[i-1],cx=((pr[0]+p[0])/2).toFixed(1); return a+' C'+cx+','+pr[1].toFixed(1)+' '+cx+','+p[1].toFixed(1)+' '+p[0].toFixed(1)+','+p[1].toFixed(1); },'');
+  var area=path+' L'+pts[n-1][0].toFixed(1)+','+(padT+ph)+' L'+pts[0][0].toFixed(1)+','+(padT+ph)+' Z';
+  var grid=[0,.5,1].map(function(f){ var y=(padT+ph-f*ph).toFixed(1); return '<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="rgba(255,255,255,.035)"/>'; }).join('');
+  var labels=data.map(function(d,i){ if(i%2!==0) return ''; var x=pts[i][0].toFixed(1); var l=d.date?d.date.slice(5):(d.hour!==undefined?d.hour+'h':''); return '<text x="'+x+'" y="'+(h-5)+'" fill="rgba(255,255,255,.22)" font-size="9" text-anchor="middle" font-family="JetBrains Mono,monospace">'+l+'</text>'; }).join('');
+  var dots=pts.map(function(p,i){ var d=data[i],l=d.date||(d.hour!==undefined?d.hour+'h':''); return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.6" fill="'+color+'" stroke="var(--panel)" stroke-width="1.5"><title>'+d.count+' — '+l+'</title></circle>'; }).join('');
+  var gid='g'+(++svgCtr);
+  return '<svg viewBox="0 0 '+W+' '+h+'" style="width:100%;display:block"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+color+'" stop-opacity=".22"/><stop offset="100%" stop-color="'+color+'" stop-opacity="0"/></linearGradient></defs>'+grid+'<path d="'+area+'" fill="url(#'+gid+')"/><path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'+dots+labels+'</svg>';
 }
-function fmtDur(s) {
-  if (!s) return '—';
-  if (s < 60) return s + 's';
-  return Math.floor(s/60) + 'm ' + (s%60) + 's';
-}
-function fmtDate(iso) {
-  try { return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}); }
-  catch(e) { return ''; }
-}
-function relTime(iso) {
-  if (!iso) return '—';
-  var diff = Math.floor((Date.now() - new Date(iso)) / 1000);
-  if (diff < 5)   return 'maintenant';
-  if (diff < 60)  return 'il y a ' + diff + 's';
-  if (diff < 3600)return 'il y a ' + Math.floor(diff/60) + 'min';
-  return 'il y a ' + Math.floor(diff/3600) + 'h';
-}
-function isMobile(ua) {
-  return ua && /Mobile|Android|iPhone/i.test(ua);
-}
-function deviceSvg(ua) {
-  if (isMobile(ua)) {
-    return '<svg class="feed-device" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17.5" r=".8" fill="currentColor" stroke="none"/></svg>';
-  }
-  return '<svg class="feed-device" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>';
-}
-function stars(n) {
-  var s = '';
-  for (var i = 0; i < 5; i++) {
-    s += '<svg viewBox="0 0 24 24" width="12" height="12" style="opacity:'+(i<n?1:.18)+'"><path d="M12 2l2.95 6.18 6.8.62-5.13 4.5 1.54 6.65L12 17.1 5.84 20.45l1.54-6.65L2.25 8.8l6.8-.62z" fill="currentColor"/></svg>';
-  }
-  return s;
-}
-function frDate(iso) {
-  try { return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
-  catch(e) { return ''; }
-}
-
-// ── SVG Charts ────────────────────────────────────────
-function svgLine(data, color, h) {
-  h = h || 110;
-  var W = 600, padL = 4, padR = 4, padT = 12, padB = 22;
-  var pw = W - padL - padR, ph = h - padT - padB;
-  var counts = data.map(function(d){ return d.count || 0; });
-  var max = Math.max.apply(null, counts) || 1;
-  var n = data.length;
-  if (n < 2) return '<text x="300" y="55" fill="#3A414C" font-size="12" text-anchor="middle" font-family="Inter,sans-serif">Pas encore de données</text>';
-  var pts = data.map(function(d, i) {
-    return [padL + (i/(n-1))*pw, padT + ph - ((d.count||0)/max)*ph];
-  });
-  // Smooth bezier
-  var path = pts.reduce(function(acc, p, i) {
-    if (i === 0) return 'M'+p[0].toFixed(1)+','+p[1].toFixed(1);
-    var prev = pts[i-1];
-    var cx = ((prev[0]+p[0])/2).toFixed(1);
-    return acc+' C'+cx+','+prev[1].toFixed(1)+' '+cx+','+p[1].toFixed(1)+' '+p[0].toFixed(1)+','+p[1].toFixed(1);
-  }, '');
-  var area = path + ' L'+pts[n-1][0].toFixed(1)+','+(padT+ph)+' L'+pts[0][0].toFixed(1)+','+(padT+ph)+' Z';
-  // Grid lines (3 horizontal)
-  var grid = [0, 0.5, 1].map(function(f) {
-    var y = (padT + ph - f*ph).toFixed(1);
-    return '<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>';
-  }).join('');
-  // X labels (every 2nd point)
-  var labels = data.map(function(d, i) {
-    if (i % 2 !== 0) return '';
-    var x = pts[i][0].toFixed(1);
-    var lbl = d.date ? d.date.slice(5) : (d.hour !== undefined ? d.hour+'h' : '');
-    return '<text x="'+x+'" y="'+(h-5)+'" fill="rgba(255,255,255,0.22)" font-size="9" text-anchor="middle" font-family="JetBrains Mono,monospace">'+lbl+'</text>';
-  }).join('');
-  // Dots with tooltip
-  var dots = pts.map(function(p, i) {
-    var d = data[i];
-    var lbl = d.date || (d.hour !== undefined ? d.hour+'h' : '');
-    return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.8" fill="'+color+'" stroke="#0E1219" stroke-width="1.5"><title>'+d.count+' — '+lbl+'</title></circle>';
-  }).join('');
-  var gid = 'g'+(++svgCtr);
-  return '<svg viewBox="0 0 '+W+' '+h+'" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">'
-    +'<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1">'
-    +'<stop offset="0%" stop-color="'+color+'" stop-opacity="0.22"/>'
-    +'<stop offset="100%" stop-color="'+color+'" stop-opacity="0"/>'
-    +'</linearGradient></defs>'
-    +grid
-    +'<path d="'+area+'" fill="url(#'+gid+')"/>'
-    +'<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    +dots+labels
-    +'</svg>';
+function svgHour(data){
+  var W=600,H=74,barW=W/24,max=Math.max.apply(null,data.map(function(d){return d.count||0;}))||1;
+  var bars=data.map(function(d,i){ var bh=Math.max((d.count/max)*52,2),x=(i*barW+1).toFixed(1),y=(60-bh).toFixed(1),op=(.3+(d.count/max)*.7).toFixed(2),c=d.count>0?'#7FB8E8':'#1C212A'; var lbl=(i%4===0)?'<text x="'+(i*barW+barW/2).toFixed(1)+'" y="70" fill="rgba(255,255,255,.22)" font-size="8" text-anchor="middle" font-family="JetBrains Mono,monospace">'+i+'h</text>':''; return '<rect x="'+x+'" y="'+y+'" width="'+(barW-2).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+c+'" opacity="'+op+'" rx="1"><title>'+d.count+' visites à '+i+'h</title></rect>'+lbl; }).join('');
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block">'+bars+'</svg>';
 }
 
 function svgHourBar(data) {
@@ -354,8 +302,8 @@ function loadStats() {
   }
   fetch(STATS_API, { headers: { 'X-Admin-Pass': ADMIN_PASS } })
     .then(function(r){ return r.json(); })
-    .then(function(d){ lastStatsData = d; renderStats(d); })
-    .catch(function(){ if (!lastStatsData) document.getElementById('panelStats').innerHTML = '<div class="adm-empty">Erreur de chargement.</div>'; });
+    .then(function(d){ if(d && !d.error){ lastStats=d; lastOkTs=Date.now(); renderStats(d); updateLiveLabel(); } })
+    .catch(function(){ if(!lastStats) document.getElementById('panelStats').innerHTML = '<div class="empty">Erreur de chargement.</div>'; });
 }
 
 function renderStats(d) {
@@ -432,131 +380,86 @@ function renderStats(d) {
     +'<div class="chart-box"><div class="chart-box__title">Inscriptions par jour — 14 jours <span>'+((c.daily_signups||[]).reduce(function(a,x){return a+x.count;},0))+'</span></div><div class="chart-wrap">'+chartSignups+'</div></div>'
     +'</div>';
 
-  // Charts row 2: hourly + top pages
-  var chartHour = svgHourBar(c.hourly || []);
-  var maxPage = (c.top_pages && c.top_pages[0]) ? c.top_pages[0].count : 1;
-  var topPagesHtml = (c.top_pages || []).map(function(p, i) {
-    var pct = Math.round((p.count/maxPage)*100);
-    return '<div class="page-row">'
-      +'<span class="page-rank">'+(i+1)+'</span>'
-      +'<span class="page-name">'+esc(p.page)+'</span>'
-      +'<div class="page-bar-wrap"><div class="page-bar" style="width:'+pct+'%"></div></div>'
-      +'<span class="page-count">'+p.count+'</span>'
-      +'</div>';
-  }).join('') || '<div style="color:#7E8794;font-size:12px;padding:16px 0">Aucune donnée — le tracker collecte dès maintenant.</div>';
-
-  var charts2 = '<div class="charts-2" style="margin-bottom:10px">'
-    +'<div class="chart-box"><div class="chart-box__title">Heures de pointe — 7 jours</div><div class="chart-wrap">'+chartHour+'</div></div>'
-    +'<div class="chart-box"><div class="chart-box__title">Pages les plus visitées — 30 jours</div><div class="pages-list">'+topPagesHtml+'</div></div>'
+  var maxP=(c.top_pages&&c.top_pages[0])?c.top_pages[0].count:1;
+  var pagesHtml=(c.top_pages||[]).map(function(p,i){ return '<div class="prow"><span class="prow__n">'+(i+1)+'</span><span class="prow__name">'+esc(p.page)+'</span><div class="prow__bar"><i style="width:'+Math.round(p.count/maxP*100)+'%"></i></div><span class="prow__c">'+p.count+'</span></div>'; }).join('') || '<div style="color:var(--muted);font-size:12px;padding:14px 0">Aucune donnée pour l\'instant.</div>';
+  var charts2='<div class="grid-2">'
+    +'<div class="card"><div class="card__h">Heures de pointe — 7 j</div>'+svgHour(c.hourly||[])+'</div>'
+    +'<div class="card"><div class="card__h">Pages les plus visitées — 30 j</div><div class="pages">'+pagesHtml+'</div></div>'
     +'</div>';
 
-  // Live feed + recent users
-  var feedItems = '';
-  var evts = (lv.events || []).filter(function(e){ return e.event_type === 'pageview'; });
-  if (evts.length === 0) {
-    feedItems = '<div class="feed-empty">Aucune visite enregistrée pour l\'instant.</div>';
-  } else {
-    feedItems = evts.slice(0, 40).map(function(e, i) {
-      var mobile = isMobile(e.ua);
-      var newCls = i < 3 ? ' feed-item--new' : '';
-      return '<div class="feed-item'+newCls+'">'
-        +'<span class="feed-item__time">'+relTime(e.created_at)+'</span>'
-        +'<div class="feed-item__mid">'
-          +'<div class="feed-item__page">'+(e.page || 'index')+'</div>'
-          +'<div class="feed-item__email">'+(e.user_email ? esc(e.user_email) : 'Visiteur anonyme')+(e.session_id ? ' · #'+e.session_id : '')+'</div>'
-        +'</div>'
-        +'<div class="feed-item__right">'
-          +'<span class="feed-dot feed-dot--pv"></span>'
-          +deviceSvg(e.ua)
-        +'</div>'
-        +'</div>';
+  // Live feed (connexions) — flash des événements nouveaux depuis le dernier refresh
+  var evts=(lv.events||[]).filter(function(e){ return e.event_type==='pageview'; }).slice(0,40);
+  var newSeen={};
+  var feed;
+  if(!evts.length){ feed='<div class="fempty">Aucune connexion enregistrée pour l\'instant.<br>Le tracker collecte à chaque visite du site.</div>'; }
+  else {
+    feed=evts.map(function(e){
+      var key=(e.session_id||'')+'|'+(e.created_at||'');
+      var fresh=!firstRender && !seenEvents[key];
+      newSeen[key]=1;
+      var who=e.user_email?esc(e.user_email):'Visiteur anonyme';
+      return '<div class="fitem'+(fresh?' fresh':'')+'">'
+        +'<span class="fitem__t">'+relTime(e.created_at)+'</span>'
+        +'<div class="fitem__mid"><div class="fitem__page">'+esc(e.page||'index')+'</div>'
+        +'<div class="fitem__who'+(e.user_email?' auth':'')+'">'+who+(e.session_id?' · #'+esc(e.session_id):'')+'</div></div>'
+        +'<div class="fitem__r"><span class="fdot"></span>'+deviceSvg(e.ua)+'</div></div>';
     }).join('');
   }
+  seenEvents = newSeen;
 
-  var recentUsersHtml = (u.recent || []).map(function(usr) {
-    return '<tr>'
-      +'<td style="font-family:\'JetBrains Mono\',monospace;font-size:11px">'+esc(usr.email||'—')+'</td>'
-      +'<td>'+(usr.is_pro?'<span class="badge-pro">PRO</span>':'<span class="badge-free">Gratuit</span>')+'</td>'
-      +'<td style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:#7E8794">'+fmtDate(usr.created_at)+'</td>'
-      +'</tr>';
-  }).join('') || '<tr><td colspan="3" style="color:#7E8794;padding:16px 8px">Aucun utilisateur</td></tr>';
+  var usersHtml=(u.recent||[]).map(function(x){
+    var fresh=!firstRender && x.email && !seenUsers[x.email];
+    return '<tr'+(fresh?' class="fresh"':'')+'><td class="mono">'+esc(x.email||'—')+'</td>'
+      +'<td>'+(x.is_pro?'<span class="pill pill--pro">Premium</span>':'<span class="pill pill--free">Gratuit</span>')+'</td>'
+      +'<td class="mono" style="color:var(--muted)">'+fmtDate(x.created_at)+'</td></tr>';
+  }).join('') || '<tr><td colspan="3" style="color:var(--muted);padding:16px 8px">Aucun utilisateur</td></tr>';
+  var newSeenU={}; (u.recent||[]).forEach(function(x){ if(x.email) newSeenU[x.email]=1; }); seenUsers=newSeenU;
 
-  var feedAndUsers = '<div class="charts-feed">'
-    +'<div class="chart-box" style="padding:18px 16px">'
-      +'<div class="chart-box__title">Flux de connexions en temps réel <span>'+(evts.length||0)+'</span></div>'
-      +'<div class="feed-list">'+feedItems+'</div>'
-    +'</div>'
-    +'<div class="tbl-box">'
-      +'<div class="tbl-box__title">Derniers inscrits</div>'
-      +'<table class="tbl"><thead><tr><th>Email</th><th>Statut</th><th>Inscription</th></tr></thead>'
-      +'<tbody>'+recentUsersHtml+'</tbody></table>'
-    +'</div>'
+  var bottom='<div class="grid-32">'
+    +'<div class="card"><div class="card__h">Connexions en temps réel <b>'+evts.length+'</b></div><div class="feed">'+feed+'</div></div>'
+    +'<div class="card"><div class="card__h">Derniers inscrits</div><table class="tbl"><thead><tr><th>Email</th><th>Statut</th><th>Inscription</th></tr></thead><tbody>'+usersHtml+'</tbody></table></div>'
     +'</div>';
 
-  document.getElementById('panelStats').innerHTML = liveBar + kpiRow1 + kpiRow2 + charts1 + charts2 + feedAndUsers;
+  document.getElementById('panelStats').innerHTML = kpis + charts1 + charts2 + bottom;
+  firstRender = false;
 }
 
-// ── Reviews ───────────────────────────────────────────
-function loadReviews() {
-  fetch(REVIEWS_API + '?all=1', { headers: { 'X-Admin-Pass': ADMIN_PASS } })
+// ── Reviews ──
+function loadReviews(){
+  fetch(REVIEWS_API+'?all=1',{ headers:{ 'X-Admin-Pass':ADMIN_PASS } })
     .then(function(r){ return r.json(); })
-    .then(function(d) {
-      reviewData.pending  = (d.reviews || []).filter(function(r){ return !r.approved; });
-      reviewData.approved = (d.reviews || []).filter(function(r){ return  r.approved; });
-      var badge = document.getElementById('badgePending');
-      if (reviewData.pending.length > 0) { badge.textContent = reviewData.pending.length; badge.style.display = ''; }
-      else badge.style.display = 'none';
-      renderReviews('pending');
-      renderReviews('approved');
-    })
-    .catch(function(){});
+    .then(function(d){
+      reviewData.pending  = (d.reviews||[]).filter(function(r){ return !r.approved; });
+      reviewData.approved = (d.reviews||[]).filter(function(r){ return  r.approved; });
+      var b=document.getElementById('badgePending');
+      if(reviewData.pending.length){ b.textContent=reviewData.pending.length; b.style.display=''; } else b.style.display='none';
+      renderReviews('pending'); renderReviews('approved');
+    }).catch(function(){});
 }
-
-function renderReviews(tab) {
-  var rows = reviewData[tab];
-  var panelId = 'panel' + tab.charAt(0).toUpperCase() + tab.slice(1);
-  var area = document.getElementById(panelId);
-  if (!rows.length) {
-    area.innerHTML = '<div class="adm-empty">'+(tab==='pending'?'Aucun avis en attente.':'Aucun avis publié.')+'</div>';
-    return;
-  }
-  area.innerHTML = '<div class="adm-count">'+rows.length+' avis</div>'
-    +'<div class="adm-grid">'+rows.map(function(rv) {
-      return '<div class="adm-card">'
-        +'<div>'
-        +'<div class="adm-card__meta">'
-          +'<span class="adm-card__name">'+esc(rv.author_name)+'</span>'
-          +(rv.role ? '<span class="adm-card__role">'+esc(rv.role)+'</span>' : '')
-          +'<span class="adm-card__stars">'+stars(rv.rating)+'</span>'
-          +'<span class="adm-card__date">'+frDate(rv.created_at)+'</span>'
-        +'</div>'
-        +(rv.user_email ? '<div class="adm-card__email">'+esc(rv.user_email)+'</div>' : '')
-        +'<div class="adm-card__body">'+esc(rv.body)+'</div>'
-        +'</div>'
-        +'<div class="adm-card__actions">'
-          +(tab==='pending'
-            ? '<button class="btn-approve" onclick="approveRv(\''+rv.id+'\')">Approuver</button>'
-            : '<button class="btn-unapprove" onclick="unapproveRv(\''+rv.id+'\')">Retirer</button>')
-          +'<button class="btn-delete" onclick="deleteRv(\''+rv.id+'\')">Supprimer</button>'
-        +'</div>'
-        +'</div>';
-    }).join('')+'</div>';
+function renderReviews(tab){
+  var rows=reviewData[tab], area=document.getElementById('panel'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(!rows.length){ area.innerHTML='<div class="empty">'+(tab==='pending'?'Aucun avis en attente.':'Aucun avis publié.')+'</div>'; return; }
+  area.innerHTML='<div class="rev-count">'+rows.length+' avis</div><div class="rev-grid">'+rows.map(function(rv){
+    return '<div class="rev"><div>'
+      +'<div class="rev__meta"><span class="rev__name">'+esc(rv.author_name)+'</span>'
+      +(rv.role?'<span class="rev__role">'+esc(rv.role)+'</span>':'')
+      +'<span class="rev__stars">'+stars(rv.rating)+'</span><span class="rev__date">'+frDateT(rv.created_at)+'</span></div>'
+      +(rv.user_email?'<div class="rev__email">'+esc(rv.user_email)+'</div>':'')
+      +'<div class="rev__body">'+esc(rv.body)+'</div></div>'
+      +'<div class="rev__act">'
+      +(tab==='pending'?'<button class="b b--ok" onclick="approveRv(\''+rv.id+'\')">Approuver</button>':'<button class="b b--warn" onclick="setRv(\''+rv.id+'\',false)">Retirer</button>')
+      +'<button class="b b--del" onclick="deleteRv(\''+rv.id+'\')">Supprimer</button></div></div>';
+  }).join('')+'</div>';
 }
-
-function approveRv(id) {
-  if (!confirm('Publier cet avis ?')) return;
-  fetch(REVIEWS_API, { method:'PATCH', headers:{'Content-Type':'application/json','X-Admin-Pass':ADMIN_PASS}, body:JSON.stringify({id:id,approved:true}) })
-    .then(function(r){ return r.json(); }).then(function(d){ if (d.ok) loadReviews(); });
+function setRv(id,approved){
+  fetch(REVIEWS_API,{ method:'PATCH', headers:{'Content-Type':'application/json','X-Admin-Pass':ADMIN_PASS}, body:JSON.stringify({id:id,approved:approved}) })
+    .then(function(r){ return r.json(); }).then(function(d){ if(d.ok) loadReviews(); });
 }
-function unapproveRv(id) {
-  if (!confirm('Retirer cet avis de la publication ?')) return;
-  fetch(REVIEWS_API, { method:'PATCH', headers:{'Content-Type':'application/json','X-Admin-Pass':ADMIN_PASS}, body:JSON.stringify({id:id,approved:false}) })
-    .then(function(r){ return r.json(); }).then(function(d){ if (d.ok) loadReviews(); });
-}
-function deleteRv(id) {
-  if (!confirm('Supprimer définitivement cet avis ?')) return;
-  fetch(REVIEWS_API, { method:'DELETE', headers:{'Content-Type':'application/json','X-Admin-Pass':ADMIN_PASS}, body:JSON.stringify({id:id}) })
-    .then(function(r){ return r.json(); }).then(function(d){ if (d.ok) loadReviews(); });
+function approveRv(id){ if(confirm('Publier cet avis ?')) setRv(id,true); }
+function deleteRv(id){
+  if(!confirm('Supprimer définitivement cet avis ?')) return;
+  fetch(REVIEWS_API,{ method:'DELETE', headers:{'Content-Type':'application/json','X-Admin-Pass':ADMIN_PASS}, body:JSON.stringify({id:id}) })
+    .then(function(r){ return r.json(); }).then(function(d){ if(d.ok) loadReviews(); });
 }
 </script>
 </body>
