@@ -59,6 +59,13 @@
 }
 :root[data-theme="light"] .lt-live { background: linear-gradient(180deg, #FFFFFF, var(--bg-base)); }
 
+/* Scène du héros : le corps du portable suit déjà les tokens de fond ;
+   seule la capture affichée à l'écran change de thème. */
+:root[data-theme="light"] .lt-laptop__screen { background-image: url("/img/hero-journal-light.webp"); box-shadow: inset 0 0 0 1px rgba(15,23,42,0.10); }
+:root[data-theme="light"] .lt-laptop__lid { box-shadow: 0 50px 110px -34px rgba(15,23,42,0.32), 0 0 0 1px var(--border), inset 0 1px 0 rgba(255,255,255,0.9); }
+:root[data-theme="light"] .lt-laptop__deck { box-shadow: 0 36px 60px -22px rgba(15,23,42,0.3); }
+:root[data-theme="light"] .lt-laptop__glare { background: linear-gradient(116deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 27%, transparent 47%); }
+
 /* ── 2. BOUTONS : texte blanc sur bleu profond (le noir ne contraste plus) ── */
 :root[data-theme="light"] .lt-btn--primary,
 :root[data-theme="light"] .lt-btn[data-variant="primary"] { color: #FFFFFF !important; }
