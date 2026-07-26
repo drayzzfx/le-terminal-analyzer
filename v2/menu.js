@@ -1301,3 +1301,55 @@
   })();
 
 })();
+
+/* ══════════════════════════════════════════════════════════════════════
+   V2 · MENU FLOTTANT EN BULLE
+   Transforme la nav (.lt-nav) en pilule flottante centrée, fixe au scroll.
+   On ne touche qu'au menu : mêmes couleurs / tokens du design system.
+   Injecté ici pour s'appliquer à toutes les pages v2 sans éditer leur HTML.
+   ══════════════════════════════════════════════════════════════════════ */
+(function v2FloatingNav () {
+  if (document.getElementById('v2FloatNavCss')) return;
+  var css = document.createElement('style');
+  css.id = 'v2FloatNavCss';
+  css.textContent = [
+    /* Le conteneur fixe devient transparent et laisse passer les clics
+       sur ses côtés vides ; seule la pilule capte les événements. */
+    '.lt-chrome{background:transparent!important;border:0!important;pointer-events:none;}',
+    '.lt-chrome > *{pointer-events:auto;}',
+    /* La nav : pilule flottante centrée, verre dépoli, bordure complète. */
+    '.lt-nav{',
+      'margin:14px auto;',
+      'width:calc(100% - 32px);max-width:1180px;',
+      'padding:10px 12px 10px 22px;',
+      'border:1px solid var(--border);border-radius:999px;',
+      'background:linear-gradient(180deg,rgba(15,18,25,.85),rgba(11,14,20,.72));',
+      'backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);',
+      'box-shadow:0 14px 40px -14px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset,0 0 26px -14px var(--accent-glow);',
+    '}',
+    /* Au scroll : pilule un peu plus compacte et plus opaque. */
+    '.lt-chrome.is-scrolled .lt-nav{margin-top:8px;padding:8px 12px 8px 22px;background:linear-gradient(180deg,rgba(13,16,23,.94),rgba(10,13,19,.9));}',
+    /* Coins arrondis du menu déroulant « Outils » cohérents avec la pilule. */
+    '.lt-nav__menu{top:calc(100% + 12px);}',
+    /* Tablette / mobile : marges et rayon réduits. */
+    '@media(max-width:860px){.lt-nav,.lt-chrome.is-scrolled .lt-nav{width:calc(100% - 20px);margin:10px auto;padding:8px 10px 8px 14px;border-radius:22px;}}',
+    '@media(max-width:560px){.lt-nav,.lt-chrome.is-scrolled .lt-nav{width:calc(100% - 16px);margin:8px auto;border-radius:20px;}}'
+  ].join('');
+  (document.head || document.documentElement).appendChild(css);
+
+  /* Synchronise --chrome-h avec la hauteur réelle de la pilule flottante
+     pour que le contenu des pages passe toujours en dessous. */
+  var raf = 0;
+  function syncChromeH () {
+    var c = document.querySelector('.lt-chrome');
+    if (!c) return;
+    var h = Math.round(c.getBoundingClientRect().height);
+    if (h) document.documentElement.style.setProperty('--chrome-h', h + 'px');
+  }
+  function schedule () { if (raf) return; raf = requestAnimationFrame(function () { raf = 0; syncChromeH(); }); }
+  if (document.readyState !== 'loading') syncChromeH();
+  else document.addEventListener('DOMContentLoaded', syncChromeH);
+  window.addEventListener('load', syncChromeH);
+  window.addEventListener('resize', schedule);
+  window.addEventListener('scroll', schedule, { passive: true });
+})();
