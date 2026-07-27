@@ -173,14 +173,20 @@
   .bm-split>.bm-stage{flex:none !important;width:100%;height:62vh;min-height:420px}
   .bm-perf{width:auto;align-self:stretch}
 }
-/* Sous-nav section « Données » */
+/* Sous-nav section « Données » (menu déroulant) */
 .dv-sub{margin:0 0 18px}
-.dv-sub__inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:8px 10px 8px 16px}
+.dv-sub__inner{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:10px 12px 10px 16px}
 .dv-sub__label{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
-.dv-sub__tabs{display:flex;gap:4px;flex-wrap:wrap}
-.dv-tab{font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--text-muted);text-decoration:none;padding:8px 15px;border-radius:var(--r-md);transition:all var(--dur-fast) var(--ease-out)}
-.dv-tab:hover{color:var(--text-title);background:rgba(127,150,190,.06)}
-.dv-tab.is-on{color:var(--accent-bright);background:var(--accent-glow-soft);box-shadow:inset 0 0 0 1px var(--accent-glow)}
+.dv-drop{position:relative}
+.dv-drop__btn{display:inline-flex;align-items:center;gap:9px;background:var(--bg-void);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:9px 14px;color:var(--text-title);font-family:var(--font-text);font-size:13.5px;font-weight:600;cursor:pointer;transition:border-color var(--dur-fast) var(--ease-out)}
+.dv-drop__btn:hover,.dv-drop:focus-within .dv-drop__btn{border-color:var(--accent)}
+.dv-drop__btn svg{color:var(--text-muted);transition:transform var(--dur-fast) var(--ease-out)}
+.dv-drop:hover .dv-drop__btn svg,.dv-drop:focus-within .dv-drop__btn svg{transform:rotate(180deg)}
+.dv-drop__menu{position:absolute;top:calc(100% + 6px);left:0;min-width:210px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-md);box-shadow:0 14px 38px rgba(0,0,0,.55);padding:5px;display:none;z-index:60}
+.dv-drop:hover .dv-drop__menu,.dv-drop:focus-within .dv-drop__menu{display:block}
+.dv-drop__item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r-sm);color:var(--text-body);text-decoration:none;font-size:13px;font-weight:500;transition:background var(--dur-fast) var(--ease-out)}
+.dv-drop__item:hover{background:var(--accent-glow-soft);color:var(--accent-bright)}
+.dv-drop__item.is-on{color:var(--accent-bright);background:var(--accent-glow-soft)}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
 
@@ -366,14 +372,17 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 <div class="main">
 <div class="content">
 
-  <!-- SOUS-NAV SECTION DONNÉES -->
+  <!-- SOUS-NAV SECTION DONNÉES (menu déroulant) -->
   <div class="dv-sub"><div class="dv-sub__inner">
     <span class="dv-sub__label">Données</span>
-    <nav class="dv-sub__tabs">
-      <a href="/bubble" class="dv-tab is-on">Bubble Map</a>
-      <a href="/correlations" class="dv-tab">Corrélations</a>
-      <a href="/taux" class="dv-tab">Taux d'intérêt</a>
-    </nav>
+    <div class="dv-drop" tabindex="0">
+      <button class="dv-drop__btn" type="button">Bubble Map <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="dv-drop__menu">
+        <a href="/bubble" class="dv-drop__item is-on">Bubble Map</a>
+        <a href="/correlations" class="dv-drop__item">Corrélations</a>
+        <a href="/taux" class="dv-drop__item">Taux d'intérêt</a>
+      </div>
+    </div>
   </div></div>
 
   <!-- PAGE HEAD -->
