@@ -641,6 +641,10 @@
   function _ltClearAllAccountData() {
     // Sauvegarde la progression sur le compte AVANT d'effacer le token (sinon perdu).
     try { if (window.ltFlushStats) window.ltFlushStats(); } catch (e) {}
+    // Coupe la synchronisation : les suppressions qui suivent ne doivent en
+    // aucun cas remonter au compte, et les horodatages du compte sortant ne
+    // doivent pas servir d'arbitrage au compte suivant.
+    try { if (window.ltSyncReset) window.ltSyncReset(); } catch (e) {}
     localStorage.removeItem('ta_token');
     localStorage.removeItem('ta_refresh');
     localStorage.removeItem('ta_exp');
@@ -650,6 +654,13 @@
     localStorage.removeItem('lt_history');
     localStorage.removeItem('lt_deleted');
     localStorage.removeItem('jnl_trades');
+    // Données rattachées au compte et synchronisées (voir sync.js) : elles
+    // repartent du serveur à la prochaine connexion, et ne doivent surtout pas
+    // rester en place pour un autre compte sur le même navigateur.
+    localStorage.removeItem('lt_pf_state');
+    localStorage.removeItem('jnl_currency');
+    localStorage.removeItem('jnl_notes');
+    localStorage.removeItem('lt_cal_prefs');
     localStorage.removeItem('lt_pseudo');
     localStorage.removeItem('lt_avatar');
     // Flags d'onboarding : on les efface pour qu'un AUTRE compte soit réévalué
