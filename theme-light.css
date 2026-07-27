@@ -59,9 +59,9 @@
 }
 :root[data-theme="light"] .lt-live { background: linear-gradient(180deg, #FFFFFF, var(--bg-base)); }
 
-/* Jet en fond du héros : déclinaison claire du visuel. */
+/* Jet en fond du héros : déclinaison claire, voile clair pour la lisibilité. */
 :root[data-theme="light"] .lt-hero__jet { background-image: url("/img/hero-jet-light.webp"); }
-:root[data-theme="light"] .lt-hero__stage { opacity: 0.45; }
+:root[data-theme="light"] .lt-hero__stage::after { background: radial-gradient(74% 64% at 50% 46%, rgba(244,246,250,0.78) 0%, rgba(244,246,250,0.58) 46%, rgba(233,238,245,0.9) 100%); }
 
 /* ── 2. BOUTONS : texte blanc sur bleu profond (le noir ne contraste plus) ── */
 :root[data-theme="light"] .lt-btn--primary,
