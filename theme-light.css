@@ -59,13 +59,9 @@
 }
 :root[data-theme="light"] .lt-live { background: linear-gradient(180deg, #FFFFFF, var(--bg-base)); }
 
-/* Portable en fond du héros : son corps suit déjà les tokens de fond,
-   seule la capture affichée à l'écran change de thème. */
-:root[data-theme="light"] .lt-laptop__screen { background-image: url("/img/hero-journal-light.webp"); box-shadow: inset 0 0 0 1px rgba(15,23,42,0.10); }
-:root[data-theme="light"] .lt-laptop__lid { box-shadow: 0 50px 110px -34px rgba(15,23,42,0.3), 0 0 0 1px var(--border), inset 0 1px 0 rgba(255,255,255,0.9); }
-:root[data-theme="light"] .lt-laptop__deck { box-shadow: 0 36px 60px -22px rgba(15,23,42,0.28); }
-:root[data-theme="light"] .lt-laptop__glare { background: linear-gradient(116deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 27%, transparent 47%); }
-:root[data-theme="light"] .lt-hero__stage { opacity: 0.3; }
+/* Jet en fond du héros : déclinaison claire, voile clair pour la lisibilité. */
+:root[data-theme="light"] .lt-hero__jet { background-image: url("/img/hero-jet-light.webp"); }
+:root[data-theme="light"] .lt-hero__stage::after { background: radial-gradient(74% 64% at 50% 46%, rgba(244,246,250,0.78) 0%, rgba(244,246,250,0.58) 46%, rgba(233,238,245,0.9) 100%); }
 
 /* ── 2. BOUTONS : texte blanc sur bleu profond (le noir ne contraste plus) ── */
 :root[data-theme="light"] .lt-btn--primary,
