@@ -173,6 +173,14 @@
   .bm-split>.bm-stage{flex:none !important;width:100%;height:62vh;min-height:420px}
   .bm-perf{width:auto;align-self:stretch}
 }
+/* Sous-nav section « Données » */
+.dv-sub{margin:0 0 18px}
+.dv-sub__inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:8px 10px 8px 16px}
+.dv-sub__label{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.dv-sub__tabs{display:flex;gap:4px;flex-wrap:wrap}
+.dv-tab{font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--text-muted);text-decoration:none;padding:8px 15px;border-radius:var(--r-md);transition:all var(--dur-fast) var(--ease-out)}
+.dv-tab:hover{color:var(--text-title);background:rgba(127,150,190,.06)}
+.dv-tab.is-on{color:var(--accent-bright);background:var(--accent-glow-soft);box-shadow:inset 0 0 0 1px var(--accent-glow)}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
 
@@ -255,7 +263,7 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
           <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
           <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
           <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Données</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Bulles · corrélations · taux</span></a>
           <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
           <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
         </div>
@@ -304,8 +312,8 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
   </a>
   <a class="lt-dock__item is-active" href="/bubble">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg>
-    <span class="lt-dock__lbl">Bubble</span>
-    <span class="lt-dock__tip">Bubble Map</span>
+    <span class="lt-dock__lbl">Données</span>
+    <span class="lt-dock__tip">Données</span>
   </a>
   <a class="lt-dock__item" href="/calculateur">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
@@ -357,6 +365,16 @@ body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-tit
 
 <div class="main">
 <div class="content">
+
+  <!-- SOUS-NAV SECTION DONNÉES -->
+  <div class="dv-sub"><div class="dv-sub__inner">
+    <span class="dv-sub__label">Données</span>
+    <nav class="dv-sub__tabs">
+      <a href="/bubble" class="dv-tab is-on">Bubble Map</a>
+      <a href="/correlations" class="dv-tab">Corrélations</a>
+      <a href="/taux" class="dv-tab">Taux d'intérêt</a>
+    </nav>
+  </div></div>
 
   <!-- PAGE HEAD -->
   <div class="page-head" style="margin-bottom:4px">

@@ -69,6 +69,8 @@ const SYMBOL_MAP = {
   'GOLDF':'GC=F','SILVERF':'SI=F','PALLADIUM':'PA=F','COFFEE':'KC=F','SUGAR':'SB=F','COCOA':'CC=F','COTTON':'CT=F','WHEAT':'ZW=F','CORN':'ZC=F','SOYBEAN':'ZS=F','ORANGEJUICE':'OJ=F',
   // Indices
   'RUSSELL2000':'^RUT','VIX':'^VIX','STOXX50':'^STOXX50E','SMI':'^SSMI','IBEX35':'^IBEX','AEX':'^AEX',
+  // Rendements obligataires US (le "price" renvoyé EST le rendement en %)
+  'US13W':'^IRX','US5Y':'^FVX','US10Y':'^TNX','US30Y':'^TYX',
 };
 
 function fetchYahoo(yahooSym) {

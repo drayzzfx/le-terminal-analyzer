@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#04060B">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corrélations des marchés en direct | Le Terminal</title>
+<meta name="description" content="Matrices de corrélation en direct entre forex, crypto, indices et matières premières. Voyez quels marchés bougent ensemble.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://www.leterminal.net/correlations">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./calendar-eco.css">
+<style>
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
+
+.dv-sub{max-width:1200px;margin:0 auto 22px;padding:0 20px}
+.dv-sub__inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:8px 10px 8px 16px}
+.dv-sub__label{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.dv-sub__tabs{display:flex;gap:4px;flex-wrap:wrap}
+.dv-tab{font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--text-muted);text-decoration:none;padding:8px 15px;border-radius:var(--r-md);transition:all var(--dur-fast) var(--ease-out)}
+.dv-tab:hover{color:var(--text-title);background:rgba(127,150,190,.06)}
+.dv-tab.is-on{color:var(--accent-bright);background:var(--accent-glow-soft);box-shadow:inset 0 0 0 1px var(--accent-glow)}
+.page-head{max-width:1200px;margin:0 auto 20px;padding:0 20px}
+.page-head .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.page-head .eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);display:inline-block}
+.page-head h1{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.9rem,4vw,2.6rem);letter-spacing:.01em;color:var(--text-title);margin:0 0 8px}
+.page-head p{margin:0;color:var(--text-body);font-size:.98rem;max-width:70ch;line-height:1.6}
+.dv-wrap{max-width:1200px;margin:0 auto;padding:0 20px 80px}
+.panel{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:22px}
+.panel__title{font-family:var(--font-mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dv-live{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--bull)}
+.dv-live .ld{width:6px;height:6px;border-radius:50%;background:var(--bull);box-shadow:0 0 8px var(--bull-glow);animation:dvp 2s ease-in-out infinite}
+@keyframes dvp{0%,100%{opacity:1}50%{opacity:.3}}
+
+
+.cor-ctrl{max-width:1200px;margin:0 auto 16px;padding:0 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.cor-tabs{display:flex;gap:4px;flex-wrap:wrap;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:4px}
+.cor-tab{font-family:var(--font-text);font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;padding:8px 15px;border-radius:var(--r-sm);cursor:pointer;transition:all var(--dur-fast) var(--ease-out)}
+.cor-tab:hover{color:var(--text-title)}
+.cor-tab.is-on{background:var(--accent-glow-soft);color:var(--accent-bright);box-shadow:inset 0 0 0 1px var(--accent-glow)}
+.cor-win{display:inline-flex;gap:4px;margin-left:auto;background:var(--bg-void);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:4px}
+.cor-win button{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text-muted);background:none;border:none;padding:6px 12px;border-radius:var(--r-sm);cursor:pointer}
+.cor-win button.is-on{background:var(--accent-glow-soft);color:var(--accent-bright)}
+.cor-matrix-wrap{overflow-x:auto}
+.cor-matrix{border-collapse:collapse;font-family:var(--font-mono);width:100%;min-width:520px}
+.cor-matrix th{font-size:11px;font-weight:600;color:var(--text-muted);padding:7px 6px;text-align:center;white-space:nowrap}
+.cor-matrix th.rowh{text-align:right;padding-right:10px;color:var(--text-body)}
+.cor-matrix td{width:44px;height:38px;text-align:center;font-size:11px;font-weight:600;color:#0A0D12;border-radius:5px;transition:transform .1s}
+.cor-matrix td:hover{transform:scale(1.08);outline:1px solid rgba(255,255,255,.35)}
+.cor-note{margin-top:16px;font-size:12px;color:var(--text-muted);line-height:1.6}
+.cor-legend{display:flex;align-items:center;gap:10px;margin-top:14px;font-family:var(--font-mono);font-size:10px;color:var(--text-muted);flex-wrap:wrap}
+.cor-scale{display:flex;height:10px;width:180px;border-radius:5px;overflow:hidden}
+.cor-loader{padding:60px;text-align:center;color:var(--text-muted);font-size:13px}
+
+</style>
+</head>
+<body>
+
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Données</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Bubbles · correlations · rates">Bulles · corrélations · taux</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<!-- ============ LEFT DOCK ============ -->
+<nav class="lt-dock" aria-label="Pages">
+  <a class="lt-dock__item" href="/">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg>
+    <span class="lt-dock__lbl" data-en="Home">Accueil</span>
+    <span class="lt-dock__tip" data-en="Home">Accueil</span>
+  </a>
+  <a class="lt-dock__item" href="/journal">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg>
+    <span class="lt-dock__lbl">Journal</span>
+    <span class="lt-dock__tip">Journal de Trading</span>
+  </a>
+  <a class="lt-dock__item" href="/app">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg>
+    <span class="lt-dock__lbl">Analyzer</span>
+    <span class="lt-dock__tip">Setup Analyzer</span>
+  </a>
+  <a class="lt-dock__item" href="/patrimoine-presentation">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>
+    <span class="lt-dock__lbl">Patrim.</span>
+    <span class="lt-dock__tip">Patrimoine</span>
+  </a>
+  <a class="lt-dock__item" href="/calendrier">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg>
+    <span class="lt-dock__lbl">Éco</span>
+    <span class="lt-dock__tip">Calendrier Éco</span>
+  </a>
+  <a class="lt-dock__item is-active" href="/bubble">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg>
+    <span class="lt-dock__lbl">Données</span>
+    <span class="lt-dock__tip">Données</span>
+  </a>
+  <a class="lt-dock__item" href="/calculateur">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
+    <span class="lt-dock__lbl">Pips</span>
+    <span class="lt-dock__tip">Calculateur de Pips</span>
+  </a>
+  <a class="lt-dock__item" href="/mur-des-trades">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>
+    <span class="lt-dock__lbl">Trades</span>
+    <span class="lt-dock__tip">Mur des Trades</span>
+  </a>
+</nav>
+
+<main>
+<div class="dv-sub"><div class="dv-sub__inner">
+  <span class="dv-sub__label">Données</span>
+  <nav class="dv-sub__tabs">
+    <a href="/bubble" class="dv-tab">Bubble Map</a>
+    <a href="/correlations" class="dv-tab is-on">Corrélations</a>
+    <a href="/taux" class="dv-tab">Taux d'intérêt</a>
+  </nav>
+</div></div>
+
+<div class="page-head">
+  <span class="eyebrow"><span class="lt-dot"></span> Données de marché</span>
+  <h1>Corrélations en direct</h1>
+  <p>Comment les marchés bougent-ils ensemble ? Chaque matrice montre la corrélation des <strong>rendements quotidiens</strong> entre actifs d'une même classe. +1 = ils montent et descendent ensemble ; −1 = ils vont en sens inverse ; 0 = aucun lien.</p>
+</div>
+<div class="cor-ctrl">
+  <div class="cor-tabs" id="corTabs"></div>
+  <div class="cor-win" id="corWin">
+    <button data-w="30">30 j</button>
+    <button data-w="90" class="is-on">90 j</button>
+    <button data-w="180">180 j</button>
+  </div>
+</div>
+<div class="dv-wrap">
+  <div class="panel">
+    <div class="panel__title"><span id="corTitle">Forex</span><span class="dv-live"><span class="ld"></span> EN DIRECT</span></div>
+    <div id="corBody"><div class="cor-loader">Chargement…</div></div>
+    <div class="cor-legend">
+      <span>−1</span>
+      <span class="cor-scale" style="background:linear-gradient(90deg,#F0647A,#2A2F3A 50%,#4ADE9C)"></span>
+      <span>+1</span>
+      <span style="margin-left:auto">Corrélation de Pearson sur les rendements journaliers · source Yahoo Finance</span>
+    </div>
+  </div>
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./appshell.js"></script>
+<script src="./menu.js"></script>
+<script>
+(function(){
+  'use strict';
+  var CLASSES=[
+    {id:'forex',label:'Forex',syms:[['EURUSD','EUR/USD'],['GBPUSD','GBP/USD'],['USDJPY','USD/JPY'],['AUDUSD','AUD/USD'],['USDCAD','USD/CAD'],['USDCHF','USD/CHF'],['NZDUSD','NZD/USD'],['EURJPY','EUR/JPY'],['GBPJPY','GBP/JPY']]},
+    {id:'crypto',label:'Crypto',syms:[['BTC','BTC'],['ETH','ETH'],['SOL','SOL'],['XRP','XRP'],['BNB','BNB'],['ADA','ADA'],['DOGE','DOGE'],['AVAX','AVAX'],['LINK','LINK'],['DOT','DOT']]},
+    {id:'indices',label:'Indices',syms:[['SP500','S&P 500'],['NAS100','Nasdaq'],['US30','Dow'],['DAX','DAX'],['CAC40','CAC 40'],['UK100','FTSE'],['JP225','Nikkei'],['HK50','Hang Seng']]},
+    {id:'commo',label:'Matières prem.',syms:[['GOLD','Or'],['SILVER','Argent'],['USOIL','WTI'],['BRENT','Brent'],['NATGAS','Gaz nat.'],['COPPER','Cuivre'],['PLATINUM','Platine']]}
+  ];
+  var cur='forex', win=90, cache={};
+  var $=function(id){return document.getElementById(id);};
+
+  function pearson(a,b){var n=Math.min(a.length,b.length),ma=0,mb=0,i;for(i=0;i<n;i++){ma+=a[i];mb+=b[i];}ma/=n;mb/=n;var na=0,da=0,db=0;for(i=0;i<n;i++){var x=a[i]-ma,y=b[i]-mb;na+=x*y;da+=x*x;db+=y*y;}return (da&&db)?na/Math.sqrt(da*db):0;}
+  function rets(s){var r=[];for(var i=1;i<s.length;i++){ if(s[i]>0&&s[i-1]>0) r.push(Math.log(s[i]/s[i-1])); }return r;}
+  function corrColor(v){ // -1..1 -> couleur
+    if(v>=0){ var a=Math.min(1,v); return 'rgba(74,222,156,'+(0.12+a*0.85)+')'; }
+    var b=Math.min(1,-v); return 'rgba(240,100,122,'+(0.12+b*0.85)+')';
+  }
+  function txtColor(v){ return Math.abs(v)>0.45 ? '#07090C' : 'var(--text-body)'; }
+
+  function renderTabs(){
+    $('corTabs').innerHTML=CLASSES.map(function(c){return '<button class="cor-tab'+(c.id===cur?' is-on':'')+'" data-id="'+c.id+'">'+c.label+'</button>';}).join('');
+  }
+  function buildMatrix(cls,data){
+    var syms=cls.syms.filter(function(s){return data.series[s[0]];});
+    var R={}; syms.forEach(function(s){ R[s[0]]=rets(data.series[s[0]]); });
+    var head='<tr><th></th>'+syms.map(function(s){return '<th>'+s[1]+'</th>';}).join('')+'</tr>';
+    var rows=syms.map(function(a){
+      var tds=syms.map(function(b){
+        var v=pearson(R[a[0]],R[b[0]]);
+        if(a[0]===b[0]) v=1;
+        return '<td style="background:'+corrColor(v)+';color:'+txtColor(v)+'" title="'+a[1]+' / '+b[1]+' : '+v.toFixed(2)+'">'+(v>=0?'':'−')+Math.abs(v).toFixed(2).replace('0.','.').replace('1.00','1')+'</td>';
+      }).join('');
+      return '<tr><th class="rowh">'+a[1]+'</th>'+tds+'</tr>';
+    }).join('');
+    return '<div class="cor-matrix-wrap"><table class="cor-matrix">'+head+rows+'</table></div>';
+  }
+  function load(){
+    var cls=CLASSES.filter(function(c){return c.id===cur;})[0];
+    $('corTitle').textContent=cls.label;
+    var key=cur+'_'+win;
+    if(cache[key]){ $('corBody').innerHTML=buildMatrix(cls,cache[key]); return; }
+    $('corBody').innerHTML='<div class="cor-loader">Chargement des données ('+win+' j)…</div>';
+    var syms=cls.syms.map(function(s){return s[0];}).join(',');
+    fetch('/api/history-series?symbols='+encodeURIComponent(syms)+'&days='+win)
+      .then(function(r){return r.json();})
+      .then(function(d){ if(!d||d.error||!d.series){ $('corBody').innerHTML='<div class="cor-loader">Données indisponibles pour le moment.</div>'; return; } cache[key]=d; if(CLASSES.filter(function(c){return c.id===cur;})[0]) $('corBody').innerHTML=buildMatrix(cls,d)+'<div class="cor-note">'+ (d.dates?d.dates.length:0) +' séances analysées · fenêtre '+win+' jours.</div>'; })
+      .catch(function(){ $('corBody').innerHTML='<div class="cor-loader">Erreur de chargement.</div>'; });
+  }
+  function init(){
+    renderTabs();
+    $('corTabs').addEventListener('click',function(e){var b=e.target.closest('.cor-tab');if(!b)return;cur=b.getAttribute('data-id');renderTabs();load();});
+    $('corWin').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;win=parseInt(b.getAttribute('data-w'),10);Array.prototype.forEach.call($('corWin').children,function(x){x.classList.toggle('is-on',x===b);});load();});
+    load();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>
