@@ -147,20 +147,18 @@ a { color: inherit; text-decoration: none; }
 .lt-hero__cta { display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
 .lt-hero__chips { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
 
-/* ═══ Portable en fond du héros ═══
+/* ═══ Jet en fond du héros ═══
    Décor uniquement : posé en absolu derrière .lt-hero__inner (z-index 5), en
-   retrait et fondu sur son bord gauche pour ne jamais gêner la lecture. Le
-   corps du portable est bâti sur les tokens de fond, il s'éclaircit donc tout
-   seul en thème clair ; seule la capture d'écran change de fichier. */
-.lt-hero__stage { position: absolute; z-index: 1; top: 50%; right: -10%; width: min(44vw, 720px); transform: translateY(-40%); opacity: 0.26; pointer-events: none; perspective: 1800px; perspective-origin: 30% 46%; }
-.lt-hero__stage { -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 48%); mask-image: linear-gradient(90deg, transparent 0%, #000 48%); }
-.lt-laptop { transform-style: preserve-3d; transform: rotateY(-17deg) rotateX(6deg) rotateZ(0.6deg); }
-.lt-laptop__lid { position: relative; padding: 10px 10px 12px; border-radius: 14px; background: linear-gradient(150deg, var(--bg-elevated), var(--bg-void) 46%, var(--bg-surface)); box-shadow: 0 50px 110px -34px rgba(0,0,0,0.8), 0 0 0 1px var(--border-subtle), inset 0 1px 0 rgba(255,255,255,0.07); }
-.lt-laptop__screen { position: relative; aspect-ratio: 16 / 10; border-radius: 6px; overflow: hidden; background: var(--bg-void) url("/img/hero-journal-dark.webp") center / cover no-repeat; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.55); }
-.lt-laptop__glare { position: absolute; inset: 0; background: linear-gradient(116deg, rgba(143, 186, 255,0.16) 0%, rgba(143, 186, 255,0.03) 27%, transparent 47%); }
-.lt-laptop__hinge { width: 84%; height: 6px; margin: 0 auto; border-radius: 0 0 5px 5px; background: linear-gradient(180deg, var(--bg-surface), var(--bg-void)); }
-.lt-laptop__deck { height: 18px; margin: 0 -1.5%; border-radius: 0 0 16px 16px; transform: rotateX(74deg); transform-origin: top center; background: linear-gradient(180deg, var(--bg-elevated), var(--bg-void)); box-shadow: 0 36px 60px -22px rgba(0,0,0,0.85); }
-@media (prefers-reduced-motion: reduce) { .lt-laptop { transform: none; } }
+   retrait et fondu sur ses quatre côtés pour ne jamais gêner la lecture et
+   pour que le bord rectangulaire de l'image ne se devine pas sur le fond.
+   Deux fichiers, un par thème — seule la variante active se télécharge. */
+.lt-hero__stage { position: absolute; z-index: 1; top: 50%; right: -2%; width: min(50vw, 780px); transform: translateY(-42%); opacity: 0.5; pointer-events: none; }
+.lt-hero__stage { -webkit-mask-image: radial-gradient(66% 66% at 56% 50%, #000 26%, rgba(0,0,0,0) 100%); mask-image: radial-gradient(66% 66% at 56% 50%, #000 26%, rgba(0,0,0,0) 100%); }
+.lt-hero__jet { width: 100%; aspect-ratio: 3 / 2; background: url("/img/hero-jet-dark.webp") center center / cover no-repeat; }
+
+/* Tablette : le visuel se réduit et se retire dans l'angle pour laisser
+   respirer le texte, qui occupe alors presque toute la largeur. */
+@media (max-width: 1100px) { .lt-hero__stage { width: min(56vw, 540px); right: -6%; opacity: 0.42; } }
 /* Sous 900px le texte occupe toute la largeur : pas de décor derrière. */
 @media (max-width: 900px) { .lt-hero__stage { display: none; } }
 .lt-chip { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border: 1px solid var(--border-subtle); border-radius: var(--r-md); background: rgba(11, 16, 24,0.85); transition: border-color var(--dur-fast) var(--ease-out); }
