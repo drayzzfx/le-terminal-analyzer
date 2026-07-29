@@ -67,6 +67,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.leterminal.net/blog/calendrier-economique-trading</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.leterminal.net/blog/bubble-map-crypto</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.leterminal.net/blog/gestion-du-risque-trading</loc>
     <lastmod>2026-07-26</lastmod>
     <changefreq>monthly</changefreq>
