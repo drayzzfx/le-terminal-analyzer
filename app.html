@@ -7,11 +7,11 @@
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<script>(function(){var t=localStorage.getItem('ta_token');function chk(k){if(!k)return;fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro)localStorage.setItem('lt_pro','1');else localStorage.removeItem('lt_pro');}).catch(function(){});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(t&&rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);localStorage.setItem('ta_exp',String(Date.now()+(parseInt(d.expires_in,10)||3600)*1000));chk(d.access_token);}else chk(t);}).catch(function(){chk(t);});}else chk(t);})();</script>
 <script>(function(){
 if((window.location.hash||'').indexOf('access_token')!==-1)return;
 var t=localStorage.getItem('ta_token');
-if(!t){window.location.replace('/tarifs.html');return;}
+if(!t){void 0;return;}
 document.documentElement.style.visibility='hidden';
 window.ltRefreshToken=function(force){
   var rt=localStorage.getItem('ta_refresh')||'';
@@ -37,15 +37,15 @@ function chk(tok){
       if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}
     }else if(d&&d.token_invalid){
       document.documentElement.style.visibility='';
-      if(localStorage.getItem('lt_pro')!=='1'){window.location.replace('/tarifs.html');}
+      if(localStorage.getItem('lt_pro')!=='1'){void 0;}
     }else{
       localStorage.removeItem('lt_pro');
-      window.location.replace('/tarifs.html');
+      void 0;
     }
   }).catch(function(){
     clearTimeout(_to);
     document.documentElement.style.visibility='';
-    if(localStorage.getItem('lt_pro')!=='1'){window.location.replace('/tarifs.html');}
+    if(localStorage.getItem('lt_pro')!=='1'){void 0;}
   });
 }
 window.ltRefreshToken(false).then(function(tok){chk(tok||t);});
@@ -1986,10 +1986,11 @@ async function analyze(){
   const bias=document.getElementById('bias').value;
   const sess=document.getElementById('sess').value;
   const conf=document.getElementById('conf').value.trim();
-  // Login not required to analyze
   if(!pair||!entry||!tp||!sl||!dir){alert(c().alertFill);return}
-  if(!canGo()){window.location.href="/";return}
-  if(!authToken){ window.location.href='/'; return; }
+  // Funnel : compte obligatoire + 1 analyse gratuite (Premium = illimité)
+  var _fg = await funnelUse('analyze');
+  if(!_fg.ok) return;
+  authToken = localStorage.getItem('ta_token') || authToken;
   const rrv=calcRR();
   const steps=c().steps; let si=0;
   showLoad();
@@ -2032,7 +2033,7 @@ Détecte le niveau du trader à partir de la richesse des informations fournies,
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body:JSON.stringify({system:c().sys,messages:[{role:'user',content}],kind:'analyze'})
     });
-    if(res.status===401){ clearInterval(iv); showForm(); window.location.href='/'; return; }
+    if(res.status===401){ clearInterval(iv); showForm(); if(window.funnelShowAccount) funnelShowAccount(); return; }
     if(!res.ok){const e=await res.json().catch(()=>({}));const msg=typeof e.error==='string'?e.error:(e.error?.message||'Erreur '+res.status);throw new Error(msg);}
     clearInterval(iv);
     const data=await res.json();
@@ -3047,7 +3048,7 @@ window._refreshSession=_refreshSession;
 
 async function checkSession(){
   var token=localStorage.getItem('ta_token');
-  if(!token){window.location.href='/?paywall=1';return;}
+  if(!token){ if(window.funnelShowAccount) funnelShowAccount(); return; }
   // Restore session optimistically from token immediately
   authToken=token;
   var savedEmail=localStorage.getItem('ta_email')||'';
@@ -3077,7 +3078,7 @@ async function checkSession(){
       if(storedUid && storedUid!==data.id) _clearAccountData();
       localStorage.setItem('ta_user_id', data.id);
       await checkProStatus();
-      if(!isPro){ window.location.replace('/tarifs.html'); return; }
+      if(!isPro){ void 0; return; }
       document.documentElement.style.visibility='';
       updateUserUI();loadHistory();
     } else {
@@ -3097,7 +3098,7 @@ async function checkSession(){
       authToken=null;currentUser=null;
       localStorage.removeItem('ta_token');
       localStorage.removeItem('ta_email');
-      window.location.replace('/tarifs.html');
+      void 0;
       return;
     }
   }catch(e){
@@ -3109,7 +3110,7 @@ async function checkSession(){
       updateUserUI();loadHistory();
       return;
     }
-    window.location.replace('/tarifs.html');
+    void 0;
     return;
   }
 }
@@ -4348,6 +4349,8 @@ function quickSetResult(result){
   </div>
 </div>
 <div id="pairSuggestions" style="display:none;position:fixed;background:#0B1018;border:1px solid rgba(59, 125, 255,.3);border-radius:12px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:200px"></div>
+<script>window.FUNNEL_GATE=1;</script>
+<script src="./funnel.js"></script>
 <script src="./appshell.js"></script>
 <script src="./menu.js?v=2"></script>
 <script>

@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<script>(function(){var t=localStorage.getItem('ta_token');function chk(k){if(!k)return;fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro)localStorage.setItem('lt_pro','1');else localStorage.removeItem('lt_pro');}).catch(function(){});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(t&&rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);localStorage.setItem('ta_exp',String(Date.now()+(parseInt(d.expires_in,10)||3600)*1000));chk(d.access_token);}else chk(t);}).catch(function(){chk(t);});}else chk(t);})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Journal de Trading — P&L, win rate & IA Coach | Le Terminal</title>
 <meta name="robots" content="noindex,follow">
@@ -1707,6 +1707,9 @@ async function saveTrade() {
     var idx = trades.findIndex(function(t){ return t.id === editingId; });
     if(idx !== -1) trades[idx] = trade;
   } else {
+    // Funnel : 3 positions gratuites (Premium = illimité)
+    var _fg = await funnelUse('journal');
+    if(!_fg.ok) return;
     trades.push(trade);
   }
 
@@ -2229,7 +2232,7 @@ var isProJ = false;
 
 async function checkSession() {
   var token = localStorage.getItem('ta_token');
-  if(!token){window.location.href='/?paywall=1';return;}
+  if(!token){ if(window.funnelShowAccount) funnelShowAccount(); return; }
   authToken = token;
   var savedEmail = localStorage.getItem('ta_email') || '';
   currentUser = {email: savedEmail};
@@ -2261,7 +2264,7 @@ async function checkSession() {
       } catch(e) {
         if(localStorage.getItem('lt_pro')==='1') isProJ=true;
       }
-      if(!isProJ){ window.location.replace('/tarifs.html'); return; }
+      if(!isProJ){ void 0; return; }
       document.documentElement.style.visibility='';
       updateUserUI();
       await syncAllLocalTrades();
@@ -2270,11 +2273,11 @@ async function checkSession() {
     } else if(data.error) {
       authToken = null; currentUser = null;
       localStorage.removeItem('ta_token');
-      window.location.replace('/tarifs.html');
+      void 0;
       return;
     }
   } catch(e) {
-    window.location.replace('/tarifs.html');
+    void 0;
     return;
   }
 }
@@ -3394,6 +3397,8 @@ async function importMt5Trades() {
   window.addEventListener('load', refreshCal);
 })();
 </script>
+<script>window.FUNNEL_GATE=1;</script>
+<script src="./funnel.js"></script>
 <script src="./appshell.js"></script>
 <script src="./menu.js?v=2"></script>
 <script src="./cookies.js"></script>

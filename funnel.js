@@ -100,7 +100,10 @@
     if (!document.body) { document.addEventListener('DOMContentLoaded', mount); return; }
     document.body.appendChild(acct); document.body.appendChild(pay);
     wire();
-    if (!isAuthed()) showAcct();
+    // Verrou « compte obligatoire » à l'arrivée : uniquement si la page le demande
+    // (window.FUNNEL_GATE). Les pages de contenu (éco) ne l'activent pas : seule
+    // l'action (funnelUse) y déclenche l'overlay compte.
+    if (window.FUNNEL_GATE && !isAuthed()) showAcct();
   }
 
   // ── Show/hide ──
