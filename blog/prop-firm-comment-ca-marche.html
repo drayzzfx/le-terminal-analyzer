@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prop firm : comment ça marche vraiment | Le Terminal</title>
+<meta name="description" content="Prop firm : le fonctionnement du challenge, les règles imposées, le partage des gains, le coût réel et le modèle économique — expliqué sans promesse de gain.">
+<link rel="canonical" href="https://www.leterminal.net/blog/prop-firm-comment-ca-marche">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Prop firm : comment ça marche vraiment | Le Terminal">
+<meta property="og:description" content="Prop firm : le fonctionnement du challenge, les règles imposées, le partage des gains, le coût réel et le modèle économique — expliqué sans promesse de gain.">
+<meta property="og:url" content="https://www.leterminal.net/blog/prop-firm-comment-ca-marche">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/prop-firm-comment-ca-marche-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fonctionnement d'une prop firm : phase 1, phase 2 et compte financé, avec les règles de drawdown — Le Terminal">
+<meta property="article:published_time" content="2026-07-31">
+<meta property="article:modified_time" content="2026-07-31">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prop firm : comment ça marche vraiment">
+<meta name="twitter:description" content="Le challenge, les règles, le partage des gains, le coût réel — et le modèle économique qu'on explique rarement.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/prop-firm-comment-ca-marche-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Prop firm : comment ça marche vraiment",
+      "description": "Le fonctionnement d'une prop firm expliqué de bout en bout : le principe du capital alloué, les deux phases du challenge, les règles de drawdown et d'objectif, le partage des gains, le coût réel et le modèle économique de ces sociétés.",
+      "datePublished": "2026-07-31",
+      "dateModified": "2026-07-31",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/prop-firm-comment-ca-marche-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/prop-firm-comment-ca-marche" },
+      "keywords": "prop firm, prop firm trading, comment fonctionne une prop firm, challenge prop firm, compte financé, profit split, drawdown"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'une prop firm ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Une prop firm, ou société de trading pour compte propre, met un capital à disposition de traders qu'elle a sélectionnés, en échange d'une part de leurs gains. Le trader ne dépose pas le capital qu'il utilise : il paie des frais d'inscription pour passer un test d'évaluation, appelé challenge, et obtient en cas de réussite un compte alloué assorti de règles strictes de risque."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment fonctionne un challenge de prop firm ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le challenge comporte le plus souvent deux phases. La première demande d'atteindre un objectif de gain, typiquement autour de 8 à 10 %, sans dépasser les limites de perte. La seconde, dite de vérification, fixe un objectif plus modeste, souvent autour de 5 %, pour confirmer la régularité. Dans les deux cas, dépasser le drawdown maximal ou la perte journalière autorisée met fin immédiatement au test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien coûte un challenge de prop firm ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les frais d'inscription varient selon la taille du compte visé et selon la société, allant généralement de quelques dizaines à plusieurs centaines d'euros. Ces frais sont souvent remboursés lors du premier retrait en cas de réussite. En cas d'échec, ils sont perdus, et repasser le challenge implique de payer à nouveau."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Le compte financé est-il un compte réel ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cela dépend des sociétés et ce point est rarement mis en avant. Certaines prop firms exécutent réellement les ordres sur les marchés, d'autres opèrent sur des comptes en environnement simulé et couvrent elles-mêmes les gains versés. Dans les deux cas les paiements peuvent être bien réels, mais il est important de lire les conditions générales pour savoir dans quel cadre on s'engage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi la plupart des traders échouent-ils au challenge ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'échec vient rarement de l'analyse et presque toujours de la gestion du risque. L'objectif de gain pousse à prendre des positions trop grosses ou à multiplier les trades, alors que les limites de perte, en particulier le drawdown journalier, ne pardonnent aucune série défavorable. Un risque faible et constant par trade est le facteur qui discrimine le plus les réussites des échecs."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Prop firm : comment ça marche", "item": "https://www.leterminal.net/blog/prop-firm-comment-ca-marche" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Prop firm : comment ça marche</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Prop firm</span>
+  <h1 class="bl-art__title">Prop firm : comment ça marche vraiment</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published July 31, 2026">Publié le 31 juillet 2026</span>
+    <span>·</span>
+    <span data-en="10 min read">10 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/prop-firm-comment-ca-marche.webp" width="1600" height="900" alt="Fonctionnement d'une prop firm : les deux phases du challenge, le compte financé et les règles de drawdown à respecter" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Une prop firm vous confie un capital que vous n'avez pas déposé, en échange d'une part de vos gains — à condition de réussir un <strong>challenge</strong> payant et de respecter ensuite des règles de risque strictes. Le principe est séduisant et parfaitement légitime ; encore faut-il comprendre <strong>où se trouve réellement la difficulté</strong>, et comment ces sociétés gagnent leur vie.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Le pitch est efficace : vous avez la compétence mais pas le capital, une société vous prête 100 000 € et vous gardez 80 à 90 % des gains. Formulé ainsi, on comprend l'engouement. Mais entre l'annonce et le premier virement, il y a un parcours dont les règles méritent d'être lues attentivement — parce que c'est précisément là que se joue la réussite ou l'échec.</p>
+    <p>Voici le fonctionnement complet, sans enthousiasme commercial ni procès d'intention.</p>
+
+    <h2>Qu'est-ce qu'une prop firm ?</h2>
+    <p>« Prop firm » est l'abréviation de <em>proprietary trading firm</em>, société de trading pour compte propre. Le principe historique est ancien : une société fait trader son propre capital par des opérateurs sélectionnés, et partage les résultats avec eux.</p>
+    <p>Le modèle qui s'est répandu en ligne depuis quelques années en est une version accessible à distance : plutôt que de recruter des salariés, la société <strong>évalue les candidats via un test payant</strong>. Vous ne déposez pas le capital que vous tradez ; vous payez des frais d'inscription pour prouver que vous savez le gérer.</p>
+    <p>La distinction est importante : vous n'êtes ni salarié, ni client d'un courtier classique. Vous êtes un candidat, puis — si vous réussissez — un partenaire soumis à un contrat.</p>
+
+    <h2>Les deux phases du challenge</h2>
+    <p>La quasi-totalité des sociétés fonctionne sur une évaluation en deux temps. Les chiffres varient selon les acteurs, mais la logique est constante.</p>
+
+    <h3>Phase 1 : l'évaluation</h3>
+    <p>Vous devez atteindre un <strong>objectif de gain</strong> — typiquement de l'ordre de 8 à 10 % du capital nominal — sans jamais franchir les limites de perte. C'est la phase où l'on démontre qu'on sait gagner.</p>
+
+    <h3>Phase 2 : la vérification</h3>
+    <p>L'objectif est plus modeste, souvent autour de 5 %, mais les limites de perte restent identiques. Cette phase ne teste pas votre capacité à performer : elle teste votre <strong>régularité</strong>. C'est là que beaucoup de candidats, euphoriques après une phase 1 réussie, relâchent leur discipline.</p>
+
+    <h3>Le compte alloué</h3>
+    <p>Vous accédez ensuite au compte financé, avec un <strong>partage des gains</strong> généralement compris entre 80 et 90 % en votre faveur. Les règles de risque, elles, continuent de s'appliquer — indéfiniment. C'est une nuance que beaucoup découvrent trop tard : la contrainte ne disparaît jamais.</p>
+
+    <h2>Les règles que vous devrez respecter</h2>
+    <p>Ce sont elles qui font toute la difficulté de l'exercice. Quatre reviennent partout :</p>
+    <ul>
+      <li><strong>Le drawdown maximal</strong> — la perte totale à ne jamais dépasser depuis le capital de départ (souvent de l'ordre de 10 %). Le franchir met fin au compte, immédiatement.</li>
+      <li><strong>La perte journalière maximale</strong> — souvent autour de 5 %, calculée sur la journée. C'est la règle qui élimine le plus de candidats, car elle transforme une mauvaise journée en fin de parcours.</li>
+      <li><strong>Le nombre de jours de trading minimum</strong> — pour éviter qu'on atteigne l'objectif sur un unique pari.</li>
+      <li><strong>Les restrictions d'activité</strong> — interdiction de trader autour des annonces à fort impact, de conserver des positions le week-end, ou d'utiliser certaines stratégies automatisées, selon les sociétés.</li>
+    </ul>
+    <p>Le détail de ces contraintes chez l'un des acteurs de référence est décortiqué dans notre article sur les <a href="/blog/regles-ftmo">règles FTMO</a>. Attention à un point technique décisif : selon les sociétés, le drawdown se calcule sur le solde <em>ou</em> sur l'équité, et peut être fixe ou glissant. Deux comptes affichant « 10 % de drawdown » n'offrent donc pas du tout la même marge de manœuvre.</p>
+
+    <h2>Combien ça coûte, et combien ça rapporte</h2>
+    <p>Les frais d'inscription dépendent de la taille du compte visé : de quelques dizaines d'euros pour les plus petits à plusieurs centaines pour les comptes importants. En cas de réussite, ces frais sont fréquemment <strong>remboursés au premier retrait</strong>.</p>
+    <p>En cas d'échec, ils sont perdus. Et c'est ici qu'il faut faire un calcul honnête : si vous repassez le challenge trois ou quatre fois, le coût cumulé devient significatif — parfois comparable au capital que vous auriez pu trader vous-même sur un petit compte personnel.</p>
+    <p>Côté gains, un partage à 80-90 % sur un compte de 100 000 € reste attractif : 2 % de performance mensuelle représentent 2 000 € de gains bruts, dont l'essentiel vous revient. Encore faut-il produire ces 2 % de façon régulière, ce qui est une autre affaire.</p>
+
+    <h2>Le point qu'on explique rarement : le modèle économique</h2>
+    <p>Il est utile de comprendre d'où vient l'argent de ces sociétés, non pas pour les accuser, mais pour évaluer lucidement ce dans quoi vous vous engagez.</p>
+    <p>Une part importante de leurs revenus provient des <strong>frais de challenge</strong>, payés par une majorité de candidats qui échouent. Cela n'a rien d'illégitime — c'est le modèle assumé d'une sélection payante — mais cela signifie que la société n'a pas besoin que vous réussissiez pour être rentable.</p>
+    <p>Second point, rarement mis en avant : selon les acteurs, <strong>le compte « financé » n'est pas toujours un compte réel sur les marchés</strong>. Certaines sociétés exécutent effectivement les ordres, d'autres opèrent en environnement simulé et versent les gains sur leurs fonds propres. Les paiements peuvent être parfaitement réels dans les deux cas, mais les conditions générales sont le seul endroit où l'on trouve la réponse. Lisez-les avant de payer, pas après.</p>
+
+    <h2>Pourquoi la majorité échoue</h2>
+    <p>Les taux de réussite communiqués par le secteur sont bas, souvent de l'ordre de quelques pour cent. La cause n'est presque jamais l'analyse technique.</p>
+    <p>Le mécanisme est toujours le même : l'objectif de gain crée une <strong>pression au rendement</strong>, qui pousse à augmenter la taille des positions ou à multiplier les trades. Or les limites de perte, elles, ne pardonnent rien. Un trader qui risque 3 % par trade a besoin de trois pertes consécutives pour être éliminé — et trois pertes consécutives, tout le monde en connaît.</p>
+    <p>À l'inverse, un risque de 0,5 % par trade rend l'élimination presque impossible tout en laissant le temps d'atteindre l'objectif. C'est arithmétique, pas psychologique — même si la psychologie est ce qui empêche de l'appliquer. Nous détaillons cette mécanique dans <a href="/blog/gestion-risque-prop-firm">gestion du risque en prop firm</a>, et la méthode de passage complète dans <a href="/blog/reussir-challenge-prop-firm">réussir son challenge prop firm</a>.</p>
+
+    <h2>Est-ce fait pour vous ?</h2>
+    <p>Une prop firm a du sens si vous avez déjà une méthode définie, des statistiques sur plusieurs dizaines de trades, et une discipline de risque éprouvée sur votre propre compte. Dans ce cas, c'est un levier de capital rationnel.</p>
+    <p>En revanche, si vous n'êtes pas encore régulièrement rentable sur un petit compte personnel, le challenge ne changera rien — sinon qu'il ajoutera une pression de temps et un coût d'entrée à un problème qui n'est pas résolu. Aucune contrainte externe ne crée une méthode ; elle ne fait que révéler son absence plus vite.</p>
+    <p>Le test préalable est simple, et il ne coûte rien : appliquez les règles du challenge <em>sur votre propre compte</em> pendant deux mois — même objectif, même drawdown, même limite journalière. Si vous les tenez, vous êtes prêt. Sinon, vous venez d'économiser des frais d'inscription et vous savez exactement quoi travailler.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Vérifiez que vous tenez les règles avant de payer</p>
+    <p>Le Journal du Terminal suit votre drawdown, votre perte journalière et votre risque réel par trade — les trois chiffres exacts sur lesquels un challenge se gagne ou se perd.</p>
+    <a class="lt-btn lt-btn--primary" href="/journal-presentation">Découvrir le Journal de Trading</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue ni un conseil en investissement ni une recommandation d'une quelconque société de trading. Les chiffres cités (objectifs, drawdowns, partages de gains, frais) sont des ordres de grandeur observés sur le marché et varient selon les acteurs : seules les conditions générales de la société concernée font foi. Le trading comporte un risque de perte en capital, et les frais de challenge sont perdus en cas d'échec.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'une prop firm ?</h3>
+        <p>Une prop firm, ou société de trading pour compte propre, met un capital à disposition de traders qu'elle a sélectionnés, en échange d'une part de leurs gains. Le trader ne dépose pas le capital qu'il utilise : il paie des frais d'inscription pour passer un test d'évaluation, appelé challenge, et obtient en cas de réussite un compte alloué assorti de règles strictes de risque.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Comment fonctionne un challenge de prop firm ?</h3>
+        <p>Le challenge comporte le plus souvent deux phases. La première demande d'atteindre un objectif de gain, typiquement autour de 8 à 10 %, sans dépasser les limites de perte. La seconde, dite de vérification, fixe un objectif plus modeste, souvent autour de 5 %, pour confirmer la régularité. Dans les deux cas, dépasser le drawdown maximal ou la perte journalière autorisée met fin immédiatement au test.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Combien coûte un challenge de prop firm ?</h3>
+        <p>Les frais d'inscription varient selon la taille du compte visé et selon la société, allant généralement de quelques dizaines à plusieurs centaines d'euros. Ces frais sont souvent remboursés lors du premier retrait en cas de réussite. En cas d'échec, ils sont perdus, et repasser le challenge implique de payer à nouveau.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Le compte financé est-il un compte réel ?</h3>
+        <p>Cela dépend des sociétés et ce point est rarement mis en avant. Certaines prop firms exécutent réellement les ordres sur les marchés, d'autres opèrent sur des comptes en environnement simulé et couvrent elles-mêmes les gains versés. Dans les deux cas les paiements peuvent être bien réels, mais il est important de lire les conditions générales pour savoir dans quel cadre on s'engage.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Pourquoi la plupart des traders échouent-ils au challenge ?</h3>
+        <p>L'échec vient rarement de l'analyse et presque toujours de la gestion du risque. L'objectif de gain pousse à prendre des positions trop grosses ou à multiplier les trades, alors que les limites de perte, en particulier le drawdown journalier, ne pardonnent aucune série défavorable. Un risque faible et constant par trade est le facteur qui discrimine le plus les réussites des échecs.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : conditions générales publiques des principales sociétés de financement de traders et documentation sectorielle 2025-2026. Les chiffres cités sont des ordres de grandeur et varient selon les acteurs. Publié le 31 juillet 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/reussir-challenge-prop-firm"><span class="t">Réussir son challenge prop firm</span><span class="d">La méthode de passage, phase par phase</span></a>
+        <a href="/blog/regles-ftmo"><span class="t">Règles FTMO expliquées</span><span class="d">Drawdown, objectifs et interdits en détail</span></a>
+        <a href="/blog/gestion-risque-prop-firm"><span class="t">Gestion du risque en prop firm</span><span class="d">Le calcul qui décide de la réussite</span></a>
+        <a href="/blog/plan-de-trading"><span class="t">Plan de trading</span><span class="d">Le document à écrire avant de payer un challenge</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
