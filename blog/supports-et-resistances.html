@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supports et résistances : comment les tracer | Le Terminal</title>
+<meta name="description" content="Support et résistance en trading : pourquoi ces niveaux tiennent, comment tracer une zone, le principe de polarité et les erreurs de traçage à éviter.">
+<link rel="canonical" href="https://www.leterminal.net/blog/supports-et-resistances">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Supports et résistances : comment les tracer | Le Terminal">
+<meta property="og:description" content="Support et résistance en trading : pourquoi ces niveaux tiennent, comment tracer une zone, le principe de polarité et les erreurs de traçage à éviter.">
+<meta property="og:url" content="https://www.leterminal.net/blog/supports-et-resistances">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/supports-et-resistances-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Supports et résistances en trading : zones de prix, principe de polarité et niveaux dynamiques — Le Terminal">
+<meta property="article:published_time" content="2026-08-06">
+<meta property="article:modified_time" content="2026-08-06">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Supports et résistances : comment les tracer">
+<meta name="twitter:description" content="Pourquoi ces niveaux tiennent, comment tracer une zone plutôt qu'une ligne, et le principe de polarité qui les fait changer de rôle.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/supports-et-resistances-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Supports et résistances : comment les tracer (et s'en servir)",
+      "description": "Ce qu'est réellement un support ou une résistance, pourquoi ces niveaux tiennent, la méthode pour tracer une zone correctement, le principe de polarité, les niveaux dynamiques et les erreurs de traçage les plus fréquentes.",
+      "datePublished": "2026-08-06",
+      "dateModified": "2026-08-06",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/supports-et-resistances-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/supports-et-resistances" },
+      "keywords": "support et résistance, supports et résistances, tracer un support, principe de polarité, zone de prix, analyse technique"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un support et une résistance ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un support est une zone de prix où la demande a suffisamment absorbé l'offre pour arrêter une baisse ; une résistance est la zone symétrique où l'offre a stoppé une hausse. Ce ne sont pas des barrières physiques mais des endroits où un rapport de force s'est déjà inversé au moins une fois, et où de nombreux intervenants surveillent le prix."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment tracer correctement un support ou une résistance ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On trace une zone plutôt qu'une ligne, en partant des unités de temps élevées vers les plus basses. On retient les endroits où le prix a nettement réagi à plusieurs reprises, en s'appuyant de préférence sur les corps de bougies pour délimiter le cœur de la zone et sur les mèches pour ses bords. Moins il y a de niveaux tracés, plus ils sont exploitables."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le principe de polarité ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le principe de polarité désigne le changement de rôle d'un niveau une fois franchi : une résistance cassée devient souvent un support lors du retour du prix, et inversement. Cette bascule est la base du setup de breakout suivi d'un retest, qui consiste à attendre que le niveau franchi confirme son nouveau rôle avant d'entrer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien de touches faut-il pour valider un niveau ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deux réactions nettes suffisent généralement à rendre un niveau intéressant, et une troisième renforce sa lisibilité. Ce qui compte davantage que le nombre de touches, c'est la qualité de la réaction : un rejet franc et rapide a plus de valeur que trois effleurements mous. Un niveau très testé finit d'ailleurs souvent par céder, car chaque test consomme les ordres qui le défendaient."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il tracer des lignes ou des zones ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Des zones. Le prix ne s'arrête presque jamais au pixel près : il réagit dans un intervalle, souvent large de quelques dizaines de points selon l'instrument. Tracer une zone évite d'être sorti par une mèche de quelques points et rend la lecture beaucoup plus robuste que la recherche d'un niveau exact."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Supports et résistances", "item": "https://www.leterminal.net/blog/supports-et-resistances" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Supports et résistances</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Analyse technique</span>
+  <h1 class="bl-art__title">Supports et résistances : comment les tracer (et s'en servir)</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 6, 2026">Publié le 6 août 2026</span>
+    <span>·</span>
+    <span data-en="11 min read">11 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/supports-et-resistances.webp" width="1600" height="900" alt="Supports et résistances en trading : zones de prix tracées sur un graphique, principe de polarité et niveaux dynamiques" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un support et une résistance ne sont pas des lignes magiques : ce sont des <strong>zones</strong> où un rapport de force s'est déjà inversé, et que beaucoup d'intervenants surveillent. Tracez-les <strong>larges</strong>, en partant des grandes unités de temps, gardez-en <strong>peu</strong>, et retenez le principe de <strong>polarité</strong> : un niveau franchi change de rôle.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>C'est la première chose qu'on apprend en analyse technique, et souvent la dernière qu'on maîtrise vraiment. Tout le monde sait tracer un trait sous un creux. Beaucoup moins de traders savent <em>lequel</em> tracer, <em>à quelle épaisseur</em>, et surtout <em>quand s'en méfier</em>.</p>
+    <p>Le symptôme est facile à reconnaître : un graphique couvert de douze lignes horizontales dont on ne sait plus laquelle compte. Voici comment revenir à une lecture qui sert réellement à décider.</p>
+
+    <h2>Ce qu'est vraiment un support ou une résistance</h2>
+    <p>Un <strong>support</strong> est une zone de prix où la demande a suffisamment absorbé l'offre pour arrêter une baisse. Une <strong>résistance</strong> est l'inverse : la zone où l'offre a stoppé une hausse.</p>
+    <p>Formulé autrement, et c'est la formulation utile : <strong>c'est un endroit où le rapport de force s'est déjà inversé au moins une fois</strong>. Rien de plus, rien de moins. Il n'y a pas de barrière physique dans le marché — seulement des ordres, et le souvenir que d'autres en ont.</p>
+
+    <h2>Pourquoi ces niveaux fonctionnent (la vraie raison)</h2>
+    <p>La réponse honnête tient en deux mécanismes, dont aucun n'est mystique.</p>
+    <p><strong>Le premier est structurel.</strong> Là où beaucoup d'ordres ont été exécutés, il en reste souvent d'autres : des acheteurs qui n'ont pas été servis et attendent un retour, des vendeurs qui veulent sortir au point mort. Quand le prix revient, il rencontre de la matière.</p>
+    <p><strong>Le second est autoréalisateur.</strong> Ces niveaux sont visibles par tout le monde. Des milliers d'intervenants tracent approximativement les mêmes zones et y placent leurs ordres — ce qui produit une réaction, qui confirme le niveau, qui renforce la croyance. Ce n'est pas un défaut : c'est ce qui rend l'analyse technique exploitable.</p>
+    <p>Le corollaire important est qu'un niveau vaut par son <strong>évidence</strong>. Un support que vous êtes seul à voir n'a aucune raison de tenir. Si vous devez zoomer et plisser les yeux pour le justifier, il n'existe pas.</p>
+
+    <h2>Comment tracer un niveau correctement</h2>
+
+    <h3>Tracez des zones, pas des lignes</h3>
+    <p>C'est la correction qui change le plus de choses. Le prix ne s'arrête presque jamais au pixel près : il réagit dans un <strong>intervalle</strong>, large de quelques dizaines de points selon l'instrument.</p>
+    <p>En pratique : délimitez le cœur de la zone avec les <strong>corps</strong> de bougies (là où le prix a réellement clôturé) et ses bords avec les <strong>mèches</strong> (jusqu'où il est allé avant d'être repoussé). Cette lecture s'appuie directement sur ce que racontent les <a href="/blog/chandeliers-japonais">chandeliers japonais</a> : une mèche est une trace d'échec, donc une frontière de zone.</p>
+    <p>Le bénéfice est immédiat : vous cessez d'être sorti par une mèche de trois points sur un niveau « raté de peu ».</p>
+
+    <h3>Partez des grandes unités de temps</h3>
+    <p>Un niveau visible en journalier pèse infiniment plus lourd qu'un niveau visible en 5 minutes, parce qu'il a été vu — et travaillé — par beaucoup plus de monde.</p>
+    <p>La méthode qui fonctionne : ouvrez d'abord l'unité de temps supérieure, tracez les trois ou quatre zones majeures, <em>puis</em> descendez sur votre unité d'exécution. Vous arrivez avec une carte, au lieu de dessiner au fur et à mesure ce qui vous arrange.</p>
+
+    <h3>Gardez-en peu</h3>
+    <p>Trois à cinq zones par instrument suffisent. Au-delà, vous n'avez plus une carte mais un filet : le prix est toujours « près d'un niveau », donc plus aucun niveau ne signifie quoi que ce soit.</p>
+    <p>Le test est simple et impitoyable : si vos zones ne vous permettent pas de dire à l'avance <em>où vous n'entrerez pas</em>, elles ne servent à rien.</p>
+
+    <h2>Le principe de polarité</h2>
+    <p>Voici le concept qui fait passer un débutant à l'étape suivante. Quand un niveau est franchi, <strong>il change de rôle</strong> : une résistance cassée devient un support, un support cassé devient une résistance.</p>
+    <p>La logique est cohérente avec ce qui précède. Ceux qui vendaient à ce niveau ont eu tort ; ils cherchent à sortir au point mort quand le prix revient. Ceux qui ont manqué la cassure attendent un repli pour entrer. Les deux comportements produisent la même chose : de la demande, là où il y avait de l'offre.</p>
+    <p>C'est exactement le mécanisme du <strong>breakout suivi d'un retest</strong>, l'un des <a href="/blog/setups-de-trading">setups les plus courants</a>. Et c'est pourquoi attendre le retest coûte quelques points d'entrée mais évite beaucoup de fausses cassures : vous laissez le niveau <em>prouver</em> son nouveau rôle.</p>
+
+    <h2>Les autres formes de niveaux</h2>
+    <p>Les zones horizontales ne sont pas les seules à produire des réactions. Trois familles complètent utilement la carte :</p>
+    <ul>
+      <li><strong>Les niveaux dynamiques</strong> — une moyenne mobile longue joue souvent le rôle de support mobile dans une tendance nette. Comme expliqué dans notre article sur les <a href="/blog/indicateurs-techniques-trading">indicateurs techniques</a>, son efficacité tient en grande partie au fait que tout le monde regarde la même.</li>
+      <li><strong>Les nombres ronds</strong> — 1,1000 sur l'EUR/USD, 50 000 sur le Bitcoin. Les ordres s'y agglutinent par simple commodité psychologique, ce qui suffit à créer des réactions.</li>
+      <li><strong>Les extrêmes de séance</strong> — plus haut et plus bas de la veille, ouverture du jour. Ces repères sont suivis par un très grand nombre d'intervenants intraday.</li>
+    </ul>
+
+    <h2>Comment s'en servir concrètement</h2>
+    <p>Un niveau n'est pas un signal d'entrée. C'est un endroit où <strong>vous avez le droit de chercher</strong> un signal. La différence est décisive.</p>
+    <p>La séquence saine tient en trois temps :</p>
+    <ul>
+      <li><strong>Le contexte</strong> — le prix arrive sur une zone que vous aviez tracée <em>avant</em>. Pas après.</li>
+      <li><strong>Le déclencheur</strong> — une réaction visible dans la zone : rejet, ralentissement, figure de retournement.</li>
+      <li><strong>L'invalidation</strong> — un point précis au-delà de la zone où votre thèse est fausse. C'est cette distance qui détermine ensuite votre taille de position, via le <a href="/blog/calculer-les-pips">calcul des pips</a>.</li>
+    </ul>
+    <p>C'est la structure même d'un setup exploitable, détaillée dans <a href="/blog/quest-ce-quun-setup">qu'est-ce qu'un setup de trading</a>. Les supports et résistances en fournissent le premier élément — le contexte — et rien d'autre.</p>
+
+    <h2>Les erreurs de traçage les plus fréquentes</h2>
+    <ul>
+      <li><strong>Tracer après coup.</strong> Le biais le plus coûteux : sur un graphique passé, on trouve toujours un niveau qui explique le mouvement. Une zone n'a de valeur que si elle existait avant.</li>
+      <li><strong>Chercher le prix exact.</strong> Vouloir le niveau « juste » mène à des stops de trois points balayés par le bruit normal de l'instrument.</li>
+      <li><strong>Croire qu'un niveau très testé est solide.</strong> C'est souvent l'inverse : chaque test consomme les ordres qui le défendaient. Un support touché six fois est un support qui s'use.</li>
+      <li><strong>Confondre traversée et cassure.</strong> Une mèche qui dépasse n'est pas une cassure ; une clôture franche au-delà, si. La distinction se fait à la clôture, jamais en direct.</li>
+      <li><strong>Oublier que le niveau ne gère pas le risque.</strong> Une zone parfaite avec une position trop grosse reste un mauvais trade — c'est le sujet de notre article sur la <a href="/blog/gestion-du-risque-trading">gestion du risque</a>.</li>
+    </ul>
+
+    <h2>S'entraîner à voir les bons niveaux</h2>
+    <p>La compétence se construit par répétition sur un seul instrument. Chaque semaine, tracez vos trois zones majeures avant l'ouverture, puis notez à la fin de la semaine lesquelles ont produit une réaction et lesquelles ont été traversées sans un regard.</p>
+    <p>Au bout de quelques dizaines d'observations consignées dans un <a href="/blog/comment-tenir-journal-trading">journal de trading</a>, un tri s'opère : vous découvrirez que ce sont presque toujours les mêmes <em>types</em> de zones qui fonctionnent pour vous — les extrêmes hebdomadaires, ou les zones de départ d'impulsion, ou les ronds. C'est cette liste-là, courte et personnelle, qui vaut mieux que n'importe quelle règle générale.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Vos niveaux tiennent-ils vraiment ?</p>
+    <p>Envoyez la capture de votre graphique : le Setup Analyzer évalue la structure, la qualité du niveau et le ratio risque/rendement, puis vous rend un score argumenté.</p>
+    <a class="lt-btn lt-btn--primary" href="/analyzer-presentation">Découvrir le Setup Analyzer</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Aucun support ou résistance ne garantit une réaction du prix : ces niveaux sont des repères de contexte, pas des signaux. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un support et une résistance ?</h3>
+        <p>Un support est une zone de prix où la demande a suffisamment absorbé l'offre pour arrêter une baisse ; une résistance est la zone symétrique où l'offre a stoppé une hausse. Ce ne sont pas des barrières physiques mais des endroits où un rapport de force s'est déjà inversé au moins une fois, et où de nombreux intervenants surveillent le prix.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Comment tracer correctement un support ou une résistance ?</h3>
+        <p>On trace une zone plutôt qu'une ligne, en partant des unités de temps élevées vers les plus basses. On retient les endroits où le prix a nettement réagi à plusieurs reprises, en s'appuyant de préférence sur les corps de bougies pour délimiter le cœur de la zone et sur les mèches pour ses bords. Moins il y a de niveaux tracés, plus ils sont exploitables.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le principe de polarité ?</h3>
+        <p>Le principe de polarité désigne le changement de rôle d'un niveau une fois franchi : une résistance cassée devient souvent un support lors du retour du prix, et inversement. Cette bascule est la base du setup de breakout suivi d'un retest, qui consiste à attendre que le niveau franchi confirme son nouveau rôle avant d'entrer.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Combien de touches faut-il pour valider un niveau ?</h3>
+        <p>Deux réactions nettes suffisent généralement à rendre un niveau intéressant, et une troisième renforce sa lisibilité. Ce qui compte davantage que le nombre de touches, c'est la qualité de la réaction : un rejet franc et rapide a plus de valeur que trois effleurements mous. Un niveau très testé finit d'ailleurs souvent par céder, car chaque test consomme les ordres qui le défendaient.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il tracer des lignes ou des zones ?</h3>
+        <p>Des zones. Le prix ne s'arrête presque jamais au pixel près : il réagit dans un intervalle, souvent large de quelques dizaines de points selon l'instrument. Tracer une zone évite d'être sorti par une mèche de quelques points et rend la lecture beaucoup plus robuste que la recherche d'un niveau exact.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature classique d'analyse technique sur les niveaux horizontaux, la polarité et les zones de réaction, documentation méthodologique 2025-2026. Publié le 6 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/setups-de-trading"><span class="t">Les 7 setups les plus courants</span><span class="d">Où la polarité devient un plan de trade</span></a>
+        <a href="/blog/quest-ce-quun-setup"><span class="t">Qu'est-ce qu'un setup&nbsp;?</span><span class="d">Contexte, déclencheur, invalidation, objectif</span></a>
+        <a href="/blog/chandeliers-japonais"><span class="t">Chandeliers japonais</span><span class="d">Lire la réaction du prix dans la zone</span></a>
+        <a href="/blog/analyse-de-setup-trading"><span class="t">Analyse de setup : la méthode</span><span class="d">Noter la qualité d'un niveau sur une grille</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
