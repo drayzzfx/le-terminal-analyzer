@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyse multi-timeframe : choisir ses unités de temps | Le Terminal</title>
+<meta name="description" content="Comment combiner trois unités de temps : la règle des 3 écrans, le bon facteur entre elles, l'ordre de lecture et le piège du timeframe shopping.">
+<link rel="canonical" href="https://www.leterminal.net/blog/analyse-multi-timeframe">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Analyse multi-timeframe : choisir ses unités de temps | Le Terminal">
+<meta property="og:description" content="Comment combiner trois unités de temps : la règle des 3 écrans, le bon facteur entre elles, l'ordre de lecture et le piège du timeframe shopping.">
+<meta property="og:url" content="https://www.leterminal.net/blog/analyse-multi-timeframe">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/analyse-multi-timeframe-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Analyse multi-timeframe : trois unités de temps emboîtées, du contexte à l'exécution — Le Terminal">
+<meta property="article:published_time" content="2026-08-08">
+<meta property="article:modified_time" content="2026-08-08">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Analyse multi-timeframe : choisir ses unités de temps">
+<meta name="twitter:description" content="La règle des 3 écrans, le bon facteur entre timeframes, et pourquoi changer d'unité de temps après l'entrée est un aveu.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/analyse-multi-timeframe-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Analyse multi-timeframe : comment combiner ses unités de temps",
+      "description": "Pourquoi une seule unité de temps ne suffit pas, la règle des trois écrans (contexte, structure, exécution), le facteur à respecter entre timeframes, la séquence de lecture du haut vers le bas et le piège du timeframe shopping.",
+      "datePublished": "2026-08-08",
+      "dateModified": "2026-08-08",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/analyse-multi-timeframe-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/analyse-multi-timeframe" },
+      "keywords": "analyse multi-timeframe, unité de temps trading, timeframe, règle des 3 écrans, multi unités de temps, analyse technique"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que l'analyse multi-timeframe ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'analyse multi-timeframe consiste à observer le même instrument sur plusieurs unités de temps pour séparer trois questions distinctes : dans quel sens travailler, où se situent les niveaux importants, et à quel moment précis entrer. Chaque unité de temps répond à une seule de ces questions, ce qui évite de tout demander à un unique graphique."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien d'unités de temps faut-il utiliser ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trois suffisent et constituent la référence : une unité de contexte pour la tendance de fond, une unité de structure pour repérer les niveaux et la configuration, et une unité d'exécution pour le déclencheur et le placement du stop. Au-delà de trois, les signaux se contredisent et la décision devient impossible à prendre."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel écart faut-il entre deux unités de temps ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un facteur de quatre à six entre chaque niveau est un repère solide. Par exemple H4, H1 puis M15, ou journalier, H4 puis H1. Un écart plus faible fait voir deux fois la même information ; un écart trop grand rend le lien entre les graphiques difficile à établir, car les niveaux de l'unité supérieure deviennent trop éloignés."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dans quel ordre faut-il lire les graphiques ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Toujours du plus grand vers le plus petit. On commence par l'unité de contexte pour déterminer le sens autorisé, puis l'unité de structure pour situer les zones, et seulement ensuite l'unité d'exécution pour chercher le déclencheur. L'ordre inverse conduit à trouver un signal séduisant puis à chercher une justification, ce qui est le mécanisme même du biais de confirmation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le timeframe shopping ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "C'est le fait de changer d'unité de temps jusqu'à en trouver une qui valide la position que l'on souhaite prendre, ou qui rend acceptable une position déjà perdante. C'est un biais de confirmation outillé : les unités de temps de travail doivent être fixées à l'avance dans le plan de trading et ne jamais varier en cours de trade."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Analyse multi-timeframe", "item": "https://www.leterminal.net/blog/analyse-multi-timeframe" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Analyse multi-timeframe</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Analyse technique</span>
+  <h1 class="bl-art__title">Analyse multi-timeframe : comment combiner ses unités de temps</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 8, 2026">Publié le 8 août 2026</span>
+    <span>·</span>
+    <span data-en="11 min read">11 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/analyse-multi-timeframe.webp" width="1600" height="900" alt="Analyse multi-timeframe : trois unités de temps emboîtées, du contexte à la structure puis à l'exécution" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un seul graphique ne peut pas répondre à trois questions différentes. L'analyse multi-timeframe consiste à en attribuer <strong>une par unité de temps</strong> : le <strong>contexte</strong> donne le sens autorisé, la <strong>structure</strong> situe les niveaux, l'<strong>exécution</strong> fournit le déclencheur. Trois écrans, un facteur de 4 à 6 entre chacun, et une lecture toujours du haut vers le bas.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Voici une situation que tout le monde a vécue. Vous repérez un beau signal d'achat en 5 minutes, vous entrez, et le prix s'effondre. Vous ouvrez alors le graphique journalier : vous veniez d'acheter juste sous une résistance majeure, dans une tendance baissière franche.</p>
+    <p>Le signal n'était pas faux. Il était simplement <em>hors contexte</em>. C'est exactement le problème que résout l'analyse multi-timeframe — et c'est un concept que nous évoquons dans presque tous nos articles (« contexte en H4, exécution en M15 ») sans jamais l'avoir détaillé. Réparons cela.</p>
+
+    <h2>Pourquoi une seule unité de temps ne suffit pas</h2>
+    <p>Un graphique doit vous dire trois choses très différentes, et il n'en dit bien qu'une à la fois :</p>
+    <ul>
+      <li><strong>Dans quel sens ai-je le droit de travailler ?</strong> C'est une question de tendance de fond, qui ne se lit correctement que sur une grande unité de temps.</li>
+      <li><strong>Où sont les endroits qui comptent ?</strong> Les zones de réaction, la configuration en cours.</li>
+      <li><strong>Quand est-ce que j'appuie, et où va mon stop ?</strong> Une question de précision, qui exige une unité de temps fine.</li>
+    </ul>
+    <p>Demander tout cela à un seul écran mène à l'un des deux échecs classiques : en unité de temps trop grande, vous voyez juste mais vos stops sont énormes ; en unité trop petite, votre timing est précis mais vous tradez contre la tendance sans le savoir.</p>
+
+    <h2>La règle des trois écrans</h2>
+    <p>La solution, popularisée sous le nom de « système des trois écrans », consiste à assigner <strong>une question par unité de temps</strong>. Chacune a un rôle unique, et ne le déborde jamais.</p>
+
+    <h3>Écran 1 — le contexte</h3>
+    <p>La plus grande unité de temps. Elle répond à une seule question, et par oui ou par non : <strong>ai-je le droit d'acheter, de vendre, ou de rester à l'écart ?</strong></p>
+    <p>Vous n'y cherchez aucune entrée. Vous constatez une structure — sommets et creux ascendants, descendants, ou range — et vous en déduisez une autorisation. Si le contexte est illisible, la réponse est « à l'écart », et c'est une réponse parfaitement valable.</p>
+
+    <h3>Écran 2 — la structure</h3>
+    <p>L'unité intermédiaire. C'est là que vous tracez vos zones et que vous identifiez la configuration : un pullback en formation, un range dont les bornes sont nettes, une compression.</p>
+    <p>C'est l'écran principal de travail, celui où vous passez le plus de temps. Vos <a href="/blog/supports-et-resistances">supports et résistances</a> se tracent ici en priorité, et c'est ici que vous reconnaissez l'un des <a href="/blog/setups-de-trading">setups courants</a>.</p>
+
+    <h3>Écran 3 — l'exécution</h3>
+    <p>La plus petite unité. Elle ne sert qu'à deux choses : repérer le <strong>déclencheur</strong> précis (une bougie de rejet, une cassure de micro-structure) et placer un <strong>stop serré</strong>.</p>
+    <p>C'est le gain concret de la méthode : au lieu d'un stop large calculé sur l'unité de structure, vous obtenez une invalidation courte, donc un meilleur ratio risque/rendement à conviction égale. C'est aussi ici que la lecture des <a href="/blog/chandeliers-japonais">chandeliers japonais</a> devient réellement utile.</p>
+
+    <h2>Choisir son trio d'unités de temps</h2>
+    <p>La règle pratique : un <strong>facteur de 4 à 6</strong> entre chaque niveau. En dessous, vous regardez deux fois la même information ; au-dessus, le lien entre les graphiques se perd car les niveaux du haut sont trop lointains.</p>
+    <div class="bl-note">
+      <p><strong>Swing (quelques jours à quelques semaines)</strong> — Hebdomadaire → Journalier → H4<br>
+      <strong>Intraday (quelques heures)</strong> — Journalier → H1 → M15<br>
+      <strong>Court terme (moins d'une heure)</strong> — H4 → M15 → M5</p>
+    </div>
+    <p>Le choix du trio ne dépend pas de votre ambition mais de votre <strong>disponibilité réelle</strong>. Un trio intraday suppose d'être devant l'écran pendant votre plage horaire ; un trio swing se pilote en vingt minutes par jour. C'est exactement le raisonnement de la première section d'un <a href="/blog/plan-de-trading">plan de trading</a> — et c'est aussi pourquoi le trio doit être cohérent avec les <a href="/blog/sessions-de-trading-forex">sessions</a> que vous suivez.</p>
+
+    <h2>La séquence de lecture : toujours du haut vers le bas</h2>
+    <p>L'ordre n'est pas un détail de confort : c'est ce qui protège votre objectivité. La séquence correcte tient en quatre temps.</p>
+    <ul>
+      <li><strong>Contexte.</strong> Quelle est la structure de fond ? Quel sens est autorisé ?</li>
+      <li><strong>Structure.</strong> Où sont mes zones ? Le prix arrive-t-il sur l'une d'elles ?</li>
+      <li><strong>Exécution.</strong> Y a-t-il un déclencheur, et où se situe l'invalidation ?</li>
+      <li><strong>Dimensionnement.</strong> Cette distance d'invalidation se convertit en taille de position via le <a href="/blog/calculer-les-pips">calcul des pips</a>.</li>
+    </ul>
+    <p>Faite dans l'autre sens, la démarche s'inverse dangereusement : vous partez d'un signal séduisant en petite unité de temps, puis vous montez chercher de quoi le justifier. Ce n'est plus de l'analyse, c'est de la plaidoirie.</p>
+
+    <h2>Le piège du « timeframe shopping »</h2>
+    <p>C'est l'abus le plus répandu, et le plus coûteux. Il consiste à changer d'unité de temps jusqu'à en trouver une qui valide ce que vous voulez faire — ou qui rende acceptable une position déjà perdante.</p>
+    <p>Le scénario typique : votre trade en M15 est invalidé, alors vous ouvrez le H4 où « la tendance est toujours haussière », et vous gardez la position. Vous venez de changer de méthode en cours de trade. Votre stop n'a plus de sens, votre risque n'est plus celui que vous aviez calculé.</p>
+    <p>C'est du <strong>biais de confirmation outillé</strong> — le même mécanisme que celui décrit dans nos <a href="/blog/erreurs-psychologie-trading">erreurs de psychologie du trading</a>, en version graphique. Le remède est simple et sans appel : <strong>vos trois unités de temps sont écrites dans votre plan et ne changent jamais en cours de trade</strong>.</p>
+
+    <h2>Que faire quand les unités de temps se contredisent ?</h2>
+    <p>Question fréquente, et la réponse est plus simple qu'on ne le croit : <strong>la plus grande unité de temps a toujours le dernier mot</strong>.</p>
+    <p>Si le contexte est haussier et que l'exécution donne un signal de vente, vous ne vendez pas : vous attendez. Le signal contraire n'est pas une opportunité, c'est du bruit à l'échelle qui vous intéresse.</p>
+    <p>Il existe cependant un cas particulier utile : lorsque la grande unité de temps est en <em>range</em>, aucun sens n'est privilégié et vous pouvez travailler les deux bornes. Un contexte neutre n'interdit pas de trader — il interdit de trader une tendance qui n'existe pas.</p>
+
+    <h2>Les erreurs classiques</h2>
+    <ul>
+      <li><strong>Utiliser quatre unités de temps ou plus.</strong> Au-delà de trois, il y en a toujours une qui vous contredit, et la décision devient impossible.</li>
+      <li><strong>Choisir des unités trop proches</strong> (H1 et M30). Vous dupliquez l'information et croyez à une confirmation.</li>
+      <li><strong>Analyser une bougie non close.</strong> La dernière bougie de l'unité de contexte n'est pas terminée : ce qu'elle montre peut totalement changer d'ici sa clôture.</li>
+      <li><strong>Oublier que le stop se calcule sur l'exécution.</strong> Placer un stop d'unité de structure sur une entrée d'unité d'exécution annule tout le bénéfice de la méthode.</li>
+      <li><strong>Changer de trio parce que le marché a changé.</strong> Le trio se révise à froid, entre deux séances, comme n'importe quelle règle de <a href="/blog/gestion-du-risque-trading">gestion du risque</a>.</li>
+    </ul>
+
+    <h2>Le vrai bénéfice : moins de trades, mieux choisis</h2>
+    <p>Il faut le dire, car c'est souvent une déception avant d'être un avantage : l'analyse multi-timeframe va <strong>réduire votre nombre d'opportunités</strong>. Beaucoup de signaux séduisants en petite unité de temps seront désormais écartés parce que le contexte ne les autorise pas.</p>
+    <p>C'est précisément l'objectif. Vous échangez de la quantité contre de l'alignement, et l'alignement est ce qui fait qu'un setup a une chance de fonctionner plutôt qu'une chance sur deux.</p>
+    <p>Vérifiez-le sur vos propres chiffres plutôt que sur notre parole : notez dans votre <a href="/blog/comment-tenir-journal-trading">journal de trading</a>, pour chaque trade, si le contexte était aligné ou non. Après une trentaine d'occurrences, l'écart de performance entre les deux catégories est en général sans ambiguïté — et c'est la démonstration la plus convaincante qui existe.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Votre contexte est-il vraiment aligné ?</p>
+    <p>Envoyez la capture de votre graphique : le Setup Analyzer évalue la structure, la confluence et le ratio risque/rendement, puis vous rend un score argumenté avec forces et faiblesses.</p>
+    <a class="lt-btn lt-btn--primary" href="/analyzer-presentation">Découvrir le Setup Analyzer</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. L'analyse multi-timeframe améliore la sélection des configurations mais ne garantit aucun résultat. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que l'analyse multi-timeframe ?</h3>
+        <p>L'analyse multi-timeframe consiste à observer le même instrument sur plusieurs unités de temps pour séparer trois questions distinctes : dans quel sens travailler, où se situent les niveaux importants, et à quel moment précis entrer. Chaque unité de temps répond à une seule de ces questions, ce qui évite de tout demander à un unique graphique.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Combien d'unités de temps faut-il utiliser ?</h3>
+        <p>Trois suffisent et constituent la référence : une unité de contexte pour la tendance de fond, une unité de structure pour repérer les niveaux et la configuration, et une unité d'exécution pour le déclencheur et le placement du stop. Au-delà de trois, les signaux se contredisent et la décision devient impossible à prendre.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quel écart faut-il entre deux unités de temps ?</h3>
+        <p>Un facteur de quatre à six entre chaque niveau est un repère solide. Par exemple H4, H1 puis M15, ou journalier, H4 puis H1. Un écart plus faible fait voir deux fois la même information ; un écart trop grand rend le lien entre les graphiques difficile à établir, car les niveaux de l'unité supérieure deviennent trop éloignés.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Dans quel ordre faut-il lire les graphiques ?</h3>
+        <p>Toujours du plus grand vers le plus petit. On commence par l'unité de contexte pour déterminer le sens autorisé, puis l'unité de structure pour situer les zones, et seulement ensuite l'unité d'exécution pour chercher le déclencheur. L'ordre inverse conduit à trouver un signal séduisant puis à chercher une justification, ce qui est le mécanisme même du biais de confirmation.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le timeframe shopping ?</h3>
+        <p>C'est le fait de changer d'unité de temps jusqu'à en trouver une qui valide la position que l'on souhaite prendre, ou qui rend acceptable une position déjà perdante. C'est un biais de confirmation outillé : les unités de temps de travail doivent être fixées à l'avance dans le plan de trading et ne jamais varier en cours de trade.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature d'analyse technique sur le système des trois écrans et l'analyse multi-unités de temps, documentation méthodologique 2025-2026. Publié le 8 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/supports-et-resistances"><span class="t">Supports et résistances</span><span class="d">Les tracer sur la bonne unité de temps</span></a>
+        <a href="/blog/setups-de-trading"><span class="t">Les 7 setups les plus courants</span><span class="d">Ce que vous cherchez sur l'écran de structure</span></a>
+        <a href="/blog/quest-ce-quun-setup"><span class="t">Qu'est-ce qu'un setup&nbsp;?</span><span class="d">Contexte, déclencheur, invalidation, objectif</span></a>
+        <a href="/blog/plan-de-trading"><span class="t">Plan de trading</span><span class="d">Y figer son trio d'unités de temps</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
