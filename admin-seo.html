@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<title>Admin — Titres &amp; SEO | Le Terminal</title>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<style>
+.sq-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* --- portail --- */
+.sq-gate { max-width: 380px; margin: 14vh auto; text-align: center; }
+.sq-gate h1 { font-family: var(--font-display); text-transform: uppercase; font-size: 2.2rem; line-height: 1; margin-bottom: 10px; color: var(--text-title); }
+.sq-gate p { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; }
+.sq-in { width: 100%; font-family: var(--font-mono); font-size: 14px; color: var(--text-title); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 11px 14px; }
+.sq-in:focus { outline: none; border-color: var(--accent); }
+.sq-err { margin-top: 10px; font-size: 13px; color: var(--bear); min-height: 18px; }
+
+/* --- en-tête --- */
+.sq-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 8px; }
+.sq-head h1 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 3rem); line-height: 0.98; margin: 0; color: var(--text-title); }
+.sq-sub { font-size: 14px; color: var(--text-muted); margin: 10px 0 26px; max-width: 68ch; line-height: 1.6; }
+
+.sq-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 22px; }
+.sq-search { flex: 1 1 240px; max-width: 340px; }
+.sq-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); background: transparent; border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 10px 15px; cursor: pointer; transition: color .3s var(--ease-out), border-color .3s var(--ease-out), background .3s var(--ease-out); }
+.sq-btn:hover { color: var(--text-title); border-color: var(--border); }
+.sq-btn--go { color: var(--accent); border-color: var(--accent-glow); background: var(--accent-glow-soft); }
+.sq-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.sq-stats { display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 26px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--text-muted); }
+.sq-stats b { color: var(--text-title); font-size: 15px; }
+.sq-stats .warn b { color: var(--neutral); }
+.sq-stats .bad b { color: var(--bear); }
+
+/* --- carte page --- */
+.sq-page { border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: linear-gradient(165deg, rgba(59,125,255,0.04), rgba(16,23,36,0.5)); padding: 20px 22px; margin-bottom: 14px; }
+.sq-page[hidden] { display: none; }
+.sq-page__top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.sq-url { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: none; letter-spacing: 0.02em; }
+.sq-url:hover { color: var(--accent-bright); text-decoration: underline; }
+.sq-flags { display: flex; flex-wrap: wrap; gap: 6px; }
+.sq-flag { font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: var(--r-sm); }
+.sq-flag--ok { color: var(--bull); border: 1px solid rgba(74,222,156,0.35); }
+.sq-flag--warn { color: var(--neutral); border: 1px solid rgba(232,194,104,0.4); }
+.sq-flag--bad { color: var(--bear); border: 1px solid rgba(240,100,122,0.4); }
+
+.sq-field { margin-bottom: 12px; }
+.sq-lbl { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+.sq-count { font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
+.sq-count--ok { color: var(--bull); }
+.sq-count--warn { color: var(--neutral); }
+.sq-count--bad { color: var(--bear); }
+.sq-ta { width: 100%; font-family: var(--font-body, inherit); font-size: 14px; line-height: 1.5; color: var(--text-title); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 9px 12px; resize: vertical; }
+.sq-ta:focus { outline: none; border-color: var(--accent); }
+.sq-ta.is-dirty { border-color: var(--neutral); background: rgba(232,194,104,0.05); }
+
+.sq-out { margin-top: 14px; border-top: 1px solid var(--border-subtle); padding-top: 14px; }
+.sq-row { display: grid; grid-template-columns: 46px 1fr; gap: 10px; align-items: start; margin-bottom: 7px; }
+.sq-row--h3 { padding-left: 26px; }
+.sq-tag { font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); padding-top: 9px; }
+.sq-row--h3 .sq-tag { color: var(--text-muted); }
+
+.sq-empty { text-align: center; padding: 50px 0; color: var(--text-muted); font-size: 14px; }
+.sq-load { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; }
+
+@media (max-width: 640px) {
+  .sq-wrap { padding: 26px 16px 60px; }
+  .sq-row { grid-template-columns: 38px 1fr; }
+  .sq-row--h3 { padding-left: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- PORTAIL -->
+<div class="sq-wrap" id="sqGate">
+  <div class="sq-gate">
+    <h1>Titres &amp; SEO</h1>
+    <p>Espace privé. Saisissez le mot de passe administrateur.</p>
+    <input class="sq-in" id="sqPass" type="password" placeholder="Mot de passe admin" autocomplete="current-password">
+    <div class="sq-err" id="sqErr"></div>
+    <button class="sq-btn sq-btn--go" id="sqGo" style="margin-top:6px">Entrer</button>
+  </div>
+</div>
+
+<!-- TABLEAU DE BORD -->
+<div class="sq-wrap" id="sqApp" hidden>
+  <div class="sq-head">
+    <h1>Titres &amp; SEO</h1>
+    <div class="sq-bar" style="margin:0">
+      <button class="sq-btn" id="sqReload">Recharger</button>
+      <button class="sq-btn sq-btn--go" id="sqCopy">Copier les modifications</button>
+    </div>
+  </div>
+  <p class="sq-sub">
+    Toutes les pages du site, lues <strong>en direct</strong> depuis le sitemap : cette liste ne peut pas être périmée.
+    Les champs sont modifiables pour préparer vos changements — la sauvegarde dans les fichiers n'est pas automatique,
+    utilisez « Copier les modifications » puis transmettez le résultat.
+  </p>
+
+  <div class="sq-bar">
+    <input class="sq-in sq-search" id="sqFilter" type="search" placeholder="Filtrer par URL ou par titre…">
+    <button class="sq-btn" data-f="all">Tout</button>
+    <button class="sq-btn" data-f="blog">Blog</button>
+    <button class="sq-btn" data-f="pages">Pages</button>
+    <button class="sq-btn" data-f="issues">À corriger</button>
+  </div>
+
+  <div class="sq-stats" id="sqStats"><span class="sq-load">Lecture des pages…</span></div>
+  <div id="sqList"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ADMIN_PASS = 'leterminal-admin-2026';
+  var MAX_TITLE = 65, MAX_DESC = 160;
+
+  var gate = document.getElementById('sqGate'), app = document.getElementById('sqApp');
+
+  function unlock() {
+    gate.hidden = true; app.hidden = false;
+    try { sessionStorage.setItem('lt_seo_ok', '1'); } catch (e) {}
+    load();
+  }
+  document.getElementById('sqGo').addEventListener('click', function () {
+    if (document.getElementById('sqPass').value !== ADMIN_PASS) {
+      document.getElementById('sqErr').textContent = 'Mot de passe incorrect.'; return;
+    }
+    unlock();
+  });
+  document.getElementById('sqPass').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('sqGo').click();
+  });
+  try { if (sessionStorage.getItem('lt_seo_ok') === '1') unlock(); } catch (e) {}
+
+  var DATA = [];
+
+  /* Récupère la liste des URL depuis le sitemap : toute nouvelle page y est
+     automatiquement prise en compte, sans rien à maintenir ici. */
+  function urls() {
+    return fetch('/sitemap.xml', { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (xml) {
+        var d = new DOMParser().parseFromString(xml, 'application/xml');
+        var out = [];
+        Array.prototype.forEach.call(d.querySelectorAll('loc'), function (n) {
+          var p;
+          try { p = new URL(n.textContent.trim()).pathname; } catch (e) { p = n.textContent.trim(); }
+          if (p !== '/' && p.slice(-1) === '/') p = p.slice(0, -1);
+          if (out.indexOf(p) === -1) out.push(p);
+        });
+        return out;
+      });
+  }
+
+  /* cleanUrls en production ; en local le .html est nécessaire → double essai. */
+  function grab(path) {
+    return fetch(path, { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(0); })
+      .catch(function () {
+        var alt = path === '/' ? '/index.html' : path + '.html';
+        return fetch(alt, { cache: 'no-store' }).then(function (r) {
+          return r.ok ? r.text() : Promise.reject(0);
+        });
+      });
+  }
+
+  function parse(path, html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    /* On écarte le chrome du site : seuls les titres du contenu comptent. */
+    Array.prototype.forEach.call(
+      doc.querySelectorAll('.lt-chrome, header.lt-nav, footer, .lt-footer, .lt-dock, nav'),
+      function (n) { n.remove(); }
+    );
+    var scope = doc.querySelector('article.bl-art') || doc.querySelector('main') || doc.body;
+    var t = doc.querySelector('title');
+    var d = doc.querySelector('meta[name="description"]');
+    var hs = [];
+    Array.prototype.forEach.call(scope.querySelectorAll('h1, h2, h3'), function (h) {
+      /* les <br> ne portent aucune espace : sans ça « Les outils<br>du cockpit »
+         ressortirait collé. On les remplace par une espace avant lecture. */
+      var c = h.cloneNode(true);
+      Array.prototype.forEach.call(c.querySelectorAll('br'), function (br) {
+        br.parentNode.replaceChild(doc.createTextNode(' '), br);
+      });
+      var txt = (c.textContent || '').replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+      if (txt) hs.push({ lvl: +h.tagName[1], txt: txt });
+    });
+    return {
+      path: path,
+      isBlog: path.indexOf('/blog/') === 0,
+      title: t ? t.textContent.trim() : '',
+      desc: d ? (d.getAttribute('content') || '').trim() : '',
+      heads: hs
+    };
+  }
+
+  function issues(p) {
+    var out = [];
+    var n1 = p.heads.filter(function (h) { return h.lvl === 1; }).length;
+    if (!p.title) out.push(['bad', 'title absent']);
+    else if (p.title.length > MAX_TITLE) out.push(['warn', 'title ' + p.title.length + ' car.']);
+    if (!p.desc) out.push(['bad', 'meta absente']);
+    else if (p.desc.length > MAX_DESC) out.push(['warn', 'meta ' + p.desc.length + ' car.']);
+    if (n1 === 0) out.push(['bad', 'aucun H1']);
+    else if (n1 > 1) out.push(['bad', n1 + ' H1']);
+    var prev = 0, skip = false;
+    p.heads.forEach(function (h) { if (prev && h.lvl > prev + 1) skip = true; prev = h.lvl; });
+    if (skip) out.push(['warn', 'saut de niveau']);
+    return out;
+  }
+
+  function counter(len, max) {
+    var c = len > max ? 'bad' : (len > max - 8 ? 'warn' : 'ok');
+    return '<span class="sq-count sq-count--' + c + '">' + len + ' / ' + max + '</span>';
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function render() {
+    var list = document.getElementById('sqList');
+    list.innerHTML = DATA.map(function (p, i) {
+      var fl = issues(p);
+      var flags = fl.length
+        ? fl.map(function (f) { return '<span class="sq-flag sq-flag--' + f[0] + '">' + esc(f[1]) + '</span>'; }).join('')
+        : '<span class="sq-flag sq-flag--ok">conforme</span>';
+      var rows = p.heads.map(function (h, j) {
+        return '<div class="sq-row' + (h.lvl === 3 ? ' sq-row--h3' : '') + '">' +
+          '<span class="sq-tag">H' + h.lvl + '</span>' +
+          '<textarea class="sq-ta" rows="1" data-p="' + i + '" data-k="h' + j + '">' + esc(h.txt) + '</textarea>' +
+        '</div>';
+      }).join('');
+      return '<section class="sq-page" data-blog="' + (p.isBlog ? 1 : 0) + '" data-issues="' + (fl.length ? 1 : 0) + '">' +
+        '<div class="sq-page__top">' +
+          '<a class="sq-url" href="' + esc(p.path) + '" target="_blank" rel="noopener">' + esc(p.path) + '</a>' +
+          '<span class="sq-flags">' + flags + '</span>' +
+        '</div>' +
+        '<div class="sq-field"><div class="sq-lbl"><span>Title</span>' + counter(p.title.length, MAX_TITLE) + '</div>' +
+          '<textarea class="sq-ta" rows="1" data-p="' + i + '" data-k="title">' + esc(p.title) + '</textarea></div>' +
+        '<div class="sq-field"><div class="sq-lbl"><span>Meta description</span>' + counter(p.desc.length, MAX_DESC) + '</div>' +
+          '<textarea class="sq-ta" rows="2" data-p="' + i + '" data-k="desc">' + esc(p.desc) + '</textarea></div>' +
+        '<div class="sq-out">' + (rows || '<span class="sq-load">aucun titre détecté</span>') + '</div>' +
+      '</section>';
+    }).join('') || '<p class="sq-empty">Aucune page lue.</p>';
+
+    /* hauteur auto + marquage des champs modifiés */
+    Array.prototype.forEach.call(list.querySelectorAll('.sq-ta'), function (ta) {
+      ta.dataset.orig = ta.value;
+      fit(ta);
+      ta.addEventListener('input', function () {
+        fit(ta);
+        ta.classList.toggle('is-dirty', ta.value !== ta.dataset.orig);
+      });
+    });
+
+    var nIss = DATA.filter(function (p) { return issues(p).length; }).length;
+    var nH = DATA.reduce(function (a, p) { return a + p.heads.length; }, 0);
+    document.getElementById('sqStats').innerHTML =
+      '<span><b>' + DATA.length + '</b> pages</span>' +
+      '<span><b>' + DATA.filter(function (p) { return p.isBlog; }).length + '</b> articles</span>' +
+      '<span><b>' + nH + '</b> titres</span>' +
+      '<span class="' + (nIss ? 'warn' : '') + '"><b>' + nIss + '</b> à corriger</span>';
+  }
+
+  function fit(ta) { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 2) + 'px'; }
+
+  function load() {
+    document.getElementById('sqStats').innerHTML = '<span class="sq-load">Lecture des pages…</span>';
+    document.getElementById('sqList').innerHTML = '';
+    DATA = [];
+    urls().then(function (paths) {
+      var i = 0, res = new Array(paths.length);
+      function next() {
+        if (i >= paths.length) return Promise.resolve();
+        var k = i++;
+        return grab(paths[k])
+          .then(function (h) { res[k] = parse(paths[k], h); })
+          .catch(function () { res[k] = null; })
+          .then(next);
+      }
+      /* 6 requêtes en parallèle : rapide sans saturer le réseau */
+      return Promise.all([next(), next(), next(), next(), next(), next()]).then(function () {
+        DATA = res.filter(Boolean);
+        render();
+      });
+    }).catch(function () {
+      document.getElementById('sqStats').innerHTML =
+        '<span class="sq-load">Lecture impossible — le sitemap est-il accessible ?</span>';
+    });
+  }
+
+  document.getElementById('sqReload').addEventListener('click', load);
+
+  /* filtres */
+  document.getElementById('sqFilter').addEventListener('input', applyFilter);
+  Array.prototype.forEach.call(document.querySelectorAll('.sq-btn[data-f]'), function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.sq-btn[data-f]').forEach(function (x) { x.classList.remove('sq-btn--go'); });
+      b.classList.add('sq-btn--go');
+      applyFilter();
+    });
+  });
+  function applyFilter() {
+    var q = document.getElementById('sqFilter').value.toLowerCase().trim();
+    var act = document.querySelector('.sq-btn[data-f].sq-btn--go');
+    var f = act ? act.getAttribute('data-f') : 'all';
+    Array.prototype.forEach.call(document.querySelectorAll('.sq-page'), function (el) {
+      var isBlog = el.getAttribute('data-blog') === '1';
+      var hasIss = el.getAttribute('data-issues') === '1';
+      var ok = f === 'all' || (f === 'blog' && isBlog) || (f === 'pages' && !isBlog) || (f === 'issues' && hasIss);
+      if (ok && q) ok = el.textContent.toLowerCase().indexOf(q) !== -1;
+      el.hidden = !ok;
+    });
+  }
+
+  /* export des modifications */
+  document.getElementById('sqCopy').addEventListener('click', function () {
+    var out = [], cur = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.sq-ta'), function (ta) {
+      if (ta.value === ta.dataset.orig) return;
+      var p = DATA[+ta.dataset.p], k = ta.dataset.k;
+      if (cur !== p.path) { cur = p.path; out.push('\n' + p.path); }
+      var lbl = k === 'title' ? 'TITLE' : (k === 'desc' ? 'META DESCRIPTION' : 'H' + p.heads[+k.slice(1)].lvl);
+      out.push('  ' + lbl + '\n    avant : ' + ta.dataset.orig + '\n    après : ' + ta.value);
+    });
+    var txt = out.length
+      ? 'MODIFICATIONS SEO À APPLIQUER' + out.join('\n')
+      : 'Aucune modification.';
+    var btn = this;
+    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copier les modifications'; }, 2200); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { done(out.length ? 'Copié' : 'Rien à copier'); },
+                                             function () { window.prompt('Copiez ce texte :', txt); });
+    } else { window.prompt('Copiez ce texte :', txt); }
+  });
+})();
+</script>
+<script src="/theme.js"></script>
+</body>
+</html>
