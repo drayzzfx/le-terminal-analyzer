@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Effet de levier : ce n'est pas votre risque | Le Terminal</title>
+<meta name="description" content="Effet de levier : ce qu'il fait vraiment, le calcul de la marge, l'appel de marge, et pourquoi c'est la taille de position qui fixe votre risque.">
+<link rel="canonical" href="https://www.leterminal.net/blog/effet-de-levier-trading">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Effet de levier : ce n'est pas votre risque | Le Terminal">
+<meta property="og:description" content="Effet de levier : ce qu'il fait vraiment, le calcul de la marge, l'appel de marge, et pourquoi c'est la taille de position qui fixe votre risque.">
+<meta property="og:url" content="https://www.leterminal.net/blog/effet-de-levier-trading">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/effet-de-levier-trading-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Effet de levier et marge en trading : même risque à levier différent, et niveau d'appel de marge — Le Terminal">
+<meta property="article:published_time" content="2026-08-09">
+<meta property="article:modified_time" content="2026-08-09">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Effet de levier : ce n'est pas votre risque">
+<meta name="twitter:description" content="Le levier fixe la marge immobilisée, pas la perte possible. Deux positions identiques à levier 1:30 et 1:500 risquent exactement la même chose.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/effet-de-levier-trading-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Effet de levier en trading : ce n'est pas votre risque",
+      "description": "Ce que fait réellement l'effet de levier, comment se calcule la marge requise, ce qu'est un appel de marge et un stop out, et pourquoi c'est la taille de position et la distance au stop — et non le levier — qui déterminent la perte possible.",
+      "datePublished": "2026-08-09",
+      "dateModified": "2026-08-09",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/effet-de-levier-trading-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/effet-de-levier-trading" },
+      "keywords": "effet de levier, effet de levier trading, marge, appel de marge, stop out, taille de position, levier forex"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que l'effet de levier en trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'effet de levier permet de contrôler une position d'une valeur supérieure au capital immobilisé. Un levier de 1 pour 30 signifie qu'une position de 30 000 euros ne mobilise que 1 000 euros de marge. Le levier ne modifie ni le prix de l'instrument ni l'ampleur de ses variations : il détermine uniquement la part de votre capital bloquée en garantie pendant que la position est ouverte."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "L'effet de levier augmente-t-il le risque ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pas directement. La perte possible sur un trade dépend de la taille de position et de la distance au stop, pas du levier disponible. Deux traders ouvrant la même position avec le même stop perdront le même montant, que leur levier soit de 1 pour 30 ou de 1 pour 500. Le levier devient dangereux indirectement, parce qu'un levier élevé rend techniquement possible une taille de position déraisonnable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment calculer la marge requise ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On divise la valeur nominale de la position par le levier. Une position d'un lot standard sur une paire de devises représente 100 000 unités : avec un levier de 1 pour 30, la marge immobilisée est d'environ 3 333 euros ; avec un levier de 1 pour 100, elle tombe à 1 000 euros. Cette marge n'est pas une dépense, elle est bloquée puis restituée à la clôture."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un appel de marge et un stop out ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le niveau de marge correspond à votre équité divisée par la marge utilisée. Quand il descend sous un seuil défini par le courtier, un appel de marge vous avertit que la garantie devient insuffisante. Si la baisse se poursuit jusqu'au seuil de stop out, le courtier ferme automatiquement des positions pour protéger le compte. Dans l'Union européenne, la clôture intervient au plus tard lorsque l'équité atteint la moitié de la marge initiale."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel effet de levier choisir ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le levier utile est celui qui permet d'ouvrir la taille de position calculée à partir de votre risque, sans immobiliser une part excessive du capital. Pour un trader qui risque un pourcentage faible et fixe par trade, un levier modéré suffit largement. Un levier très élevé n'apporte rien de plus à cette approche : il ne fait qu'augmenter la taille maximale techniquement accessible."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Effet de levier en trading", "item": "https://www.leterminal.net/blog/effet-de-levier-trading" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Effet de levier</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Calcul</span>
+  <h1 class="bl-art__title">Effet de levier en trading : ce n'est pas votre risque</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 9, 2026">Publié le 9 août 2026</span>
+    <span>·</span>
+    <span data-en="11 min read">11 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/effet-de-levier-trading.webp" width="1600" height="900" alt="Effet de levier en trading : marge immobilisée selon le levier, à taille de position et risque identiques" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> C'est la confusion la plus répandue du trading : le levier ne détermine <strong>pas</strong> votre risque. Il fixe uniquement la <strong>marge immobilisée</strong>. Deux traders qui ouvrent la même position avec le même stop perdent exactement la même chose, que leur levier soit de 1:30 ou de 1:500. Ce qui décide de la perte, c'est <strong>la taille de position et la distance au stop</strong> — rien d'autre.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>« L'effet de levier est dangereux. » On le lit partout, y compris dans nos propres avertissements réglementaires. C'est vrai — mais l'explication qui accompagne cette phrase est presque toujours fausse, et cette erreur de raisonnement coûte cher.</p>
+    <p>Le raisonnement erroné dit : plus de levier, donc plus de risque. Le raisonnement juste dit : plus de levier, donc <em>plus de taille de position techniquement accessible</em> — et c'est la taille, si on la prend, qui crée le risque. La nuance paraît subtile. Elle est décisive, parce qu'elle désigne le bon levier de contrôle.</p>
+
+    <h2>Ce que fait réellement l'effet de levier</h2>
+    <p>Le levier vous permet de contrôler une position dont la valeur dépasse le capital immobilisé. Avec un levier de <strong>1:30</strong>, une position de 30 000 € ne bloque que 1 000 € sur votre compte.</p>
+    <p>Ce qu'il faut bien saisir : cette somme n'est <strong>pas une dépense</strong>. C'est une <em>garantie</em>, bloquée pendant la durée de la position et restituée intégralement à la clôture. Vous ne « payez » pas la marge, vous l'immobilisez.</p>
+    <p>Et surtout, le levier <strong>ne change rien à l'instrument</strong>. L'EUR/USD ne bouge ni plus ni moins selon votre levier. Un mouvement de 20 pips reste un mouvement de 20 pips. Le levier n'agit que sur une seule chose : la part de votre capital réservée en garantie.</p>
+
+    <h2>Le calcul de la marge</h2>
+    <p>La formule est simple :</p>
+    <div class="bl-note">
+      <p><strong>Marge requise</strong> = Valeur nominale de la position ÷ Levier</p>
+    </div>
+    <p>Un lot standard sur une paire de devises représente 100 000 unités. Selon le levier :</p>
+    <div class="bl-note">
+      <p><strong>Levier 1:30</strong> → 100 000 ÷ 30 = <strong>3 333 €</strong> immobilisés<br>
+      <strong>Levier 1:100</strong> → 100 000 ÷ 100 = <strong>1 000 €</strong> immobilisés<br>
+      <strong>Levier 1:500</strong> → 100 000 ÷ 500 = <strong>200 €</strong> immobilisés</p>
+    </div>
+    <p>Dans les trois cas, <strong>c'est exactement la même position</strong>. Même exposition, même valeur du pip, même gain et même perte à chaque mouvement du prix. Seule la somme bloquée diffère.</p>
+    <p>À noter pour le contexte français et européen : les leviers accessibles aux particuliers sont plafonnés par la réglementation, généralement autour de 1:30 sur les paires de devises majeures, et nettement moins sur les autres classes d'actifs. Ces plafonds varient selon l'instrument et le statut du client — vérifiez ceux de votre courtier.</p>
+
+    <h2>Pourquoi le levier n'est pas votre risque</h2>
+    <p>Voici le cœur de l'article. Votre perte sur un trade se calcule ainsi :</p>
+    <div class="bl-note">
+      <p><strong>Perte</strong> = Distance au stop (en pips) × Valeur du pip × Taille de position</p>
+    </div>
+    <p><strong>Le levier n'apparaît nulle part dans cette formule.</strong> Relisez-la : il n'y est pas.</p>
+    <p>Prenons deux traders sur un compte de 10 000 €. Tous deux ouvrent 0,5 lot d'EUR/USD avec un stop à 20 pips. Le premier a un levier de 1:30, le second de 1:500.</p>
+    <div class="bl-note">
+      <p><strong>Trader A (1:30)</strong> — marge immobilisée : 1 667 €. Perte si le stop est touché : <strong>100 €</strong>.<br>
+      <strong>Trader B (1:500)</strong> — marge immobilisée : 100 €. Perte si le stop est touché : <strong>100 €</strong>.</p>
+    </div>
+    <p>Rigoureusement le même risque. Le second a simplement plus de capital disponible pour d'autres positions.</p>
+    <p>Alors pourquoi le levier a-t-il si mauvaise réputation ? Parce qu'il agit comme un <strong>facilitateur</strong>. Avec 1:30, notre trader ne peut pas ouvrir 5 lots sur un compte de 10 000 € — la marge requise dépasserait son capital. Avec 1:500, il le peut techniquement. Et s'il le fait, un mouvement de 20 pips lui coûte 1 000 €, soit 10 % du compte.</p>
+    <p>Le levier ne l'a pas forcé. Il a simplement retiré la barrière qui l'en empêchait. <strong>Le danger n'est pas le levier, c'est l'absence de règle de taille.</strong></p>
+
+    <h2>Ce qui détermine vraiment votre risque</h2>
+    <p>La séquence correcte est toujours la même, et elle ignore complètement le levier :</p>
+    <ul>
+      <li><strong>Le pourcentage de risque</strong> que vous acceptez par trade — 0,5 à 1 % du capital, fixé à froid dans votre <a href="/blog/plan-de-trading">plan de trading</a>.</li>
+      <li><strong>La distance à l'invalidation</strong>, donnée par le graphique et non par votre envie.</li>
+      <li><strong>La taille de position</strong>, qui découle mécaniquement des deux précédents, via le <a href="/blog/calculer-les-pips">calcul des pips</a>.</li>
+    </ul>
+    <p>Le levier n'intervient qu'<em>après</em>, pour une seule question : ai-je assez de marge disponible pour ouvrir cette taille ? Si oui, il n'a plus aucun rôle. C'est exactement la logique développée dans notre article sur la <a href="/blog/gestion-du-risque-trading">gestion du risque en trading</a>.</p>
+
+    <h2>Appel de marge et stop out</h2>
+    <p>Le levier a tout de même un effet bien réel, mais il se situe ailleurs : sur votre <strong>capacité à encaisser une perte latente</strong>.</p>
+    <p>Votre <strong>niveau de marge</strong> se calcule ainsi :</p>
+    <div class="bl-note">
+      <p><strong>Niveau de marge</strong> = (Équité ÷ Marge utilisée) × 100</p>
+    </div>
+    <p>Quand ce niveau descend sous un seuil défini par votre courtier, vous recevez un <strong>appel de marge</strong> : un avertissement signalant que la garantie devient insuffisante. Si la baisse continue jusqu'au seuil de <strong>stop out</strong>, le courtier ferme automatiquement des positions — sans vous demander votre avis.</p>
+    <p>Dans l'Union européenne, la clôture automatique intervient au plus tard lorsque l'équité tombe à la moitié de la marge initiale. Les seuils d'alerte précis varient d'un courtier à l'autre : ils figurent dans vos conditions de compte.</p>
+    <p>Le lien avec le levier est ici direct et paradoxal : <strong>un levier plus élevé immobilise moins de marge, donc laisse plus d'équité libre</strong>, et éloigne le stop out. C'est l'inverse de l'intuition commune. Ce qui rapproche vraiment le stop out, c'est le fait d'ouvrir trop de positions à la fois — pas le levier lui-même.</p>
+
+    <h2>Quel levier choisir</h2>
+    <p>Si vous appliquez une règle de risque fixe, la réponse est décevante et rassurante : <strong>cela n'a presque aucune importance.</strong></p>
+    <p>Le bon levier est simplement celui qui vous permet d'ouvrir la taille calculée à partir de votre risque, sans immobiliser une part absurde du capital. Un levier modéré y suffit dans l'immense majorité des cas.</p>
+    <p>Un levier très élevé n'apporte rien de plus à cette approche — il augmente uniquement la taille maximale techniquement accessible, c'est-à-dire précisément ce dont vous n'avez pas besoin. Et si vous vous surprenez à <em>chercher</em> un levier plus fort, la question à vous poser n'est pas « quel courtier ? » mais « pourquoi ai-je besoin d'une position plus grosse que ce que mon capital autorise ? ».</p>
+
+    <h2>Les erreurs classiques</h2>
+    <ul>
+      <li><strong>Croire qu'on « perd son levier ».</strong> On ne perd jamais du levier, on perd sa marge. Le levier n'est pas une somme d'argent, c'est un ratio.</li>
+      <li><strong>Baisser son levier en croyant réduire son risque.</strong> Sans changer la taille de position, cela ne change rien à la perte possible — seulement la marge bloquée.</li>
+      <li><strong>Ouvrir en fonction de la marge disponible.</strong> « Il me reste 2 000 € de marge, donc je peux prendre 2 lots » est le raisonnement inverse du bon. La taille se déduit du risque, jamais de la marge restante.</li>
+      <li><strong>Multiplier les positions simultanées.</strong> Chacune consomme de la marge et cumule le risque. C'est la vraie route vers le stop out — et l'une des <a href="/blog/erreurs-traders-debutants">erreurs de débutant</a> les plus fréquentes.</li>
+      <li><strong>Oublier le coût de portage.</strong> Une position à fort nominal maintenue plusieurs jours génère des frais de financement proportionnels à sa taille.</li>
+    </ul>
+
+    <h2>La bonne façon d'y penser</h2>
+    <p>Une image utile pour finir. Le levier est le <strong>plafond</strong> d'une pièce : il fixe la hauteur maximale que vous pouvez atteindre. La taille de position, c'est <strong>l'échelle sur laquelle vous montez réellement</strong>.</p>
+    <p>Un plafond haut ne vous fait pas tomber. Monter trop haut sur l'échelle, si. Et quelle que soit la hauteur du plafond, c'est vous qui décidez du nombre de barreaux.</p>
+    <p>Concrètement : fixez votre pourcentage de risque, laissez le graphique fixer votre stop, calculez la taille qui en découle, et cessez complètement de penser au levier. Il redeviendra ce qu'il aurait toujours dû être — un paramètre technique de votre compte, pas une décision de trading.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Calculez la taille, oubliez le levier</p>
+    <p>Capital, pourcentage de risque, paire, distance de stop : le calculateur du Terminal vous rend la taille exacte à prendre — la seule variable qui détermine réellement votre perte.</p>
+    <a class="lt-btn lt-btn--primary" href="/calculateur">Ouvrir le calculateur</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Le trading sur produits à effet de levier comporte un risque élevé de perte rapide en capital, pouvant dépasser le dépôt initial. Les plafonds de levier, seuils d'appel de marge et de stop out varient selon les instruments, les courtiers et votre statut : seules les conditions de votre compte font foi. Les montants cités sont des illustrations pédagogiques.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que l'effet de levier en trading ?</h3>
+        <p>L'effet de levier permet de contrôler une position d'une valeur supérieure au capital immobilisé. Un levier de 1 pour 30 signifie qu'une position de 30 000 euros ne mobilise que 1 000 euros de marge. Le levier ne modifie ni le prix de l'instrument ni l'ampleur de ses variations : il détermine uniquement la part de votre capital bloquée en garantie pendant que la position est ouverte.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>L'effet de levier augmente-t-il le risque ?</h3>
+        <p>Pas directement. La perte possible sur un trade dépend de la taille de position et de la distance au stop, pas du levier disponible. Deux traders ouvrant la même position avec le même stop perdront le même montant, que leur levier soit de 1 pour 30 ou de 1 pour 500. Le levier devient dangereux indirectement, parce qu'un levier élevé rend techniquement possible une taille de position déraisonnable.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Comment calculer la marge requise ?</h3>
+        <p>On divise la valeur nominale de la position par le levier. Une position d'un lot standard sur une paire de devises représente 100 000 unités : avec un levier de 1 pour 30, la marge immobilisée est d'environ 3 333 euros ; avec un levier de 1 pour 100, elle tombe à 1 000 euros. Cette marge n'est pas une dépense, elle est bloquée puis restituée à la clôture.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un appel de marge et un stop out ?</h3>
+        <p>Le niveau de marge correspond à votre équité divisée par la marge utilisée. Quand il descend sous un seuil défini par le courtier, un appel de marge vous avertit que la garantie devient insuffisante. Si la baisse se poursuit jusqu'au seuil de stop out, le courtier ferme automatiquement des positions pour protéger le compte. Dans l'Union européenne, la clôture intervient au plus tard lorsque l'équité atteint la moitié de la marge initiale.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quel effet de levier choisir ?</h3>
+        <p>Le levier utile est celui qui permet d'ouvrir la taille de position calculée à partir de votre risque, sans immobiliser une part excessive du capital. Pour un trader qui risque un pourcentage faible et fixe par trade, un levier modéré suffit largement. Un levier très élevé n'apporte rien de plus à cette approche : il ne fait qu'augmenter la taille maximale techniquement accessible.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : documentation réglementaire européenne sur les plafonds de levier et la clôture automatique des positions, spécifications de contrat standard du marché des changes, 2025-2026. Publié le 9 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/calculateur"><span class="t">Calculateur de position</span><span class="d">La taille exacte, calculée depuis votre risque</span></a>
+        <a href="/blog/calculer-les-pips"><span class="t">Calcul des pips</span><span class="d">De la distance de stop à la taille de lot</span></a>
+        <a href="/blog/gestion-du-risque-trading"><span class="t">Gestion du risque en trading</span><span class="d">Le pourcentage fixe qui décide de tout</span></a>
+        <a href="/blog/erreurs-traders-debutants"><span class="t">Les erreurs des traders débutants</span><span class="d">Le risque mal calculé arrive en tête</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
