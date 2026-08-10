@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spread, swap, commission : le coût réel du trading | Le Terminal</title>
+<meta name="description" content="Spread, commission, swap, slippage : les quatre frais qui grignotent un compte, comment les chiffrer, et pourquoi ils décident souvent du résultat annuel.">
+<link rel="canonical" href="https://www.leterminal.net/blog/couts-du-trading">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Spread, swap, commission : le coût réel du trading | Le Terminal">
+<meta property="og:description" content="Spread, commission, swap, slippage : les quatre frais qui grignotent un compte, comment les chiffrer, et pourquoi ils décident souvent du résultat annuel.">
+<meta property="og:url" content="https://www.leterminal.net/blog/couts-du-trading">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/couts-du-trading-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les quatre coûts du trading : spread, commission, swap et slippage, et leur poids annuel — Le Terminal">
+<meta property="article:published_time" content="2026-08-10">
+<meta property="article:modified_time" content="2026-08-10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Spread, swap, commission : le coût réel du trading">
+<meta name="twitter:description" content="Vous payez avant même d'avoir raison. Les quatre frais chiffrés, et pourquoi ils pèsent plus lourd que vos trades perdants.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/couts-du-trading-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Spread, swap et commissions : le coût réel de vos trades",
+      "description": "Les quatre postes de coût du trading — spread, commission, swap de financement et slippage — expliqués et chiffrés, avec l'effet cumulé sur une année et les leviers concrets pour les réduire.",
+      "datePublished": "2026-08-10",
+      "dateModified": "2026-08-10",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/couts-du-trading-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/couts-du-trading" },
+      "keywords": "coût du trading, spread, commission, swap, slippage, frais de trading, financement overnight"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le spread en trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le spread est l'écart entre le prix d'achat et le prix de vente affichés simultanément. Il constitue la rémunération principale de nombreux courtiers et se paie dès l'ouverture de la position : celle-ci démarre en perte de la valeur du spread. Sur une paire majeure, il représente souvent une fraction de pip à un pip en conditions normales, mais il s'élargit fortement lors des annonces et en dehors des heures liquides."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le swap en trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le swap, ou frais de financement overnight, est appliqué à chaque position conservée au-delà de la clôture quotidienne. Il découle de l'écart de taux d'intérêt entre les deux devises de la paire et peut être négatif ou positif. Sur le marché des changes, il est généralement triplé le mercredi pour couvrir le week-end à venir, en raison du délai de règlement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien coûtent réellement les frais de trading sur un an ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tout dépend du nombre de trades. Un swing trader effectuant deux opérations par semaine supporte des frais marginaux. Un trader intraday réalisant plusieurs opérations quotidiennes peut voir le cumul annuel des spreads et commissions atteindre une part très significative de son capital, parfois comparable à la performance qu'il vise. C'est pourquoi le coût par trade doit être intégré au calcul du ratio risque/rendement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre spread et commission ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ce sont deux modes de rémunération du courtier. Dans un compte à spread seul, la marge du courtier est incluse dans l'écart de prix. Dans un compte à commission, le spread affiché est plus serré mais une commission fixe est facturée à l'ouverture et à la clôture. Le coût total réel se compare en additionnant les deux composantes, jamais en regardant le spread seul."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment réduire ses coûts de trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le levier le plus efficace est de réduire le nombre de trades, car chaque opération porte un coût fixe. Viennent ensuite le fait de trader aux heures les plus liquides, où les écarts sont les plus serrés, d'éviter les minutes entourant les annonces à fort impact, de comparer le coût total et non le spread affiché, et de limiter la durée de détention lorsque le financement est défavorable."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Le coût réel du trading", "item": "https://www.leterminal.net/blog/couts-du-trading" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Le coût réel du trading</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Calcul</span>
+  <h1 class="bl-art__title">Spread, swap et commissions : le coût réel de vos trades</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 10, 2026">Publié le 10 août 2026</span>
+    <span>·</span>
+    <span data-en="11 min read">11 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/couts-du-trading.webp" width="1600" height="900" alt="Les quatre coûts du trading — spread, commission, swap et slippage — et leur poids cumulé selon le nombre de trades" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Chaque position démarre <strong>en perte</strong>. Avant même que le marché ait bougé, vous payez le spread — puis, selon les cas, une commission, un financement quotidien et du slippage. Ces frais sont invisibles trade par trade et <strong>décisifs sur un an</strong>. Voici comment les chiffrer, et pourquoi ils condamnent certaines approches avant même qu'elles commencent.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Presque tous les traders débutants tiennent le même raisonnement : « si j'ai raison plus d'une fois sur deux avec un bon ratio, je gagne ». C'est arithmétiquement vrai — et pratiquement faux, parce que ce calcul oublie un terme.</p>
+    <p>Ce terme, ce sont les frais. Ils ne se voient pas sur un trade isolé, où ils représentent quelques euros noyés dans le résultat. Ils deviennent évidents sur un relevé annuel — souvent trop tard.</p>
+
+    <h2>Le coût que personne ne compte</h2>
+    <p>Commençons par le fait le plus contre-intuitif : <strong>vous ouvrez toujours en perte</strong>.</p>
+    <p>À l'instant où votre position est exécutée, elle affiche un résultat négatif égal au spread. Le marché n'a pas bougé, vous n'avez ni raison ni tort — vous avez simplement payé le droit d'entrer.</p>
+    <p>Ce n'est pas une anomalie, c'est le fonctionnement normal du marché. Mais cela signifie que <strong>votre premier adversaire n'est pas le marché : c'est votre coût de transaction</strong>. Il faut d'abord le rembourser avant de commencer à gagner.</p>
+
+    <h2>1. Le spread</h2>
+    <p>Le spread est l'écart entre le prix auquel vous pouvez acheter et celui auquel vous pouvez vendre <em>au même instant</em>. C'est la rémunération principale de nombreux courtiers.</p>
+
+    <h3>Comment le lire</h3>
+    <p>Votre plateforme affiche deux prix. Sur une paire majeure, l'écart entre les deux se compte en dixièmes de pip à quelques pips selon les conditions. Traduit en argent, il faut le convertir via le <a href="/blog/calculer-les-pips">calcul des pips</a> : sur un lot standard où le pip vaut 10 €, un spread d'un pip représente <strong>10 € payés à l'ouverture</strong>.</p>
+
+    <h3>Fixe ou variable</h3>
+    <p>Un spread <strong>fixe</strong> ne change pas, ce qui simplifie les calculs mais s'accompagne généralement d'un niveau moyen plus élevé. Un spread <strong>variable</strong> suit les conditions réelles du marché : très serré aux heures liquides, il peut être multiplié par dix lors d'un pic de volatilité.</p>
+
+    <h3>Quand il s'élargit</h3>
+    <p>Trois situations à connaître, car elles sont prévisibles :</p>
+    <ul>
+      <li><strong>Autour des annonces à fort impact.</strong> Le spread peut exploser dans les secondes entourant une publication — l'une des raisons pour lesquelles notre article sur le <a href="/blog/calendrier-economique-trading">calendrier économique</a> recommande de rester à l'écart à ces moments précis.</li>
+      <li><strong>Aux heures creuses.</strong> En fin de session américaine et avant l'ouverture asiatique, la liquidité s'effondre et les écarts s'élargissent. Les <a href="/blog/sessions-de-trading-forex">sessions de trading</a> détaillent ces plages.</li>
+      <li><strong>À la réouverture du dimanche soir</strong>, où les écarts sont particulièrement larges.</li>
+    </ul>
+
+    <h2>2. La commission</h2>
+    <p>Certains comptes affichent des spreads très serrés mais facturent une <strong>commission fixe</strong>, prélevée à l'ouverture et à la clôture.</p>
+    <p>Le piège classique consiste à comparer deux courtiers sur le seul spread affiché. Un compte à spread quasi nul avec commission peut revenir plus cher qu'un compte à spread légèrement plus large sans commission — ou l'inverse. <strong>Seul le coût total compte</strong> :</p>
+    <div class="bl-note">
+      <p><strong>Coût par trade</strong> = Spread (converti en €) + Commission aller-retour</p>
+    </div>
+    <p>Faites ce calcul une fois, notez le résultat, et utilisez-le ensuite systématiquement.</p>
+
+    <h2>3. Le swap (financement overnight)</h2>
+    <p>Toute position conservée au-delà de la clôture quotidienne subit un ajustement de financement, appelé <strong>swap</strong>. Il découle de l'écart de taux d'intérêt entre les deux devises de la paire.</p>
+    <p>Il peut être <strong>négatif</strong> — le cas le plus fréquent — mais aussi <strong>positif</strong>, auquel cas la position vous rapporte à la détention. Deux points pratiques à retenir :</p>
+    <ul>
+      <li><strong>Il est généralement triplé le mercredi</strong> sur le marché des changes, pour couvrir le week-end à venir en raison du délai de règlement.</li>
+      <li><strong>Il s'accumule</strong>. Négligeable sur une nuit, il devient significatif sur plusieurs semaines — ce qui concerne directement le swing et le position trading, comme expliqué dans notre comparatif des <a href="/blog/styles-de-trading">styles de trading</a>.</li>
+    </ul>
+
+    <h2>4. Le slippage</h2>
+    <p>Le slippage est l'écart entre le prix demandé et le prix réellement obtenu. Il n'est pas facturé par le courtier : il résulte du fait que le marché a bougé entre votre ordre et son exécution.</p>
+    <p>Il peut jouer en votre faveur, mais dans les faits il est <strong>asymétrique</strong> : il se produit surtout quand le marché accélère, c'est-à-dire au pire moment. Un stop placé à 20 pips peut être exécuté à 24 pips lors d'un mouvement violent.</p>
+    <p>C'est un coût réel, rarement compté, et il faut l'anticiper : votre perte maximale n'est pas garantie au pip près.</p>
+
+    <h2>Combien ça coûte vraiment : l'exemple chiffré</h2>
+    <p>Prenons un coût total de <strong>10 € par trade</strong> — hypothèse raisonnable pour un lot standard sur une paire majeure. Sur un capital de 10 000 €, voici le cumul annuel selon l'intensité :</p>
+    <div class="bl-note">
+      <p><strong>Swing trader</strong> — 2 trades/semaine, soit ~100/an → <strong>1 000 €</strong>, soit 10 % du capital<br>
+      <strong>Day trader</strong> — 3 trades/jour, soit ~600/an → <strong>6 000 €</strong>, soit 60 % du capital<br>
+      <strong>Scalpeur</strong> — 15 trades/jour, soit ~3 000/an → <strong>30 000 €</strong>, soit 300 % du capital</p>
+    </div>
+    <p>Lisez la dernière ligne deux fois. Le scalpeur doit générer <strong>trois fois son capital</strong> en gains bruts uniquement pour rentrer dans ses frais.</p>
+    <p>Ces chiffres sont volontairement illustratifs : un scalpeur travaille en général avec des tailles plus petites et sur des comptes à commission réduite, ce qui abaisse le coût unitaire. Mais l'ordre de grandeur reste vrai, et c'est lui qui compte : <strong>le nombre de trades est le facteur numéro un de votre facture annuelle</strong>.</p>
+
+    <h2>L'effet sur votre ratio risque/rendement</h2>
+    <p>Voici la conséquence la plus concrète, et la plus ignorée. Les frais ne s'ajoutent pas simplement à vos pertes : ils <strong>dégradent votre ratio</strong>.</p>
+    <p>Imaginons un trade à 1:2 — vous risquez 100 € pour en viser 200 €. Avec 10 € de frais, votre perte réelle devient 110 € et votre gain réel 190 €. Votre ratio effectif tombe à environ 1,7:1.</p>
+    <p>Sur un seul trade, c'est anecdotique. Sur des centaines, cette érosion suffit à faire basculer une méthode légèrement gagnante du côté perdant. C'est pourquoi le coût par trade doit figurer dans votre calcul d'<strong>expectancy</strong>, comme nous l'expliquons dans <a href="/blog/gestion-du-risque-trading">la gestion du risque en trading</a>.</p>
+    <p>Corollaire direct : <strong>plus votre objectif est petit, plus les frais pèsent</strong>. Viser 10 pips avec 1 pip de spread, c'est céder 10 % de l'objectif d'emblée. Viser 100 pips avec le même spread, c'est 1 %. Le même coût, dix fois moins lourd.</p>
+
+    <h2>Comment réduire ses coûts</h2>
+    <p>Cinq leviers, du plus efficace au plus marginal :</p>
+    <ul>
+      <li><strong>Trader moins.</strong> De loin le plus puissant. Chaque trade porte un coût fixe : diviser leur nombre par deux divise la facture par deux. C'est aussi, en général, ce qui améliore la qualité moyenne des configurations retenues.</li>
+      <li><strong>Viser des mouvements plus amples.</strong> Le coût devient proportionnellement négligeable.</li>
+      <li><strong>Trader aux heures liquides.</strong> Les écarts y sont les plus serrés, et le slippage le plus faible.</li>
+      <li><strong>Éviter les annonces.</strong> Quelques minutes d'attente évitent des spreads multipliés.</li>
+      <li><strong>Comparer le coût total</strong>, spread plus commission, jamais le spread affiché seul.</li>
+    </ul>
+
+    <h2>Mesurez, ne devinez pas</h2>
+    <p>Dernier conseil, et le seul qui produise une réponse propre à votre situation : <strong>calculez ce que vous payez réellement</strong>.</p>
+    <p>Relevez le coût total de vos vingt derniers trades, additionnez, et rapportez ce montant à votre résultat sur la même période. Beaucoup de traders découvrent à cette occasion que leurs frais dépassent leur performance nette — autrement dit qu'ils étaient rentables <em>avant</em> frais.</p>
+    <p>C'est une découverte désagréable mais extrêmement utile, car elle désigne un levier immédiat et gratuit : trader moins, ou viser plus large. Consigner le coût de chaque opération dans un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> transforme cette intuition en chiffre, et le chiffre en décision.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Intégrez le coût dans votre calcul</p>
+    <p>Capital, pourcentage de risque, distance de stop : le calculateur du Terminal vous rend la taille exacte à prendre — le point de départ pour chiffrer ce que chaque trade vous coûte vraiment.</p>
+    <a class="lt-btn lt-btn--primary" href="/calculateur">Ouvrir le calculateur</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Les montants cités sont des illustrations pédagogiques : spreads, commissions et swaps varient fortement selon les instruments, les courtiers et les conditions de marché. Seules les conditions tarifaires de votre compte font foi. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le spread en trading ?</h3>
+        <p>Le spread est l'écart entre le prix d'achat et le prix de vente affichés simultanément. Il constitue la rémunération principale de nombreux courtiers et se paie dès l'ouverture de la position : celle-ci démarre en perte de la valeur du spread. Sur une paire majeure, il représente souvent une fraction de pip à un pip en conditions normales, mais il s'élargit fortement lors des annonces et en dehors des heures liquides.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le swap en trading ?</h3>
+        <p>Le swap, ou frais de financement overnight, est appliqué à chaque position conservée au-delà de la clôture quotidienne. Il découle de l'écart de taux d'intérêt entre les deux devises de la paire et peut être négatif ou positif. Sur le marché des changes, il est généralement triplé le mercredi pour couvrir le week-end à venir, en raison du délai de règlement.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Combien coûtent réellement les frais de trading sur un an ?</h3>
+        <p>Tout dépend du nombre de trades. Un swing trader effectuant deux opérations par semaine supporte des frais marginaux. Un trader intraday réalisant plusieurs opérations quotidiennes peut voir le cumul annuel des spreads et commissions atteindre une part très significative de son capital, parfois comparable à la performance qu'il vise. C'est pourquoi le coût par trade doit être intégré au calcul du ratio risque/rendement.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre spread et commission ?</h3>
+        <p>Ce sont deux modes de rémunération du courtier. Dans un compte à spread seul, la marge du courtier est incluse dans l'écart de prix. Dans un compte à commission, le spread affiché est plus serré mais une commission fixe est facturée à l'ouverture et à la clôture. Le coût total réel se compare en additionnant les deux composantes, jamais en regardant le spread seul.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Comment réduire ses coûts de trading ?</h3>
+        <p>Le levier le plus efficace est de réduire le nombre de trades, car chaque opération porte un coût fixe. Viennent ensuite le fait de trader aux heures les plus liquides, où les écarts sont les plus serrés, d'éviter les minutes entourant les annonces à fort impact, de comparer le coût total et non le spread affiché, et de limiter la durée de détention lorsque le financement est défavorable.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : documentation tarifaire de courtiers réglementés et littérature sur les coûts de transaction, 2025-2026. Les montants cités sont illustratifs et varient selon les instruments et les conditions de marché. Publié le 10 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/styles-de-trading"><span class="t">Styles de trading</span><span class="d">Pourquoi le scalping est le plus pénalisé</span></a>
+        <a href="/blog/calculer-les-pips"><span class="t">Calcul des pips</span><span class="d">Convertir un spread en euros</span></a>
+        <a href="/blog/gestion-du-risque-trading"><span class="t">Gestion du risque</span><span class="d">Intégrer le coût dans l'expectancy</span></a>
+        <a href="/blog/sessions-de-trading-forex"><span class="t">Sessions de trading forex</span><span class="d">Les heures où les écarts sont serrés</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
