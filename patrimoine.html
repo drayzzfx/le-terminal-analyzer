@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(){if((window.location.hash||'').indexOf('access_token')!==-1)return;var t=localStorage.getItem('ta_token');if(!t){window.location.replace('/tarifs.html');return;}document.documentElement.style.visibility='hidden';var _to=setTimeout(function(){if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}},9000);function chk(tok){fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(d){clearTimeout(_to);if(d&&d.is_pro){var wasCached=localStorage.getItem('lt_pro')==='1';localStorage.setItem('lt_pro','1');if(!wasCached){window.location.reload();}else{document.documentElement.style.visibility='';}}else{localStorage.removeItem('lt_pro');window.location.replace('/tarifs.html');}}).catch(function(){clearTimeout(_to);if(localStorage.getItem('lt_pro')==='1'){document.documentElement.style.visibility='';}else{window.location.replace('/tarifs.html');}});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);var ttl=parseInt(d.expires_in,10)||3600;localStorage.setItem('ta_exp',String(Date.now()+ttl*1000));chk(d.access_token);}else{chk(t);}}).catch(function(){chk(t);});}else{chk(t);}})();</script>
+<script>(function(){var t=localStorage.getItem('ta_token');function chk(k){if(!k)return;fetch('/api/check-pro',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k}}).then(function(r){return r.json();}).then(function(d){if(d&&d.is_pro)localStorage.setItem('lt_pro','1');else localStorage.removeItem('lt_pro');}).catch(function(){});}var rt=localStorage.getItem('ta_refresh'),exp=parseInt(localStorage.getItem('ta_exp')||'0',10);if(t&&rt&&exp&&Date.now()>exp-60000){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'refresh',refresh_token:rt})}).then(function(r){return r.json();}).then(function(d){if(d&&d.access_token){localStorage.setItem('ta_token',d.access_token);if(d.refresh_token)localStorage.setItem('ta_refresh',d.refresh_token);localStorage.setItem('ta_exp',String(Date.now()+(parseInt(d.expires_in,10)||3600)*1000));chk(d.access_token);}else chk(t);}).catch(function(){chk(t);});}else chk(t);})();</script>
 <title>Le Terminal — Patrimoine · Portefeuille</title>
 <meta name="robots" content="noindex,follow">
 <link rel="stylesheet" href="./fonts.css">
@@ -147,9 +147,11 @@
 .pf-asset-search input::placeholder { color:var(--text-muted); }
 .pf-asset-search input:focus { border-color:var(--accent); }
 .pf-asset-search svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; }
-.pf-asset-list { max-height:220px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--r-md); margin-bottom:16px; }
-.pf-asset-list::-webkit-scrollbar { width:3px; }
-.pf-asset-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+.pf-asset-list { max-height:260px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--r-md); margin-bottom:16px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.pf-asset-list::-webkit-scrollbar { width:10px; }
+.pf-asset-list::-webkit-scrollbar-track { background:transparent; }
+.pf-asset-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:99px; border:3px solid var(--bg-elevated); }
+.pf-asset-list::-webkit-scrollbar-thumb:hover { background:var(--accent); }
 /* accordéon catégories */
 .pf-cat-header { display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-void); border-bottom:1px solid var(--border-subtle); cursor:pointer; user-select:none; transition:background var(--dur-fast) var(--ease-out); border-left:3px solid var(--cat-col,#3B7DFF); }
 .pf-cat-header:hover { background:rgba(59, 125, 255,0.06); }
@@ -175,6 +177,91 @@
 .pf-asset-item__amt input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
 .pf-asset-item__amt input[type=number]:focus { border-color:var(--accent); }
 .pf-asset-item__amt span { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); }
+
+/* ============================================================
+   Simulation en direct — portefeuille fictif valorisé aux prix réels.
+   Additif : n'altère pas le simulateur de projection existant.
+   ============================================================ */
+.pf-modes { display:inline-flex; gap:4px; padding:4px; border:1px solid var(--border-subtle); border-radius:var(--r-md); background:var(--bg-void); }
+.pf-mode { padding:9px 20px; border:none; background:transparent; color:var(--text-muted); font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:0.04em; border-radius:var(--r-sm); cursor:pointer; transition:all var(--dur-fast) var(--ease-out); }
+.pf-mode:hover { color:var(--text-title); }
+.pf-mode.is-on { background:var(--accent-glow-soft); color:var(--accent-bright); box-shadow:inset 0 0 0 1px var(--accent-glow); }
+
+.pfsim-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+@media (max-width:620px){ .pfsim-stats { grid-template-columns:repeat(2,1fr); } }
+.pfsim-stat { background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:var(--r-lg); padding:16px 18px; display:flex; flex-direction:column; gap:8px; }
+.pfsim-stat .k { font-family:var(--font-mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); }
+.pfsim-stat .v { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:1.5rem; font-weight:700; color:var(--text-title); line-height:1; }
+
+.pfr-head { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+.pfr-refresh { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; color:var(--text-muted); background:transparent; border:1px solid var(--border-subtle); border-radius:var(--r-pill); padding:6px 13px; cursor:pointer; transition:all var(--dur-fast) var(--ease-out); }
+.pfr-refresh:hover { border-color:var(--accent); color:var(--accent-bright); }
+.pfr-refresh svg { transition:transform .5s var(--ease-out); }
+.pfr-refresh.spin svg { transform:rotate(360deg); }
+
+.pfr-form { display:flex; flex-direction:column; gap:14px; }
+.pfr-field label { display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+.pfr-input, .pfr-select { width:100%; box-sizing:border-box; background:var(--bg-void); border:1px solid var(--border-subtle); border-radius:var(--r-md); padding:10px 12px; font-family:Inter,sans-serif; font-size:13.5px; color:var(--text-body); outline:none; transition:border-color var(--dur-fast) var(--ease-out); }
+.pfr-input:focus, .pfr-select:focus { border-color:var(--accent); }
+.pfr-input[type=number] { font-family:var(--font-mono); -moz-appearance:textfield; }
+.pfr-input[type=number]::-webkit-outer-spin-button, .pfr-input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+.pfr-select { appearance:none; -webkit-appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237E8794' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:34px; }
+.pfr-wrap { position:relative; }
+.pfr-wrap .sfx { position:absolute; right:12px; top:50%; transform:translateY(-50%); font-family:var(--font-mono); font-size:12px; color:var(--text-muted); pointer-events:none; }
+.pfr-wrap .pfr-input { padding-right:30px; }
+.pfr-add { width:100%; background:var(--accent); color:#07090C; border:none; border-radius:var(--r-sm); padding:12px; font-family:var(--font-text),Inter,sans-serif; font-size:14px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:filter var(--dur-fast) var(--ease-out); }
+.pfr-add:hover { filter:brightness(1.08); }
+.pfr-add:disabled { opacity:.55; cursor:not-allowed; }
+.pfr-msg { font-size:12px; min-height:15px; font-weight:500; }
+.pfr-note { font-size:11px; color:var(--text-muted); line-height:1.55; }
+
+/* menu déroulant maison (remplace le <select> natif — scrollbar stylée) */
+.pfr-combo { position:relative; }
+.pfr-combo__btn { width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--bg-void); border:1px solid var(--border-subtle); border-radius:var(--r-md); padding:10px 12px; color:var(--text-body); font-family:Inter,sans-serif; font-size:13.5px; cursor:pointer; text-align:left; transition:border-color var(--dur-fast) var(--ease-out); }
+.pfr-combo__btn:hover, .pfr-combo.open .pfr-combo__btn { border-color:var(--accent); }
+.pfr-combo__btn > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pfr-combo__btn svg { color:var(--text-muted); flex-shrink:0; transition:transform var(--dur-fast) var(--ease-out); }
+.pfr-combo.open .pfr-combo__btn svg { transform:rotate(180deg); }
+.pfr-combo__panel { position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:60; background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:var(--r-md); box-shadow:0 14px 38px rgba(0,0,0,.55); overflow:hidden; }
+.pfr-combo__search { padding:8px; border-bottom:1px solid var(--border-subtle); }
+.pfr-combo__search input { width:100%; box-sizing:border-box; background:var(--bg-void); border:1px solid var(--border-subtle); border-radius:var(--r-sm); padding:8px 10px; color:var(--text-body); font-family:Inter,sans-serif; font-size:13px; outline:none; }
+.pfr-combo__search input:focus { border-color:var(--accent); }
+.pfr-combo__list { max-height:280px; overflow-y:auto; padding:4px 5px 6px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.pfr-combo__list::-webkit-scrollbar { width:10px; }
+.pfr-combo__list::-webkit-scrollbar-track { background:transparent; margin:4px 0; }
+.pfr-combo__list::-webkit-scrollbar-thumb { background:var(--border); border-radius:99px; border:3px solid var(--bg-elevated); }
+.pfr-combo__list::-webkit-scrollbar-thumb:hover { background:var(--accent); }
+.pfr-combo__grp { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-bright); padding:10px 9px 4px; position:sticky; top:0; background:var(--bg-elevated); }
+.pfr-combo__opt { display:flex; align-items:baseline; gap:9px; padding:8px 9px; border-radius:var(--r-sm); cursor:pointer; font-size:13px; color:var(--text-body); }
+.pfr-combo__opt:hover, .pfr-combo__opt.hl { background:var(--accent-glow-soft); }
+.pfr-combo__opt.sel { background:var(--accent-glow-soft); color:var(--accent-bright); }
+.pfr-combo__opt b { font-family:var(--font-mono); font-weight:700; font-size:12px; min-width:66px; color:var(--text-title); }
+.pfr-combo__empty { padding:18px; text-align:center; color:var(--text-muted); font-size:12px; }
+
+.pfr-list { display:flex; flex-direction:column; gap:10px; }
+.pfr-row { display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:14px 16px; border:1px solid var(--border-subtle); border-radius:var(--r-md); background:var(--bg-surface); transition:border-color var(--dur-fast) var(--ease-out); }
+.pfr-row:hover { border-color:var(--accent-glow); }
+.pfr-row.loading .pfr-now, .pfr-row.loading .pfr-pnl { opacity:.35; }
+.pfr-row__top { display:flex; align-items:center; gap:9px; }
+.pfr-row__sym { font-family:var(--font-mono); font-weight:700; font-size:14px; color:var(--text-title); }
+.pfr-row__name { font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pfr-row__cat { font-family:var(--font-mono); font-size:9px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); border:1px solid var(--border-subtle); border-radius:var(--r-pill); padding:2px 8px; flex-shrink:0; }
+.pfr-meta { display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; }
+.pfr-cell .k { font-family:var(--font-mono); font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); display:block; margin-bottom:2px; }
+.pfr-cell .v { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:12.5px; color:var(--text-body); }
+.pfr-row__r { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+.pfr-now { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:17px; font-weight:700; color:var(--text-title); line-height:1; }
+.pfr-pnl { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:12.5px; font-weight:600; }
+.pfr-pct { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:11px; font-weight:600; padding:2px 7px; border-radius:var(--r-pill); }
+.pfr-del { background:transparent; border:none; color:var(--text-muted); cursor:pointer; padding:3px; border-radius:var(--r-sm); margin-top:3px; transition:color var(--dur-fast) var(--ease-out); }
+.pfr-del:hover { color:var(--bear); }
+.pfr-up { color:var(--bull); } .pfr-down { color:var(--bear); } .pfr-fl { color:var(--neutral); }
+.pfr-pct.pfr-up { background:var(--bull-glow); } .pfr-pct.pfr-down { background:var(--bear-glow); } .pfr-pct.pfr-fl { background:rgba(232,194,104,0.12); }
+.pfr-empty { padding:40px 22px; text-align:center; color:var(--text-muted); border:1px dashed var(--border-subtle); border-radius:var(--r-md); }
+.pfr-empty svg { opacity:.6; margin-bottom:12px; }
+.pfr-empty b { display:block; color:var(--text-body); font-size:14px; margin-bottom:5px; font-weight:600; }
+.pfr-empty span { font-size:12.5px; line-height:1.5; }
+@media (max-width:620px){ .pfr-row { grid-template-columns:1fr; } .pfr-row__r { align-items:flex-start; } }
 </style>
   <link rel="canonical" href="https://www.leterminal.net/patrimoine">
 <script src="/sync.js"></script>
@@ -198,7 +285,7 @@
           <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
           <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
           <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
-          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Données</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Bulles · corrélations · taux</span></a>
           <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
           <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
         </div>
@@ -225,6 +312,11 @@
     <span class="eyebrow"><span class="lt-dot"></span> Investissement long terme</span>
     <h1>Mon Portefeuille</h1>
     <p>Suivez votre patrimoine investi en un coup d'œil.</p>
+  </div>
+
+  <div class="pf-modes" id="pfModes">
+    <button type="button" class="pf-mode is-on" data-mode="projection">Projection</button>
+    <button type="button" class="pf-mode" data-mode="sim">Simulation en direct</button>
   </div>
 
   <div id="pfMain">
@@ -292,12 +384,72 @@
     </div>
   </div>
 
+  <div id="pfSim" style="display:none">
+    <div class="pfsim-stats">
+      <div class="pfsim-stat"><span class="k">Valeur actuelle</span><span class="v" id="psVal">—</span></div>
+      <div class="pfsim-stat"><span class="k">Investi</span><span class="v" id="psInv">—</span></div>
+      <div class="pfsim-stat"><span class="k">Plus / moins-value</span><span class="v" id="psPnl">—</span></div>
+      <div class="pfsim-stat"><span class="k">Performance</span><span class="v" id="psPct">—</span></div>
+    </div>
+
+    <div class="pf-grid" style="margin-top:20px">
+      <!-- Positions -->
+      <div class="pf-ov panel">
+        <div class="pfr-head">
+          <h3 class="panel__title" style="margin:0">Mes positions</h3>
+          <button type="button" class="pfr-refresh" id="psRefresh">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            Actualiser
+          </button>
+        </div>
+        <div id="psList" class="pfr-list"></div>
+      </div>
+
+      <!-- Ajouter -->
+      <div class="pf-alloc panel">
+        <h3 class="panel__title">Ajouter une position</h3>
+        <div class="pfr-form">
+          <div class="pfr-field">
+            <label>Actif</label>
+            <div class="pfr-combo" id="psCombo">
+              <button type="button" class="pfr-combo__btn" id="psComboBtn">
+                <span id="psComboLabel">Choisir un actif</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pfr-combo__panel" id="psComboPanel" style="display:none">
+                <div class="pfr-combo__search">
+                  <input type="text" id="psComboSearch" placeholder="Rechercher (Apple, BTC, or…)" autocomplete="off">
+                </div>
+                <div class="pfr-combo__list" id="psComboList"></div>
+              </div>
+            </div>
+          </div>
+          <div class="pfr-field">
+            <label for="psAmount">Montant investi</label>
+            <div class="pfr-wrap">
+              <input class="pfr-input" type="number" id="psAmount" min="1" step="any" placeholder="100" inputmode="decimal">
+              <span class="sfx">€</span>
+            </div>
+          </div>
+          <button type="button" class="pfr-add" id="psAdd">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            <span id="psAddLbl">Ajouter au portefeuille</span>
+          </button>
+          <div class="pfr-msg" id="psMsg"></div>
+          <div class="pfr-note">Le prix d'entrée est le cours réel de l'actif au moment où vous l'ajoutez. La valeur est ensuite réévaluée en direct à chaque visite. Simulation fictive, sans argent réel — ne constitue pas un conseil en investissement.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 </main>
 <div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
 <script src="./eco.js"></script>
+<script>window.FUNNEL_GATE=1;</script>
+<script src="./funnel.js"></script>
 <script src="./appshell.js"></script>
-<script src="./menu.js"></script>
+<script src="./menu.js?v=2"></script>
 <script>
 (function(){
   'use strict';
@@ -310,8 +462,8 @@
   var pfPortfolio = SAVED.assets || {};   // { assetId: montant€ }
   var currentPeriod = '1A';
 
-  var CAT_COL = { 'ETF':'#3B7DFF', 'Action':'#4ADE9C', 'Obligation':'#E8C268', 'Liquidites':'#C3CAD4', 'Crypto':'#F0647A' };
-  var CAT_LABEL = { 'ETF':'ETF', 'Action':'Actions', 'Crypto':'Crypto', 'Obligation':'Obligations', 'Liquidites':'Liquidites' };
+  var CAT_COL = { 'ETF':'#3B7DFF', 'Action':'#4ADE9C', 'Metaux':'#C9A24B', 'Obligation':'#E8C268', 'Liquidites':'#C3CAD4', 'Crypto':'#F0647A' };
+  var CAT_LABEL = { 'ETF':'ETF', 'Action':'Actions', 'Crypto':'Crypto', 'Metaux':'Métaux précieux', 'Obligation':'Obligations', 'Liquidites':'Liquidites' };
 
   // ── Catalogue Trade Republic ──
   var TR_ASSETS = [
@@ -419,10 +571,27 @@
     // Liquidites
     { id:'xeon',   name:'Fonds monetaire EUR',         cat:'Liquidites', ticker:'XEON'   },
     { id:'ern0',   name:'Fonds monetaire EUR (Amundi)',cat:'Liquidites', ticker:'ERN0'   },
-    { id:'cash',   name:'Liquidites / Cash',           cat:'Liquidites', ticker:'-'      }
+    { id:'cash',   name:'Liquidites / Cash',           cat:'Liquidites', ticker:'-'      },
+    // Métaux précieux
+    { id:'m_gold',    name:'Or',                        cat:'Metaux',     ticker:'XAU'    },
+    { id:'m_silver',  name:'Argent',                    cat:'Metaux',     ticker:'XAG'    },
+    { id:'m_plat',    name:'Platine',                   cat:'Metaux',     ticker:'XPT'    },
+    { id:'m_pall',    name:'Palladium',                 cat:'Metaux',     ticker:'XPD'    },
+    { id:'m_goldetc', name:'Or physique (ETC)',         cat:'Metaux',     ticker:'PHAU'   },
+    // Actions supplémentaires
+    { id:'cost',   name:'Costco',                       cat:'Action',     ticker:'COST'   },
+    { id:'mcd',    name:'McDonald\'s',                  cat:'Action',     ticker:'MCD'    },
+    { id:'nke',    name:'Nike',                         cat:'Action',     ticker:'NKE'    },
+    { id:'sbux',   name:'Starbucks',                    cat:'Action',     ticker:'SBUX'   },
+    { id:'ba',     name:'Boeing',                       cat:'Action',     ticker:'BA'     },
+    { id:'catp',   name:'Caterpillar',                  cat:'Action',     ticker:'CAT'    },
+    { id:'baba',   name:'Alibaba',                      cat:'Action',     ticker:'BABA'   },
+    { id:'abnb',   name:'Airbnb',                       cat:'Action',     ticker:'ABNB'   },
+    { id:'hood',   name:'Robinhood',                    cat:'Action',     ticker:'HOOD'   },
+    { id:'qcom',   name:'Qualcomm',                     cat:'Action',     ticker:'QCOM'   }
   ];
 
-  var CAT_ORDER = ['ETF','Action','Crypto','Obligation','Liquidites'];
+  var CAT_ORDER = ['ETF','Action','Crypto','Metaux','Obligation','Liquidites'];
   var openCats = {};
 
   function saveState(){
@@ -430,7 +599,7 @@
   }
 
   // Rendement annuel attendu par catégorie (hypothèse prudente)
-  var CAT_RETURN = { ETF:0.08, Action:0.09, Obligation:0.03, Liquidites:0.02, Crypto:0.14 };
+  var CAT_RETURN = { ETF:0.08, Action:0.09, Metaux:0.06, Obligation:0.03, Liquidites:0.02, Crypto:0.14 };
 
   function portfolioTotal(){
     var s=0;
@@ -631,7 +800,19 @@
       var id=e.target.getAttribute('data-id'); if(!id) return;
       if(e.target.classList.contains('pf-cb')){
         var item=e.target.closest('.pf-asset-item');
-        if(e.target.checked){ pfPortfolio[id]=0; item.classList.add('is-checked'); }
+        if(e.target.checked){
+          // Funnel : 3 actifs gratuits sur la projection (Premium = illimité)
+          if(window.funnelUse){
+            e.target.disabled=true;
+            funnelUse('patrimoine').then(function(g){
+              e.target.disabled=false;
+              if(!g.ok){ e.target.checked=false; return; }
+              pfPortfolio[id]=0; item.classList.add('is-checked'); drawDonut(); saveState();
+            });
+            return;
+          }
+          pfPortfolio[id]=0; item.classList.add('is-checked');
+        }
         else { delete pfPortfolio[id]; item.classList.remove('is-checked'); }
       } else if(e.target.classList.contains('pf-amt')){
         var v2=parseFloat(e.target.value); pfPortfolio[id]=isNaN(v2)?0:v2;
@@ -643,6 +824,180 @@
   }
 
   window.ecoReloadNews=function(){};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script>
+(function(){
+  'use strict';
+  // ══ Simulation en direct — portefeuille fictif valorisé aux prix réels (additif) ══
+  var LS='lt_pf_sim';
+  var positions=[];
+
+  var ASSETS=[
+    {g:'Actions US',items:[['NVDA','Nvidia'],['AAPL','Apple'],['MSFT','Microsoft'],['AMZN','Amazon'],['GOOGL','Alphabet'],['META','Meta'],['TSLA','Tesla'],['AVGO','Broadcom'],['AMD','AMD'],['NFLX','Netflix'],['JPM','JPMorgan'],['V','Visa'],['MA','Mastercard'],['WMT','Walmart'],['COST','Costco'],['HD','Home Depot'],['KO','Coca-Cola'],['PEP','PepsiCo'],['MCD','McDonald’s'],['SBUX','Starbucks'],['NKE','Nike'],['DIS','Disney'],['INTC','Intel'],['CRM','Salesforce'],['ADBE','Adobe'],['PYPL','PayPal'],['UBER','Uber'],['ORCL','Oracle'],['CSCO','Cisco'],['QCOM','Qualcomm'],['TXN','Texas Instruments'],['BA','Boeing'],['CAT','Caterpillar'],['GE','GE Aerospace'],['F','Ford'],['GM','General Motors'],['PFE','Pfizer'],['JNJ','Johnson & Johnson'],['LLY','Eli Lilly'],['MRK','Merck'],['ABBV','AbbVie'],['UNH','UnitedHealth'],['XOM','ExxonMobil'],['CVX','Chevron'],['BAC','Bank of America'],['WFC','Wells Fargo'],['GS','Goldman Sachs'],['C','Citigroup'],['PLTR','Palantir'],['COIN','Coinbase'],['SHOP','Shopify'],['SNAP','Snap'],['ABNB','Airbnb'],['RIVN','Rivian'],['LCID','Lucid'],['MRNA','Moderna'],['T','AT&T'],['VZ','Verizon'],['IBM','IBM'],['DELL','Dell'],['MU','Micron'],['BABA','Alibaba'],['NIO','Nio'],['SOFI','SoFi'],['HOOD','Robinhood'],['SPOT','Spotify'],['NET','Cloudflare'],['CRWD','CrowdStrike'],['SNOW','Snowflake'],['DDOG','Datadog'],['PANW','Palo Alto Networks'],['SMCI','Super Micro'],['ARM','Arm'],['MARA','Marathon Digital'],['RIOT','Riot Platforms']]},
+    {g:'Actions EU',items:[['LVMH','LVMH'],['LOREAL','L’Oréal'],['AIRBUS','Airbus'],['TOTALENERGIES','TotalEnergies'],['SANOFI','Sanofi'],['BNPPARIBAS','BNP Paribas'],['AIRLIQUIDE','Air Liquide'],['VINCI','Vinci'],['SCHNEIDER','Schneider Electric'],['HERMES','Hermès'],['KERING','Kering'],['ESSILOR','EssilorLuxottica'],['AXA','AXA'],['ASML','ASML'],['SAP','SAP'],['SIEMENS','Siemens'],['ALLIANZ','Allianz'],['BMW','BMW'],['VOLKSWAGEN','Volkswagen'],['ADIDAS','Adidas'],['BASF','BASF'],['MERCEDES','Mercedes-Benz'],['NESTLE','Nestlé'],['NOVARTIS','Novartis'],['SHELL','Shell'],['ASTRAZENECA','AstraZeneca'],['HSBC','HSBC'],['BP','BP'],['UNILEVER','Unilever']]},
+    {g:'ETF',items:[['SPY','S&P 500 (SPY)'],['VOO','Vanguard S&P 500'],['QQQ','Nasdaq 100 (QQQ)'],['VTI','Vanguard Total US'],['IWM','Russell 2000 (IWM)'],['DIA','Dow Jones (DIA)'],['EEM','Marchés émergents'],['ARKK','ARK Innovation'],['GLD','Or (GLD)'],['SLV','Argent (SLV)'],['TLT','Trésor US 20+ ans']]},
+    {g:'Crypto',items:[['BTC','Bitcoin'],['ETH','Ethereum'],['SOL','Solana'],['XRP','XRP'],['BNB','BNB'],['DOGE','Dogecoin'],['ADA','Cardano'],['AVAX','Avalanche'],['LINK','Chainlink'],['DOT','Polkadot'],['LTC','Litecoin'],['MATIC','Polygon'],['TRX','Tron'],['BCH','Bitcoin Cash'],['XLM','Stellar'],['NEAR','Near'],['SHIB','Shiba Inu'],['UNI','Uniswap'],['ATOM','Cosmos'],['ICP','Internet Computer'],['FIL','Filecoin'],['APT','Aptos'],['ARB','Arbitrum'],['OP','Optimism'],['INJ','Injective'],['IMX','Immutable'],['RNDR','Render'],['SUI','Sui'],['SEI','Sei'],['TON','Toncoin'],['HBAR','Hedera'],['VET','VeChain'],['ALGO','Algorand'],['AAVE','Aave'],['MKR','Maker'],['GRT','The Graph'],['SAND','The Sandbox'],['MANA','Decentraland'],['AXS','Axie Infinity'],['PEPE','Pepe'],['TIA','Celestia'],['STX','Stacks'],['RUNE','THORChain'],['FTM','Fantom'],['THETA','Theta'],['CHZ','Chiliz'],['ZEC','Zcash'],['XMR','Monero'],['EOS','EOS']]},
+    {g:'Indices',items:[['SP500','S&P 500'],['NAS100','Nasdaq 100'],['US30','Dow Jones'],['RUSSELL2000','Russell 2000'],['VIX','VIX (volatilité)'],['DAX','DAX 40'],['CAC40','CAC 40'],['UK100','FTSE 100'],['STOXX50','Euro Stoxx 50'],['SMI','SMI (Suisse)'],['IBEX35','IBEX 35'],['AEX','AEX (Pays-Bas)'],['JP225','Nikkei 225'],['HK50','Hang Seng'],['AUS200','ASX 200']]},
+    {g:'Matières premières',items:[['GOLDF','Or'],['SILVERF','Argent'],['PLATINUM','Platine'],['PALLADIUM','Palladium'],['COPPER','Cuivre'],['USOIL','Pétrole WTI'],['BRENT','Brent'],['NATGAS','Gaz naturel'],['COFFEE','Café'],['SUGAR','Sucre'],['COCOA','Cacao'],['COTTON','Coton'],['WHEAT','Blé'],['CORN','Maïs'],['SOYBEAN','Soja'],['ORANGEJUICE','Jus d’orange']]},
+    {g:'Forex',items:[['EURUSD','EUR / USD'],['GBPUSD','GBP / USD'],['USDJPY','USD / JPY'],['AUDUSD','AUD / USD'],['USDCAD','USD / CAD'],['USDCHF','USD / CHF'],['NZDUSD','NZD / USD'],['EURGBP','EUR / GBP'],['EURJPY','EUR / JPY'],['GBPJPY','GBP / JPY']]}
+  ];
+  var CAT_OF={},NAME_OF={};
+  ASSETS.forEach(function(g){g.items.forEach(function(it){CAT_OF[it[0]]=g.g;NAME_OF[it[0]]=it[1];});});
+
+  var fmtEur=new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2});
+  function money(n){return isFinite(n)?fmtEur.format(n):'—';}
+  function num(n,d){return isFinite(n)?new Intl.NumberFormat('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}).format(n):'—';}
+  function price(n){ if(!isFinite(n))return '—'; var d=Math.abs(n)>=1?2:(Math.abs(n)>=0.01?4:6); return num(n,d); }
+  function pct(p){return (p>=0?'+':'')+num(p,2)+' %';}
+  function dt(d){try{return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;}}
+  function cls(n){return n>0.0001?'pfr-up':(n<-0.0001?'pfr-down':'pfr-fl');}
+  function arrow(n){return n>0.0001?'▲':(n<-0.0001?'▼':'—');}
+
+  function load(){try{positions=JSON.parse(localStorage.getItem(LS)||'[]');if(!Array.isArray(positions))positions=[];}catch(e){positions=[];}}
+  function save(){try{localStorage.setItem(LS,JSON.stringify(positions));}catch(e){}}
+  var $=function(id){return document.getElementById(id);};
+
+  // ── Menu déroulant maison (cherchable) ──
+  var selSym='NVDA', comboOpen=false, comboItems=[];
+  function comboLabel(){ var b=$('psComboLabel'); if(b) b.textContent=selSym+' — '+(NAME_OF[selSym]||selSym); }
+  function renderComboList(q){
+    q=(q||'').trim().toLowerCase();
+    var host=$('psComboList'), html=''; comboItems=[];
+    ASSETS.forEach(function(g){
+      var its=g.items.filter(function(it){ return !q || it[0].toLowerCase().indexOf(q)>=0 || it[1].toLowerCase().indexOf(q)>=0; });
+      if(!its.length) return;
+      html+='<div class="pfr-combo__grp">'+g.g+'</div>';
+      its.forEach(function(it){
+        comboItems.push(it[0]);
+        html+='<div class="pfr-combo__opt'+(it[0]===selSym?' sel':'')+'" data-sym="'+it[0]+'"><b>'+it[0]+'</b><span>'+it[1]+'</span></div>';
+      });
+    });
+    host.innerHTML=html||'<div class="pfr-combo__empty">Aucun actif trouvé</div>';
+  }
+  function openCombo(){ comboOpen=true; $('psCombo').classList.add('open'); $('psComboPanel').style.display=''; var s=$('psComboSearch'); s.value=''; renderComboList(''); s.focus(); }
+  function closeCombo(){ comboOpen=false; $('psCombo').classList.remove('open'); $('psComboPanel').style.display='none'; }
+  function pickSym(sym){ if(sym){ selSym=sym; comboLabel(); } closeCombo(); }
+  function buildCombo(){
+    comboLabel();
+    $('psComboBtn').addEventListener('click',function(e){ e.stopPropagation(); comboOpen?closeCombo():openCombo(); });
+    $('psComboSearch').addEventListener('input',function(){ renderComboList(this.value); });
+    $('psComboSearch').addEventListener('keydown',function(e){ if(e.key==='Escape') closeCombo(); else if(e.key==='Enter' && comboItems.length) pickSym(comboItems[0]); });
+    $('psComboList').addEventListener('click',function(e){ var o=e.target.closest('.pfr-combo__opt'); if(o) pickSym(o.getAttribute('data-sym')); });
+    document.addEventListener('click',function(e){ if(comboOpen && !$('psCombo').contains(e.target)) closeCombo(); });
+  }
+
+  async function livePrice(sym){
+    var r=await fetch('/api/price?symbol='+encodeURIComponent(sym));
+    var j=await r.json();
+    if(!r.ok||!(j.price>0)) throw new Error((j&&j.error)||'prix indisponible');
+    return j;
+  }
+
+  async function add(){
+    // Funnel : la simulation en direct est réservée au Premium (0 essai gratuit)
+    if(localStorage.getItem('lt_pro')!=='1'){ if(window.funnelPaywall) funnelPaywall(); return; }
+    var msg=$('psMsg'),btn=$('psAdd'),lbl=$('psAddLbl');
+    var sym=selSym, amount=parseFloat($('psAmount').value);
+    msg.textContent=''; msg.className='pfr-msg';
+    if(!(amount>0)){ msg.textContent='Entrez un montant valide.'; msg.className='pfr-msg pfr-down'; return; }
+    btn.disabled=true; lbl.textContent='Récupération du cours…';
+    try{
+      var live=await livePrice(sym);
+      var now=new Date();
+      var pos={ id:(now.getTime().toString(36)+Math.random().toString(36).slice(2,7)),
+        symbol:sym, name:NAME_OF[sym]||sym, cat:CAT_OF[sym]||'',
+        date:now.toISOString(), entry:live.price, amount:amount, qty:amount/live.price,
+        last:live.price, lastChange:live.change };
+      positions.unshift(pos); save(); render();
+      msg.textContent='Position ajoutée — entrée à '+price(live.price)+'.'; msg.className='pfr-msg pfr-up';
+      $('psAmount').value='';
+    }catch(e){ msg.textContent='Erreur : '+e.message; msg.className='pfr-msg pfr-down'; }
+    finally{ btn.disabled=false; lbl.textContent='Ajouter au portefeuille'; }
+  }
+
+  window.pfSimDelete=function(id){ positions=positions.filter(function(p){return p.id!==id;}); save(); render(); };
+
+  var refreshing=false;
+  async function refresh(spin){
+    if(refreshing||!positions.length) return;
+    refreshing=true;
+    var rb=$('psRefresh'); if(spin&&rb) rb.classList.add('spin');
+    Array.prototype.forEach.call(document.querySelectorAll('#psList .pfr-row'),function(el){el.classList.add('loading');});
+    var syms={}; positions.forEach(function(p){syms[p.symbol]=1;});
+    await Promise.all(Object.keys(syms).map(async function(s){
+      try{ var live=await livePrice(s); positions.forEach(function(p){if(p.symbol===s){p.last=live.price;p.lastChange=live.change;}}); }catch(e){}
+    }));
+    save(); render(); refreshing=false;
+    if(rb) setTimeout(function(){rb.classList.remove('spin');},200);
+  }
+
+  function render(){
+    var list=$('psList'); if(!list) return;
+    if(!positions.length){
+      list.innerHTML='<div class="pfr-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-4 3 3 5-7"/></svg><b>Aucune position pour l\'instant</b><span>Choisissez un actif et un montant à droite. Le suivi démarre au cours du jour.</span></div>';
+      stats(); return;
+    }
+    list.innerHTML=positions.map(function(p){
+      var has=p.last!=null&&isFinite(p.last);
+      var val=has?p.qty*p.last:null, pnl=has?val-p.amount:null, pc=has?(p.last/p.entry-1)*100:null;
+      var sc=has?cls(pnl):'pfr-fl';
+      return '<div class="pfr-row'+(has?'':' loading')+'">'
+        +'<div><div class="pfr-row__top"><span class="pfr-row__sym">'+p.symbol+'</span><span class="pfr-row__name">'+p.name+'</span><span class="pfr-row__cat">'+p.cat+'</span></div>'
+        +'<div class="pfr-meta">'
+        +'<div class="pfr-cell"><span class="k">Ajouté le</span><span class="v">'+dt(p.date)+'</span></div>'
+        +'<div class="pfr-cell"><span class="k">Prix d\'entrée</span><span class="v">'+price(p.entry)+'</span></div>'
+        +'<div class="pfr-cell"><span class="k">Prix actuel</span><span class="v">'+(has?price(p.last):'…')+'</span></div>'
+        +'<div class="pfr-cell"><span class="k">Investi</span><span class="v">'+money(p.amount)+'</span></div>'
+        +'</div></div>'
+        +'<div class="pfr-row__r">'
+        +'<div class="pfr-now">'+(has?money(val):'…')+'</div>'
+        +'<div class="pfr-pnl '+sc+'">'+(has?(arrow(pnl)+' '+money(pnl)):'')+'</div>'
+        +'<div class="pfr-pct '+sc+'">'+(has?pct(pc):'—')+'</div>'
+        +'<button class="pfr-del" title="Supprimer" onclick="pfSimDelete(\''+p.id+'\')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>'
+        +'</div></div>';
+    }).join('');
+    stats();
+  }
+
+  function stats(){
+    var inv=0,val=0,has=false;
+    positions.forEach(function(p){ inv+=p.amount; if(p.last!=null&&isFinite(p.last)){has=true;val+=p.qty*p.last;}else{val+=p.amount;} });
+    var pnl=val-inv, pc=inv>0?pnl/inv*100:0;
+    $('psInv').textContent=positions.length?money(inv):'—';
+    if(positions.length&&has){
+      $('psVal').textContent=money(val);
+      var e=$('psPnl'); e.textContent=(pnl>=0?'+':'')+money(pnl); e.className='v '+cls(pnl);
+      var e2=$('psPct'); e2.textContent=pct(pc); e2.className='v '+cls(pnl);
+    }else{
+      $('psVal').textContent=positions.length?'…':'—';
+      $('psPnl').textContent=positions.length?'…':'—'; $('psPnl').className='v';
+      $('psPct').textContent='—'; $('psPct').className='v';
+    }
+  }
+
+  function setMode(mode){
+    var proj=mode!=='sim';
+    $('pfMain').style.display=proj?'':'none';
+    $('pfSim').style.display=proj?'none':'';
+    Array.prototype.forEach.call(document.querySelectorAll('#pfModes .pf-mode'),function(b){
+      b.classList.toggle('is-on', b.getAttribute('data-mode')===(proj?'projection':'sim'));
+    });
+    if(!proj && positions.length) refresh(false);
+  }
+
+  function init(){
+    if(!$('pfModes')||!$('psCombo')) return;
+    buildCombo(); load(); render();
+    $('psAdd').addEventListener('click',add);
+    $('psAmount').addEventListener('keydown',function(e){ if(e.key==='Enter') add(); });
+    $('psRefresh').addEventListener('click',function(){ refresh(true); });
+    $('pfModes').addEventListener('click',function(e){
+      var b=e.target.closest('.pf-mode'); if(!b) return; setMode(b.getAttribute('data-mode'));
+    });
+    setInterval(function(){ if($('pfSim')&&$('pfSim').style.display!=='none' && positions.length && !document.hidden) refresh(false); }, 60000);
+  }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>

@@ -14,14 +14,14 @@
 :root{
   --bg:#07090C; --panel:#0E1219; --panel2:#0B0E13; --line:#1B2029; --line2:#262C37;
   --txt:#C3CAD4; --title:#F2F4F7; --muted:#7E8794; --dim:#5A616C;
-  --accent:#7FB8E8; --green:#4ADE9C; --red:#F0647A; --gold:#E8C268;
+  --accent:#3B7DFF; --green:#4ADE9C; --red:#F0647A; --gold:#E8C268;
   --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* ── AUTH GATE ── */
-#authGate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(59, 125, 255,.06) 0%,transparent 70%)}
+#authGate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(59,125,255,.06) 0%,transparent 70%)}
 .ag-box{background:#0E1219;border:1px solid #1C212A;border-radius:10px;padding:44px 36px;width:100%;max-width:380px;text-align:center}
 .ag-logo{font-family:'Anton',sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:.08em;background:linear-gradient(180deg,#FBFCFE 0%,#8A929E 50%,#B7BEC9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
 .ag-sub{font-size:12px;color:#7E8794;letter-spacing:.06em;text-transform:uppercase;margin-bottom:28px}
@@ -33,16 +33,21 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 
 /* ── LAYOUT ── */
 #admin{display:none;min-height:100vh}
-.adm-nav{background:#070A11;border-bottom:1px solid #1C212A;padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100}
+.adm-nav{background:#070A11;border-bottom:1px solid #1C212A;padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100;flex-wrap:wrap}
 .adm-nav-logo{font-family:'Anton',sans-serif;font-size:15px;text-transform:uppercase;letter-spacing:.1em;color:#F2F4F7;margin-right:24px;white-space:nowrap;padding:14px 0}
 .adm-tab{padding:16px 16px;border:none;border-bottom:2px solid transparent;background:transparent;color:#7E8794;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
 .adm-tab.active{color:#3B7DFF;border-bottom-color:#3B7DFF}
 .adm-tab:hover:not(.active){color:#F2F4F7}
 .adm-badge{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;border-radius:99px;background:#F0647A;color:#fff;font-size:10px;font-weight:700;padding:0 4px;margin-left:5px}
+.adm-nav-live{margin-left:auto;display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#7E8794;padding:8px 0}
+.adm-nav-dot{width:8px;height:8px;border-radius:50%;background:#4ADE9C;flex-shrink:0;animation:livepulse 2s infinite}
+.adm-nav-dot.stale{background:#E8C268;animation:none}
+.adm-nav-refresh{padding:6px 12px;background:transparent;border:1px solid #1C212A;border-radius:5px;color:#7E8794;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.adm-nav-refresh:hover{border-color:#3B7DFF;color:#3B7DFF}
 .adm-body{padding:24px 24px 80px;max-width:1440px;margin:0 auto}
 
 /* ── LIVE BAR ── */
-.live-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:10px 14px;background:#0E1219;border:1px solid #1C212A;border-radius:8px}
+.live-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:10px 14px;background:#0E1219;border:1px solid #1C212A;border-radius:8px;flex-wrap:wrap}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#4ADE9C;flex-shrink:0;animation:livepulse 2s infinite}
 @keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,156,.6)}50%{box-shadow:0 0 0 5px rgba(74,222,156,0)}}
 .live-label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#4ADE9C;text-transform:uppercase;letter-spacing:.1em}
@@ -54,15 +59,13 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 
 /* ── KPI GRID ── */
 .kpi-row{display:grid;gap:10px;margin-bottom:10px}
-.kpi-row--4{grid-template-columns:repeat(4,1fr)}
-.kpi-row--4b{grid-template-columns:repeat(4,1fr)}
+.kpi-row--4,.kpi-row--4b{grid-template-columns:repeat(4,1fr)}
 @media(max-width:1100px){.kpi-row--4,.kpi-row--4b{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.kpi-row--4,.kpi-row--4b{grid-template-columns:1fr 1fr}}
-
 .kpi{background:#0E1219;border:1px solid #1C212A;border-radius:10px;padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
 .kpi:hover{border-color:#3A414C}
-.kpi__top-bar{position:absolute;top:0;left:0;right:0;height:2px}
-.kpi--accent .kpi__top-bar{background:linear-gradient(90deg,#3B7DFF,rgba(59, 125, 255,0))}
+.kpi__top-bar{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#3B7DFF,rgba(59,125,255,0))}
+.kpi--accent .kpi__top-bar{background:linear-gradient(90deg,#3B7DFF,rgba(59,125,255,0))}
 .kpi--bull .kpi__top-bar{background:linear-gradient(90deg,#4ADE9C,rgba(74,222,156,0))}
 .kpi--bear .kpi__top-bar{background:linear-gradient(90deg,#F0647A,rgba(240,100,122,0))}
 .kpi--warn .kpi__top-bar{background:linear-gradient(90deg,#E8C268,rgba(232,194,104,0))}
@@ -81,9 +84,7 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 /* ── CHARTS LAYOUT ── */
 .charts-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .charts-3{display:grid;grid-template-columns:3fr 2fr;gap:10px;margin-bottom:10px}
-.charts-feed{display:grid;grid-template-columns:3fr 2fr;gap:10px;margin-bottom:10px}
-@media(max-width:900px){.charts-2,.charts-3,.charts-feed{grid-template-columns:1fr}}
-
+@media(max-width:900px){.charts-2,.charts-3{grid-template-columns:1fr}}
 .chart-box{background:#0E1219;border:1px solid #1C212A;border-radius:10px;padding:20px 20px 16px}
 .chart-box__title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#7E8794;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
 .chart-box__title span{font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2F4F7;font-weight:600}
@@ -105,7 +106,7 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 .feed-list::-webkit-scrollbar-thumb{background:#1C212A;border-radius:99px}
 .feed-item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:8px 10px;border-radius:6px;transition:background .15s}
 .feed-item:hover{background:#070A11}
-.feed-item--new{background:rgba(74,222,156,.04)}
+.feed-item--new{background:rgba(74,222,156,.05)}
 .feed-item__time{font-family:'JetBrains Mono',monospace;font-size:10px;color:#7E8794;white-space:nowrap;min-width:64px}
 .feed-item__mid{min-width:0}
 .feed-item__page{font-family:'JetBrains Mono',monospace;font-size:12px;color:#C3CAD4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -113,9 +114,8 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 .feed-item__right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .feed-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .feed-dot--pv{background:#3B7DFF}
-.feed-dot--se{background:#7E8794}
-.feed-device{color:#7E8794}
-.feed-empty{text-align:center;padding:40px 16px;color:#7E8794;font-size:13px}
+.feed-device{color:#7E8794;display:flex}
+.feed-empty{text-align:center;padding:40px 16px;color:#7E8794;font-size:13px;line-height:1.6}
 
 /* ── USERS TABLE ── */
 .tbl-box{background:#0E1219;border:1px solid #1C212A;border-radius:10px;padding:18px 20px}
@@ -123,8 +123,10 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
 .tbl th{text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#7E8794;border-bottom:1px solid #1C212A}
 .tbl td{padding:8px 8px;border-bottom:1px solid #070A11;color:#C3CAD4;vertical-align:middle}
+.tbl td.mono{font-family:'JetBrains Mono',monospace}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:rgba(255,255,255,.015)}
+.tbl tr.is-new td{background:rgba(74,222,156,.05)}
 .badge-pro{display:inline-block;padding:2px 7px;border-radius:4px;background:rgba(74,222,156,.1);border:1px solid rgba(74,222,156,.25);color:#4ADE9C;font-size:10px;font-weight:600}
 .badge-free{display:inline-block;padding:2px 7px;border-radius:4px;background:#070A11;border:1px solid #1C212A;color:#7E8794;font-size:10px}
 
@@ -149,9 +151,6 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 .adm-empty{text-align:center;padding:64px 24px;color:#7E8794;font-size:14px}
 .adm-loader{text-align:center;padding:48px;color:#7E8794;font-size:13px}
 .adm-count{font-size:12px;color:#7E8794;margin-bottom:12px}
-
-/* ── SECTION DIVIDERS ── */
-.section-gap{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -167,19 +166,19 @@ body{background:#04060B;color:#C3CAD4;font-family:'Inter',system-ui,sans-serif;m
 </div>
 
 <div id="admin">
-  <nav class="nav">
-    <span class="nav__logo">Admin</span>
-    <button class="tab active" id="tabStats"    onclick="showTab('stats')">Tableau de bord</button>
-    <button class="tab"        id="tabPending"  onclick="showTab('pending')">Avis en attente <span id="badgePending" class="tab__badge" style="display:none"></span></button>
-    <button class="tab"        id="tabApproved" onclick="showTab('approved')">Avis publiés</button>
-    <div class="nav__live">
-      <span class="nav__dot" id="liveDot"></span>
+  <nav class="adm-nav">
+    <span class="adm-nav-logo">Admin</span>
+    <button class="adm-tab active" id="tabStats"    onclick="showTab('stats')">Tableau de bord</button>
+    <button class="adm-tab"        id="tabPending"  onclick="showTab('pending')">Avis en attente <span id="badgePending" class="adm-badge" style="display:none"></span></button>
+    <button class="adm-tab"        id="tabApproved" onclick="showTab('approved')">Avis publiés</button>
+    <div class="adm-nav-live">
+      <span class="adm-nav-dot" id="liveDot"></span>
       <span id="liveTxt">connexion…</span>
-      <button class="nav__refresh" onclick="manualRefresh()">Actualiser</button>
+      <button class="adm-nav-refresh" onclick="manualRefresh()">Actualiser</button>
     </div>
   </nav>
-  <div class="body">
-    <div id="panelStats"></div>
+  <div class="adm-body">
+    <div id="panelStats"><div class="adm-loader">Chargement…</div></div>
     <div id="panelPending"  style="display:none"></div>
     <div id="panelApproved" style="display:none"></div>
   </div>
@@ -192,7 +191,7 @@ var REVIEWS_API = '/api/admin-reviews';
 var REFRESH_MS  = 12000;
 var curTab = 'stats';
 var reviewData = { pending: [], approved: [] };
-var lastStats = null, prevTotal = null, prevActive = null;
+var lastStats = null;
 var seenEvents = {};          // signatures d'événements déjà affichés (pour "fresh")
 var seenUsers = {};           // emails déjà vus (pour flash nouveaux inscrits)
 var firstRender = true;
@@ -213,9 +212,10 @@ function showTab(tab){
   curTab = tab;
   ['stats','pending','approved'].forEach(function(t){
     var T = t.charAt(0).toUpperCase()+t.slice(1);
-    document.getElementById('tab'+T).className = 'tab'+(t===tab?' active':'');
+    document.getElementById('tab'+T).className = 'adm-tab'+(t===tab?' active':'');
     document.getElementById('panel'+T).style.display = t===tab ? '' : 'none';
   });
+  if (tab!=='stats' && !reviewData[tab].length) loadReviews();
 }
 
 // ── Boucle temps réel (pause si onglet caché, refresh immédiat au retour) ──
@@ -224,7 +224,7 @@ function startLoop(){
   tickTimer = setInterval(function(){
     updateLiveLabel();
     if (document.hidden) return;
-    if (Date.now() - lastOkTs >= REFRESH_MS){ loadStats(); if (curTab!=='stats') loadReviews(); }
+    if (Date.now() - lastOkTs >= REFRESH_MS){ loadStats(); loadReviews(); }
   }, 1000);
 }
 document.addEventListener('visibilitychange', function(){
@@ -235,8 +235,10 @@ function updateLiveLabel(){
   var dot = document.getElementById('liveDot'), txt = document.getElementById('liveTxt');
   if (!dot || !lastOkTs) return;
   var s = Math.round((Date.now()-lastOkTs)/1000);
-  dot.className = 'nav__dot' + (s>REFRESH_MS/1000+8 ? ' stale' : '');
+  dot.className = 'adm-nav-dot' + (s>REFRESH_MS/1000+8 ? ' stale' : '');
   txt.textContent = s<3 ? 'à jour' : 'actualisé il y a '+s+'s';
+  var cd = document.getElementById('liveCountdown');
+  if (cd){ var rem = Math.max(0, Math.ceil((REFRESH_MS-(Date.now()-lastOkTs))/1000)); cd.textContent = rem>0 ? 'Actualisation dans '+rem+'s' : 'Actualisation…'; }
 }
 
 // ── Helpers ──
@@ -274,36 +276,19 @@ function svgLine(data,color,h){
 }
 function svgHour(data){
   var W=600,H=74,barW=W/24,max=Math.max.apply(null,data.map(function(d){return d.count||0;}))||1;
-  var bars=data.map(function(d,i){ var bh=Math.max((d.count/max)*52,2),x=(i*barW+1).toFixed(1),y=(60-bh).toFixed(1),op=(.3+(d.count/max)*.7).toFixed(2),c=d.count>0?'#7FB8E8':'#1C212A'; var lbl=(i%4===0)?'<text x="'+(i*barW+barW/2).toFixed(1)+'" y="70" fill="rgba(255,255,255,.22)" font-size="8" text-anchor="middle" font-family="JetBrains Mono,monospace">'+i+'h</text>':''; return '<rect x="'+x+'" y="'+y+'" width="'+(barW-2).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+c+'" opacity="'+op+'" rx="1"><title>'+d.count+' visites à '+i+'h</title></rect>'+lbl; }).join('');
+  var bars=data.map(function(d,i){ var bh=Math.max((d.count/max)*52,2),x=(i*barW+1).toFixed(1),y=(60-bh).toFixed(1),op=(.3+(d.count/max)*.7).toFixed(2),c=d.count>0?'#3B7DFF':'#1C212A'; var lbl=(i%4===0)?'<text x="'+(i*barW+barW/2).toFixed(1)+'" y="70" fill="rgba(255,255,255,.22)" font-size="8" text-anchor="middle" font-family="JetBrains Mono,monospace">'+i+'h</text>':''; return '<rect x="'+x+'" y="'+y+'" width="'+(barW-2).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+c+'" opacity="'+op+'" rx="1"><title>'+d.count+' visites à '+i+'h</title></rect>'+lbl; }).join('');
   return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block">'+bars+'</svg>';
-}
-
-function svgHourBar(data) {
-  var W = 600, H = 72;
-  var counts = data.map(function(d){ return d.count||0; });
-  var max = Math.max.apply(null, counts) || 1;
-  var barW = W / 24;
-  var bars = data.map(function(d, i) {
-    var bh = Math.max((d.count/max)*52, 2);
-    var x = (i * barW + 1).toFixed(1);
-    var y = (60 - bh).toFixed(1);
-    var op = (0.3 + (d.count/max)*0.7).toFixed(2);
-    var color = d.count > 0 ? '#3B7DFF' : '#1C212A';
-    var lbl = (i % 4 === 0) ? '<text x="'+(i*barW+barW/2).toFixed(1)+'" y="70" fill="rgba(255,255,255,0.22)" font-size="8" text-anchor="middle" font-family="JetBrains Mono,monospace">'+i+'h</text>' : '';
-    return '<rect x="'+x+'" y="'+y+'" width="'+(barW-2).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+color+'" opacity="'+op+'" rx="1"><title>'+d.count+' visites à '+i+'h</title></rect>'+lbl;
-  }).join('');
-  return '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">'+bars+'</svg>';
 }
 
 // ── Render Stats ──────────────────────────────────────
 function loadStats() {
-  if (!document.getElementById('liveUpdated')) {
-    document.getElementById('panelStats').innerHTML = '<div class="adm-loader">Chargement…</div>';
-  }
   fetch(STATS_API, { headers: { 'X-Admin-Pass': ADMIN_PASS } })
     .then(function(r){ return r.json(); })
-    .then(function(d){ if(d && !d.error){ lastStats=d; lastOkTs=Date.now(); renderStats(d); updateLiveLabel(); } })
-    .catch(function(){ if(!lastStats) document.getElementById('panelStats').innerHTML = '<div class="empty">Erreur de chargement.</div>'; });
+    .then(function(d){
+      if(d && !d.error){ lastStats=d; lastOkTs=Date.now(); renderStats(d); updateLiveLabel(); }
+      else if(!lastStats){ document.getElementById('panelStats').innerHTML = '<div class="adm-empty">Erreur de chargement des statistiques.</div>'; }
+    })
+    .catch(function(){ if(!lastStats) document.getElementById('panelStats').innerHTML = '<div class="adm-empty">Erreur de chargement.</div>'; });
 }
 
 function renderStats(d) {
@@ -314,6 +299,7 @@ function renderStats(d) {
   var lv = d.live    || {};
 
   var now = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  var cd0 = Math.ceil(REFRESH_MS/1000);
 
   // Live bar
   var liveBar = '<div class="live-bar">'
@@ -321,51 +307,45 @@ function renderStats(d) {
     +'<span class="live-label">Live</span>'
     +'<span class="live-sep">|</span>'
     +'<span class="live-upd" id="liveUpdated">Actualisé à '+now+'</span>'
-    +'<span class="live-countdown" id="liveCountdown">Actualisation dans '+refreshCountdown+'s</span>'
+    +'<span class="live-countdown" id="liveCountdown">Actualisation dans '+cd0+'s</span>'
     +'<button class="live-refreshbtn" onclick="manualRefresh()">Actualiser</button>'
     +'</div>';
 
-  // KPI row 1: Active now, Today, Users, PRO
-  var kpiRow1 = '<div class="kpi-row kpi-row--4" style="margin-bottom:10px">'
+  // KPI row 1
+  var kpiRow1 = '<div class="kpi-row kpi-row--4">'
     +'<div class="kpi kpi--live"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__live-badge"><span class="kpi__live-badge-dot"></span>EN DIRECT</div>'
     +'<div class="kpi__label">Actifs maintenant</div>'
     +'<div class="kpi__val">'+(t.active_now||0)+'</div>'
     +'<div class="kpi__sub">dernières 5 minutes</div></div>'
-
     +'<div class="kpi kpi--accent"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Visites aujourd\'hui</div>'
     +'<div class="kpi__val">'+(t.views_today||0)+'</div>'
     +'<div class="kpi__sub">'+(t.sessions_today||0)+' sessions uniques</div></div>'
-
     +'<div class="kpi kpi--bull"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Utilisateurs total</div>'
     +'<div class="kpi__val">'+(u.total||0)+'</div>'
     +'<div class="kpi__sub">'+(u.total ? Math.round((u.pro||0)/(u.total)*100) : 0)+'% PRO</div></div>'
-
     +'<div class="kpi kpi--accent"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Comptes PRO</div>'
     +'<div class="kpi__val">'+(u.pro||0)+'</div>'
     +'<div class="kpi__sub">'+(u.free||0)+' comptes gratuits</div></div>'
     +'</div>';
 
-  // KPI row 2: 7j, 30j, Duration, Reviews
+  // KPI row 2
   var kpiRow2 = '<div class="kpi-row kpi-row--4b" style="margin-bottom:20px">'
-    +'<div class="kpi"><div class="kpi__top-bar" style="background:linear-gradient(90deg,#3B7DFF,transparent)"></div>'
+    +'<div class="kpi"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Visites 7 jours</div>'
     +'<div class="kpi__val" style="font-size:28px">'+(t.views_7d||0)+'</div>'
     +'<div class="kpi__sub">'+(t.sessions_7d||0)+' sessions</div></div>'
-
-    +'<div class="kpi"><div class="kpi__top-bar" style="background:linear-gradient(90deg,#3B7DFF,transparent)"></div>'
+    +'<div class="kpi"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Visites 30 jours</div>'
     +'<div class="kpi__val" style="font-size:28px">'+(t.views_30d||0)+'</div>'
     +'<div class="kpi__sub">&nbsp;</div></div>'
-
-    +'<div class="kpi"><div class="kpi__top-bar" style="background:linear-gradient(90deg,#E8C268,transparent)"></div>'
+    +'<div class="kpi kpi--warn"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Durée moy. session</div>'
-    +'<div class="kpi__val" style="font-size:28px;color:#E8C268">'+fmtDur(t.avg_duration_s)+'</div>'
+    +'<div class="kpi__val" style="font-size:28px">'+fmtDur(t.avg_duration_s)+'</div>'
     +'<div class="kpi__sub">30 derniers jours</div></div>'
-
     +'<div class="kpi kpi--warn"><div class="kpi__top-bar"></div>'
     +'<div class="kpi__label">Avis en attente</div>'
     +'<div class="kpi__val" style="font-size:28px">'+(co.reviews_pending||0)+'</div>'
@@ -376,51 +356,57 @@ function renderStats(d) {
   var chartViews   = svgLine(c.daily_views   || [], '#3B7DFF');
   var chartSignups = svgLine(c.daily_signups || [], '#4ADE9C');
   var charts1 = '<div class="charts-2">'
-    +'<div class="chart-box"><div class="chart-box__title">Visites par jour — 14 jours <span>'+((c.daily_views||[]).reduce(function(a,x){return a+x.count;},0))+'</span></div><div class="chart-wrap">'+chartViews+'</div></div>'
-    +'<div class="chart-box"><div class="chart-box__title">Inscriptions par jour — 14 jours <span>'+((c.daily_signups||[]).reduce(function(a,x){return a+x.count;},0))+'</span></div><div class="chart-wrap">'+chartSignups+'</div></div>'
+    +'<div class="chart-box"><div class="chart-box__title">Visites par jour — 14 jours <span>'+((c.daily_views||[]).reduce(function(a,x){return a+(x.count||0);},0))+'</span></div><div class="chart-wrap">'+chartViews+'</div></div>'
+    +'<div class="chart-box"><div class="chart-box__title">Inscriptions par jour — 14 jours <span>'+((c.daily_signups||[]).reduce(function(a,x){return a+(x.count||0);},0))+'</span></div><div class="chart-wrap">'+chartSignups+'</div></div>'
     +'</div>';
 
-  var maxP=(c.top_pages&&c.top_pages[0])?c.top_pages[0].count:1;
-  var pagesHtml=(c.top_pages||[]).map(function(p,i){ return '<div class="prow"><span class="prow__n">'+(i+1)+'</span><span class="prow__name">'+esc(p.page)+'</span><div class="prow__bar"><i style="width:'+Math.round(p.count/maxP*100)+'%"></i></div><span class="prow__c">'+p.count+'</span></div>'; }).join('') || '<div style="color:var(--muted);font-size:12px;padding:14px 0">Aucune donnée pour l\'instant.</div>';
-  var charts2='<div class="grid-2">'
-    +'<div class="card"><div class="card__h">Heures de pointe — 7 j</div>'+svgHour(c.hourly||[])+'</div>'
-    +'<div class="card"><div class="card__h">Pages les plus visitées — 30 j</div><div class="pages">'+pagesHtml+'</div></div>'
+  // Charts row 2: hourly peak + top pages
+  var maxP=(c.top_pages&&c.top_pages[0])?(c.top_pages[0].count||1):1;
+  var pagesHtml=(c.top_pages||[]).map(function(p,i){
+    return '<div class="page-row"><span class="page-rank">'+(i+1)+'</span><span class="page-name">'+esc(p.page)+'</span>'
+      +'<div class="page-bar-wrap"><div class="page-bar" style="width:'+Math.round((p.count||0)/maxP*100)+'%"></div></div>'
+      +'<span class="page-count">'+(p.count||0)+'</span></div>';
+  }).join('') || '<div style="color:var(--muted);font-size:12px;padding:14px 0">Aucune donnée pour l\'instant.</div>';
+  var charts2='<div class="charts-3">'
+    +'<div class="chart-box"><div class="chart-box__title">Heures de pointe — 7 jours</div><div class="chart-wrap">'+svgHour(c.hourly||[])+'</div></div>'
+    +'<div class="chart-box"><div class="chart-box__title">Pages les plus visitées — 30 jours</div><div class="pages-list">'+pagesHtml+'</div></div>'
     +'</div>';
 
-  // Live feed (connexions) — flash des événements nouveaux depuis le dernier refresh
+  // Live feed (connexions) — flash des nouveaux événements
   var evts=(lv.events||[]).filter(function(e){ return e.event_type==='pageview'; }).slice(0,40);
   var newSeen={};
   var feed;
-  if(!evts.length){ feed='<div class="fempty">Aucune connexion enregistrée pour l\'instant.<br>Le tracker collecte à chaque visite du site.</div>'; }
+  if(!evts.length){ feed='<div class="feed-empty">Aucune connexion enregistrée pour l\'instant.<br>Le tracker collecte à chaque visite du site.</div>'; }
   else {
-    feed=evts.map(function(e){
+    feed='<div class="feed-list">'+evts.map(function(e){
       var key=(e.session_id||'')+'|'+(e.created_at||'');
       var fresh=!firstRender && !seenEvents[key];
       newSeen[key]=1;
       var who=e.user_email?esc(e.user_email):'Visiteur anonyme';
-      return '<div class="fitem'+(fresh?' fresh':'')+'">'
-        +'<span class="fitem__t">'+relTime(e.created_at)+'</span>'
-        +'<div class="fitem__mid"><div class="fitem__page">'+esc(e.page||'index')+'</div>'
-        +'<div class="fitem__who'+(e.user_email?' auth':'')+'">'+who+(e.session_id?' · #'+esc(e.session_id):'')+'</div></div>'
-        +'<div class="fitem__r"><span class="fdot"></span>'+deviceSvg(e.ua)+'</div></div>';
-    }).join('');
+      return '<div class="feed-item'+(fresh?' feed-item--new':'')+'">'
+        +'<span class="feed-item__time">'+relTime(e.created_at)+'</span>'
+        +'<div class="feed-item__mid"><div class="feed-item__page">'+esc(e.page||'index')+'</div>'
+        +'<div class="feed-item__email">'+who+(e.session_id?' · #'+esc(e.session_id):'')+'</div></div>'
+        +'<div class="feed-item__right"><span class="feed-dot feed-dot--pv"></span><span class="feed-device">'+deviceSvg(e.ua)+'</span></div></div>';
+    }).join('')+'</div>';
   }
   seenEvents = newSeen;
 
+  // Derniers inscrits
   var usersHtml=(u.recent||[]).map(function(x){
     var fresh=!firstRender && x.email && !seenUsers[x.email];
-    return '<tr'+(fresh?' class="fresh"':'')+'><td class="mono">'+esc(x.email||'—')+'</td>'
-      +'<td>'+(x.is_pro?'<span class="pill pill--pro">Premium</span>':'<span class="pill pill--free">Gratuit</span>')+'</td>'
+    return '<tr'+(fresh?' class="is-new"':'')+'><td class="mono">'+esc(x.email||'—')+'</td>'
+      +'<td>'+(x.is_pro?'<span class="badge-pro">Premium</span>':'<span class="badge-free">Gratuit</span>')+'</td>'
       +'<td class="mono" style="color:var(--muted)">'+fmtDate(x.created_at)+'</td></tr>';
   }).join('') || '<tr><td colspan="3" style="color:var(--muted);padding:16px 8px">Aucun utilisateur</td></tr>';
   var newSeenU={}; (u.recent||[]).forEach(function(x){ if(x.email) newSeenU[x.email]=1; }); seenUsers=newSeenU;
 
-  var bottom='<div class="grid-32">'
-    +'<div class="card"><div class="card__h">Connexions en temps réel <b>'+evts.length+'</b></div><div class="feed">'+feed+'</div></div>'
-    +'<div class="card"><div class="card__h">Derniers inscrits</div><table class="tbl"><thead><tr><th>Email</th><th>Statut</th><th>Inscription</th></tr></thead><tbody>'+usersHtml+'</tbody></table></div>'
+  var bottom='<div class="charts-3">'
+    +'<div class="chart-box"><div class="chart-box__title">Connexions en temps réel <span>'+evts.length+'</span></div>'+feed+'</div>'
+    +'<div class="tbl-box"><div class="tbl-box__title">Derniers inscrits</div><table class="tbl"><thead><tr><th>Email</th><th>Statut</th><th>Inscription</th></tr></thead><tbody>'+usersHtml+'</tbody></table></div>'
     +'</div>';
 
-  document.getElementById('panelStats').innerHTML = kpis + charts1 + charts2 + bottom;
+  document.getElementById('panelStats').innerHTML = liveBar + kpiRow1 + kpiRow2 + charts1 + charts2 + bottom;
   firstRender = false;
 }
 
@@ -438,17 +424,18 @@ function loadReviews(){
 }
 function renderReviews(tab){
   var rows=reviewData[tab], area=document.getElementById('panel'+tab.charAt(0).toUpperCase()+tab.slice(1));
-  if(!rows.length){ area.innerHTML='<div class="empty">'+(tab==='pending'?'Aucun avis en attente.':'Aucun avis publié.')+'</div>'; return; }
-  area.innerHTML='<div class="rev-count">'+rows.length+' avis</div><div class="rev-grid">'+rows.map(function(rv){
-    return '<div class="rev"><div>'
-      +'<div class="rev__meta"><span class="rev__name">'+esc(rv.author_name)+'</span>'
-      +(rv.role?'<span class="rev__role">'+esc(rv.role)+'</span>':'')
-      +'<span class="rev__stars">'+stars(rv.rating)+'</span><span class="rev__date">'+frDateT(rv.created_at)+'</span></div>'
-      +(rv.user_email?'<div class="rev__email">'+esc(rv.user_email)+'</div>':'')
-      +'<div class="rev__body">'+esc(rv.body)+'</div></div>'
-      +'<div class="rev__act">'
-      +(tab==='pending'?'<button class="b b--ok" onclick="approveRv(\''+rv.id+'\')">Approuver</button>':'<button class="b b--warn" onclick="setRv(\''+rv.id+'\',false)">Retirer</button>')
-      +'<button class="b b--del" onclick="deleteRv(\''+rv.id+'\')">Supprimer</button></div></div>';
+  if(!area) return;
+  if(!rows.length){ area.innerHTML='<div class="adm-empty">'+(tab==='pending'?'Aucun avis en attente.':'Aucun avis publié.')+'</div>'; return; }
+  area.innerHTML='<div class="adm-count">'+rows.length+' avis</div><div class="adm-grid">'+rows.map(function(rv){
+    return '<div class="adm-card"><div>'
+      +'<div class="adm-card__meta"><span class="adm-card__name">'+esc(rv.author_name)+'</span>'
+      +(rv.role?'<span class="adm-card__role">'+esc(rv.role)+'</span>':'')
+      +'<span class="adm-card__stars">'+stars(rv.rating)+'</span><span class="adm-card__date">'+frDateT(rv.created_at)+'</span></div>'
+      +(rv.user_email?'<div class="adm-card__email">'+esc(rv.user_email)+'</div>':'')
+      +'<div class="adm-card__body">'+esc(rv.body)+'</div></div>'
+      +'<div class="adm-card__actions">'
+      +(tab==='pending'?'<button class="btn-approve" onclick="approveRv(\''+rv.id+'\')">Approuver</button>':'<button class="btn-unapprove" onclick="setRv(\''+rv.id+'\',false)">Retirer</button>')
+      +'<button class="btn-delete" onclick="deleteRv(\''+rv.id+'\')">Supprimer</button></div></div>';
   }).join('')+'</div>';
 }
 function setRv(id,approved){

@@ -52,7 +52,7 @@
     try{
       var TOOLS = {
         'app.html':'Setup Analyzer','journal.html':'Journal','calendrier.html':'Calendrier Éco',
-        'bubble.html':'Bubble Map','calculateur.html':'Calculateur de Pips','mur-des-trades.html':'Mur des Trades',
+        'bubble.html':'Données','correlations.html':'Données','taux.html':'Données','calculateur.html':'Calculateur de Pips','mur-des-trades.html':'Mur des Trades',
         'patrimoine.html':'Patrimoine','patrimoine-presentation.html':'Patrimoine','patrimoine-plan.html':'Patrimoine'
       };
       var tool = TOOLS[path] || (/^eco-/.test(path) ? 'Calendrier Éco' : null);
@@ -79,7 +79,9 @@
     'journal.html':     { crumb: 'Journal de Trading',  key: 'journal' },
     'calendrier.html':  { crumb: 'Calendrier Éco',      key: 'calendrier' },
     'app.html':         { crumb: 'Setup Analyzer',      key: 'analyzer' },
-    'bubble.html':      { crumb: 'Bubble Map',          key: 'bubble' },
+    'bubble.html':      { crumb: 'Données · Bubble Map',       key: 'bubble' },
+    'correlations.html':{ crumb: 'Données · Corrélations',     key: 'bubble' },
+    'taux.html':        { crumb: 'Données · Taux d\'intérêt',  key: 'bubble' },
     'calculateur.html': { crumb: 'Calculateur de Pips', key: 'calculateur' },
     'mur-des-trades.html': { crumb: 'Mur des Trades',   key: 'trades' },
     'patrimoine.html':            { crumb: 'Patrimoine · Portefeuille',   key: 'patrimoine' },
@@ -172,7 +174,11 @@
       { label: 'Crypto', href: './eco-crypto.html', icon: I.crypto },
       { label: 'Archive', href: './eco-archive.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M9.5 12h5"/></svg>' }
     ] },
-    { key: 'bubble', label: 'Bubble Map', href: './bubble.html', icon: I.bubble },
+    { key: 'bubble', label: 'Données', href: './bubble.html', icon: I.bubble, children: [
+      { label: 'Bubble Map', href: './bubble.html', icon: I.bubble },
+      { label: 'Corrélations', href: './correlations.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><circle cx="9" cy="14" r="2"/><circle cx="16" cy="8" r="2"/><path d="M10.6 12.7 14.4 9.4"/></svg>' },
+      { label: 'Taux d\'intérêt', href: './taux.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>' }
+    ] },
     { key: 'calculateur', label: 'Calculateur de Pips', href: './calculateur.html', icon: I.calc },
     { key: 'trades', label: 'Mur des Trades', href: './mur-des-trades.html', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>' }
   ];

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#04060B">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taux d'intérêt — courbe US en direct & banques centrales | Le Terminal</title>
+<meta name="description" content="Courbe des taux d'emprunt américains en direct et taux directeurs des grandes banques centrales (Fed, BCE, BoE, BoJ…).">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://www.leterminal.net/taux">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./design-system.css">
+<link rel="stylesheet" href="./theme-light.css">
+<link rel="stylesheet" href="./calendar-eco.css">
+<style>
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-text);background:var(--bg-void);color:var(--text-title);min-height:100vh;overflow-x:hidden;padding-top:var(--chrome-h,64px)}
+
+.dv-sub{max-width:1200px;margin:0 auto 22px;padding:0 20px}
+.dv-sub__inner{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:10px 12px 10px 16px}
+.dv-sub__label{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.dv-drop{position:relative}
+.dv-drop__btn{display:inline-flex;align-items:center;gap:9px;background:var(--bg-void);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:9px 14px;color:var(--text-title);font-family:var(--font-text);font-size:13.5px;font-weight:600;cursor:pointer;transition:border-color var(--dur-fast) var(--ease-out)}
+.dv-drop__btn:hover,.dv-drop:focus-within .dv-drop__btn{border-color:var(--accent)}
+.dv-drop__btn svg{color:var(--text-muted);transition:transform var(--dur-fast) var(--ease-out)}
+.dv-drop:hover .dv-drop__btn svg,.dv-drop:focus-within .dv-drop__btn svg{transform:rotate(180deg)}
+.dv-drop__menu{position:absolute;top:calc(100% + 6px);left:0;min-width:210px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-md);box-shadow:0 14px 38px rgba(0,0,0,.55);padding:5px;display:none;z-index:60}
+.dv-drop:hover .dv-drop__menu,.dv-drop:focus-within .dv-drop__menu{display:block}
+.dv-drop__item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r-sm);color:var(--text-body);text-decoration:none;font-size:13px;font-weight:500;transition:background var(--dur-fast) var(--ease-out)}
+.dv-drop__item:hover{background:var(--accent-glow-soft);color:var(--accent-bright)}
+.dv-drop__item.is-on{color:var(--accent-bright);background:var(--accent-glow-soft)}
+/* scrollbars aux couleurs du site */
+html{scrollbar-width:thin;scrollbar-color:rgba(59,125,255,.42) transparent}
+*::-webkit-scrollbar{width:12px;height:12px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:rgba(59,125,255,.32);border-radius:99px;border:3px solid var(--bg-void)}
+*::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+.page-head{max-width:1200px;margin:0 auto 20px;padding:0 20px}
+.page-head .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.page-head .eyebrow .lt-dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);display:inline-block}
+.page-head h1{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.9rem,4vw,2.6rem);letter-spacing:.01em;color:var(--text-title);margin:0 0 8px}
+.page-head p{margin:0;color:var(--text-body);font-size:.98rem;max-width:70ch;line-height:1.6}
+.dv-wrap{max-width:1200px;margin:0 auto;padding:0 20px 80px}
+.panel{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:22px}
+.panel__title{font-family:var(--font-mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dv-live{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--bull)}
+.dv-live .ld{width:6px;height:6px;border-radius:50%;background:var(--bull);box-shadow:0 0 8px var(--bull-glow);animation:dvp 2s ease-in-out infinite}
+@keyframes dvp{0%,100%{opacity:1}50%{opacity:.3}}
+
+
+.tx-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.tx-yields{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.tx-yields{grid-template-columns:repeat(2,1fr)}}
+.tx-y{background:var(--bg-void);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:16px 18px}
+.tx-y__lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.tx-y__val{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:1.9rem;font-weight:700;color:var(--text-title);line-height:1}
+.tx-y__chg{font-family:var(--font-mono);font-size:12px;font-weight:600;margin-top:6px}
+.tx-y__chg.up{color:var(--bear)} .tx-y__chg.dn{color:var(--bull)} .tx-y__chg.fl{color:var(--text-muted)}
+.tx-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tx-tbl th{text-align:left;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding:9px 12px;border-bottom:1px solid var(--border-subtle)}
+.tx-tbl td{padding:11px 12px;border-bottom:1px solid rgba(127,150,190,.08);color:var(--text-body);vertical-align:middle}
+.tx-tbl tr:last-child td{border-bottom:none}
+.tx-tbl tr:hover td{background:rgba(127,150,190,.03)}
+.tx-bank{font-weight:600;color:var(--text-title)}
+.tx-zone{font-size:11px;color:var(--text-muted)}
+.tx-rate{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent-bright);font-size:14px}
+.tx-banner{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:12px 16px;border:1px solid rgba(232,194,104,.28);border-radius:var(--r-md);background:rgba(232,194,104,.06)}
+.tx-banner svg{color:#E8C268;flex-shrink:0;margin-top:1px}
+.tx-banner p{margin:0;font-size:12px;line-height:1.6;color:rgba(232,194,104,.85)}
+
+</style>
+</head>
+<body>
+
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="./logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Données</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Bubbles · correlations · rates">Bulles · corrélations · taux</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<!-- ============ LEFT DOCK ============ -->
+<nav class="lt-dock" aria-label="Pages">
+  <a class="lt-dock__item" href="/">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/></svg>
+    <span class="lt-dock__lbl" data-en="Home">Accueil</span>
+    <span class="lt-dock__tip" data-en="Home">Accueil</span>
+  </a>
+  <a class="lt-dock__item" href="/journal">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M13 8h3M13 12h3"/></svg>
+    <span class="lt-dock__lbl">Journal</span>
+    <span class="lt-dock__tip">Journal de Trading</span>
+  </a>
+  <a class="lt-dock__item" href="/app">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M7 14l3-3 2 2 4-4"/></svg>
+    <span class="lt-dock__lbl">Analyzer</span>
+    <span class="lt-dock__tip">Setup Analyzer</span>
+  </a>
+  <a class="lt-dock__item" href="/patrimoine-presentation">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></svg>
+    <span class="lt-dock__lbl">Patrim.</span>
+    <span class="lt-dock__tip">Patrimoine</span>
+  </a>
+  <a class="lt-dock__item" href="/calendrier">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1.5"/><path d="M4 9h16M8 3v4M16 3v4M9 14h2"/></svg>
+    <span class="lt-dock__lbl">Éco</span>
+    <span class="lt-dock__tip">Calendrier Éco</span>
+  </a>
+  <a class="lt-dock__item is-active" href="/bubble">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><circle cx="17" cy="15" r="3"/><circle cx="16" cy="6" r="2"/></svg>
+    <span class="lt-dock__lbl">Données</span>
+    <span class="lt-dock__tip">Données</span>
+  </a>
+  <a class="lt-dock__item" href="/calculateur">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h6"/></svg>
+    <span class="lt-dock__lbl">Pips</span>
+    <span class="lt-dock__tip">Calculateur de Pips</span>
+  </a>
+  <a class="lt-dock__item" href="/mur-des-trades">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M5 6H3v1.5A3 3 0 0 0 6 10.5M19 6h2v1.5a3 3 0 0 1-3 3"/></svg>
+    <span class="lt-dock__lbl">Trades</span>
+    <span class="lt-dock__tip">Mur des Trades</span>
+  </a>
+</nav>
+
+<main>
+<div class="dv-sub"><div class="dv-sub__inner">
+  <span class="dv-sub__label">Données</span>
+  <div class="dv-drop" tabindex="0">
+    <button class="dv-drop__btn" type="button">Taux d'intérêt <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="dv-drop__menu"><a href="/bubble" class="dv-drop__item">Bubble Map</a><a href="/correlations" class="dv-drop__item">Corrélations</a><a href="/taux" class="dv-drop__item is-on">Taux d'intérêt</a></div>
+  </div>
+</div></div>
+
+<div class="page-head">
+  <span class="eyebrow"><span class="lt-dot"></span> Données de marché</span>
+  <h1>Taux d'intérêt</h1>
+  <p>La courbe des taux d'emprunt américains, actualisée en direct, et les taux directeurs des grandes banques centrales.</p>
+</div>
+<div class="dv-wrap">
+  <div class="tx-grid">
+    <div class="panel">
+      <div class="panel__title"><span>Courbe des taux US — emprunts d'État</span><span class="dv-live"><span class="ld"></span> EN DIRECT</span></div>
+      <div class="tx-yields" id="txYields">
+        <div class="tx-y"><div class="tx-y__lbl">13 semaines</div><div class="tx-y__val" id="y13w">…</div><div class="tx-y__chg" id="c13w">&nbsp;</div></div>
+        <div class="tx-y"><div class="tx-y__lbl">5 ans</div><div class="tx-y__val" id="y5y">…</div><div class="tx-y__chg" id="c5y">&nbsp;</div></div>
+        <div class="tx-y"><div class="tx-y__lbl">10 ans</div><div class="tx-y__val" id="y10y">…</div><div class="tx-y__chg" id="c10y">&nbsp;</div></div>
+        <div class="tx-y"><div class="tx-y__lbl">30 ans</div><div class="tx-y__val" id="y30y">…</div><div class="tx-y__chg" id="c30y">&nbsp;</div></div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--text-muted)">Variation en points de base (pb) depuis la clôture de la veille. Source Yahoo Finance, rafraîchi à chaque visite.</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel__title"><span>Taux directeurs des banques centrales</span></div>
+      <div style="overflow-x:auto"><table class="tx-tbl">
+        <thead><tr><th>Banque centrale</th><th>Taux directeur</th><th>Dernière décision</th><th>Prochaine réunion</th></tr></thead>
+        <tbody id="txCB"></tbody>
+      </table></div>
+      <div class="tx-banner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p><strong>Valeurs de référence</strong> — les taux directeurs changent uniquement lors des réunions de politique monétaire (pas de flux « tick » temps réel). Ce tableau est mis à jour manuellement · dernière révision : <span id="txAsOf">—</span>. Vérifiez toujours auprès de la source officielle avant décision.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<div class="backdrop" id="navBackdrop" aria-hidden="true"></div>
+<script src="./appshell.js"></script>
+<script src="./menu.js?v=2"></script>
+<script>
+(function(){
+  'use strict';
+  var $=function(id){return document.getElementById(id);};
+  // ── Courbe US en direct ──
+  var Y=[['13w','y13w','c13w','US13W'],['5y','y5y','c5y','US5Y'],['10y','y10y','c10y','US10Y'],['30y','y30y','c30y','US30Y']];
+  function fmtPct(v){return v.toFixed(2).replace('.',',')+' %';}
+  async function loadYields(){
+    await Promise.all(Y.map(async function(row){
+      try{
+        var r=await fetch('/api/price?symbol='+row[3]); var j=await r.json();
+        if(!(j.price>0)) throw 0;
+        $(row[1]).textContent=fmtPct(j.price);
+        // change (%) -> prev yield -> delta en pb
+        var el=$(row[2]);
+        if(j.change!=null){
+          var prev=j.price/(1+j.change/100);
+          var bps=Math.round((j.price-prev)*100);
+          el.textContent=(bps>0?'+':'')+bps+' pb';
+          el.className='tx-y__chg '+(bps>0?'up':(bps<0?'dn':'fl'));
+        } else { el.textContent=''; }
+      }catch(e){ $(row[1]).textContent='n/d'; }
+    }));
+  }
+  // ── Taux directeurs (valeurs de référence, à maintenir) ──
+  var AS_OF='janvier 2026';
+  var CB=[
+    ['Réserve fédérale (Fed)','États-Unis','4,25 – 4,50 %','−0,25 pt · déc. 2025','28–29 janv. 2026'],
+    ['Banque centrale européenne','Zone euro','2,15 %','−0,25 pt · déc. 2025','30 janv. 2026'],
+    ['Banque d\'Angleterre','Royaume-Uni','4,25 %','−0,25 pt · nov. 2025','5 févr. 2026'],
+    ['Banque nationale suisse','Suisse','0,00 %','−0,25 pt · déc. 2025','19 mars 2026'],
+    ['Banque du Japon','Japon','0,50 %','+0,25 pt · janv. 2025','23–24 janv. 2026'],
+    ['Banque du Canada','Canada','2,75 %','statu quo · déc. 2025','28 janv. 2026'],
+    ['Reserve Bank of Australia','Australie','3,85 %','−0,25 pt · nov. 2025','3 févr. 2026'],
+    ['Banque populaire de Chine','Chine','3,00 %','statu quo · déc. 2025','20 janv. 2026']
+  ];
+  function renderCB(){
+    $('txAsOf').textContent=AS_OF;
+    $('txCB').innerHTML=CB.map(function(r){
+      return '<tr><td><span class="tx-bank">'+r[0]+'</span><br><span class="tx-zone">'+r[1]+'</span></td>'
+        +'<td><span class="tx-rate">'+r[2]+'</span></td>'
+        +'<td>'+r[3]+'</td><td>'+r[4]+'</td></tr>';
+    }).join('');
+  }
+  function init(){ renderCB(); loadYields(); setInterval(function(){ if(!document.hidden) loadYields(); }, 60000); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script src="./cookies.js"></script>
+<script src="./lang.js"></script>
+<script src="./theme.js"></script>
+<script src="./tracker.js"></script>
+</body>
+</html>
