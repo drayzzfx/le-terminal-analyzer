@@ -115,6 +115,13 @@
   // Repli : toute page éco non listée (eco-*.html) reçoit quand même l'AppShell,
   // rattachée à la branche Calendrier — la barre latérale ne disparaît jamais.
   if (!cfg && /^eco-/.test(path)) cfg = { crumb: 'Calendrier Éco', key: 'calendrier' };
+  // Repli général : toute page non listée qui porte le chrome du site (articles de
+  // blog, mentions légales…) reçoit la navigation mobile. Sans cela, la barre du haut
+  // passe en display:none sous 860px et ces pages n'ont plus AUCUN menu. On passe par
+  // chromeOnly : seul le tiroir est injecté, la mise en page n'est pas touchée.
+  if (!cfg && document.querySelector('.lt-chrome .lt-nav')) {
+    cfg = { crumb: '', key: '', chromeOnly: true };
+  }
   if (!cfg) return;
 
   var I = {
@@ -221,9 +228,35 @@
       + '<button class="lt-btn lt-btn--primary lt-btn--sm" style="width:100%" onclick="location.href=\'./tarifs.html\'">Passer Premium</button></div>';
   }
 
+  // Liens du site (Tarifs, Blog, Méthode, Communauté, Avis) : ils vivent dans
+  // .lt-nav__links, masqué sous 860px. Sans cette section, ils ne sont accessibles
+  // nulle part sur mobile — le tiroir ne proposait que les outils.
+  var SITE = [
+    { label: 'Tarifs',     en: 'Pricing',   href: './tarifs.html',
+      icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg>' },
+    { label: 'Blog',       en: 'Blog',      href: './blog/',
+      icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l4 4v16H6z"/><path d="M15 2v4h4"/><path d="M9.5 12h6M9.5 16h6"/></svg>' },
+    { label: 'Méthode',    en: 'Method',    href: './#method',
+      icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13 13l-4.5 2.5L11 11z"/></svg>' },
+    { label: 'Communauté', en: 'Community', href: './#community',
+      icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-1.6a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20"/><circle cx="9" cy="7" r="3.4"/><path d="M22 20v-1.6a4 4 0 0 0-3-3.9"/><path d="M16.5 3.6a4 4 0 0 1 0 7"/></svg>' },
+    { label: 'Avis',       en: 'Reviews',   href: './avis.html',
+      icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>' }
+  ];
+
+  function buildSiteLinks() {
+    return SITE.map(function (s) {
+      return '<a class="side__item" href="' + s.href + '">'
+        + '<span class="side__ic">' + s.icon + '</span>'
+        + '<span class="side__lbl" data-en="' + s.en + '">' + s.label + '</span></a>';
+    }).join('');
+  }
+
   function buildSideInner() {
     return '<span class="side__label">Outils</span>'
       + buildNav()
+      + '<span class="side__label">Le site</span>'
+      + buildSiteLinks()
       + '<div class="side__spacer"></div>'
       + buildFooter();
   }
@@ -479,6 +512,11 @@
     var drawer = document.createElement('aside'); drawer.className = 'lt-mnav';
     drawer.setAttribute('aria-label', 'Navigation');
     drawer.innerHTML = '<div class="lt-mnav__inner">' + innerHTML + '</div>';
+    // Le tiroir s'affiche aussi depuis un sous-dossier (/blog/…) où un lien relatif
+    // « ./journal.html » viserait /blog/journal.html. On les ramène à la racine.
+    Array.prototype.forEach.call(drawer.querySelectorAll('a[href^="./"]'), function (a) {
+      a.setAttribute('href', a.getAttribute('href').replace(/^\.\//, '/'));
+    });
     document.body.appendChild(bd);
     document.body.appendChild(drawer);
 
@@ -626,6 +664,10 @@
       var drawer = document.createElement('aside'); drawer.className = 'lt-mnav';
       drawer.setAttribute('aria-label', 'Navigation');
       drawer.innerHTML = '<div class="lt-mnav__inner">' + sideEl.innerHTML + '</div>';
+      // Même normalisation que dans buildMobileDrawer : liens ramenés à la racine.
+      Array.prototype.forEach.call(drawer.querySelectorAll('a[href^="./"]'), function (a) {
+        a.setAttribute('href', a.getAttribute('href').replace(/^\.\//, '/'));
+      });
       document.body.appendChild(bd);
       document.body.appendChild(drawer);
 
