@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Types d'ordres en trading : market, limit, stop | Le Terminal</title>
+<meta name="description" content="Ordre au marché, limite, stop, stop-limite, OCO : ce que chaque type garantit vraiment, lequel choisir, et les erreurs d'exécution qui coûtent cher.">
+<link rel="canonical" href="https://www.leterminal.net/blog/types-ordres-trading">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Types d'ordres en trading : market, limit, stop | Le Terminal">
+<meta property="og:description" content="Ordre au marché, limite, stop, stop-limite, OCO : ce que chaque type garantit vraiment, lequel choisir, et les erreurs d'exécution qui coûtent cher.">
+<meta property="og:url" content="https://www.leterminal.net/blog/types-ordres-trading">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/types-ordres-trading-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les types d'ordres en trading : marché, limite, stop, stop-limite et ordres liés, avec ce que chacun garantit — Le Terminal">
+<meta property="article:published_time" content="2026-08-11">
+<meta property="article:modified_time" content="2026-08-11">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Types d'ordres en trading : market, limit, stop">
+<meta name="twitter:description" content="Un ordre au marché garantit l'exécution, pas le prix. Un ordre limite garantit le prix, pas l'exécution. Tout part de là.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/types-ordres-trading-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Les types d'ordres en trading : market, limit, stop et les autres",
+      "description": "Guide complet des types d'ordres en trading : ordre au marché, ordre limite, ordre stop, stop-limite, stop de protection, take profit, stop suiveur et ordres liés OCO, avec le choix à faire selon la situation.",
+      "datePublished": "2026-08-11",
+      "dateModified": "2026-08-11",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/types-ordres-trading-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/types-ordres-trading" },
+      "keywords": "types d'ordres, ordre au marché, ordre limite, ordre stop, stop-limite, stop-loss, take profit, trailing stop, OCO, exécution"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quelle est la différence entre un ordre au marché et un ordre limite ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un ordre au marché garantit l'exécution mais pas le prix : il est exécuté immédiatement au meilleur prix disponible, qui peut différer du prix affiché. Un ordre limite garantit le prix mais pas l'exécution : il ne se déclenche qu'à votre prix ou mieux, et peut ne jamais être servi si le marché ne revient pas sur ce niveau. Aucun des deux n'est meilleur dans l'absolu : le choix dépend de ce que vous acceptez de perdre, du prix ou de l'opportunité."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre un ordre stop et un ordre limite ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les deux sont des ordres en attente placés à un prix choisi, mais ils se situent de part et d'autre du prix actuel. Un ordre limite d'achat se place sous le marché : il achète moins cher, en pariant sur un retour du prix. Un ordre stop d'achat se place au-dessus du marché : il achète plus cher, en pariant sur une accélération. Le premier sert à acheter un repli, le second à suivre une cassure."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Un stop-loss garantit-il ma perte maximale ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Un stop de protection classique se transforme en ordre au marché lorsqu'il est touché : il est donc exécuté au prochain prix disponible, qui peut être nettement moins favorable lors d'un gap ou d'un mouvement violent. C'est le slippage. Le stop borne la perte dans des conditions normales, mais ne la garantit pas au pip près. Seuls certains courtiers proposent un stop garanti, généralement facturé."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il utiliser un stop suiveur (trailing stop) ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le stop suiveur remonte automatiquement derrière le prix d'une distance fixée et ne redescend jamais. Il sécurise le gain sans surveillance, ce qui convient aux tendances soutenues et aux traders qui ne peuvent pas rester devant l'écran. En contrepartie, une distance trop serrée fait sortir sur le moindre repli normal. Il se règle sur la volatilité de l'instrument, pas sur un chiffre rond."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un ordre OCO en trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "OCO signifie « one cancels the other » : deux ordres liés dont l'exécution de l'un annule automatiquement l'autre. C'est le mécanisme qui permet d'attacher simultanément un stop de protection et un objectif à une position ouverte, sans risquer de se retrouver avec un ordre orphelin après la clôture. La plupart des plateformes le proposent sous forme d'ordre bracket, où entrée, stop et objectif sont saisis en une seule fois."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel type d'ordre utiliser quand on débute ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'ordre bracket, qui associe l'entrée, le stop de protection et l'objectif en une seule saisie. Il impose de définir le risque avant d'entrer, supprime la tentation de déplacer le stop après coup, et protège la position même en cas de déconnexion. C'est le format le plus simple à discipliner tant que les réflexes d'exécution ne sont pas acquis."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Les types d'ordres en trading", "item": "https://www.leterminal.net/blog/types-ordres-trading" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Les types d'ordres</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Méthode forex</span>
+  <h1 class="bl-art__title">Les types d'ordres en trading : market, limit, stop et les autres</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 11, 2026">Publié le 11 août 2026</span>
+    <span>·</span>
+    <span data-en="12 min read">12 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/types-ordres-trading.webp" width="1600" height="900" alt="Les types d'ordres en trading placés autour du prix actuel : ordre limite sous le marché, ordre stop au-dessus, stop de protection et objectif liés en OCO" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Il n'existe qu'un seul arbitrage à comprendre, et tout le reste en découle : <strong>l'ordre au marché garantit l'exécution mais pas le prix ; l'ordre limite garantit le prix mais pas l'exécution</strong>. Les autres types — stop, stop-limite, OCO, trailing — ne sont que des combinaisons de ces deux briques, déclenchées par une condition. Voici ce que chacun fait réellement, et lequel choisir selon la situation.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Un trader passe des heures à travailler son analyse, sa taille de position, sa gestion du risque — puis clique sur le premier bouton venu pour entrer. C'est la partie du métier la moins enseignée et la plus mécanique : <strong>l'exécution</strong>.</p>
+    <p>Le paradoxe, c'est qu'elle est entièrement déterministe. Contrairement à l'analyse, il n'y a rien à deviner : chaque type d'ordre a un comportement écrit noir sur blanc. Le seul travail consiste à le connaître, une bonne fois.</p>
+
+    <h2>Le seul arbitrage qui compte</h2>
+    <p>Avant d'entrer dans la liste, posons le principe qui organise tout le reste. Vous ne pouvez jamais obtenir les deux garanties simultanément :</p>
+    <div class="bl-note">
+      <p><strong>Exécution certaine, prix incertain</strong> → ordre au marché<br>
+      <strong>Prix certain, exécution incertaine</strong> → ordre limite</p>
+    </div>
+    <p>Tous les types d'ordres évolués sont des variations autour de ce couple. Un stop est un ordre au marché déclenché par un prix. Un stop-limite est un ordre limite déclenché par un prix. Un OCO est une paire d'ordres qui s'annulent mutuellement. Une fois le principe posé, la nomenclature devient triviale.</p>
+    <p>La question à se poser avant chaque clic tient en une phrase : <strong>qu'est-ce que je refuse de perdre — le prix, ou l'opportunité ?</strong></p>
+
+    <h2>1. L'ordre au marché (market order)</h2>
+    <p>C'est l'ordre le plus simple : <em>achetez maintenant, au prix disponible</em>. Il est exécuté immédiatement contre la meilleure contrepartie présente dans le carnet.</p>
+
+    <h3>Ce qu'il garantit</h3>
+    <p>L'exécution, et rien d'autre. Vous serez dans le marché. À quel prix exactement, la plateforme ne s'engage pas.</p>
+
+    <h3>Le piège</h3>
+    <p>Le prix obtenu peut différer du prix affiché à l'écran une seconde plus tôt. C'est le <strong>slippage</strong>, et il n'a rien d'anormal : il traduit simplement le fait que le marché a bougé entre votre clic et l'exécution. Ajoutez-y le spread, payé d'office à l'ouverture, et vous démarrez toujours en léger négatif — un mécanisme détaillé dans notre article sur <a href="/blog/couts-du-trading">le coût réel du trading</a>.</p>
+
+    <h3>Quand l'utiliser</h3>
+    <ul>
+      <li>Quand entrer <strong>maintenant</strong> vaut plus que gagner quelques dixièmes de pip.</li>
+      <li>Pour <strong>sortir</strong> d'une position en urgence, gagnante ou perdante.</li>
+      <li>Sur un instrument très liquide, aux heures actives, où le slippage reste négligeable.</li>
+    </ul>
+    <p>Et à éviter systématiquement dans les secondes entourant une publication à fort impact : c'est précisément là que l'écart entre prix affiché et prix obtenu devient le plus large. Le <a href="/blog/calendrier-economique-trading">calendrier économique</a> permet de repérer ces fenêtres à l'avance.</p>
+
+    <h2>2. L'ordre limite (limit order)</h2>
+    <p>Vous fixez un prix, et l'ordre ne s'exécutera qu'<strong>à ce prix ou mieux</strong>. Jamais moins bien.</p>
+    <ul>
+      <li>Un <strong>achat limite</strong> se place <strong>sous</strong> le prix actuel : vous voulez acheter moins cher.</li>
+      <li>Une <strong>vente limite</strong> se place <strong>au-dessus</strong> : vous voulez vendre plus cher.</li>
+    </ul>
+
+    <h3>Ce qu'il garantit</h3>
+    <p>Le prix, et rien d'autre. Si le marché ne revient jamais sur votre niveau, l'ordre reste en attente indéfiniment et vous regardez le mouvement partir sans vous.</p>
+
+    <h3>Quand l'utiliser</h3>
+    <p>C'est l'ordre de l'analyse technique patiente. Vous avez identifié une zone qui vous intéresse — un <a href="/blog/supports-et-resistances">support ou une résistance</a>, une zone de repli en tendance — et vous y placez votre ordre au lieu de surveiller l'écran. Le marché vient à vous, ou ne vient pas.</p>
+    <p>C'est aussi le mode d'entrée par défaut de la plupart des approches de type pullback décrites dans notre panorama des <a href="/blog/setups-de-trading">setups de trading</a>.</p>
+
+    <h3>Le piège</h3>
+    <p>Deux, en réalité. Le premier : <strong>l'ordre non servi</strong> — le prix s'approche à un pip de votre niveau, repart, et vous ratez tout le mouvement. Le second, plus insidieux : <strong>l'ordre servi parce que le marché s'est retourné</strong>. Un achat limite est toujours exécuté par une baisse. Il faut donc une raison technique de penser que cette baisse s'arrêtera là — sinon vous ne faites qu'attraper un couteau qui tombe.</p>
+
+    <h2>3. L'ordre stop (stop order)</h2>
+    <p>Symétrique de l'ordre limite, et le plus souvent mal compris. Il se déclenche quand le prix <strong>franchit</strong> un niveau, et se transforme alors en ordre au marché.</p>
+    <ul>
+      <li>Un <strong>achat stop</strong> se place <strong>au-dessus</strong> du prix actuel : vous achetez <em>plus cher</em>, en pariant sur une accélération.</li>
+      <li>Une <strong>vente stop</strong> se place <strong>en dessous</strong> : vous vendez plus bas, même logique à l'envers.</li>
+    </ul>
+    <div class="bl-note">
+      <p><strong>Le repère à retenir.</strong> Achat limite = sous le marché, on achète un repli. Achat stop = au-dessus du marché, on achète une cassure. Même position dans le carnet, intention opposée.</p>
+    </div>
+
+    <h3>Quand l'utiliser</h3>
+    <p>C'est l'ordre du trader de cassure : le prix compresse sous une résistance, vous placez un achat stop juste au-dessus, et vous n'êtes servi que si la cassure a réellement lieu. Vous ne pariez pas sur l'événement — vous le laissez vous déclencher.</p>
+
+    <h3>Le piège</h3>
+    <p>Le déclenchement se produit exactement au moment où le marché accélère, donc là où le slippage est maximal. Placer un achat stop pile sur le plus haut visible, c'est aussi se positionner sur le niveau où le plus grand nombre d'ordres se déclenchent en même temps — d'où des exécutions dégradées et de fréquents <strong>faux signaux</strong>.</p>
+
+    <h2>4. L'ordre stop-limite</h2>
+    <p>La combinaison des deux : un niveau de déclenchement (<em>stop</em>) et un prix plafond ou plancher d'exécution (<em>limite</em>). Quand le stop est touché, ce n'est pas un ordre au marché qui part, mais un ordre limite.</p>
+    <p>Exemple : achat stop à 1,1050 avec limite à 1,1060. Si le prix franchit 1,1050, un ordre limite d'achat à 1,1060 maximum est déposé. Vous ne paierez jamais plus de 1,1060.</p>
+
+    <h3>L'arbitrage</h3>
+    <p>Vous vous protégez du slippage, mais vous acceptez de <strong>ne pas être exécuté du tout</strong> si le marché traverse votre fourchette d'un bloc. Sur un gap ou une accélération violente, c'est exactement ce qui se produit.</p>
+    <p>Conséquence directe, et elle est importante : <strong>n'utilisez jamais un stop-limite pour un stop de protection</strong>. Le jour où le marché décroche, l'ordre ne sera pas servi et vous resterez dans une position perdante sans protection — précisément la situation qu'il devait empêcher.</p>
+
+    <h2>5. Le stop de protection (stop-loss)</h2>
+    <p>Techniquement, c'est un ordre stop placé du côté de la sortie. Fonctionnellement, c'est le seul ordre réellement non négociable de votre exécution.</p>
+    <p>Il définit le point où votre scénario est invalidé — pas le montant que vous êtes prêt à perdre. Cette distinction est la base de toute la <a href="/blog/gestion-du-risque-trading">gestion du risque</a> : <strong>le stop se place selon la structure du marché, et c'est ensuite la taille de position qui s'ajuste</strong> pour que la distance obtenue corresponde au risque voulu. Jamais l'inverse.</p>
+
+    <h3>Ce qu'il ne garantit pas</h3>
+    <p>Votre perte maximale, au pip près. Un stop classique devient un ordre au marché une fois touché : en cas de gap — ouverture du dimanche soir, publication surprise — il est exécuté au prochain prix disponible, qui peut être nettement plus loin. Certains courtiers proposent un <strong>stop garanti</strong>, généralement facturé sous forme de prime ou de spread élargi.</p>
+
+    <h3>La seule règle qui compte</h3>
+    <p>Le stop se place <strong>en même temps que l'entrée</strong>, dans la même saisie. Un stop décidé après coup est un stop qui sera déplacé — et le déplacement de stop reste, de loin, la manière la plus répandue de transformer une petite perte en perte grave, comme le documente notre article sur les <a href="/blog/erreurs-psychologie-trading">erreurs de psychologie en trading</a>.</p>
+
+    <h2>6. La prise de bénéfice (take profit)</h2>
+    <p>Un ordre limite placé du côté du gain. Il ferme la position automatiquement quand l'objectif est atteint.</p>
+    <p>Son intérêt n'est pas technique, il est comportemental : il vous <strong>sort du trade sans vous demander votre avis</strong>. Un objectif défini avant l'entrée et exécuté automatiquement supprime la question « et si ça continuait ? », qui coûte bien plus cher qu'elle ne rapporte.</p>
+    <p>L'objectif se fixe sur le graphique — prochaine zone technique majeure — puis se traduit en ratio. Si la distance jusqu'à cette zone ne représente pas au moins deux fois la distance de stop, le trade ne vaut souvent pas d'être pris. Le <a href="/calculateur">calculateur du Terminal</a> effectue cette conversion en une saisie.</p>
+
+    <h3>Sortie totale ou partielle</h3>
+    <p>Beaucoup de traders scindent : une partie de la position fermée au premier objectif, le reste laissé courir avec un stop remonté au point d'entrée. La position devient alors sans risque. C'est un compromis raisonnable entre sécuriser et laisser respirer — à condition d'avoir fixé la règle à l'avance, et de s'y tenir.</p>
+
+    <h2>7. Le stop suiveur (trailing stop)</h2>
+    <p>Un stop qui suit le prix à distance fixe. Le prix monte, le stop remonte ; le prix redescend, le stop ne bouge pas. Il ne recule jamais.</p>
+
+    <h3>Le réglage, seul vrai sujet</h3>
+    <p>Une distance trop serrée fait sortir sur le premier repli normal — et les replis normaux sont fréquents dans toute tendance saine. Une distance trop large rend l'ordre inutile. Le réglage se fait sur la <strong>volatilité de l'instrument</strong>, souvent via une mesure d'amplitude moyenne, jamais sur un chiffre rond choisi par confort.</p>
+
+    <h3>Quand il est pertinent</h3>
+    <ul>
+      <li>Sur des tendances soutenues, où l'objectif final est difficile à fixer d'avance.</li>
+      <li>Pour un trader qui <strong>ne peut pas rester devant l'écran</strong> — c'est son cas d'usage le plus solide.</li>
+      <li>En swing et en position trading plus qu'en intraday, comme le détaille notre comparatif des <a href="/blog/styles-de-trading">styles de trading</a>.</li>
+    </ul>
+
+    <h2>8. Les ordres liés : OCO et bracket</h2>
+    <p><strong>OCO</strong> — <em>one cancels the other</em> — désigne deux ordres liés dont l'exécution de l'un annule automatiquement l'autre. C'est le mécanisme qui permet d'attacher un stop et un objectif à une même position sans se retrouver, après la clôture, avec un ordre orphelin traînant dans le carnet.</p>
+    <p>L'<strong>ordre bracket</strong> va un cran plus loin : entrée, stop et objectif saisis en une seule opération. Le trade complet est défini avant d'exister.</p>
+    <div class="bl-note">
+      <p><strong>Si vous ne deviez en retenir qu'un, c'est celui-là.</strong> L'ordre bracket vous oblige à connaître votre risque avant d'entrer, supprime la tentation de « voir venir » pour le stop, et protège la position même si votre connexion tombe.</p>
+    </div>
+
+    <h2>9. La durée de validité</h2>
+    <p>Un paramètre secondaire, mais qui produit de vraies surprises quand il est ignoré. Tout ordre en attente porte une durée de vie :</p>
+    <ul>
+      <li><strong>Jour</strong> — annulé à la clôture de la séance. Le défaut sur beaucoup de plateformes actions.</li>
+      <li><strong>GTC</strong> (<em>good till cancelled</em>) — reste actif jusqu'à annulation manuelle, parfois avec une limite de durée imposée par le courtier.</li>
+      <li><strong>GTD</strong> (<em>good till date</em>) — expire à une date choisie.</li>
+      <li><strong>IOC</strong> et <strong>FOK</strong> — exécution immédiate, partielle tolérée pour le premier, tout ou rien pour le second. Usage professionnel, rarement nécessaire au particulier.</li>
+    </ul>
+    <p>Le piège classique : un ordre limite placé en « jour » sur une zone qui n'est atteinte que le lendemain. L'ordre a disparu, et le trade avec.</p>
+
+    <h2>Quel ordre pour quelle situation</h2>
+    <p>La synthèse pratique, situation par situation :</p>
+    <div class="bl-note">
+      <p><strong>Entrer sur un repli identifié</strong> → ordre limite<br>
+      <strong>Entrer sur une cassure</strong> → ordre stop<br>
+      <strong>Entrer maintenant, sans discussion</strong> → ordre au marché<br>
+      <strong>Protéger une position</strong> → stop de protection, jamais stop-limite<br>
+      <strong>Sortir sur objectif</strong> → ordre limite (take profit)<br>
+      <strong>Laisser courir une tendance</strong> → stop suiveur<br>
+      <strong>Tout définir d'un coup</strong> → ordre bracket</p>
+    </div>
+
+    <h2>Les trois erreurs d'exécution les plus coûteuses</h2>
+
+    <h3>Entrer au marché après un mouvement</h3>
+    <p>Le prix vient de parcourir une distance importante, la peur de rater fait cliquer, et l'entrée se fait au pire endroit : loin du niveau technique, donc avec un stop nécessairement large et un ratio dégradé. L'ordre limite existe précisément pour ce cas — il impose d'attendre que le prix revienne.</p>
+
+    <h3>Utiliser un stop-limite comme protection</h3>
+    <p>Déjà évoqué plus haut, mais c'est l'erreur qui produit les pertes les plus lourdes, parce qu'elle ne se manifeste que le jour où elle fait mal.</p>
+
+    <h3>Placer le stop après l'entrée</h3>
+    <p>« J'entre d'abord, je mettrai mon stop après. » Dans les faits, le stop est alors placé en fonction du résultat courant plutôt que de la structure — puis déplacé. Placez le stop en même temps que l'ordre d'entrée, en une seule saisie.</p>
+
+    <h2>Ce que révèle votre historique d'exécution</h2>
+    <p>Les types d'ordres ne s'apprennent pas dans un tableau, ils s'apprennent dans un relevé. Notez pour chaque trade le type d'ordre utilisé à l'entrée, puis comparez sur trente opérations. Le résultat est souvent net : une catégorie d'ordre concentre l'essentiel des mauvaises entrées.</p>
+    <p>C'est le genre de constat qu'un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> rend visible en quelques semaines, et qui produit une correction immédiate — sans changer quoi que ce soit à votre analyse.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Définissez le trade avant de le passer</p>
+    <p>Capital, risque accepté, distance de stop : le calculateur du Terminal vous rend la taille exacte et le ratio du trade — de quoi remplir un ordre bracket complet avant même de cliquer.</p>
+    <a class="lt-btn lt-btn--primary" href="/calculateur">Ouvrir le calculateur</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Le comportement exact de chaque type d'ordre, les durées de validité disponibles et les conditions de déclenchement varient selon les courtiers, les plateformes et les instruments : seule la documentation contractuelle de votre compte fait foi. Les prix cités sont des illustrations. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Quelle est la différence entre un ordre au marché et un ordre limite ?</h3>
+        <p>Un ordre au marché garantit l'exécution mais pas le prix : il est exécuté immédiatement au meilleur prix disponible, qui peut différer du prix affiché. Un ordre limite garantit le prix mais pas l'exécution : il ne se déclenche qu'à votre prix ou mieux, et peut ne jamais être servi si le marché ne revient pas sur ce niveau. Aucun des deux n'est meilleur dans l'absolu : le choix dépend de ce que vous acceptez de perdre, du prix ou de l'opportunité.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre un ordre stop et un ordre limite ?</h3>
+        <p>Les deux sont des ordres en attente placés à un prix choisi, mais ils se situent de part et d'autre du prix actuel. Un ordre limite d'achat se place sous le marché : il achète moins cher, en pariant sur un retour du prix. Un ordre stop d'achat se place au-dessus du marché : il achète plus cher, en pariant sur une accélération. Le premier sert à acheter un repli, le second à suivre une cassure.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Un stop-loss garantit-il ma perte maximale ?</h3>
+        <p>Non. Un stop de protection classique se transforme en ordre au marché lorsqu'il est touché : il est donc exécuté au prochain prix disponible, qui peut être nettement moins favorable lors d'un gap ou d'un mouvement violent. C'est le slippage. Le stop borne la perte dans des conditions normales, mais ne la garantit pas au pip près. Seuls certains courtiers proposent un stop garanti, généralement facturé.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il utiliser un stop suiveur (trailing stop) ?</h3>
+        <p>Le stop suiveur remonte automatiquement derrière le prix d'une distance fixée et ne redescend jamais. Il sécurise le gain sans surveillance, ce qui convient aux tendances soutenues et aux traders qui ne peuvent pas rester devant l'écran. En contrepartie, une distance trop serrée fait sortir sur le moindre repli normal. Il se règle sur la volatilité de l'instrument, pas sur un chiffre rond.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un ordre OCO en trading ?</h3>
+        <p>OCO signifie « one cancels the other » : deux ordres liés dont l'exécution de l'un annule automatiquement l'autre. C'est le mécanisme qui permet d'attacher simultanément un stop de protection et un objectif à une position ouverte, sans risquer de se retrouver avec un ordre orphelin après la clôture. La plupart des plateformes le proposent sous forme d'ordre bracket, où entrée, stop et objectif sont saisis en une seule fois.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quel type d'ordre utiliser quand on débute ?</h3>
+        <p>L'ordre bracket, qui associe l'entrée, le stop de protection et l'objectif en une seule saisie. Il impose de définir le risque avant d'entrer, supprime la tentation de déplacer le stop après coup, et protège la position même en cas de déconnexion. C'est le format le plus simple à discipliner tant que les réflexes d'exécution ne sont pas acquis.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : documentations d'exécution de courtiers et de plateformes réglementés, et littérature sur la microstructure de marché, 2025-2026. Les niveaux de prix cités sont illustratifs. Publié le 11 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/gestion-du-risque-trading"><span class="t">Gestion du risque</span><span class="d">Placer le stop, puis dimensionner</span></a>
+        <a href="/blog/couts-du-trading"><span class="t">Le coût réel du trading</span><span class="d">Spread et slippage, chiffrés</span></a>
+        <a href="/blog/setups-de-trading"><span class="t">Les 7 setups de trading</span><span class="d">Quel ordre pour quel setup</span></a>
+        <a href="/blog/plan-de-trading"><span class="t">Le plan de trading</span><span class="d">Écrire ses règles d'exécution</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
