@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retracements de Fibonacci : comment les tracer | Le Terminal</title>
+<meta name="description" content="D'où viennent 0,382 et 0,618, comment tracer un retracement sans tricher, la zone de valeur, les extensions, et pourquoi Fibonacci seul ne vaut rien.">
+<link rel="canonical" href="https://www.leterminal.net/blog/retracements-fibonacci">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Retracements de Fibonacci : comment les tracer | Le Terminal">
+<meta property="og:description" content="D'où viennent 0,382 et 0,618, comment tracer un retracement sans tricher, la zone de valeur, les extensions, et pourquoi Fibonacci seul ne vaut rien.">
+<meta property="og:url" content="https://www.leterminal.net/blog/retracements-fibonacci">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/retracements-fibonacci-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les niveaux de retracement de Fibonacci tracés sur une impulsion : 0,382, 0,5, 0,618 et 0,786, avec la zone de valeur mise en avant — Le Terminal">
+<meta property="article:published_time" content="2026-08-12">
+<meta property="article:modified_time" content="2026-08-12">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Retracements de Fibonacci : comment les tracer">
+<meta name="twitter:description" content="Un niveau de Fibonacci ne retient pas le prix. Il désigne un endroit où regarder — et c'est déjà beaucoup.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/retracements-fibonacci-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Les retracements de Fibonacci : tracer, lire, et ne pas se raconter d'histoires",
+      "description": "Guide pratique des retracements de Fibonacci : origine des ratios, niveaux qui comptent, méthode de tracé, zone de valeur 0,5–0,618, extensions pour projeter un objectif, et pourquoi l'outil n'a de valeur qu'en confluence.",
+      "datePublished": "2026-08-12",
+      "dateModified": "2026-08-12",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/retracements-fibonacci-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/retracements-fibonacci" },
+      "keywords": "retracement de Fibonacci, Fibonacci trading, 0.618, nombre d'or, zone de valeur, extension de Fibonacci, analyse technique"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un retracement de Fibonacci ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un retracement de Fibonacci est un ensemble de niveaux horizontaux tracés entre le début et la fin d'un mouvement de prix, situés à des proportions fixes de ce mouvement : principalement 0,382, 0,5, 0,618 et 0,786. Ils servent à repérer les zones où un repli est susceptible de s'arrêter avant que la tendance ne reprenne. Ce sont des repères de proportion, pas des niveaux ayant un pouvoir propre sur le prix."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment tracer un retracement de Fibonacci ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On sélectionne une impulsion complète et incontestable, puis on relie son point de départ à son point d'arrivée dans le sens du mouvement : du creux vers le sommet pour une hausse, du sommet vers le creux pour une baisse. Les niveaux intermédiaires apparaissent automatiquement. Le tracé doit se faire sur les extrêmes réels, mèches comprises, et rester identique d'une analyse à l'autre pour que les résultats soient comparables."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est le niveau de Fibonacci le plus important ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le 0,618 est le plus suivi, car il découle du nombre d'or, mais aucun niveau n'a de supériorité démontrée. En pratique, l'intervalle compris entre 0,5 et 0,618 est le plus utile : il correspond à un repli suffisamment profond pour offrir un bon prix, sans remettre en cause la structure du mouvement. C'est une zone à surveiller, pas une ligne où passer un ordre les yeux fermés."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Les retracements de Fibonacci fonctionnent-ils vraiment ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Aucune étude sérieuse n'établit que ces niveaux possèdent un pouvoir prédictif propre. Leur utilité est double : ils imposent une lecture proportionnelle du mouvement plutôt qu'un jugement à l'œil, et ils sont observés par un grand nombre de participants, ce qui peut produire des réactions autoréalisatrices. Employés seuls, ils ne constituent pas un signal ; en confluence avec un support, une structure ou une unité de temps supérieure, ils deviennent un filtre utile."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre retracement et extension de Fibonacci ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le retracement mesure une proportion à l'intérieur du mouvement de départ et sert à repérer une zone d'entrée. L'extension projette des proportions au-delà de ce mouvement, aux niveaux 1,272, 1,618 ou 2,618, et sert à estimer un objectif de sortie. Les deux répondent à des questions différentes : où entrer d'une part, jusqu'où viser d'autre part."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Sur quelle unité de temps utiliser Fibonacci ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sur celle où l'impulsion de référence est nette et incontestable, ce qui est plus souvent le cas en quatre heures ou en journalier qu'en une minute. Un retracement tracé sur un mouvement ambigu produit des niveaux arbitraires. La pratique la plus solide consiste à tracer sur l'unité de temps supérieure pour définir la zone, puis à descendre d'un cran pour chercher un déclencheur d'entrée."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Les retracements de Fibonacci", "item": "https://www.leterminal.net/blog/retracements-fibonacci" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Les retracements de Fibonacci</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Analyse technique</span>
+  <h1 class="bl-art__title">Les retracements de Fibonacci : tracer, lire, et ne pas se raconter d'histoires</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 12, 2026">Publié le 12 août 2026</span>
+    <span>·</span>
+    <span data-en="12 min read">12 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/retracements-fibonacci.webp" width="1600" height="900" alt="Les niveaux de retracement de Fibonacci tracés sur une impulsion haussière — 0,382, 0,5, 0,618 et 0,786 — avec la zone de valeur comprise entre 0,5 et 0,618 mise en évidence" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un niveau de Fibonacci <strong>ne retient pas le prix</strong>. Il ne possède aucun pouvoir propre, et aucune étude sérieuse ne lui en attribue. Ce qu'il fait — et c'est déjà beaucoup — c'est vous <strong>désigner un endroit où regarder</strong>, en proportion du mouvement plutôt qu'à l'œil. Voici comment le tracer sans tricher, quoi en attendre, et à quelle condition il devient réellement utile.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Peu d'outils sont aussi mal employés. D'un côté, ceux qui y voient une loi mathématique du marché et achètent le 0,618 les yeux fermés. De l'autre, ceux qui le rejettent en bloc comme de la numérologie.</p>
+    <p>Les deux camps ratent la même chose. Un retracement de Fibonacci n'est ni une prophétie ni une superstition : c'est un <strong>instrument de mesure</strong>. Il transforme « le prix a un peu reculé » en « le prix a reculé de 61,8 % de son mouvement ». Cette seule discipline vaut déjà l'apprentissage.</p>
+
+    <h2>D'où viennent ces niveaux</h2>
+    <p>La suite de Fibonacci est élémentaire : chaque terme est la somme des deux précédents. 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, et ainsi de suite.</p>
+    <p>Sa propriété remarquable apparaît dans les rapports entre termes consécutifs. Plus on avance, plus le rapport d'un terme au suivant converge vers <strong>0,618</strong> — l'inverse du nombre d'or. Et le rapport d'un terme au deuxième suivant converge vers <strong>0,382</strong>.</p>
+    <div class="bl-note">
+      <p><strong>Les ratios usuels</strong><br>
+      0,236 — un terme sur trois rangs<br>
+      0,382 — un terme sur deux rangs<br>
+      0,500 — <em>ce n'est pas un ratio de Fibonacci</em>, simplement la moitié du mouvement<br>
+      0,618 — le nombre d'or inversé<br>
+      0,786 — la racine carrée de 0,618</p>
+    </div>
+    <p>Notez la troisième ligne. Le 0,5 s'est glissé dans l'outil par usage, pas par mathématiques. C'est révélateur de la nature réelle de Fibonacci en trading : une convention largement partagée, davantage qu'une propriété du marché.</p>
+
+    <h2>Les niveaux qui comptent vraiment</h2>
+    <p>Sur les cinq niveaux affichés par défaut, deux méritent votre attention et trois encombrent le graphique.</p>
+    <ul>
+      <li><strong>0,236</strong> — un repli très superficiel. Il indique une tendance forte, mais offre un point d'entrée médiocre : le stop logique se situe loin en dessous, ce qui dégrade mécaniquement le ratio.</li>
+      <li><strong>0,382</strong> — le premier niveau réellement exploitable, typique des tendances soutenues.</li>
+      <li><strong>0,5 et 0,618</strong> — le cœur du sujet, développé plus bas.</li>
+      <li><strong>0,786</strong> — un repli profond. La tendance devient discutable ; le mouvement a rendu près de 80 % de son gain.</li>
+    </ul>
+    <p>Au-delà, si le prix efface l'intégralité du mouvement, il ne s'agit plus d'un retracement mais d'un retournement. L'analyse doit repartir de zéro.</p>
+
+    <h2>Comment tracer un retracement correctement</h2>
+    <p>Le tracé est mécanique, à condition de respecter trois règles.</p>
+
+    <h3>Choisir une impulsion incontestable</h3>
+    <p>C'est le point décisif, et le seul qui demande du jugement. L'impulsion de référence doit être <strong>évidente</strong> : un mouvement franc, d'un seul tenant, que n'importe quel observateur identifierait de la même façon.</p>
+    <p>Si vous hésitez entre deux points de départ, c'est que l'impulsion n'est pas assez nette. Passez votre chemin plutôt que de choisir celui qui vous arrange.</p>
+
+    <h3>Relier dans le sens du mouvement</h3>
+    <p>Du creux vers le sommet pour une hausse, du sommet vers le creux pour une baisse. L'ordre compte : à l'envers, les niveaux s'inversent et le tracé ne veut plus rien dire.</p>
+
+    <h3>Prendre les extrêmes réels</h3>
+    <p>Mèches comprises, corps exclus. On peut défendre l'usage des clôtures, mais l'essentiel est de <strong>ne jamais changer de convention</strong>. Un outil de mesure dont on modifie l'étalon selon les cas ne mesure plus rien.</p>
+
+    <h2>Les trois erreurs de tracé</h2>
+
+    <h3>Choisir l'impulsion après coup</h3>
+    <p>De loin la plus répandue, et la plus insidieuse : vous savez déjà où le prix s'est arrêté, et vous sélectionnez — sans vous en rendre compte — l'impulsion dont le 0,618 tombe précisément là. Fibonacci ne valide alors plus rien du tout ; il ne fait que confirmer ce que vous avez décidé.</p>
+    <p>Le test est simple : tracez <em>avant</em> que le repli ne soit terminé. Si vous attendez de voir où ça rebondit, vous ne faites pas de l'analyse, vous faites de la description.</p>
+
+    <h3>Multiplier les tracés</h3>
+    <p>Trois retracements sur trois impulsions différentes couvrent l'écran de lignes. Avec assez de niveaux, tout prix se trouve forcément près de l'un d'eux — et l'outil ne discrimine plus rien. Un tracé par unité de temps, au maximum.</p>
+
+    <h3>Tracer sur du bruit</h3>
+    <p>Un mouvement de quelques bougies en une minute n'est pas une impulsion, c'est de l'agitation. Le retracement qui en découle produit des niveaux arbitraires. L'outil demande une structure visible, ce qui suppose en général une unité de temps d'au moins quatre heures.</p>
+
+    <h2>La zone de valeur : 0,5 à 0,618</h2>
+    <p>Si vous ne deviez retenir qu'une chose de cet article, ce serait cet intervalle. Non parce qu'il aurait une vertu magique, mais pour une raison structurelle.</p>
+    <p>Un repli dans cette zone est <strong>assez profond pour offrir un bon prix</strong> — vous n'achetez pas au sommet — et <strong>assez limité pour que le mouvement reste intact</strong> : plus de la moitié du chemin parcouru est conservée.</p>
+    <p>Traduit en termes de trade, cela signifie un stop logique relativement proche, sous le point bas de l'impulsion, et un objectif encore lointain. C'est arithmétiquement l'endroit où le <a href="/blog/gestion-du-risque-trading">ratio risque/rendement</a> est le plus favorable — et c'est là, bien plus que dans les mathématiques du nombre d'or, que réside l'intérêt réel de l'outil.</p>
+    <div class="bl-note">
+      <p><strong>À retenir.</strong> La zone 0,5–0,618 n'est pas une zone où le prix <em>doit</em> rebondir. C'est la zone où, <em>s'il rebondit</em>, le trade offre le meilleur rapport entre ce que vous risquez et ce que vous visez.</p>
+    </div>
+
+    <h2>Les extensions : projeter un objectif</h2>
+    <p>Le retracement répond à « où entrer ». L'extension répond à « jusqu'où viser ». Elle projette des proportions <em>au-delà</em> du mouvement de départ, aux niveaux 1,272, 1,618 et 2,618.</p>
+    <p>La logique est la même que celle de l'<a href="/blog/figures-chartistes">objectif mesuré des figures chartistes</a> : l'amplitude du mouvement passé sert à estimer celle du mouvement à venir. Et la même réserve s'applique — s'il existe une <a href="/blog/supports-et-resistances">résistance majeure</a> avant votre extension, c'est la résistance qui prime. La géométrie ne l'emporte jamais sur la structure réelle du marché.</p>
+    <p>En pratique, le 1,618 constitue l'objectif le plus employé, et le 1,272 un premier palier raisonnable pour une sortie partielle.</p>
+
+    <h2>Fibonacci ne vaut que par la confluence</h2>
+    <p>Voici le point que la plupart des contenus sur le sujet passent sous silence, et il est déterminant.</p>
+    <p>Un niveau de Fibonacci, <strong>seul</strong>, n'est pas un signal. C'est une ligne sur un écran. Ce qui lui donne du poids, c'est ce qu'il rencontre :</p>
+    <ul>
+      <li>Un <a href="/blog/supports-et-resistances">support ou une résistance</a> déjà éprouvé, situé au même endroit.</li>
+      <li>Une moyenne mobile suivie, qui vient croiser la zone — un usage détaillé dans notre panorama des <a href="/blog/indicateurs-techniques-trading">indicateurs techniques</a>.</li>
+      <li>Un niveau psychologique rond.</li>
+      <li>Le 0,618 d'une <a href="/blog/analyse-multi-timeframe">unité de temps supérieure</a> qui tombe sur la même zone.</li>
+      <li>Un <a href="/blog/chandeliers-japonais">chandelier de retournement</a> qui se forme précisément là.</li>
+    </ul>
+    <p>Deux de ces éléments superposés valent infiniment mieux que le plus beau des 0,618 isolés. La règle pratique tient en une phrase : <strong>Fibonacci ne crée jamais une zone, il en confirme une</strong>.</p>
+
+    <h2>Ce que Fibonacci ne peut pas faire</h2>
+    <p>Par honnêteté, la liste des limites. Elle est courte mais sérieuse.</p>
+    <ul>
+      <li><strong>Prédire.</strong> Aucun travail sérieux n'établit que ces niveaux possèdent un pouvoir prédictif propre. La part d'effet autoréalisateur — beaucoup de participants regardent les mêmes lignes — est l'explication la plus plausible des réactions observées, et elle est bien plus fragile qu'une loi.</li>
+      <li><strong>Décider seul.</strong> Sans contexte de tendance, un retracement pointe une zone dans un marché qui n'a peut-être aucune raison d'y réagir.</li>
+      <li><strong>Résister au réglage rétrospectif.</strong> C'est sa faiblesse principale, parce qu'elle est invisible : le choix de l'impulsion offre juste assez de liberté pour justifier n'importe quoi après coup.</li>
+      <li><strong>Fonctionner sur du bruit.</strong> En dessous d'une certaine unité de temps, il n'y a plus de mouvement à mesurer.</li>
+    </ul>
+
+    <h2>Comment le tester sur vos propres trades</h2>
+    <p>La question qui compte n'est pas « Fibonacci fonctionne-t-il ? » mais « <strong>fonctionne-t-il pour moi, sur mes instruments, sur mon unité de temps ?</strong> ». Elle a une réponse chiffrée, et vous êtes le seul à pouvoir la produire.</p>
+    <p>La méthode tient en trois points :</p>
+    <ul>
+      <li>Tracez <strong>avant</strong> que le repli ne soit achevé, et notez la zone visée. C'est la seule façon d'éviter le réglage rétrospectif.</li>
+      <li>Consignez le niveau réellement atteint : 0,382, 0,5, 0,618, 0,786, ou dépassement complet.</li>
+      <li>Au bout de cinquante observations, comparez. Si vos entrées en 0,618 ne se comportent pas mieux que vos entrées en 0,5, vous venez d'apprendre quelque chose que personne n'aurait pu vous dire.</li>
+    </ul>
+    <p>C'est exactement le type de statistique qu'un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> produit sans effort une fois l'habitude prise. Et la réponse obtenue vaut mieux que tous les articles sur le sujet — celui-ci compris.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Faites vérifier votre zone d'entrée</p>
+    <p>Envoyez la capture de votre graphique au Setup Analyzer : confluence, niveau d'invalidation, cohérence du ratio — une lecture chiffrée de votre zone avant d'engager le trade.</p>
+    <a class="lt-btn lt-btn--primary" href="/analyzer-presentation">Découvrir le Setup Analyzer</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Les retracements de Fibonacci sont une grille de lecture conventionnelle : ils n'ont aucune valeur prédictive démontrée, et les niveaux cités ne garantissent aucune réaction du prix. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un retracement de Fibonacci ?</h3>
+        <p>Un retracement de Fibonacci est un ensemble de niveaux horizontaux tracés entre le début et la fin d'un mouvement de prix, situés à des proportions fixes de ce mouvement : principalement 0,382, 0,5, 0,618 et 0,786. Ils servent à repérer les zones où un repli est susceptible de s'arrêter avant que la tendance ne reprenne. Ce sont des repères de proportion, pas des niveaux ayant un pouvoir propre sur le prix.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Comment tracer un retracement de Fibonacci ?</h3>
+        <p>On sélectionne une impulsion complète et incontestable, puis on relie son point de départ à son point d'arrivée dans le sens du mouvement : du creux vers le sommet pour une hausse, du sommet vers le creux pour une baisse. Les niveaux intermédiaires apparaissent automatiquement. Le tracé doit se faire sur les extrêmes réels, mèches comprises, et rester identique d'une analyse à l'autre pour que les résultats soient comparables.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quel est le niveau de Fibonacci le plus important ?</h3>
+        <p>Le 0,618 est le plus suivi, car il découle du nombre d'or, mais aucun niveau n'a de supériorité démontrée. En pratique, l'intervalle compris entre 0,5 et 0,618 est le plus utile : il correspond à un repli suffisamment profond pour offrir un bon prix, sans remettre en cause la structure du mouvement. C'est une zone à surveiller, pas une ligne où passer un ordre les yeux fermés.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Les retracements de Fibonacci fonctionnent-ils vraiment ?</h3>
+        <p>Aucune étude sérieuse n'établit que ces niveaux possèdent un pouvoir prédictif propre. Leur utilité est double : ils imposent une lecture proportionnelle du mouvement plutôt qu'un jugement à l'œil, et ils sont observés par un grand nombre de participants, ce qui peut produire des réactions autoréalisatrices. Employés seuls, ils ne constituent pas un signal ; en confluence avec un support, une structure ou une unité de temps supérieure, ils deviennent un filtre utile.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre retracement et extension de Fibonacci ?</h3>
+        <p>Le retracement mesure une proportion à l'intérieur du mouvement de départ et sert à repérer une zone d'entrée. L'extension projette des proportions au-delà de ce mouvement, aux niveaux 1,272, 1,618 ou 2,618, et sert à estimer un objectif de sortie. Les deux répondent à des questions différentes : où entrer d'une part, jusqu'où viser d'autre part.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Sur quelle unité de temps utiliser Fibonacci ?</h3>
+        <p>Sur celle où l'impulsion de référence est nette et incontestable, ce qui est plus souvent le cas en quatre heures ou en journalier qu'en une minute. Un retracement tracé sur un mouvement ambigu produit des niveaux arbitraires. La pratique la plus solide consiste à tracer sur l'unité de temps supérieure pour définir la zone, puis à descendre d'un cran pour chercher un déclencheur d'entrée.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature classique d'analyse technique sur les proportions de retracement et travaux académiques sur la performance statistique des niveaux de Fibonacci, 2025-2026. Aucune valeur prédictive n'est établie. Publié le 12 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/supports-et-resistances"><span class="t">Supports et résistances</span><span class="d">Les zones que Fibonacci confirme</span></a>
+        <a href="/blog/figures-chartistes"><span class="t">Les figures chartistes</span><span class="d">L'autre façon de mesurer un objectif</span></a>
+        <a href="/blog/indicateurs-techniques-trading"><span class="t">Les indicateurs techniques</span><span class="d">Pourquoi en empiler six nuit</span></a>
+        <a href="/blog/analyse-multi-timeframe"><span class="t">Analyse multi-timeframe</span><span class="d">Tracer en haut, entrer en bas</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>

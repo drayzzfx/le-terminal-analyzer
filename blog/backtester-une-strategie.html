@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backtester une stratégie de trading : la méthode | Le Terminal</title>
+<meta name="description" content="Écrire ses règles, tester barre par barre, sortir les bons chiffres — et repérer les cinq biais qui rendent presque tous les backtests trop beaux.">
+<link rel="canonical" href="https://www.leterminal.net/blog/backtester-une-strategie">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Backtester une stratégie de trading : la méthode | Le Terminal">
+<meta property="og:description" content="Écrire ses règles, tester barre par barre, sortir les bons chiffres — et repérer les cinq biais qui rendent presque tous les backtests trop beaux.">
+<meta property="og:url" content="https://www.leterminal.net/blog/backtester-une-strategie">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/backtester-une-strategie-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les étapes d'un backtest de stratégie de trading et les cinq biais qui faussent le résultat — Le Terminal">
+<meta property="article:published_time" content="2026-08-12">
+<meta property="article:modified_time" content="2026-08-12">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backtester une stratégie de trading : la méthode">
+<meta name="twitter:description" content="Un backtest ne sert pas à prouver qu'une stratégie gagne. Il sert à savoir ce qu'elle vous fera vivre.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/backtester-une-strategie-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Backtester une stratégie de trading : la méthode honnête",
+      "description": "Méthode complète de backtest manuel d'une stratégie de trading : formalisation des règles, test barre par barre, taille d'échantillon, indicateurs à calculer, les cinq biais qui faussent le résultat, et le forward test.",
+      "datePublished": "2026-08-12",
+      "dateModified": "2026-08-12",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/backtester-une-strategie-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/backtester-une-strategie" },
+      "keywords": "backtest, backtester une stratégie, forward test, surapprentissage, curve fitting, expectancy, drawdown, échantillon"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un backtest en trading ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un backtest consiste à appliquer les règles d'une stratégie à des données de marché passées, afin d'observer les résultats qu'elle aurait produits. Son objet n'est pas de démontrer qu'une méthode gagne, mais d'en mesurer le comportement : espérance par trade, profondeur des pertes cumulées, longueur des séries perdantes. C'est un test de faisabilité psychologique autant que statistique."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien de trades faut-il pour un backtest fiable ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En dessous d'une centaine de trades, le hasard domine largement le résultat et aucune conclusion n'est solide. Entre cent et deux cents, une tendance commence à se dessiner. Au-delà de deux cents, les chiffres deviennent exploitables. Plus important encore que le nombre : l'échantillon doit couvrir plusieurs régimes de marché, tendance et range, volatilité forte et faible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le surapprentissage d'une stratégie ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le surapprentissage, ou curve fitting, consiste à ajuster les paramètres d'une stratégie jusqu'à ce qu'elle colle parfaitement aux données testées. Le résultat devient spectaculaire sur l'historique et décevant en réel, parce que la méthode a appris le bruit propre à cet échantillon plutôt qu'un comportement de marché reproductible. Le signe caractéristique est une performance qui s'effondre dès qu'un paramètre est légèrement modifié."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre backtest et forward test ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le backtest s'effectue sur des données passées, que l'on peut consulter à volonté. Le forward test applique les mêmes règles en avançant dans le temps sans connaître la suite, en direct ou sur compte de démonstration. Le second élimine par construction le biais de connaissance du futur, qui est le principal défaut du premier. Une stratégie qui perd sa performance au passage du backtest au forward test était ajustée, pas validée."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il inclure les frais dans un backtest ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, systématiquement, et c'est l'omission la plus fréquente. Spread, commission, financement overnight et slippage se retranchent de chaque opération. Une stratégie affichant une espérance faiblement positive avant frais devient perdante une fois ceux-ci intégrés, et l'effet est d'autant plus marqué que la fréquence de trades est élevée."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quand faut-il abandonner une stratégie ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Une série de pertes ne suffit pas : elle est attendue et figure dans les chiffres du backtest. Le signal d'abandon est un écart durable entre le comportement réel et le comportement testé, notamment un recul de capital plus profond ou plus long que le pire observé sur l'échantillon. Fixer ce seuil à l'avance, par écrit, évite d'avoir à trancher au moment où le jugement est le plus altéré."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Backtester une stratégie", "item": "https://www.leterminal.net/blog/backtester-une-strategie" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Backtester une stratégie</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Méthode forex</span>
+  <h1 class="bl-art__title">Backtester une stratégie de trading : la méthode honnête</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 12, 2026">Publié le 12 août 2026</span>
+    <span>·</span>
+    <span data-en="13 min read">13 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/backtester-une-strategie.webp" width="1600" height="900" alt="Les quatre étapes d'un backtest de stratégie de trading — formaliser, tester barre par barre, mesurer, valider en forward test — et les cinq biais qui faussent le résultat" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un backtest ne sert pas à prouver qu'une stratégie gagne. Il sert à <strong>savoir ce qu'elle vous fera vivre</strong> : combien de pertes d'affilée, quelle profondeur de creux, quelle espérance par trade. La plupart des backtests sont trop beaux — non par malhonnêteté, mais parce que cinq biais très précis s'y glissent presque automatiquement. Voici la méthode, et comment les neutraliser.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Il existe une raison simple pour laquelle tant de traders abandonnent une méthode qui aurait fonctionné : ils ignoraient à quoi s'attendre. Cinq pertes consécutives paraissent anormales quand on n'a jamais mesuré que la série la plus longue de sa propre stratégie est de neuf.</p>
+    <p>C'est le véritable objet d'un backtest. Pas de valider une intuition — de <strong>construire des attentes réalistes</strong> avant que l'argent réel ne soit engagé. Une stratégie moyenne dont vous connaissez le comportement vaut mieux qu'une excellente stratégie que vous abandonnerez au premier creux.</p>
+
+    <h2>À quoi sert vraiment un backtest</h2>
+    <p>Trois réponses, dans l'ordre d'importance — et la première surprend souvent.</p>
+    <ul>
+      <li><strong>Rendre la méthode exécutable.</strong> Une stratégie qu'on ne peut pas backtester est une stratégie qu'on ne peut pas suivre : si les règles ne sont pas assez précises pour être appliquées à un graphique passé, elles ne le seront pas davantage en direct.</li>
+      <li><strong>Mesurer la douleur.</strong> Pire série perdante, recul de capital maximal, durée de la traversée du désert. Ce sont les chiffres qui décident si vous tiendrez.</li>
+      <li><strong>Estimer l'espérance.</strong> Le gain moyen par opération, frais compris.</li>
+    </ul>
+    <p>Ce qu'un backtest ne fait <em>pas</em> : prédire vos résultats futurs. Le passé n'est pas un échantillon du futur, seulement le seul dont vous disposiez.</p>
+
+    <h2>Ce qu'il faut écrire avant de commencer</h2>
+    <p>Étape la plus ingrate, et strictement non contournable : <strong>vos règles doivent être écrites au point qu'une autre personne obtienne les mêmes trades que vous</strong>.</p>
+    <p>C'est le test qui élimine 90 % des « stratégies ». « J'achète quand ça rebondit sur un support » ne se backteste pas. Il faut descendre au niveau où plus aucun jugement n'intervient :</p>
+    <div class="bl-note">
+      <p><strong>Les six lignes à écrire</strong><br>
+      <strong>Instruments et unité de temps</strong> — sur quoi, à quelle échelle<br>
+      <strong>Contexte requis</strong> — la condition de marché sans laquelle on ne regarde même pas<br>
+      <strong>Déclencheur d'entrée</strong> — l'événement précis, observable, non ambigu<br>
+      <strong>Type d'ordre</strong> — au marché, limite ou stop, selon les <a href="/blog/types-ordres-trading">types d'ordres</a><br>
+      <strong>Invalidation</strong> — où le stop se place, selon la structure<br>
+      <strong>Sortie</strong> — objectif fixe, ratio cible, ou règle de suivi</p>
+    </div>
+    <p>Si vous butez sur l'une de ces lignes, ce n'est pas le backtest qui est en cause : c'est que la stratégie n'existe pas encore. C'est d'ailleurs à cela que sert un <a href="/blog/plan-de-trading">plan de trading</a> — et un backtest en est le premier contrôle qualité.</p>
+
+    <h2>Le backtest manuel, barre par barre</h2>
+    <p>Pour une méthode discrétionnaire, la simulation manuelle reste la plus fiable — et de loin la plus formatrice.</p>
+
+    <h3>La méthode</h3>
+    <p>Ouvrez un graphique historique, masquez la partie droite, et avancez <strong>une bougie à la fois</strong>. À chaque barre, posez une seule question : mes règles déclenchent-elles une entrée, oui ou non ?</p>
+    <p>Si oui, notez tout <em>immédiatement</em> — prix d'entrée, stop, objectif — puis continuez d'avancer jusqu'à ce que l'un des deux soit touché. Enregistrez le résultat et passez à la suite.</p>
+
+    <h3>La règle absolue</h3>
+    <p>Ne jamais faire défiler en arrière pour « vérifier ». À l'instant où vous voyez la suite, la mesure est contaminée — définitivement, et sans que vous en ayez conscience.</p>
+
+    <h3>Ce qu'il faut consigner</h3>
+    <p>Pour chaque trade : date, sens, prix d'entrée, stop, objectif, résultat en R (multiples du risque), et une ligne de contexte. Le résultat en R plutôt qu'en euros permet de comparer des trades de tailles différentes et de raisonner indépendamment du capital.</p>
+    <p>C'est lent. Comptez plusieurs heures pour cent trades. C'est aussi le seul procédé qui vous apprend à reconnaître vos configurations — un bénéfice secondaire souvent supérieur au résultat chiffré.</p>
+
+    <h2>Combien de trades faut-il</h2>
+    <p>La question revient toujours, et la réponse est moins un nombre qu'un seuil de confiance.</p>
+    <ul>
+      <li><strong>Moins de 50</strong> — le hasard explique l'essentiel du résultat. Aucune conclusion n'est défendable.</li>
+      <li><strong>100 à 200</strong> — une tendance apparaît, à manier avec prudence.</li>
+      <li><strong>Plus de 200</strong> — les chiffres deviennent exploitables.</li>
+    </ul>
+    <p>Mais la <strong>diversité de l'échantillon prime sur sa taille</strong>. Deux cents trades pris dans une seule tendance haussière valent moins que cent trades répartis sur une phase de tendance, une phase de range et un épisode de forte volatilité. Une stratégie de suivi de tendance testée uniquement en tendance produira évidemment d'excellents chiffres — et vous ruinera dès le premier marché sans direction.</p>
+
+    <h2>Les chiffres à sortir</h2>
+    <p>Cinq indicateurs suffisent. Les autres sont du confort.</p>
+    <div class="bl-note">
+      <p><strong>Espérance par trade</strong> — (taux de réussite × gain moyen) − (taux d'échec × perte moyenne). Le seul chiffre qui dit si la méthode est viable.<br>
+      <strong>Recul maximal</strong> — la plus forte baisse du capital cumulé, du sommet au creux.<br>
+      <strong>Plus longue série perdante</strong> — le chiffre psychologique par excellence.<br>
+      <strong>Ratio moyen réalisé</strong> — presque toujours inférieur au ratio visé.<br>
+      <strong>Nombre de trades par mois</strong> — pour vérifier que la méthode est compatible avec votre vie réelle.</p>
+    </div>
+    <p>Un piège classique mérite d'être signalé : <strong>le taux de réussite ne dit rien à lui seul</strong>. Une méthode gagnant 35 % du temps avec un ratio de 1:3 est nettement plus rentable qu'une méthode gagnant 65 % du temps avec un ratio de 1:1. C'est l'espérance qui tranche, et elle seule — un raisonnement développé dans notre article sur la <a href="/blog/gestion-du-risque-trading">gestion du risque</a>.</p>
+
+    <h2>Les cinq biais qui rendent un backtest faux</h2>
+    <p>La partie qui compte. Ces biais ne relèvent pas de la malhonnêteté : ils s'installent tout seuls, et c'est précisément ce qui les rend dangereux.</p>
+
+    <h3>1. La connaissance du futur</h3>
+    <p>Le plus courant. Vous testez sur une période dont vous connaissez déjà l'allure générale, et cette connaissance oriente vos décisions sans que vous le vouliez. Le masquage strict de la partie droite du graphique est la seule parade réellement efficace.</p>
+
+    <h3>2. Le surapprentissage</h3>
+    <p>Vous ajustez un paramètre, le résultat s'améliore. Vous en ajustez un deuxième, encore mieux. Au bout de six réglages, la courbe est superbe — et la stratégie a appris le <em>bruit</em> de cet échantillon précis, pas un comportement reproductible du marché.</p>
+    <p>Le test de robustesse est simple et impitoyable : modifiez légèrement chaque paramètre. Si la performance s'effondre, vous n'avez pas une stratégie, vous avez une description de l'échantillon.</p>
+
+    <h3>3. L'échantillon d'un seul régime</h3>
+    <p>Tester exclusivement sur la période qui convient à la méthode. Le remède : découper l'historique en sous-périodes et comparer les résultats de chacune. Des chiffres qui s'effondrent sur l'une d'elles vous renseignent bien davantage que la moyenne d'ensemble.</p>
+
+    <h3>4. L'oubli des frais</h3>
+    <p>Spread, commission, financement, slippage — retranchés de <em>chaque</em> opération. Une espérance de +0,1 R par trade devient négative une fois les frais intégrés si vous tradez souvent. Nos <a href="/blog/couts-du-trading">chiffres sur le coût réel du trading</a> montrent l'ampleur du phénomène : c'est l'omission la plus coûteuse de la liste.</p>
+
+    <h3>5. La sélection des trades</h3>
+    <p>Écarter, même de bonne foi, les trades « qui ne comptent pas » : celui pris pendant une annonce, celui du vendredi soir, celui où l'exécution était douteuse. Chaque exclusion embellit le résultat. Si un cas doit être écarté, la règle qui l'exclut doit figurer <strong>par écrit, avant</strong> le test — et s'appliquer alors à tous les cas semblables, gagnants comme perdants.</p>
+
+    <h2>Le forward test : l'étape que tout le monde saute</h2>
+    <p>Un backtest concluant ne prouve rien tant qu'il n'a pas survécu à une confrontation avec des données que vous n'aviez pas vues.</p>
+    <p>Deux façons de procéder, complémentaires :</p>
+    <ul>
+      <li><strong>La période réservée.</strong> Mettez de côté les six derniers mois de données <em>avant</em> de commencer. Ne les touchez pas. Une fois la stratégie figée, testez-les. Si les chiffres tiennent, le signal est sérieux.</li>
+      <li><strong>Le test en avançant.</strong> Appliquez la méthode en direct sur compte de démonstration, ou en taille minimale, pendant un à trois mois.</li>
+    </ul>
+    <p>Une performance qui se dégrade nettement au passage du backtest au forward test a une explication unique : la stratégie était <strong>ajustée</strong>, pas validée. C'est une découverte désagréable, et infiniment moins coûteuse qu'en compte réel.</p>
+
+    <h2>Quand abandonner une stratégie</h2>
+    <p>La question la plus difficile, parce qu'elle se pose toujours au pire moment — au creux, quand le jugement est le plus altéré.</p>
+    <p>D'où la règle : <strong>le seuil se fixe à l'avance, par écrit</strong>. Et il découle directement de votre backtest.</p>
+    <p>Si votre pire recul mesuré est de 12 % et votre plus longue série perdante de 8 trades, alors ces chiffres constituent la normalité de votre méthode. Une série de 6 pertes n'est pas un signal d'alarme — elle était prévue. Un recul de 20 %, ou une série de 15, en est un : le comportement réel s'écarte durablement du comportement testé.</p>
+    <p>Sans ce repère, chaque perte devient une remise en cause, et vous changerez de méthode tous les mois — le mécanisme d'échec le plus banal qui soit, décrit dans notre article sur les <a href="/blog/erreurs-psychologie-trading">erreurs de psychologie en trading</a>.</p>
+
+    <h2>Du backtest au réel : garder la mesure</h2>
+    <p>Le backtest vous donne un comportement attendu. Le passage en réel ne clôt pas le sujet — il ouvre la seule comparaison qui vaille : <strong>votre exécution réelle correspond-elle à ce qui a été testé ?</strong></p>
+    <p>C'est souvent là que l'écart apparaît, et il est rarement dû à la stratégie. Trades supplémentaires non prévus par les règles, stops déplacés, sorties anticipées : la méthode testée et la méthode appliquée sont devenues deux choses différentes.</p>
+    <p>Consigner chaque opération avec la mention « conforme aux règles : oui / non » dans un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> rend cet écart visible en quelques semaines. Et dans la majorité des cas, la correction ne porte pas sur la stratégie — elle porte sur son application.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Comparez le réel à ce que vous aviez testé</p>
+    <p>Le Journal du Terminal agrège vos opérations, calcule votre espérance et vos reculs de capital, et met votre exécution réelle face aux règles que vous vous étiez données.</p>
+    <a class="lt-btn lt-btn--primary" href="/journal-presentation">Découvrir le Journal de Trading</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Les résultats d'un backtest portent sur des données passées et ne préjugent en rien des résultats futurs : aucune performance historique, simulée ou réelle, ne constitue une garantie. Les chiffres cités en exemple sont illustratifs. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un backtest en trading ?</h3>
+        <p>Un backtest consiste à appliquer les règles d'une stratégie à des données de marché passées, afin d'observer les résultats qu'elle aurait produits. Son objet n'est pas de démontrer qu'une méthode gagne, mais d'en mesurer le comportement : espérance par trade, profondeur des pertes cumulées, longueur des séries perdantes. C'est un test de faisabilité psychologique autant que statistique.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Combien de trades faut-il pour un backtest fiable ?</h3>
+        <p>En dessous d'une centaine de trades, le hasard domine largement le résultat et aucune conclusion n'est solide. Entre cent et deux cents, une tendance commence à se dessiner. Au-delà de deux cents, les chiffres deviennent exploitables. Plus important encore que le nombre : l'échantillon doit couvrir plusieurs régimes de marché, tendance et range, volatilité forte et faible.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le surapprentissage d'une stratégie ?</h3>
+        <p>Le surapprentissage, ou curve fitting, consiste à ajuster les paramètres d'une stratégie jusqu'à ce qu'elle colle parfaitement aux données testées. Le résultat devient spectaculaire sur l'historique et décevant en réel, parce que la méthode a appris le bruit propre à cet échantillon plutôt qu'un comportement de marché reproductible. Le signe caractéristique est une performance qui s'effondre dès qu'un paramètre est légèrement modifié.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre backtest et forward test ?</h3>
+        <p>Le backtest s'effectue sur des données passées, que l'on peut consulter à volonté. Le forward test applique les mêmes règles en avançant dans le temps sans connaître la suite, en direct ou sur compte de démonstration. Le second élimine par construction le biais de connaissance du futur, qui est le principal défaut du premier. Une stratégie qui perd sa performance au passage du backtest au forward test était ajustée, pas validée.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il inclure les frais dans un backtest ?</h3>
+        <p>Oui, systématiquement, et c'est l'omission la plus fréquente. Spread, commission, financement overnight et slippage se retranchent de chaque opération. Une stratégie affichant une espérance faiblement positive avant frais devient perdante une fois ceux-ci intégrés, et l'effet est d'autant plus marqué que la fréquence de trades est élevée.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quand faut-il abandonner une stratégie ?</h3>
+        <p>Une série de pertes ne suffit pas : elle est attendue et figure dans les chiffres du backtest. Le signal d'abandon est un écart durable entre le comportement réel et le comportement testé, notamment un recul de capital plus profond ou plus long que le pire observé sur l'échantillon. Fixer ce seuil à l'avance, par écrit, évite d'avoir à trancher au moment où le jugement est le plus altéré.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature sur l'évaluation des stratégies de marché et travaux sur le surapprentissage et les biais d'échantillon en finance quantitative, 2025-2026. Les chiffres cités sont illustratifs. Publié le 12 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/plan-de-trading"><span class="t">Le plan de trading</span><span class="d">Écrire les règles à tester</span></a>
+        <a href="/blog/gestion-du-risque-trading"><span class="t">Gestion du risque</span><span class="d">Calculer une espérance</span></a>
+        <a href="/blog/couts-du-trading"><span class="t">Le coût réel du trading</span><span class="d">Les frais à retrancher</span></a>
+        <a href="/blog/comment-tenir-journal-trading"><span class="t">Tenir un journal</span><span class="d">Comparer le réel au testé</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
