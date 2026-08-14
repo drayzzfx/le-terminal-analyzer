@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trader les indices : CAC 40, DAX, S&amp;P 500 | Le Terminal</title>
+<meta name="description" content="Ce qu'est vraiment un indice, ce qui le fait bouger, le gap d'ouverture, et les différences concrètes avec le forex quand on passe des devises aux indices.">
+<link rel="canonical" href="https://www.leterminal.net/blog/trader-les-indices">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Trader les indices : CAC 40, DAX, S&amp;P 500 | Le Terminal">
+<meta property="og:description" content="Ce qu'est vraiment un indice, ce qui le fait bouger, le gap d'ouverture, et les différences concrètes avec le forex quand on passe des devises aux indices.">
+<meta property="og:url" content="https://www.leterminal.net/blog/trader-les-indices">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/trader-les-indices-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les grands indices boursiers — CAC 40, DAX, S&amp;P 500, Nasdaq 100 — leur composition et le gap d'ouverture propre aux indices — Le Terminal">
+<meta property="article:published_time" content="2026-08-14">
+<meta property="article:modified_time" content="2026-08-14">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trader les indices : CAC 40, DAX, S&amp;P 500">
+<meta name="twitter:description" content="Un indice ferme la nuit. C'est la différence qui change tout : le prix peut rouvrir loin de votre stop.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/trader-les-indices-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Trader les indices boursiers : ce qui change par rapport au forex",
+      "description": "Ce qu'est réellement un indice boursier, la personnalité des grands indices, les facteurs qui les font bouger, le rôle des horaires et du gap d'ouverture, et les différences pratiques avec le marché des changes.",
+      "datePublished": "2026-08-14",
+      "dateModified": "2026-08-14",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/trader-les-indices-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/trader-les-indices" },
+      "keywords": "indices boursiers, CAC 40, DAX, S&P 500, Nasdaq 100, gap d'ouverture, pondération, trading d'indices"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un indice boursier ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un indice boursier est une mesure calculée à partir du cours d'un ensemble d'entreprises sélectionnées selon des règles publiques. Ce n'est pas un actif que l'on détient : c'est un nombre qui résume l'évolution d'un panier. On ne peut donc pas acheter un indice directement, mais seulement des instruments qui répliquent sa valeur ou en dérivent."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre le CAC 40 et le DAX ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Au-delà des économies qu'ils représentent, une différence technique majeure les sépare : le CAC 40 est généralement suivi dans sa version prix, qui ne tient pas compte des dividendes versés, tandis que le DAX est historiquement un indice de performance, calculé dividendes réinvestis. À performance économique comparable, cela suffit à créer un écart durable entre les deux courbes sur longue période."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le gap d'ouverture sur un indice ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "C'est l'écart entre le dernier cours d'une séance et le premier de la suivante, sans cotation intermédiaire. Il se produit parce qu'un marché actions ferme la nuit : les informations publiées pendant la fermeture sont intégrées d'un seul coup à la réouverture. Un stop placé à l'intérieur de cet écart n'est pas exécuté à son niveau mais au premier prix disponible, qui peut être nettement plus défavorable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qui fait bouger un indice boursier ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Principalement des facteurs communs à l'ensemble de ses composantes : décisions et anticipations de politique monétaire, publications macroéconomiques, appétit général pour le risque. S'y ajoutent les périodes de résultats d'entreprises et, sur les indices très concentrés, le poids de quelques valeurs dont les mouvements suffisent à orienter l'ensemble."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Vaut-il mieux trader les indices ou le forex ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Aucun des deux n'est supérieur ; ils imposent des contraintes différentes. Le marché des changes fonctionne en continu du dimanche soir au vendredi soir, ce qui limite les écarts de cotation en semaine. Les indices concentrent leur activité sur des plages horaires précises et comportent un risque de gap à chaque réouverture. Le choix dépend surtout des heures où vous êtes réellement disponible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel indice choisir quand on débute ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le critère utile est la correspondance entre les heures d'activité de l'indice et votre disponibilité réelle, puis le coût d'accès facturé par votre intermédiaire. Un indice très volatil impose des distances de stop plus larges, donc des positions plus petites à risque égal. Mieux vaut en suivre un seul assez longtemps pour en connaître le rythme que d'en surveiller plusieurs superficiellement."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Trader les indices boursiers", "item": "https://www.leterminal.net/blog/trader-les-indices" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Trader les indices</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Marché</span>
+  <h1 class="bl-art__title">Trader les indices boursiers : ce qui change par rapport au forex</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 14, 2026">Publié le 14 août 2026</span>
+    <span>·</span>
+    <span data-en="12 min read">12 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/trader-les-indices.webp" width="1600" height="900" alt="Les grands indices boursiers — CAC 40, DAX, S&amp;P 500 et Nasdaq 100 — leur composition, leurs plages horaires et le gap d'ouverture qui les distingue du marché des changes" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un indice n'est pas un actif : c'est un <strong>nombre calculé</strong> à partir d'un panier d'entreprises. Cette nature explique tout le reste — ce qui le fait bouger, pourquoi quelques valeurs peuvent l'orienter à elles seules, et surtout la différence qui compte le plus face au forex : <strong>un marché actions ferme la nuit</strong>. Le prix peut donc rouvrir de l'autre côté de votre stop.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Beaucoup de traders particuliers passent du marché des changes aux indices en transposant leurs habitudes telles quelles. Les outils d'analyse se transposent effectivement bien — supports, structures, unités de temps.</p>
+    <p>Deux choses ne se transposent pas : <strong>les horaires</strong> et <strong>le risque de gap</strong>. Elles suffisent à transformer une méthode rentable en méthode perdante si elles ne sont pas intégrées.</p>
+
+    <h2>Ce qu'est réellement un indice</h2>
+    <p>Un indice est une <strong>mesure</strong>, pas un titre. Il agrège le cours d'un ensemble d'entreprises sélectionnées selon des règles publiques, et en restitue une valeur unique.</p>
+    <p>Conséquence immédiate, souvent mal comprise : <strong>on n'achète pas un indice</strong>. On achète un instrument qui en réplique la valeur ou qui en dérive. Le détenteur ne possède aucune part des sociétés concernées.</p>
+
+    <h3>La pondération, et pourquoi elle compte</h3>
+    <p>Toutes les composantes ne pèsent pas également. La plupart des grands indices sont pondérés par la <strong>capitalisation flottante</strong> : plus une société est valorisée, plus elle influence l'indice.</p>
+    <p>Cela a une implication très concrète. Sur un indice où quelques valeurs représentent une part importante du total, <strong>leur mouvement suffit à orienter l'ensemble</strong> — l'indice peut progresser alors qu'une majorité de ses composantes reculent. Un indice « large » n'est pas nécessairement un indice diversifié, ce qui rejoint directement le mécanisme décrit dans notre article sur <a href="/blog/diversification-portefeuille">la diversification d'un portefeuille</a>.</p>
+    <p>Le Dow Jones fait exception : il est pondéré par le <em>prix</em> des actions, une méthode ancienne qui donne davantage de poids aux titres au cours nominal élevé, indépendamment de la taille des entreprises.</p>
+
+    <h3>Indice de prix ou de performance</h3>
+    <p>Distinction technique, mais elle explique des écarts que beaucoup trouvent inexplicables. Un <strong>indice de prix</strong> ne tient pas compte des dividendes versés ; un <strong>indice de performance</strong> les réintègre comme s'ils étaient réinvestis.</p>
+    <p>Le CAC 40 est habituellement suivi dans sa version prix, tandis que le DAX est historiquement calculé en performance. À évolution économique comparable, la courbe du second paraît donc durablement plus favorable — ce n'est pas une supériorité de l'économie allemande, c'est une différence de mode de calcul.</p>
+
+    <h2>La personnalité des grands indices</h2>
+    <p>Chacun a un comportement propre, et ce comportement découle de sa composition.</p>
+    <ul>
+      <li><strong>CAC 40</strong> — quarante grandes valeurs françaises, fortement internationalisées. Une part importante de leur chiffre d'affaires étant réalisée hors de France, l'indice réagit autant au contexte mondial qu'à l'actualité nationale. Nette présence du luxe, de l'énergie et de la banque.</li>
+      <li><strong>DAX</strong> — quarante valeurs allemandes, avec un poids marqué de l'industrie et de l'automobile. Historiquement réputé plus nerveux que le CAC 40.</li>
+      <li><strong>S&amp;P 500</strong> — cinq cents grandes sociétés américaines. La référence du marché mondial : ce qu'il fait conditionne largement l'humeur des autres places.</li>
+      <li><strong>Nasdaq 100</strong> — cent grandes valeurs non financières cotées sur le Nasdaq, très orientées technologie. Le plus volatil des quatre, et le plus concentré : quelques titres y pèsent lourd.</li>
+      <li><strong>Dow Jones</strong> — trente valeurs américaines, pondérées par le prix. Le plus médiatisé, le moins représentatif.</li>
+    </ul>
+
+    <h2>Ce qui fait bouger un indice</h2>
+    <p>La différence essentielle avec une action isolée : un indice ne réagit presque jamais à une entreprise, il réagit à ce qui concerne <strong>toutes</strong> ses composantes à la fois.</p>
+    <ul>
+      <li><strong>La politique monétaire.</strong> Décisions et surtout <em>anticipations</em> de taux. Le premier facteur, et de loin.</li>
+      <li><strong>Les publications macroéconomiques.</strong> Emploi, inflation, activité — les rendez-vous que recense le <a href="/blog/calendrier-economique-trading">calendrier économique</a>.</li>
+      <li><strong>L'appétit pour le risque.</strong> Les capitaux se déplacent par blocs entre classes d'actifs, un mouvement que la <a href="/bubble">Bubble Map</a> rend visible.</li>
+      <li><strong>Les périodes de résultats.</strong> Sur quelques semaines, les publications d'entreprises reprennent le dessus, avec des mouvements plus erratiques.</li>
+      <li><strong>Le poids des géants.</strong> Sur un indice concentré, une seule très grande valeur peut expliquer l'essentiel d'une séance.</li>
+    </ul>
+
+    <h2>Les horaires : la vraie différence</h2>
+    <p>C'est ici que la transposition depuis le forex échoue le plus souvent.</p>
+    <p>Le marché des changes fonctionne en continu du dimanche soir au vendredi soir. Les <a href="/blog/sessions-de-trading-forex">sessions</a> s'y enchaînent sans interruption, et un stop reste opérant la nuit.</p>
+    <p>Un marché actions, lui, <strong>ferme</strong>. Les instruments dérivés proposés par les intermédiaires étendent souvent la plage de cotation, mais avec une liquidité bien plus faible et des écarts élargis en dehors des heures principales.</p>
+    <div class="bl-note">
+      <p><strong>Le rythme d'une séance d'indice</strong><br>
+      <strong>L'ouverture</strong> — le moment le plus actif : la nuit s'intègre au prix d'un coup, l'amplitude est maximale et le mouvement souvent trompeur.<br>
+      <strong>Le milieu de séance</strong> — l'activité retombe nettement.<br>
+      <strong>Le recouvrement avec les États-Unis</strong> — sur les indices européens, la reprise d'activité la plus marquée de la journée.<br>
+      <strong>La clôture</strong> — regain de volume lié aux ajustements de fin de séance.</p>
+    </div>
+    <p>Traduit en pratique : sur les indices, <strong>l'essentiel se joue sur deux plages horaires</strong>. Le reste du temps offre peu de configurations exploitables, et les payer au prix des frais rarement.</p>
+
+    <h2>Le gap d'ouverture</h2>
+    <p>Le point le plus important de cet article pour qui vient du forex.</p>
+    <p>Un <strong>gap</strong> est un écart entre le dernier cours d'une séance et le premier de la suivante, <em>sans aucune cotation entre les deux</em>. Il se forme parce que l'information continue de circuler pendant que le marché est fermé : résultats publiés après clôture, décisions de banques centrales, événements du week-end.</p>
+
+    <h3>Ce que cela implique pour votre stop</h3>
+    <p>C'est net, et rarement anticipé : <strong>un stop situé à l'intérieur du gap n'est pas exécuté à son niveau</strong>. Il devient un ordre au marché et s'exécute au premier prix disponible, qui peut être très en dessous — un mécanisme détaillé dans notre article sur les <a href="/blog/types-ordres-trading">types d'ordres</a>.</p>
+    <p>Autrement dit, votre perte maximale calculée n'est pas garantie sur une position conservée pendant une fermeture. Trois conséquences pratiques :</p>
+    <ul>
+      <li>Une position conservée <strong>d'une séance à l'autre</strong> porte un risque supplémentaire non borné par le stop.</li>
+      <li>Le passage du <strong>week-end</strong> concentre ce risque : deux jours d'actualité s'intègrent d'un seul coup.</li>
+      <li>Beaucoup de traders intraday sur indices <strong>ferment tout avant la clôture</strong>, non par principe mais par ce calcul.</li>
+    </ul>
+    <p>Si vous conservez des positions, la réponse n'est pas de renoncer : c'est de <strong>réduire la taille</strong> en conséquence, puisque la perte potentielle dépasse la distance de stop. Le <a href="/calculateur">calculateur du Terminal</a> donne la taille correspondant à votre risque ; sur un indice conservé la nuit, il est prudent de considérer ce chiffre comme un maximum, pas comme une cible.</p>
+
+    <h2>Indices ou forex : la comparaison</h2>
+    <div class="bl-note">
+      <p><strong>Continuité</strong> — Forex : continu en semaine · Indices : séances avec fermetures<br>
+      <strong>Risque de gap</strong> — Forex : limité à la réouverture dominicale · Indices : à chaque réouverture<br>
+      <strong>Moteur principal</strong> — Forex : écarts de politique monétaire entre deux zones · Indices : politique monétaire et appétit pour le risque<br>
+      <strong>Concentration du risque</strong> — Forex : la devise commune entre paires · Indices : les plus grosses pondérations<br>
+      <strong>Plages utiles</strong> — Forex : plusieurs par jour · Indices : ouverture et recouvrement américain</p>
+    </div>
+    <p>Une remarque qui vaut pour les deux, et qui découle de notre article sur les <a href="/blog/paires-de-devises">paires de devises</a> : les grands indices occidentaux sont <strong>fortement corrélés entre eux</strong>. Ouvrir des positions de même sens sur trois indices différents, c'est reproduire exactement le piège des trois paires en dollar — un pari unique, compté trois fois.</p>
+
+    <h2>Les erreurs propres aux indices</h2>
+
+    <h3>Trader l'ouverture sans en connaître le rythme</h3>
+    <p>Les premières minutes concentrent l'amplitude, ce qui les rend attirantes. Elles concentrent aussi les faux mouvements : le prix part franchement dans une direction, puis se retourne une fois la nuit digérée. C'est la plage la plus difficile de la séance, pas la plus facile.</p>
+
+    <h3>Conserver une position sans compter le gap</h3>
+    <p>Déjà traité plus haut, mais c'est l'erreur la plus coûteuse, parce qu'elle ne se manifeste que le jour où elle fait mal.</p>
+
+    <h3>Appliquer des distances de stop héritées du forex</h3>
+    <p>Les amplitudes n'ont rien de comparable, ni entre indices et devises, ni entre deux indices. Un stop calibré sur une paire majeure sera régulièrement balayé sur un indice technologique. La distance se règle sur la volatilité effective de l'instrument, jamais sur une habitude.</p>
+
+    <h3>Ignorer les périodes de résultats</h3>
+    <p>Pendant ces semaines, l'indice devient plus sensible aux publications d'entreprises qu'aux données macroéconomiques. Le comportement change temporairement, et une méthode calibrée hors de ces périodes s'y comporte moins bien.</p>
+
+    <h2>Avant de vous y mettre</h2>
+    <p>Trois vérifications valent mieux qu'un long apprentissage par l'erreur.</p>
+    <ul>
+      <li><strong>Le coût d'accès chez votre intermédiaire.</strong> Il varie fortement d'un indice à l'autre et s'élargit en dehors des heures principales.</li>
+      <li><strong>L'amplitude moyenne de l'indice visé</strong>, comparée à celle de vos instruments habituels. Elle détermine vos distances de stop, donc vos tailles.</li>
+      <li><strong>Vos disponibilités réelles</strong>, confrontées aux deux plages qui comptent. Si vous ne pouvez être présent ni à l'ouverture ni au recouvrement américain, l'instrument est probablement mal choisi.</li>
+    </ul>
+    <p>Et, comme toujours, la réponse définitive ne se trouve pas dans un article : elle se trouve dans vos propres relevés. Consigner sur trente opérations l'heure d'entrée, l'instrument et le résultat fait apparaître très vite quelles plages vous réussissent — c'est ce que produit un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> tenu régulièrement.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Adaptez la taille à l'instrument</p>
+    <p>Capital, risque accepté, distance de stop : le calculateur du Terminal rend la taille exacte pour chaque instrument — indispensable quand on passe d'une paire de devises à un indice bien plus ample.</p>
+    <a class="lt-btn lt-btn--primary" href="/calculateur">Ouvrir le calculateur</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Aucun indice ni instrument n'est recommandé ici. Les compositions, méthodes de calcul, horaires de cotation et conditions d'accès évoluent et varient selon les fournisseurs d'indices et les intermédiaires : vérifiez-les auprès des sources officielles et de votre courtier. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier, et un gap peut porter la perte au-delà du niveau de stop prévu.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un indice boursier ?</h3>
+        <p>Un indice boursier est une mesure calculée à partir du cours d'un ensemble d'entreprises sélectionnées selon des règles publiques. Ce n'est pas un actif que l'on détient : c'est un nombre qui résume l'évolution d'un panier. On ne peut donc pas acheter un indice directement, mais seulement des instruments qui répliquent sa valeur ou en dérivent.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre le CAC 40 et le DAX ?</h3>
+        <p>Au-delà des économies qu'ils représentent, une différence technique majeure les sépare : le CAC 40 est généralement suivi dans sa version prix, qui ne tient pas compte des dividendes versés, tandis que le DAX est historiquement un indice de performance, calculé dividendes réinvestis. À performance économique comparable, cela suffit à créer un écart durable entre les deux courbes sur longue période.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le gap d'ouverture sur un indice ?</h3>
+        <p>C'est l'écart entre le dernier cours d'une séance et le premier de la suivante, sans cotation intermédiaire. Il se produit parce qu'un marché actions ferme la nuit : les informations publiées pendant la fermeture sont intégrées d'un seul coup à la réouverture. Un stop placé à l'intérieur de cet écart n'est pas exécuté à son niveau mais au premier prix disponible, qui peut être nettement plus défavorable.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qui fait bouger un indice boursier ?</h3>
+        <p>Principalement des facteurs communs à l'ensemble de ses composantes : décisions et anticipations de politique monétaire, publications macroéconomiques, appétit général pour le risque. S'y ajoutent les périodes de résultats d'entreprises et, sur les indices très concentrés, le poids de quelques valeurs dont les mouvements suffisent à orienter l'ensemble.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Vaut-il mieux trader les indices ou le forex ?</h3>
+        <p>Aucun des deux n'est supérieur ; ils imposent des contraintes différentes. Le marché des changes fonctionne en continu du dimanche soir au vendredi soir, ce qui limite les écarts de cotation en semaine. Les indices concentrent leur activité sur des plages horaires précises et comportent un risque de gap à chaque réouverture. Le choix dépend surtout des heures où vous êtes réellement disponible.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quel indice choisir quand on débute ?</h3>
+        <p>Le critère utile est la correspondance entre les heures d'activité de l'indice et votre disponibilité réelle, puis le coût d'accès facturé par votre intermédiaire. Un indice très volatil impose des distances de stop plus larges, donc des positions plus petites à risque égal. Mieux vaut en suivre un seul assez longtemps pour en connaître le rythme que d'en surveiller plusieurs superficiellement.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : méthodologies publiées par les fournisseurs d'indices et documentation des intermédiaires sur les conditions de cotation, 2025-2026. Compositions et horaires évoluent : vérifiez auprès des sources officielles. Publié le 14 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/paires-de-devises"><span class="t">Les paires de devises</span><span class="d">L'autre grande famille d'instruments</span></a>
+        <a href="/blog/types-ordres-trading"><span class="t">Les types d'ordres</span><span class="d">Pourquoi un stop ne tient pas dans un gap</span></a>
+        <a href="/blog/calendrier-economique-trading"><span class="t">Le calendrier économique</span><span class="d">Les rendez-vous qui déplacent les indices</span></a>
+        <a href="/blog/sessions-de-trading-forex"><span class="t">Sessions de trading</span><span class="d">Le contraste avec un marché continu</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
