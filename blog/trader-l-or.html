@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trader l'or : ce qui fait bouger le XAU/USD | Le Terminal</title>
+<meta name="description" content="Taux réels, dollar, demande de refuge, banques centrales : les quatre moteurs de l'or, et ce que sa volatilité change pour vos stops et vos tailles.">
+<link rel="canonical" href="https://www.leterminal.net/blog/trader-l-or">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Trader l'or : ce qui fait bouger le XAU/USD | Le Terminal">
+<meta property="og:description" content="Taux réels, dollar, demande de refuge, banques centrales : les quatre moteurs de l'or, et ce que sa volatilité change pour vos stops et vos tailles.">
+<meta property="og:url" content="https://www.leterminal.net/blog/trader-l-or">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/trader-l-or-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les quatre moteurs du cours de l'or — taux réels, dollar, demande de refuge et achats des banques centrales — Le Terminal">
+<meta property="article:published_time" content="2026-08-15">
+<meta property="article:modified_time" content="2026-08-15">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trader l'or : ce qui fait bouger le XAU/USD">
+<meta name="twitter:description" content="L'or ne produit rien. C'est sa principale caractéristique — et elle explique tout ce qui le fait monter ou descendre.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/trader-l-or-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Trader l'or : ce qui le fait bouger, et ce que ça change",
+      "description": "Pourquoi l'or n'est pas un actif comme les autres, ses quatre moteurs de prix — taux réels, dollar, demande de refuge, achats des banques centrales —, son mode de cotation, sa volatilité et les erreurs propres à cet instrument.",
+      "datePublished": "2026-08-15",
+      "dateModified": "2026-08-15",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/trader-l-or-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/trader-l-or" },
+      "keywords": "trader l'or, XAU/USD, taux réels, valeur refuge, banques centrales, once, métaux précieux, volatilité"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qui fait monter le cours de l'or ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Quatre facteurs dominent. La baisse des taux d'intérêt réels rend moins coûteux le fait de détenir un actif qui ne rapporte aucun revenu. L'affaiblissement du dollar, monnaie dans laquelle l'or est coté, le rend mécaniquement moins cher pour les autres devises. Les épisodes de tension économique ou géopolitique alimentent la demande de valeur refuge. Enfin, les achats des banques centrales constituent une demande de fond, moins visible mais durable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le XAU/USD ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "XAU/USD est le code désignant le prix d'une once d'or exprimé en dollars américains, XAU étant le code international de l'or. Il se lit comme une paire de devises : l'or joue le rôle de devise de base, le dollar celui de contrepartie. Acheter le XAU/USD revient donc à parier sur la hausse de l'or face au dollar, jamais sur l'or seul."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi l'or est-il considéré comme une valeur refuge ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Parce qu'il ne dépend ni des résultats d'une entreprise, ni de la solvabilité d'un émetteur : il ne comporte pas de risque de défaut. Lors des périodes d'incertitude, une partie des capitaux se déplace vers cette caractéristique. Ce statut n'a toutefois rien d'automatique : l'or peut reculer pendant une crise, notamment lorsque les intervenants vendent leurs actifs liquides pour couvrir des pertes ailleurs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "L'or est-il plus volatil que les paires de devises ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Son amplitude quotidienne est généralement supérieure à celle des grandes paires de devises, avec des accélérations marquées lors des publications macroéconomiques. Concrètement, cela impose des distances de stop plus larges, donc des positions plus petites à risque égal. Reprendre telle quelle une taille calibrée sur une paire majeure est l'erreur la plus fréquente sur cet instrument."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quand trader l'or dans la journée ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'activité se concentre sur les heures où les places européennes et américaines se recouvrent, période durant laquelle la liquidité est la meilleure et les écarts les plus serrés. Les publications macroéconomiques américaines constituent les moments les plus mouvementés. En dehors de ces plages, l'amplitude retombe et les écarts s'élargissent."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre acheter de l'or et trader l'or ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Acheter de l'or physique ou un support adossé à du métal constitue une détention, sans échéance ni frais de portage quotidiens. Trader l'or via un produit dérivé crée une exposition à sa variation de prix, sans propriété du métal, avec effet de levier possible et frais de financement. Les deux démarches répondent à des objectifs et à des horizons différents."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Trader l'or", "item": "https://www.leterminal.net/blog/trader-l-or" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Trader l'or</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Marché</span>
+  <h1 class="bl-art__title">Trader l'or : ce qui le fait bouger, et ce que ça change</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 15, 2026">Publié le 15 août 2026</span>
+    <span>·</span>
+    <span data-en="12 min read">12 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/trader-l-or.webp" width="1600" height="900" alt="Les quatre moteurs du cours de l'or — taux d'intérêt réels, dollar américain, demande de valeur refuge et achats des banques centrales — et leur effet sur le XAU/USD" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> L'or ne verse aucun revenu, ne publie aucun résultat et ne dépend d'aucune entreprise. <strong>Il ne produit rien</strong> — et c'est précisément sa caractéristique déterminante : elle explique pourquoi il monte quand les taux réels baissent, pourquoi il évolue à l'inverse du dollar, et pourquoi on ne peut pas le valoriser comme une action. Voici ses quatre moteurs, et ce que sa volatilité impose concrètement.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>L'or est l'un des instruments les plus tradés par les particuliers, et l'un des plus mal abordés. La raison est simple : beaucoup y transposent des réflexes venus du marché des changes, sur un actif dont la logique n'a rien à voir.</p>
+    <p>Une paire de devises oppose deux économies. Un indice agrège des entreprises. L'or, lui, <strong>n'a pas de contrepartie économique</strong>. Il faut donc raisonner autrement.</p>
+
+    <h2>Pourquoi l'or n'est pas un actif comme les autres</h2>
+    <p>Une action vaut quelque chose parce qu'elle donne droit à des bénéfices futurs. Une obligation, parce qu'elle promet des versements. On peut, en théorie, en calculer une valeur.</p>
+    <p><strong>L'or ne promet rien.</strong> Pas de dividende, pas de coupon, pas de résultat trimestriel. Une once reste une once. Trois conséquences majeures en découlent.</p>
+    <ul>
+      <li><strong>Il n'existe pas de valeur « fondamentale » calculable.</strong> Son prix est celui que le marché accepte de payer, sans ancrage comptable.</li>
+      <li><strong>Le détenir a un coût d'opportunité.</strong> Immobiliser du capital dans un actif sans revenu revient à renoncer au rendement disponible ailleurs. Ce renoncement est le cœur du mécanisme.</li>
+      <li><strong>Il ne comporte pas de risque de défaut.</strong> Aucun émetteur ne peut faire faillite. C'est l'origine de son statut de valeur refuge.</li>
+    </ul>
+
+    <h2>Les quatre moteurs du cours de l'or</h2>
+
+    <h3>1. Les taux d'intérêt réels</h3>
+    <p>Le facteur le plus puissant, et le moins intuitif. Le taux réel est, en substance, le rendement d'un placement sûr <em>diminué</em> de l'inflation.</p>
+    <p>Le raisonnement se tient en deux temps. Quand les taux réels sont <strong>élevés</strong>, un placement sans risque rapporte : détenir de l'or, qui ne rapporte rien, devient coûteux, et l'or a tendance à souffrir. Quand ils sont <strong>bas ou négatifs</strong>, l'alternative ne rapporte plus grand-chose : le coût d'opportunité disparaît, et l'or devient relativement attractif.</p>
+    <div class="bl-note">
+      <p><strong>La règle de lecture.</strong> Ce ne sont pas les taux nominaux qui comptent, mais les taux <em>réels</em>. L'or peut très bien monter pendant une phase de hausse des taux, si l'inflation progresse encore plus vite.</p>
+    </div>
+    <p>C'est aussi pourquoi les décisions et les discours de banques centrales déplacent l'or aussi nettement : ils modifient les anticipations de taux, donc l'attractivité relative de l'actif. Ces rendez-vous figurent tous dans le <a href="/blog/calendrier-economique-trading">calendrier économique</a>.</p>
+
+    <h3>2. Le dollar américain</h3>
+    <p>L'or est coté en dollars. Un dollar plus faible rend donc l'once mécaniquement moins chère pour un acheteur qui paie dans une autre monnaie, ce qui soutient la demande — et inversement.</p>
+    <p>Il en résulte une <strong>relation inverse fréquente</strong> entre l'or et le dollar. Deux nuances importantes : cette relation n'est pas mécanique et se relâche régulièrement ; et lors des épisodes de tension aiguë, or et dollar peuvent monter <em>ensemble</em>, tous deux recherchés comme refuges.</p>
+    <p>Conséquence directe, à ne pas manquer : si vous êtes déjà exposé au dollar via vos <a href="/blog/paires-de-devises">paires de devises</a>, une position sur l'or n'est pas un pari indépendant. Elle ajoute à la même exposition, exactement comme le décrit notre article sur <a href="/blog/diversification-portefeuille">la diversification</a>.</p>
+
+    <h3>3. La demande de refuge</h3>
+    <p>Le moteur le plus connu, et le plus surestimé. En période d'incertitude — tensions géopolitiques, doutes sur le système bancaire, crise de confiance —, une part des capitaux se déplace vers un actif sans risque d'émetteur.</p>
+    <p>Deux réserves, cependant, qui évitent des erreurs coûteuses :</p>
+    <ul>
+      <li><strong>Ce n'est pas automatique.</strong> L'or peut baisser pendant une crise, notamment lorsque les intervenants vendent ce qui est liquide — l'or l'est — pour couvrir des pertes ailleurs.</li>
+      <li><strong>Le mouvement est souvent bref.</strong> Les poussées liées à un événement se dégonflent fréquemment en quelques jours, ce qui piège ceux qui entrent après le mouvement.</li>
+    </ul>
+
+    <h3>4. Les banques centrales</h3>
+    <p>Le moteur de fond, le moins visible au quotidien et le plus structurant sur longue période. Les banques centrales détiennent de l'or dans leurs réserves, et leurs opérations d'achat ou de vente représentent des volumes considérables.</p>
+    <p>Cette demande ne se lit pas sur un graphique intraday : elle s'observe dans les statistiques publiées avec retard. Elle influence surtout la tendance de fond, rarement la séance du jour.</p>
+
+    <h2>Comment l'or est coté</h2>
+    <p>Sur les plateformes, l'or apparaît sous le code <strong>XAU/USD</strong> — XAU étant le code international du métal. Il se lit exactement comme une paire de devises : l'or est la base, le dollar la contrepartie.</p>
+    <p>Deux points pratiques qui évitent des erreurs de calcul :</p>
+    <ul>
+      <li><strong>Le prix s'entend par once</strong>, unité de référence du marché international.</li>
+      <li><strong>La valeur du point dépend entièrement des spécifications de votre contrat.</strong> Elle n'a rien de commun avec celle d'une paire de devises, et elle varie d'un intermédiaire à l'autre.</li>
+    </ul>
+    <p>C'est la source d'erreur la plus fréquente sur cet instrument : appliquer un raisonnement en pips hérité du forex. Vérifiez la fiche du contrat — un réflexe détaillé dans notre article sur <a href="/blog/qu-est-ce-qu-un-cfd">ce qu'est réellement un CFD</a> — puis convertissez avec le <a href="/calculateur">calculateur du Terminal</a>.</p>
+
+    <h2>Ce que la volatilité impose</h2>
+    <p>L'amplitude quotidienne de l'or est généralement supérieure à celle des grandes paires de devises, avec des accélérations marquées lors des publications américaines.</p>
+    <p>Cela ne rend pas l'instrument « meilleur » : cela impose une adaptation, et elle n'est pas optionnelle.</p>
+    <div class="bl-note">
+      <p><strong>La conséquence en une ligne.</strong> Une amplitude plus large impose des stops plus larges, donc — à risque identique — des <strong>positions plus petites</strong>. Reprendre telle quelle une taille calibrée sur une paire majeure est l'erreur numéro un sur l'or.</p>
+    </div>
+    <p>Le raisonnement reste celui de la <a href="/blog/gestion-du-risque-trading">gestion du risque</a> : le stop se place selon la structure du marché, puis la taille s'ajuste pour que le risque en euros reste constant. Sur l'or, c'est la seconde étape qui change, pas la première.</p>
+
+    <h3>Les heures qui comptent</h3>
+    <p>L'activité se concentre sur le recouvrement entre les places européennes et américaines : c'est là que la liquidité est la meilleure et que les écarts sont les plus serrés. Les publications macroéconomiques américaines constituent les moments les plus mouvementés — et les moins propices à une entrée précipitée. En dehors de ces plages, l'amplitude retombe nettement, comme le détaille notre article sur les <a href="/blog/sessions-de-trading-forex">sessions de trading</a>.</p>
+
+    <h2>L'or et les autres métaux</h2>
+    <p>Deux voisins reviennent souvent, et il vaut mieux savoir ce qui les sépare.</p>
+    <ul>
+      <li><strong>L'argent</strong> partage une partie des moteurs de l'or, mais avec une forte composante industrielle et un marché plus étroit. Il est nettement plus volatil : les mêmes distances de stop y sont largement insuffisantes.</li>
+      <li><strong>Le platine et le palladium</strong> sont d'abord des métaux industriels. Leur logique est dominée par l'offre minière et la demande de secteurs précis, pas par le statut de refuge.</li>
+    </ul>
+    <p>Traiter ces métaux comme des variantes de l'or est une erreur d'analyse : les moteurs ne sont pas les mêmes.</p>
+
+    <h2>Les erreurs propres à l'or</h2>
+
+    <h3>Acheter la peur après le mouvement</h3>
+    <p>Un événement survient, l'or bondit, l'information circule — et beaucoup entrent une fois la hausse déjà réalisée. Or ces poussées se dégonflent fréquemment en quelques séances. La règle vaut ici plus qu'ailleurs : entrer après un mouvement vertical impose un stop lointain et un ratio dégradé.</p>
+
+    <h3>Confondre inflation et hausse de l'or</h3>
+    <p>« L'or protège de l'inflation » est un raccourci. Le lien passe par les <em>taux réels</em>, pas par l'inflation seule. Une inflation élevée accompagnée de taux nominaux qui montent plus vite est un environnement défavorable à l'or, contrairement à l'intuition.</p>
+
+    <h3>Négliger le double comptage du dollar</h3>
+    <p>Déjà signalé plus haut, et systématiquement sous-estimé : une position sur l'or et plusieurs positions sur des paires en dollar constituent, en partie, le même pari.</p>
+
+    <h3>Appliquer des repères de forex</h3>
+    <p>Valeur du point, distance de stop, amplitude attendue : rien n'est transposable. Chaque chiffre doit être repris depuis les spécifications de l'instrument et de votre compte.</p>
+
+    <h2>Trader l'or ou en détenir</h2>
+    <p>Une distinction utile, parce que les deux démarches sont régulièrement confondues.</p>
+    <p><strong>Détenir</strong> — physiquement ou via un support adossé au métal — relève d'une logique patrimoniale : pas d'échéance, pas de frais de portage quotidiens, et une propriété réelle.</p>
+    <p><strong>Trader</strong> via un produit dérivé crée une exposition à la variation de prix, sans propriété du métal, avec effet de levier possible et frais de financement à la détention.</p>
+    <p>Les deux répondent à des objectifs différents, et l'un ne remplace pas l'autre. La confusion coûte cher dans un sens précis : utiliser un produit conçu pour le court terme afin de tenir une position pendant des mois, en accumulant un portage que la détention n'aurait pas.</p>
+
+    <h2>Vérifiez sur vos propres relevés</h2>
+    <p>Comme toujours, la réponse utile n'est pas dans cet article : elle est dans vos opérations passées.</p>
+    <p>Reprenez vos trades sur l'or et notez trois choses pour chacun : l'heure d'entrée, le fait qu'une publication américaine ait eu lieu ou non dans l'heure précédente, et le résultat en R. Deux régularités apparaissent presque toujours — les entrées hors des plages liquides se comportent moins bien, et les entrées immédiatement après une accélération verticale aussi.</p>
+    <p>C'est le type de constat qu'un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> fait émerger en quelques semaines, et qui produit une correction sans rien changer à votre analyse.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Recalculez votre taille pour l'or</p>
+    <p>Valeur du point, distance de stop, risque accepté : le calculateur du Terminal rend la taille exacte — indispensable quand on passe d'une paire de devises à un instrument bien plus ample.</p>
+    <a class="lt-btn lt-btn--primary" href="/calculateur">Ouvrir le calculateur</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Aucun actif n'est recommandé ici, et aucune anticipation n'est formulée sur l'évolution du cours de l'or. Les relations décrites entre l'or, les taux réels et le dollar sont des régularités observées historiquement, sujettes à exceptions et à ruptures. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qui fait monter le cours de l'or ?</h3>
+        <p>Quatre facteurs dominent. La baisse des taux d'intérêt réels rend moins coûteux le fait de détenir un actif qui ne rapporte aucun revenu. L'affaiblissement du dollar, monnaie dans laquelle l'or est coté, le rend mécaniquement moins cher pour les autres devises. Les épisodes de tension économique ou géopolitique alimentent la demande de valeur refuge. Enfin, les achats des banques centrales constituent une demande de fond, moins visible mais durable.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que le XAU/USD ?</h3>
+        <p>XAU/USD est le code désignant le prix d'une once d'or exprimé en dollars américains, XAU étant le code international de l'or. Il se lit comme une paire de devises : l'or joue le rôle de devise de base, le dollar celui de contrepartie. Acheter le XAU/USD revient donc à parier sur la hausse de l'or face au dollar, jamais sur l'or seul.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Pourquoi l'or est-il considéré comme une valeur refuge ?</h3>
+        <p>Parce qu'il ne dépend ni des résultats d'une entreprise, ni de la solvabilité d'un émetteur : il ne comporte pas de risque de défaut. Lors des périodes d'incertitude, une partie des capitaux se déplace vers cette caractéristique. Ce statut n'a toutefois rien d'automatique : l'or peut reculer pendant une crise, notamment lorsque les intervenants vendent leurs actifs liquides pour couvrir des pertes ailleurs.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>L'or est-il plus volatil que les paires de devises ?</h3>
+        <p>Son amplitude quotidienne est généralement supérieure à celle des grandes paires de devises, avec des accélérations marquées lors des publications macroéconomiques. Concrètement, cela impose des distances de stop plus larges, donc des positions plus petites à risque égal. Reprendre telle quelle une taille calibrée sur une paire majeure est l'erreur la plus fréquente sur cet instrument.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quand trader l'or dans la journée ?</h3>
+        <p>L'activité se concentre sur les heures où les places européennes et américaines se recouvrent, période durant laquelle la liquidité est la meilleure et les écarts les plus serrés. Les publications macroéconomiques américaines constituent les moments les plus mouvementés. En dehors de ces plages, l'amplitude retombe et les écarts s'élargissent.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre acheter de l'or et trader l'or ?</h3>
+        <p>Acheter de l'or physique ou un support adossé à du métal constitue une détention, sans échéance ni frais de portage quotidiens. Trader l'or via un produit dérivé crée une exposition à sa variation de prix, sans propriété du métal, avec effet de levier possible et frais de financement. Les deux démarches répondent à des objectifs et à des horizons différents.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature sur les déterminants du cours des métaux précieux et publications relatives aux réserves officielles, 2025-2026. Les relations décrites sont des régularités historiques, sans garantie de persistance. Publié le 15 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/qu-est-ce-qu-un-cfd"><span class="t">Qu'est-ce qu'un CFD</span><span class="d">Ce que vous détenez quand vous tradez l'or</span></a>
+        <a href="/blog/paires-de-devises"><span class="t">Les paires de devises</span><span class="d">L'exposition dollar que vous cumulez</span></a>
+        <a href="/blog/trader-les-indices"><span class="t">Trader les indices</span><span class="d">L'autre grande famille d'instruments</span></a>
+        <a href="/blog/gestion-du-risque-trading"><span class="t">Gestion du risque</span><span class="d">Adapter la taille à l'amplitude</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
