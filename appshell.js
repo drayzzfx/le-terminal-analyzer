@@ -258,11 +258,17 @@
     }).join('');
   }
 
-  function buildSideInner() {
+  function buildSiteSection() {
+    return '<span class="side__label">Le site</span>' + buildSiteLinks();
+  }
+
+  // includeSite : la section « Le site » est réservée au tiroir mobile. Sur la
+  // barre latérale desktop, ces pages sont déjà dans .lt-nav__links en haut —
+  // les répéter à gauche faisait doublon.
+  function buildSideInner(includeSite) {
     return '<span class="side__label">Outils</span>'
       + buildNav()
-      + '<span class="side__label">Le site</span>'
-      + buildSiteLinks()
+      + (includeSite ? buildSiteSection() : '')
       + '<div class="side__spacer"></div>'
       + buildFooter();
   }
@@ -547,7 +553,7 @@
   // (hamburger + nouveau tiroir), qui remplace l'ancien menu « Le Terminal Hub ».
   if (cfg.chromeOnly) {
     injectMktCss(); // styles .side__acct (carte compte du pied)
-    buildMobileDrawer(document.querySelector('.lt-nav'), buildSideInner());
+    buildMobileDrawer(document.querySelector('.lt-nav'), buildSideInner(true));
     refreshProFooter(); // reflète le statut Premium dans le pied du tiroir
     return;
   }
@@ -612,7 +618,7 @@
   // ── PART 2 : remplit la barre latérale (toutes les pages) ──
   var sideEl = document.querySelector('.app > .side, aside.side');
   if (sideEl) {
-    sideEl.innerHTML = buildSideInner();
+    sideEl.innerHTML = buildSideInner(false);
     // déplie la branche de la page courante
     var activeGroup = sideEl.querySelector('.side__group[data-key="' + cfg.key + '"]');
     if (activeGroup) {
@@ -670,6 +676,14 @@
       var drawer = document.createElement('aside'); drawer.className = 'lt-mnav';
       drawer.setAttribute('aria-label', 'Navigation');
       drawer.innerHTML = '<div class="lt-mnav__inner">' + sideEl.innerHTML + '</div>';
+      // Le tiroir clone la barre latérale (pour hériter de la branche dépliée sur
+      // la page courante), mais celle-ci n'a plus la section « Le site ». On la
+      // réinjecte ici : sous 860px, .lt-nav__links est masqué et le tiroir devient
+      // le seul accès à Tarifs / Blog / Méthode / Communauté / Avis.
+      var _inner = drawer.querySelector('.lt-mnav__inner');
+      var _spacer = _inner.querySelector('.side__spacer');
+      if (_spacer) _spacer.insertAdjacentHTML('beforebegin', buildSiteSection());
+      else _inner.insertAdjacentHTML('beforeend', buildSiteSection());
       // Même normalisation que dans buildMobileDrawer : liens ramenés à la racine.
       Array.prototype.forEach.call(drawer.querySelectorAll('a[href^="./"]'), function (a) {
         a.setAttribute('href', a.getAttribute('href').replace(/^\.\//, '/'));
