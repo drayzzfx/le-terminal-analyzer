@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Money Concepts : le vocabulaire décodé | Le Terminal</title>
+<meta name="description" content="Order block, liquidité, BOS, fair value gap : ce que chaque terme désigne vraiment, ce qui est utile, et ce qui n'est qu'un renommage de concepts classiques.">
+<link rel="canonical" href="https://www.leterminal.net/blog/smart-money-concepts">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Smart Money Concepts : le vocabulaire décodé | Le Terminal">
+<meta property="og:description" content="Order block, liquidité, BOS, fair value gap : ce que chaque terme désigne vraiment, ce qui est utile, et ce qui n'est qu'un renommage de concepts classiques.">
+<meta property="og:url" content="https://www.leterminal.net/blog/smart-money-concepts">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/smart-money-concepts-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Le vocabulaire des Smart Money Concepts décodé et mis en regard des concepts classiques d'analyse technique — Le Terminal">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:modified_time" content="2026-08-16">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Smart Money Concepts : le vocabulaire décodé">
+<meta name="twitter:description" content="Une partie décrit des faits observables. Une autre renomme des concepts vieux d'un siècle. Voici comment les séparer.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/smart-money-concepts-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Smart Money Concepts : décoder le vocabulaire, garder ce qui sert",
+      "description": "Glossaire critique des Smart Money Concepts : structure de marché, liquidité, order block, fair value gap, premium et discount, displacement. Ce que chaque terme désigne réellement, ce qui recoupe l'analyse technique classique, et les limites de l'approche.",
+      "datePublished": "2026-08-16",
+      "dateModified": "2026-08-16",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/smart-money-concepts-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/smart-money-concepts" },
+      "keywords": "smart money concepts, order block, liquidité, fair value gap, break of structure, displacement, premium discount, analyse technique"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Que sont les Smart Money Concepts ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les Smart Money Concepts désignent un ensemble de méthodes de lecture graphique diffusées principalement en ligne, organisées autour de l'idée que le prix serait dirigé par des intervenants institutionnels cherchant à déclencher les ordres des particuliers. L'ensemble comprend un vocabulaire propre — structure de marché, liquidité, order block, fair value gap — dont une partie décrit des phénomènes réellement observables et une autre reformule des notions classiques d'analyse technique."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un order block ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un order block désigne la dernière bougie de sens opposé qui précède un mouvement d'ampleur, considérée comme la zone où des ordres importants auraient été placés. Concrètement, il s'agit de la base d'où part une impulsion — ce que l'analyse technique classique appelle une zone d'offre ou de demande. L'observation sous-jacente est réelle : les départs d'impulsion sont souvent revisités. L'attribution de cette zone à un acteur identifié, en revanche, n'est pas vérifiable sur un graphique."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que la liquidité en Smart Money Concepts ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le terme désigne les zones où se concentrent des ordres en attente, typiquement les stops placés juste au-delà d'un plus haut ou d'un plus bas évident. C'est la partie la plus solide de l'approche : ces accumulations existent réellement, parce que la majorité des intervenants place ses protections aux mêmes endroits, et elles expliquent une part des faux franchissements observés sur les niveaux les plus visibles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un fair value gap ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un fair value gap, ou déséquilibre, est une zone laissée par un mouvement si rapide que les mèches de trois bougies consécutives ne se recouvrent pas. L'idée est que le prix a tendance à y revenir. Le phénomène observé — un mouvement vertical laisse une zone peu échangée, souvent revisitée — est classique et rejoint la notion de gap. Sa fréquence rend en revanche la sélection nécessaire : sur un graphique donné, ces zones sont nombreuses."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Les Smart Money Concepts fonctionnent-ils vraiment ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Aucune étude publique ne démontre une performance supérieure de cette approche par rapport à l'analyse technique classique. Elle apporte un cadre de lecture cohérent et attire l'attention sur des phénomènes réels, notamment les concentrations d'ordres de protection. Sa faiblesse principale est le nombre de zones qu'elle produit sur un même graphique, qui permet de justifier presque n'importe quel mouvement une fois celui-ci survenu."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre order block et zone de support ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les deux désignent une zone du graphique susceptible de provoquer une réaction du prix. Le support classique se définit par des touches répétées observables dans le passé ; l'order block se définit par la position d'une bougie précédant une impulsion, indépendamment du nombre de tests. En pratique, les deux coïncident fréquemment, et une zone identifiée par les deux méthodes à la fois offre davantage de confluence qu'une zone repérée par une seule."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Smart Money Concepts", "item": "https://www.leterminal.net/blog/smart-money-concepts" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Smart Money Concepts</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Analyse technique</span>
+  <h1 class="bl-art__title">Smart Money Concepts : décoder le vocabulaire, garder ce qui sert</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 16, 2026">Publié le 16 août 2026</span>
+    <span>·</span>
+    <span data-en="13 min read">13 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/smart-money-concepts.webp" width="1600" height="900" alt="Le vocabulaire des Smart Money Concepts — structure de marché, liquidité, order block, fair value gap — mis en regard des notions classiques d'analyse technique correspondantes" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Ce vocabulaire contient deux choses très différentes, mélangées. Une partie décrit des <strong>phénomènes réellement observables</strong> — au premier rang desquels les concentrations de stops autour des niveaux évidents. Une autre <strong>renomme des notions classiques</strong> vieilles d'un siècle. Aucune ne justifie le récit qui les accompagne. Voici comment séparer les deux, et ce qu'il reste quand on a fait le tri.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Il est difficile d'aborder ce sujet sans se retrouver dans un camp. D'un côté, ceux qui y voient la clé enfin révélée du fonctionnement des marchés. De l'autre, ceux qui balaient l'ensemble comme du marketing pour vendre des formations.</p>
+    <p>Les deux positions empêchent de faire le seul travail utile : <strong>examiner chaque terme séparément</strong>. Certains décrivent des choses vérifiables. D'autres sont des synonymes. Un dernier groupe relève d'une histoire qu'on se raconte. Le tri est faisable, et c'est ce que fait cet article.</p>
+
+    <h2>D'où vient ce vocabulaire</h2>
+    <p>L'expression <em>smart money</em> est ancienne en finance : elle désigne, de façon générique, les capitaux réputés les mieux informés. L'ensemble méthodologique qui porte aujourd'hui ce nom s'est en revanche constitué en ligne, diffusé principalement par des formateurs, sur les réseaux et les plateformes vidéo.</p>
+    <p>Ce n'est pas un défaut en soi — l'analyse technique classique s'est elle aussi diffusée par des livres commerciaux. Mais cela implique une conséquence pratique : <strong>il n'existe pas de définition de référence</strong>. Deux sources emploient fréquemment le même terme pour deux choses différentes, ce qui complique toute évaluation sérieuse.</p>
+
+    <h2>Le postulat de départ, et ce qu'il vaut</h2>
+    <p>L'approche repose sur une idée : le prix serait <em>dirigé</em> par des acteurs institutionnels qui font délibérément monter puis chuter le marché pour déclencher les ordres des particuliers avant de prendre la direction voulue.</p>
+    <p>Décomposons, parce que tout n'est pas à jeter :</p>
+    <ul>
+      <li><strong>Ce qui est exact.</strong> Il existe bien des ordres en attente concentrés à des endroits prévisibles. Il existe bien des intervenants dont la taille impose de chercher de la contrepartie là où elle se trouve. Et les franchissements de niveaux évidents échouent effectivement souvent.</li>
+      <li><strong>Ce qui n'est pas démontrable.</strong> L'attribution de ces mouvements à une <em>intention</em> coordonnée. Sur un graphique, on observe un prix — jamais un acteur, jamais un motif. Un même mouvement s'explique aussi bien par l'exécution mécanique d'ordres accumulés, sans que personne ne l'ait décidé.</li>
+    </ul>
+    <div class="bl-note">
+      <p><strong>La distinction qui compte.</strong> « Les stops se concentrent au-dessus des plus hauts évidents, et le prix y passe souvent avant de repartir » est une observation. « Quelqu'un est allé les chercher » est une interprétation. La première suffit à trader ; la seconde ajoute un récit, et un récit se plie à ce qu'on veut lui faire dire.</p>
+    </div>
+
+    <h2>Le glossaire, terme par terme</h2>
+
+    <h3>Structure de marché, BOS, CHoCH</h3>
+    <p><strong>Ce que ça désigne.</strong> La séquence des sommets et des creux. Un <em>break of structure</em> (BOS) est le franchissement d'un sommet ou d'un creux qui prolonge la séquence en cours. Un <em>change of character</em> (CHoCH) est le premier franchissement qui la rompt.</p>
+    <p><strong>Ce que ça vaut.</strong> C'est solide — et c'est exactement la définition classique d'une tendance : une succession de plus hauts et de plus bas croissants, jusqu'à ce qu'elle cesse. Le vocabulaire est nouveau, l'idée date de la théorie de Dow. Elle reste l'un des cadres les plus fiables de l'analyse graphique, et nous l'utilisons sous ce nom dans notre article sur les <a href="/blog/figures-chartistes">figures chartistes</a>.</p>
+
+    <h3>Liquidité, liquidity grab, sweep</h3>
+    <p><strong>Ce que ça désigne.</strong> Les zones où s'accumulent des ordres en attente — essentiellement les stops placés juste au-delà d'un plus haut ou d'un plus bas visible. Un <em>sweep</em> est le passage du prix dans cette zone, suivi d'un retour.</p>
+    <p><strong>Ce que ça vaut.</strong> <strong>C'est la partie la plus utile de tout l'ensemble</strong>, et elle mérite d'être prise au sérieux. Ces accumulations existent réellement : la majorité des intervenants place ses protections aux mêmes endroits, parce que les niveaux évidents sont évidents pour tout le monde. Cela explique une part substantielle des faux franchissements — un mécanisme que nous décrivions déjà, sans ce vocabulaire, dans <a href="/blog/supports-et-resistances">supports et résistances</a>.</p>
+    <p>La conséquence pratique est concrète et immédiatement applicable : <strong>ne placez pas votre stop à l'endroit le plus évident</strong>, c'est-à-dire juste derrière le plus haut ou le plus bas que tout le monde voit.</p>
+
+    <h3>Order block</h3>
+    <p><strong>Ce que ça désigne.</strong> La dernière bougie de sens opposé avant un mouvement d'ampleur — la base d'où part l'impulsion.</p>
+    <p><strong>Ce que ça vaut.</strong> L'observation est bonne : les départs d'impulsion sont fréquemment revisités, et donnent souvent des zones de réaction. Mais c'est aussi, mot pour mot, ce que l'analyse technique appelle depuis longtemps une <strong>zone d'offre ou de demande</strong>. Le renommage n'ajoute pas d'information.</p>
+    <p>La partie non vérifiable est l'attribution : rien sur un graphique ne dit qu'un acteur particulier a placé des ordres dans cette bougie. On observe une base d'impulsion ; le reste est une interprétation.</p>
+
+    <h3>Fair value gap, imbalance</h3>
+    <p><strong>Ce que ça désigne.</strong> Une zone laissée par un mouvement si rapide que les mèches de trois bougies consécutives ne se recouvrent pas. L'idée est que le prix tend à y revenir.</p>
+    <p><strong>Ce que ça vaut.</strong> Le phénomène est réel et ancien : un mouvement vertical laisse une zone peu échangée, souvent revisitée. C'est proche de la notion de gap traitée dans <a href="/blog/trader-les-indices">trader les indices</a>.</p>
+    <p>La limite est statistique, et elle est sérieuse : ces zones sont <strong>très nombreuses</strong> sur n'importe quel graphique. Sans critère de sélection strict, on en trouve toujours une qui explique le mouvement — après coup.</p>
+
+    <h3>Premium et discount</h3>
+    <p><strong>Ce que ça désigne.</strong> La moitié haute et la moitié basse d'une amplitude de référence. On achète en <em>discount</em>, on vend en <em>premium</em>.</p>
+    <p><strong>Ce que ça vaut.</strong> C'est le niveau 0,5 d'un retracement, exactement. Nous consacrons un article entier au <a href="/blog/retracements-fibonacci">retracement de Fibonacci</a>, et le raisonnement y est identique : acheter un repli plutôt qu'un sommet améliore mécaniquement le ratio. L'idée est juste ; elle n'est pas nouvelle.</p>
+
+    <h3>Displacement</h3>
+    <p><strong>Ce que ça désigne.</strong> Un mouvement directionnel violent, censé signaler l'entrée d'acteurs importants.</p>
+    <p><strong>Ce que ça vaut.</strong> Observer qu'un mouvement large et rapide marque une rupture d'équilibre est raisonnable, et rejoint la lecture de l'amplitude et du volume. En faire la <em>signature</em> d'un acteur identifié ne l'est pas.</p>
+
+    <h2>Ce qui reste après le tri</h2>
+    <p>Résumons honnêtement. Sur l'ensemble du vocabulaire, voici ce qui apporte quelque chose d'exploitable :</p>
+    <div class="bl-note">
+      <p><strong>À garder</strong><br>
+      <strong>Les zones de stops</strong> autour des extrêmes évidents — le seul apport réellement distinctif, et il est bon<br>
+      <strong>La rupture de structure</strong> comme définition opérationnelle du changement de tendance<br>
+      <strong>Les bases d'impulsion</strong> comme zones de réaction probables<br>
+      <strong>La moitié basse d'une amplitude</strong> comme zone d'achat préférable<br><br>
+      <strong>À laisser</strong><br>
+      L'attribution des mouvements à une intention coordonnée<br>
+      La multiplication des zones sur un même graphique<br>
+      Le vocabulaire lui-même, si votre méthode fonctionne déjà sans lui</p>
+    </div>
+    <p>Ce tri fait apparaître un constat qui n'a rien d'infamant : <strong>l'essentiel de ce qui marche là-dedans recoupe l'analyse technique classique</strong>, avec un nom différent et une attention plus soutenue portée aux stops.</p>
+
+    <h2>Les trois faiblesses de l'approche</h2>
+
+    <h3>La prolifération des zones</h3>
+    <p>C'est la faiblesse principale, et elle est structurelle. Sur un graphique donné, on identifie plusieurs order blocks, de nombreux déséquilibres, plusieurs zones de liquidité. Avec assez de zones, <strong>tout mouvement finit par en toucher une</strong> — et se trouve donc « expliqué ».</p>
+    <p>Le test est simple et sévère : annotez le graphique <em>avant</em> le mouvement, sans le modifier ensuite. Si la lecture ne tient que rétrospectivement, ce n'est pas une méthode, c'est une description.</p>
+
+    <h3>Un récit invérifiable</h3>
+    <p>Un cadre qui explique aussi bien la hausse que la baisse, avant comme après, n'est pas réfutable. Ce n'est pas nécessairement inutile — mais cela signifie qu'il ne peut jamais être démenti, donc jamais validé non plus. Une méthode qui ne peut pas avoir tort ne peut pas non plus prouver qu'elle a raison.</p>
+
+    <h3>Aucune mesure publique</h3>
+    <p>Aucune étude publique n'établit que cette approche surperforme l'analyse technique classique. Ce n'est pas une preuve du contraire — l'analyse classique n'est pas mieux lotie sur ce terrain. Mais cela impose de traiter les affirmations de performance avec la même prudence que celle recommandée dans notre article sur <a href="/blog/arnaques-trading">les arnaques au trading</a> : <strong>une promesse de résultat reste une promesse de résultat, quel que soit le vocabulaire employé</strong>.</p>
+
+    <h2>Si vous voulez l'utiliser quand même</h2>
+    <p>Rien n'interdit de s'en servir, et la partie « liquidité » vaut réellement l'apprentissage. Trois règles rendent l'usage défendable.</p>
+    <ul>
+      <li><strong>Limitez-vous à quelques zones.</strong> Deux ou trois par unité de temps, pas quinze. C'est la seule parade contre l'explication rétrospective.</li>
+      <li><strong>Exigez la confluence.</strong> Une zone qui coïncide avec un <a href="/blog/supports-et-resistances">support classique</a> ou un niveau d'unité de temps supérieure vaut infiniment mieux qu'une zone isolée.</li>
+      <li><strong>Ne changez rien à la gestion du risque.</strong> Ce vocabulaire ne modifie ni le dimensionnement, ni le placement du stop selon la structure, ni le calcul du ratio. La <a href="/blog/gestion-du-risque-trading">gestion du risque</a> reste identique, et c'est elle qui décide du résultat sur la durée.</li>
+    </ul>
+
+    <h2>Comment trancher pour votre cas</h2>
+    <p>La question n'est pas « les Smart Money Concepts fonctionnent-ils ? » — elle n'a pas de réponse générale. La question utile est : <strong>ce cadre améliore-t-il mes résultats par rapport à ce que je faisais avant ?</strong></p>
+    <p>Elle se tranche, et de la seule manière possible :</p>
+    <ul>
+      <li>Notez pour chaque trade la <strong>raison d'entrée</strong>, dans le vocabulaire employé au moment de la décision.</li>
+      <li>Annotez <strong>avant</strong> le mouvement, jamais après.</li>
+      <li>Au bout de cinquante trades, comparez le résultat en R des entrées justifiées par ce cadre à celui des autres.</li>
+    </ul>
+    <p>Trois issues, toutes instructives. Vos entrées « liquidité » se comportent mieux : gardez cette partie et abandonnez le reste. Rien ne se distingue : le vocabulaire ne vous apporte rien, et vous venez d'économiser des mois. Elles se comportent moins bien : la réponse est encore plus claire.</p>
+    <p>C'est précisément ce type de comparaison qu'un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> tenu avec la mention du motif d'entrée produit sans effort supplémentaire — et il tranche un débat que dix vidéos ne trancheront pas.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Faites relire votre zone, sans vocabulaire</p>
+    <p>Envoyez la capture de votre graphique au Setup Analyzer : structure, confluence, niveau d'invalidation et cohérence du ratio — une lecture chiffrée, indépendante de l'école à laquelle vous vous rattachez.</p>
+    <a class="lt-btn lt-btn--primary" href="/analyzer-presentation">Découvrir le Setup Analyzer</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Les Smart Money Concepts sont une grille de lecture parmi d'autres : aucune performance supérieure n'est démontrée publiquement, et les notions décrites n'ont pas de définition normalisée — elles varient selon les sources. Aucune formation, aucun formateur et aucune méthode payante ne sont recommandés ici. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Que sont les Smart Money Concepts ?</h3>
+        <p>Les Smart Money Concepts désignent un ensemble de méthodes de lecture graphique diffusées principalement en ligne, organisées autour de l'idée que le prix serait dirigé par des intervenants institutionnels cherchant à déclencher les ordres des particuliers. L'ensemble comprend un vocabulaire propre — structure de marché, liquidité, order block, fair value gap — dont une partie décrit des phénomènes réellement observables et une autre reformule des notions classiques d'analyse technique.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un order block ?</h3>
+        <p>Un order block désigne la dernière bougie de sens opposé qui précède un mouvement d'ampleur, considérée comme la zone où des ordres importants auraient été placés. Concrètement, il s'agit de la base d'où part une impulsion — ce que l'analyse technique classique appelle une zone d'offre ou de demande. L'observation sous-jacente est réelle : les départs d'impulsion sont souvent revisités. L'attribution de cette zone à un acteur identifié, en revanche, n'est pas vérifiable sur un graphique.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que la liquidité en Smart Money Concepts ?</h3>
+        <p>Le terme désigne les zones où se concentrent des ordres en attente, typiquement les stops placés juste au-delà d'un plus haut ou d'un plus bas évident. C'est la partie la plus solide de l'approche : ces accumulations existent réellement, parce que la majorité des intervenants place ses protections aux mêmes endroits, et elles expliquent une part des faux franchissements observés sur les niveaux les plus visibles.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un fair value gap ?</h3>
+        <p>Un fair value gap, ou déséquilibre, est une zone laissée par un mouvement si rapide que les mèches de trois bougies consécutives ne se recouvrent pas. L'idée est que le prix a tendance à y revenir. Le phénomène observé — un mouvement vertical laisse une zone peu échangée, souvent revisitée — est classique et rejoint la notion de gap. Sa fréquence rend en revanche la sélection nécessaire : sur un graphique donné, ces zones sont nombreuses.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Les Smart Money Concepts fonctionnent-ils vraiment ?</h3>
+        <p>Aucune étude publique ne démontre une performance supérieure de cette approche par rapport à l'analyse technique classique. Elle apporte un cadre de lecture cohérent et attire l'attention sur des phénomènes réels, notamment les concentrations d'ordres de protection. Sa faiblesse principale est le nombre de zones qu'elle produit sur un même graphique, qui permet de justifier presque n'importe quel mouvement une fois celui-ci survenu.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre order block et zone de support ?</h3>
+        <p>Les deux désignent une zone du graphique susceptible de provoquer une réaction du prix. Le support classique se définit par des touches répétées observables dans le passé ; l'order block se définit par la position d'une bougie précédant une impulsion, indépendamment du nombre de tests. En pratique, les deux coïncident fréquemment, et une zone identifiée par les deux méthodes à la fois offre davantage de confluence qu'une zone repérée par une seule.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature classique d'analyse technique et contenus publics diffusant les Smart Money Concepts, 2025-2026. Les définitions varient selon les sources ; aucune méthode ni formation n'est recommandée. Publié le 16 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/supports-et-resistances"><span class="t">Supports et résistances</span><span class="d">Les mêmes zones, sans le vocabulaire</span></a>
+        <a href="/blog/figures-chartistes"><span class="t">Les figures chartistes</span><span class="d">La structure, version classique</span></a>
+        <a href="/blog/retracements-fibonacci"><span class="t">Retracements de Fibonacci</span><span class="d">Ce que « discount » désigne déjà</span></a>
+        <a href="/blog/backtester-une-strategie"><span class="t">Backtester une stratégie</span><span class="d">Trancher au lieu de débattre</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
