@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trader les cryptomonnaies : ce qui change | Le Terminal</title>
+<meta name="description" content="Un marché qui ne ferme jamais, éclaté entre des dizaines de plateformes, sans coupe-circuit : ce que ça impose à vos stops, vos tailles et votre week-end.">
+<link rel="canonical" href="https://www.leterminal.net/blog/trader-les-cryptomonnaies">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Trader les cryptomonnaies : ce qui change | Le Terminal">
+<meta property="og:description" content="Un marché qui ne ferme jamais, éclaté entre des dizaines de plateformes, sans coupe-circuit : ce que ça impose à vos stops, vos tailles et votre week-end.">
+<meta property="og:url" content="https://www.leterminal.net/blog/trader-les-cryptomonnaies">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/trader-les-cryptomonnaies-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ce qui distingue le marché des cryptomonnaies des marchés classiques : cotation continue, absence de place centrale et volatilité — Le Terminal">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:modified_time" content="2026-08-16">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trader les cryptomonnaies : ce qui change">
+<meta name="twitter:description" content="Le seul marché qui ne ferme jamais. Pas de gap d'ouverture — mais aucune pause pour reprendre son souffle.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/trader-les-cryptomonnaies-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Trader les cryptomonnaies : ce qui change par rapport aux marchés classiques",
+      "description": "Les différences structurelles du marché des cryptomonnaies : cotation continue, absence de place centrale, écarts de prix entre plateformes, volatilité, absence de coupe-circuit, question de la conservation des avoirs et erreurs propres à cette classe d'actifs.",
+      "datePublished": "2026-08-16",
+      "dateModified": "2026-08-16",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/trader-les-cryptomonnaies-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/trader-les-cryptomonnaies" },
+      "keywords": "trader les cryptomonnaies, marché 24/7, volatilité, plateformes d'échange, conservation, stablecoin, corrélation, bitcoin"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Le marché des cryptomonnaies ferme-t-il ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Les cryptomonnaies s'échangent en continu, tous les jours de l'année, sans séance ni clôture. Cela supprime le gap d'ouverture qui affecte les marchés actions, mais crée une contrainte inverse : aucune interruption ne vient marquer une pause, un mouvement important peut survenir à n'importe quelle heure, et une position conservée reste exposée pendant le sommeil comme pendant le week-end."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi le prix d'une cryptomonnaie diffère-t-il selon les plateformes ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Parce qu'il n'existe pas de place centrale : chaque plateforme tient son propre carnet d'ordres, avec ses propres participants. Le prix affiché est donc celui de ce carnet, et non un cours unique de référence. Les écarts restent faibles sur les actifs les plus échangés, mais ils s'élargissent nettement sur les actifs peu liquides et pendant les épisodes de forte volatilité."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Les cryptomonnaies sont-elles plus volatiles que le forex ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nettement, et sur l'ensemble de la classe d'actifs. Des variations qui constitueraient une séance exceptionnelle sur une paire de devises majeure y sont banales. La conséquence pratique est directe : à risque égal, les distances de stop doivent être plus larges, donc les tailles de position plus petites. Transposer un dimensionnement calibré sur le forex est l'erreur la plus fréquente."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un stablecoin et pourquoi sert-il de référence ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un stablecoin est un actif numérique conçu pour suivre la valeur d'une monnaie, le plus souvent le dollar. La plupart des paires d'échange sont cotées contre lui plutôt que contre une devise traditionnelle, pour des raisons pratiques de règlement. Il en résulte que la performance affichée s'entend par rapport à cette référence, et que le mécanisme garantissant sa parité constitue un risque distinct, propre à l'émetteur."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il conserver ses cryptomonnaies sur une plateforme ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Laisser ses avoirs sur une plateforme revient à en confier la conservation à un tiers : l'accès dépend alors de la solidité et de la disponibilité de cet intermédiaire. La conservation personnelle supprime cette dépendance mais transfère l'entière responsabilité de la sauvegarde des accès, dont la perte est irréversible. Les deux approches comportent un risque, de nature différente, et le choix relève de l'usage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Les altcoins suivent-ils le bitcoin ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Historiquement, les autres cryptomonnaies évoluent largement dans le sillage du bitcoin, avec une amplitude généralement supérieure lors des phases de baisse. Détenir plusieurs actifs numériques différents ne constitue donc pas une répartition du risque : il s'agit le plus souvent d'un pari unique, décliné plusieurs fois, avec une exposition supérieure à ce que la diversité apparente laisse croire."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Trader les cryptomonnaies", "item": "https://www.leterminal.net/blog/trader-les-cryptomonnaies" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Trader les cryptomonnaies</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Marché</span>
+  <h1 class="bl-art__title">Trader les cryptomonnaies : ce qui change par rapport aux marchés classiques</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 16, 2026">Publié le 16 août 2026</span>
+    <span>·</span>
+    <span data-en="12 min read">12 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/trader-les-cryptomonnaies.webp" width="1600" height="900" alt="Les différences structurelles du marché des cryptomonnaies : cotation continue sans clôture, absence de place centrale avec des prix propres à chaque plateforme, et amplitude supérieure aux marchés classiques" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Trois différences structurelles suffisent à expliquer presque tout : <strong>le marché ne ferme jamais</strong>, <strong>il n'existe pas de place centrale</strong>, et <strong>rien n'interrompt une chute</strong>. Aucun gap d'ouverture à redouter, donc — mais aucune pause non plus, un prix qui diffère d'une plateforme à l'autre, et une amplitude qui rend inapplicable tout dimensionnement hérité du forex.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>Après les <a href="/blog/paires-de-devises">paires de devises</a>, les <a href="/blog/trader-les-indices">indices</a> et <a href="/blog/trader-l-or">l'or</a>, voici la famille d'instruments qui ressemble le moins aux autres.</p>
+    <p>L'analyse graphique s'y transpose sans difficulté : supports, structures, unités de temps fonctionnent comme ailleurs. Ce qui ne se transpose pas, c'est <strong>l'infrastructure</strong> — et elle change plus de choses qu'on ne l'imagine.</p>
+
+    <h2>Un marché qui ne ferme jamais</h2>
+    <p>C'est la différence la plus visible, et celle dont les conséquences sont le plus sous-estimées. Pas de séance, pas de clôture, pas de week-end : la cotation est continue, tous les jours de l'année.</p>
+
+    <h3>Le bon côté</h3>
+    <p>Il n'y a pas de <strong>gap d'ouverture</strong>. Sur un indice, un stop placé dans l'écart de réouverture n'est pas exécuté à son niveau — un mécanisme que nous détaillons dans <a href="/blog/trader-les-indices">trader les indices</a>. Ici, le prix s'écoule sans interruption : un stop a, en conditions normales, davantage de chances d'être servi près du niveau prévu.</p>
+
+    <h3>Le mauvais côté</h3>
+    <p>Il n'y a <strong>aucune pause</strong>. Sur les marchés classiques, la clôture impose un arrêt : elle borne la journée, oblige à faire le point, empêche de suivre indéfiniment. Ici, rien n'arrête.</p>
+    <p>Deux conséquences très concrètes :</p>
+    <ul>
+      <li><strong>Le mouvement décisif peut survenir pendant votre sommeil.</strong> Une position conservée l'est réellement, sans interruption.</li>
+      <li><strong>Le week-end est un moment à part.</strong> Les volumes y sont plus faibles, donc les mouvements plus faciles à provoquer et les écarts plus larges. Beaucoup d'amplitudes marquantes s'y produisent, précisément parce que la participation est réduite.</li>
+    </ul>
+    <p>La contrainte n'est donc pas technique, elle est personnelle : <strong>c'est le seul marché où c'est vous qui devez décider quand la séance s'arrête</strong>, puisque personne ne le fera à votre place. Les plages de repos gagnent à figurer dans le <a href="/blog/plan-de-trading">plan de trading</a>, au même titre que les règles d'entrée.</p>
+
+    <h2>Il n'y a pas un marché, il y en a des dizaines</h2>
+    <p>Deuxième différence structurelle, moins visible mais lourde de conséquences.</p>
+    <p>Une action se traite sur une place organisée qui centralise les ordres. Une cryptomonnaie, non : <strong>chaque plateforme tient son propre carnet</strong>, avec ses propres participants. Il n'existe pas de cours unique de référence — seulement le prix de tel carnet, à tel instant.</p>
+    <ul>
+      <li><strong>Les prix diffèrent</strong> d'une plateforme à l'autre. L'écart reste faible sur les actifs très échangés, mais il s'élargit nettement sur les actifs peu liquides et pendant les épisodes agités.</li>
+      <li><strong>La liquidité est fragmentée.</strong> Un carnet peut se vider localement pendant qu'un autre absorbe sans difficulté.</li>
+      <li><strong>Vos niveaux techniques dépendent du flux que vous regardez.</strong> Un plus haut sur une plateforme peut ne pas exister sur une autre.</li>
+    </ul>
+    <div class="bl-note">
+      <p><strong>La règle qui en découle.</strong> Analysez et exécutez sur <strong>le même flux</strong>. Tracer ses niveaux sur un graphique agrégé puis exécuter ailleurs introduit un décalage suffisant pour faire sauter des stops serrés — le même raisonnement que pour <a href="/blog/qu-est-ce-qu-un-cfd">les CFD</a>, où le prix est celui du courtier.</p>
+    </div>
+
+    <h2>La volatilité, et ce qu'elle impose</h2>
+    <p>Troisième différence, la plus connue et pourtant la plus mal gérée : <strong>l'amplitude n'a rien de comparable</strong>. Des variations qui constitueraient une séance exceptionnelle sur une paire de devises majeure sont ici banales.</p>
+    <p>S'y ajoute un point qu'on oublie : <strong>rien n'interrompt une chute</strong>. Les marchés actions disposent de mécanismes de suspension en cas de mouvement extrême. Ici, il n'y en a pas. Un mouvement violent se déroule jusqu'au bout.</p>
+    <div class="bl-note">
+      <p><strong>La conséquence, en une ligne.</strong> Amplitude plus large → stops plus larges → <strong>positions plus petites</strong>, à risque en euros identique. Reprendre une taille calibrée sur le forex est l'erreur la plus fréquente, et la plus coûteuse.</p>
+    </div>
+    <p>Le raisonnement reste celui de la <a href="/blog/gestion-du-risque-trading">gestion du risque</a> : le stop se place selon la structure, puis la taille s'ajuste. Seule la seconde étape change — et le <a href="/calculateur">calculateur du Terminal</a> la traite à partir de vos chiffres réels.</p>
+
+    <h2>Ce qui fait bouger une cryptomonnaie</h2>
+    <p>La question est plus délicate que pour les autres classes d'actifs, parce qu'il n'y a ni bénéfices, ni taux directeur propre, ni banque centrale de référence.</p>
+    <ul>
+      <li><strong>L'appétit général pour le risque.</strong> C'est le premier facteur. Le secteur se comporte largement comme un actif risqué : il réagit aux mêmes anticipations de taux et aux mêmes basculements de confiance que les indices technologiques.</li>
+      <li><strong>L'actualité réglementaire.</strong> Décisions, autorisations, restrictions : ce sont des catalyseurs propres à la classe d'actifs, et ils frappent souvent sans préavis.</li>
+      <li><strong>Les flux entre segments.</strong> Les capitaux se déplacent par blocs — d'un actif dominant vers les plus petits, ou l'inverse en phase de repli. C'est exactement ce que rend visible notre <a href="/bubble">Bubble Map</a>, détaillée dans <a href="/blog/bubble-map-crypto">l'article qui lui est consacré</a>.</li>
+      <li><strong>Les mécanismes internes au marché.</strong> Les positions à effet de levier y sont nombreuses, et leurs liquidations en chaîne amplifient les mouvements bien au-delà de l'impulsion initiale. C'est une des explications des accélérations verticales.</li>
+    </ul>
+    <p>Ce qui manque, en revanche, est tout aussi important à savoir : <strong>il n'existe pas de méthode de valorisation consensuelle</strong>. Sans flux financiers à actualiser, aucun calcul ne dit ce que « devrait » valoir un actif numérique — une situation qui rappelle celle de <a href="/blog/trader-l-or">l'or</a>, sans le statut de refuge ni les siècles d'usage monétaire.</p>
+
+    <h2>Trois familles, trois logiques</h2>
+    <ul>
+      <li><strong>L'actif dominant.</strong> Le bitcoin concentre l'essentiel de la liquidité et sert de baromètre au reste du secteur. C'est le plus échangé, donc le plus étroit en écart et le plus régulier des trois.</li>
+      <li><strong>Les autres actifs numériques.</strong> Ils évoluent historiquement dans son sillage, avec une amplitude généralement supérieure — surtout à la baisse. D'où un point capital : en détenir plusieurs différents <strong>n'est pas une répartition du risque</strong>. C'est le même pari, décliné, exactement comme les trois paires en dollar de notre article sur <a href="/blog/diversification-portefeuille">la diversification</a>.</li>
+      <li><strong>Les stablecoins.</strong> Conçus pour suivre la valeur d'une monnaie, le plus souvent le dollar, ils servent de référence à la plupart des paires d'échange. Deux implications : votre performance s'entend par rapport à cette référence, et le mécanisme qui garantit la parité constitue un risque distinct, propre à l'émetteur.</li>
+    </ul>
+
+    <h2>La question de la conservation</h2>
+    <p>Un sujet qui n'a pas d'équivalent ailleurs, et qu'il faut trancher consciemment.</p>
+    <p>Laisser ses avoirs sur une plateforme, c'est en <strong>confier la garde à un tiers</strong> : l'accès dépend de la solidité et de la disponibilité de cet intermédiaire. Les conserver soi-même supprime cette dépendance, mais transfère l'entière responsabilité de la sauvegarde des accès — dont la perte est <strong>irréversible</strong>, sans recours ni service client.</p>
+    <p>Les deux approches comportent un risque, de nature différente. Le choix dépend de l'usage : une position de trading appelée à être fermée rapidement ne pose pas la même question qu'une détention longue. Ce qu'il faut éviter, c'est de ne pas se poser la question du tout.</p>
+    <p>Précision utile : si vous vous exposez via un produit dérivé plutôt qu'en détenant l'actif, la question ne se pose pas — mais une autre apparaît, celle du <a href="/blog/qu-est-ce-qu-un-cfd">risque de contrepartie</a>. Dans ce cas, vous ne détenez aucun actif numérique, seulement un contrat.</p>
+
+    <h2>Les erreurs propres à ce marché</h2>
+
+    <h3>Transposer un dimensionnement</h3>
+    <p>Déjà dit, mais c'est de loin la plus coûteuse. Les amplitudes n'ont aucun rapport avec celles du forex, et une taille calibrée ailleurs produit ici des pertes hors proportion.</p>
+
+    <h3>Croire qu'on diversifie</h3>
+    <p>Détenir cinq actifs numériques différents donne le sentiment d'une répartition. Le jour où le secteur recule, les cinq reculent ensemble, généralement plus fort que l'actif dominant.</p>
+
+    <h3>Ne jamais s'arrêter</h3>
+    <p>Le marché fonctionne en continu, donc la tentation de suivre en continu. C'est le terrain idéal pour la surexposition et la décision fatiguée — les mécanismes décrits dans nos <a href="/blog/erreurs-psychologie-trading">erreurs de psychologie en trading</a>. Sur les marchés classiques, la clôture protège. Ici, il n'y a que vos propres règles.</p>
+
+    <h3>Sous-estimer le week-end</h3>
+    <p>Participation réduite, écarts élargis, mouvements plus faciles à provoquer. Conserver une position importante sur cette plage est une décision à prendre délibérément, pas par défaut.</p>
+
+    <h2>Ce qu'il faut vérifier avant de commencer</h2>
+    <ul>
+      <li><strong>Les frais réels</strong> de la plateforme ou du courtier : commission par opération, écart moyen, et — si vous passez par un dérivé — le coût de portage. Nos <a href="/blog/couts-du-trading">chiffres sur le coût réel du trading</a> montrent ce que la fréquence prélève sur un an.</li>
+      <li><strong>L'amplitude moyenne</strong> de l'actif visé, comparée à celle de vos instruments habituels. Elle détermine vos distances de stop, donc vos tailles.</li>
+      <li><strong>Vos règles horaires.</strong> Sur un marché sans clôture, ce sont les seules qui existent : décidez quand vous ne regardez pas.</li>
+      <li><strong>Le statut de l'intermédiaire.</strong> Le secteur attire les montages frauduleux ; la vérification préalable décrite dans <a href="/blog/arnaques-trading">reconnaître une arnaque au trading</a> s'applique intégralement.</li>
+    </ul>
+    <p>Et, comme toujours, la mesure prime sur l'intuition. Notez pour chaque trade l'heure d'entrée et le jour de la semaine : sur trente opérations, la répartition des résultats entre les plages horaires et entre semaine et week-end dit très vite quand vous devriez vous abstenir. C'est ce que produit un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> tenu régulièrement.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Suivez la rotation des capitaux</p>
+    <p>La Bubble Map du Terminal visualise en direct les flux entre crypto, forex, indices et matières premières — de quoi situer un mouvement dans son contexte avant de le trader.</p>
+    <a class="lt-btn lt-btn--primary" href="/bubble">Ouvrir la Bubble Map</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Aucun actif numérique, aucune plateforme et aucun mode de conservation ne sont recommandés ici. Les cryptomonnaies présentent une volatilité élevée et un cadre réglementaire variable selon les juridictions ; une perte totale du capital est possible, et la perte des moyens d'accès à des avoirs conservés personnellement est irréversible. Sur les produits à effet de levier, la perte peut dépasser le dépôt initial.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Le marché des cryptomonnaies ferme-t-il ?</h3>
+        <p>Non. Les cryptomonnaies s'échangent en continu, tous les jours de l'année, sans séance ni clôture. Cela supprime le gap d'ouverture qui affecte les marchés actions, mais crée une contrainte inverse : aucune interruption ne vient marquer une pause, un mouvement important peut survenir à n'importe quelle heure, et une position conservée reste exposée pendant le sommeil comme pendant le week-end.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Pourquoi le prix d'une cryptomonnaie diffère-t-il selon les plateformes ?</h3>
+        <p>Parce qu'il n'existe pas de place centrale : chaque plateforme tient son propre carnet d'ordres, avec ses propres participants. Le prix affiché est donc celui de ce carnet, et non un cours unique de référence. Les écarts restent faibles sur les actifs les plus échangés, mais ils s'élargissent nettement sur les actifs peu liquides et pendant les épisodes de forte volatilité.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Les cryptomonnaies sont-elles plus volatiles que le forex ?</h3>
+        <p>Nettement, et sur l'ensemble de la classe d'actifs. Des variations qui constitueraient une séance exceptionnelle sur une paire de devises majeure y sont banales. La conséquence pratique est directe : à risque égal, les distances de stop doivent être plus larges, donc les tailles de position plus petites. Transposer un dimensionnement calibré sur le forex est l'erreur la plus fréquente.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un stablecoin et pourquoi sert-il de référence ?</h3>
+        <p>Un stablecoin est un actif numérique conçu pour suivre la valeur d'une monnaie, le plus souvent le dollar. La plupart des paires d'échange sont cotées contre lui plutôt que contre une devise traditionnelle, pour des raisons pratiques de règlement. Il en résulte que la performance affichée s'entend par rapport à cette référence, et que le mécanisme garantissant sa parité constitue un risque distinct, propre à l'émetteur.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Faut-il conserver ses cryptomonnaies sur une plateforme ?</h3>
+        <p>Laisser ses avoirs sur une plateforme revient à en confier la conservation à un tiers : l'accès dépend alors de la solidité et de la disponibilité de cet intermédiaire. La conservation personnelle supprime cette dépendance mais transfère l'entière responsabilité de la sauvegarde des accès, dont la perte est irréversible. Les deux approches comportent un risque, de nature différente, et le choix relève de l'usage.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Les altcoins suivent-ils le bitcoin ?</h3>
+        <p>Historiquement, les autres cryptomonnaies évoluent largement dans le sillage du bitcoin, avec une amplitude généralement supérieure lors des phases de baisse. Détenir plusieurs actifs numériques différents ne constitue donc pas une répartition du risque : il s'agit le plus souvent d'un pari unique, décliné plusieurs fois, avec une exposition supérieure à ce que la diversité apparente laisse croire.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature sur la microstructure des marchés d'actifs numériques et publications des autorités de supervision européennes, 2025-2026. Le cadre réglementaire évolue et varie selon les juridictions. Publié le 16 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/bubble-map-crypto"><span class="t">La bubble map crypto</span><span class="d">Lire la rotation des capitaux</span></a>
+        <a href="/blog/trader-l-or"><span class="t">Trader l'or</span><span class="d">L'autre actif sans valorisation</span></a>
+        <a href="/blog/diversification-portefeuille"><span class="t">La diversification</span><span class="d">Pourquoi cinq actifs font un pari</span></a>
+        <a href="/blog/gestion-du-risque-trading"><span class="t">Gestion du risque</span><span class="d">Adapter la taille à l'amplitude</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
