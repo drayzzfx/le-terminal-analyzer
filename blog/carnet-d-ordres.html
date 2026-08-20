@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>try{if(localStorage.getItem('lt_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le carnet d'ordres : d'où vient vraiment le prix | Le Terminal</title>
+<meta name="description" content="Acheteurs, vendeurs, profondeur : comment un prix se forme réellement, pourquoi le spread existe, d'où vient le slippage — et ce que le carnet ne dit pas.">
+<link rel="canonical" href="https://www.leterminal.net/blog/carnet-d-ordres">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Le Terminal">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Le carnet d'ordres : d'où vient vraiment le prix | Le Terminal">
+<meta property="og:description" content="Acheteurs, vendeurs, profondeur : comment un prix se forme réellement, pourquoi le spread existe, d'où vient le slippage — et ce que le carnet ne dit pas.">
+<meta property="og:url" content="https://www.leterminal.net/blog/carnet-d-ordres">
+<meta property="og:image" content="https://www.leterminal.net/blog/img/carnet-d-ordres-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Un carnet d'ordres avec ses acheteurs et ses vendeurs empilés de part et d'autre du spread, et la profondeur disponible à chaque niveau — Le Terminal">
+<meta property="article:published_time" content="2026-08-18">
+<meta property="article:modified_time" content="2026-08-18">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Le carnet d'ordres : d'où vient vraiment le prix">
+<meta name="twitter:description" content="Un prix n'est pas une valeur. C'est la dernière transaction conclue entre deux personnes qui n'étaient pas d'accord.">
+<meta name="twitter:image" content="https://www.leterminal.net/blog/img/carnet-d-ordres-og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Le carnet d'ordres : d'où vient vraiment le prix",
+      "description": "Fonctionnement du carnet d'ordres : empilement des acheteurs et des vendeurs, origine du spread, rôle du preneur et de l'apporteur de liquidité, profondeur de marché et formation du slippage, limites de l'information affichée et disponibilité selon les marchés.",
+      "datePublished": "2026-08-18",
+      "dateModified": "2026-08-18",
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Le Terminal",
+        "url": "https://www.leterminal.net/",
+        "logo": { "@type": "ImageObject", "url": "https://www.leterminal.net/logo.png" }
+      },
+      "image": "https://www.leterminal.net/blog/img/carnet-d-ordres-og.jpg",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.leterminal.net/blog/carnet-d-ordres" },
+      "keywords": "carnet d'ordres, profondeur de marché, spread, liquidité, slippage, preneur, apporteur de liquidité, exécution"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un carnet d'ordres ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un carnet d'ordres est la liste, tenue par une place de marché, de tous les ordres d'achat et de vente en attente pour un instrument, classés par prix. Les acheteurs figurent d'un côté, les vendeurs de l'autre, et une transaction survient lorsque les deux se rencontrent. Le prix affiché n'est donc pas une valeur théorique : c'est le niveau de la dernière transaction conclue."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi y a-t-il un spread entre l'achat et la vente ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Parce que le meilleur acheteur propose toujours moins que ce que demande le meilleur vendeur : sans cet écart, la transaction aurait déjà eu lieu. Le spread est donc la distance qui sépare les deux, et il mesure directement l'accord des participants. Il se resserre quand ils sont nombreux et se répartissent finement, et s'élargit dès que la participation diminue ou que l'incertitude augmente."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que la profondeur de marché ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La profondeur désigne le volume disponible à chaque niveau de prix du carnet, au-delà de la seule meilleure limite. Elle indique quelle quantité peut être échangée avant que le prix ne se déplace. Un carnet profond absorbe des ordres importants sans variation notable ; un carnet mince voit le prix bouger sensiblement pour un volume modeste."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "D'où vient le slippage ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un ordre au marché consomme les offres disponibles en commençant par la meilleure. Si sa taille dépasse le volume présent au premier niveau, il se sert au suivant, puis au suivant encore, à des prix de moins en moins favorables. Le prix moyen obtenu diffère alors du prix affiché : c'est le slippage. Il ne résulte donc pas d'un dysfonctionnement mais du mécanisme normal d'exécution dans un carnet."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre preneur et apporteur de liquidité ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un ordre au marché consomme un ordre déjà présent dans le carnet : celui qui le passe est preneur de liquidité. Un ordre limite, à l'inverse, vient s'inscrire dans le carnet et attendre : celui qui le place est apporteur de liquidité. Certaines places tarifent différemment ces deux rôles, l'apport de liquidité étant parfois facturé moins cher, voire rémunéré."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Peut-on voir le carnet d'ordres sur toutes les plateformes ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Le carnet est visible sur les marchés organisés à place centrale, comme les actions, les contrats à terme ou les plateformes d'échange de cryptomonnaies. Sur le marché des changes au comptant et sur les produits dérivés de gré à gré, il n'existe pas de carnet central : l'affichage éventuel reflète alors le flux de l'intermédiaire, pas l'ensemble du marché."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.leterminal.net/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.leterminal.net/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Le carnet d'ordres", "item": "https://www.leterminal.net/blog/carnet-d-ordres" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/anton-400-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/fonts.css">
+<link rel="stylesheet" href="/design-system.css">
+<link rel="stylesheet" href="/theme-light.css">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+<a id="top"></a>
+<div class="lt-progress" aria-hidden="true"><span class="lt-progress__fill"></span></div>
+
+<!-- CHROME -->
+<div class="lt-chrome" id="ltChrome">
+  <header class="lt-nav">
+    <a class="lt-nav__brand" href="/">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </a>
+    <nav class="lt-nav__links">
+      <div class="lt-nav__drop" id="ltDrop">
+        <button class="lt-nav__droptrigger" aria-expanded="false" data-en="Tools <span class='lt-nav__caret'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg></span>">
+          Outils <span class="lt-nav__caret"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="lt-nav__menu">
+          <a class="lt-nav__menuitem" href="/"><span class="lt-nav__menutop"><span class="lt-nav__menulabel" data-en="Home">Accueil</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Overview">Vue d'ensemble</span></a>
+          <a class="lt-nav__menuitem" href="/journal-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Journal de Trading</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Calendar · P&amp;L · AI coach">Calendrier · P&amp;L · IA coach</span></a>
+          <a class="lt-nav__menuitem" href="/analyzer-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Setup Analyzer</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="AI score for your setup">Score IA de votre setup</span></a>
+          <a class="lt-nav__menuitem" href="/patrimoine-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Patrimoine</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Long-term portfolio">Portefeuille long terme</span></a>
+          <a class="lt-nav__menuitem" href="/calendrier-presentation"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calendrier Éco</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc">NFP · CPI · FOMC</span></a>
+          <a class="lt-nav__menuitem" href="/bubble"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Bubble Map</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Live capital flows">Flux de capitaux en direct</span></a>
+          <a class="lt-nav__menuitem" href="/calculateur"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Calculateur de Pips</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Position · risk · R:R">Position · risque · R:R</span></a>
+          <a class="lt-nav__menuitem" href="/mur-des-trades"><span class="lt-nav__menutop"><span class="lt-nav__menulabel">Mur des Trades</span><span class="lt-dot"></span></span><span class="lt-nav__menudesc" data-en="Community-shared trades">Trades partagés par la communauté</span></a>
+        </div>
+      </div>
+      <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      <a href="/#method" data-en="Method">Méthode</a>
+      <a href="/#community" data-en="Community">Communauté</a>
+      <a href="/avis" data-en="Reviews">Avis</a>
+      <a href="/blog">Blog</a>
+    </nav>
+    <div class="lt-nav__actions">
+      <span class="lt-nav__pill" id="ltLangPill" title="Changer de langue">FR</span>
+      <button class="lt-btn lt-btn--ghost lt-btn--sm" id="loginBtn" onclick="window.ltOpenLogin?ltOpenLogin():void(0)" data-en="Sign in">Connexion</button>
+      <div id="ltUserBar"></div>
+      <a class="lt-btn lt-btn--primary lt-btn--sm lt-nav__cta" href="/tarifs"><svg class="lt-nav__cta-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l4.5 3.5L12 5l3.5 6.5L20 8l-1.6 9.5H5.6z"/></svg><span class="lt-nav__cta-txt" data-en="Premium Access">Accès Premium</span></a>
+    </div>
+  </header>
+</div>
+
+<main class="bl-wrap">
+<article class="bl-art">
+  <nav class="bl-crumb" aria-label="Fil d'Ariane">
+    <a href="/" data-en="Home">Accueil</a><span class="sep">→</span><a href="/blog">Blog</a><span class="sep">→</span><span class="cur">Le carnet d'ordres</span>
+  </nav>
+
+  <span class="lt-eyebrow"><span class="lt-dot"></span> Analyse technique</span>
+  <h1 class="bl-art__title">Le carnet d'ordres : d'où vient vraiment le prix</h1>
+  <div class="bl-art__meta">
+    <span data-en="By the founders of Le Terminal">Par les fondateurs du Terminal</span>
+    <span>·</span>
+    <span data-en="Published August 18, 2026">Publié le 18 août 2026</span>
+    <span>·</span>
+    <span data-en="12 min read">12 min de lecture</span>
+  </div>
+
+  <figure class="bl-art__hero">
+    <img src="/blog/img/carnet-d-ordres.webp" width="1600" height="900" alt="Un carnet d'ordres avec les acheteurs et les vendeurs empilés de part et d'autre du spread, et le volume disponible à chaque niveau de prix qui constitue la profondeur de marché" fetchpriority="high">
+  </figure>
+
+  <div class="bl-lead">
+    <p><strong>En bref.</strong> Un prix n'est pas une valeur : c'est <strong>la dernière transaction conclue entre deux personnes qui n'étaient pas d'accord</strong>. Derrière chaque cotation, il y a une file d'acheteurs et une file de vendeurs empilés par prix. Comprendre cette mécanique explique d'un coup trois choses que vous subissez sans les expliquer : pourquoi le spread existe, d'où vient le slippage, et pourquoi certains niveaux « tiennent » et d'autres non.</p>
+  </div>
+
+  <div class="bl-prose">
+    <p>On peut trader des années en regardant uniquement des bougies. Beaucoup le font, et ce n'est pas absurde : un graphique suffit à décider.</p>
+    <p>Mais une bougie est un <em>résumé</em>. Elle vous dit qu'entre 14 h et 15 h le prix est passé de A à B. Elle ne dit pas comment. Le carnet d'ordres, lui, montre le mécanisme — et ce mécanisme explique la plupart des frictions que vous rencontrez à l'exécution.</p>
+
+    <h2>Ce qu'il y a derrière un prix</h2>
+    <p>Sur un marché organisé, chaque instrument dispose d'un <strong>carnet d'ordres</strong> : la liste de tous les ordres en attente, classés par prix.</p>
+    <p>Deux files se font face :</p>
+    <ul>
+      <li>Les <strong>acheteurs</strong>, chacun avec un prix maximal et une quantité. Le meilleur d'entre eux est celui qui propose le plus.</li>
+      <li>Les <strong>vendeurs</strong>, chacun avec un prix minimal et une quantité. Le meilleur est celui qui demande le moins.</li>
+    </ul>
+    <p>Une transaction survient quand les deux se rencontrent. Et le « prix » que vous voyez sur votre graphique n'est rien d'autre que <strong>le niveau de la dernière rencontre</strong>.</p>
+    <div class="bl-note">
+      <p><strong>La conséquence à retenir.</strong> Un prix ne représente pas ce que « vaut » un actif. Il représente le seul point où, à cet instant, un acheteur et un vendeur ont accepté de conclure. Tous les autres participants sont, par définition, en désaccord avec lui.</p>
+    </div>
+
+    <h2>Pourquoi le spread existe</h2>
+    <p>La question paraît naïve, et sa réponse est éclairante : <strong>si le meilleur acheteur proposait autant que ce que demande le meilleur vendeur, la transaction aurait déjà eu lieu</strong>. Le fait qu'ils soient tous les deux encore là signifie qu'un écart les sépare.</p>
+    <p>Cet écart, c'est le spread. Il n'est donc pas un prélèvement arbitraire : c'est <strong>la mesure du désaccord</strong> entre les deux camps.</p>
+    <p>Cela explique immédiatement son comportement, décrit dans notre article sur le <a href="/blog/couts-du-trading">coût réel du trading</a> :</p>
+    <ul>
+      <li><strong>Beaucoup de participants</strong> → les prix proposés se répartissent finement, les deux meilleurs se rapprochent, le spread se resserre.</li>
+      <li><strong>Peu de participants</strong> → les files se clairsèment, l'écart s'élargit. C'est le cas aux heures creuses et le week-end.</li>
+      <li><strong>Forte incertitude</strong> → chacun se protège en s'éloignant, et le spread explose. C'est ce qui se produit autour des annonces du <a href="/blog/calendrier-economique-trading">calendrier économique</a>.</li>
+    </ul>
+
+    <h2>Ce qui se passe quand vous passez un ordre</h2>
+    <p>Les deux types d'ordres de base, revisités à la lumière du carnet — et cette lecture rend leur différence évidente.</p>
+
+    <h3>L'ordre au marché : vous consommez</h3>
+    <p>Il ne rejoint pas la file : il <strong>se sert</strong> dans celle d'en face. Vous achetez au meilleur vendeur disponible, immédiatement. La transaction est certaine ; le prix dépend de ce qui est présent.</p>
+    <p>Vous êtes alors <strong>preneur de liquidité</strong> : vous retirez du carnet un ordre qui s'y trouvait.</p>
+
+    <h3>L'ordre limite : vous alimentez</h3>
+    <p>Il <strong>rejoint la file</strong> à votre prix et attend qu'on vienne le chercher. Le prix est certain ; la transaction ne l'est pas.</p>
+    <p>Vous êtes alors <strong>apporteur de liquidité</strong> : vous ajoutez au carnet un ordre qui n'y était pas. Certaines places tarifent d'ailleurs différemment les deux rôles, l'apport étant parfois facturé moins cher, voire rémunéré.</p>
+    <p>C'est la même distinction que celle exposée dans notre article sur les <a href="/blog/types-ordres-trading">types d'ordres</a>, vue depuis l'intérieur du mécanisme : <strong>garantir l'exécution, c'est accepter le prix des autres ; garantir le prix, c'est accepter d'attendre</strong>.</p>
+
+    <h2>La profondeur, et l'origine du slippage</h2>
+    <p>Jusqu'ici, nous n'avons regardé que la meilleure limite de chaque côté. Or le carnet en compte beaucoup d'autres, avec des volumes différents : c'est la <strong>profondeur de marché</strong>.</p>
+    <p>Elle répond à une question précise : <em>combien peut-on échanger avant que le prix ne bouge ?</em></p>
+
+    <h3>Le mécanisme, étape par étape</h3>
+    <p>Vous passez un ordre au marché plus gros que le volume disponible au premier niveau. Il se sert donc :</p>
+    <ul>
+      <li>d'abord au meilleur prix, jusqu'à épuisement de ce qui s'y trouve ;</li>
+      <li>puis au niveau suivant, moins favorable ;</li>
+      <li>puis au suivant encore, et ainsi de suite jusqu'à être entièrement servi.</li>
+    </ul>
+    <p>Le prix moyen que vous obtenez est donc <strong>moins bon que le prix affiché</strong>. C'est exactement cela, le slippage — et on voit qu'il ne résulte d'aucun dysfonctionnement : c'est le fonctionnement normal.</p>
+    <div class="bl-note">
+      <p><strong>Ce que ça implique pour vos stops.</strong> Un stop touché devient un ordre au marché. S'il se déclenche au moment où le carnet est mince — annonce, réouverture, panique —, il consomme plusieurs niveaux et s'exécute nettement plus loin que prévu. C'est la traduction concrète du fait qu'<strong>un stop ne garantit pas votre perte maximale</strong>.</p>
+    </div>
+    <p>Cela explique aussi une observation banale : un carnet profond absorbe des ordres importants sans bouger, un carnet mince se déplace pour presque rien. C'est pourquoi le même montant produit une exécution très différente sur une paire majeure et sur une <a href="/blog/paires-de-devises">paire exotique</a>.</p>
+
+    <h2>Ce que le carnet ne dit pas</h2>
+    <p>Section indispensable, parce que l'illusion inverse est répandue : le carnet donne l'impression de « voir » le marché. Il montre en réalité beaucoup moins qu'on ne croit.</p>
+    <ul>
+      <li><strong>Il ne montre que les ordres en attente.</strong> Un participant qui compte acheter au marché dans dix secondes n'y figure pas. L'essentiel de la demande à venir est invisible.</li>
+      <li><strong>Il change en permanence.</strong> Des ordres apparaissent et disparaissent en continu. Ce que vous lisez a déjà changé.</li>
+      <li><strong>Il peut être partiellement dissimulé.</strong> Certains types d'ordres ne révèlent qu'une fraction de leur volume : la profondeur affichée sous-estime alors la réalité.</li>
+      <li><strong>Il peut induire en erreur.</strong> Des ordres importants peuvent être placés puis retirés avant exécution. Ces pratiques sont interdites sur les marchés régulés et poursuivies comme manipulation, mais elles suffisent à rappeler qu'<strong>un gros ordre affiché n'est pas une intention garantie</strong>.</li>
+    </ul>
+    <p>D'où une conclusion mesurée : le carnet est un excellent outil pour <strong>comprendre</strong> comment un prix se forme, et un outil trompeur pour <strong>prédire</strong> où il ira.</p>
+
+    <h2>Où vous pouvez le voir — et où vous ne le voyez pas</h2>
+    <p>Point pratique souvent ignoré, et il change ce que vous regardez.</p>
+    <ul>
+      <li><strong>Marchés à place centrale</strong> — actions, contrats à terme, plateformes d'échange de cryptomonnaies : un carnet existe et il est généralement consultable.</li>
+      <li><strong>Marché des changes au comptant</strong> — il n'y a pas de place centrale. La liquidité est répartie entre de nombreux acteurs, et aucun carnet unique n'existe.</li>
+      <li><strong>Produits dérivés de gré à gré</strong> — le prix est celui de votre intermédiaire. Ce qui est éventuellement affiché reflète son flux, pas l'ensemble du marché, pour les raisons détaillées dans <a href="/blog/qu-est-ce-qu-un-cfd">qu'est-ce qu'un CFD</a>.</li>
+      <li><strong>Cryptomonnaies</strong> — chaque plateforme a son propre carnet, ce qui explique que les prix diffèrent d'un lieu à l'autre, comme nous l'expliquons dans <a href="/blog/trader-les-cryptomonnaies">trader les cryptomonnaies</a>.</li>
+    </ul>
+    <p>Autrement dit : si vous tradez le forex via un dérivé, vous ne verrez jamais « le » carnet — il n'existe pas. Ce n'est pas une information qu'on vous cache, c'est une propriété du marché.</p>
+
+    <h2>Ce qu'il faut en retenir en pratique</h2>
+    <p>Vous n'avez pas besoin de lire un carnet en direct pour en tirer profit. Quatre conséquences suffisent, et elles s'appliquent même sans y avoir accès.</p>
+    <ul>
+      <li><strong>Le spread n'est pas un abus, c'est un thermomètre.</strong> Quand il s'élargit, c'est que la participation baisse ou que l'incertitude monte. C'est une information sur le marché, pas seulement un coût.</li>
+      <li><strong>La taille de votre ordre compte.</strong> Au-delà d'un certain volume, vous déplacez le prix contre vous. Le seuil dépend de l'instrument et de l'heure.</li>
+      <li><strong>Les heures creuses coûtent doublement</strong> — spread plus large à l'entrée, exécution plus dégradée en cas de stop. Les plages liquides sont détaillées dans notre article sur les <a href="/blog/sessions-de-trading-forex">sessions de trading</a>.</li>
+      <li><strong>Les stops se massent aux endroits évidents.</strong> Juste au-delà d'un plus haut visible, le carnet contient une concentration d'ordres de protection. C'est ce qui alimente les faux franchissements décrits dans <a href="/blog/supports-et-resistances">supports et résistances</a> — et l'unique observation solide derrière le vocabulaire des <a href="/blog/smart-money-concepts">Smart Money Concepts</a>.</li>
+    </ul>
+
+    <h2>Vérifiez-le sur vos propres exécutions</h2>
+    <p>Tout ce qui précède se mesure, et vous disposez déjà des données.</p>
+    <p>Reprenez vos vingt derniers trades et notez, pour chacun, l'écart entre le prix visé et le prix réellement obtenu, à l'entrée comme à la sortie. Puis classez ces écarts par heure de la journée.</p>
+    <p>Deux régularités apparaissent presque toujours : les écarts se concentrent en dehors des plages liquides, et ils explosent autour des publications. Ce ne sont pas des anomalies de votre courtier — c'est la profondeur du carnet qui varie, et vous venez de la mesurer indirectement.</p>
+    <p>Consigner ces écarts dans un <a href="/blog/comment-tenir-journal-trading">journal de trading</a> transforme une gêne diffuse en chiffre, et le chiffre en décision : très souvent, celle de ne plus trader certaines heures.</p>
+  </div>
+
+  <section class="bl-cta">
+    <p class="bl-cta__t">Chiffrez ce que l'exécution vous coûte</p>
+    <p>Le calculateur du Terminal convertit spread et distance de stop en euros, et vous rend la taille de position correspondant à votre risque — le point de départ pour mesurer l'effet réel du carnet sur vos trades.</p>
+    <a class="lt-btn lt-btn--primary" href="/calculateur">Ouvrir le calculateur</a>
+  </section>
+
+  <div class="bl-prose">
+    <div class="bl-note">
+      <p><strong>Avertissement risque.</strong> Ce contenu est éducatif et ne constitue pas un conseil en investissement. Le fonctionnement des carnets d'ordres, les types d'ordres disponibles et les informations affichées varient selon les places de marché et les intermédiaires : référez-vous à leur documentation. La lecture d'un carnet ne confère aucune capacité de prévision. Le trading comporte un risque de perte en capital pouvant dépasser le dépôt initial sur les produits à effet de levier.</p>
+    </div>
+
+    <h2>FAQ</h2>
+    <div class="bl-faq">
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce qu'un carnet d'ordres ?</h3>
+        <p>Un carnet d'ordres est la liste, tenue par une place de marché, de tous les ordres d'achat et de vente en attente pour un instrument, classés par prix. Les acheteurs figurent d'un côté, les vendeurs de l'autre, et une transaction survient lorsque les deux se rencontrent. Le prix affiché n'est donc pas une valeur théorique : c'est le niveau de la dernière transaction conclue.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Pourquoi y a-t-il un spread entre l'achat et la vente ?</h3>
+        <p>Parce que le meilleur acheteur propose toujours moins que ce que demande le meilleur vendeur : sans cet écart, la transaction aurait déjà eu lieu. Le spread est donc la distance qui sépare les deux, et il mesure directement l'accord des participants. Il se resserre quand ils sont nombreux et se répartissent finement, et s'élargit dès que la participation diminue ou que l'incertitude augmente.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Qu'est-ce que la profondeur de marché ?</h3>
+        <p>La profondeur désigne le volume disponible à chaque niveau de prix du carnet, au-delà de la seule meilleure limite. Elle indique quelle quantité peut être échangée avant que le prix ne se déplace. Un carnet profond absorbe des ordres importants sans variation notable ; un carnet mince voit le prix bouger sensiblement pour un volume modeste.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>D'où vient le slippage ?</h3>
+        <p>Un ordre au marché consomme les offres disponibles en commençant par la meilleure. Si sa taille dépasse le volume présent au premier niveau, il se sert au suivant, puis au suivant encore, à des prix de moins en moins favorables. Le prix moyen obtenu diffère alors du prix affiché : c'est le slippage. Il ne résulte donc pas d'un dysfonctionnement mais du mécanisme normal d'exécution dans un carnet.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Quelle différence entre preneur et apporteur de liquidité ?</h3>
+        <p>Un ordre au marché consomme un ordre déjà présent dans le carnet : celui qui le passe est preneur de liquidité. Un ordre limite, à l'inverse, vient s'inscrire dans le carnet et attendre : celui qui le place est apporteur de liquidité. Certaines places tarifent différemment ces deux rôles, l'apport de liquidité étant parfois facturé moins cher, voire rémunéré.</p>
+      </div>
+      <div class="bl-faq__item">
+        <h3>Peut-on voir le carnet d'ordres sur toutes les plateformes ?</h3>
+        <p>Non. Le carnet est visible sur les marchés organisés à place centrale, comme les actions, les contrats à terme ou les plateformes d'échange de cryptomonnaies. Sur le marché des changes au comptant et sur les produits dérivés de gré à gré, il n'existe pas de carnet central : l'affichage éventuel reflète alors le flux de l'intermédiaire, pas l'ensemble du marché.</p>
+      </div>
+    </div>
+
+    <div class="bl-author">
+      <span class="bl-author__ava">LT</span>
+      <div>
+        <p class="bl-author__name">Les fondateurs du Terminal</p>
+        <p class="bl-author__bio">Adrien et Romain, fondateurs du Terminal, conçoivent les outils et les contenus méthodologiques de la plateforme avec un principe : aucune promesse de gain, uniquement des cadres et des outils pour décider mieux.</p>
+      </div>
+    </div>
+
+    <p class="bl-src">Sources : littérature sur la microstructure des marchés et documentation des places de marché organisées, 2025-2026. Le fonctionnement exact varie selon les places et les intermédiaires. Publié le 18 août 2026.</p>
+
+    <div class="bl-more">
+      <h2>Pour aller plus loin</h2>
+      <div class="bl-more__grid">
+        <a href="/blog/types-ordres-trading"><span class="t">Les types d'ordres</span><span class="d">Preneur ou apporteur de liquidité</span></a>
+        <a href="/blog/couts-du-trading"><span class="t">Le coût réel du trading</span><span class="d">Le spread, chiffré en euros</span></a>
+        <a href="/blog/supports-et-resistances"><span class="t">Supports et résistances</span><span class="d">Où les stops se concentrent</span></a>
+        <a href="/blog/sessions-de-trading-forex"><span class="t">Sessions de trading</span><span class="d">Quand le carnet est profond</span></a>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var fill=document.querySelector('.lt-progress__fill'), chrome=document.getElementById('ltChrome'), raf=0;
+  function onScroll(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=0; var h=document.documentElement; if(fill) fill.style.width=((h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight))*100).toFixed(2)+'%'; if(chrome) chrome.classList.toggle('is-scrolled', window.scrollY>24); }); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var drop=document.getElementById('ltDrop');
+  if(drop){ var menu=drop.querySelector('.lt-nav__menu'), caret=drop.querySelector('.lt-nav__caret'), trig=drop.querySelector('.lt-nav__droptrigger');
+    function so(o){ if(menu) menu.classList.toggle('is-open',o); if(caret) caret.classList.toggle('is-open',o); if(trig) trig.setAttribute('aria-expanded',o); }
+    drop.addEventListener('mouseenter',function(){so(true);}); drop.addEventListener('mouseleave',function(){so(false);});
+  }
+  /* Bascule FR/EN gérée par lang.js (délégation globale) — pas de wiring local. */
+})();
+</script>
+<script src="/appshell.js"></script>
+<script src="/menu.js"></script>
+<footer class="lt-footer ltf">
+  <div class="ltf__wrap">
+    <div class="ltf__brand">
+      <span class="lt-nav__mark"><img src="/logo-nav.webp" alt="Le Terminal" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;"></span>
+      <span class="lt-nav__word">LE&nbsp;TERMINAL</span>
+    </div>
+
+    <div class="ltf__cols">
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Tools">Outils</h4>
+        <a href="/analyzer-presentation">Setup Analyzer</a>
+        <a href="/journal-presentation" data-en="Trading Journal">Journal de Trading</a>
+        <a href="/calendrier-presentation" data-en="Economic Calendar">Calendrier Éco</a>
+        <a href="/bubble">Bubble Map</a>
+        <a href="/mur-des-trades" data-en="Trade Wall">Mur des Trades</a>
+        <a href="/patrimoine-presentation" data-en="Wealth tracker">Patrimoine</a>
+        <a href="/calculateur" data-en="Pip Calculator">Calculateur de Pips</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Markets">Marchés</h4>
+        <a href="/eco-calendrier" data-en="Overview">Présentation</a>
+        <a href="/eco-flash">Flash Info</a>
+        <a href="/eco-selection" data-en="The selection">La sélection</a>
+        <a href="/eco-crypto">Crypto</a>
+        <a href="/eco-archive" data-en="Archive">Archive</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Company">Entreprise</h4>
+        <a href="/blog">Blog</a>
+        <a href="/#method" data-en="Method">Méthode</a>
+        <a href="/#community" data-en="Community">Communauté</a>
+        <a href="/avis" data-en="Reviews">Avis</a>
+        <a href="/tarifs" data-en="Pricing">Tarifs</a>
+      </div>
+      <div class="ltf__col">
+        <h4 class="ltf__h" data-en="Legal">Infos légales</h4>
+        <a href="/legal#mentions" data-en="Legal notice">Mentions légales</a>
+        <a href="/legal#confidentialite" data-en="Privacy">Confidentialité</a>
+        <a href="/legal#cookies" data-en="Cookies">Cookies</a>
+        <a href="/legal#cgv" data-en="Terms">CGV</a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <div class="ltf__mid">
+      <div class="ltf__social">
+        <a href="https://www.instagram.com/leterminalapp/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://t.me/leterminalfx" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.3 2.9 11.4c-.9.35-.88 1.65.03 1.97l4.6 1.6 1.77 5.3c.27.66 1.13.79 1.6.25l2.5-2.7 4.45 3.28c.6.44 1.46.12 1.62-.61L22.9 5.4c.2-.92-.7-1.46-1.4-1.1z"/><path d="m7.5 15 9-7.5-6.6 8.3"/></svg></a>
+      </div>
+    </div>
+
+    <div class="ltf__sep"></div>
+
+    <p class="ltf__disc" data-en="Le Terminal is a suite of research, analysis and decision-support tools for self-directed traders and investors. We provide no recommendation on specific assets and no investment advice. Trading carries a high risk and may not suit every profile: a total loss — or a loss exceeding the capital invested — is possible.">Le Terminal est une suite d'outils de recherche, d'analyse et d'aide à la décision destinée aux traders et investisseurs autonomes. Nous ne fournissons aucune recommandation sur des actifs spécifiques et ne dispensons aucun conseil en investissement. Le trading comporte un risque élevé et peut ne pas convenir à tous les profils : une perte totale, voire supérieure au capital investi, est possible.</p>
+
+    <div class="ltf__bottom">
+      <span data-en="© 2026 Le Terminal — AI-powered trading hub">© 2026 Le Terminal — Hub trading propulsé par l'IA</span>
+    </div>
+  </div>
+</footer>
+<script src="/cookies.js"></script>
+<script src="/lang.js"></script>
+<script src="/theme.js"></script>
+</body>
+</html>
